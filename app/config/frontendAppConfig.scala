@@ -1,4 +1,4 @@
-package uk.gov.hmrc.deregistervatfrontend
+package config
 
 import play.api.Play.{configuration, current}
 import uk.gov.hmrc.play.config.ServicesConfig

@@ -1,5 +1,5 @@
 # Add all the application routes to the app.routes file
-->         /deregister-vat-frontend              app.Routes
+->         /deregister-for-vat        app.Routes
 ->         /                          health.Routes
 ->     	   /template                  template.Routes
 

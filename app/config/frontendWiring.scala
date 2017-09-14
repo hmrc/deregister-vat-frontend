@@ -1,4 +1,4 @@
-package uk.gov.hmrc.deregistervatfrontend
+package config
 
 import uk.gov.hmrc.play.audit.http.config.LoadAuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector => Auditing}
