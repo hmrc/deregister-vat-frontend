@@ -27,7 +27,7 @@ import scala.concurrent.Future
 
 @Singleton
 class HelloWorld @Inject()(val appConfig: AppConfig, val messagesApi: MessagesApi) extends FrontendController with I18nSupport {
-  val helloWorld = Action.async { implicit request =>
+  val helloWorld: Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok(views.html.helloworld.hello_world(appConfig)))
   }
 }
