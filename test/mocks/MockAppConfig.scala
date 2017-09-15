@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2017 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(appConfig: config.AppConfig)(implicit request: Request[_], messages: Messages)
+package mocks
 
-@views.html.main_template(title = "Hello from deregister-vat-frontend", bodyClasses = None, appConfig = appConfig) {
-<h1>Hello from deregister-vat-frontend!</h1>
+import config.AppConfig
+import play.api.mvc.Call
+
+class MockAppConfig extends AppConfig {
+  override val analyticsToken: String = ""
+  override val analyticsHost: String = ""
+  override val reportAProblemPartialUrl: String = ""
+  override val reportAProblemNonJSUrl: String = ""
+  override val whitelistedIps: Seq[String] = Seq("")
+  override val whitelistExcludedPaths: Seq[Call] = Nil
+  override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/deregister-vat"
 }
+
