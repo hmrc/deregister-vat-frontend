@@ -1,4 +1,4 @@
-# Deregister VAT Frontend Contributor Guidelines
+# De-register for VAT Frontend Contributor Guidelines
 
 Hello! Thank you for taking the time to contribute to [deregister-vat-frontend](https://github.com/hmrc/deregister-vat-frontend).
 
@@ -7,7 +7,7 @@ Hello! Thank you for taking the time to contribute to [deregister-vat-frontend](
 Before you go any further, please read the general [MDTP Contributor Guidelines](https://github.com/hmrc/mdtp-contributor-guidelines/blob/master/CONTRIBUTING.md).
 It would be helpful if you were to talk to the team before making a pull request to stop any conflicts that may occur.
 
-## Deregister VAT Guidelines
+## De-register for VAT Guidelines
 
 First run `sbt test`. If those tests do not work, you are not ready to raise a PR.
 
