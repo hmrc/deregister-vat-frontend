@@ -6,6 +6,13 @@
 
 ## Summary
 
+
+
+
+
+
+
+
 This service provides end users with a mechanism to De-register for VAT.
 
 ## Requirements
