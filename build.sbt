@@ -5,6 +5,7 @@ import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.versioning.SbtGitVersioning
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
+import TestPhases._
 
 val appName: String = "deregister-vat-frontend"
 
@@ -34,8 +35,6 @@ lazy val coverageSettings: Seq[Setting[_]] = {
     ScoverageKeys.coverageHighlighting := true
   )
 }
-
-import TestPhases._
 
 lazy val microservice: Project = Project(appName, file("."))
   .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
