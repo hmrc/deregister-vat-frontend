@@ -33,16 +33,17 @@ import views.html.error_template
 object FrontendGlobal
   extends DefaultFrontendGlobal {
 
-  override lazy val auditConnector = new FrontendAuditConnector(Play.current)
+  lazy val application: Application = Play.current
+  override lazy val auditConnector = new FrontendAuditConnector(application)
   override val loggingFilter: LoggingFilter.type = LoggingFilter
   override val frontendAuditFilter: AuditFilter.type = AuditFilter
 
   override protected lazy val defaultFrontendFilters: Seq[EssentialFilter] = {
     val coreFilters = super.defaultFrontendFilters.filterNot(filter => filter.equals(RecoveryFilter))
-    val whiteListEnabled = Play.current.configuration.getBoolean("whitelist.enabled").getOrElse(false)
+    val whiteListEnabled = application.configuration.getBoolean("whitelist.enabled").getOrElse(false)
 
     if (whiteListEnabled) {
-      coreFilters.:+(new WhitelistFilter(Play.current))
+      coreFilters.:+(new WhitelistFilter(application))
     } else {
       coreFilters
     }
@@ -54,7 +55,7 @@ object FrontendGlobal
   }
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html = {
-    val appConfig: AppConfig = Play.current.injector.instanceOf[AppConfig]
+    val appConfig: AppConfig = application.injector.instanceOf[AppConfig]
     error_template(appConfig, pageTitle, heading, message)
   }
 
