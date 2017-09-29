@@ -16,15 +16,14 @@
 
 package config
 
-import com.google.inject.AbstractModule
-import connectors.{FrontendAuditConnector, FrontendAuthConnector}
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
+import javax.inject.{Inject, Singleton}
 
-class DIModule extends AbstractModule {
-  def configure(): Unit = {
-    bind(classOf[AppConfig]).to(classOf[FrontendAppConfig]).asEagerSingleton()
-    bind(classOf[AuthConnector]).to(classOf[FrontendAuthConnector])
-    bind(classOf[AuditConnector]).to(classOf[FrontendAuditConnector])
-  }
+import play.api.Application
+import uk.gov.hmrc.http._
+import uk.gov.hmrc.http.hooks.HttpHook
+
+@Singleton
+class WSHttp @Inject()(val app: Application) extends uk.gov.hmrc.play.http.ws.WSHttp
+  with HttpGet with HttpPost with HttpPut with HttpPatch with HttpDelete {
+  override val hooks: Seq[HttpHook] = NoneRequired
 }
