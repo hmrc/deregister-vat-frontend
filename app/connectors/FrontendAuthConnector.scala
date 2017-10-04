@@ -17,12 +17,11 @@
 package connectors
 
 import javax.inject.{Inject, Singleton}
-
-import config.{AppConfig, WSHttp}
-import uk.gov.hmrc.play.config.ServicesConfig
-import uk.gov.hmrc.play.frontend.auth.connectors.AuthConnector
+import uk.gov.hmrc.auth.core.PlayAuthConnector
+import config.AppConfig
+import uk.gov.hmrc.http._
 
 @Singleton
-class FrontendAuthConnector @Inject()(appConfig: AppConfig, val http: WSHttp) extends AuthConnector with ServicesConfig {
-  lazy val serviceUrl: String = baseUrl("auth")
+class FrontendAuthConnector @Inject()(configuration: AppConfig, val http: HttpPost) extends PlayAuthConnector {
+  lazy val serviceUrl: String = configuration.authServiceUrl
 }
