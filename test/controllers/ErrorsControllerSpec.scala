@@ -16,23 +16,10 @@
 
 package controllers
 
-import config.AppConfig
 import play.api.http.Status
-import play.api.i18n.MessagesApi
-import play.api.inject.Injector
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.play.test.{UnitSpec, WithFakeApplication}
 
-
-class ErrorsControllerSpec extends UnitSpec with WithFakeApplication{
-
-  lazy val injector: Injector = fakeApplication.injector
-  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
-
-  implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
+class ErrorsControllerSpec extends ControllerSpec {
 
   lazy val target = new ErrorsController(mockConfig, messages)
 

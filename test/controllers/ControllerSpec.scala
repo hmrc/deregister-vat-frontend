@@ -16,24 +16,20 @@
 
 package controllers
 
-import play.api.http.Status
-import play.api.test.Helpers._
+import config.AppConfig
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.i18n.MessagesApi
+import play.api.inject.Injector
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
+import uk.gov.hmrc.play.test.UnitSpec
 
-class HelloWorldControllerSpec extends ControllerSpec {
 
-  lazy val target = new HelloWorld(mockConfig, messages)
+class ControllerSpec extends UnitSpec with GuiceOneAppPerSuite {
 
-  "Calling the helloWorld action" should {
-    "return 200" in {
-      val result = target.helloWorld(fakeRequest)
-      status(result) shouldBe Status.OK
-    }
+  lazy val injector: Injector = app.injector
+  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
+  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
 
-    "return HTML" in {
-      val result = target.helloWorld(fakeRequest)
-      contentType(result) shouldBe Some("text/html")
-      charset(result) shouldBe Some("utf-8")
-    }
-  }
-
+  implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 }
