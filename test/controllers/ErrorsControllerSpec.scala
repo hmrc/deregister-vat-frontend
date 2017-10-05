@@ -50,4 +50,18 @@ class ErrorsControllerSpec extends UnitSpec with WithFakeApplication{
     }
   }
 
+  "Calling the unauthorised action" should {
+
+    lazy val result = target.unauthorised(fakeRequest)
+
+    "return 200" in {
+      status(result) shouldBe Status.OK
+    }
+
+    "return HTML" in {
+      contentType(result) shouldBe Some("text/html")
+      charset(result) shouldBe Some("utf-8")
+    }
+  }
+
 }

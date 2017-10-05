@@ -32,4 +32,8 @@ class ErrorsController @Inject()(val appConfig: AppConfig, val messagesApi: Mess
     Future.successful(Ok(views.html.errors.sessionTimeout(appConfig)))
   }
 
+  val unauthorised: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(views.html.errors.unauthorised(appConfig)))
+  }
+
 }
