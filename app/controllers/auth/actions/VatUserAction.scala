@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package connectors
+package controllers.auth.actions
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.auth.core.PlayAuthConnector
-import config.AppConfig
-import uk.gov.hmrc.http._
+import controllers.auth.{AuthPredicates, AuthorisedActions}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-@Singleton
-class FrontendAuthConnector @Inject()(configuration: AppConfig, val http: HttpPost) extends PlayAuthConnector {
-  lazy val serviceUrl: String = configuration.authUrl
+trait VatUserAction extends AuthorisedActions {
+  self: FrontendController =>
+
+  object VatUserAction {
+    def async: AuthenticatedAction = action(AuthPredicates.enrolledUserPredicate)
+  }
 }

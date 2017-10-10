@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package connectors
+package controllers.auth
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.auth.core.PlayAuthConnector
-import config.AppConfig
-import uk.gov.hmrc.http._
+import cats.Monoid
+import play.api.mvc.{AnyContent, Request, Result}
 
-@Singleton
-class FrontendAuthConnector @Inject()(configuration: AppConfig, val http: HttpPost) extends PlayAuthConnector {
-  lazy val serviceUrl: String = configuration.authUrl
+import scala.concurrent.Future
+
+object AuthPredicate {
+
+  object Success
+
+  type Success = Success.type
+
+  implicit object SuccessMonoid extends Monoid[Success] {
+    override def empty: Success = Success
+    override def combine(x: Success, y: Success): Success = Success
+  }
+
+  type AuthPredicate = Request[AnyContent] => User => Either[Future[Result], Success]
 }

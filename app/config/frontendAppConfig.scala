@@ -32,7 +32,8 @@ trait AppConfig extends ServicesConfig {
   val whitelistedIps: Seq[String]
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
-  val authServiceUrl: String
+  val signInUrl: String
+  val authUrl: String
 }
 
 @Singleton
@@ -40,7 +41,8 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
 
   protected val configuration: Configuration = app.configuration
 
-  private def loadConfig(key: String) = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+  private def loadConfig(key: String) = configuration.getString(key)
+    .getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
   private val contactHost = configuration.getString("contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
@@ -58,9 +60,11 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
   override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig("whitelist.excludedPaths").map(path => Call("GET", path))
   override lazy val shutterPage: String = loadConfig("whitelist.shutter-page-url")
 
-  private lazy val authSignInUrl: String = loadConfig("auth.signInUrl")
-  private lazy val authContinueBaseUrl: String = configuration.getString("auth.continueUrl").getOrElse("")
-  private lazy val authContinueUrl: String = ContinueUrl(authContinueBaseUrl + controllers.routes.HelloWorld.helloWorld().url).encodedUrl
-  private lazy val authOrigin = loadConfig("appName")
-  override lazy val authServiceUrl: String = s"$authSignInUrl?continue=$authContinueUrl&origin=$authOrigin"
+  private lazy val signInBaseUrl: String = loadConfig("microservice.services.auth.signIn.url")
+  private lazy val signInContinueBaseUrl: String = configuration.getString("microservice.services.auth.signIn.continueUrl").getOrElse("")
+  private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
+  private lazy val signInOrigin = loadConfig("appName")
+  override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
+
+  lazy val authUrl: String = baseUrl("auth")
 }

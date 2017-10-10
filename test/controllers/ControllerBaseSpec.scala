@@ -17,6 +17,8 @@
 package controllers
 
 import config.AppConfig
+import mocks.MockAppConfig
+import org.scalamock.scalatest.MockFactory
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.i18n.MessagesApi
 import play.api.inject.Injector
@@ -25,11 +27,11 @@ import play.api.test.FakeRequest
 import uk.gov.hmrc.play.test.UnitSpec
 
 
-class ControllerSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite {
+class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite {
 
   lazy val injector: Injector = app.injector
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
+  lazy val mockConfig: AppConfig = new MockAppConfig()
 
   implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 }

@@ -19,7 +19,7 @@ package controllers
 import play.api.http.Status
 import play.api.test.Helpers._
 
-class ErrorsControllerSpec extends ControllerSpec {
+class ErrorsControllerSpec extends ControllerBaseSpec {
 
   lazy val target = new ErrorsController(mockConfig, messages)
 

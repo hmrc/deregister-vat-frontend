@@ -55,7 +55,8 @@ val compile: Seq[ModuleID] = Seq(
   "uk.gov.hmrc" %% "frontend-bootstrap" % "8.6.0",
   "uk.gov.hmrc" %% "play-partials" % "6.0.0",
   "uk.gov.hmrc" %% "play-whitelist-filter" % "2.0.0",
-  "uk.gov.hmrc" %% "auth-client" % "1.0.0"
+  "uk.gov.hmrc" %% "auth-client" % "1.0.0",
+  "org.typelevel" %% "cats" % "0.9.0"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
@@ -65,7 +66,7 @@ def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "org.jsoup" % "jsoup" % "1.10.3" % scope,
   "com.typesafe.play" %% "play-test" % PlayVersion.current % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % scope,
-  "org.mockito" % "mockito-core" % "2.9.0" % scope,
+  "org.scalamock" %% "scalamock-scalatest-support" % "3.6.0" % scope,
   "com.github.tomakehurst" % "wiremock" % "2.6.0" % scope
 )
 

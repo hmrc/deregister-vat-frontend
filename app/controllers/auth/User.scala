@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package connectors
+package controllers.auth
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.auth.core.PlayAuthConnector
-import config.AppConfig
-import uk.gov.hmrc.http._
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
-@Singleton
-class FrontendAuthConnector @Inject()(configuration: AppConfig, val http: HttpPost) extends PlayAuthConnector {
-  lazy val serviceUrl: String = configuration.authUrl
+case class User(enrolments: Enrolments) {
+
+  // TODO clean this code when the identifier for the enrolment key is known
+  private val SERVICE_ENROLMENT_KEY: String = "HMRC-MTD-VAT"
+
+  lazy val Vrn: Option[String] = enrolments.enrolments.collectFirst {
+    case Enrolment(SERVICE_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _, _) => value
+  }
+
 }

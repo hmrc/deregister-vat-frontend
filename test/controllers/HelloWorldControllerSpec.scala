@@ -18,22 +18,82 @@ package controllers
 
 import play.api.http.Status
 import play.api.test.Helpers._
+import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.http.HeaderCarrier
 
-class HelloWorldControllerSpec extends ControllerSpec {
+import scala.concurrent.{ExecutionContext, Future}
 
-  lazy val target = new HelloWorld(mockConfig, messages)
+class HelloWorldControllerSpec extends ControllerBaseSpec {
 
-  "Calling the helloWorld action" should {
-    "return 200" in {
-      val result = target.helloWorld(fakeRequest)
-      status(result) shouldBe Status.OK
+  private trait Test {
+    val enrolments: Enrolments
+    val mockAuthConnector: AuthConnector = mock[AuthConnector]
+
+    def setup() {
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(Future.successful(enrolments))
     }
 
-    "return HTML" in {
-      val result = target.helloWorld(fakeRequest)
-      contentType(result) shouldBe Some("text/html")
-      charset(result) shouldBe Some("utf-8")
+    val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
+
+    def target: HelloWorldController = {
+      setup()
+      new HelloWorldController(mockConfig, messages, mockAuthorisedFunctions)
     }
   }
 
+  "Calling the .helloWorld action" when {
+
+    "the user is authorised" should {
+
+      val goodEnrolments: Enrolments = Enrolments(
+        Set(
+          Enrolment(
+            "HMRC-MTD-VAT",
+            Seq(EnrolmentIdentifier("", "VRN1234567890")),
+            "Active",
+            ConfidenceLevel.L50)
+        )
+      )
+
+      "return 200" in new Test {
+        override val enrolments: Enrolments = goodEnrolments
+        val result = target.helloWorld(fakeRequest)
+
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in new Test {
+        override val enrolments: Enrolments = goodEnrolments
+        val result = target.helloWorld(fakeRequest)
+
+        contentType(result) shouldBe Some("text/html")
+        charset(result) shouldBe Some("utf-8")
+      }
+    }
+
+    "the user is not authorised" should {
+
+      val noEnrolments: Enrolments = Enrolments(Set())
+
+      "return 303" in new Test {
+        override val enrolments: Enrolments = noEnrolments
+        val result = target.helloWorld(fakeRequest)
+
+        status(result) shouldBe Status.SEE_OTHER
+      }
+
+      "redirect the user to the unauthorised page" in new Test {
+        override val enrolments: Enrolments = noEnrolments
+        val result = target.helloWorld(fakeRequest)
+
+        redirectLocation(result) shouldBe Some(routes.ErrorsController.unauthorised().url)
+      }
+    }
+
+  }
 }
