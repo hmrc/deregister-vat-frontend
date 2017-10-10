@@ -16,7 +16,8 @@
 
 @(appConfig: config.AppConfig)(implicit request: Request[_], messages: Messages)
 
-@views.html.main_template(title = "Unauthorised access", bodyClasses = None, appConfig = appConfig) {
-  <h2>You don&apos;t have access to this service.</h2>
-  <p>Here are some instructions about what you should do next.</p>
+@views.html.main_template(title = Messages("unauthorised.title"), bodyClasses = None, appConfig = appConfig) {
+  <h1>@Messages("unauthorised.title")</h1>
+
+  <p>@Messages("unauthorised.instructions")</p>
 }

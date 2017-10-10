@@ -29,7 +29,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.collection.JavaConverters._
 
-trait ViewSpec extends UnitSpec with GuiceOneAppPerSuite with Matchers {
+trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with Matchers {
 
   lazy val mockConfig = new MockAppConfig()
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()

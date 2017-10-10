@@ -16,20 +16,18 @@
 
 package controllers
 
+import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.MessagesApi
-import play.api.inject.Injector
-import play.api.mvc.AnyContentAsEmpty
-import play.api.test.FakeRequest
-import uk.gov.hmrc.play.test.UnitSpec
+import controllers.auth.AuthenticatedFrontendController
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc._
 
+import scala.concurrent.Future
 
-class ControllerSpec extends UnitSpec with GuiceOneAppPerSuite {
-
-  lazy val injector: Injector = app.injector
-  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = injector.instanceOf[AppConfig]
-
-  implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
+@Singleton
+class HelloWorld @Inject()(val appConfig: AppConfig, val messagesApi: MessagesApi) extends AuthenticatedFrontendController with I18nSupport {
+  val helloWorld: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(views.html.helloworld.hello_world(appConfig)))
+  }
 }

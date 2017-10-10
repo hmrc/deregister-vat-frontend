@@ -16,16 +16,16 @@
 
 package views.errors
 
-import views.ViewSpec
+import views.ViewBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-class SessionTimeoutSpec extends ViewSpec {
+class SessionTimeoutSpec extends ViewBaseSpec {
 
   "Rendering the session timeout page" should {
 
     object Selectors {
-      val pageHeading = "#content h2"
+      val pageHeading = "#content h1"
       val instructions = "#content p"
     }
 
@@ -33,15 +33,15 @@ class SessionTimeoutSpec extends ViewSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe "Session timed out"
+      document.title shouldBe "Your session has timed out"
     }
 
     s"have a the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "Your session has timed out."
+      elementText(Selectors.pageHeading) shouldBe "Your session has timed out"
     }
 
     s"have the correct instructions on the page" in {
-      elementText(Selectors.instructions) shouldBe "Here are some instructions about what you should do next."
+      elementText(Selectors.instructions) shouldBe "To manage your VAT account, you'll have to sign in using your Government Gateway ID."
     }
 
   }

@@ -16,16 +16,16 @@
 
 package views.errors
 
-import views.ViewSpec
+import views.ViewBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-class UnauthorisedViewSpec extends ViewSpec {
+class UnauthorisedViewSpec extends ViewBaseSpec {
 
   "Rendering the unauthorised page" should {
 
     object Selectors {
-      val pageHeading = "#content h2"
+      val pageHeading = "#content h1"
       val instructions = "#content p"
     }
 
@@ -37,7 +37,7 @@ class UnauthorisedViewSpec extends ViewSpec {
     }
 
     s"have a the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe "You don't have access to this service."
+      elementText(Selectors.pageHeading) shouldBe "Unauthorised access"
     }
 
     s"have the correct instructions on the page" in {
