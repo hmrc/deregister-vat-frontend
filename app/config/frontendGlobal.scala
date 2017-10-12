@@ -18,6 +18,7 @@ package config
 
 import com.typesafe.config.Config
 import config.filters.WhitelistFilter
+import connectors.FrontendAuditConnector
 import net.ceedubs.ficus.Ficus._
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
@@ -28,21 +29,22 @@ import uk.gov.hmrc.crypto.ApplicationCrypto
 import uk.gov.hmrc.play.config.{AppName, ControllerConfig, RunMode}
 import uk.gov.hmrc.play.frontend.bootstrap.DefaultFrontendGlobal
 import uk.gov.hmrc.play.frontend.filters.{FrontendAuditFilter, FrontendLoggingFilter, MicroserviceFilterSupport, RecoveryFilter}
-import views.html.error_template
+import views.html.errors.standardError
 
 object FrontendGlobal
   extends DefaultFrontendGlobal {
 
-  override lazy val auditConnector = new FrontendAuditConnector(Play.current)
+  lazy val application: Application = Play.current
+  override lazy val auditConnector = new FrontendAuditConnector(application)
   override val loggingFilter: LoggingFilter.type = LoggingFilter
   override val frontendAuditFilter: AuditFilter.type = AuditFilter
 
   override protected lazy val defaultFrontendFilters: Seq[EssentialFilter] = {
     val coreFilters = super.defaultFrontendFilters.filterNot(filter => filter.equals(RecoveryFilter))
-    val whiteListEnabled = Play.current.configuration.getBoolean("whitelist.enabled").getOrElse(false)
+    val whiteListEnabled = application.configuration.getBoolean("whitelist.enabled").getOrElse(false)
 
     if (whiteListEnabled) {
-      coreFilters.:+(new WhitelistFilter(Play.current))
+      coreFilters.:+(new WhitelistFilter(application))
     } else {
       coreFilters
     }
@@ -54,8 +56,8 @@ object FrontendGlobal
   }
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html = {
-    val appConfig: AppConfig = Play.current.injector.instanceOf[AppConfig]
-    error_template(appConfig, pageTitle, heading, message)
+    val appConfig: AppConfig = application.injector.instanceOf[AppConfig]
+    standardError(appConfig, pageTitle, heading, message)
   }
 
   override def microserviceMetricsConfig(implicit app: Application): Option[Configuration] = app.configuration.getConfig(s"microservice.metrics")

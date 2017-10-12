@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package mocks
+package controllers.auth
 
-import config.AppConfig
-import play.api.mvc.Call
+import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 
-class MockAppConfig extends AppConfig {
-  override val analyticsToken: String = ""
-  override val analyticsHost: String = ""
-  override val reportAProblemPartialUrl: String = ""
-  override val reportAProblemNonJSUrl: String = ""
-  override val whitelistedIps: Seq[String] = Seq("")
-  override val whitelistExcludedPaths: Seq[Call] = Nil
-  override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/manage-vat-subscription"
-  override val signInUrl : String = ""
-  override val authUrl : String = ""
+case class User(enrolments: Enrolments) {
+
+  // TODO clean this code when the identifier for the enrolment key is known
+  private val SERVICE_ENROLMENT_KEY: String = "HMRC-MTD-VAT"
+
+  lazy val Vrn: Option[String] = enrolments.enrolments.collectFirst {
+    case Enrolment(SERVICE_ENROLMENT_KEY, EnrolmentIdentifier(_, value) :: _, _, _, _) => value
+  }
+
 }
-

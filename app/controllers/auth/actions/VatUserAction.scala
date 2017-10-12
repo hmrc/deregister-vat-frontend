@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package mocks
+package controllers.auth.actions
 
-import config.AppConfig
-import play.api.mvc.Call
+import controllers.auth.{AuthPredicates, AuthorisedActions}
+import uk.gov.hmrc.play.frontend.controller.FrontendController
 
-class MockAppConfig extends AppConfig {
-  override val analyticsToken: String = ""
-  override val analyticsHost: String = ""
-  override val reportAProblemPartialUrl: String = ""
-  override val reportAProblemNonJSUrl: String = ""
-  override val whitelistedIps: Seq[String] = Seq("")
-  override val whitelistExcludedPaths: Seq[Call] = Nil
-  override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/manage-vat-subscription"
-  override val signInUrl : String = ""
-  override val authUrl : String = ""
+trait VatUserAction extends AuthorisedActions {
+  self: FrontendController =>
+
+  object VatUserAction {
+    def async: AuthenticatedAction = action(AuthPredicates.enrolledUserPredicate)
+  }
 }
-

@@ -14,20 +14,14 @@
  * limitations under the License.
  */
 
-package mocks
+package connectors
 
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.auth.core.PlayAuthConnector
 import config.AppConfig
-import play.api.mvc.Call
+import uk.gov.hmrc.http._
 
-class MockAppConfig extends AppConfig {
-  override val analyticsToken: String = ""
-  override val analyticsHost: String = ""
-  override val reportAProblemPartialUrl: String = ""
-  override val reportAProblemNonJSUrl: String = ""
-  override val whitelistedIps: Seq[String] = Seq("")
-  override val whitelistExcludedPaths: Seq[Call] = Nil
-  override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/manage-vat-subscription"
-  override val signInUrl : String = ""
-  override val authUrl : String = ""
+@Singleton
+class FrontendAuthConnector @Inject()(configuration: AppConfig, val http: HttpPost) extends PlayAuthConnector {
+  lazy val serviceUrl: String = configuration.authUrl
 }
-

@@ -21,6 +21,7 @@ import javax.inject.{Inject, Singleton}
 
 import play.api.mvc.Call
 import play.api.{Application, Configuration}
+import uk.gov.hmrc.play.binders.ContinueUrl
 import uk.gov.hmrc.play.config.ServicesConfig
 
 trait AppConfig extends ServicesConfig {
@@ -31,6 +32,8 @@ trait AppConfig extends ServicesConfig {
   val whitelistedIps: Seq[String]
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
+  val signInUrl: String
+  val authUrl: String
 }
 
 @Singleton
@@ -38,13 +41,14 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
 
   protected val configuration: Configuration = app.configuration
 
-  private def loadConfig(key: String) = configuration.getString(key).getOrElse(throw new Exception(s"Missing configuration key: $key"))
+  private def loadConfig(key: String) = configuration.getString(key)
+    .getOrElse(throw new Exception(s"Missing configuration key: $key"))
 
-  private val contactHost = configuration.getString(s"contact-frontend.host").getOrElse("")
+  private val contactHost = configuration.getString("contact-frontend.host").getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
 
-  override lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
-  override lazy val analyticsHost: String = loadConfig(s"google-analytics.host")
+  override lazy val analyticsToken: String = loadConfig("google-analytics.token")
+  override lazy val analyticsHost: String = loadConfig("google-analytics.host")
   override lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
@@ -55,4 +59,12 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
   override lazy val whitelistedIps: Seq[String] = whitelistConfig("whitelist.allowedIps")
   override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig("whitelist.excludedPaths").map(path => Call("GET", path))
   override lazy val shutterPage: String = loadConfig("whitelist.shutter-page-url")
+
+  private lazy val signInBaseUrl: String = loadConfig("microservice.services.auth.signIn.url")
+  private lazy val signInContinueBaseUrl: String = configuration.getString("microservice.services.auth.signIn.continueUrl").getOrElse("")
+  private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
+  private lazy val signInOrigin = loadConfig("appName")
+  override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
+
+  lazy val authUrl: String = baseUrl("auth")
 }
