@@ -29,7 +29,7 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
       val instructions = "#content p"
     }
 
-    lazy val view = views.html.errors.unauthorised(mockConfig)
+    lazy val view = views.html.errors.unauthorised()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
