@@ -60,10 +60,10 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
   override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig("whitelist.excludedPaths").map(path => Call("GET", path))
   override lazy val shutterPage: String = loadConfig("whitelist.shutter-page-url")
 
-  private lazy val signInBaseUrl: String = loadConfig("microservice.services.auth.signIn.url")
-  private lazy val signInContinueBaseUrl: String = configuration.getString("microservice.services.auth.signIn.continueUrl").getOrElse("")
+  private lazy val signInBaseUrl: String = loadConfig("signIn.url")
+  private lazy val signInContinueBaseUrl: String = configuration.getString("signIn.continueBaseUrl").getOrElse("")
   private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
-  private lazy val signInOrigin = loadConfig("appName")
+  private lazy val signInOrigin: String = loadConfig("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
 
   lazy val authUrl: String = baseUrl("auth")
