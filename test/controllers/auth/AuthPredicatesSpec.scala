@@ -38,7 +38,7 @@ class AuthPredicatesSpec extends UnitSpec with GuiceOneAppPerSuite with EitherVa
   val userWithMtdVatEnrolment = User(
     Enrolments(
       Set(
-        Enrolment(SERVICE_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "", ConfidenceLevel.L0)
+        Enrolment(SERVICE_ENROLMENT_KEY, Seq(EnrolmentIdentifier("", "")), "")
       )
     )
   )
