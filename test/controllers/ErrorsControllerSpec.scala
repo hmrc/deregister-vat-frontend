@@ -21,7 +21,7 @@ import play.api.test.Helpers._
 
 class ErrorsControllerSpec extends ControllerBaseSpec {
 
-  lazy val target = new ErrorsController(mockConfig, messages)
+  lazy val target = new ErrorsController(messages, mockConfig)
 
   "Calling the sessionTimeout action" should {
 

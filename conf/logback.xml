@@ -57,6 +57,7 @@
     <logger name="org.asynchttpclient.netty" level="WARN" />
     <logger name="play.core.netty.utils.ServerCookieDecoder" level="WARN" />
     <logger name="akka.stream" level="WARN" />
+    <logger name="io.netty" level="INFO"/>
 
     <root level="DEBUG">
         <appender-ref ref="FILE"/>
