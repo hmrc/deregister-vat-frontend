@@ -33,6 +33,8 @@ trait AppConfig extends ServicesConfig {
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
   val signInUrl: String
+
+  def authFeatureEnabled: Boolean
 }
 
 @Singleton
@@ -65,4 +67,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
   private lazy val signInOrigin: String = loadConfig("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
+
+  override def authFeatureEnabled: Boolean = sys.props.get("features.auth.enabled").exists(_.toBoolean)
+
 }
