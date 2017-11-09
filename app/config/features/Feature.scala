@@ -25,20 +25,5 @@ trait Feature {
   def name: String
   def enabled: Boolean
 
-  def switch(to: Boolean): Unit = {
-//    sys.props.foreach(println)
-    println(sys.props.get(name))
-
-    sys.props += name -> to.toString
-    println
-    println
-    println
-    println
-    println(sys.props.get(name))
-    println("name: "+name)
-    println(conf.authFeatureEnabled)
-//    sys.props.foreach(println)
-
-  }
-
+  def switch(to: Boolean): Unit = sys.props += name -> to.toString
 }
