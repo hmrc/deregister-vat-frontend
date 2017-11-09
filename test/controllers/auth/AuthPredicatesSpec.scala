@@ -31,7 +31,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 class AuthPredicatesSpec extends UnitSpec with GuiceOneAppPerSuite with EitherValues {
 
   lazy val injector: Injector = app.injector
-  lazy val mockAppConfig = new MockAppConfig
+  lazy val mockAppConfig = new MockAppConfig(app.configuration)
 
   private val SERVICE_ENROLMENT_KEY = "HMRC-MTD-VAT"
 

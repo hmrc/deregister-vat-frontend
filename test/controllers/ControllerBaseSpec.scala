@@ -26,12 +26,11 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import uk.gov.hmrc.play.test.UnitSpec
 
-
 class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite {
 
   lazy val injector: Injector = app.injector
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = new MockAppConfig()
+  lazy val mockConfig: AppConfig = new MockAppConfig(app.configuration)
 
   implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
 }
