@@ -20,7 +20,7 @@ import java.util.Base64
 import javax.inject.{Inject, Singleton}
 
 import play.api.mvc.Call
-import play.api.{Application, Configuration}
+import play.api.Configuration
 import uk.gov.hmrc.play.binders.ContinueUrl
 import uk.gov.hmrc.play.config.ServicesConfig
 
@@ -29,6 +29,7 @@ trait AppConfig extends ServicesConfig {
   val analyticsHost: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
+  val whitelistEnabled: Boolean
   val whitelistedIps: Seq[String]
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
@@ -37,9 +38,7 @@ trait AppConfig extends ServicesConfig {
 }
 
 @Singleton
-class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
-
-  protected val configuration: Configuration = app.configuration
+class FrontendAppConfig @Inject()(val configuration: Configuration)extends AppConfig {
 
   private def loadConfig(key: String) = configuration.getString(key)
     .getOrElse(throw new Exception(s"Missing configuration key: $key"))
@@ -56,6 +55,7 @@ class FrontendAppConfig @Inject()(val app: Application) extends AppConfig {
     Some(new String(Base64.getDecoder.decode(configuration.getString(key)
       .getOrElse("")), "UTF-8")).map(_.split(",")).getOrElse(Array.empty).toSeq
 
+  override lazy val whitelistEnabled: Boolean = configuration.getBoolean("whitelist.enabled").getOrElse(true)
   override lazy val whitelistedIps: Seq[String] = whitelistConfig("whitelist.allowedIps")
   override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig("whitelist.excludedPaths").map(path => Call("GET", path))
   override lazy val shutterPage: String = loadConfig("whitelist.shutter-page-url")

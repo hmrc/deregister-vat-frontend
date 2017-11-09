@@ -21,10 +21,11 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
-class ErrorsController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class ErrorsController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
+  extends FrontendController with I18nSupport {
 
   val sessionTimeout: Action[AnyContent] = Action { implicit request =>
     Ok(views.html.errors.sessionTimeout())
