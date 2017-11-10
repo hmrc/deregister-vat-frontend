@@ -44,7 +44,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
 
   override val mode = environment.mode
 
-  private val contactHost = runModeConfiguration.getString(Keys.contactFrontendHost).getOrElse("")
+  private val contactHost = baseUrl(Keys.contactFrontendService)
   private val contactFormServiceIdentifier = "MyService"
 
   override lazy val analyticsToken: String = getString(Keys.googleAnalyticsToken)
@@ -56,10 +56,10 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
     Some(new String(Base64.getDecoder.decode(runModeConfiguration.getString(key)
       .getOrElse("")), "UTF-8")).map(_.split(",")).getOrElse(Array.empty).toSeq
 
-  override lazy val whitelistEnabled: Boolean = runModeConfiguration.getBoolean("whitelist.enabled").getOrElse(true)
+  override lazy val whitelistEnabled: Boolean = runModeConfiguration.getBoolean(Keys.whitelistEnabled).getOrElse(true)
   override lazy val whitelistedIps: Seq[String] = whitelistConfig(Keys.whitelistedIps)
   override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig(Keys.whitelistExcludedPaths).map(path => Call("GET", path))
-  override lazy val shutterPage: String = getString("whitelist.shutter-page-url")
+  override lazy val shutterPage: String = getString(Keys.whitelistShutterPage)
 
   private lazy val signInBaseUrl: String = getString(Keys.signInBaseUrl)
   private lazy val signInContinueBaseUrl: String = runModeConfiguration.getString(Keys.signInContinueBaseUrl).getOrElse("")
