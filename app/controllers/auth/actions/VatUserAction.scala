@@ -17,7 +17,7 @@
 package controllers.auth.actions
 
 import controllers.auth.{AuthPredicates, AuthorisedActions}
-import uk.gov.hmrc.play.frontend.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 trait VatUserAction extends AuthorisedActions {
   self: FrontendController =>

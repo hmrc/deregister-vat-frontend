@@ -22,7 +22,6 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
-import play.api.libs.ws.WSClient
 
 object WireMockHelper extends Eventually with IntegrationPatience {
 

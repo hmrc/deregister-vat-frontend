@@ -31,7 +31,7 @@ import scala.collection.JavaConverters._
 
 trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with Matchers {
 
-  lazy implicit val mockConfig: MockAppConfig = new MockAppConfig()
+  lazy implicit val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
   lazy val injector: Injector = app.injector
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
@@ -56,5 +56,5 @@ trait ViewBaseSpec extends UnitSpec with GuiceOneAppPerSuite with Matchers {
     document.select(cssSelector).first()
   }
 
-  def formatHtml(markup: String): String = Jsoup.parseBodyFragment("\n$markup\n").toString.trim
+  def formatHtml(markup: String): String = Jsoup.parseBodyFragment(s"\n$markup\n").toString.trim
 }

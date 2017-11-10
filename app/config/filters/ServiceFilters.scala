@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package connectors
+package config.filters
 
-import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.auth.core.PlayAuthConnector
-import config.AppConfig
-import uk.gov.hmrc.http._
+import javax.inject.Inject
 
-@Singleton
-class FrontendAuthConnector @Inject()(configuration: AppConfig, val http: HttpPost) extends PlayAuthConnector {
-  lazy val serviceUrl: String = configuration.authUrl
-}
+import play.api.http.DefaultHttpFilters
+import uk.gov.hmrc.play.bootstrap.filters.FrontendFilters
+
+class ServiceFilters @Inject()(defaultFilters: FrontendFilters, whitelistFilter: WhitelistFilter)
+  extends DefaultHttpFilters(defaultFilters.filters :+ whitelistFilter :_*)
