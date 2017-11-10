@@ -20,10 +20,10 @@ import config.AppConfig
 
 trait Feature {
 
-  def conf: AppConfig
+  protected def conf: AppConfig
 
-  def name: String
+  def key: String
   def enabled: Boolean
 
-  def switch(to: Boolean): Unit = sys.props += name -> to.toString
+  def switchTo(value: Boolean): Unit = sys.props += key -> value.toString
 }

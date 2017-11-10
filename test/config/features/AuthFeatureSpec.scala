@@ -24,34 +24,16 @@ class AuthFeatureSpec extends PlaySpec with GuiceOneAppPerSuite {
 
   private val feature = new AuthFeature(app.injector.instanceOf[AppConfig])
 
-  "The Auth Feature" when {
+  "The Auth Feature" should {
 
-    "disabled" should {
-
-      "return false" in {
-        feature.enabled mustBe false
-      }
-
-      "toggle to true" in {
-        feature.switch(to = true)
-
-        feature.enabled mustBe true
-      }
-
+    "return its current state" in {
+      feature.switchTo(false)
+      feature.enabled mustBe false
     }
 
-    "enabled" should {
-
-      "return true" in {
-        feature.enabled mustBe true
-      }
-
-      "toggle to false" in {
-        feature.switch(to = false)
-
-        feature.enabled mustBe false
-      }
-
+    "switch to a new state" in {
+      feature.switchTo(true)
+      feature.enabled mustBe true
     }
 
   }
