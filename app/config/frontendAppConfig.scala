@@ -22,6 +22,7 @@ import play.api.mvc.Call
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.binders.ContinueUrl
 import uk.gov.hmrc.play.config.ServicesConfig
+import config.{ConfigKeys => Keys}
 
 trait AppConfig extends ServicesConfig {
   val analyticsToken: String
@@ -40,15 +41,14 @@ trait AppConfig extends ServicesConfig {
 
 @Singleton
 class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val environment: Environment) extends AppConfig {
-  import ConfigKeys._
 
   override val mode = environment.mode
 
-  private val contactHost = baseUrl("contact-frontend")
+  private val contactHost = runModeConfiguration.getString(Keys.contactFrontendHost).getOrElse("")
   private val contactFormServiceIdentifier = "MyService"
 
-  override lazy val analyticsToken: String = getString(googleAnalyticsTokenKey)
-  override lazy val analyticsHost: String = getString(googleAnalyticsHostKey)
+  override lazy val analyticsToken: String = getString(Keys.googleAnalyticsToken)
+  override lazy val analyticsHost: String = getString(Keys.googleAnalyticsHost)
   override lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
@@ -57,15 +57,15 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
       .getOrElse("")), "UTF-8")).map(_.split(",")).getOrElse(Array.empty).toSeq
 
   override lazy val whitelistEnabled: Boolean = runModeConfiguration.getBoolean("whitelist.enabled").getOrElse(true)
-  override lazy val whitelistedIps: Seq[String] = whitelistConfig(whitelistedIpsKey)
-  override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig(whitelistExcludedPathsKey).map(path => Call("GET", path))
+  override lazy val whitelistedIps: Seq[String] = whitelistConfig(Keys.whitelistedIps)
+  override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig(Keys.whitelistExcludedPaths).map(path => Call("GET", path))
   override lazy val shutterPage: String = getString("whitelist.shutter-page-url")
 
-  private lazy val signInBaseUrl: String = getString(signInBaseUrlKey)
-  private lazy val signInContinueBaseUrl: String = runModeConfiguration.getString(signInContinueBaseUrlKey).getOrElse("")
+  private lazy val signInBaseUrl: String = getString(Keys.signInBaseUrl)
+  private lazy val signInContinueBaseUrl: String = runModeConfiguration.getString(Keys.signInContinueBaseUrl).getOrElse("")
   private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
   private lazy val signInOrigin: String = getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
 
-  override def authFeatureEnabled: Boolean = sys.props.get(simpleAuthFeatureKey).exists(_.toBoolean)
+  override def authFeatureEnabled: Boolean = sys.props.get(Keys.simpleAuthFeature).exists(_.toBoolean)
 }

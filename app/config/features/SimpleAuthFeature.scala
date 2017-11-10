@@ -20,9 +20,9 @@ import javax.inject.Inject
 
 import config.{AppConfig, ConfigKeys}
 
-class AuthFeature @Inject()(val conf: AppConfig) extends Feature {
+class SimpleAuthFeature @Inject()(val conf: AppConfig) extends Feature {
 
-  override lazy val key: String = ConfigKeys.simpleAuthFeatureKey
+  override lazy val key: String = ConfigKeys.simpleAuthFeature
 
   override def enabled: Boolean = conf.authFeatureEnabled
 

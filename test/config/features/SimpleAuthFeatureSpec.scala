@@ -20,9 +20,9 @@ import config.AppConfig
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-class AuthFeatureSpec extends PlaySpec with GuiceOneAppPerSuite {
+class SimpleAuthFeatureSpec extends PlaySpec with GuiceOneAppPerSuite {
 
-  private val feature = new AuthFeature(app.injector.instanceOf[AppConfig])
+  private val feature = new SimpleAuthFeature(app.injector.instanceOf[AppConfig])
 
   "The Auth Feature" should {
 

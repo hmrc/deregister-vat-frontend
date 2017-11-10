@@ -18,19 +18,19 @@ package config
 
 object ConfigKeys {
 
-  val contactFrontendHostKey: String = "contact-frontend.host"
+  val contactFrontendHost: String = "contact-frontend.host"
 
   private val googleAnalyticsRoot: String = "google-analytics"
-  val googleAnalyticsTokenKey: String = googleAnalyticsRoot + ".token"
-  val googleAnalyticsHostKey: String = googleAnalyticsRoot + ".host"
+  val googleAnalyticsToken: String = googleAnalyticsRoot + ".token"
+  val googleAnalyticsHost: String = googleAnalyticsRoot + ".host"
 
-  val whitelistedIpsKey: String = "whitelist.allowedIps"
-  val whitelistExcludedPathsKey: String = "whitelist.excludedPaths"
-  val whitelistShutterPageKey: String = "whitelist.shutter-page-url"
+  val whitelistedIps: String = "whitelist.allowedIps"
+  val whitelistExcludedPaths: String = "whitelist.excludedPaths"
+  val whitelistShutterPage: String = "whitelist.shutter-page-url"
 
-  val signInBaseUrlKey: String = "signIn.url"
-  val signInContinueBaseUrlKey: String = "signIn.continueBaseUrl"
+  val signInBaseUrl: String = "signIn.url"
+  val signInContinueBaseUrl: String = "signIn.continueBaseUrl"
 
-  val simpleAuthFeatureKey: String = "features.simpleAuth.enabled"
+  val simpleAuthFeature: String = "features.simpleAuth.enabled"
 
 }
