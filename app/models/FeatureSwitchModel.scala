@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-package models.test
+package models
 
-case class FeatureSwitchModel()
+case class FeatureSwitchModel(simpleAuthEnabled: Boolean)

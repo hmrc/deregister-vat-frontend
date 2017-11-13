@@ -14,8 +14,29 @@
  * limitations under the License.
  *@
 
-@()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@import models._
+@import helper.CSRF
+
+@(form: Form[FeatureSwitchModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(title = "Feature Switch", bodyClasses = None, appConfig = appConfig) {
 
+ @helper.form(action = routes.FeatureSwitchController.submitFeatureSwitch) {
+  @CSRF.formField
+
+  <div class="form-group">
+   <fieldset>
+
+    <legend>
+     <h1 class="heading-medium">Features</h1>
+    </legend>
+
+    @views.html.templates.inputs.singleCheckbox(form("simpleAuthEnabled"), "Simple Auth Enabled")
+
+   </fieldset>
+  </div>
+
+  <button class="button" type="submit" id="continue-button">Submit</button>
+
+ }
 }

@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package models.test
+package forms
 
-import play.api.libs.json.{Json, OFormat}
+import models.FeatureSwitchModel
+import play.api.data.Form
+import play.api.data.Forms._
 
-case class TextInputModel(text: String)
+object FeatureSwitchForm {
 
-object TextInputModel {
-  implicit val format: OFormat[TextInputModel] = Json.format[TextInputModel]
+  val form: Form[FeatureSwitchModel] = Form(
+    mapping(
+      "simpleAuthEnabled" -> boolean
+      )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
+  )
+
 }
