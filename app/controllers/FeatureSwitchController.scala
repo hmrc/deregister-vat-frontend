@@ -33,7 +33,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
 
   val featureSwitch: Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok(views.html.featureSwitch(FeatureSwitchForm.form.fill(
-      FeatureSwitchModel(true)
+      FeatureSwitchModel(simpleAuthEnabled = true)
     ))))
   }
 
