@@ -25,5 +25,8 @@ trait Feature {
   def key: String
   def enabled: Boolean
 
-  def switchTo(value: Boolean): Unit = sys.props += key -> value.toString
+  def switchTo(value: Boolean): Unit = {
+    println(s"Switching to $value")
+    sys.props += key -> value.toString
+  }
 }
