@@ -30,13 +30,19 @@ import scala.concurrent.{ExecutionContext, Future}
 class HelloWorldControllerSpec extends ControllerBaseSpec {
 
   private trait Test {
+    val success: Boolean = true
     val enrolments: Enrolments
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-    def setup() {
+    private def setup() = if (success) {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(Future.successful(enrolments))
+    }
+    else {
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(Future.failed(InsufficientEnrolments()))
     }
 
     val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
@@ -63,14 +69,14 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
       "return 200" in new Test {
         override val enrolments: Enrolments = goodEnrolments
-        val result = target.helloWorld(fakeRequest)
+        private val result = target.helloWorld()(fakeRequest)
 
         status(result) shouldBe Status.OK
       }
 
       "return HTML" in new Test {
         override val enrolments: Enrolments = goodEnrolments
-        val result = target.helloWorld(fakeRequest)
+        private val result = target.helloWorld()(fakeRequest)
 
         contentType(result) shouldBe Some("text/html")
         charset(result) shouldBe Some("utf-8")
@@ -82,15 +88,17 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
       val noEnrolments: Enrolments = Enrolments(Set())
 
       "return 303" in new Test {
+        override val success: Boolean = false
         override val enrolments: Enrolments = noEnrolments
-        val result = target.helloWorld(fakeRequest)
+        private val result = target.helloWorld()(fakeRequest)
 
         status(result) shouldBe Status.SEE_OTHER
       }
 
       "redirect the user to the unauthorised page" in new Test {
+        override val success: Boolean = false
         override val enrolments: Enrolments = noEnrolments
-        val result = target.helloWorld(fakeRequest)
+        private val result = target.helloWorld()(fakeRequest)
 
         redirectLocation(result) shouldBe Some(routes.ErrorsController.unauthorised().url)
       }

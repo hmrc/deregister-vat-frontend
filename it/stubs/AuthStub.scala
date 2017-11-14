@@ -52,7 +52,7 @@ object AuthStub extends WireMockMethods {
 
   def unauthorisedMissingEnrolment(): StubMapping = {
     when(method = POST, uri = authoriseUri)
-      .thenReturn(status = OK, body = successfulAuthResponse(otherEnrolment))
+      .thenReturn(status = UNAUTHORIZED, body = successfulAuthResponse(otherEnrolment))
   }
 
   def unauthorisedNotLoggedIn(): StubMapping = {
@@ -61,6 +61,6 @@ object AuthStub extends WireMockMethods {
   }
 
   private def successfulAuthResponse(enrolments: JsObject*): JsObject = {
-    Json.obj("allEnrolments" -> enrolments)
+    Json.obj("authorisedEnrolments" -> enrolments)
   }
 }
