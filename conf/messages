@@ -1,3 +1,5 @@
+service.title = De-register for VAT
+
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To manage your VAT account, you''ll have to
 sessionTimeout.helpTwo = sign in
@@ -5,3 +7,6 @@ sessionTimeout.helpThree = using your Government Gateway ID.
 
 unauthorised.title = Unauthorised access
 unauthorised.instructions = Here are some instructions about what you should do next.
+
+featureSwitch.title = Feature switches
+features.simpleAuth.enabled = Simple auth

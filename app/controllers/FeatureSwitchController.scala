@@ -33,22 +33,22 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
                                         implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
-  def featureSwitch: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(views.html.featureSwitch(FeatureSwitchForm.form.fill(
+  def featureSwitch: Action[AnyContent] = Action { implicit request =>
+    Ok(views.html.featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(simpleAuthEnabled = simpleAuthFeature.enabled)
-    ))))
+    )))
   }
 
-  def submitFeatureSwitch = Action { implicit request =>
+  def submitFeatureSwitch: Action[AnyContent] = Action { implicit request =>
     FeatureSwitchForm.form.bindFromRequest().fold(
-      hasErrors = _ => Ok("miranda is a noob"),
+      _ => Redirect(routes.FeatureSwitchController.featureSwitch()),
       success = handleSuccess
     )
   }
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     simpleAuthFeature.switchTo(model.simpleAuthEnabled)
-    Redirect(routes.HelloWorldController.helloWorld())
+    Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 
 }

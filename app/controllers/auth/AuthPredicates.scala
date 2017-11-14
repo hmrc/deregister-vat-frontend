@@ -28,14 +28,14 @@ object AuthPredicates extends Results {
   lazy val unauthorisedRoute: Result = Redirect(controllers.routes.ErrorsController.unauthorised())
   lazy val timeoutRoute: Result = Redirect(controllers.routes.ErrorsController.sessionTimeout())
 
-  private[auth] def enrolledPredicate: AuthPredicate = _ => user =>
+  private[auth] val enrolledPredicate: AuthPredicate = _ => user =>
     if (user.Vrn.isDefined) {
       Right(Success)
     } else {
       Left(Future.successful(unauthorisedRoute))
     }
 
-  private[auth] def timeoutPredicate: AuthPredicate = request => _ =>
+  private[auth] val timeoutPredicate: AuthPredicate = request => _ =>
     if (request.session.get(lastRequestTimestamp).isDefined && request.session.get(authToken).isEmpty) {
       Left(Future.successful(timeoutRoute))
     }

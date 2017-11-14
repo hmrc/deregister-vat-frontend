@@ -28,10 +28,8 @@ trait VatUserAction extends AuthorisedActions {
   object VatUserAction {
     def async: AuthenticatedAction = {
       if(simpleAuthFeature.enabled) {
-        println(">>>>>>>>>>>>> Simple Auth")
         action(AuthPredicates.timeoutPredicate)
       } else {
-        println(">>>>>>>>>>>>> Really Complicated Auth that is hard to understand no really it is hard")
         action(AuthPredicates.enrolledUserPredicate)
       }
     }

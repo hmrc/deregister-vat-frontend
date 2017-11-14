@@ -20,7 +20,7 @@
 
 @(form: Form[FeatureSwitchModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(title = "Feature Switch", bodyClasses = None, appConfig = appConfig) {
+@views.html.main_template(title = messages("featureSwitch.title"), bodyClasses = None, appConfig = appConfig) {
 
  @helper.form(action = routes.FeatureSwitchController.submitFeatureSwitch) {
   @CSRF.formField
@@ -32,7 +32,7 @@
      <h1 class="heading-medium">Features</h1>
     </legend>
 
-    @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.simpleAuthFeature), "Simple Auth Enabled")
+    @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.simpleAuthFeature), messages(ConfigKeys.simpleAuthFeature))
 
    </fieldset>
   </div>
