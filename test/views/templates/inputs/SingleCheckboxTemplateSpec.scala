@@ -35,7 +35,7 @@ class SingleCheckboxTemplateSpec extends TemplateBaseSpec {
       val expectedMarkup = Html(
         s"""
           |<div class="multiple-choice">
-          |    <input id="$fieldName" name="$fieldName" type="checkbox" value="$value" checked>
+          |    <input id="$fieldName" name="$fieldName" type="checkbox" value="true" checked>
           |    <label for="$fieldName">$label</label>
           |</div>
           |""".stripMargin
@@ -56,7 +56,7 @@ class SingleCheckboxTemplateSpec extends TemplateBaseSpec {
       val expectedMarkup = Html(
         s"""
            |<div class="multiple-choice">
-           |    <input id="$fieldName" name="$fieldName" type="checkbox" value="$value">
+           |    <input id="$fieldName" name="$fieldName" type="checkbox" value="true">
            |    <label for="$fieldName">$label</label>
            |</div>
            |""".stripMargin
@@ -76,7 +76,7 @@ class SingleCheckboxTemplateSpec extends TemplateBaseSpec {
       val expectedMarkup = Html(
         s"""
            |<div class="multiple-choice">
-           |    <input id="$fieldName" name="$fieldName" type="checkbox" value="false">
+           |    <input id="$fieldName" name="$fieldName" type="checkbox" value="true">
            |    <label for="$fieldName">$label</label>
            |</div>
            |""".stripMargin

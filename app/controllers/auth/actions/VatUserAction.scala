@@ -16,13 +16,22 @@
 
 package controllers.auth.actions
 
+import config.features.SimpleAuthFeature
 import controllers.auth.{AuthPredicates, AuthorisedActions}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 trait VatUserAction extends AuthorisedActions {
   self: FrontendController =>
 
+  def simpleAuthFeature: SimpleAuthFeature
+
   object VatUserAction {
-    def async: AuthenticatedAction = action(AuthPredicates.enrolledUserPredicate)
+    def async: AuthenticatedAction = {
+      if(simpleAuthFeature.enabled) {
+        action(AuthPredicates.timeoutPredicate)
+      } else {
+        action(AuthPredicates.enrolledUserPredicate)
+      }
+    }
   }
 }

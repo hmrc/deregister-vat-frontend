@@ -24,6 +24,8 @@ import play.api.i18n.MessagesApi
 import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import play.filters.csrf.CSRF.Token
+import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
 import uk.gov.hmrc.play.test.UnitSpec
 
 class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite {
@@ -32,5 +34,19 @@ class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSu
   lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
   lazy val mockConfig: AppConfig = new MockAppConfig(app.configuration)
 
-  implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("", "")
+  implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+
+  implicit class CSRFTokenAdder[T](req: FakeRequest[T]) {
+    def addToken: FakeRequest[T] = {
+      val csrfConfig = app.injector.instanceOf[CSRFConfigProvider].get
+      val csrfFilter = app.injector.instanceOf[CSRFFilter]
+      val token = csrfFilter.tokenProvider.generateToken
+
+      req.copyFakeRequest(tags = req.tags ++ Map(
+        Token.NameRequestTag -> csrfConfig.tokenName,
+        Token.RequestTag -> token
+      )).withHeaders(csrfConfig.headerName -> token)
+    }
+  }
+
 }

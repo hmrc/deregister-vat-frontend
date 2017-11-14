@@ -19,6 +19,7 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
+import config.features.SimpleAuthFeature
 import controllers.auth.actions.VatUserAction
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -30,10 +31,11 @@ import scala.concurrent.Future
 @Singleton
 class HelloWorldController @Inject()(val messagesApi: MessagesApi,
                                      val authFunctions: AuthorisedFunctions,
+                                     val simpleAuthFeature: SimpleAuthFeature,
                                      implicit val appConfig: AppConfig)
   extends FrontendController with VatUserAction with I18nSupport {
 
-  val helloWorld: Action[AnyContent] = VatUserAction.async { implicit request => _ =>
+  def helloWorld: Action[AnyContent] = VatUserAction.async { implicit request => _ =>
     Future.successful(Ok(views.html.helloworld.hello_world()))
   }
 }
