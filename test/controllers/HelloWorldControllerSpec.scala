@@ -16,7 +16,6 @@
 
 package controllers
 
-import config.features.SimpleAuthFeature
 import play.api.http.Status
 import play.api.test.Helpers._
 import services.EnrolmentsAuthService
@@ -47,11 +46,10 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
     }
 
     val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
-    val mockAuthFeature = new SimpleAuthFeature(mockConfig)
 
     def target: HelloWorldController = {
       setup()
-      new HelloWorldController(messages, mockAuthorisedFunctions, mockAuthFeature, mockConfig)
+      new HelloWorldController(messages, mockAuthorisedFunctions, mockConfig)
     }
   }
 

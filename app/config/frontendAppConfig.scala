@@ -18,11 +18,14 @@ package config
 
 import java.util.Base64
 import javax.inject.{Inject, Singleton}
+
+import config.features.Features
 import play.api.mvc.Call
 import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.binders.ContinueUrl
 import uk.gov.hmrc.play.config.ServicesConfig
 import config.{ConfigKeys => Keys}
+import play.api.Mode.Mode
 
 trait AppConfig extends ServicesConfig {
   val analyticsToken: String
@@ -34,15 +37,13 @@ trait AppConfig extends ServicesConfig {
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
   val signInUrl: String
-
-  // must be a 'def' to collect updates
-  def authFeatureEnabled: Boolean
+  val features: Features
 }
 
 @Singleton
-class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val environment: Environment) extends AppConfig {
+class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, environment: Environment) extends AppConfig {
 
-  override val mode = environment.mode
+  override val mode: Mode = environment.mode
 
   private val contactHost = baseUrl(Keys.contactFrontendService)
   private val contactFormServiceIdentifier = "MyService"
@@ -67,5 +68,5 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, val e
   private lazy val signInOrigin: String = getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
 
-  override def authFeatureEnabled: Boolean = sys.props.get(Keys.simpleAuthFeature).exists(_.toBoolean)
+  override val features = new Features(runModeConfiguration)
 }

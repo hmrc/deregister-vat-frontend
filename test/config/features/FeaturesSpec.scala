@@ -16,14 +16,25 @@
 
 package config.features
 
-import javax.inject.Inject
+import play.api.Configuration
+import org.scalatestplus.play.PlaySpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-import config.{AppConfig, ConfigKeys}
+class FeaturesSpec extends PlaySpec with GuiceOneAppPerSuite {
 
-class SimpleAuthFeature @Inject()(val conf: AppConfig) extends Feature {
+  private val features = new Features(app.injector.instanceOf[Configuration])
 
-  override lazy val key: String = ConfigKeys.simpleAuthFeature
+  "The Auth Feature" should {
 
-  override def enabled: Boolean = conf.authFeatureEnabled
+    "return its current state" in {
+      features.simpleAuth() mustBe false
+    }
+
+    "switch to a new state" in {
+      features.simpleAuth(true)
+      features.simpleAuth() mustBe true
+    }
+
+  }
 
 }

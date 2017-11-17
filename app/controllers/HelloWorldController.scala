@@ -19,7 +19,6 @@ package controllers
 import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
-import config.features.SimpleAuthFeature
 import play.api.Logger
 import play.api.i18n.MessagesApi
 import play.api.mvc._
@@ -30,7 +29,6 @@ import scala.concurrent.Future
 @Singleton
 class HelloWorldController @Inject()(val messagesApi: MessagesApi,
                                      val auth: AuthorisedFunctions,
-                                     simpleAuthFeature: SimpleAuthFeature,
                                      override implicit val appConfig: AppConfig)
   extends AuthorisedController {
 
