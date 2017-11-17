@@ -55,7 +55,7 @@ object AuthStub extends WireMockMethods {
       .thenReturn(status = UNAUTHORIZED, body = successfulAuthResponse(otherEnrolment))
   }
 
-  def unauthorisedNotLoggedIn(): StubMapping = {
+  def unauthenticated(): StubMapping = {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = UNAUTHORIZED, headers = Map("WWW-Authenticate" -> """MDTP detail="MissingBearerToken""""))
   }

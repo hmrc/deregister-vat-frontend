@@ -30,19 +30,20 @@ import scala.concurrent.{ExecutionContext, Future}
 class HelloWorldControllerSpec extends ControllerBaseSpec {
 
   private trait Test {
-    val success: Boolean = true
-    val enrolments: Enrolments
+    val failure: Option[AuthorisationException] = None
+    val enrolments: Option[Enrolments] = None
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-    private def setup() = if (success) {
+    private def setup() {
+      val result = (enrolments, failure) match {
+        case (None, Some(ex)) => Future.failed(ex)
+        case (Some(services), None) => Future.successful(services)
+        case _ => fail("Invalid test scenario")
+      }
+
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
-        .returns(Future.successful(enrolments))
-    }
-    else {
-      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *, *)
-        .returns(Future.failed(InsufficientEnrolments()))
+        .returns(result)
     }
 
     val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
@@ -68,14 +69,14 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
       )
 
       "return 200" in new Test {
-        override val enrolments: Enrolments = goodEnrolments
+        override val enrolments = Some(goodEnrolments)
         private val result = target.helloWorld()(fakeRequest)
 
         status(result) shouldBe Status.OK
       }
 
       "return HTML" in new Test {
-        override val enrolments: Enrolments = goodEnrolments
+        override val enrolments = Some(goodEnrolments)
         private val result = target.helloWorld()(fakeRequest)
 
         contentType(result) shouldBe Some("text/html")
@@ -83,24 +84,23 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "the user is not authorised" should {
-
-      val noEnrolments: Enrolments = Enrolments(Set())
+    "the user is not authenticated" should {
 
       "return 303" in new Test {
-        override val success: Boolean = false
-        override val enrolments: Enrolments = noEnrolments
+        override val failure = Some(MissingBearerToken())
         private val result = target.helloWorld()(fakeRequest)
 
-        status(result) shouldBe Status.SEE_OTHER
+        status(result) shouldBe Status.UNAUTHORIZED
       }
+    }
 
-      "redirect the user to the unauthorised page" in new Test {
-        override val success: Boolean = false
-        override val enrolments: Enrolments = noEnrolments
+    "the user is not authorised" should {
+
+      "return 303" in new Test {
+        override val failure = Some(InsufficientEnrolments())
         private val result = target.helloWorld()(fakeRequest)
 
-        redirectLocation(result) shouldBe Some(routes.ErrorsController.unauthorised().url)
+        status(result) shouldBe Status.FORBIDDEN
       }
     }
 

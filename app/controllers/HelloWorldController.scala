@@ -28,15 +28,17 @@ import uk.gov.hmrc.auth.core._
 import scala.concurrent.Future
 
 @Singleton
-class HelloWorldController @Inject()(messagesApi: MessagesApi,
-                                     auth: AuthorisedFunctions,
+class HelloWorldController @Inject()(val messagesApi: MessagesApi,
+                                     val auth: AuthorisedFunctions,
                                      simpleAuthFeature: SimpleAuthFeature,
                                      override implicit val appConfig: AppConfig)
-  extends AuthorisedController(messagesApi, auth, appConfig) {
+  extends AuthorisedController {
 
-  def helloWorld(): Action[AnyContent] = authorisedAction { implicit request => vrn =>
-      Logger.warn(s"THE USERS VRN IS: $vrn")
-      Future.successful(Ok(views.html.helloworld.hello_world()))
+  def helloWorld(): Action[AnyContent] = authorisedAction {
+    implicit request =>
+      vrn =>
+        Logger.debug(s"THE USERS VRN IS: $vrn")
+        Future.successful(Ok(views.html.helloworld.hello_world()))
   }
 
 }
