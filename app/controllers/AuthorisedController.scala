@@ -16,6 +16,7 @@
 
 package controllers
 
+import common.EnrolmentKeys
 import config.AppConfig
 import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -32,12 +33,10 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
   val auth: AuthorisedFunctions
   implicit val appConfig: AppConfig
 
-  private val VAT_ENROLMENT_ID = "HMRC-MTD-VAT"
-
   def authorisedAction(block: Request[AnyContent] => User => Future[Result]): Action[AnyContent] = Action.async { implicit request =>
-    auth.authorised(Enrolment(VAT_ENROLMENT_ID)).retrieve(Retrievals.authorisedEnrolments) {
+    auth.authorised(Enrolment(EnrolmentKeys.VatEnrolmentId)).retrieve(Retrievals.authorisedEnrolments) {
       enrolments => {
-        val user = buildUser(enrolments)
+        val user = User(enrolments)
         block(request)(user)
       }
     } recoverWith {
@@ -45,9 +44,5 @@ abstract class AuthorisedController extends FrontendController with I18nSupport 
       case _: AuthorisationException => Future.successful(Forbidden(views.html.errors.unauthorised()))
     }
   }
-
-  private def buildUser(enrolments: Enrolments): User = enrolments.enrolments.collectFirst {
-    case Enrolment(VAT_ENROLMENT_ID, EnrolmentIdentifier(_, vatId) :: _, _, _) => User(vatId)
-  }.getOrElse(throw InternalError("VRN Missing"))
 
 }
