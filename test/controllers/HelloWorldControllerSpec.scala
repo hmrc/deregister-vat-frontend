@@ -29,20 +29,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class HelloWorldControllerSpec extends ControllerBaseSpec {
 
   private trait Test {
-    val failure: Option[AuthorisationException] = None
-    val enrolments: Option[Enrolments] = None
+    val authResult: Future[Enrolments]
     val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
     private def setup() {
-      val result = (enrolments, failure) match {
-        case (None, Some(ex)) => Future.failed(ex)
-        case (Some(services), None) => Future.successful(services)
-        case _ => fail("Invalid test scenario")
-      }
-
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
-        .returns(result)
+        .returns(authResult)
     }
 
     val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
@@ -66,15 +59,15 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
         )
       )
 
-      "return 200" in new Test {
-        override val enrolments = Some(goodEnrolments)
+      "return 200 (OK)" in new Test {
+        override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
         private val result = target.helloWorld()(fakeRequest)
 
         status(result) shouldBe Status.OK
       }
 
       "return HTML" in new Test {
-        override val enrolments = Some(goodEnrolments)
+        override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
         private val result = target.helloWorld()(fakeRequest)
 
         contentType(result) shouldBe Some("text/html")
@@ -84,8 +77,8 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
     "the user is not authenticated" should {
 
-      "return 303" in new Test {
-        override val failure = Some(MissingBearerToken())
+      "return 401 (Unauthorised)" in new Test {
+        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
         private val result = target.helloWorld()(fakeRequest)
 
         status(result) shouldBe Status.UNAUTHORIZED
@@ -94,8 +87,8 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
     "the user is not authorised" should {
 
-      "return 303" in new Test {
-        override val failure = Some(InsufficientEnrolments())
+      "return 403 (Forbidden)" in new Test {
+        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
         private val result = target.helloWorld()(fakeRequest)
 
         status(result) shouldBe Status.FORBIDDEN
