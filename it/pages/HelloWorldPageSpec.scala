@@ -18,7 +18,7 @@ package pages
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import play.api.http.{HeaderNames, Status}
+import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs.AuthStub
 
@@ -40,6 +40,7 @@ class HelloWorldPageSpec extends IntegrationBaseSpec {
 
       "return 200 OK" in new Test {
         override def setupStubs(): StubMapping = AuthStub.authorised()
+
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK
       }
@@ -51,6 +52,7 @@ class HelloWorldPageSpec extends IntegrationBaseSpec {
 
       "return 401 SEE UNAUTHORIZED" in new Test {
         override def setupStubs(): StubMapping = setupStubsForScenario()
+
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.UNAUTHORIZED
       }
@@ -62,6 +64,7 @@ class HelloWorldPageSpec extends IntegrationBaseSpec {
 
       "return 403 SEE FORBIDDEN" in new Test {
         override def setupStubs(): StubMapping = setupStubsForScenario()
+
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.FORBIDDEN
       }
