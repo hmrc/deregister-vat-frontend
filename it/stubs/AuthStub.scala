@@ -52,15 +52,15 @@ object AuthStub extends WireMockMethods {
 
   def unauthorisedMissingEnrolment(): StubMapping = {
     when(method = POST, uri = authoriseUri)
-      .thenReturn(status = OK, body = successfulAuthResponse(otherEnrolment))
+      .thenReturn(status = UNAUTHORIZED, body = successfulAuthResponse(otherEnrolment))
   }
 
-  def unauthorisedNotLoggedIn(): StubMapping = {
+  def unauthenticated(): StubMapping = {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = UNAUTHORIZED, headers = Map("WWW-Authenticate" -> """MDTP detail="MissingBearerToken""""))
   }
 
   private def successfulAuthResponse(enrolments: JsObject*): JsObject = {
-    Json.obj("allEnrolments" -> enrolments)
+    Json.obj("authorisedEnrolments" -> enrolments)
   }
 }

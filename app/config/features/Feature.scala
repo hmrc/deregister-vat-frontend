@@ -16,14 +16,10 @@
 
 package config.features
 
-import config.AppConfig
+import play.api.Configuration
 
-trait Feature {
+class Feature(val key: String, config: Configuration) {
+  def apply(value: Boolean): Unit = sys.props += key -> value.toString
 
-  protected def conf: AppConfig
-
-  def key: String
-  def enabled: Boolean
-
-  def switchTo(value: Boolean): Unit = sys.props += key -> value.toString
+  def apply(): Boolean = sys.props.get(key).fold(config.getBoolean(key).getOrElse(false))(_.toBoolean)
 }

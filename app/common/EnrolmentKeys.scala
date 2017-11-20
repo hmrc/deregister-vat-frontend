@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package config.features
+package common
 
-import javax.inject.Inject
+object EnrolmentKeys {
 
-import config.{AppConfig, ConfigKeys}
-
-class SimpleAuthFeature @Inject()(val conf: AppConfig) extends Feature {
-
-  override lazy val key: String = ConfigKeys.simpleAuthFeature
-
-  override def enabled: Boolean = conf.authFeatureEnabled
+  val VatEnrolmentId = "HMRC-MTD-VAT"
 
 }

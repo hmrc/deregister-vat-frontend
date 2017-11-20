@@ -19,23 +19,19 @@ package controllers
 import javax.inject.Inject
 
 import config.AppConfig
-import config.features.SimpleAuthFeature
 import forms.FeatureSwitchForm
 import models.FeatureSwitchModel
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
-
 class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
-                                        simpleAuthFeature: SimpleAuthFeature,
                                         implicit val appConfig: AppConfig)
   extends FrontendController with I18nSupport {
 
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
     Ok(views.html.featureSwitch(FeatureSwitchForm.form.fill(
-      FeatureSwitchModel(simpleAuthEnabled = simpleAuthFeature.enabled)
+      FeatureSwitchModel(simpleAuthEnabled = appConfig.features.simpleAuth())
     )))
   }
 
@@ -47,7 +43,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
   }
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
-    simpleAuthFeature.switchTo(model.simpleAuthEnabled)
+    appConfig.features.simpleAuth(model.simpleAuthEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 

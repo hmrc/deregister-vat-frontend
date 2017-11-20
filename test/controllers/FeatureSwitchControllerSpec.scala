@@ -16,14 +16,12 @@
 
 package controllers
 
-import config.features.SimpleAuthFeature
 import play.api.http.Status
 import play.api.test.Helpers._
 
 class FeatureSwitchControllerSpec extends ControllerBaseSpec {
 
-  private lazy val mockAuthFeature = new SimpleAuthFeature(mockConfig)
-  private lazy val target = new FeatureSwitchController(messages, mockAuthFeature, mockConfig)
+  private lazy val target = new FeatureSwitchController(messages, mockConfig)
 
   "Calling the .featureSwitch action" should {
 

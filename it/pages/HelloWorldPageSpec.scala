@@ -18,7 +18,7 @@ package pages
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import play.api.http.{HeaderNames, Status}
+import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
 import stubs.AuthStub
 
@@ -40,6 +40,7 @@ class HelloWorldPageSpec extends IntegrationBaseSpec {
 
       "return 200 OK" in new Test {
         override def setupStubs(): StubMapping = AuthStub.authorised()
+
         val response: WSResponse = await(request().get())
         response.status shouldBe Status.OK
       }
@@ -47,18 +48,13 @@ class HelloWorldPageSpec extends IntegrationBaseSpec {
 
     "the user is not authenticated" should {
 
-      def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedNotLoggedIn()
+      def setupStubsForScenario(): StubMapping = AuthStub.unauthenticated()
 
-      "return 303 SEE OTHER" in new Test {
+      "return 401 SEE UNAUTHORIZED" in new Test {
         override def setupStubs(): StubMapping = setupStubsForScenario()
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.SEE_OTHER
-      }
 
-      "return redirect to the session timeout page" in new Test {
-        override def setupStubs(): StubMapping = setupStubsForScenario()
         val response: WSResponse = await(request().get())
-        response.header(HeaderNames.LOCATION) shouldBe Some(s"$appRouteContext/session-timeout")
+        response.status shouldBe Status.UNAUTHORIZED
       }
     }
 
@@ -66,16 +62,11 @@ class HelloWorldPageSpec extends IntegrationBaseSpec {
 
       def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedMissingEnrolment()
 
-      "return 303 SEE OTHER" in new Test {
+      "return 403 SEE FORBIDDEN" in new Test {
         override def setupStubs(): StubMapping = setupStubsForScenario()
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.SEE_OTHER
-      }
 
-      "return redirect to the unauthorised page" in new Test {
-        override def setupStubs(): StubMapping = setupStubsForScenario()
         val response: WSResponse = await(request().get())
-        response.header(HeaderNames.LOCATION) shouldBe Some(s"$appRouteContext/unauthorised")
+        response.status shouldBe Status.FORBIDDEN
       }
     }
   }

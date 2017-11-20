@@ -17,6 +17,7 @@
 package mocks
 
 import config.AppConfig
+import config.features.Features
 import play.api.{Configuration, Mode}
 import play.api.mvc.Call
 import play.api.Mode.Mode
@@ -32,6 +33,6 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/manage-vat-subscription"
   override val signInUrl: String = ""
 
-  override def authFeatureEnabled: Boolean = false
+  override val features: Features = new Features(runModeConfiguration)
 }
 

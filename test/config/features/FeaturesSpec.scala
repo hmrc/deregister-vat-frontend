@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package controllers
+package config.features
 
-import javax.inject.{Inject, Singleton}
+import play.api.Configuration
+import org.scalatestplus.play.PlaySpec
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-import config.AppConfig
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+class FeaturesSpec extends PlaySpec with GuiceOneAppPerSuite {
 
-@Singleton
-class ErrorsController @Inject()(val messagesApi: MessagesApi, implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport {
+  private val features = new Features(app.injector.instanceOf[Configuration])
 
-  val sessionTimeout: Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.errors.sessionTimeout())
-  }
+  "The Auth Feature" should {
 
-  val unauthorised: Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.errors.unauthorised())
+    "return its current state" in {
+      features.simpleAuth() mustBe false
+    }
+
+    "switch to a new state" in {
+      features.simpleAuth(true)
+      features.simpleAuth() mustBe true
+    }
+
   }
 
 }

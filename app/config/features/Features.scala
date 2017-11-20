@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package controllers.auth
+package config.features
 
-import cats.Monoid
-import play.api.mvc.{AnyContent, Request, Result}
+import javax.inject.{Inject, Singleton}
 
-import scala.concurrent.Future
+import config.ConfigKeys
+import play.api.Configuration
 
-object AuthPredicate {
-
-  object Success
-
-  type Success = Success.type
-
-  implicit object SuccessMonoid extends Monoid[Success] {
-    override def empty: Success = Success
-    override def combine(x: Success, y: Success): Success = Success
-  }
-
-  type AuthPredicate = Request[AnyContent] => User => Either[Future[Result], Success]
+@Singleton
+class Features @Inject()(config: Configuration) {
+  val simpleAuth = new Feature(ConfigKeys.simpleAuthFeature, config)
 }
