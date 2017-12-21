@@ -16,13 +16,19 @@
 
 package config.features
 
+import org.scalatest.BeforeAndAfterEach
 import play.api.Configuration
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-class FeaturesSpec extends PlaySpec with GuiceOneAppPerSuite {
+class FeaturesSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
 
   private val features = new Features(app.injector.instanceOf[Configuration])
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    features.simpleAuth(false)
+  }
 
   "The Auth Feature" should {
 
