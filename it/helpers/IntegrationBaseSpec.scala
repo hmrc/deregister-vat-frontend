@@ -34,7 +34,7 @@ trait IntegrationBaseSpec extends UnitSpec
 
   val mockHost: String = WireMockHelper.host
   val mockPort: String = WireMockHelper.wmPort.toString
-  val appRouteContext: String = "/deregister-for-vat"
+  val appRouteContext: String = "/vat-through-software/account/deregister"
 
   lazy val client: WSClient = app.injector.instanceOf[WSClient]
 
