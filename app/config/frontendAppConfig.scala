@@ -46,7 +46,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override val mode: Mode = environment.mode
 
   private val contactHost = baseUrl(Keys.contactFrontendService)
-  private val contactFormServiceIdentifier = "MyService"
+  private val contactFormServiceIdentifier = "VATVC"
 
   override lazy val analyticsToken: String = getString(Keys.googleAnalyticsToken)
   override lazy val analyticsHost: String = getString(Keys.googleAnalyticsHost)
