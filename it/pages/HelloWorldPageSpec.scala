@@ -16,57 +16,58 @@
 
 package pages
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.IntegrationBaseSpec
-import play.api.http.Status
-import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.AuthStub
+import play.api.libs.ws.WSResponse
+import play.api.http.Status._
 
 class HelloWorldPageSpec extends IntegrationBaseSpec {
 
-  private trait Test {
+  def request(): WSResponse = get("/hello-world")
 
-    def setupStubs(): StubMapping
+  "Calling the HelloWorldController.helloWorld" when {
 
-    def request(): WSRequest = {
-      setupStubs()
-      buildRequest("/hello-world")
-    }
-  }
+    "the user is authorised" should {
 
-  "Calling the hello-world route" when {
+      "return 200 OK" in {
 
-    "the user is authenticated" should {
+        given.user.isAuthorised
 
-      "return 200 OK" in new Test {
-        override def setupStubs(): StubMapping = AuthStub.authorised()
+        val response: WSResponse = request()
 
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.OK
+        response should have(
+          httpStatus(OK),
+          pageTitle("Hello from deregister-vat-frontend")
+        )
       }
     }
 
     "the user is not authenticated" should {
 
-      def setupStubsForScenario(): StubMapping = AuthStub.unauthenticated()
+      "return 401 UNAUTHORIZED" in {
 
-      "return 401 SEE UNAUTHORIZED" in new Test {
-        override def setupStubs(): StubMapping = setupStubsForScenario()
+        given.user.isNotAuthenticated
 
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.UNAUTHORIZED
+        val response: WSResponse = request()
+
+        response should have(
+          httpStatus(UNAUTHORIZED),
+          pageTitle("Your session has timed out")
+        )
       }
     }
 
     "the user is not authorised" should {
 
-      def setupStubsForScenario(): StubMapping = AuthStub.unauthorisedMissingEnrolment()
+      "return 403 FORBIDDEN" in {
 
-      "return 403 SEE FORBIDDEN" in new Test {
-        override def setupStubs(): StubMapping = setupStubsForScenario()
+        given.user.isNotAuthorised
 
-        val response: WSResponse = await(request().get())
-        response.status shouldBe Status.FORBIDDEN
+        val response: WSResponse = request()
+
+        response should have(
+          httpStatus(FORBIDDEN),
+          pageTitle("Unauthorised access")
+        )
       }
     }
   }
