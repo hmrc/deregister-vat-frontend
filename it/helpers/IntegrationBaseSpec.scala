@@ -16,13 +16,16 @@
 
 package helpers
 
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, TestSuite}
+import config.AppConfig
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen, TestSuite}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.data.Form
+import play.api.http.HeaderNames
+import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
+import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.{Application, Environment, Mode}
+import stubs.AuthStub
 import uk.gov.hmrc.play.test.UnitSpec
 
 trait IntegrationBaseSpec extends UnitSpec
@@ -30,13 +33,46 @@ trait IntegrationBaseSpec extends UnitSpec
   with GuiceOneServerPerSuite
   with TestSuite
   with BeforeAndAfterEach
-  with BeforeAndAfterAll {
+  with BeforeAndAfterAll
+  with GivenWhenThen
+  with CustomMatchers {
 
   val mockHost: String = WireMockHelper.host
   val mockPort: String = WireMockHelper.wmPort.toString
   val appRouteContext: String = "/vat-through-software/account/deregister"
 
-  lazy val client: WSClient = app.injector.instanceOf[WSClient]
+  implicit lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
+  lazy val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
+  implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)
+
+  class PreconditionBuilder {
+    implicit val builder: PreconditionBuilder = this
+
+    def user: User = new User()
+  }
+
+  def given: PreconditionBuilder = new PreconditionBuilder
+
+  class User()(implicit builder: PreconditionBuilder) {
+
+    def isAuthorised: PreconditionBuilder = {
+      Given("User is enrolled to HMRC-MTD-VAT")
+      AuthStub.authorised()
+      builder
+    }
+
+    def isNotAuthenticated: PreconditionBuilder = {
+      Given("User is not logged in")
+      AuthStub.unauthenticated()
+      builder
+    }
+
+    def isNotAuthorised: PreconditionBuilder = {
+      Given("User is not enrolled to HMRC-MTD-VAT")
+      AuthStub.unauthorisedMissingEnrolment()
+      builder
+    }
+  }
 
   def servicesConfig: Map[String, String] = Map(
     "microservice.services.auth.host" -> mockHost,
@@ -58,8 +94,20 @@ trait IntegrationBaseSpec extends UnitSpec
     super.afterAll()
   }
 
-  def buildRequest(path: String): WSRequest = client.url(s"http://localhost:$port$appRouteContext$path").withFollowRedirects(false)
+  def get(path: String, additionalCookies: Map[String, String] = Map.empty): WSResponse = await(
+    buildRequest(path, additionalCookies).get()
+  )
 
-  def document(response: WSResponse): Document = Jsoup.parse(response.body)
+  def post(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse = await(
+    buildRequest(path, additionalCookies).post(body)
+  )
 
+  def buildRequest(path: String, additionalCookies: Map[String, String] = Map.empty): WSRequest =
+    client.url(s"http://localhost:$port$appRouteContext$path")
+      .withFollowRedirects(false)
+
+  def redirectLocation(response: WSResponse): Option[String] = response.header(HeaderNames.LOCATION)
+
+  def toFormData[T](form: Form[T], data: T): Map[String, Seq[String]] =
+    form.fill(data).data map { case (k, v) => k -> Seq(v) }
 }

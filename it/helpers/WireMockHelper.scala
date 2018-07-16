@@ -22,6 +22,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
 import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.libs.ws.WSClient
 
 object WireMockHelper extends Eventually with IntegrationPatience {
 
@@ -35,6 +36,7 @@ trait WireMockHelper {
 
   import WireMockHelper._
 
+  lazy val client: WSClient = app.injector.instanceOf[WSClient]
   lazy val wmConfig: WireMockConfiguration = wireMockConfig.port(wmPort)
   lazy val wmServer: WireMockServer = new WireMockServer(wmConfig)
 

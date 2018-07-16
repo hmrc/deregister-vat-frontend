@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package forms
+package testOnly.forms
 
 import config.ConfigKeys
-import models.FeatureSwitchModel
 import play.api.data.Form
 import play.api.data.Forms._
+import testOnly.models.FeatureSwitchModel
 
 object FeatureSwitchForm {
 

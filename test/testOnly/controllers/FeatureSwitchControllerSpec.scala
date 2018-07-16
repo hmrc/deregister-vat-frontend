@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package controllers
+package testOnly.controllers
 
+import controllers.ControllerBaseSpec
 import play.api.http.Status
 import play.api.test.Helpers._
 
@@ -48,7 +49,7 @@ class FeatureSwitchControllerSpec extends ControllerBaseSpec {
     }
 
     "redirect the user to the feature switch page" in {
-      redirectLocation(result) shouldBe Some(routes.FeatureSwitchController.featureSwitch().url)
+      redirectLocation(result) shouldBe Some(testOnly.controllers.routes.FeatureSwitchController.featureSwitch().url)
     }
 
   }
