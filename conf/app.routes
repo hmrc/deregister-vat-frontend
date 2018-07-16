@@ -1,5 +1,3 @@
 # microservice specific routes
 
 GET        /hello-world            controllers.HelloWorldController.helloWorld
-GET        /feature-switch         controllers.FeatureSwitchController.featureSwitch
-POST       /feature-switch         controllers.FeatureSwitchController.submitFeatureSwitch
