@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package testOnly.controllers
 
+import controllers.ControllerBaseSpec
 import play.api.http.Status
 import play.api.test.Helpers._
-import testOnly.controllers.FeatureSwitchController
 
 class FeatureSwitchControllerSpec extends ControllerBaseSpec {
 
