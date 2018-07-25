@@ -19,6 +19,7 @@ package views.templates.inputs
 import play.api.data.Field
 import play.twirl.api.Html
 import testOnly.forms.FeatureSwitchForm
+import views.templates.TemplateBaseSpec
 
 class SingleCheckboxTemplateSpec extends TemplateBaseSpec {
 
