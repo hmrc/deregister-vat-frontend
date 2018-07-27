@@ -42,7 +42,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
     def target: HelloWorldController = {
       setup()
-      new HelloWorldController(messages, mockAuthorisedFunctions, mockConfig)
+      new HelloWorldController(messagesApi, mockAuthorisedFunctions, mockConfig)
     }
   }
 
@@ -61,14 +61,14 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
       "return 200 (OK)" in new Test {
         override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-        private val result = target.helloWorld()(fakeRequest)
+        private val result = target.helloWorld()(user)
 
         status(result) shouldBe Status.OK
       }
 
       "return HTML" in new Test {
         override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-        private val result = target.helloWorld()(fakeRequest)
+        private val result = target.helloWorld()(user)
 
         contentType(result) shouldBe Some("text/html")
         charset(result) shouldBe Some("utf-8")
@@ -79,7 +79,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
       "return 401 (Unauthorised)" in new Test {
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
-        private val result = target.helloWorld()(fakeRequest)
+        private val result = target.helloWorld()(user)
 
         status(result) shouldBe Status.UNAUTHORIZED
       }
@@ -89,7 +89,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
 
       "return 403 (Forbidden)" in new Test {
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
-        private val result = target.helloWorld()(fakeRequest)
+        private val result = target.helloWorld()(user)
 
         status(result) shouldBe Status.FORBIDDEN
       }

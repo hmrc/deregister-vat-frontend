@@ -17,9 +17,10 @@
 package models
 
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolment, EnrolmentIdentifier, Enrolments}
-import uk.gov.hmrc.play.test.UnitSpec
+import utils.TestUtil
 
-class UserSpec extends UnitSpec {
+
+class UserSpec extends TestUtil {
 
   "Creating a user with only a VRN" should {
 
@@ -89,7 +90,7 @@ class UserSpec extends UnitSpec {
     }
 
     "be have an active status" in {
-      user.active shouldBe false
+      user.active shouldBe true
     }
   }
 
@@ -107,14 +108,14 @@ class UserSpec extends UnitSpec {
 
     "throw an exception" in {
       intercept[AuthorisationException] {
-        User(enrolments)
+        User(enrolments)(user)
       }
     }
 
     "have the correct message in the exception" in {
       the[AuthorisationException] thrownBy {
-        User(enrolments)
-      } should have message "VAT enrolment missing"
+        User(enrolments)(user)
+      } should have message "VRN missing"
     }
   }
 
@@ -132,13 +133,13 @@ class UserSpec extends UnitSpec {
 
     "throw an exception" in {
       intercept[AuthorisationException] {
-        User(enrolments)
+        User(enrolments)(user)
       }
     }
 
     "have the correct message in the exception" in {
       the[AuthorisationException] thrownBy {
-        User(enrolments)
+        User(enrolments)(user)
       } should have message "VRN missing"
     }
   }

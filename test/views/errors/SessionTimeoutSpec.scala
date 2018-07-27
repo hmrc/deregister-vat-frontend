@@ -29,7 +29,8 @@ class SessionTimeoutSpec extends ViewBaseSpec {
       val instructions = "#content p"
     }
 
-    lazy val view = views.html.errors.sessionTimeout()
+
+    lazy val view = views.html.errors.sessionTimeout()(user, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

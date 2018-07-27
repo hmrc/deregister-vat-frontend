@@ -33,10 +33,9 @@ class HelloWorldController @Inject()(val messagesApi: MessagesApi,
   extends AuthorisedController {
 
   def helloWorld(): Action[AnyContent] = authorisedAction {
-    implicit request =>
-      vrn =>
-        Logger.debug(s"THE USERS VRN IS: $vrn")
-        Future.successful(Ok(views.html.helloworld.hello_world()))
+    implicit user =>
+      Logger.debug(s"THE USERS VRN IS: ${user.vrn}vrn")
+      Future.successful(Ok(views.html.helloworld.hello_world()))
   }
 
 }

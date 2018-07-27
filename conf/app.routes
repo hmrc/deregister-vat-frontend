@@ -1,3 +1,6 @@
 # microservice specific routes
 
 GET        /hello-world            controllers.HelloWorldController.helloWorld
+
+GET        /deregistration-reason  controllers.DeregReasonController.show
+POST       /deregistration-reason  controllers.DeregReasonController.submit

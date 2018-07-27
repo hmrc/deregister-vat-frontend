@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package common
+@import uk.gov.hmrc.play.views.html.helpers.{errorSummary => summary}
 
-object EnrolmentKeys {
+@(heading: String, form: Form[_])(implicit messages: Messages)
 
-  val vatEnrolmentId: String = "HMRC-MTD-VAT"
-  val vatIdentifierId: String = "VRN"
-  val agentEnrolmentId: String = "HMRC-AS-AGENT"
-  val agentIdentifierId: String = "AgentReferenceNumber"
-  val agentAffinityGroup: String = "Agent"
-  val mtdVatDelegatedAuthRule: String = "mtd-vat-auth"
-
+@if(form.hasErrors) {
+  @summary(messages(heading), form)
 }
