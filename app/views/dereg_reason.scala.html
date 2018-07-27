@@ -15,10 +15,11 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers
+@import views.html.templates.errors.errorSummary
 @import templates.inputs.radioGroup
 @import templates.headings
 
-@(form: Form[DeregReasonModel])(implicit request : Request[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[DeregReasonModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = messages("deregisterReason.title"),
@@ -27,23 +28,27 @@
 
     <a id="link-back" href="#">@messages("common.back")</a>
 
+    @errorSummary("common.errorSummary.heading", form)
+
     @headings(messages("deregisterReason.title"))
 
-    <div class="form-group" id="reason-option">
-        @radioGroup(
-            field = form("reason-option"),
-            choices = Seq(
-                ("reason-1", Messages("deregisterReason.reason.1")),
-                ("reason-2", Messages("deregisterReason.reason.2")),
-                ("reason-3", Messages("deregisterReason.reason.3"))
-            ),
-            question = messages("deregisterReason.title"),
-            additionalContent = None
-        )
-    </div>
+    @helpers.form(action = controllers.routes.DeregReasonController.submit) {
 
-    <button class="button" type ="submit" id="continue">
-        @messages("common.continue")
-    </button>
+        <div class="form-group" id="reason-option">
+            @radioGroup(
+                field = form("dereg-reason"),
+                choices = Seq(
+                    ("reason-1", Messages("deregisterReason.reason.1")),
+                    ("reason-2", Messages("deregisterReason.reason.2")),
+                    ("reason-3", Messages("deregisterReason.reason.3"))
+                ),
+                question = messages("deregisterReason.title"),
+                additionalContent = None
+            )
+        </div>
 
+        <button class="button" type ="submit" id="continue">
+            @messages("common.continue")
+        </button>
+    }
 }

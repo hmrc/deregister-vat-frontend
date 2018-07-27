@@ -16,25 +16,14 @@
 
 package controllers
 
-import config.AppConfig
-import mocks.MockAppConfig
 import org.scalamock.scalatest.MockFactory
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.MessagesApi
-import play.api.inject.Injector
-import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRF.Token
 import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
-import uk.gov.hmrc.play.test.UnitSpec
+import utils.TestUtil
 
-class ControllerBaseSpec extends UnitSpec with MockFactory with GuiceOneAppPerSuite {
-
-  lazy val injector: Injector = app.injector
-  lazy val messages: MessagesApi = injector.instanceOf[MessagesApi]
-  lazy val mockConfig: AppConfig = new MockAppConfig(app.configuration)
-
-  implicit val fakeRequest: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+class ControllerBaseSpec extends TestUtil with MockFactory with GuiceOneAppPerSuite {
 
   implicit class CSRFTokenAdder[T](req: FakeRequest[T]) {
     def addToken: FakeRequest[T] = {

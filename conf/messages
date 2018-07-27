@@ -7,6 +7,7 @@ deregisterReason.title = Why is the business deregistering from VAT?
 deregisterReason.reason.1 = It has stopped trading
 deregisterReason.reason.2 = Annual turnover is below £83,000
 deregisterReason.reason.3 = Other
+deregisterReason.error = No option selected
 
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To manage your VAT account, you''ll have to
