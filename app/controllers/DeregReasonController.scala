@@ -46,7 +46,7 @@ class DeregReasonController @Inject()(val messagesApi: MessagesApi,
 
     DeregReasonForm.deregReasonForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.dereg_reason(error))),
-      data => Future.successful(Ok(views.html.dereg_reason(DeregReasonForm.deregReasonForm))
+      data => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld())
         .addingToSession(SessionKeys.DEREG_REASON -> data.reason))
     )
   }

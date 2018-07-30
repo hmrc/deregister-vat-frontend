@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package assets.messages
+package utils
 
-object CommonMessages {
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
 
-  val continue = "Continue"
-  val back = "back"
-  val errorHeading = "You have one or more errors"
-
+trait MaterializerSupport {
+  implicit val system = ActorSystem("Sys")
+  implicit val materializer = ActorMaterializer()
 }
