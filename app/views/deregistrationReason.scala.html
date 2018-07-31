@@ -34,13 +34,13 @@
 
     @helpers.form(action = controllers.routes.DeregistrationReasonController.submit) {
 
-        <div class="form-group" id="reason-option">
+        <div class="form-group" id="reason">
             @radioGroup(
                 field = form("reason"),
                 choices = Seq(
-                    ("option-1", Messages("deregistrationReason.reason.stoppedTrading")),
-                    ("option-2", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
-                    ("option-3", Messages("deregistrationReason.reason.other"))
+                    ("stoppedTrading", Messages("deregistrationReason.reason.stoppedTrading")),
+                    ("turnoverBelowThreshold", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
+                    ("other", Messages("deregistrationReason.reason.other"))
                 ),
                 question = messages("deregistrationReason.title"),
                 additionalContent = None
