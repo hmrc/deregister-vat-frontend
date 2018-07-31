@@ -2,5 +2,5 @@
 
 GET        /hello-world            controllers.HelloWorldController.helloWorld
 
-GET        /deregistration-reason  controllers.DeregReasonController.show
-POST       /deregistration-reason  controllers.DeregReasonController.submit
+GET        /deregistration-reason  controllers.DeregistrationReasonController.show
+POST       /deregistration-reason  controllers.DeregistrationReasonController.submit

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package assets.messages
+package utils
 
-object DeregReasonMessages {
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
 
-  val title = "Why is the business deregistering from VAT?"
-  val reason1 = "It has stopped trading"
-  val reason2 = "Annual turnover is below £83,000"
-  val reason3 = "Other"
-
+trait MaterializerSupport {
+  implicit val system = ActorSystem("Sys")
+  implicit val materializer = ActorMaterializer()
 }

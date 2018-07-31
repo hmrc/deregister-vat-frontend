@@ -47,7 +47,9 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
   "Calling the radio helper with no choice pre-selected" should {
 
     "render the choices as radio buttons" in {
+
       val field: Field = Field(DeregistrationReasonForm.deregistrationReasonForm, fieldName, Seq(), None, Seq(), None)
+
       val expectedMarkup = Html(
         s"""
            |  <div>
@@ -75,7 +77,9 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
   "Calling the radio group helper with a choice pre-selected" should {
 
     "render a list of radio options with one pre-checked" in {
+
       val field: Field = Field(DeregistrationReasonForm.deregistrationReasonForm, fieldName, Seq(), None, Seq(), Some("value2"))
+
       val expectedMarkup = Html(
         s"""
            |  <div>
@@ -103,7 +107,9 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
 
     "render an error" in {
       val errorMessage = "Error message"
+
       val field: Field = Field(DeregistrationReasonForm.deregistrationReasonForm, fieldName, Seq(), None, Seq(FormError("text", errorMessage)), None)
+
       val expectedMarkup = Html(
         s"""
            |  <div class="form-field--error">
@@ -133,7 +139,9 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
 
     "render the choices as radio buttons with additional content" in {
       val additionalContent = Html("<p>Additional text</p>")
+
       val field: Field = Field(DeregistrationReasonForm.deregistrationReasonForm, fieldName, Seq(), None, Seq(), None)
+
       val expectedMarkup = Html(
         s"""
            |<div>

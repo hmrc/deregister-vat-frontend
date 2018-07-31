@@ -26,21 +26,21 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a id="link-back" href="#">@messages("common.back")</a>
+    <a class="link-back" href="#">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
     @headings(messages("deregistrationReason.title"))
 
-    @helpers.form(action = controllers.routes.DeregReasonController.submit) {
+    @helpers.form(action = controllers.routes.DeregistrationReasonController.submit) {
 
         <div class="form-group" id="reason-option">
             @radioGroup(
                 field = form("reason"),
                 choices = Seq(
-                    ("reason-1", Messages("deregistrationReason.reason.stoppedTrading")),
-                    ("reason-2", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
-                    ("reason-3", Messages("deregistrationReason.reason.other"))
+                    ("option-1", Messages("deregistrationReason.reason.stoppedTrading")),
+                    ("option-2", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
+                    ("option-3", Messages("deregistrationReason.reason.other"))
                 ),
                 question = messages("deregistrationReason.title"),
                 additionalContent = None
