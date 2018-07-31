@@ -18,8 +18,8 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class DeregReasonModel(reason: String)
+case class DeregistrationReasonModel(reason: String)
 
-object DeregReasonModel {
-  implicit val format: OFormat[DeregReasonModel] = Json.format[DeregReasonModel]
+object DeregistrationReasonModel {
+  implicit val format: OFormat[DeregistrationReasonModel] = Json.format[DeregistrationReasonModel]
 }

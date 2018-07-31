@@ -16,16 +16,16 @@
 
 package forms
 
-import models.DeregReasonModel
+import models.DeregistrationReasonModel
 import play.api.data.Form
 import play.api.data.Forms._
 
 object DeregistrationReasonForm {
 
-  val deregistrationReasonForm: Form[DeregReasonModel] = Form(
+  val deregistrationReasonForm: Form[DeregistrationReasonModel] = Form(
     mapping(
       "reason" -> nonEmptyText
-    )(DeregReasonModel.apply)(DeregReasonModel.unapply)
+    )(DeregistrationReasonModel.apply)(DeregistrationReasonModel.unapply)
   )
 
 }
