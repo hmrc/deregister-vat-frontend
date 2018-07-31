@@ -16,10 +16,9 @@
 
 package controllers
 
-import common.SessionKeys
 import org.jsoup.Jsoup
 import play.api.http.Status
-import play.api.mvc.AnyContentAsFormUrlEncoded
+import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.EnrolmentsAuthService
@@ -86,20 +85,17 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
         "return 200 (OK)" in new Test {
 
           override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          val result = target.show()(request.withSession(SessionKeys.DEREG_REASON -> "option-1"))
+          val result: Future[Result] = target.show()(request)
 
           status(result) shouldBe Status.OK
         }
 
         "return HTML" in new Test {
           override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          val result = target.show()(request.withSession(SessionKeys.DEREG_REASON -> "option-1"))
+          val result: Future[Result] = target.show()(request)
 
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
-
-          Jsoup.parse(bodyOf(result)).select("#reason-option-1").attr("checked") shouldBe "checked"
-
         }
       }
     }

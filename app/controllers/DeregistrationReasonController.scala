@@ -18,7 +18,6 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
-import common.SessionKeys
 import config.AppConfig
 import forms.DeregistrationReasonForm
 import models.DeregistrationReasonModel
@@ -34,20 +33,14 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
                                                override implicit val appConfig: AppConfig) extends AuthorisedController {
 
   val show: Action[AnyContent] = authorisedAction { implicit user =>
-    Future.successful(Ok(views.html.deregistrationReason(
-      user.session.get(SessionKeys.DEREG_REASON) match {
-        case Some(value) => DeregistrationReasonForm.deregistrationReasonForm.fill(DeregistrationReasonModel(value))
-        case _ => DeregistrationReasonForm.deregistrationReasonForm
-      }
-    )))
+    Future.successful(Ok(views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)))
   }
 
   val submit: Action[AnyContent] = authorisedAction { implicit user =>
 
     DeregistrationReasonForm.deregistrationReasonForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.deregistrationReason(error))),
-      data => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld())
-        .addingToSession(SessionKeys.DEREG_REASON -> data.reason))
+      _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
     )
   }
 }
