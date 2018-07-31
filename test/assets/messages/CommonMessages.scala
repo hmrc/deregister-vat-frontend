@@ -19,6 +19,6 @@ package assets.messages
 object CommonMessages {
 
   val continue = "Continue"
-  val back = "back"
+  val back = "Back"
 
 }

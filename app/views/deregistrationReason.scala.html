@@ -21,23 +21,23 @@
 @(form: Form[DeregReasonModel])(implicit request : Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("deregisterReason.title"),
+    title = messages("deregistrationReason.title"),
     bodyClasses = None,
     appConfig = appConfig) {
 
     <a id="link-back" href="#">@messages("common.back")</a>
 
-    @headings(messages("deregisterReason.title"))
+    @headings(messages("deregistrationReason.title"))
 
     <div class="form-group" id="reason-option">
         @radioGroup(
             field = form("reason-option"),
             choices = Seq(
-                ("reason-1", Messages("deregisterReason.reason.1")),
-                ("reason-2", Messages("deregisterReason.reason.2")),
-                ("reason-3", Messages("deregisterReason.reason.3"))
+                ("reason-1", Messages("deregistrationReason.reason.stoppedTrading")),
+                ("reason-2", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
+                ("reason-3", Messages("deregistrationReason.reason.other"))
             ),
-            question = messages("deregisterReason.title"),
+            question = messages("deregistrationReason.title"),
             additionalContent = None
         )
     </div>

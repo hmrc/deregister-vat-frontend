@@ -19,10 +19,10 @@ package views
 import assets.messages.{CommonMessages,DeregReasonMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import forms.DeregReasonForm
+import forms.DeregistrationReasonForm
 
 
-class DeregReasonSpec extends ViewBaseSpec {
+class DeregistrationReasonSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration reason page" should {
 
@@ -33,7 +33,7 @@ class DeregReasonSpec extends ViewBaseSpec {
       val button = ".button"
     }
 
-    lazy val view = views.html.dereg_reason(DeregReasonForm.deregReasonForm)
+    lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

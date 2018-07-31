@@ -1,12 +1,12 @@
 service.title = De-register for VAT
 
 common.continue = Continue
-common.back = back
+common.back = Back
 
-deregisterReason.title = Why is the business deregistering from VAT?
-deregisterReason.reason.1 = It has stopped trading
-deregisterReason.reason.2 = Annual turnover is below £83,000
-deregisterReason.reason.3 = Other
+deregistrationReason.title = Why is the business deregistering from VAT?
+deregistrationReason.reason.stoppedTrading = It has stopped trading
+deregistrationReason.reason.turnoverBelowThreshold = Annual turnover is below £83,000
+deregistrationReason.reason.other = Other
 
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To manage your VAT account, you''ll have to
