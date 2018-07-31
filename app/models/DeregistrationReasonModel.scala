@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package forms
+package models
 
-import models.DeregistrationReasonModel
-import play.api.data.Form
-import play.api.data.Forms._
+import play.api.libs.json.{Json, OFormat}
 
-object DeregistrationReasonForm {
+case class DeregistrationReasonModel(reason: String)
 
-  val deregistrationReasonForm: Form[DeregistrationReasonModel] = Form(
-    mapping(
-      "reason" -> nonEmptyText
-    )(DeregistrationReasonModel.apply)(DeregistrationReasonModel.unapply)
-  )
-
+object DeregistrationReasonModel {
+  implicit val format: OFormat[DeregistrationReasonModel] = Json.format[DeregistrationReasonModel]
 }

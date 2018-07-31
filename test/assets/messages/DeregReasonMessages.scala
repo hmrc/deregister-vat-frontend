@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package assets.messages
 
-import models.DeregistrationReasonModel
-import play.api.data.Form
-import play.api.data.Forms._
+object DeregReasonMessages {
 
-object DeregistrationReasonForm {
-
-  val deregistrationReasonForm: Form[DeregistrationReasonModel] = Form(
-    mapping(
-      "reason" -> nonEmptyText
-    )(DeregistrationReasonModel.apply)(DeregistrationReasonModel.unapply)
-  )
+  val title = "Why is the business deregistering from VAT?"
+  val reason1 = "It has stopped trading"
+  val reason2 = "Annual turnover is below £83,000"
+  val reason3 = "Other"
 
 }

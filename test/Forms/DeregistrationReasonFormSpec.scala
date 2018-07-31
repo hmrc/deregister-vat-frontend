@@ -17,7 +17,7 @@
 package Forms
 
 import forms.DeregistrationReasonForm
-import models.DeregReasonModel
+import models.DeregistrationReasonModel
 import uk.gov.hmrc.play.test.UnitSpec
 
 class DeregistrationReasonFormSpec extends UnitSpec {
@@ -32,7 +32,7 @@ class DeregistrationReasonFormSpec extends UnitSpec {
     }
 
     "generate the correct model" in {
-      form.value shouldBe Some(DeregReasonModel("Reason"))
+      form.value shouldBe Some(DeregistrationReasonModel("Reason"))
     }
   }
 
@@ -56,7 +56,7 @@ class DeregistrationReasonFormSpec extends UnitSpec {
   "A form built from a valid model" should {
 
     "generate the correct mapping" in {
-      val model = DeregReasonModel("Another Reason")
+      val model = DeregistrationReasonModel("Another Reason")
       val form = DeregistrationReasonForm.deregistrationReasonForm.fill(model)
       form.data shouldBe Map("reason" -> "Another Reason")
     }

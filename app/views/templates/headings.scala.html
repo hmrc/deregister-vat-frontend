@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package forms
+@(heading: String)(implicit messages: Messages)
 
-import models.DeregistrationReasonModel
-import play.api.data.Form
-import play.api.data.Forms._
-
-object DeregistrationReasonForm {
-
-  val deregistrationReasonForm: Form[DeregistrationReasonModel] = Form(
-    mapping(
-      "reason" -> nonEmptyText
-    )(DeregistrationReasonModel.apply)(DeregistrationReasonModel.unapply)
-  )
-
-}
+<header class="page-heading">
+    <h1 id="page-heading" class="heading-large">@heading</h1>
+</header>

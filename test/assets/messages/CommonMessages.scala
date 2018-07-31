@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package models
+package assets.messages
 
-import play.api.libs.json.{Json, OFormat}
+object CommonMessages {
 
-case class DeregReasonModel(reason: String)
+  val continue = "Continue"
+  val back = "Back"
 
-object DeregReasonModel {
-  implicit val format: OFormat[DeregReasonModel] = Json.format[DeregReasonModel]
 }

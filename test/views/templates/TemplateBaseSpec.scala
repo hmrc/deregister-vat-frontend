@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.templates.inputs
+package views.templates
 
 import mocks.MockAppConfig
 import org.jsoup.Jsoup
