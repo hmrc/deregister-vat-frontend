@@ -20,11 +20,11 @@ import models.DeregReasonModel
 import play.api.data.Form
 import play.api.data.Forms._
 
-object DeregReasonForm {
+object DeregestrationReasonForm {
 
   val deregReasonForm: Form[DeregReasonModel] = Form(
     mapping(
-      "dereg-reason" -> nonEmptyText
+      "reason" -> nonEmptyText
     )(DeregReasonModel.apply)(DeregReasonModel.unapply)
   )
 

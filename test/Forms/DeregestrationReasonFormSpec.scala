@@ -16,16 +16,16 @@
 
 package Forms
 
-import forms.DeregReasonForm
+import forms.DeregestrationReasonForm
 import models.DeregReasonModel
 import uk.gov.hmrc.play.test.UnitSpec
 
-class DeregReasonFormSpec extends UnitSpec {
+class DeregestrationReasonFormSpec extends UnitSpec {
 
   "Binding a form with valid data" should {
 
-    val data = Map("dereg-reason" -> "Reason")
-    val form = DeregReasonForm.deregReasonForm.bind(data)
+    val data = Map("reason" -> "Reason")
+    val form = DeregestrationReasonForm.deregReasonForm.bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
@@ -41,7 +41,7 @@ class DeregReasonFormSpec extends UnitSpec {
     "the no option has been selected" should {
 
       val missingOption: Map[String, String] = Map.empty
-      val form = DeregReasonForm.deregReasonForm.bind(missingOption)
+      val form = DeregestrationReasonForm.deregReasonForm.bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -57,8 +57,8 @@ class DeregReasonFormSpec extends UnitSpec {
 
     "generate the correct mapping" in {
       val model = DeregReasonModel("Another Reason")
-      val form = DeregReasonForm.deregReasonForm.fill(model)
-      form.data shouldBe Map("dereg-reason" -> "Another Reason")
+      val form = DeregestrationReasonForm.deregReasonForm.fill(model)
+      form.data shouldBe Map("reason" -> "Another Reason")
     }
   }
 
