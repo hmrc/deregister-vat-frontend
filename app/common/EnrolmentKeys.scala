@@ -18,6 +18,11 @@ package common
 
 object EnrolmentKeys {
 
-  val VatEnrolmentId = "HMRC-MTD-VAT"
+  val vatEnrolmentId: String = "HMRC-MTD-VAT"
+  val vatIdentifierId: String = "VRN"
+  val agentEnrolmentId: String = "HMRC-AS-AGENT"
+  val agentIdentifierId: String = "AgentReferenceNumber"
+  val agentAffinityGroup: String = "Agent"
+  val mtdVatDelegatedAuthRule: String = "mtd-vat-auth"
 
 }

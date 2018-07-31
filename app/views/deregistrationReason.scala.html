@@ -15,35 +15,40 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers
+@import views.html.templates.errors.errorSummary
 @import templates.inputs.radioGroup
 @import templates.headings
 
-@(form: Form[DeregistrationReasonModel])(implicit request : Request[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[DeregistrationReasonModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = messages("deregistrationReason.title"),
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a id="link-back" href="#">@messages("common.back")</a>
+    <a class="link-back" href="#">@messages("common.back")</a>
+
+    @errorSummary("common.errorSummary.heading", form)
 
     @headings(messages("deregistrationReason.title"))
 
-    <div class="form-group" id="reason-option">
-        @radioGroup(
-            field = form("reason-option"),
-            choices = Seq(
-                ("reason-1", Messages("deregistrationReason.reason.stoppedTrading")),
-                ("reason-2", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
-                ("reason-3", Messages("deregistrationReason.reason.other"))
-            ),
-            question = messages("deregistrationReason.title"),
-            additionalContent = None
-        )
-    </div>
+    @helpers.form(action = controllers.routes.DeregistrationReasonController.submit) {
 
-    <button class="button" type ="submit" id="continue">
-        @messages("common.continue")
-    </button>
+        <div class="form-group" id="reason">
+            @radioGroup(
+                field = form("reason"),
+                choices = Seq(
+                    ("stoppedTrading", Messages("deregistrationReason.reason.stoppedTrading")),
+                    ("turnoverBelowThreshold", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
+                    ("other", Messages("deregistrationReason.reason.other"))
+                ),
+                question = messages("deregistrationReason.title"),
+                additionalContent = None
+            )
+        </div>
 
+        <button class="button" type ="submit" id="continue">
+            @messages("common.continue")
+        </button>
+    }
 }

@@ -2,6 +2,7 @@ service.title = De-register for VAT
 
 common.continue = Continue
 common.back = Back
+common.errorSummary.heading = You have one or more errors
 
 deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.stoppedTrading = It has stopped trading

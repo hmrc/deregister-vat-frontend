@@ -16,22 +16,16 @@
 
 package models
 
-import common.EnrolmentKeys
+import play.api.mvc.{Request, WrappedRequest}
 import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments, InternalError}
 
-case class User(vrn: String, active: Boolean = true)
+case class User[A](vrn: String, active: Boolean = true, arn: Option[String] = None) (implicit request: Request[A]) extends WrappedRequest[A](request) {
+  val isAgent: Boolean = arn.isDefined
+}
 
 object User {
-  def apply(enrolments: Enrolments): User = {
-    val vatEnrolments = enrolments.enrolments.filter(enrolment => enrolment.key == EnrolmentKeys.VatEnrolmentId)
-
-    if (vatEnrolments.isEmpty) {
-      throw InternalError("VAT enrolment missing")
-    }
-    else {
-      vatEnrolments.collectFirst {
-        case Enrolment(EnrolmentKeys.VatEnrolmentId, EnrolmentIdentifier(_, vrn) :: _, status, _) => User(vrn, status == "Activated")
-      }.getOrElse(throw InternalError("VRN missing"))
-    }
-  }
+  def apply[A](enrolments: Enrolments)(implicit request: Request[A]): User[A] =
+    enrolments.enrolments.collectFirst {
+      case Enrolment("HMRC-MTD-VAT", EnrolmentIdentifier(_, vatId) :: _, _, _) => User(vatId)
+    }.getOrElse(throw InternalError("VRN missing"))
 }

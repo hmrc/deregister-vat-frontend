@@ -16,7 +16,7 @@
 
 package views
 
-import assets.messages.{CommonMessages,DeregReasonMessages}
+import assets.messages.{CommonMessages,DeregistrationReasonMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import forms.DeregistrationReasonForm
@@ -27,7 +27,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
   "Rendering the Deregistration reason page" should {
 
     object Selectors {
-      val back = "#link-back"
+      val back = ".link-back"
       val pageHeading = "#content h1"
       val reasonOption = (number: Int) => s"fieldset > div:nth-of-type($number) > label"
       val button = ".button"
@@ -37,7 +37,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregReasonMessages.title
+      document.title shouldBe DeregistrationReasonMessages.title
     }
 
     s"have the correct back text" in {
@@ -46,13 +46,13 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregReasonMessages.title
+      elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.title
     }
 
     s"have the correct a radio button form with the correct 3 options" in {
-      elementText(Selectors.reasonOption(1)) shouldBe DeregReasonMessages.reason1
-      elementText(Selectors.reasonOption(2)) shouldBe DeregReasonMessages.reason2
-      elementText(Selectors.reasonOption(3)) shouldBe DeregReasonMessages.reason3
+      elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
+      elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
+      elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
     }
 
     s"have the correct continue button text and url" in {

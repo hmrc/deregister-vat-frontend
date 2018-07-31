@@ -22,11 +22,11 @@ import play.api.test.Helpers._
 
 class FeatureSwitchControllerSpec extends ControllerBaseSpec {
 
-  private lazy val target = new FeatureSwitchController(messages, mockConfig)
+  private lazy val target = new FeatureSwitchController(messagesApi, mockConfig)
 
   "Calling the .featureSwitch action" should {
 
-    lazy val result = target.featureSwitch(fakeRequest.addToken)
+    lazy val result = target.featureSwitch(request.addToken)
 
     "return 200" in {
       status(result) shouldBe Status.OK
@@ -41,7 +41,7 @@ class FeatureSwitchControllerSpec extends ControllerBaseSpec {
 
   "Calling the .submitFeatureSwitch action" should {
 
-    lazy val result = target.submitFeatureSwitch(fakeRequest.addToken
+    lazy val result = target.submitFeatureSwitch(request.addToken
       .withFormUrlEncodedBody("features.simpleAuth.enabled" -> "true"))
 
     "return 303" in {
