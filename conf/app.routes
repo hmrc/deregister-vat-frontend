@@ -4,3 +4,6 @@ GET        /hello-world            controllers.HelloWorldController.helloWorld
 
 GET        /deregistration-reason  controllers.DeregistrationReasonController.show
 POST       /deregistration-reason  controllers.DeregistrationReasonController.submit
+
+#Sign Out Routes
+GET         /sign-out              @controllers.SignOutController.signOut(authorised: Boolean)

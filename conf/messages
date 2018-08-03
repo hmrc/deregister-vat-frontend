@@ -1,13 +1,21 @@
 service.title = De-register for VAT
 
+base.sign-out = Sign out
+
 common.continue = Continue
 common.back = Back
 common.errorSummary.heading = You have one or more errors
+common.fullStop = .
+common.agentService = Update your client''s VAT details
 
 deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.stoppedTrading = It has stopped trading
 deregistrationReason.reason.turnoverBelowThreshold = Annual turnover is below £83,000
 deregistrationReason.reason.other = Other
+
+unauthorised.agent.title = You can’t use this service yet
+unauthorised.agent.useThisService = To use this service, you need to
+unauthorised.agent.setUpAccount = set up an agent services account
 
 sessionTimeout.title = Your session has timed out
 sessionTimeout.helpOne = To manage your VAT account, you''ll have to
