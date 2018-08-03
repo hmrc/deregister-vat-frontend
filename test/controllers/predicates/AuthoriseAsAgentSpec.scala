@@ -115,28 +115,12 @@ class AuthoriseAsAgentSpec extends ControllerBaseSpec {
         lazy val predicate = setup(authResponse)
         lazy val result = target(predicate)(FakeRequest())
 
-        "return 401" in {
-          status(result) shouldBe Status.UNAUTHORIZED
+        "return 403" in {
+          status(result) shouldBe Status.FORBIDDEN
         }
 
         "render Unauthorised view" in {
           Jsoup.parse(bodyOf(result)).title shouldBe "You can’t use this service yet"
-        }
-
-      }
-
-      "there is no active session" should {
-
-        val authResponse = Future.failed(MissingBearerToken())
-        lazy val predicate = setup(authResponse)
-        lazy val result = target(predicate)(FakeRequest())
-
-        "return 401" in {
-          status(result) shouldBe Status.UNAUTHORIZED
-        }
-
-        "render Session Timeout view" in {
-          Jsoup.parse(bodyOf(result)).title shouldBe "Your session has timed out"
         }
 
       }

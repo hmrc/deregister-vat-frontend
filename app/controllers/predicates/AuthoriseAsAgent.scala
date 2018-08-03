@@ -16,7 +16,7 @@
 
 package controllers.predicates
 
-import common.{EnrolmentKeys, SessionKeys}
+import common.EnrolmentKeys
 import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.{Inject, Singleton}
 import models.User
@@ -24,7 +24,7 @@ import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core.retrieve.{Retrievals, ~}
+import uk.gov.hmrc.auth.core.retrieve.Retrievals._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
@@ -47,15 +47,13 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
     Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Client VRN from Session: $vrn")
     enrolmentsAuthService
       .authorised(delegatedAuthorityRule(vrn))
-      .retrieve(Retrievals.allEnrolments) {
+      .retrieve(allEnrolments) {
+        Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Authenticated as Agent")
         allEnrolments => block(User(vrn, active = true, Some(arn(allEnrolments))))
       } recover {
-      case _: NoActiveSession =>
-        Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have an active session, rendering Session Timeout")
-        Unauthorized(views.html.errors.sessionTimeout())
       case _: InternalError =>
         Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have a HMRC-AS-AGENT enrolment")
-        Unauthorized(views.html.errors.agent.unauthorised())
+        Forbidden(views.html.errors.agent.unauthorised())
       case _: AuthorisationException =>
         Logger.warn(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have delegated authority for Client")
 
