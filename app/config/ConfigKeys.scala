@@ -39,6 +39,8 @@ object ConfigKeys {
 
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
 
+  val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
+
   val govUkSetupAgentServices: String = "gov-uk.guidance.setupAgentServices.url"
 
 }
