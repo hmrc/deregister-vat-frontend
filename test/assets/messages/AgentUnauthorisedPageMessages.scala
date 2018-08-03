@@ -16,13 +16,10 @@
 
 package assets.messages
 
-object CommonMessages {
+object AgentUnauthorisedPageMessages {
 
-  val continue = "Continue"
-  val back = "Back"
-  val errorHeading = "You have one or more errors"
-  val signOut = "Sign out"
-
-  val agentServiceName = "Update your client's VAT details"
+  val title = "You can’t use this service yet"
+  val pageHeading = "You can’t use this service yet"
+  val instructions = "To use this service, you need to set up an agent services account."
 
 }
