@@ -149,7 +149,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
       "the user submits without selecting an option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("dereg-reason", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", ""))
 
         "return 400 (BAD REQUEST)" in new Test {
           override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
@@ -184,7 +184,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
     "Calling the .submit action" when {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody(("dereg-reason", ""))
+        FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", ""))
 
       "return 401 (Unauthorised)" in new Test {
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
@@ -210,7 +210,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
     "Calling the .submit action" when {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody(("dereg-reason", "stoppedTrading"))
+        FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "stoppedTrading"))
 
       "return 403 (Forbidden)" in new Test {
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
