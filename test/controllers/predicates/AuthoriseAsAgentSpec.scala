@@ -94,12 +94,11 @@ class AuthoriseAsAgentSpec extends ControllerBaseSpec {
           }
 
           "render Unauthorised view" in {
-            Jsoup.parse(bodyOf(result)).title shouldBe "Unauthorised access"
+            Jsoup.parse(bodyOf(result)).title shouldBe "You can’t use this service yet"
           }
         }
       }
 
-      //TODO: update with new view
       "the Agent is not enrolled to HMRC-AS-AGENT" should {
 
         val authResponse = Future.successful(
@@ -121,7 +120,7 @@ class AuthoriseAsAgentSpec extends ControllerBaseSpec {
         }
 
         "render Unauthorised view" in {
-          Jsoup.parse(bodyOf(result)).title shouldBe "Unauthorised access"
+          Jsoup.parse(bodyOf(result)).title shouldBe "You can’t use this service yet"
         }
 
       }

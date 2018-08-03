@@ -48,23 +48,19 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
     enrolmentsAuthService
       .authorised(delegatedAuthorityRule(vrn))
       .retrieve(Retrievals.allEnrolments) {
-        allEnrolments =>
-          val user = User(vrn, active = true, Some(arn(allEnrolments)))
-          block(user)
+        allEnrolments => block(User(vrn, active = true, Some(arn(allEnrolments))))
       } recover {
       case _: NoActiveSession =>
         Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have an active session, rendering Session Timeout")
         Unauthorized(views.html.errors.sessionTimeout())
       case _: InternalError =>
         Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have a HMRC-AS-AGENT enrolment")
-
-        //TODO: update with new view
-        Unauthorized(views.html.errors.unauthorised())
+        Unauthorized(views.html.errors.agent.unauthorised())
       case _: AuthorisationException =>
         Logger.warn(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have delegated authority for Client")
 
         //TODO: update to redirect to new view or new agent lookup service
-        Unauthorized(views.html.errors.unauthorised())
+        Unauthorized(views.html.errors.agent.unauthorised())
     }
   }
 
