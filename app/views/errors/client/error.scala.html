@@ -22,5 +22,9 @@
 title = Messages("unauthorised.agent.title"),
 bodyClasses = None,
 appConfig = appConfig,
-serviceName = Some(messages("common.agentService"))
-)
+serviceName = Some(messages("common.clientService"))
+){
+   @headings(Messages("unauthorised.client.title"))
+
+   <p data-metrics="client_unauthorised:view:not-enrolled"></p>>
+}
