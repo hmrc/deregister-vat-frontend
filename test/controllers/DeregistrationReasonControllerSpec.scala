@@ -16,7 +16,6 @@
 
 package controllers
 
-import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
@@ -102,10 +101,10 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
     "Calling the .submit action" when {
 
-      "the user submits after selecting an option" should {
+      "the user submits after selecting an 'stoppedTrading' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "option-1"))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "stoppedTrading"))
 
         "return 303 (SEE OTHER)" in new Test {
 
@@ -113,6 +112,37 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
           private val result = target.submit()(request)
 
           status(result) shouldBe Status.SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        }
+      }
+
+      "the user submits after selecting the 'turnoverBelowThreshold' option" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "turnoverBelowThreshold"))
+
+        "return 303 (SEE OTHER)" in new Test {
+
+          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
+          private val result = target.submit()(request)
+
+          status(result) shouldBe Status.SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        }
+      }
+
+      "the user submits after selecting the 'other' option" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "other"))
+
+        "return 303 (SEE OTHER)" in new Test {
+
+          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
+          private val result = target.submit()(request)
+
+          status(result) shouldBe Status.SEE_OTHER
+          redirectLocation(result) shouldBe Some(mockConfig.govUkCancelVatRegistration)
         }
       }
 
@@ -154,7 +184,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
     "Calling the .submit action" when {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody(("dereg-reason", "option-1"))
+        FakeRequest("POST", "/").withFormUrlEncodedBody(("dereg-reason", ""))
 
       "return 401 (Unauthorised)" in new Test {
         override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
@@ -180,7 +210,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
     "Calling the .submit action" when {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody(("dereg-reason", "option-1"))
+        FakeRequest("POST", "/").withFormUrlEncodedBody(("dereg-reason", "stoppedTrading"))
 
       "return 403 (Forbidden)" in new Test {
         override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())

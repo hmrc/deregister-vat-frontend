@@ -40,7 +40,12 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
 
     DeregistrationReasonForm.deregistrationReasonForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.deregistrationReason(error))),
-      _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
+      success =>
+        success.reason match {
+          case "other" => Future.successful(Redirect(appConfig.govUkCancelVatRegistration))
+          case _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
+        }
+
     )
   }
 }

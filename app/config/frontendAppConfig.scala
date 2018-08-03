@@ -37,6 +37,7 @@ trait AppConfig extends ServicesConfig {
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
   val signInUrl: String
+  val govUkCancelVatRegistration: String
   val features: Features
 }
 
@@ -67,6 +68,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
   private lazy val signInOrigin: String = getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
+
+  override lazy val govUkCancelVatRegistration: String = getString(Keys.govUkCancelVatRegistration)
 
   override val features = new Features(runModeConfiguration)
 }
