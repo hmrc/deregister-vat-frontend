@@ -57,12 +57,14 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
         Unauthorized(views.html.errors.sessionTimeout())
       case _: InternalError =>
         Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have a HMRC-AS-AGENT enrolment")
-        //TODO: show new unauthorised view
-        Unauthorized(views.html.errors.sessionTimeout())
+
+        //TODO: update with new view
+        Unauthorized(views.html.errors.unauthorised())
       case _: AuthorisationException =>
         Logger.warn(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have delegated authority for Client")
-        //TODO: redirect to vat-agent-client-lookup
-        Unauthorized(views.html.errors.sessionTimeout())
+
+        //TODO: update to redirect to new view or new agent lookup service
+        Unauthorized(views.html.errors.unauthorised())
     }
   }
 

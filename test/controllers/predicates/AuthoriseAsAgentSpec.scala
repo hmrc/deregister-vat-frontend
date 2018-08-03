@@ -20,14 +20,14 @@ import config.ServiceErrorHandler
 import controllers.ControllerBaseSpec
 import org.jsoup.Jsoup
 import play.api.http.Status
-import play.api.libs.json.Json
+import play.api.test.Helpers._
 import play.api.mvc.{Action, AnyContent}
 import play.api.mvc.Results.Ok
 import play.api.test.FakeRequest
 import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core.{NoActiveSession, _}
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -89,18 +89,17 @@ class AuthoriseAsAgentSpec extends ControllerBaseSpec {
           lazy val predicate = setup(authResponse)
           lazy val result = target(predicate)(FakeRequest())
 
-          //TODO: change to redirect
           "return 401" in {
             status(result) shouldBe Status.UNAUTHORIZED
           }
 
-          //TODO: change to redirect location
           "render Unauthorised view" in {
-            Jsoup.parse(bodyOf(result)).title shouldBe "Your session has timed out"
+            Jsoup.parse(bodyOf(result)).title shouldBe "Unauthorised access"
           }
         }
       }
 
+      //TODO: update with new view
       "the Agent is not enrolled to HMRC-AS-AGENT" should {
 
         val authResponse = Future.successful(
@@ -121,9 +120,8 @@ class AuthoriseAsAgentSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.UNAUTHORIZED
         }
 
-        "render Session Timeout view" in {
-          //TODO: change to new unauthorised page
-          Jsoup.parse(bodyOf(result)).title shouldBe "Your session has timed out"
+        "render Unauthorised view" in {
+          Jsoup.parse(bodyOf(result)).title shouldBe "Unauthorised access"
         }
 
       }
