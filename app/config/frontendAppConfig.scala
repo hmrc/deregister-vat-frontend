@@ -37,6 +37,11 @@ trait AppConfig extends ServicesConfig {
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
   val signInUrl: String
+  val signOutUrl: String
+  val surveyUrl: String
+  val unauthorisedSignOutUrl: String
+  val agentServicesGovUkGuidance: String
+  val govUkCancelVatRegistration: String
   val features: Features
 }
 
@@ -67,6 +72,18 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
   private lazy val signInOrigin: String = getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
+
+  private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
+
+  private lazy val surveyBaseUrl = getString(Keys.surveyHost) + getString(Keys.surveyUrl)
+  override lazy val surveyUrl = s"$surveyBaseUrl/?origin=$contactFormServiceIdentifier"
+
+  override lazy val signOutUrl = s"$governmentGatewayHost/gg/sign-out?continue=$surveyUrl"
+  override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
+
+  override lazy val agentServicesGovUkGuidance: String = getString(Keys.govUkSetupAgentServices)
+
+  override lazy val govUkCancelVatRegistration: String = getString(Keys.govUkCancelVatRegistration)
 
   override val features = new Features(runModeConfiguration)
 }

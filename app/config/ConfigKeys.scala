@@ -32,6 +32,15 @@ object ConfigKeys {
   val signInBaseUrl: String = "signIn.url"
   val signInContinueBaseUrl: String = "signIn.continueBaseUrl"
 
+  val surveyHost: String = "feedback-survey-frontend.host"
+  val surveyUrl: String = "feedback-survey-frontend.url"
+
+  val governmentGatewayHost: String = "government-gateway.host"
+
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
+
+  val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
+
+  val govUkSetupAgentServices: String = "gov-uk.guidance.setupAgentServices.url"
 
 }
