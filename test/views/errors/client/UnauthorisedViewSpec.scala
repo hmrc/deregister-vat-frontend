@@ -45,6 +45,7 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
       val serviceName = ".header__menu__proposition-name"
       val pageHeading = "#content h1"
       val instructions = "#content p"
+      val clientInstructions = "#content p"
       val instructionsLink = "#content p > a"
       val button = "#content .button"
     }
@@ -66,7 +67,7 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     }
 
     s"have the correct instructions on the page" in {
-     // elementText(Selectors.instructions) shouldBe Messages.instructions
+      elementText(Selectors.clientInstructions) shouldBe Messages.clientInstructions
     }
 
     s"have a link to GOV.UK guidance" in {
