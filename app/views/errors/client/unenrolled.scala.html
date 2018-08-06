@@ -24,7 +24,7 @@ bodyClasses = None,
 appConfig = appConfig,
 serviceName = Some(messages("common.agentService"))
 
-{
+){
    @headings(Messages("unauthorised.client.title"))
 
    <p data-metrics="client_unauthorised:view:not-enrolled">
@@ -35,8 +35,8 @@ serviceName = Some(messages("common.agentService"))
    </p>
 
    <a onclick="sendGAEvent('unauthorised','sign-out','not-enrolled', true)"
-     class="button"
-     href="@controllers.routes.SignOutController.signOut(authorised = false)">
-      @Messages("base.sign-out")
+       class="button"
+       href="@controllers.routes.SignOutController.signOut(authorised = false)">
+       @Messages("base.sign-out")
    </a>
 }
