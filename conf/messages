@@ -27,7 +27,7 @@ unauthorised.instructions = Here are some instructions about what you should do 
 
 unauthorised.client.title = You can’t use this service yet
 unauthorised.client.useThisService = To use this service, you need to
-unauthorised.client.signUp = sign up to use software to submit your VAT Returns.
+unauthorised.client.signUp = sign up to use software to submit your VAT Returns
 
 featureSwitch.title = Feature switches
 features.simpleAuth.enabled = Simple auth
