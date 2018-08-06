@@ -16,17 +16,26 @@
 
 package models
 
-import java.time.{DateTimeException, LocalDate}
+import java.time.LocalDate
 
-import play.api.libs.json.{Json, OFormat}
+import utils.TestUtil
 
-case class CeasedTradingDateModel(day: Int, month: Int, year: Int){
+class CeasedTradingDateModelSpec extends TestUtil {
 
-  val date: Option[LocalDate] =
-    try Some(LocalDate.of(year,month,day))
-    catch {case _:DateTimeException => None}
-}
+  "CeasedTradingModel.date" when {
 
-object CeasedTradingDateModel {
-  implicit val format: OFormat[CeasedTradingDateModel] = Json.format[CeasedTradingDateModel]
+    "given a valid date" should {
+
+      "return Some(LocalDate)" in {
+        CeasedTradingDateModel(1,1,2018).date shouldBe Some(LocalDate.of(2018,1,1))
+      }
+    }
+
+    "given an invalid date" should {
+
+      "return None" in {
+        CeasedTradingDateModel(99,99,9999).date shouldBe None
+      }
+    }
+  }
 }

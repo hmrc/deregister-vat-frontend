@@ -22,7 +22,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 class CeasedTradingDateFormSpec extends UnitSpec {
 
-  "Binding a form with valid data" should {
+  "Binding a form with valid date" should {
 
     val data = Map(
       "day" -> "1",
@@ -35,14 +35,14 @@ class CeasedTradingDateFormSpec extends UnitSpec {
       form.hasErrors shouldBe false
     }
 
-    "generate the correct model" in {
+    "generate a CeasedTradingDateModel" in {
       form.value shouldBe Some(CeasedTradingDateModel(1,1,2018))
     }
   }
 
   "Binding a form with invalid data" when {
 
-    "the no option has been selected" should {
+    "no date has been entered" should {
 
       val missingOption: Map[String, String] = Map.empty
       val form = CeasedTradingDateForm.ceasedTradingDateForm.bind(missingOption)
@@ -51,8 +51,26 @@ class CeasedTradingDateFormSpec extends UnitSpec {
         form.hasErrors shouldBe true
       }
 
-      "throw one error" in {
+      "have three error" in {
         form.errors.size shouldBe 3
+      }
+    }
+
+    "an invalid date has been entered" should {
+
+      val data = Map(
+        "day" -> "99",
+        "month" -> "99",
+        "year" -> "9999"
+      )
+      val form = CeasedTradingDateForm.ceasedTradingDateForm.bind(data)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "have three error" in {
+        form.errors.size shouldBe 1
       }
     }
   }
