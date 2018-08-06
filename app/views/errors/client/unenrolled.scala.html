@@ -29,8 +29,8 @@ serviceName = Some(messages("common.agentService"))
 
    <p data-metrics="client_unauthorised:view:not-enrolled">
       @Messages("unauthorised.client.useThisService")
-      <a onclick="sendGAEvent('unauthorised','click-agent-services','not-enrolled', true)"
-         href="@appConfig.agentServicesGovUkGuidance">
+      <a onclick="sendGAEvent('unauthorised','click-client-services','not-enrolled', true)"
+         href="@appConfig.clientServicesGovUkGuidance">
          @Messages("unauthorised.client.signUp")</a>@Messages("common.fullStop")
    </p>
 
