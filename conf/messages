@@ -16,6 +16,11 @@ deregistrationReason.reason.stoppedTrading = It has stopped trading
 deregistrationReason.reason.turnoverBelowThreshold = Annual turnover is below £83,000
 deregistrationReason.reason.other = Other
 
+deregistrationProperty.title = Do you have more than one VAT registered business?
+deregistrationProperty.p1 = This includes both land and buildings.
+deregistrationProperty.radio_input.yes = Yes
+deregistrationProperty.radio_input.no = No
+
 optionTax.title = Did you notify HMRC of option to tax?
 optionTax.text.1 = This means that the business chose to charge VAT on any income it earns from renting or selling its commercial property.
 optionTax.text.2 = Commercial property is usually exempt from VAT. Some businesses choose to charge VAT so they can recover costs, such as from construction and repairs.

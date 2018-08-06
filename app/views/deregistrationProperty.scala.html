@@ -1,0 +1,57 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.play.views.html.helpers
+@import views.html.templates.errors.errorSummary
+@import views.html.helpers.radioHelper
+@import templates.headings
+@import forms.YesNoForm._
+
+@(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+
+@views.html.main_template(
+    title = messages("deregistrationProperty.title"),
+    bodyClasses = None,
+    appConfig = appConfig) {
+
+    <a class="link-back" href="#">@messages("common.back")</a>
+
+    @errorSummary("common.errorSummary.heading", form)
+
+    @headings(messages("deregistrationProperty.title"))
+
+    <p>@messages("deregistrationProperty.p1")</p>
+
+    @helpers.form(action = controllers.routes.DeregistrationPropertyController.submit) {
+
+        <div class="form-group" id="reason">
+            @radioHelper(
+                parentForm = form,
+                inline = true,
+                options = Seq(
+                    (yes, Messages("deregistrationProperty.radio_input.yes")),
+                    (no, Messages("deregistrationProperty.radio_input.no"))
+                ),
+                legend = Messages("deregistrationProperty.title"),
+                field = form(yesNo)
+            )
+        </div>
+
+        <button class="button" type ="submit" id="continue">
+            @messages("common.continue")
+        </button>
+    }
+}
