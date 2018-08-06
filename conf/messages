@@ -8,6 +8,7 @@ common.errorSummary.heading = You have one or more errors
 common.day = Day
 common.month = Month
 common.year = Year
+common.dateError = Invalid date
 common.fullStop = .
 common.agentService = Update your client''s VAT details
 common.yes = Yes
