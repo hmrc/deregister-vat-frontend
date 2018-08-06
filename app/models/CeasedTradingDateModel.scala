@@ -16,15 +16,20 @@
 
 package models
 
-import java.time.{DateTimeException, LocalDate}
+import java.time.LocalDate
 
 import play.api.libs.json.{Json, OFormat}
 
-case class CeasedTradingDateModel(day: Int, month: Int, year: Int){
+import scala.util.{Failure, Success, Try}
+
+
+case class CeasedTradingDateModel(ceasedTradingDateDay: Int, ceasedTradingDateMonth: Int, ceasedTradingDateYear: Int){
 
   val date: Option[LocalDate] =
-    try Some(LocalDate.of(year,month,day))
-    catch {case _:DateTimeException => None}
+    Try(LocalDate.of(ceasedTradingDateYear,ceasedTradingDateMonth,ceasedTradingDateDay)) match {
+      case Success(validDate) => Some(validDate)
+      case Failure(_) => None
+    }
 }
 
 object CeasedTradingDateModel {

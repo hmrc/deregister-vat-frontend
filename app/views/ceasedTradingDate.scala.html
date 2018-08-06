@@ -28,17 +28,22 @@
 
     <a class="link-back" href="#">@messages("common.back")</a>
 
-    <div class="form-group" id="reason">
-        @date(
-            form = form,
-            question = messages("ceasedTrading.title"),
-            fieldName = "ceasedTradingDate",
-            hint = Some(messages("ceasedTrading.hint")),
-            renderQuestionAsHeading = true
-        )
-    </div>
+    @errorSummary("common.errorSummary.heading", form)
 
-    <button class="button" type ="submit" id="continue">
-        @messages("common.continue")
-    </button>
+    @helpers.form(action = controllers.routes.CeasedTradingDateController.submit) {
+
+        <div class="form-group" id="ceasedTrading">
+            @date(
+                form = form,
+                question = messages("ceasedTrading.title"),
+                fieldName = "ceasedTradingDate",
+                hint = Some(messages("ceasedTrading.hint")),
+                renderQuestionAsHeading = true
+            )
+        </div>
+
+        <button class="button" type ="submit" id="continue">
+            @messages("common.continue")
+        </button>
+    }
 }

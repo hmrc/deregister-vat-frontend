@@ -25,9 +25,9 @@ class CeasedTradingDateFormSpec extends UnitSpec {
   "Binding a form with valid date" should {
 
     val data = Map(
-      "day" -> "1",
-      "month" -> "1",
-      "year" -> "2018"
+      "ceasedTradingDateDay" -> "1",
+      "ceasedTradingDateMonth" -> "1",
+      "ceasedTradingDateYear" -> "2018"
     )
     val form = CeasedTradingDateForm.ceasedTradingDateForm.bind(data)
 
@@ -59,9 +59,9 @@ class CeasedTradingDateFormSpec extends UnitSpec {
     "an invalid date has been entered" should {
 
       val data = Map(
-        "day" -> "99",
-        "month" -> "99",
-        "year" -> "9999"
+        "ceasedTradingDateDay" -> "99",
+        "ceasedTradingDateMonth" -> "99",
+        "ceasedTradingDateYear" -> "9999"
       )
       val form = CeasedTradingDateForm.ceasedTradingDateForm.bind(data)
 
@@ -81,9 +81,9 @@ class CeasedTradingDateFormSpec extends UnitSpec {
       val model = CeasedTradingDateModel(1,1,2018)
       val form = CeasedTradingDateForm.ceasedTradingDateForm.fill(model)
       form.data shouldBe Map(
-        "day" -> "1",
-        "month" -> "1",
-        "year" -> "2018"
+        "ceasedTradingDateDay" -> "1",
+        "ceasedTradingDateMonth" -> "1",
+        "ceasedTradingDateYear" -> "2018"
       )
     }
   }

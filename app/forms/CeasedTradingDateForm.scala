@@ -25,9 +25,9 @@ object CeasedTradingDateForm {
 
   val ceasedTradingDateForm: Form[CeasedTradingDateModel] = Form(
     mapping(
-      "day" -> number,
-      "month" -> number,
-      "year" -> number
+      "ceasedTradingDateDay" -> number,
+      "ceasedTradingDateMonth" -> number,
+      "ceasedTradingDateYear" -> number
     )(CeasedTradingDateModel.apply)(CeasedTradingDateModel.unapply)
       .verifying("Invalid date", _.date.isDefined)
   )
