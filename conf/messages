@@ -5,6 +5,9 @@ base.sign-out = Sign out
 common.continue = Continue
 common.back = Back
 common.errorSummary.heading = You have one or more errors
+common.day = Day
+common.month = Month
+common.year = Year
 common.fullStop = .
 common.agentService = Update your client''s VAT details
 common.yes = Yes
@@ -15,6 +18,9 @@ deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.stoppedTrading = It has stopped trading
 deregistrationReason.reason.turnoverBelowThreshold = Annual turnover is below £83,000
 deregistrationReason.reason.other = Other
+
+ceasedTrading.title = The date your business ceased or will cease trading
+ceasedTrading.hint = For example, 31 3 1980
 
 optionTax.title = Did you notify HMRC of option to tax?
 optionTax.text.1 = This means that the business chose to charge VAT on any income it earns from renting or selling its commercial property.

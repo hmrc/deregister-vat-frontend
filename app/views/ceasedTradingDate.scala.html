@@ -1,0 +1,44 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.play.views.html.helpers
+@import views.html.templates.errors.errorSummary
+@import templates.inputs.date
+@import templates.headings
+
+@(form: Form[CeasedTradingDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+
+@views.html.main_template(
+    title = messages("ceasedTrading.title"),
+    bodyClasses = None,
+    appConfig = appConfig) {
+
+    <a class="link-back" href="#">@messages("common.back")</a>
+
+    <div class="form-group" id="reason">
+        @date(
+            form = form,
+            question = messages("ceasedTrading.title"),
+            fieldName = "ceasedTradingDate",
+            hint = Some(messages("ceasedTrading.hint")),
+            renderQuestionAsHeading = true
+        )
+    </div>
+
+    <button class="button" type ="submit" id="continue">
+        @messages("common.continue")
+    </button>
+}
