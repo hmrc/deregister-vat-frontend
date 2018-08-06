@@ -41,6 +41,7 @@ trait AppConfig extends ServicesConfig {
   val surveyUrl: String
   val unauthorisedSignOutUrl: String
   val agentServicesGovUkGuidance: String
+  val clientServicesGovUkGuidance: String
   val govUkCancelVatRegistration: String
   val features: Features
 }
@@ -82,6 +83,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
 
   override lazy val agentServicesGovUkGuidance: String = getString(Keys.govUkSetupAgentServices)
+
+  override lazy val clientServicesGovUkGuidance:String = getString(Keys.govUkSetupClientServices)
 
   override lazy val govUkCancelVatRegistration: String = getString(Keys.govUkCancelVatRegistration)
 
