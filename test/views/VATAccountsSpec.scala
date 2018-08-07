@@ -16,28 +16,27 @@
 
 package views
 
-import assets.messages.{CommonMessages,DeregistrationReasonMessages}
+import assets.messages.{CommonMessages, VATAccountsMessages}
+import forms.VATAccountsForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import forms.DeregistrationReasonForm
 
+class VATAccountsSpec extends ViewBaseSpec {
 
-class DeregistrationReasonSpec extends ViewBaseSpec {
-
-  "Rendering the Deregistration reason page" should {
+  "Rendering the VAT Accounts page" should {
 
     object Selectors {
       val back = ".link-back"
       val pageHeading = "#content h1"
-      val reasonOption: Int => String = (number: Int) => s"fieldset > div:nth-of-type($number) > label"
+      val methodOption: Int => String = (number: Int) => s"fieldset > div:nth-of-type($number) > label"
       val button = ".button"
     }
 
-    lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
+    lazy val view = views.html.vatAccounts(VATAccountsForm.vatAccountsForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationReasonMessages.title
+      document.title shouldBe VATAccountsMessages.title
     }
 
     s"have the correct back text" in {
@@ -46,17 +45,22 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.title
+      elementText(Selectors.pageHeading) shouldBe VATAccountsMessages.title
     }
 
-    s"have the correct a radio button form with the correct 3 options" in {
-      elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
-      elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
-      elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
+    s"have a sentence regarding users with accountants" in {
+      elementText("#accountant") shouldBe VATAccountsMessages.accountant
+    }
+
+    s"have the correct a radio button form with the correct 2 options" in {
+      elementText(Selectors.methodOption(1)) shouldBe VATAccountsMessages.standard + " " + VATAccountsMessages.invoice
+      elementText(Selectors.methodOption(2)) shouldBe VATAccountsMessages.cash + " " + VATAccountsMessages.payment
     }
 
     s"have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
+
   }
+
 }
