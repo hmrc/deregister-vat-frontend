@@ -26,6 +26,5 @@ object CommonMessages {
   val agentServiceName = "Update your client's VAT details"
   val errorHeading = "You have one or more errors"
   val errorMandatoryRadioOption = "No option selected"
-  val errorMandatoryRadioOptionField = "Select an option"
 
 }

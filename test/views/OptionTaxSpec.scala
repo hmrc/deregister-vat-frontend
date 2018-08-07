@@ -114,7 +114,7 @@ class OptionTaxSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOptionField
+      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
     }
   }
 }

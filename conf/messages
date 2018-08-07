@@ -10,7 +10,6 @@ common.agentService = Update your client''s VAT details
 common.yes = Yes
 common.no = No
 common.error.mandatoryRadioOption = No option selected
-common.error.mandatoryRadioOption.field = Select an option
 
 deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.stoppedTrading = It has stopped trading
