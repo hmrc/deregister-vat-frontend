@@ -28,7 +28,7 @@
     <fieldset @if(inline) { class="inline" }>
         <legend class="visuallyhidden">@legend</legend>
         @if(hasError){
-            <span class="error-notification" role="tooltip" id="error-message-@field.name">@{Messages(s"${parentForm.error(field.name).get.message}.field")}</span>
+            <span class="error-message" role="tooltip" id="error-message-@field.name">@{Messages(s"${parentForm.error(field.name).get.message}.field")}</span>
         }
         @for(option <- options) {
             <div id="@{field.name}" class="multiple-choice">

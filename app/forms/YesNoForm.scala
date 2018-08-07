@@ -29,7 +29,7 @@ object YesNoForm {
 
   val no: String = "no"
 
-  val yesNoError: String = "error.multiple_vat_check"
+  val yesNoError: String = "common.error.mandatoryRadioOption"
 
   private val formatter: Formatter[YesNo] = new Formatter[YesNo] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], YesNo] = {
