@@ -41,7 +41,7 @@ class DeregistrationPropertyController @Inject()(val messagesApi: MessagesApi,
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.deregistrationProperty(error))),
       {
-        case Yes => Future.successful(Redirect(appConfig.govUkCancelVatRegistration))
+        case Yes => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
         case No => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
       }
     )

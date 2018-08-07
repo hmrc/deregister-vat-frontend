@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
-@import views.html.helpers.radioHelper
+@import views.html.templates.inputs.radioHelper
 @import templates.headings
 @import forms.YesNoForm._
 
@@ -42,8 +42,8 @@
                 parentForm = form,
                 inline = true,
                 options = Seq(
-                    (yes, Messages("deregistrationProperty.radio_input.yes")),
-                    (no, Messages("deregistrationProperty.radio_input.no"))
+                    (yes, Messages("common.yes")),
+                    (no, Messages("common.no"))
                 ),
                 legend = Messages("deregistrationProperty.title"),
                 field = form(yesNo)

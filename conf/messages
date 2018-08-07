@@ -5,11 +5,14 @@ base.sign-out = Sign out
 common.continue = Continue
 common.back = Back
 common.errorSummary.heading = You have one or more errors
+common.errorSummary = This field is required
+common.errorSummary.field = This field is required
 common.fullStop = .
 common.agentService = Update your client''s VAT details
 common.yes = Yes
 common.no = No
 common.error.mandatoryRadioOption = No option selected
+
 
 deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.stoppedTrading = It has stopped trading
@@ -18,8 +21,6 @@ deregistrationReason.reason.other = Other
 
 deregistrationProperty.title = Do you have more than one VAT registered business?
 deregistrationProperty.p1 = This includes both land and buildings.
-deregistrationProperty.radio_input.yes = Yes
-deregistrationProperty.radio_input.no = No
 
 optionTax.title = Did you notify HMRC of option to tax?
 optionTax.text.1 = This means that the business chose to charge VAT on any income it earns from renting or selling its commercial property.
