@@ -29,24 +29,70 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait MockAuth extends ControllerBaseSpec {
 
-  def setup(authResponse: Future[_]): AuthPredicate = {
+  type AuthResponse = Future[~[Option[AffinityGroup], Enrolments]]
+
+  def setup(authResponse: AuthResponse, isAgent: Boolean = false): AuthPredicate = {
     val mockAuthConnector = mock[AuthConnector]
 
     (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *)
       .returns(authResponse)
 
+    if(isAgent) {
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(authResponse.b)
+    }
+
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val serviceErrorHandler = mock[ServiceErrorHandler]
+    val serviceErrorHandler = injector.instanceOf[ServiceErrorHandler]
     val mockAuthoriseAsAgent = new AuthoriseAsAgent(mockEnrolmentsAuthService, serviceErrorHandler, messagesApi, mockConfig)
     new AuthPredicate(mockEnrolmentsAuthService, serviceErrorHandler, mockAuthoriseAsAgent, messagesApi, mockConfig)
   }
 
-  val mockAuthorisedIndividual =
+  val mockAuthorisedIndividual: AuthResponse = Future.successful(
     new ~(Some(AffinityGroup.Individual),
       Enrolments(Set(Enrolment("HMRC-MTD-VAT",
         Seq(EnrolmentIdentifier("VRN", "999999999")),
         "Activated"
       )))
     )
+  )
+
+  val mockAuthorisedAgent: AuthResponse = Future.successful(
+    new ~(Some(AffinityGroup.Agent),
+      Enrolments(
+        Set(
+          Enrolment(
+            "HMRC-AS-AGENT",
+            Seq(EnrolmentIdentifier("AgentReferenceNumber", "XAIT0000000000")),
+            "Activated",
+            Some("mtd-vat-auth")
+          )
+        )
+      )
+    )
+  )
+
+  val mockUnauthorisedIndividual: AuthResponse = Future.successful(
+    new ~(Some(AffinityGroup.Individual),
+      Enrolments(
+        Set(
+          Enrolment(
+            "OTHER-ENROLMENT",
+            Seq(EnrolmentIdentifier("", "")),
+            "Activated"
+          )
+        )
+      )
+    )
+  )
+
+  val mockNoAffinityGroup: AuthResponse = Future.successful(
+    new ~(None,
+      Enrolments(
+        Set()
+      )
+    )
+  )
 }

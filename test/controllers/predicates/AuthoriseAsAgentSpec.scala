@@ -16,11 +16,10 @@
 
 package controllers.predicates
 
+import assets.mocks.MockAuth
 import config.ServiceErrorHandler
-import controllers.ControllerBaseSpec
 import org.jsoup.Jsoup
 import play.api.http.Status
-import play.api.test.Helpers._
 import play.api.mvc.{Action, AnyContent}
 import play.api.mvc.Results.Ok
 import play.api.test.FakeRequest
@@ -32,7 +31,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthoriseAsAgentSpec extends ControllerBaseSpec {
+class AuthoriseAsAgentSpec extends MockAuth {
 
   def setup(authResponse: Future[_]): AuthoriseAsAgent = {
     val mockAuthConnector = mock[AuthConnector]
@@ -42,7 +41,7 @@ class AuthoriseAsAgentSpec extends ControllerBaseSpec {
       .returns(authResponse)
 
     val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val serviceErrorHandler = mock[ServiceErrorHandler]
+    val serviceErrorHandler = injector.instanceOf[ServiceErrorHandler]
     new AuthoriseAsAgent(mockEnrolmentsAuthService, serviceErrorHandler, messagesApi, mockConfig)
   }
 

@@ -29,7 +29,7 @@ import scala.concurrent.Future
 class DeregistrationReasonControllerSpec extends MockAuth {
 
   private trait Test {
-    val authResult: Future[_]
+    val authResult: AuthResponse
 
     def target: DeregistrationReasonController = {
       val predicate: AuthPredicate = setup(authResult)
@@ -44,14 +44,14 @@ class DeregistrationReasonControllerSpec extends MockAuth {
       "the user does not have a pre selected option" should {
 
         "return 200 (OK)" in new Test {
-          override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+          override val authResult: AuthResponse = mockAuthorisedIndividual
           private val result = target.show()(request)
 
           status(result) shouldBe Status.OK
         }
 
         "return HTML" in new Test {
-          override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+          override val authResult: AuthResponse = mockAuthorisedIndividual
           private val result = target.show()(request)
 
           contentType(result) shouldBe Some("text/html")
@@ -63,14 +63,14 @@ class DeregistrationReasonControllerSpec extends MockAuth {
 
         "return 200 (OK)" in new Test {
 
-          override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+          override val authResult: AuthResponse = mockAuthorisedIndividual
           val result: Future[Result] = target.show()(request)
 
           status(result) shouldBe Status.OK
         }
 
         "return HTML" in new Test {
-          override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+          override val authResult: AuthResponse = mockAuthorisedIndividual
           val result: Future[Result] = target.show()(request)
 
           contentType(result) shouldBe Some("text/html")
@@ -88,7 +88,7 @@ class DeregistrationReasonControllerSpec extends MockAuth {
 
         "return 303 (SEE OTHER)" in new Test {
 
-          override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+          override val authResult: AuthResponse = mockAuthorisedIndividual
           private val result = target.submit()(request)
 
           status(result) shouldBe Status.SEE_OTHER
@@ -103,7 +103,7 @@ class DeregistrationReasonControllerSpec extends MockAuth {
 
         "return 303 (SEE OTHER)" in new Test {
 
-          override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+          override val authResult: AuthResponse = mockAuthorisedIndividual
           private val result = target.submit()(request)
 
           status(result) shouldBe Status.SEE_OTHER
@@ -118,7 +118,7 @@ class DeregistrationReasonControllerSpec extends MockAuth {
 
         "return 303 (SEE OTHER)" in new Test {
 
-          override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+          override val authResult: AuthResponse = mockAuthorisedIndividual
           private val result = target.submit()(request)
 
           status(result) shouldBe Status.SEE_OTHER
@@ -132,14 +132,14 @@ class DeregistrationReasonControllerSpec extends MockAuth {
           FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", ""))
 
         "return 400 (BAD REQUEST)" in new Test {
-          override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+          override val authResult: AuthResponse = mockAuthorisedIndividual
           private val result = target.submit()(request)
 
           status(result) shouldBe Status.BAD_REQUEST
         }
 
         "return HTML" in new Test {
-          override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+          override val authResult: AuthResponse = mockAuthorisedIndividual
           private val result = target.submit()(request)
 
           contentType(result) shouldBe Some("text/html")
@@ -154,7 +154,7 @@ class DeregistrationReasonControllerSpec extends MockAuth {
     "Calling the .show action" when {
 
       "return 401 (Unauthorised)" in new Test {
-        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+        override val authResult: AuthResponse = Future.failed(MissingBearerToken())
         private val result = target.show()(request)
 
         status(result) shouldBe Status.UNAUTHORIZED
@@ -167,7 +167,7 @@ class DeregistrationReasonControllerSpec extends MockAuth {
         FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", ""))
 
       "return 401 (Unauthorised)" in new Test {
-        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
+        override val authResult: AuthResponse = Future.failed(MissingBearerToken())
         private val result = target.submit()(request)
 
         status(result) shouldBe Status.UNAUTHORIZED
@@ -180,7 +180,7 @@ class DeregistrationReasonControllerSpec extends MockAuth {
     "Calling the .show action" when {
 
       "return 403 (Forbidden)" in new Test {
-        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
+        override val authResult: AuthResponse = Future.failed(InsufficientEnrolments())
         private val result = target.show()(request)
 
         status(result) shouldBe Status.FORBIDDEN
@@ -193,7 +193,7 @@ class DeregistrationReasonControllerSpec extends MockAuth {
         FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "stoppedTrading"))
 
       "return 403 (Forbidden)" in new Test {
-        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
+        override val authResult: AuthResponse = Future.failed(InsufficientEnrolments())
         private val result = target.submit()(request)
 
         status(result) shouldBe Status.FORBIDDEN

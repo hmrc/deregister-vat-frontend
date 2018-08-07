@@ -27,7 +27,7 @@ import scala.concurrent.Future
 class HelloWorldControllerSpec extends MockAuth {
 
   private trait Test {
-    val authResult: Future[_]
+    val authResult: AuthResponse
 
     def target: HelloWorldController = {
       val predicate: AuthPredicate = setup(authResult)
@@ -40,14 +40,14 @@ class HelloWorldControllerSpec extends MockAuth {
     "the user is authorised" should {
 
       "return 200 (OK)" in new Test {
-        override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+        override val authResult: AuthResponse = mockAuthorisedIndividual
         private val result = target.helloWorld()(user)
 
         status(result) shouldBe Status.OK
       }
 
       "return HTML" in new Test {
-        override val authResult: Future[_] = Future.successful(mockAuthorisedIndividual)
+        override val authResult: AuthResponse = mockAuthorisedIndividual
         private val result = target.helloWorld()(user)
 
         contentType(result) shouldBe Some("text/html")
@@ -58,7 +58,7 @@ class HelloWorldControllerSpec extends MockAuth {
     "the user is not authenticated" should {
 
       "return 401 (Unauthorised)" in new Test {
-        override val authResult: Future[_] = Future.failed(MissingBearerToken())
+        override val authResult: AuthResponse = Future.failed(MissingBearerToken())
         private val result = target.helloWorld()(user)
 
         status(result) shouldBe Status.UNAUTHORIZED
@@ -68,7 +68,7 @@ class HelloWorldControllerSpec extends MockAuth {
     "the user is not authorised" should {
 
       "return 403 (Forbidden)" in new Test {
-        override val authResult: Future[_] = Future.failed(InsufficientEnrolments())
+        override val authResult: AuthResponse = Future.failed(InsufficientEnrolments())
         private val result = target.helloWorld()(user)
 
         status(result) shouldBe Status.FORBIDDEN
