@@ -16,14 +16,10 @@
 
 package assets.messages
 
-object CommonMessages {
+object OptionTaxMessages {
 
-  val continue = "Continue"
-  val back = "Back"
-  val errorHeading = "You have one or more errors"
-  val signOut = "Sign out"
-  val yes = "Yes"
-  val no = "No"
-  val agentServiceName = "Update your client's VAT details"
+  val title = "Did you notify HMRC of option to tax?"
+  val text1 = "This means that the business chose to charge VAT on any income it earns from renting or selling its commercial property."
+  val text2 = "Commercial property is usually exempt from VAT. Some businesses choose to charge VAT so they can recover costs, such as from construction and repairs."
 
 }

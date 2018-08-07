@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package assets.messages
+package models
 
-object CommonMessages {
+sealed trait YesNo
 
-  val continue = "Continue"
-  val back = "Back"
-  val errorHeading = "You have one or more errors"
-  val signOut = "Sign out"
-  val yes = "Yes"
-  val no = "No"
-  val agentServiceName = "Update your client's VAT details"
+object Yes extends YesNo
 
-}
+object No extends YesNo
