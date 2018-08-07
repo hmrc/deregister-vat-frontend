@@ -66,7 +66,7 @@ class HelloWorldPageSpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("Unauthorised access")
+          pageTitle("You can’t use this service yet")
         )
       }
     }
