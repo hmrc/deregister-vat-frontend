@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package Forms
+package forms
 
-import forms.DeregistrationReasonForm
 import models.DeregistrationReasonModel
 import uk.gov.hmrc.play.test.UnitSpec
 
