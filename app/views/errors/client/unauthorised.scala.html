@@ -19,11 +19,9 @@
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-title = Messages("unauthorised.client.title"),
+title = messages("unauthorised.client.title"),
 bodyClasses = None,
-appConfig = appConfig,
-serviceName = Some(messages("common.agentService"))
-
+appConfig = appConfig
 ){
    @headings(Messages("unauthorised.client.title"))
 
