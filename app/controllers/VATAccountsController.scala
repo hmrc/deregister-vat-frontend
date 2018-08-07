@@ -37,12 +37,7 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
 
     VATAccountsForm.vatAccountsForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.vatAccounts(error))),
-      success =>
-        success.accountingMethod match {
-          case "standard" => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
-          case _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
-        }
-
+      _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
     )
   }
 
