@@ -43,4 +43,6 @@ object ConfigKeys {
 
   val govUkSetupAgentServices: String = "gov-uk.guidance.setupAgentServices.url"
 
+  val govUkSetupClientServices: String = "gov-uk.setupClientServices.url"
+
 }

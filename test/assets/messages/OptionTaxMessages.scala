@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+package assets.messages
 
-@views.html.main_template(title = Messages("unauthorised.title"), bodyClasses = None, appConfig = appConfig) {
-  <h1>@Messages("unauthorised.title")</h1>
+object OptionTaxMessages {
 
-  <p>@Messages("unauthorised.instructions")</p>
+  val title = "Did you notify HMRC of option to tax?"
+  val text1 = "This means that the business chose to charge VAT on any income it earns from renting or selling its commercial property."
+  val text2 = "Commercial property is usually exempt from VAT. Some businesses choose to charge VAT so they can recover costs, such as from construction and repairs."
+
 }

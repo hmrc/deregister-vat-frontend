@@ -20,9 +20,11 @@ object CommonMessages {
 
   val continue = "Continue"
   val back = "Back"
-  val errorHeading = "You have one or more errors"
   val signOut = "Sign out"
-
+  val yes = "Yes"
+  val no = "No"
   val agentServiceName = "Update your client's VAT details"
+  val errorHeading = "You have one or more errors"
+  val errorMandatoryRadioOption = "No option selected"
 
 }
