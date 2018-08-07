@@ -54,10 +54,11 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
       case _: InternalError =>
         Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have a HMRC-AS-AGENT enrolment")
         Forbidden(views.html.errors.agent.unauthorised())
+
       case _: AuthorisationException =>
         Logger.warn(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have delegated authority for Client")
 
-        //TODO: update to redirect to new view or new agent lookup service
+        //TODO: redirect to new agent lookup service
         Unauthorized(views.html.errors.agent.unauthorised())
     }
   }

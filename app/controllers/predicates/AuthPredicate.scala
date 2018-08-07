@@ -58,9 +58,10 @@ class AuthPredicate @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
       case _: NoActiveSession =>
         Logger.debug("[AuthPredicate][invokeBlock] - No active session, rendering Session Timeout view")
         Unauthorized(views.html.errors.sessionTimeout())
+
       case _: AuthorisationException =>
         Logger.warn("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
-        Unauthorized(views.html.errors.unauthorised())
+        Forbidden(views.html.errors.client.unauthorised())
     }
   }
 
@@ -71,7 +72,7 @@ class AuthPredicate @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
     }
     else {
       Logger.debug(s"[AuthPredicate][checkVatEnrolment] - Individual without HMRC-MTD-VAT enrolment. $enrolments")
-      Future.successful(Forbidden(views.html.errors.unauthorised()))
+      Future.successful(Forbidden(views.html.errors.client.unauthorised()))
     }
 
 }
