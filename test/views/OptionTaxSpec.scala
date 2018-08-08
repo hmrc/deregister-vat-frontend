@@ -29,11 +29,11 @@ class OptionTaxSpec extends ViewBaseSpec {
     val back = ".link-back"
     val pageHeading = "#content h1"
     val text = (number: Int) => s"#content > article > p:nth-child($number)"
-    val yesOption = "fieldset > div:nth-of-type(1) > label"
-    val noOption = "fieldset > div:nth-of-type(2) > label"
+    val yesOption = "fieldset > div > div:nth-of-type(1) > label"
+    val noOption = "fieldset > div > div:nth-of-type(2) > label"
     val button = ".button"
     val errorHeading = "#error-summary-display"
-    val error = "#error-message-yes_no"
+    val error = "#yes_no-error-summary"
   }
 
   "Rendering the option to tax page with no errors" should {
