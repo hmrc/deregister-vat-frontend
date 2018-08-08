@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package Forms
+package forms
 
-import forms.VATAccountsForm
 import models.VATAccountsModel
 import uk.gov.hmrc.play.test.UnitSpec
 
