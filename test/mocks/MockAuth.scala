@@ -14,40 +14,42 @@
  * limitations under the License.
  */
 
-package assets.mocks
+package mocks
 
 import config.ServiceErrorHandler
-import controllers.ControllerBaseSpec
 import controllers.predicates.{AuthPredicate, AuthoriseAsAgent}
+import org.scalamock.scalatest.MockFactory
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.TestUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAuth extends ControllerBaseSpec {
+trait MockAuth extends TestUtil with MockFactory {
 
   type AuthResponse = Future[~[Option[AffinityGroup], Enrolments]]
 
-  def setup(authResponse: AuthResponse, isAgent: Boolean = false): AuthPredicate = {
-    val mockAuthConnector = mock[AuthConnector]
+  lazy val mockAuthConnector: AuthConnector = mock[AuthConnector]
+
+  lazy val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+  lazy val serviceErrorHandler: ServiceErrorHandler = injector.instanceOf[ServiceErrorHandler]
+  lazy val mockAuthoriseAsAgent: AuthoriseAsAgent = new AuthoriseAsAgent(mockEnrolmentsAuthService, serviceErrorHandler, messagesApi, mockConfig)
+  lazy val mockAuthPredicate: AuthPredicate = new AuthPredicate(mockEnrolmentsAuthService, serviceErrorHandler, mockAuthoriseAsAgent, messagesApi, mockConfig)
+
+  def mockAuthResult(authResponse: AuthResponse, isAgent: Boolean = false): Unit = {
 
     (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *)
       .returns(authResponse)
 
-    if(isAgent) {
+    if (isAgent) {
       (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
         .expects(*, *, *, *)
         .returns(authResponse.b)
     }
-
-    val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-    val serviceErrorHandler = injector.instanceOf[ServiceErrorHandler]
-    val mockAuthoriseAsAgent = new AuthoriseAsAgent(mockEnrolmentsAuthService, serviceErrorHandler, messagesApi, mockConfig)
-    new AuthPredicate(mockEnrolmentsAuthService, serviceErrorHandler, mockAuthoriseAsAgent, messagesApi, mockConfig)
   }
 
   val mockAuthorisedIndividual: AuthResponse = Future.successful(
@@ -88,6 +90,20 @@ trait MockAuth extends ControllerBaseSpec {
     )
   )
 
+  val mockUnauthorisedAgent: AuthResponse = Future.successful(
+    new ~(Some(AffinityGroup.Agent),
+      Enrolments(
+        Set(
+          Enrolment(
+            "OTHER-ENROLMENT",
+            Seq(EnrolmentIdentifier("", "")),
+            "Activated"
+          )
+        )
+      )
+    )
+  )
+
   val mockNoAffinityGroup: AuthResponse = Future.successful(
     new ~(None,
       Enrolments(
@@ -95,4 +111,6 @@ trait MockAuth extends ControllerBaseSpec {
       )
     )
   )
+
 }
+

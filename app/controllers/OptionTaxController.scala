@@ -16,26 +16,26 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
+import controllers.predicates.AuthPredicate
 import forms.YesNoForm
-import play.api.i18n.MessagesApi
+import javax.inject.{Inject, Singleton}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
 class OptionTaxController @Inject()(val messagesApi: MessagesApi,
-                                    val auth: AuthorisedFunctions,
-                                    override implicit val appConfig: AppConfig) extends AuthorisedController {
+                                    val authenticate: AuthPredicate,
+                                    implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authorisedAction { implicit user =>
+  val show: Action[AnyContent] = authenticate.async { implicit user =>
     Future.successful(Ok(views.html.optionTax(YesNoForm.yesNoForm)))
   }
 
-  val submit: Action[AnyContent] = authorisedAction { implicit user =>
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionTax(error))),

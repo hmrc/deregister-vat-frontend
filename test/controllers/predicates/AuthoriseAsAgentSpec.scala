@@ -16,22 +16,23 @@
 
 package controllers.predicates
 
-import assets.mocks.MockAuth
 import config.ServiceErrorHandler
 import org.jsoup.Jsoup
+import org.scalamock.scalatest.MockFactory
 import play.api.http.Status
-import play.api.mvc.{Action, AnyContent}
 import play.api.mvc.Results.Ok
+import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.TestUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthoriseAsAgentSpec extends MockAuth {
+class AuthoriseAsAgentSpec extends TestUtil with MockFactory {
 
   def setup(authResponse: Future[_]): AuthoriseAsAgent = {
     val mockAuthConnector = mock[AuthConnector]
@@ -121,11 +122,7 @@ class AuthoriseAsAgentSpec extends MockAuth {
         "render Unauthorised view" in {
           Jsoup.parse(bodyOf(result)).title shouldBe "You can’t use this service yet"
         }
-
       }
-
     }
-
   }
-
 }
