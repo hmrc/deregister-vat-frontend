@@ -168,7 +168,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
 
   "Calling the radio helper with inline set to true" should {
 
-    "render the choices as radio buttons with additional content" in {
+    "render the choices as radio buttons with an inline class attribute" in {
       val additionalContent = Html("<p>Additional text</p>")
       val field: Field = Field(YesNoForm.yesNoForm, fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
