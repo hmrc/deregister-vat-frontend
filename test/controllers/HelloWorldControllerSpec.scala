@@ -18,17 +18,12 @@ package controllers
 
 import play.api.http.Status
 import play.api.test.Helpers._
-import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class HelloWorldControllerSpec extends ControllerBaseSpec {
 
-  object TestHelloWorldController extends HelloWorldController(messagesApi, mockAuthorisedFunctions, mockConfig)
+  object TestHelloWorldController extends HelloWorldController(messagesApi, mockAuthPredicate, mockConfig)
 
   "Calling the .helloWorld action" when {
 
@@ -37,7 +32,7 @@ class HelloWorldControllerSpec extends ControllerBaseSpec {
       lazy val result = TestHelloWorldController.helloWorld()(user)
 
       "return 200 (OK)" in {
-        mockAuthResult(Future.successful(individualAuthorised))
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.OK
       }
 

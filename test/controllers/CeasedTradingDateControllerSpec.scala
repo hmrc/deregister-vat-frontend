@@ -23,9 +23,9 @@ import play.api.test.Helpers.{contentType, _}
 
 import scala.concurrent.Future
 
-class OptionTaxControllerSpec extends ControllerBaseSpec {
+class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
 
-  object TestOptionTaxController extends OptionTaxController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestCeasedTradingDateController extends CeasedTradingDateController(messagesApi, mockAuthPredicate, mockConfig)
 
   "the user is authorised" when {
 
@@ -33,7 +33,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestOptionTaxController.show()(request)
+        lazy val result = TestCeasedTradingDateController.show()(request)
 
         "return 200 (OK)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -46,9 +46,9 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      "the user is has pre selected option" should {
+      "the user is has previously entered values" should {
 
-        lazy val result = TestOptionTaxController.show()(request)
+        lazy val result = TestCeasedTradingDateController.show()(request)
 
         "return 200 (OK)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -61,16 +61,20 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      authChecks(".show", TestOptionTaxController.show(), request)
+      authChecks(".show", TestCeasedTradingDateController.show(), request)
     }
 
     "Calling the .submit action" when {
 
-      "the user submits after selecting an 'Yes' option" should {
+      "the user submits entering a date" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes"))
-        lazy val result = TestOptionTaxController.submit()(request)
+          FakeRequest("POST", "/").withFormUrlEncodedBody(
+            ("ceasedTradingDateDay", "1"),
+            ("ceasedTradingDateMonth", "1"),
+            ("ceasedTradingDateYear", "2018")
+          )
+        lazy val result = TestCeasedTradingDateController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -78,33 +82,20 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
         }
 
         //TODO: This needs to be updated as part of the routing sub-task
-        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
+        s"redirect to the ${controllers.routes.HelloWorldController.helloWorld().url}" in {
           redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
         }
       }
 
-      "the user submits after selecting the 'No' option" should {
+      "the user submits without entering any dates" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no"))
-        lazy val result = TestOptionTaxController.submit()(request)
-
-        "return 303 (SEE OTHER)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        //TODO: This needs to be updated as part of the routing sub-task
-        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
-        }
-      }
-
-      "the user submits without selecting an option" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
-        lazy val result = TestOptionTaxController.submit()(request)
+          FakeRequest("POST", "/").withFormUrlEncodedBody(
+            ("ceasedTradingDateDay", ""),
+            ("ceasedTradingDateMonth", ""),
+            ("ceasedTradingDateYear", "")
+          )
+        lazy val result = TestCeasedTradingDateController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -118,6 +109,10 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    authChecks(".submit", TestOptionTaxController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestCeasedTradingDateController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(
+      ("ceasedTradingDateDay", "1"),
+      ("ceasedTradingDateMonth", "1"),
+      ("ceasedTradingDateYear", "2018")
+    ))
   }
 }

@@ -57,7 +57,7 @@ trait IntegrationBaseSpec extends UnitSpec
 
     def isAuthorised: PreconditionBuilder = {
       Given("User is enrolled to HMRC-MTD-VAT")
-      AuthStub.authorised()
+      AuthStub.authorisedIndividual()
       builder
     }
 
@@ -69,7 +69,7 @@ trait IntegrationBaseSpec extends UnitSpec
 
     def isNotAuthorised: PreconditionBuilder = {
       Given("User is not enrolled to HMRC-MTD-VAT")
-      AuthStub.unauthorisedMissingEnrolment()
+      AuthStub.unauthorisedIndividualMissingEnrolment()
       builder
     }
   }

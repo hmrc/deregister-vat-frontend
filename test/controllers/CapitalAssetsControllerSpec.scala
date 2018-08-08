@@ -23,7 +23,7 @@ import play.api.test.Helpers.{contentType, _}
 
 class CapitalAssetsControllerSpec extends ControllerBaseSpec {
 
-  object TestCapitalAssetsController extends CapitalAssetsController(messagesApi, mockAuthorisedFunctions, mockConfig)
+  object TestCapitalAssetsController extends CapitalAssetsController(messagesApi, mockAuthPredicate, mockConfig)
 
   "the user is authorised" when {
 
@@ -34,7 +34,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
-          mockAuthResult(individualAuthorised)
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -50,7 +50,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
-          mockAuthResult(individualAuthorised)
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -74,7 +74,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
 
 
         "return 303 (SEE OTHER)" in {
-          mockAuthResult(individualAuthorised)
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -91,7 +91,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          mockAuthResult(individualAuthorised)
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -108,7 +108,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(individualAuthorised)
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 

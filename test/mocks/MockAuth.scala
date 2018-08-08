@@ -16,34 +16,99 @@
 
 package mocks
 
-import common.EnrolmentKeys
+import config.ServiceErrorHandler
+import controllers.predicates.{AuthPredicate, AuthoriseAsAgent}
 import org.scalamock.scalatest.MockFactory
 import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
-import assets.constants.BaseTestConstants.vrn
+import utils.TestUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAuth extends MockFactory {
+trait MockAuth extends TestUtil with MockFactory {
+
+  type AuthResponse = Future[~[Option[AffinityGroup], Enrolments]]
 
   lazy val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-  def mockAuthResult[A](authResult: Future[A]) {
-    (mockAuthConnector.authorise(_: Predicate, _: Retrieval[A])(_: HeaderCarrier, _: ExecutionContext))
+  lazy val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
+  lazy val serviceErrorHandler: ServiceErrorHandler = injector.instanceOf[ServiceErrorHandler]
+  lazy val mockAuthoriseAsAgent: AuthoriseAsAgent = new AuthoriseAsAgent(mockEnrolmentsAuthService, serviceErrorHandler, messagesApi, mockConfig)
+  lazy val mockAuthPredicate: AuthPredicate = new AuthPredicate(mockEnrolmentsAuthService, serviceErrorHandler, mockAuthoriseAsAgent, messagesApi, mockConfig)
+
+  def mockAuthResult(authResponse: AuthResponse, isAgent: Boolean = false): Unit = {
+
+    (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *)
-      .returns(authResult)
+      .returns(authResponse)
+
+    if (isAgent) {
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(authResponse.b)
+    }
   }
 
-  lazy val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
+  val mockAuthorisedIndividual: AuthResponse = Future.successful(
+    new ~(Some(AffinityGroup.Individual),
+      Enrolments(Set(Enrolment("HMRC-MTD-VAT",
+        Seq(EnrolmentIdentifier("VRN", "999999999")),
+        "Activated"
+      )))
+    )
+  )
 
-  val individualAuthorised: Enrolments = Enrolments(
-    Set(
-      Enrolment(
-        EnrolmentKeys.vatEnrolmentId,
-        Seq(EnrolmentIdentifier(EnrolmentKeys.vatIdentifierId, vrn)), "Active")
+  val mockAuthorisedAgent: AuthResponse = Future.successful(
+    new ~(Some(AffinityGroup.Agent),
+      Enrolments(
+        Set(
+          Enrolment(
+            "HMRC-AS-AGENT",
+            Seq(EnrolmentIdentifier("AgentReferenceNumber", "XAIT0000000000")),
+            "Activated",
+            Some("mtd-vat-auth")
+          )
+        )
+      )
+    )
+  )
+
+  val mockUnauthorisedIndividual: AuthResponse = Future.successful(
+    new ~(Some(AffinityGroup.Individual),
+      Enrolments(
+        Set(
+          Enrolment(
+            "OTHER-ENROLMENT",
+            Seq(EnrolmentIdentifier("", "")),
+            "Activated"
+          )
+        )
+      )
+    )
+  )
+
+  val mockUnauthorisedAgent: AuthResponse = Future.successful(
+    new ~(Some(AffinityGroup.Agent),
+      Enrolments(
+        Set(
+          Enrolment(
+            "OTHER-ENROLMENT",
+            Seq(EnrolmentIdentifier("", "")),
+            "Activated"
+          )
+        )
+      )
+    )
+  )
+
+  val mockNoAffinityGroup: AuthResponse = Future.successful(
+    new ~(None,
+      Enrolments(
+        Set()
+      )
     )
   )
 

@@ -17,20 +17,15 @@
 package controllers
 
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
+import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
-  object TestDeregistrationReasonController extends DeregistrationReasonController(messagesApi, mockAuthorisedFunctions, mockConfig)
+  object TestDeregistrationReasonController extends DeregistrationReasonController(messagesApi, mockAuthPredicate, mockConfig)
 
   "the user is authorised" when {
 
@@ -41,7 +36,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationReasonController.show()(request)
 
         "return 200 (OK)" in {
-          mockAuthResult(Future.successful(individualAuthorised))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
 
@@ -53,10 +48,10 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
       "the user is has pre selected option" should {
 
-        lazy val result: Future[Result] = TestDeregistrationReasonController.show()(request)
+        lazy val result = TestDeregistrationReasonController.show()(request)
 
         "return 200 (OK)" in {
-          mockAuthResult(Future.successful(individualAuthorised))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
 
@@ -79,7 +74,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          mockAuthResult(Future.successful(individualAuthorised))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -97,7 +92,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
 
         "return 303 (SEE OTHER)" in {
-          mockAuthResult(Future.successful(individualAuthorised))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -114,7 +109,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          mockAuthResult(Future.successful(individualAuthorised))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -130,7 +125,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(individualAuthorised))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
 

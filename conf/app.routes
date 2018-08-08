@@ -5,6 +5,9 @@ GET        /hello-world            controllers.HelloWorldController.helloWorld
 GET        /deregistration-reason  controllers.DeregistrationReasonController.show
 POST       /deregistration-reason  controllers.DeregistrationReasonController.submit
 
+GET        /ceased-trading-date    controllers.CeasedTradingDateController.show
+POST       /ceased-trading-date    controllers.CeasedTradingDateController.submit
+
 GET        /option-to-tax          controllers.OptionTaxController.show
 POST       /option-to-tax          controllers.OptionTaxController.submit
 
