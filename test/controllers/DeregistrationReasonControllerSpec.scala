@@ -30,50 +30,22 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
-  private trait Test {
-    val authResult: Future[Enrolments]
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
-
-    private def setup() {
-      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *, *)
-        .returns(authResult)
-    }
-
-    val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
-
-    def target: DeregistrationReasonController = {
-      setup()
-      new DeregistrationReasonController(messagesApi, mockAuthorisedFunctions, mockConfig)
-    }
-  }
+  object TestDeregistrationReasonController extends DeregistrationReasonController(messagesApi, mockAuthorisedFunctions, mockConfig)
 
   "the user is authorised" when {
-
-    val goodEnrolments: Enrolments = Enrolments(
-      Set(
-        Enrolment(
-          "HMRC-MTD-VAT",
-          Seq(EnrolmentIdentifier("", "999999999")),
-          "Active")
-      )
-    )
 
     "Calling the .show action" when {
 
       "the user does not have a pre selected option" should {
 
-        "return 200 (OK)" in new Test {
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.show()(request)
+        lazy val result = TestDeregistrationReasonController.show()(request)
 
+        "return 200 (OK)" in {
+          mockAuthResult(Future.successful(individualAuthorised))
           status(result) shouldBe Status.OK
         }
 
-        "return HTML" in new Test {
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.show()(request)
-
+        "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
         }
@@ -81,22 +53,21 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
       "the user is has pre selected option" should {
 
-        "return 200 (OK)" in new Test {
+        lazy val result: Future[Result] = TestDeregistrationReasonController.show()(request)
 
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          val result: Future[Result] = target.show()(request)
-
+        "return 200 (OK)" in {
+          mockAuthResult(Future.successful(individualAuthorised))
           status(result) shouldBe Status.OK
         }
 
-        "return HTML" in new Test {
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          val result: Future[Result] = target.show()(request)
-
+        "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
         }
       }
+
+      authChecks(".show", TestDeregistrationReasonController.show(), request)
+
     }
 
     "Calling the .submit action" when {
@@ -105,13 +76,15 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "stoppedTrading"))
+        lazy val result = TestDeregistrationReasonController.submit()(request)
 
-        "return 303 (SEE OTHER)" in new Test {
-
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.submit()(request)
-
+        "return 303 (SEE OTHER)" in {
+          mockAuthResult(Future.successful(individualAuthorised))
           status(result) shouldBe Status.SEE_OTHER
+        }
+
+        //TODO: This test needs updating as part of the routing story
+        s"redirect to ${controllers.routes.HelloWorldController.helloWorld().url}" in {
           redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
         }
       }
@@ -120,13 +93,16 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "turnoverBelowThreshold"))
+        lazy val result = TestDeregistrationReasonController.submit()(request)
 
-        "return 303 (SEE OTHER)" in new Test {
 
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.submit()(request)
-
+        "return 303 (SEE OTHER)" in {
+          mockAuthResult(Future.successful(individualAuthorised))
           status(result) shouldBe Status.SEE_OTHER
+        }
+
+        //TODO: This test needs updating as part of the routing story
+        s"redirect to ${controllers.routes.HelloWorldController.helloWorld().url}" in {
           redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
         }
       }
@@ -135,13 +111,14 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "other"))
+        lazy val result = TestDeregistrationReasonController.submit()(request)
 
-        "return 303 (SEE OTHER)" in new Test {
-
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.submit()(request)
-
+        "return 303 (SEE OTHER)" in {
+          mockAuthResult(Future.successful(individualAuthorised))
           status(result) shouldBe Status.SEE_OTHER
+        }
+
+        s"redirect to ${mockConfig.govUkCancelVatRegistration}" in {
           redirectLocation(result) shouldBe Some(mockConfig.govUkCancelVatRegistration)
         }
       }
@@ -150,74 +127,20 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", ""))
+        lazy val result = TestDeregistrationReasonController.submit()(request)
 
-        "return 400 (BAD REQUEST)" in new Test {
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.submit()(request)
-
+        "return 400 (BAD REQUEST)" in {
+          mockAuthResult(Future.successful(individualAuthorised))
           status(result) shouldBe Status.BAD_REQUEST
         }
 
-        "return HTML" in new Test {
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.submit()(request)
-
+        "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
         }
       }
     }
-  }
 
-  "the user is not authenticated" when {
-
-    "Calling the .show action" when {
-
-      "return 401 (Unauthorised)" in new Test {
-        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
-        private val result = target.show()(request)
-
-        status(result) shouldBe Status.UNAUTHORIZED
-      }
-    }
-
-    "Calling the .submit action" when {
-
-      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", ""))
-
-      "return 401 (Unauthorised)" in new Test {
-        override val authResult: Future[Nothing] = Future.failed(MissingBearerToken())
-        private val result = target.submit()(request)
-
-        status(result) shouldBe Status.UNAUTHORIZED
-      }
-    }
-  }
-
-  "the user is not authorised" should {
-
-    "Calling the .show action" when {
-
-      "return 403 (Forbidden)" in new Test {
-        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
-        private val result = target.show()(request)
-
-        status(result) shouldBe Status.FORBIDDEN
-      }
-    }
-
-    "Calling the .submit action" when {
-
-      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "stoppedTrading"))
-
-      "return 403 (Forbidden)" in new Test {
-        override val authResult: Future[Nothing] = Future.failed(InsufficientEnrolments())
-        private val result = target.submit()(request)
-
-        status(result) shouldBe Status.FORBIDDEN
-      }
-    }
+    authChecks(".submit", TestDeregistrationReasonController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "other")))
   }
 }
