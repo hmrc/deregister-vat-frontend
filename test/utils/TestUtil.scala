@@ -24,7 +24,7 @@ import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import uk.gov.hmrc.play.test.UnitSpec
+import uk.gov.hmrc.play.test._
 
 trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach with MaterializerSupport {
 

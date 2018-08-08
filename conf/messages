@@ -5,6 +5,10 @@ base.sign-out = Sign out
 common.continue = Continue
 common.back = Back
 common.errorSummary.heading = You have one or more errors
+common.day = Day
+common.month = Month
+common.year = Year
+common.dateError = Invalid date
 common.fullStop = .
 common.agentService = Update your client''s VAT details
 common.yes = Yes
@@ -16,9 +20,16 @@ deregistrationReason.reason.stoppedTrading = It has stopped trading
 deregistrationReason.reason.turnoverBelowThreshold = Annual turnover is below £83,000
 deregistrationReason.reason.other = Other
 
+ceasedTrading.title = The date your business ceased or will cease trading
+ceasedTrading.hint = For example, 31 3 1980
+
 optionTax.title = Did you notify HMRC of option to tax?
 optionTax.text.1 = This means that the business chose to charge VAT on any income it earns from renting or selling its commercial property.
 optionTax.text.2 = Commercial property is usually exempt from VAT. Some businesses choose to charge VAT so they can recover costs, such as from construction and repairs.
+
+capitalAssets.title = Does the business have any capital assets?
+capitalAssets.text.1 = This includes things like buildings, land, unsold stock, furniture and computers.
+capitalAssets.text.2 = Do not include intangible assets, for example patents, copyrights or goodwill.
 
 optionOwesMoney.title = Does the business owe any money?
 optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.

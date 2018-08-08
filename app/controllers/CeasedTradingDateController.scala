@@ -16,10 +16,10 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.DeregistrationReasonForm
+import forms.CeasedTradingDateForm
+import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -27,23 +27,19 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.Future
 
 @Singleton
-class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
-                                               val authenticate: AuthPredicate,
-                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
+                                            val authenticate: AuthPredicate,
+                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)))
+    Future.successful(Ok(views.html.ceasedTradingDate(CeasedTradingDateForm.ceasedTradingDateForm)))
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
-    DeregistrationReasonForm.deregistrationReasonForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.deregistrationReason(error))),
-      success =>
-        success.reason match {
-          case "other" => Future.successful(Redirect(appConfig.govUkCancelVatRegistration))
-          case _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
-        }
+    CeasedTradingDateForm.ceasedTradingDateForm.bindFromRequest().fold(
+      error => Future.successful(BadRequest(views.html.ceasedTradingDate(error))),
+      _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
     )
   }
 }
