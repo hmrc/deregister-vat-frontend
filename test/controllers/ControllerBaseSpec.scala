@@ -16,14 +16,19 @@
 
 package controllers
 
-import org.scalamock.scalatest.MockFactory
+import mocks.MockAuth
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.http.Status
+import play.api.mvc.{Action, AnyContent, Request}
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRF.Token
 import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
+import uk.gov.hmrc.auth.core.{InsufficientEnrolments, MissingBearerToken}
 import utils.TestUtil
 
-class ControllerBaseSpec extends TestUtil with MockFactory with GuiceOneAppPerSuite {
+import scala.concurrent.Future
+
+trait ControllerBaseSpec extends TestUtil with MockAuth with GuiceOneAppPerSuite {
 
   implicit class CSRFTokenAdder[T](req: FakeRequest[T]) {
     def addToken: FakeRequest[T] = {
@@ -38,4 +43,22 @@ class ControllerBaseSpec extends TestUtil with MockFactory with GuiceOneAppPerSu
     }
   }
 
+  def authChecks(name: String, action: Action[AnyContent], request: Request[AnyContent]): Unit = {
+
+    s"when the user is unauthenticated for '$name'" should {
+      "return 401 (Unauthorised)" in {
+        mockAuthResult(Future.failed(MissingBearerToken()))
+        val result = action(request)
+        status(result) shouldBe Status.UNAUTHORIZED
+      }
+    }
+
+    s"when the user is unauthorised for '$name'" should {
+      "return 403 (Forbidden)" in {
+        mockAuthResult(Future.failed(InsufficientEnrolments()))
+        val result = action(request)
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+  }
 }
