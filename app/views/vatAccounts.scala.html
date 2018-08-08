@@ -36,6 +36,7 @@ appConfig = appConfig) {
 
         <div class="form-group" id="accountingMethod">
             @boldRadioGroup(
+                parentForm = form,
                 field = form("accountingMethod"),
                 choices = Seq(
                     ("standard", Messages("vatAccounts.method.standard"), Some(Messages("vatAccounts.description.standard"))),

@@ -16,12 +16,17 @@
 
 @import views.html.helper._
 
-@(field: Field,
+@(parentForm: Form[_],
+field: Field,
 choices: Seq[(String, String, Option[String])],
 question: String,
 additionalContent: Option[(String, String)] = None)(implicit messages: Messages)
 
 @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
+
+@hasError = @{
+    parentForm.error(field.name).isDefined
+}
 
 <div @if(elements.hasErrors){ class="form-field--error"}>
 
@@ -32,7 +37,9 @@ additionalContent: Option[(String, String)] = None)(implicit messages: Messages)
 
         @additionalContent.map { case (content, id) => <p id="@id">@content</p> }
 
-        @elements.errors.map { error => <span class="error-notification">@messages(error)</span> }
+        @if(hasError){
+            <span class="error-message" role="tooltip" id="error-message-@field.name">@{Messages(s"${parentForm.error(field.name).get.message}")}</span>
+        }
 
         @choices.map { case (value, label, extra) =>
 
