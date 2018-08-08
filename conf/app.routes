@@ -8,6 +8,9 @@ POST        /deregistration-reason  controllers.DeregistrationReasonController.s
 GET         /accounting-method      @controllers.VATAccountsController.show
 POST        /accounting-method      @controllers.VATAccountsController.submit
 
+GET        /ceased-trading-date    controllers.CeasedTradingDateController.show
+POST       /ceased-trading-date    controllers.CeasedTradingDateController.submit
+
 GET        /option-to-tax          controllers.OptionTaxController.show
 POST       /option-to-tax          controllers.OptionTaxController.submit
 

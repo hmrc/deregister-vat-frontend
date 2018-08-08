@@ -5,6 +5,10 @@ base.sign-out = Sign out
 common.continue = Continue
 common.back = Back
 common.errorSummary.heading = You have one or more errors
+common.day = Day
+common.month = Month
+common.year = Year
+common.dateError = Invalid date
 common.fullStop = .
 common.agentService = Update your client''s VAT details
 common.yes = Yes
@@ -22,6 +26,9 @@ vatAccounts.method.standard = Standard accounting
 vatAccounts.method.cash = Cash accounting
 vatAccounts.description.standard = You record VAT whenever you send or receive an invoice
 vatAccounts.description.cash = You record VAT whenever you make or receive a payment
+
+ceasedTrading.title = The date your business ceased or will cease trading
+ceasedTrading.hint = For example, 31 3 1980
 
 optionTax.title = Did you notify HMRC of option to tax?
 optionTax.text.1 = This means that the business chose to charge VAT on any income it earns from renting or selling its commercial property.

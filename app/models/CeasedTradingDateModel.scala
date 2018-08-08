@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package assets.messages
+package models
 
-object CommonMessages {
+import java.time.LocalDate
 
-  val continue = "Continue"
-  val back = "Back"
-  val signOut = "Sign out"
-  val yes = "Yes"
-  val no = "No"
-  val agentServiceName = "Update your client's VAT details"
-  val day = "Day"
-  val month = "Month"
-  val year = "Year"
-  val errorHeading = "You have one or more errors"
-  val errorMandatoryRadioOption = "No option selected"
+import play.api.libs.json.{Json, OFormat}
 
+import scala.util.{Failure, Success, Try}
+
+
+case class CeasedTradingDateModel(ceasedTradingDateDay: Int, ceasedTradingDateMonth: Int, ceasedTradingDateYear: Int){
+
+  val date: Option[LocalDate] =
+    Try(LocalDate.of(ceasedTradingDateYear,ceasedTradingDateMonth,ceasedTradingDateDay)) match {
+      case Success(validDate) => Some(validDate)
+      case Failure(_) => None
+    }
+}
+
+object CeasedTradingDateModel {
+  implicit val format: OFormat[CeasedTradingDateModel] = Json.format[CeasedTradingDateModel]
 }
