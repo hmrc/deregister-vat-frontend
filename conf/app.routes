@@ -11,5 +11,8 @@ POST       /ceased-trading-date    controllers.CeasedTradingDateController.submi
 GET        /option-to-tax          controllers.OptionTaxController.show
 POST       /option-to-tax          controllers.OptionTaxController.submit
 
+GET        /taxable-turnover       controllers.TaxableTurnover.show
+POST       /taxable-turnover       controllers.TaxableTuronver.submit
+
 #Sign Out Routes
 GET         /sign-out              @controllers.SignOutController.signOut(authorised: Boolean)
