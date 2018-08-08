@@ -27,6 +27,10 @@ optionTax.title = Did you notify HMRC of option to tax?
 optionTax.text.1 = This means that the business chose to charge VAT on any income it earns from renting or selling its commercial property.
 optionTax.text.2 = Commercial property is usually exempt from VAT. Some businesses choose to charge VAT so they can recover costs, such as from construction and repairs.
 
+capitalAssets.title = Does the business have any capital assets?
+capitalAssets.text.1 = This includes things like buildings, land, unsold stock, furniture and computers.
+capitalAssets.text.2 = Do not include intangible assets, for example patents, copyrights or goodwill.
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account

@@ -16,63 +16,33 @@
 
 package controllers
 
-import assets.mocks.MockAuth
-import controllers.predicates.AuthPredicate
 import play.api.http.Status
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core._
 
 import scala.concurrent.Future
 
-class HelloWorldControllerSpec extends MockAuth {
+class HelloWorldControllerSpec extends ControllerBaseSpec {
 
-  private trait Test {
-    val authResult: AuthResponse
-
-    def target: HelloWorldController = {
-      val predicate: AuthPredicate = setup(authResult)
-      new HelloWorldController(messagesApi, predicate, mockConfig)
-    }
-  }
+  object TestHelloWorldController extends HelloWorldController(messagesApi, mockAuthPredicate, mockConfig)
 
   "Calling the .helloWorld action" when {
 
     "the user is authorised" should {
 
-      "return 200 (OK)" in new Test {
-        override val authResult: AuthResponse = mockAuthorisedIndividual
-        private val result = target.helloWorld()(user)
+      lazy val result = TestHelloWorldController.helloWorld()(user)
 
+      "return 200 (OK)" in {
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.OK
       }
 
-      "return HTML" in new Test {
-        override val authResult: AuthResponse = mockAuthorisedIndividual
-        private val result = target.helloWorld()(user)
-
+      "return HTML" in {
         contentType(result) shouldBe Some("text/html")
         charset(result) shouldBe Some("utf-8")
       }
     }
 
-    "the user is not authenticated" should {
+    authChecks(".helloWorld", TestHelloWorldController.helloWorld(), request)
 
-      "return 401 (Unauthorised)" in new Test {
-        override val authResult: AuthResponse = Future.failed(MissingBearerToken())
-        private val result = target.helloWorld()(user)
-
-        status(result) shouldBe Status.UNAUTHORIZED
-      }
-    }
-
-    "the user is not authorised" should {
-
-      "return 403 (Forbidden)" in new Test {
-        override val authResult: AuthResponse = Future.failed(InsufficientEnrolments())
-        private val result = target.helloWorld()(user)
-
-        status(result) shouldBe Status.FORBIDDEN
-      }
-    }
   }
 }

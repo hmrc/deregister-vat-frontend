@@ -18,7 +18,7 @@ package controllers
 
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.CeasedTradingDateForm
+import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -27,18 +27,17 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.Future
 
 @Singleton
-class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
-                                            val authenticate: AuthPredicate,
-                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
+                                        val authentication: AuthPredicate,
+                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.ceasedTradingDate(CeasedTradingDateForm.ceasedTradingDateForm)))
+  val show: Action[AnyContent] = authentication.async { implicit user =>
+    Future.successful(Ok(views.html.capitalAssets(YesNoForm.yesNoForm)))
   }
 
-  val submit: Action[AnyContent] = authenticate.async { implicit user =>
-
-    CeasedTradingDateForm.ceasedTradingDateForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.ceasedTradingDate(error))),
+  val submit: Action[AnyContent] = authentication.async { implicit user =>
+    YesNoForm.yesNoForm.bindFromRequest().fold(
+      error => Future.successful(BadRequest(views.html.capitalAssets(error))),
       _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
     )
   }
