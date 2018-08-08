@@ -14,20 +14,28 @@
  * limitations under the License.
  */
 
-package assets.messages
+package models
 
-object CommonMessages {
+import java.time.LocalDate
 
-  val continue = "Continue"
-  val back = "Back"
-  val signOut = "Sign out"
-  val yes = "Yes"
-  val no = "No"
-  val agentServiceName = "Update your client's VAT details"
-  val day = "Day"
-  val month = "Month"
-  val year = "Year"
-  val errorHeading = "You have one or more errors"
-  val errorMandatoryRadioOption = "No option selected"
+import utils.TestUtil
 
+class CeasedTradingDateModelSpec extends TestUtil {
+
+  "CeasedTradingModel.date" when {
+
+    "given a valid date" should {
+
+      "return Some(LocalDate)" in {
+        CeasedTradingDateModel(1,1,2018).date shouldBe Some(LocalDate.of(2018,1,1))
+      }
+    }
+
+    "given an invalid date" should {
+
+      "return None" in {
+        CeasedTradingDateModel(99,99,9999).date shouldBe None
+      }
+    }
+  }
 }
