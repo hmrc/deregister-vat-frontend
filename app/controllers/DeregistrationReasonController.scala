@@ -17,26 +17,25 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
+import controllers.predicates.AuthPredicate
 import forms.DeregistrationReasonForm
-import models.DeregistrationReasonModel
-import play.api.i18n.MessagesApi
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
 class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
-                                               val auth: AuthorisedFunctions,
-                                               override implicit val appConfig: AppConfig) extends AuthorisedController {
+                                               val authenticate: AuthPredicate,
+                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authorisedAction { implicit user =>
+  val show: Action[AnyContent] = authenticate.async { implicit user =>
     Future.successful(Ok(views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)))
   }
 
-  val submit: Action[AnyContent] = authorisedAction { implicit user =>
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
     DeregistrationReasonForm.deregistrationReasonForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.deregistrationReason(error))),
@@ -45,7 +44,6 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
           case "other" => Future.successful(Redirect(appConfig.govUkCancelVatRegistration))
           case _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
         }
-
     )
   }
 }
