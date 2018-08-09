@@ -31,6 +31,8 @@ capitalAssets.title = Does the business have any capital assets?
 capitalAssets.text.1 = This includes things like buildings, land, unsold stock, furniture and computers.
 capitalAssets.text.2 = Do not include intangible assets, for example patents, copyrights or goodwill.
 
+taxableTurnover.title = What was the business''s taxable turnover in the last 12 months?
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
