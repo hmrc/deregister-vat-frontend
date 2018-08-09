@@ -17,5 +17,8 @@ POST       /capital-assets         controllers.CapitalAssetsController.submit
 GET        /taxable-turnover       controllers.TaxableTurnoverController.show
 POST       /taxable-turnover       controllers.TaxableTurnoverController.submit
 
+GET        /next-taxable-turnover  controllers.NextTaxableTurnoverController.show
+POST       /next-taxable-turnover  controllers.NextTaxableTurnoverController.submit
+
 #Sign Out Routes
 GET         /sign-out              @controllers.SignOutController.signOut(authorised: Boolean)

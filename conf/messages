@@ -33,6 +33,8 @@ capitalAssets.text.2 = Do not include intangible assets, for example patents, co
 
 taxableTurnover.title = What was the business''s taxable turnover in the last 12 months?
 
+nextTaxableTurnover.title = What is the business''s expected taxable turnover for the next 12 months?
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
