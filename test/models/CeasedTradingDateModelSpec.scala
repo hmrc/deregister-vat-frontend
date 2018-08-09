@@ -27,14 +27,14 @@ class CeasedTradingDateModelSpec extends TestUtil {
     "given a valid date" should {
 
       "return Some(LocalDate)" in {
-        CeasedTradingDateModel(1,1,2018).isValidDate shouldBe Some(LocalDate.of(2018,1,1))
+        CeasedTradingDateModel(1,1,2018).isValidDate shouldBe true
       }
     }
 
     "given an invalid date" should {
 
       "return None" in {
-        CeasedTradingDateModel(99,99,9999).isValidDate shouldBe None
+        CeasedTradingDateModel(99,99,9999).isValidDate shouldBe false
       }
     }
   }
