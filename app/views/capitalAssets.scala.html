@@ -40,16 +40,15 @@
 
     @helpers.form(action = controllers.routes.CapitalAssetsController.submit) {
 
-        <div class="form-group" id="reason">
+        <div class="form-group" id="@yesNo">
             @radioHelper(
-                parentForm = form,
-                inline = true,
-                options = Seq(
+                field = form(yesNo),
+                choices = Seq(
                     (yes, Messages("common.yes")),
                     (no, Messages("common.no"))
                 ),
-                legend = Messages("capitalAssets.title"),
-                field = form(yesNo)
+                question = Messages("capitalAssets.title"),
+                inline = true
             )
         </div>
 

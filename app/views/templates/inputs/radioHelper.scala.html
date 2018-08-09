@@ -14,27 +14,41 @@
  * limitations under the License.
  *@
 
-@(parentForm: Form[_],
-  inline: Boolean,
-  options: Seq[(String, String)],
-  legend: String,
-  field: Field)(implicit messages: Messages)
+@import views.html.helper._
 
-@hasError = @{
-    parentForm.error(field.name).isDefined
-}
+@(field: Field,
+  choices: Seq[(String, String)],
+  question: String,
+  additionalContent: Option[Html] = None,
+  inline: Boolean = false)(implicit messages: Messages)
 
-<div class="form-group@if(hasError){ form-field--error}">
-    <fieldset @if(inline) { class="inline" }>
-        <legend class="visuallyhidden">@legend</legend>
-        @if(hasError){
-            <span class="error-message" role="tooltip" id="error-message-@field.name">@{Messages(s"${parentForm.error(field.name).get.message}")}</span>
-        }
-        @for(option <- options) {
-            <div id="@{field.name}" class="multiple-choice">
-                <input id="@option._1" type="radio" name="@field.name" value="@option._1">
-                <label for="@option._1">@option._2</label>
+    @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
+
+    <div @if(elements.hasErrors){ class="form-field--error"}>
+
+        <fieldset>
+            <legend class="visuallyhidden">
+                <h1>@question</h1>
+            </legend>
+
+            @additionalContent.map { content => @content }
+
+            @elements.errors.map { error => <span class="error-message">@messages(error)</span> }
+
+            <div @if(inline){ class="inline"}>
+                @choices.map { case (value, label) =>
+
+                    @defining(s"${elements.field.name}-${value.toLowerCase}") { inputId =>
+                        <div class="multiple-choice">
+                            <input type="radio"
+                                id="@inputId"
+                                name="@elements.field.name"
+                                value="@value"
+                                    @field.value.filter( _ == value).map{_ => checked="checked"}/>
+                                <label for="@inputId">@label</label>
+                        </div>
+                    }
+                }
             </div>
-        }
-    </fieldset>
-</div>
+        </fieldset>
+    </div>
