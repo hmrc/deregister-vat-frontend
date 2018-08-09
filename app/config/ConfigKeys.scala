@@ -41,7 +41,7 @@ object ConfigKeys {
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
 
-  val govUkSetupAgentServices: String = "gov-uk.guidance.setupAgentServices.url"
+  val govUkSetupAgentServices: String = "gov-uk.setupAgentServices.url"
 
   val govUkSetupClientServices: String = "gov-uk.setupClientServices.url"
 

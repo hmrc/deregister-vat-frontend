@@ -20,6 +20,7 @@ import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.Status.{OK, UNAUTHORIZED}
 import play.api.libs.json.{JsObject, Json}
 import helpers.WireMockMethods
+import uk.gov.hmrc.auth.core.AffinityGroup
 
 object AuthStub extends WireMockMethods {
 
@@ -45,14 +46,14 @@ object AuthStub extends WireMockMethods {
     )
   )
 
-  def authorised(): StubMapping = {
+  def authorisedIndividual(): StubMapping = {
     when(method = POST, uri = authoriseUri)
-      .thenReturn(status = OK, body = successfulAuthResponse(mtdVatEnrolment))
+      .thenReturn(status = OK, body = successfulAuthResponse(Some(AffinityGroup.Individual), mtdVatEnrolment))
   }
 
-  def unauthorisedMissingEnrolment(): StubMapping = {
+  def unauthorisedIndividualMissingEnrolment(): StubMapping = {
     when(method = POST, uri = authoriseUri)
-      .thenReturn(status = UNAUTHORIZED, body = successfulAuthResponse(otherEnrolment))
+      .thenReturn(status = UNAUTHORIZED, body = successfulAuthResponse(Some(AffinityGroup.Individual), otherEnrolment))
   }
 
   def unauthenticated(): StubMapping = {
@@ -60,7 +61,15 @@ object AuthStub extends WireMockMethods {
       .thenReturn(status = UNAUTHORIZED, headers = Map("WWW-Authenticate" -> """MDTP detail="MissingBearerToken""""))
   }
 
-  private def successfulAuthResponse(enrolments: JsObject*): JsObject = {
-    Json.obj("authorisedEnrolments" -> enrolments)
+  private def successfulAuthResponse(affinityGroup: Option[AffinityGroup], enrolments: JsObject*): JsObject = {
+    affinityGroup match {
+      case Some(group) => Json.obj(
+        "affinityGroup" -> affinityGroup,
+        "allEnrolments" -> enrolments
+      )
+      case _ => Json.obj(
+        "allEnrolments" -> enrolments
+      )
+    }
   }
 }

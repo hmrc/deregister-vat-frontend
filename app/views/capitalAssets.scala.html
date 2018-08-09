@@ -16,14 +16,15 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
-@import templates.headings
 @import views.html.templates.inputs.radioHelper
+@import templates.headings
+@import forms.YesNoForm._
 
 
-@(form: Form[DeregistrationReasonModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("deregistrationReason.title"),
+    title = messages("capitalAssets.title"),
     bodyClasses = None,
     appConfig = appConfig) {
 
@@ -31,19 +32,23 @@
 
     @errorSummary("common.errorSummary.heading", form)
 
-    @headings(messages("deregistrationReason.title"))
+    @headings(messages("capitalAssets.title"))
 
-    @helpers.form(action = controllers.routes.DeregistrationReasonController.submit) {
+    <p>@messages("capitalAssets.text.1")</p>
 
-        <div class="form-group" id="reason">
+    <p>@messages("capitalAssets.text.2")</p>
+
+    @helpers.form(action = controllers.routes.CapitalAssetsController.submit) {
+
+        <div class="form-group" id="@yesNo">
             @radioHelper(
-                field = form("reason"),
+                field = form(yesNo),
                 choices = Seq(
-                    ("stoppedTrading", Messages("deregistrationReason.reason.stoppedTrading")),
-                    ("turnoverBelowThreshold", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
-                    ("other", Messages("deregistrationReason.reason.other"))
+                    (yes, Messages("common.yes")),
+                    (no, Messages("common.no"))
                 ),
-                question = Messages("deregistrationReason.title")
+                question = Messages("capitalAssets.title"),
+                inline = true
             )
         </div>
 

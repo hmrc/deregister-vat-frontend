@@ -14,5 +14,8 @@ POST       /ceased-trading-date    controllers.CeasedTradingDateController.submi
 GET        /option-to-tax          controllers.OptionTaxController.show
 POST       /option-to-tax          controllers.OptionTaxController.submit
 
+GET        /capital-assets         controllers.CapitalAssetsController.show
+POST       /capital-assets         controllers.CapitalAssetsController.submit
+
 #Sign Out Routes
 GET         /sign-out               @controllers.SignOutController.signOut(authorised: Boolean)
