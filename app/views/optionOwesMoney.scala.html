@@ -40,14 +40,13 @@ appConfig = appConfig) {
 
 <div class="form-group" id="reason">
     @radioHelper(
-    parentForm = form,
-    inline = true,
-    options = Seq(
+    field = form(yesNo),
+    choices = Seq(
     (yes, Messages("common.yes")),
     (no, Messages("common.no"))
     ),
-    legend = Messages("optionOwesMoney.title"),
-    field = form(yesNo)
+    question = Messages("optionOwesMoney.title"),
+    inline = true
     )
 </div>
 
