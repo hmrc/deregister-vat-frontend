@@ -86,7 +86,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
       "the user submits without inputting an amount" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", ""))
         lazy val result = TestTaxableTurnoverController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
