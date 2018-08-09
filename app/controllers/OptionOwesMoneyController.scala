@@ -32,13 +32,13 @@ class OptionOwesMoneyController @Inject()(val messagesApi: MessagesApi,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.optionTax(YesNoForm.yesNoForm)))
+    Future.successful(Ok(views.html.optionOwesMoney(YesNoForm.yesNoForm)))
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
     YesNoForm.yesNoForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.optionTax(error))),
+      error => Future.successful(BadRequest(views.html.optionOwesMoney(error))),
       success => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
     )
   }
