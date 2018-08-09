@@ -115,7 +115,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
            |        <h1>$labelText</h1>
            |      </legend>
            |
-           |      <span class="error-notification">$errorMessage</span>
+           |      <span class="error-message">$errorMessage</span>
            |      <div>
            |        ${generateExpectedRadioMarkup("value1", "display1")}
            |        ${generateExpectedRadioMarkup("value2", "display2")}
