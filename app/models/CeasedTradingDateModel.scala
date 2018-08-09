@@ -25,10 +25,10 @@ import scala.util.{Failure, Success, Try}
 
 case class CeasedTradingDateModel(ceasedTradingDateDay: Int, ceasedTradingDateMonth: Int, ceasedTradingDateYear: Int){
 
-  val date: Option[LocalDate] =
+  val isValidDate: Boolean =
     Try(LocalDate.of(ceasedTradingDateYear,ceasedTradingDateMonth,ceasedTradingDateDay)) match {
-      case Success(validDate) => Some(validDate)
-      case Failure(_) => None
+      case Success(_) => true
+      case Failure(_) => false
     }
 }
 

@@ -16,48 +16,21 @@
 
 package forms
 
+import forms.YesNoForm._
 import models._
+import play.api.data.Form
 import play.api.data.Forms._
-import play.api.data.format.Formatter
-import play.api.data.{Form, FormError}
 
 object DeregistrationDateForm {
 
-  val yesNo: String = "yes_no"
-
-  val yes: String = "yes"
-
-  val no: String = "no"
-
-  val yesNoError: String = "common.error.mandatoryRadioOption"
-
-  private val formatter: Formatter[YesNo] = new Formatter[YesNo] {
-    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], YesNo] = {
-      data.get(key) match {
-        case Some(`yes`) => Right(Yes)
-        case Some(`no`) => Right(No)
-        case _ => Left(Seq(FormError(key, yesNoError)))
-      }
-    }
-
-    override def unbind(key: String, value: YesNo): Map[String, String] = {
-      val stringValue = value match {
-        case Yes => yes
-        case No => no
-      }
-
-      Map(key -> stringValue)
-    }
-  }
-
   val deregistrationDateForm: Form[DeregistrationDateModel] = Form(
     mapping(
-      yesNo -> of(formatter),
-      "deregisterDay" -> optional(number),
-      "deregisterMonth" -> optional(number),
-      "deregisterYear" -> optional(number)
+      yesNo -> of(YesNoForm.formatter),
+      "deregistrationDateDay" -> optional(number),
+      "deregistrationDateMonth" -> optional(number),
+      "deregistrationDateYear" -> optional(number)
     )(DeregistrationDateModel.customApply)(DeregistrationDateModel.customUnapply)
-//      .verifying("check date error", _.checkDate)
+      .verifying("check date error", x => x.checkValidDateIfYes)
   )
 }
 
