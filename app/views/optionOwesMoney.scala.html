@@ -36,18 +36,17 @@ appConfig = appConfig) {
 
 <p>@messages("optionOwesMoney.text.1")</p>
 
-@helpers.form(action = controllers.routes.OptionTaxController.submit) {
+@helpers.form(action = controllers.routes.OptionOwesMoneyController.submit) {
 
 <div class="form-group" id="reason">
     @radioHelper(
-    parentForm = form,
-    inline = true,
-    options = Seq(
+    field = form(yesNo),
+    choices = Seq(
     (yes, Messages("common.yes")),
     (no, Messages("common.no"))
     ),
-    legend = Messages("optionOwesMoney.title"),
-    field = form(yesNo)
+    question = Messages("optionOwesMoney.title"),
+    inline = true
     )
 </div>
 

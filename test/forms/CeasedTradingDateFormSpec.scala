@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package Forms
+package forms
 
 import forms.CeasedTradingDateForm
 import models.CeasedTradingDateModel
