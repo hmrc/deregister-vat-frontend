@@ -17,23 +17,24 @@
 package controllers
 
 import config.AppConfig
+import controllers.predicates.AuthPredicate
 import forms.VATAccountsForm
 import javax.inject.Inject
-import play.api.i18n.MessagesApi
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.auth.core.AuthorisedFunctions
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 class VATAccountsController @Inject()(val messagesApi: MessagesApi,
-                                      val auth: AuthorisedFunctions,
-                                      override implicit val appConfig: AppConfig) extends AuthorisedController {
+                                      val authenticate: AuthPredicate,
+                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authorisedAction { implicit user =>
+  val show: Action[AnyContent] = authenticate.async { implicit user =>
     Future.successful(Ok(views.html.vatAccounts(VATAccountsForm.vatAccountsForm)))
   }
 
-  val submit: Action[AnyContent] = authorisedAction { implicit user =>
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
     VATAccountsForm.vatAccountsForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.vatAccounts(error))),

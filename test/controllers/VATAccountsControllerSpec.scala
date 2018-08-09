@@ -30,23 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class VATAccountsControllerSpec extends ControllerBaseSpec {
 
-  private trait Test {
-    val authResult: Future[Enrolments]
-    val mockAuthConnector: AuthConnector = mock[AuthConnector]
-
-    private def setup() {
-      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[Enrolments])(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *, *)
-        .returns(authResult)
-    }
-
-    val mockAuthorisedFunctions: AuthorisedFunctions = new EnrolmentsAuthService(mockAuthConnector)
-
-    def target: VATAccountsController = {
-      setup()
-      new VATAccountsController(messagesApi, mockAuthorisedFunctions, mockConfig)
-    }
-  }
+  object TestVATAccountsController extends VATAccountsController(messagesApi, mockAuthPredicate, mockConfig)
 
   "the user is authorised" when {
 
@@ -63,17 +47,14 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
 
       "the user does not have a pre selected option" should {
 
-        "return 200 (OK)" in new Test {
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.show()(request)
+        lazy val result = TestVATAccountsController.show()(request)
 
+        "return 200 (OK)" in {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
 
-        "return HTML" in new Test {
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.show()(request)
-
+        "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
         }
@@ -86,13 +67,15 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", "standard"))
+        lazy val result = TestVATAccountsController.submit()(request)
 
-        "return 303 (SEE OTHER)" in new Test {
-
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.submit()(request)
-
+        "return 303 (SEE OTHER)" in {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
+        }
+
+        //TODO: This needs to be updated as part of the routing sub-task
+        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
           redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
         }
       }
@@ -101,13 +84,15 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", "cash"))
+        lazy val result = TestVATAccountsController.submit()(request)
 
-        "return 303 (SEE OTHER)" in new Test {
-
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.submit()(request)
-
+        "return 303 (SEE OTHER)" in {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
+        }
+
+        //TODO: This needs to be updated as part of the routing sub-task
+        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
           redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
         }
       }
@@ -115,19 +100,15 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
       "the user submits without selecting an option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
+        lazy val result = TestVATAccountsController.submit()(request)
 
-        "return 400 (BAD REQUEST)" in new Test {
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.submit()(request)
-
+        "return 400 (BAD REQUEST)" in {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
 
-        "return HTML" in new Test {
-          override val authResult: Future[Enrolments] = Future.successful(goodEnrolments)
-          private val result = target.submit()(request)
-
+        "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
         }

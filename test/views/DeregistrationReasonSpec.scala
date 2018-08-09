@@ -29,7 +29,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     object Selectors {
       val back = ".link-back"
       val pageHeading = "#content h1"
-      val reasonOption: Int => String = (number: Int) => s"fieldset > div:nth-of-type($number) > label"
+      val reasonOption: Int => String = (number: Int) => s"fieldset > div > div:nth-of-type($number) > label"
       val button = ".button"
     }
 
