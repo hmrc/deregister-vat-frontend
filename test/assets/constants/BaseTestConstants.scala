@@ -14,21 +14,8 @@
  * limitations under the License.
  */
 
-package assets.messages
+package assets.constants
 
-object CommonMessages {
-
-  val continue = "Continue"
-  val back = "Back"
-  val signOut = "Sign out"
-  val yes = "Yes"
-  val no = "No"
-  val agentServiceName = "Update your client's VAT details"
-  val day = "Day"
-  val month = "Month"
-  val year = "Year"
-  val errorHeading = "You have one or more errors"
-  val errorMandatoryRadioOption = "No option selected"
-  val errorMandatoryAmountInput = "Real number value expected"
-
+object BaseTestConstants {
+  val vrn = "999999999"
 }

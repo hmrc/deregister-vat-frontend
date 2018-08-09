@@ -16,10 +16,10 @@
 
 package controllers.predicates
 
-import assets.mocks.MockAuth
+import mocks.MockAuth
 import play.api.http.Status
-import play.api.mvc.{Action, AnyContent}
 import play.api.mvc.Results.Ok
+import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import uk.gov.hmrc.auth.core.MissingBearerToken
 
@@ -27,8 +27,10 @@ import scala.concurrent.Future
 
 class AuthPredicateSpec extends MockAuth {
 
-  def target(predicate: AuthPredicate): Action[AnyContent] = {
-    predicate.async {
+  object TestAuthPredicate extends AuthPredicate(mockEnrolmentsAuthService, serviceErrorHandler, mockAuthoriseAsAgent, messagesApi, mockConfig)
+
+  def target(): Action[AnyContent] = {
+    TestAuthPredicate.async {
       implicit user =>
         Future.successful(Ok)
     }
@@ -41,52 +43,66 @@ class AuthPredicateSpec extends MockAuth {
       "the user is an individual" when {
 
         "the user is enrolled to HMRC-MTD-VAT" should {
-          lazy val predicate = setup(mockAuthorisedIndividual)
-          lazy val result = target(predicate)(FakeRequest())
+
+          lazy val result = target()(FakeRequest())
 
           "return 200" in {
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.OK
           }
+        }
 
-          "the user is not enrolled to HMRC-MTD-VAT" should {
-            lazy val predicate = setup(mockUnauthorisedIndividual)
-            lazy val result = target(predicate)(FakeRequest())
+        "the user is not enrolled to HMRC-MTD-VAT" should {
 
-            "return 403" in {
-              status(result) shouldBe Status.FORBIDDEN
-            }
+          lazy val result = target()(FakeRequest())
+
+          "return 403" in {
+            mockAuthResult(mockUnauthorisedIndividual)
+            status(result) shouldBe Status.FORBIDDEN
+          }
+        }
+      }
+
+      "the user is an agent" when {
+
+        "the user is enrolled to HMRC-AS-AGENT and has delegated authority for the client" should {
+
+          lazy val result = target()(FakeRequest())
+
+          "return 200" in {
+            mockAuthResult(mockAuthorisedAgent, isAgent = true)
+            status(result) shouldBe Status.OK
           }
         }
 
-        "the user is an agent" when {
+        "the user is not enrolled to HMRC-AS-AGENT" should {
 
-          "the user is enrolled to HMRC-AS-AGENT and has delegated authority for the client" should {
+          lazy val result = target()(FakeRequest())
 
-            lazy val predicate = setup(mockAuthorisedAgent, isAgent = true)
-            lazy val result = target(predicate)(FakeRequest())
-
-            "return 200" in {
-              status(result) shouldBe Status.OK
-            }
+          "return Forbidden (403)" in {
+            mockAuthResult(mockUnauthorisedAgent, isAgent = true)
+            status(result) shouldBe Status.FORBIDDEN
           }
         }
+      }
 
-        "there is no session" should {
-          lazy val predicate = setup(Future.failed(MissingBearerToken()))
-          lazy val result = target(predicate)(FakeRequest())
+      "there is no session" should {
 
-          "return 401" in {
-            status(result) shouldBe Status.UNAUTHORIZED
-          }
+        lazy val result = target()(FakeRequest())
+
+        "return 401" in {
+          mockAuthResult(Future.failed(MissingBearerToken()))
+          status(result) shouldBe Status.UNAUTHORIZED
         }
+      }
 
-        "user has no affinity group" should {
-          lazy val predicate = setup(mockNoAffinityGroup)
-          lazy val result = target(predicate)(FakeRequest())
+      "user has no affinity group" should {
 
-          "return 500" in {
-            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-          }
+        lazy val result = target()(FakeRequest())
+
+        "return 500" in {
+          mockAuthResult(mockNoAffinityGroup)
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
     }

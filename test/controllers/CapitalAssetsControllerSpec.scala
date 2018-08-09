@@ -21,11 +21,9 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 
-import scala.concurrent.Future
+class CapitalAssetsControllerSpec extends ControllerBaseSpec {
 
-class OptionTaxControllerSpec extends ControllerBaseSpec {
-
-  object TestOptionTaxController extends OptionTaxController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestCapitalAssetsController extends CapitalAssetsController(messagesApi, mockAuthPredicate, mockConfig)
 
   "the user is authorised" when {
 
@@ -33,10 +31,10 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestOptionTaxController.show()(request)
+        lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -46,12 +44,13 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      "the user is has pre selected option" should {
+      //TODO: These tests need to be updated once a stored value is retrieved from Mongo
+      "the user is has pre selected option" ignore {
 
-        lazy val result = TestOptionTaxController.show()(request)
+        lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -61,7 +60,8 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      authChecks(".show", TestOptionTaxController.show(), request)
+      authChecks(".show", TestCapitalAssetsController.show(), request)
+
     }
 
     "Calling the .submit action" when {
@@ -70,15 +70,16 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes"))
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestCapitalAssetsController.submit()(request)
+
 
         "return 303 (SEE OTHER)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        //TODO: This needs to be updated as part of the routing sub-task
-        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
+        //TODO: This needs to be update as part of the routing sub-task
+        "redirect to the HelloWorld controller" in {
           redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
         }
       }
@@ -87,15 +88,15 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no"))
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        //TODO: This needs to be updated as part of the routing sub-task
-        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
+        //TODO: This needs to be update as part of the routing sub-task
+        "redirect to the HelloWorld controller" in {
           redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
         }
       }
@@ -104,10 +105,10 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 
@@ -118,6 +119,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    authChecks(".submit", TestOptionTaxController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestCapitalAssetsController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes")))
+
   }
 }

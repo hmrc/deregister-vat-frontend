@@ -19,36 +19,21 @@ package controllers
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{contentType, _}
+import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
-class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
+class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
 
-  object TestCeasedTradingDateController extends CeasedTradingDateController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestTaxableTurnoverController extends TaxableTurnoverController(messagesApi, mockAuthPredicate, mockConfig)
 
   "the user is authorised" when {
 
     "Calling the .show action" when {
 
-      "the user does not have a pre selected option" should {
+      "the user does not have a pre selected amount" should {
 
-        lazy val result = TestCeasedTradingDateController.show()(request)
-
-        "return 200 (OK)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.OK
-        }
-
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
-        }
-      }
-
-      "the user is has previously entered values" should {
-
-        lazy val result = TestCeasedTradingDateController.show()(request)
+        lazy val result = TestTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -61,20 +46,31 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      authChecks(".show", TestCeasedTradingDateController.show(), request)
+      "the user is has pre selected amount" should {
+
+        lazy val result = TestTaxableTurnoverController.show()(request)
+
+        "return 200 (OK)" in {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      authChecks(".show", TestTaxableTurnoverController.show(), request)
     }
 
     "Calling the .submit action" when {
 
-      "the user submits entering a date" should {
+      "the user submits after inputting an amount" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
-            ("ceasedTradingDateDay", "1"),
-            ("ceasedTradingDateMonth", "1"),
-            ("ceasedTradingDateYear", "2018")
-          )
-        lazy val result = TestCeasedTradingDateController.submit()(request)
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", "1000.01"))
+        lazy val result = TestTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -82,20 +78,16 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
         }
 
         //TODO: This needs to be updated as part of the routing sub-task
-        s"redirect to the ${controllers.routes.HelloWorldController.helloWorld().url}" in {
+        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
           redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
         }
       }
 
-      "the user submits without entering any dates" should {
+      "the user submits without inputting an amount" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
-            ("ceasedTradingDateDay", ""),
-            ("ceasedTradingDateMonth", ""),
-            ("ceasedTradingDateYear", "")
-          )
-        lazy val result = TestCeasedTradingDateController.submit()(request)
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
+        lazy val result = TestTaxableTurnoverController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -109,10 +101,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    authChecks(".submit", TestCeasedTradingDateController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(
-      ("ceasedTradingDateDay", "1"),
-      ("ceasedTradingDateMonth", "1"),
-      ("ceasedTradingDateYear", "2018")
-    ))
+    authChecks(".submit", TestTaxableTurnoverController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", "1000.01")))
   }
+
 }
