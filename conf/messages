@@ -20,6 +20,13 @@ deregistrationReason.reason.stoppedTrading = It has stopped trading
 deregistrationReason.reason.turnoverBelowThreshold = Annual turnover is below £83,000
 deregistrationReason.reason.other = Other
 
+vatAccounts.title = How are the business''s VAT accounts prepared?
+vatAccounts.accountant = If you have an accountant, ask them what accounting method they use.
+vatAccounts.method.standard = Standard accounting
+vatAccounts.method.cash = Cash accounting
+vatAccounts.description.standard = You record VAT whenever you send or receive an invoice
+vatAccounts.description.cash = You record VAT whenever you make or receive a payment
+
 ceasedTrading.title = The date your business ceased or will cease trading
 ceasedTrading.hint = For example, 31 3 1980
 
