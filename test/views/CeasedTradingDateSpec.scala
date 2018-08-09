@@ -16,28 +16,31 @@
 
 package views
 
-import assets.messages.{CommonMessages,DeregistrationReasonMessages}
+import assets.messages.{CeasedTradingDateMessages, CommonMessages}
+import forms.CeasedTradingDateForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import forms.DeregistrationReasonForm
 
 
-class DeregistrationReasonSpec extends ViewBaseSpec {
+class CeasedTradingDateSpec extends ViewBaseSpec {
 
-  "Rendering the Deregistration reason page" should {
+  "Rendering the Ceased trading date page" should {
 
     object Selectors {
       val back = ".link-back"
       val pageHeading = "#content h1"
-      val reasonOption = (number: Int) => s"fieldset > div > div:nth-of-type($number) > label"
+      val hint = ".form-hint"
       val button = ".button"
+      val day = "#ceasedTradingDate-fieldset > label.form-group.form-group-day > span"
+      val month = "#ceasedTradingDate-fieldset > label.form-group.form-group-month > span"
+      val year = "#ceasedTradingDate-fieldset > label.form-group.form-group-year > span"
     }
 
-    lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
+    lazy val view = views.html.ceasedTradingDate(CeasedTradingDateForm.ceasedTradingDateForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationReasonMessages.title
+      document.title shouldBe CeasedTradingDateMessages.title
     }
 
     s"have the correct back text" in {
@@ -46,13 +49,13 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.title
+      elementText(Selectors.pageHeading) shouldBe CeasedTradingDateMessages.title
     }
 
-    s"have the correct a radio button form with the correct 3 options" in {
-      elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
-      elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
-      elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
+    s"have the correct a radio " in {
+      elementText(Selectors.day) shouldBe CommonMessages.day
+      elementText(Selectors.month) shouldBe CommonMessages.month
+      elementText(Selectors.year) shouldBe CommonMessages.year
     }
 
     s"have the correct continue button text and url" in {

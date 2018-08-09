@@ -16,14 +16,13 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
+@import templates.inputs.date
 @import templates.headings
-@import views.html.templates.inputs.radioHelper
 
-
-@(form: Form[DeregistrationReasonModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[CeasedTradingDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("deregistrationReason.title"),
+    title = messages("ceasedTrading.title"),
     bodyClasses = None,
     appConfig = appConfig) {
 
@@ -31,19 +30,15 @@
 
     @errorSummary("common.errorSummary.heading", form)
 
-    @headings(messages("deregistrationReason.title"))
+    @helpers.form(action = controllers.routes.CeasedTradingDateController.submit) {
 
-    @helpers.form(action = controllers.routes.DeregistrationReasonController.submit) {
-
-        <div class="form-group" id="reason">
-            @radioHelper(
-                field = form("reason"),
-                choices = Seq(
-                    ("stoppedTrading", Messages("deregistrationReason.reason.stoppedTrading")),
-                    ("turnoverBelowThreshold", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
-                    ("other", Messages("deregistrationReason.reason.other"))
-                ),
-                question = Messages("deregistrationReason.title")
+        <div class="form-group" id="ceasedTrading">
+            @date(
+                form = form,
+                question = messages("ceasedTrading.title"),
+                fieldName = "ceasedTradingDate",
+                hint = Some(messages("ceasedTrading.hint")),
+                renderQuestionAsHeading = true
             )
         </div>
 

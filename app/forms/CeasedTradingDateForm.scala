@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package assets.messages
+package forms
 
-object CommonMessages {
+import models.CeasedTradingDateModel
+import play.api.data.Form
+import play.api.data.Forms._
 
-  val continue = "Continue"
-  val back = "Back"
-  val signOut = "Sign out"
-  val yes = "Yes"
-  val no = "No"
-  val agentServiceName = "Update your client's VAT details"
-  val day = "Day"
-  val month = "Month"
-  val year = "Year"
-  val errorHeading = "You have one or more errors"
-  val errorMandatoryRadioOption = "No option selected"
 
+object CeasedTradingDateForm {
+
+  val ceasedTradingDateForm: Form[CeasedTradingDateModel] = Form(
+    mapping(
+      "ceasedTradingDateDay" -> number,
+      "ceasedTradingDateMonth" -> number,
+      "ceasedTradingDateYear" -> number
+    )(CeasedTradingDateModel.apply)(CeasedTradingDateModel.unapply)
+      .verifying("Invalid date", _.date.isDefined)
+  )
 }
