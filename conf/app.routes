@@ -11,8 +11,8 @@ POST       /ceased-trading-date    controllers.CeasedTradingDateController.submi
 GET        /option-to-tax          controllers.OptionTaxController.show
 POST       /option-to-tax          controllers.OptionTaxController.submit
 
-GET        /option-owes-money      controllers.OptionTaxController.show
-POST       /option-owes-money      controllers.OptionTaxController.submit
+GET        /option-owes-money      controllers.OptionOwesMoneyController.show
+POST       /option-owes-money      controllers.OptionOwesMoneyController.submit
 
 GET        /capital-assets         controllers.CapitalAssetsController.show
 POST       /capital-assets         controllers.CapitalAssetsController.submit
