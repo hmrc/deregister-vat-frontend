@@ -26,6 +26,10 @@ deregistrationReason.reason.stoppedTrading = It has stopped trading
 deregistrationReason.reason.turnoverBelowThreshold = Annual turnover is below £83,000
 deregistrationReason.reason.other = Other
 
+deregistrationDate.title = Does the business want to choose its own deregistration date?
+deregistrationDate.p1 = The deregistration date can be up to a maximum of 3 months from the date you submit your request.
+deregistrationDate.p2 = We will confirm the deregistration date when your deregistration request is accepted.
+
 deregistrationProperty.title = Does the business have any commercial property?
 deregistrationProperty.p1 = This includes both land and buildings.
 
