@@ -29,6 +29,6 @@ object CeasedTradingDateForm {
       "ceasedTradingDateMonth" -> number,
       "ceasedTradingDateYear" -> number
     )(CeasedTradingDateModel.apply)(CeasedTradingDateModel.unapply)
-      .verifying("Invalid date", _.date.isDefined)
+      .verifying("Invalid date", _.isValidDate)
   )
 }

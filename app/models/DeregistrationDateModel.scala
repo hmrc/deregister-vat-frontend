@@ -16,13 +16,16 @@
 
 package models
 
+import play.api.Logger
+
 
 case class DeregistrationDateModel(yesNo: YesNo, date: Option[CeasedTradingDateModel]) {
 
-  val checkDate: Boolean = {
+  val checkValidDateIfYes: Boolean = {
+    Logger.debug("HELLO")
     yesNo match {
-      case Yes => date.isDefined
-      case No => date.isEmpty
+      case Yes => date.fold(false)(_.isValidDate)
+      case No => true
     }
   }
 }
@@ -34,10 +37,13 @@ object DeregistrationDateModel {
                    month:Option[Int],
                    year:Option[Int]): DeregistrationDateModel ={
 
-    if(day.isDefined && month.isDefined && year.isDefined) {
-      DeregistrationDateModel(yesNo, Some(CeasedTradingDateModel(day.get, month.get, year.get)))
-    } else {
-      DeregistrationDateModel(yesNo, None)
+    (day,month,year) match {
+      case (Some(d), Some(m), Some(y)) =>
+        Logger.debug("Has date")
+        DeregistrationDateModel(yesNo, Some(CeasedTradingDateModel(d, m, y)))
+      case _ =>
+        Logger.debug("Has NO date")
+        DeregistrationDateModel(yesNo, None)
     }
   }
 
@@ -50,7 +56,7 @@ object DeregistrationDateModel {
         Some(arg.date.get.ceasedTradingDateYear)
       ))
     } else {
-      Some(arg.yesNo,None,None,None)
+      Some((arg.yesNo,None,None,None))
     }
   }
 
