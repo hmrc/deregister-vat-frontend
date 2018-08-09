@@ -37,15 +37,13 @@
 
         <div class="form-group" id="reason">
             @radioHelper(
-                parentForm = form,
-                inline = false,
-                options = Seq(
+                field = form("reason"),
+                choices = Seq(
                     ("stoppedTrading", Messages("deregistrationReason.reason.stoppedTrading")),
                     ("turnoverBelowThreshold", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
                     ("other", Messages("deregistrationReason.reason.other"))
                 ),
-                legend = Messages("deregistrationReason.title"),
-                field = form("reason")
+                question = Messages("deregistrationReason.title")
             )
         </div>
 
