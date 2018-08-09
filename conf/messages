@@ -38,6 +38,9 @@ capitalAssets.title = Does the business have any capital assets?
 capitalAssets.text.1 = This includes things like buildings, land, unsold stock, furniture and computers.
 capitalAssets.text.2 = Do not include intangible assets, for example patents, copyrights or goodwill.
 
+optionOwesMoney.title = Does the business owe any money?
+optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
