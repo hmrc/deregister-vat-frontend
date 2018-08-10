@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-package assets.messages
+package forms
 
-object DeregistrationPropertyMessages {
+import models.VATAccountsModel
+import play.api.data.Form
+import play.api.data.Forms._
 
-  val title = "Does the business have any commercial property?"
-  val p1 = "This includes both land and buildings."
+object VATAccountsForm {
+
+  val vatAccountsForm: Form[VATAccountsModel] = Form(
+    mapping(
+      "accountingMethod" -> nonEmptyText
+    )(VATAccountsModel.apply)(VATAccountsModel.unapply)
+  )
 
 }

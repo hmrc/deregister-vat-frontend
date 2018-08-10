@@ -22,8 +22,15 @@ deregistrationReason.reason.stoppedTrading = It has stopped trading
 deregistrationReason.reason.turnoverBelowThreshold = Annual turnover is below £83,000
 deregistrationReason.reason.other = Other
 
-deregistrationProperty.title = Do you have more than one VAT registered business?
+deregistrationProperty.title = Does the business have any commercial property?
 deregistrationProperty.p1 = This includes both land and buildings.
+
+vatAccounts.title = How are the business''s VAT accounts prepared?
+vatAccounts.accountant = If you have an accountant, ask them what accounting method they use.
+vatAccounts.method.standard = Standard accounting
+vatAccounts.method.cash = Cash accounting
+vatAccounts.description.standard = You record VAT whenever you send or receive an invoice
+vatAccounts.description.cash = You record VAT whenever you make or receive a payment
 
 ceasedTrading.title = The date your business ceased or will cease trading
 ceasedTrading.hint = For example, 31 3 1980
@@ -35,6 +42,9 @@ optionTax.text.2 = Commercial property is usually exempt from VAT. Some business
 capitalAssets.title = Does the business have any capital assets?
 capitalAssets.text.1 = This includes things like buildings, land, unsold stock, furniture and computers.
 capitalAssets.text.2 = Do not include intangible assets, for example patents, copyrights or goodwill.
+
+optionOwesMoney.title = Does the business owe any money?
+optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to

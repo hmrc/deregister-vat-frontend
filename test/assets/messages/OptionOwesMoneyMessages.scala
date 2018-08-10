@@ -16,9 +16,9 @@
 
 package assets.messages
 
-object DeregistrationPropertyMessages {
+object OptionOwesMoneyMessages {
 
-  val title = "Does the business have any commercial property?"
-  val p1 = "This includes both land and buildings."
+  val title = "Does the business owe any money?"
+  val text1 = "We need to know if the business owes any money for services or supplies that relate to its activities."
 
 }

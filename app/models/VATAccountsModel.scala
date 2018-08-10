@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package assets.messages
+package models
 
-object DeregistrationPropertyMessages {
+import play.api.libs.json.{Json, OFormat}
 
-  val title = "Does the business have any commercial property?"
-  val p1 = "This includes both land and buildings."
+case class VATAccountsModel(accountingMethod: String)
 
+object VATAccountsModel {
+  implicit val format: OFormat[VATAccountsModel] = Json.format[VATAccountsModel]
 }

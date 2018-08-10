@@ -16,35 +16,30 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.YesNoForm
-import models.{No, Yes}
+import forms.VATAccountsForm
+import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
-@Singleton
-class DeregistrationPropertyController @Inject()(val messagesApi: MessagesApi,
-                                                 val authenticate: AuthPredicate,
-                                                 implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class VATAccountsController @Inject()(val messagesApi: MessagesApi,
+                                      val authenticate: AuthPredicate,
+                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.deregistrationProperty(YesNoForm.yesNoForm)))
+    Future.successful(Ok(views.html.vatAccounts(VATAccountsForm.vatAccountsForm)))
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
-    YesNoForm.yesNoForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.deregistrationProperty(error))),
-      {
-        case Yes => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
-        case No => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
-      }
+    VATAccountsForm.vatAccountsForm.bindFromRequest().fold(
+      error => Future.successful(BadRequest(views.html.vatAccounts(error))),
+      _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
     )
   }
+
 }

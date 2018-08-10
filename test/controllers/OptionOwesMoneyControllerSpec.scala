@@ -17,20 +17,15 @@
 package controllers
 
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
+import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.EnrolmentsAuthService
-import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
-class DeregistrationPropertyControllerSpec extends ControllerBaseSpec {
+class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
 
-  object TestDeregistrationPropertyController extends DeregistrationPropertyController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestOptionOwesMoneyController extends OptionOwesMoneyController(messagesApi, mockAuthPredicate, mockConfig)
 
   "the user is authorised" when {
 
@@ -38,7 +33,7 @@ class DeregistrationPropertyControllerSpec extends ControllerBaseSpec {
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestDeregistrationPropertyController.show()(request)
+        lazy val result = TestOptionOwesMoneyController.show()(request)
 
         "return 200 (OK)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -51,31 +46,57 @@ class DeregistrationPropertyControllerSpec extends ControllerBaseSpec {
         }
       }
 
+      "the user is has pre selected option" should {
+
+        lazy val result = TestOptionOwesMoneyController.show()(request)
+
+        "return 200 (OK)" in {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      authChecks(".show", TestOptionOwesMoneyController.show(), request)
     }
 
     "Calling the .submit action" when {
 
-      "the user submits after selecting a 'Yes' option" should {
+      "the user submits after selecting an 'Yes' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes"))
-        lazy val result = TestDeregistrationPropertyController.submit()(request)
+        lazy val result = TestOptionOwesMoneyController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
+
+        //TODO: This needs to be updated as part of the routing sub-task
+        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        }
       }
 
-      "the user submits after selecting a 'No' option" should {
+      "the user submits after selecting the 'No' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no"))
-        lazy val result = TestDeregistrationPropertyController.submit()(request)
+        lazy val result = TestOptionOwesMoneyController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
+        }
+
+        //TODO: This needs to be updated as part of the routing sub-task
+        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
         }
       }
 
@@ -83,7 +104,7 @@ class DeregistrationPropertyControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
-        lazy val result = TestDeregistrationPropertyController.submit()(request)
+        lazy val result = TestOptionOwesMoneyController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -96,6 +117,7 @@ class DeregistrationPropertyControllerSpec extends ControllerBaseSpec {
         }
       }
     }
-  }
 
+    authChecks(".submit", TestOptionOwesMoneyController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no")))
+  }
 }
