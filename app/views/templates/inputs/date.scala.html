@@ -22,10 +22,10 @@
 
     @if(renderQuestionAsHeading){
         <legend>
-            @headings(messages("ceasedTrading.title"))
+            @headings(question)
         </legend>
     } else {
-        <legend class="form-label">@question</legend>
+        <legend class="form-label visuallyhidden">@question</legend>
     }
 
     @hint.map { hint =>
@@ -35,7 +35,7 @@
     }
 
     @if(form.hasErrors) {
-        <span class="error-notification" role="tooltip">
+        <span class="error-message" role="tooltip">
             @if(form.errors.length > 1) {
               @messages("common.dateError")
             } else {
@@ -48,21 +48,21 @@
         form(fieldName + "Day"),
         messages("common.day"),
         "day",
-        form.hasErrors
+        form(fieldName + "Day").hasErrors
     )
 
     @dateEntryField(
         form(fieldName + "Month"),
         messages("common.month"),
         "month",
-        form.hasErrors
+        form(fieldName + "Month").hasErrors
     )
 
     @dateEntryField(
         form(fieldName + "Year"),
         messages("common.year"),
         "year",
-        form.hasErrors
+        form(fieldName + "Year").hasErrors
     )
 
 </fieldset>
