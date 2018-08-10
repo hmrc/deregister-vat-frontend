@@ -47,6 +47,8 @@ sellCapitalAssets.title = Does the business plan to sell any of its capital asse
 
 taxableTurnover.title = What was the business’s taxable turnover in the last 12 months?
 
+nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
+
 optionOwesMoney.title = Does the business owe any money?
 optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
 
