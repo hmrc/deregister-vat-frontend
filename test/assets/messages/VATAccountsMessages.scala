@@ -16,8 +16,14 @@
 
 package assets.messages
 
-object TaxableTurnoverMessages {
+object VATAccountsMessages {
 
-  val title = "What was the business’s taxable turnover in the last 12 months?"
+  val title = "How are the business's VAT accounts prepared?"
+  val accountant = "If you have an accountant, ask them what accounting method they use."
+  val standard = "Standard accounting"
+  val invoice = "You record VAT whenever you send or receive an invoice"
+  val cash = "Cash accounting"
+  val payment = "You record VAT whenever you make or receive a payment"
+  val error = "This field is required"
 
 }

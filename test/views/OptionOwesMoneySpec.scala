@@ -16,33 +16,31 @@
 
 package views
 
-import assets.messages.{CommonMessages, OptionTaxMessages}
+import assets.messages.{CommonMessages, OptionOwesMoneyMessages}
 import forms.YesNoForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-
-class OptionTaxSpec extends ViewBaseSpec {
-
+class OptionOwesMoneySpec extends ViewBaseSpec {
 
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
     val text = (number: Int) => s"#content > article > p:nth-child($number)"
-    val yesOption = "fieldset > div > div:nth-of-type(1) > label"
-    val noOption = "fieldset > div > div:nth-of-type(2) > label"
+    val yesOption = "div.multiple-choice:nth-child(1) > label:nth-child(2)"
+    val noOption = "div.multiple-choice:nth-child(2) > label:nth-child(2)"
     val button = ".button"
     val errorHeading = "#error-summary-display"
-    val error = "#yes_no-error-summary"
+    val error = ".error-message"
   }
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.optionTax(YesNoForm.yesNoForm)
+    lazy val view = views.html.optionOwesMoney(YesNoForm.yesNoForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe OptionTaxMessages.title
+      document.title shouldBe OptionOwesMoneyMessages.title
     }
 
     s"have the correct back text" in {
@@ -51,7 +49,7 @@ class OptionTaxSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe OptionTaxMessages.title
+      elementText(Selectors.pageHeading) shouldBe OptionOwesMoneyMessages.title
     }
 
     "not display an error heading" in {
@@ -59,8 +57,7 @@ class OptionTaxSpec extends ViewBaseSpec {
     }
 
     s"have the correct content displayed" in {
-      elementText(Selectors.text(3)) shouldBe OptionTaxMessages.text1
-      elementText(Selectors.text(4)) shouldBe OptionTaxMessages.text2
+      elementText(Selectors.text(3)) shouldBe OptionOwesMoneyMessages.text1
     }
 
     s"have the correct a radio button form with yes/no answers" in {
@@ -79,11 +76,11 @@ class OptionTaxSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.optionTax(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
+    lazy val view = views.html.optionOwesMoney(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe OptionTaxMessages.title
+      document.title shouldBe OptionOwesMoneyMessages.title
     }
 
     s"have the correct back text" in {
@@ -92,16 +89,11 @@ class OptionTaxSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe OptionTaxMessages.title
+      elementText(Selectors.pageHeading) shouldBe OptionOwesMoneyMessages.title
     }
 
     "display the correct error heading" in {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
-    }
-
-    s"have the correct content displayed" in {
-      elementText(Selectors.text(4)) shouldBe OptionTaxMessages.text1
-      elementText(Selectors.text(5)) shouldBe OptionTaxMessages.text2
     }
 
     s"have the correct a radio button form with yes/no answers" in {
@@ -117,4 +109,5 @@ class OptionTaxSpec extends ViewBaseSpec {
       elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
     }
   }
+
 }

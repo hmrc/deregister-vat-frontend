@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package assets.messages
+package models
 
-object TaxableTurnoverMessages {
+import play.api.libs.json.{Json, OFormat}
 
-  val title = "What was the business’s taxable turnover in the last 12 months?"
+case class VATAccountsModel(accountingMethod: String)
 
+object VATAccountsModel {
+  implicit val format: OFormat[VATAccountsModel] = Json.format[VATAccountsModel]
 }

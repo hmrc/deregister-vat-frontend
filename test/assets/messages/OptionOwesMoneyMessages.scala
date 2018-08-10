@@ -16,8 +16,9 @@
 
 package assets.messages
 
-object TaxableTurnoverMessages {
+object OptionOwesMoneyMessages {
 
-  val title = "What was the business’s taxable turnover in the last 12 months?"
+  val title = "Does the business owe any money?"
+  val text1 = "We need to know if the business owes any money for services or supplies that relate to its activities."
 
 }

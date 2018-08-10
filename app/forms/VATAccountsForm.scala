@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-package assets.messages
+package forms
 
-object TaxableTurnoverMessages {
+import models.VATAccountsModel
+import play.api.data.Form
+import play.api.data.Forms._
 
-  val title = "What was the business’s taxable turnover in the last 12 months?"
+object VATAccountsForm {
+
+  val vatAccountsForm: Form[VATAccountsModel] = Form(
+    mapping(
+      "accountingMethod" -> nonEmptyText
+    )(VATAccountsModel.apply)(VATAccountsModel.unapply)
+  )
 
 }

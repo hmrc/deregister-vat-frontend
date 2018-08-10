@@ -17,39 +17,37 @@
 package controllers
 
 import play.api.http.Status
-import play.api.mvc.AnyContentAsFormUrlEncoded
+import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.{contentType, _}
+import services.EnrolmentsAuthService
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
+class VATAccountsControllerSpec extends ControllerBaseSpec {
 
-  object TestTaxableTurnoverController extends TaxableTurnoverController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestVATAccountsController extends VATAccountsController(messagesApi, mockAuthPredicate, mockConfig)
 
   "the user is authorised" when {
 
+    val goodEnrolments: Enrolments = Enrolments(
+      Set(
+        Enrolment(
+          "HMRC-MTD-VAT",
+          Seq(EnrolmentIdentifier("", "999999999")),
+          "Active")
+      )
+    )
+
     "Calling the .show action" when {
 
-      "the user does not have a pre selected amount" should {
+      "the user does not have a pre selected option" should {
 
-        lazy val result = TestTaxableTurnoverController.show()(request)
-
-        "return 200 (OK)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.OK
-        }
-
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
-        }
-      }
-
-      //TODO - update once stored data can be retrieved from Mongo
-      "the user is has pre selected amount" should {
-
-        lazy val result = TestTaxableTurnoverController.show()(request)
+        lazy val result = TestVATAccountsController.show()(request)
 
         "return 200 (OK)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -61,17 +59,15 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
           charset(result) shouldBe Some("utf-8")
         }
       }
-
-      authChecks(".show", TestTaxableTurnoverController.show(), request)
     }
 
     "Calling the .submit action" when {
 
-      "the user submits after inputting an amount" should {
+      "the user submits after selecting the 'Standard accounting' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", "1000.01"))
-        lazy val result = TestTaxableTurnoverController.submit()(request)
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", "standard"))
+        lazy val result = TestVATAccountsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -84,11 +80,28 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      "the user submits without inputting an amount" should {
+      "the user submits after selecting the 'Cash accounting' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", ""))
-        lazy val result = TestTaxableTurnoverController.submit()(request)
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", "cash"))
+        lazy val result = TestVATAccountsController.submit()(request)
+
+        "return 303 (SEE OTHER)" in {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        //TODO: This needs to be updated as part of the routing sub-task
+        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        }
+      }
+
+      "the user submits without selecting an option" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
+        lazy val result = TestVATAccountsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -101,8 +114,6 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
         }
       }
     }
-
-    authChecks(".submit", TestTaxableTurnoverController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", "1000.01")))
   }
 
 }

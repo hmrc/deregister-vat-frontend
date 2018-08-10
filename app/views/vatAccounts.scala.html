@@ -16,39 +16,34 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
-@import views.html.templates.inputs.radioHelper
+@import templates.inputs.boldRadioGroup
 @import templates.headings
-@import forms.YesNoForm._
 
-
-@(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("capitalAssets.title"),
-    bodyClasses = None,
-    appConfig = appConfig) {
+title = messages("vatAccounts.title"),
+bodyClasses = None,
+appConfig = appConfig) {
 
     <a class="link-back" href="#">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
-    @headings(messages("capitalAssets.title"))
+    @headings(messages("vatAccounts.title"))
 
-    <p>@messages("capitalAssets.text.1")</p>
+    @helpers.form(action = controllers.routes.VATAccountsController.submit) {
 
-    <p>@messages("capitalAssets.text.2")</p>
-
-    @helpers.form(action = controllers.routes.CapitalAssetsController.submit) {
-
-        <div class="form-group" id="@yesNo">
-            @radioHelper(
-                field = form(yesNo),
+        <div class="form-group" id="accountingMethod">
+            @boldRadioGroup(
+                parentForm = form,
+                field = form("accountingMethod"),
                 choices = Seq(
-                    (yes, Messages("common.yes")),
-                    (no, Messages("common.no"))
+                    ("standard", Messages("vatAccounts.method.standard"), Some(Messages("vatAccounts.description.standard"))),
+                    ("cash", Messages("vatAccounts.method.cash"), Some(Messages("vatAccounts.description.cash")))
                 ),
-                question = Messages("capitalAssets.title"),
-                inline = true
+                question = messages("vatAccounts.title"),
+                additionalContent = Some(Messages("vatAccounts.accountant"), "accountant")
             )
         </div>
 
@@ -56,4 +51,5 @@
             @messages("common.continue")
         </button>
     }
+
 }
