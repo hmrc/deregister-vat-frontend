@@ -18,6 +18,6 @@ package assets.messages
 
 object NextTaxableTurnoverMessages {
 
-  val title = "What was the business's expected taxable turnover for the next 12 months?"
+  val title = "What is the business’s expected taxable turnover for the next 12 months?"
 
 }

@@ -40,10 +40,10 @@ capitalAssets.text.2 = Do not include intangible assets, for example patents, co
 
 taxableTurnover.title = What was the business’s taxable turnover in the last 12 months?
 
+nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
+
 optionOwesMoney.title = Does the business owe any money?
 optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
-
-nextTaxableTurnover.title = What is the business''s expected taxable turnover for the next 12 months?
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
