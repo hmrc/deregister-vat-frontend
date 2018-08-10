@@ -16,33 +16,31 @@
 
 package forms
 
-import forms.TaxableTurnoverForm._
-import models.TaxableTurnoverModel
-import play.api.data.FormError
+import models.VATAccountsModel
 import uk.gov.hmrc.play.test.UnitSpec
 
-class TaxableTurnoverFormSpec extends UnitSpec {
+class VATAccountsFormSpec extends UnitSpec {
 
   "Binding a form with valid data" should {
 
-    val data = Map("turnover" -> "1000.01")
-    val form = TaxableTurnoverForm.taxableTurnoverForm.bind(data)
+    val data = Map("accountingMethod" -> "Reason")
+    val form = VATAccountsForm.vatAccountsForm.bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
     }
 
     "generate the correct model" in {
-      form.value shouldBe Some(TaxableTurnoverModel(BigDecimal(1000.01)))
+      form.value shouldBe Some(VATAccountsModel("Reason"))
     }
   }
 
   "Binding a form with invalid data" when {
 
-    "no amount has been input" should {
+    "the no option has been selected" should {
 
-      val missingInput: Map[String, String] = Map.empty
-      val form = TaxableTurnoverForm.taxableTurnoverForm.bind(missingInput)
+      val missingOption: Map[String, String] = Map.empty
+      val form = VATAccountsForm.vatAccountsForm.bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -57,9 +55,9 @@ class TaxableTurnoverFormSpec extends UnitSpec {
   "A form built from a valid model" should {
 
     "generate the correct mapping" in {
-      val model = TaxableTurnoverModel(BigDecimal(1000.01))
-      val form = TaxableTurnoverForm.taxableTurnoverForm.fill(model)
-      form.data shouldBe Map("turnover" -> "1000.01")
+      val model = VATAccountsModel("Another Reason")
+      val form = VATAccountsForm.vatAccountsForm.fill(model)
+      form.data shouldBe Map("accountingMethod" -> "Another Reason")
     }
   }
 
