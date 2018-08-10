@@ -22,7 +22,9 @@ import play.api.data.FormError
 import uk.gov.hmrc.play.test.UnitSpec
 
 class YesNoFormSpec extends UnitSpec {
+
   "YesNoForm" should {
+
     "successfully parse a Yes" in {
       val res = yesNoForm.bind(Map(yesNo -> YesNoForm.yes))
       res.value should contain(Yes)
@@ -36,6 +38,23 @@ class YesNoFormSpec extends UnitSpec {
     "fail when nothing has been entered" in {
       val res = yesNoForm.bind(Map.empty[String, String])
       res.errors should contain(FormError(yesNo, yesNoError))
+    }
+  }
+
+  "Binding a form with invalid data" when {
+
+    "the no option has been selected" should {
+
+      val missingOption: Map[String, String] = Map.empty
+      val form = YesNoForm.yesNoForm.bind(missingOption)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "throw one error" in {
+        form.errors.size shouldBe 1
+      }
     }
   }
 }

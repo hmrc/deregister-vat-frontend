@@ -5,6 +5,8 @@ base.sign-out = Sign out
 common.continue = Continue
 common.back = Back
 common.errorSummary.heading = You have one or more errors
+common.errorSummary = This field is required
+common.errorSummary.field = This field is required
 common.day = Day
 common.month = Month
 common.year = Year
@@ -19,6 +21,9 @@ deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.stoppedTrading = It has stopped trading
 deregistrationReason.reason.turnoverBelowThreshold = Annual turnover is below £83,000
 deregistrationReason.reason.other = Other
+
+deregistrationProperty.title = Does the business have any commercial property?
+deregistrationProperty.p1 = This includes both land and buildings.
 
 vatAccounts.title = How are the business''s VAT accounts prepared?
 vatAccounts.accountant = If you have an accountant, ask them what accounting method they use.
