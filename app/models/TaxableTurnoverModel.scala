@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-package assets.messages
+package models
 
-object CommonMessages {
+import play.api.libs.json.{Json, OFormat}
 
-  val continue = "Continue"
-  val back = "Back"
-  val signOut = "Sign out"
-  val yes = "Yes"
-  val no = "No"
-  val agentServiceName = "Update your client's VAT details"
-  val day = "Day"
-  val month = "Month"
-  val year = "Year"
-  val errorHeading = "You have one or more errors"
-  val errorMandatoryRadioOption = "No option selected"
-  val errorMandatoryAmountInput = "Real number value expected"
+case class TaxableTurnoverModel(turnover: BigDecimal)
 
+object TaxableTurnoverModel {
+  implicit val format: OFormat[TaxableTurnoverModel] = Json.format[TaxableTurnoverModel]
 }
