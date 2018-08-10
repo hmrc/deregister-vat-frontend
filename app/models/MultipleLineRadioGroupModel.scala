@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-package assets.messages
+package models
 
-object VATAccountsMessages {
-
-  val title = "How are the business’s VAT accounts prepared?"
-  val accountant = "If you have an accountant, ask them what accounting method they use."
-  val standard = "Standard accounting"
-  val invoice = "You record VAT whenever you send or receive an invoice"
-  val cash = "Cash accounting"
-  val payment = "You record VAT whenever you make or receive a payment"
-  val error = "This field is required"
-
-}
+case class MultipleLineRadioGroupModel(value: String, label: String, additionalContent: String)

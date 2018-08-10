@@ -12,7 +12,7 @@ common.month = Month
 common.year = Year
 common.dateError = Invalid date
 common.fullStop = .
-common.agentService = Update your client''s VAT details
+common.agentService = Update your client’s VAT details
 common.yes = Yes
 common.no = No
 common.error.mandatoryRadioOption = No option selected
@@ -25,7 +25,7 @@ deregistrationReason.reason.other = Other
 deregistrationProperty.title = Does the business have any commercial property?
 deregistrationProperty.p1 = This includes both land and buildings.
 
-vatAccounts.title = How are the business''s VAT accounts prepared?
+vatAccounts.title = How are the business’s VAT accounts prepared?
 vatAccounts.accountant = If you have an accountant, ask them what accounting method they use.
 vatAccounts.method.standard = Standard accounting
 vatAccounts.method.cash = Cash accounting

@@ -29,6 +29,7 @@ class VATAccountsSpec extends ViewBaseSpec {
     val methodOption: Int => String = (number: Int) => s"fieldset > div:nth-of-type($number) > label"
     val button = ".button"
     val error = "#accountingMethod-error-summary"
+    val accountantsContent = "#content p"
   }
 
   "Rendering the VAT Accounts page with no errors" should {
@@ -50,7 +51,7 @@ class VATAccountsSpec extends ViewBaseSpec {
     }
 
     s"have a sentence regarding users with accountants" in {
-      elementText("#accountant") shouldBe VATAccountsMessages.accountant
+      elementText(Selectors.accountantsContent) shouldBe VATAccountsMessages.accountant
     }
 
     s"have the correct a radio button form with the correct 2 options" in {
@@ -87,7 +88,7 @@ class VATAccountsSpec extends ViewBaseSpec {
     }
 
     s"have a sentence regarding users with accountants" in {
-      elementText("#accountant") shouldBe VATAccountsMessages.accountant
+      elementText(Selectors.accountantsContent) shouldBe VATAccountsMessages.accountant
     }
 
     s"have the correct a radio button form with the correct 2 options" in {

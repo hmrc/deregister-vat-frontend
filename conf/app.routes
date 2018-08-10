@@ -1,36 +1,39 @@
 # microservice specific routes
 
-GET        /hello-world            controllers.HelloWorldController.helloWorld
+GET        /hello-world              controllers.HelloWorldController.helloWorld
 
-GET        /deregistration-reason  controllers.DeregistrationReasonController.show
-POST       /deregistration-reason  controllers.DeregistrationReasonController.submit
+GET        /deregistration-reason    controllers.DeregistrationReasonController.show
+POST       /deregistration-reason    controllers.DeregistrationReasonController.submit
 
-GET        /deregistration-property     controllers.DeregistrationPropertyController.show
-POST       /deregistration-property     controllers.DeregistrationPropertyController.submit
+GET        /deregistration-property  controllers.DeregistrationPropertyController.show
+POST       /deregistration-property  controllers.DeregistrationPropertyController.submit
 
-GET         /accounting-method      @controllers.VATAccountsController.show
-POST        /accounting-method      @controllers.VATAccountsController.submit
+GET        /accounting-method        controllers.VATAccountsController.show
+POST       /accounting-method        controllers.VATAccountsController.submit
 
-GET        /ceased-trading-date    controllers.CeasedTradingDateController.show
-POST       /ceased-trading-date    controllers.CeasedTradingDateController.submit
+GET        /ceased-trading-date      controllers.CeasedTradingDateController.show
+POST       /ceased-trading-date      controllers.CeasedTradingDateController.submit
 
-GET        /option-to-tax          controllers.OptionTaxController.show
-POST       /option-to-tax          controllers.OptionTaxController.submit
+GET        /option-to-tax            controllers.OptionTaxController.show
+POST       /option-to-tax            controllers.OptionTaxController.submit
 
-GET        /option-owes-money      controllers.OptionOwesMoneyController.show
-POST       /option-owes-money      controllers.OptionOwesMoneyController.submit
+GET        /option-owes-money        controllers.OptionOwesMoneyController.show
+POST       /option-owes-money        controllers.OptionOwesMoneyController.submit
 
-GET        /capital-assets         controllers.CapitalAssetsController.show
-POST       /capital-assets         controllers.CapitalAssetsController.submit
+GET        /capital-assets           controllers.CapitalAssetsController.show
+POST       /capital-assets           controllers.CapitalAssetsController.submit
 
-GET        /sell-capital-assets    controllers.SellCapitalAssetsController.show
-POST       /sell-capital-assets    controllers.SellCapitalAssetsController.submit
+GET        /sell-capital-assets      controllers.SellCapitalAssetsController.show
+POST       /sell-capital-assets      controllers.SellCapitalAssetsController.submit
 
-GET        /taxable-turnover       controllers.TaxableTurnoverController.show
-POST       /taxable-turnover       controllers.TaxableTurnoverController.submit
+GET        /taxable-turnover         controllers.TaxableTurnoverController.show
+POST       /taxable-turnover         controllers.TaxableTurnoverController.submit
 
-GET        /next-taxable-turnover  controllers.NextTaxableTurnoverController.show
-POST       /next-taxable-turnover  controllers.NextTaxableTurnoverController.submit
+GET        /deregistration-date      controllers.DeregistrationDateController.show
+POST       /deregistration-date      controllers.DeregistrationDateController.submit
+
+GET        /next-taxable-turnover    controllers.NextTaxableTurnoverController.show
+POST       /next-taxable-turnover    controllers.NextTaxableTurnoverController.submit
 
 #Sign Out Routes
-GET         /sign-out              @controllers.SignOutController.signOut(authorised: Boolean)
+GET        /sign-out                 controllers.SignOutController.signOut(authorised: Boolean)
