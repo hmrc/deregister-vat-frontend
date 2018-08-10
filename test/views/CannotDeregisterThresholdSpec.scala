@@ -55,7 +55,7 @@ class CannotDeregisterThresholdSpec extends ViewBaseSpec {
 
     "have the correct text and url for the link" in {
       elementText(Selectors.linkText) shouldBe CannotDeregisterThresholdMessages.linkText
-      element(Selectors.link).attr("href") shouldBe "#"
+      element(Selectors.link).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
     }
   }
 }
