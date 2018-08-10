@@ -70,9 +70,9 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
-            ("ceasedTradingDateDay", "1"),
-            ("ceasedTradingDateMonth", "1"),
-            ("ceasedTradingDateYear", "2018")
+            ("dateDay", "1"),
+            ("dateMonth", "1"),
+            ("dateYear", "2018")
           )
         lazy val result = TestCeasedTradingDateController.submit()(request)
 
@@ -90,9 +90,9 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
-            ("ceasedTradingDateDay", ""),
-            ("ceasedTradingDateMonth", ""),
-            ("ceasedTradingDateYear", "")
+            ("dateDay", ""),
+            ("dateMonth", ""),
+            ("dateYear", "")
           )
         lazy val result = TestCeasedTradingDateController.submit()(request)
 
@@ -109,9 +109,9 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
     }
 
     authChecks(".submit", TestCeasedTradingDateController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(
-      ("ceasedTradingDateDay", "1"),
-      ("ceasedTradingDateMonth", "1"),
-      ("ceasedTradingDateYear", "2018")
+      ("dateDay", "1"),
+      ("dateMonth", "1"),
+      ("dateYear", "2018")
     ))
   }
 }

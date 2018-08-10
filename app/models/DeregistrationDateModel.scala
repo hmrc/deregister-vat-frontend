@@ -16,13 +16,9 @@
 
 package models
 
-import play.api.Logger
-
-
-case class DeregistrationDateModel(yesNo: YesNo, date: Option[CeasedTradingDateModel]) {
+case class DeregistrationDateModel(yesNo: YesNo, date: Option[DateModel]) {
 
   val checkValidDateIfYes: Boolean = {
-    Logger.debug("HELLO")
     yesNo match {
       case Yes => date.fold(false)(_.isValidDate)
       case No => true
@@ -33,32 +29,28 @@ case class DeregistrationDateModel(yesNo: YesNo, date: Option[CeasedTradingDateM
 object DeregistrationDateModel {
 
   def customApply(yesNo: YesNo,
-                   day:Option[Int],
-                   month:Option[Int],
-                   year:Option[Int]): DeregistrationDateModel ={
+                  day:Option[Int],
+                  month:Option[Int],
+                  year:Option[Int]): DeregistrationDateModel ={
 
-    (day,month,year) match {
-      case (Some(d), Some(m), Some(y)) =>
-        Logger.debug("Has date")
-        DeregistrationDateModel(yesNo, Some(CeasedTradingDateModel(d, m, y)))
+    (yesNo,day,month,year) match {
+      case (Yes,Some(d),Some(m),Some(y)) =>
+        DeregistrationDateModel(yesNo, Some(DateModel(d, m, y)))
       case _ =>
-        Logger.debug("Has NO date")
         DeregistrationDateModel(yesNo, None)
     }
   }
 
-  def customUnapply(arg: DeregistrationDateModel): Option[(YesNo, Option[Int],Option[Int],Option[Int])] = {
-    if(arg.date.isDefined) {
-      Some((
-        arg.yesNo,
-        Some(arg.date.get.ceasedTradingDateDay),
-        Some(arg.date.get.ceasedTradingDateMonth),
-        Some(arg.date.get.ceasedTradingDateYear)
-      ))
-    } else {
-      Some((arg.yesNo,None,None,None))
-    }
+  def customUnapply(dateModel: DeregistrationDateModel): Option[(YesNo, Option[Int],Option[Int],Option[Int])] = {
+
+    Some(dateModel.date match {
+      case Some(date) => (
+        dateModel.yesNo,
+        Some(date.dateDay),
+        Some(date.dateDay),
+        Some(date.dateDay)
+      )
+      case _ => (dateModel.yesNo,None,None,None)
+    })
   }
-
-
 }

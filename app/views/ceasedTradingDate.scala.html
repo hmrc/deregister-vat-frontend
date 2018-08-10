@@ -19,7 +19,7 @@
 @import templates.inputs.date
 @import templates.headings
 
-@(form: Form[CeasedTradingDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[DateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = messages("ceasedTrading.title"),
@@ -38,7 +38,7 @@
             @date(
                 form = form,
                 question = messages("ceasedTrading.title"),
-                fieldName = "ceasedTradingDate",
+                fieldName = "date",
                 hint = Some(messages("ceasedTrading.hint")),
                 renderQuestionAsHeading = false
             )

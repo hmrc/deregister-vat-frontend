@@ -30,5 +30,7 @@ object CommonMessages {
   val errorHeading = "You have one or more errors"
   val errorMandatoryRadioOption = "No option selected"
   val errorMandatoryAmountInput = "Real number value expected"
+  val numericValueError = "Numeric value expected"
+  val invalidDate= "Invalid date"
 
 }

@@ -16,25 +16,23 @@
 
 package models
 
-import java.time.LocalDate
-
 import utils.TestUtil
 
-class CeasedTradingDateModelSpec extends TestUtil {
+class DateModelSpec extends TestUtil {
 
   "CeasedTradingModel.date" when {
 
     "given a valid date" should {
 
       "return Some(LocalDate)" in {
-        CeasedTradingDateModel(1,1,2018).isValidDate shouldBe true
+        DateModel(1,1,2018).isValidDate shouldBe true
       }
     }
 
     "given an invalid date" should {
 
       "return None" in {
-        CeasedTradingDateModel(99,99,9999).isValidDate shouldBe false
+        DateModel(99,99,9999).isValidDate shouldBe false
       }
     }
   }
