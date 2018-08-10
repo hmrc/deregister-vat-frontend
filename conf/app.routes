@@ -1,9 +1,12 @@
 # microservice specific routes
 
-GET        /hello-world            controllers.HelloWorldController.helloWorld
+GET         /hello-world            controllers.HelloWorldController.helloWorld
 
-GET        /deregistration-reason  controllers.DeregistrationReasonController.show
-POST       /deregistration-reason  controllers.DeregistrationReasonController.submit
+GET         /deregistration-reason  controllers.DeregistrationReasonController.show
+POST        /deregistration-reason  controllers.DeregistrationReasonController.submit
+
+GET         /accounting-method      @controllers.VATAccountsController.show
+POST        /accounting-method      @controllers.VATAccountsController.submit
 
 GET        /ceased-trading-date    controllers.CeasedTradingDateController.show
 POST       /ceased-trading-date    controllers.CeasedTradingDateController.submit
@@ -18,4 +21,4 @@ GET        /capital-assets         controllers.CapitalAssetsController.show
 POST       /capital-assets         controllers.CapitalAssetsController.submit
 
 #Sign Out Routes
-GET         /sign-out              @controllers.SignOutController.signOut(authorised: Boolean)
+GET         /sign-out               @controllers.SignOutController.signOut(authorised: Boolean)
