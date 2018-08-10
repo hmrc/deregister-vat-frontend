@@ -52,6 +52,17 @@ nextTaxableTurnover.title = What is the business’s expected taxable turnover f
 optionOwesMoney.title = Does the business owe any money?
 optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
 
+whyTurnoverBelow.title = Why does the business expect its turnover to be below the threshold?
+whyTurnoverBelow.text.1 = Select all that apply
+whyTurnoverBelow.reason.lostContract = Lost a contract
+whyTurnoverBelow.reason.semiRetiring = Semi-retiring
+whyTurnoverBelow.reason.moreCompetitors = More competitors
+whyTurnoverBelow.reason.reducedTradingHours = Reduced trading hours
+whyTurnoverBelow.reason.seasonalBusiness = Seasonal business
+whyTurnoverBelow.reason.closedPlacesOfBusiness = Closed some places of business
+whyTurnoverBelow.reason.turnoverLowerThanExpected = Turnover lower than expected
+whyTurnoverBelow.error.atLeastOne = Select at least one option
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
