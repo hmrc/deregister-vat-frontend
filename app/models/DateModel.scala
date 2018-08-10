@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-package forms
+package models
 
-import models.CeasedTradingDateModel
-import play.api.data.Form
-import play.api.data.Forms._
+import java.time.LocalDate
+
+import play.api.libs.json.{Json, OFormat}
+
+import scala.util.{Failure, Success, Try}
 
 
-object CeasedTradingDateForm {
+case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int){
 
-  val ceasedTradingDateForm: Form[CeasedTradingDateModel] = Form(
-    mapping(
-      "ceasedTradingDateDay" -> number,
-      "ceasedTradingDateMonth" -> number,
-      "ceasedTradingDateYear" -> number
-    )(CeasedTradingDateModel.apply)(CeasedTradingDateModel.unapply)
-      .verifying("Invalid date", _.isValidDate)
-  )
+  val isValidDate: Boolean =
+    Try(LocalDate.of(dateYear,dateMonth,dateDay)) match {
+      case Success(_) => true
+      case Failure(_) => false
+    }
+}
+
+object DateModel {
+  implicit val format: OFormat[DateModel] = Json.format[DateModel]
 }

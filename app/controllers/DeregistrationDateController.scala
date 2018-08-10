@@ -43,8 +43,8 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
       error => Future.successful(BadRequest(views.html.deregistrationDate(error))),
       success => success.yesNo match
       {
-        case Yes => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
-        case No => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
+        case Yes => Future.successful(Ok(success.date.toString))
+        case No => Future.successful(Ok(success.date.toString))
       }
     )
   }

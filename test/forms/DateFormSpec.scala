@@ -16,26 +16,26 @@
 
 package forms
 
-import models.CeasedTradingDateModel
+import models.DateModel
 import uk.gov.hmrc.play.test.UnitSpec
 
-class CeasedTradingDateFormSpec extends UnitSpec {
+class DateFormSpec extends UnitSpec {
 
   "Binding a form with valid date" should {
 
     val data = Map(
-      "ceasedTradingDateDay" -> "1",
-      "ceasedTradingDateMonth" -> "1",
-      "ceasedTradingDateYear" -> "2018"
+      "dateDay" -> "1",
+      "dateMonth" -> "1",
+      "dateYear" -> "2018"
     )
-    val form = CeasedTradingDateForm.ceasedTradingDateForm.bind(data)
+    val form = DateForm.dateForm.bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
     }
 
-    "generate a CeasedTradingDateModel" in {
-      form.value shouldBe Some(CeasedTradingDateModel(1,1,2018))
+    "generate a DateModel" in {
+      form.value shouldBe Some(DateModel(1,1,2018))
     }
   }
 
@@ -44,7 +44,7 @@ class CeasedTradingDateFormSpec extends UnitSpec {
     "no date has been entered" should {
 
       val missingOption: Map[String, String] = Map.empty
-      val form = CeasedTradingDateForm.ceasedTradingDateForm.bind(missingOption)
+      val form = DateForm.dateForm.bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -58,11 +58,11 @@ class CeasedTradingDateFormSpec extends UnitSpec {
     "an invalid date has been entered" should {
 
       val data = Map(
-        "ceasedTradingDateDay" -> "99",
-        "ceasedTradingDateMonth" -> "99",
-        "ceasedTradingDateYear" -> "9999"
+        "dateDay" -> "99",
+        "dateMonth" -> "99",
+        "dateYear" -> "9999"
       )
-      val form = CeasedTradingDateForm.ceasedTradingDateForm.bind(data)
+      val form = DateForm.dateForm.bind(data)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -77,12 +77,12 @@ class CeasedTradingDateFormSpec extends UnitSpec {
   "A form built from a valid model" should {
 
     "generate the correct mapping" in {
-      val model = CeasedTradingDateModel(1,1,2018)
-      val form = CeasedTradingDateForm.ceasedTradingDateForm.fill(model)
+      val model = DateModel(1,1,2018)
+      val form = DateForm.dateForm.fill(model)
       form.data shouldBe Map(
-        "ceasedTradingDateDay" -> "1",
-        "ceasedTradingDateMonth" -> "1",
-        "ceasedTradingDateYear" -> "2018"
+        "dateDay" -> "1",
+        "dateMonth" -> "1",
+        "dateYear" -> "2018"
       )
     }
   }
