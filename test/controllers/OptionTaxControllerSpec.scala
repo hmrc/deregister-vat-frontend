@@ -46,21 +46,6 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      "the user is has pre selected option" should {
-
-        lazy val result = TestOptionTaxController.show()(request)
-
-        "return 200 (OK)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.OK
-        }
-
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
-        }
-      }
-
       authChecks(".show", TestOptionTaxController.show(), request)
     }
 

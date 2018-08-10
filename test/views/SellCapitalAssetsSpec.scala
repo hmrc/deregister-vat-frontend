@@ -16,30 +16,32 @@
 
 package views
 
-import assets.messages.{CommonMessages,DeregistrationReasonMessages}
+import assets.messages.{CommonMessages, SellCapitalAssetsMessages}
+import forms.YesNoForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import forms.DeregistrationReasonForm
 
 
-class DeregistrationReasonSpec extends ViewBaseSpec {
+class SellCapitalAssetsSpec extends ViewBaseSpec {
+
 
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val reasonOption: Int => String = (number: Int) => s"fieldset > div > div:nth-of-type($number) > label"
+    val yesOption = "#content > article > form > div > div > fieldset > div > div:nth-child(1) > label"
+    val noOption = "#content > article > form > div > div > fieldset > div > div:nth-child(2) > label"
     val button = ".button"
     val errorHeading = "#error-summary-display"
     val error = "#content > article > form > div > div > fieldset > span"
   }
 
-  "Rendering the Deregistration reason page" should {
+  "Rendering the Sell Capital Assets with no errors" should {
 
-    lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
+    lazy val view = views.html.sellCapitalAssets(YesNoForm.yesNoForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationReasonMessages.title
+      document.title shouldBe SellCapitalAssetsMessages.title
     }
 
     s"have the correct back text" in {
@@ -48,35 +50,34 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.title
+      elementText(Selectors.pageHeading) shouldBe SellCapitalAssetsMessages.title
     }
 
-    "display the correct error heading" in {
+    "not display an error heading" in {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct a radio button form with the correct 3 options" in {
-      elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
-      elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
-      elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
+    s"have the correct a radio button form with yes/no answers" in {
+      elementText(Selectors.yesOption) shouldBe CommonMessages.yes
+      elementText(Selectors.noOption) shouldBe CommonMessages.no
     }
 
     s"have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
-    "display the correct error messages" in {
+    "not display an error" in {
       document.select(Selectors.error).isEmpty shouldBe true
     }
   }
 
-  "Rendering the Deregistration reason page with errors" should {
+  "Rendering the Sell Capital Assets page with errors" should {
 
-    lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm.bind(Map("" -> "")))
+    lazy val view = views.html.sellCapitalAssets(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationReasonMessages.title
+      document.title shouldBe SellCapitalAssetsMessages.title
     }
 
     s"have the correct back text" in {
@@ -85,17 +86,16 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.title
+      elementText(Selectors.pageHeading) shouldBe SellCapitalAssetsMessages.title
     }
 
     "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} This field is required"
+      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
     }
 
-    s"have the correct a radio button form with the correct 3 options" in {
-      elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
-      elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
-      elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
+    s"have the correct a radio button form with yes/no answers" in {
+      elementText(Selectors.yesOption) shouldBe CommonMessages.yes
+      elementText(Selectors.noOption) shouldBe CommonMessages.no
     }
 
     s"have the correct continue button text and url" in {
@@ -103,7 +103,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe "This field is required"
+      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
     }
   }
 }
