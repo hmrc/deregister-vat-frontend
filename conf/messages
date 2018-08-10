@@ -17,6 +17,10 @@ common.yes = Yes
 common.no = No
 common.error.mandatoryRadioOption = No option selected
 
+deregisterForVAT.title = Deregister for VAT
+deregisterForVAT.p1 = You can deregister from VAT if the business no longer needs to submit VAT Returns. We will review your reasons for deregistering within 3 weeks.
+deregisterForVAT.p2 = If the business needs to deregister from any other taxes or schemes, you must do this separately.
+
 deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.stoppedTrading = It has stopped trading
 deregistrationReason.reason.turnoverBelowThreshold = Annual turnover is below £83,000
