@@ -20,5 +20,8 @@ POST       /option-owes-money      controllers.OptionOwesMoneyController.submit
 GET        /capital-assets         controllers.CapitalAssetsController.show
 POST       /capital-assets         controllers.CapitalAssetsController.submit
 
+GET        /taxable-turnover       controllers.TaxableTurnoverController.show
+POST       /taxable-turnover       controllers.TaxableTurnoverController.submit
+
 #Sign Out Routes
 GET         /sign-out               @controllers.SignOutController.signOut(authorised: Boolean)

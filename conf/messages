@@ -38,6 +38,8 @@ capitalAssets.title = Does the business have any capital assets?
 capitalAssets.text.1 = This includes things like buildings, land, unsold stock, furniture and computers.
 capitalAssets.text.2 = Do not include intangible assets, for example patents, copyrights or goodwill.
 
+taxableTurnover.title = What was the business’s taxable turnover in the last 12 months?
+
 optionOwesMoney.title = Does the business owe any money?
 optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
 
