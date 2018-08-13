@@ -16,14 +16,17 @@
 
 package assets.messages
 
-object VATAccountsMessages {
+object WhyTurnoverBelowMessages {
 
-  val title = "How are the business’s VAT accounts prepared?"
-  val accountant = "If you have an accountant, ask them what accounting method they use."
-  val standard = "Standard accounting"
-  val invoice = "You record VAT whenever you send or receive an invoice"
-  val cash = "Cash accounting"
-  val payment = "You record VAT whenever you make or receive a payment"
-  val error = "This field is required"
+  val title = "Why does the business expect its turnover to be below the threshold?"
+  val text1 = "Select all that apply"
+  val reason1 = "Lost a contract"
+  val reason2 = "Semi-retiring"
+  val reason3 = "More competitors"
+  val reason4 = "Reduced trading hours"
+  val reason5 = "Seasonal business"
+  val reason6 = "Closed some places of business"
+  val reason7 = "Turnover lower than expected"
+  val error = "Select at least one option"
 
 }

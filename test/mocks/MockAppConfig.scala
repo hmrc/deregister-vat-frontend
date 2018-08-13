@@ -38,6 +38,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val clientServicesGovUkGuidance: String = "government/publications/vat-returns-and-ec-sales-list-commercial-software-suppliers/vat-commercial-software-suppliers"
   override val surveyUrl: String = "/some-survey-url"
   override val unauthorisedSignOutUrl: String = ""
+  override val manageVatSubscriptionFrontendUrl: String = "http://localhost:9150/vat-through-software/account/change-business-details"
 
   override val features: Features = new Features(runModeConfiguration)
 }

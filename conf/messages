@@ -12,7 +12,7 @@ common.month = Month
 common.year = Year
 common.dateError = Invalid date
 common.fullStop = .
-common.agentService = Update your client''s VAT details
+common.agentService = Update your client’s VAT details
 common.yes = Yes
 common.no = No
 common.error.mandatoryRadioOption = No option selected
@@ -29,7 +29,7 @@ deregistrationReason.reason.other = Other
 deregistrationProperty.title = Does the business have any commercial property?
 deregistrationProperty.p1 = This includes both land and buildings.
 
-vatAccounts.title = How are the business''s VAT accounts prepared?
+vatAccounts.title = How are the business’s VAT accounts prepared?
 vatAccounts.accountant = If you have an accountant, ask them what accounting method they use.
 vatAccounts.method.standard = Standard accounting
 vatAccounts.method.cash = Cash accounting
@@ -49,12 +49,28 @@ capitalAssets.text.2 = Do not include intangible assets, for example patents, co
 
 sellCapitalAssets.title = Does the business plan to sell any of its capital assets?
 
+cannotDeregister.title = The business cannot deregister from VAT
+cannotDeregister.text = This is because the business expects its taxable turnover for the next 12 months to be above £83,000.
+cannotDeregister.link.text = You can
+cannotDeregister.link = update the business’s other VAT details.
+
 taxableTurnover.title = What was the business’s taxable turnover in the last 12 months?
 
 nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
 
 optionOwesMoney.title = Does the business owe any money?
 optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
+
+whyTurnoverBelow.title = Why does the business expect its turnover to be below the threshold?
+whyTurnoverBelow.text.1 = Select all that apply
+whyTurnoverBelow.reason.lostContract = Lost a contract
+whyTurnoverBelow.reason.semiRetiring = Semi-retiring
+whyTurnoverBelow.reason.moreCompetitors = More competitors
+whyTurnoverBelow.reason.reducedTradingHours = Reduced trading hours
+whyTurnoverBelow.reason.seasonalBusiness = Seasonal business
+whyTurnoverBelow.reason.closedPlacesOfBusiness = Closed some places of business
+whyTurnoverBelow.reason.turnoverLowerThanExpected = Turnover lower than expected
+whyTurnoverBelow.error.atLeastOne = Select at least one option
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to

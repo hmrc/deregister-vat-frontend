@@ -14,16 +14,26 @@
  * limitations under the License.
  */
 
-package assets.messages
+package models
 
-object VATAccountsMessages {
+import utils.TestUtil
 
-  val title = "How are the business’s VAT accounts prepared?"
-  val accountant = "If you have an accountant, ask them what accounting method they use."
-  val standard = "Standard accounting"
-  val invoice = "You record VAT whenever you send or receive an invoice"
-  val cash = "Cash accounting"
-  val payment = "You record VAT whenever you make or receive a payment"
-  val error = "This field is required"
+class WhyTurnoverBelowModelSpec extends TestUtil {
 
+  "WhyTurnoverBelowModel.atLeastOneOptionTrue" when {
+
+    "given at least one true" should {
+
+      "return true" in {
+        WhyTurnoverBelowModel(false, false, false, true, false, false, false).hasAtLeastOneSelected shouldBe true
+      }
+    }
+
+    "given all false" should {
+
+      "return false" in {
+        WhyTurnoverBelowModel(false, false, false, false, false, false, false).hasAtLeastOneSelected shouldBe false
+      }
+    }
+  }
 }

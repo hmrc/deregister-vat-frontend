@@ -16,14 +16,10 @@
 
 package assets.messages
 
-object VATAccountsMessages {
+object CannotDeregisterThresholdMessages {
 
-  val title = "How are the business’s VAT accounts prepared?"
-  val accountant = "If you have an accountant, ask them what accounting method they use."
-  val standard = "Standard accounting"
-  val invoice = "You record VAT whenever you send or receive an invoice"
-  val cash = "Cash accounting"
-  val payment = "You record VAT whenever you make or receive a payment"
-  val error = "This field is required"
+  val title = "The business cannot deregister from VAT"
+  val text = "This is because the business expects its taxable turnover for the next 12 months to be above £83,000."
+  val linkText = "You can update the business’s other VAT details."
 
 }

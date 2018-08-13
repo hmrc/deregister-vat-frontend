@@ -19,30 +19,21 @@
 @import templates.inputs.date
 @import templates.headings
 
-@(form: Form[CeasedTradingDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("ceasedTrading.title"),
+    title = messages("cannotDeregister.title"),
     bodyClasses = None,
     appConfig = appConfig) {
 
     <a class="link-back" href="#">@messages("common.back")</a>
 
-    @errorSummary("common.errorSummary.heading", form)
+    @headings(messages("cannotDeregister.title"))
 
-    @helpers.form(action = controllers.routes.CeasedTradingDateController.submit) {
+    <p>@messages("cannotDeregister.text")</p>
 
-        <div class="form-group" id="ceasedTrading">
-            @date(
-                form = form,
-                question = messages("ceasedTrading.title"),
-                fieldName = "ceasedTradingDate",
-                hint = Some(messages("ceasedTrading.hint"))
-            )
-        </div>
+    <p>@messages("cannotDeregister.link.text") <a href="@appConfig.manageVatSubscriptionFrontendUrl">@messages("cannotDeregister.link")</a></p>
 
-        <button class="button" type ="submit" id="continue">
-            @messages("common.continue")
-        </button>
-    }
+
+
 }
