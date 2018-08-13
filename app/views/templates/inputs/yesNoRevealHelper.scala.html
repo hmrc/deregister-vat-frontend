@@ -21,7 +21,7 @@
   question: String,
   additionalContent: Option[Html] = None,
   inline: Boolean = false,
-  hiddenHtml: Html
+  hiddenContent: Html
 )(implicit messages: Messages)
 
     @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
@@ -56,8 +56,8 @@
                  </div>
             </div>
 
-            <div class="form-group panel panel-border-narrow js-hidden" id="hiddenContent">
-                @hiddenHtml
+            <div class="form-group panel panel-border-narrow @if(field.value != Some("yes")){js-hidden}" id="hiddenContent">
+                @hiddenContent
             </div>
 
         </fieldset>

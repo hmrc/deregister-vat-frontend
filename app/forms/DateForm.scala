@@ -29,6 +29,6 @@ object DateForm {
       "dateMonth" -> number,
       "dateYear" -> number
     )(DateModel.apply)(DateModel.unapply)
-      .verifying("Invalid date", _.isValidDate)
+      .verifying("common.dateError", _.isValidDate)
   )
 }

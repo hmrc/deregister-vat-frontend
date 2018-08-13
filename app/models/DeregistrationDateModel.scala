@@ -21,7 +21,7 @@ case class DeregistrationDateModel(yesNo: YesNo, date: Option[DateModel]) {
   val checkValidDateIfYes: Boolean = {
     yesNo match {
       case Yes => date.fold(false)(_.isValidDate)
-      case No => true
+      case _ => true
     }
   }
 }

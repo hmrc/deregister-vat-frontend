@@ -42,7 +42,7 @@
 
     @helpers.form(action = controllers.routes.DeregistrationDateController.submit) {
 
-        <div class="form-group" id="reason">
+        <div class="form-group" id="chooseDate">
             @yesNoRevealHelper(
                 choices = Seq(
                     (yes, Messages("common.yes")),
@@ -51,7 +51,7 @@
                 question = Messages("deregistrationDate.title"),
                 field = form(yesNo),
                 inline = true,
-                hiddenHtml = date(
+                hiddenContent = date(
                     form = form,
                     question = "",
                     fieldName = "deregistrationDate",
