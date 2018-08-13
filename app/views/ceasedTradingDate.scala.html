@@ -28,7 +28,9 @@
 
     <a class="link-back" href="#">@messages("common.back")</a>
 
-    @errorSummary("common.errorSummary.heading", form)
+    @errorSummary("common.errorSummary.heading", form, Some("ceasedTrading"))
+
+    @headings(messages("ceasedTrading.title"))
 
     @helpers.form(action = controllers.routes.CeasedTradingDateController.submit) {
 
@@ -37,7 +39,8 @@
                 form = form,
                 question = messages("ceasedTrading.title"),
                 fieldName = "ceasedTradingDate",
-                hint = Some(messages("ceasedTrading.hint"))
+                hint = Some(messages("ceasedTrading.hint")),
+                renderQuestionAsHeading = false
             )
         </div>
 
