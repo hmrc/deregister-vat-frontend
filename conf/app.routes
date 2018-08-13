@@ -2,6 +2,8 @@
 
 GET        /hello-world              controllers.HelloWorldController.helloWorld
 
+GET        /deregister               controllers.DeregisterForVATController.show
+
 GET        /deregistration-reason    controllers.DeregistrationReasonController.show
 POST       /deregistration-reason    controllers.DeregistrationReasonController.submit
 
