@@ -43,6 +43,7 @@ trait AppConfig extends ServicesConfig {
   val agentServicesGovUkGuidance: String
   val clientServicesGovUkGuidance: String
   val govUkCancelVatRegistration: String
+  val manageVatSubscriptionFrontendUrl: String
   val features: Features
 }
 
@@ -73,6 +74,9 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.HelloWorldController.helloWorld().url).encodedUrl
   private lazy val signInOrigin: String = getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
+
+  override lazy val manageVatSubscriptionFrontendUrl: String =
+    getString(Keys.manageVatSubscriptionFrontendHost) + getString(Keys.manageVatSubscriptionFrontendUrl)
 
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 

@@ -35,5 +35,10 @@ POST       /deregistration-date      controllers.DeregistrationDateController.su
 GET        /next-taxable-turnover    controllers.NextTaxableTurnoverController.show
 POST       /next-taxable-turnover    controllers.NextTaxableTurnoverController.submit
 
+GET        /why-turnover-below           controllers.WhyTurnoverBelowController.show
+POST       /why-turnover-below           controllers.WhyTurnoverBelowController.submit
+
+GET        /cannot-deregister-threshold  controllers.CannotDeregisterThresholdController.show
+
 #Sign Out Routes
 GET        /sign-out                 controllers.SignOutController.signOut(authorised: Boolean)
