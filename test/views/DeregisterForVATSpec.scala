@@ -39,7 +39,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe "#"
+      element(Selectors.back).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
     }
 
     s"have the correct page heading" in {
