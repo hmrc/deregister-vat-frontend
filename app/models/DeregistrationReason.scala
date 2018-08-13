@@ -16,10 +16,8 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+sealed trait DeregistrationReason
 
-case class DeregistrationReasonModel(reason: String)
-
-object DeregistrationReasonModel {
-  implicit val format: OFormat[DeregistrationReasonModel] = Json.format[DeregistrationReasonModel]
-}
+object Ceased extends DeregistrationReason
+object BelowThreshold extends DeregistrationReason
+object Other extends DeregistrationReason

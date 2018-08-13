@@ -16,6 +16,7 @@
 
 package controllers
 
+import forms.DeregistrationReasonForm._
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
@@ -54,7 +55,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
       "the user submits after selecting an 'stoppedTrading' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "stoppedTrading"))
+          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, ceased))
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -62,16 +63,15 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        //TODO: This test needs updating as part of the routing story
-        s"redirect to ${controllers.routes.HelloWorldController.helloWorld().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        s"redirect to ${controllers.routes.CeasedTradingDateController.show().url}" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CeasedTradingDateController.show().url)
         }
       }
 
       "the user submits after selecting the 'turnoverBelowThreshold' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "turnoverBelowThreshold"))
+          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, "turnoverBelowThreshold"))
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
 
@@ -80,16 +80,15 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        //TODO: This test needs updating as part of the routing story
-        s"redirect to ${controllers.routes.HelloWorldController.helloWorld().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        s"redirect to ${controllers.routes.TaxableTurnoverController.show().url}" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.TaxableTurnoverController.show().url)
         }
       }
 
       "the user submits after selecting the 'other' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "other"))
+          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, other))
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -105,7 +104,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
       "the user submits without selecting an option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, ""))
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -120,6 +119,6 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    authChecks(".submit", TestDeregistrationReasonController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("reason", "other")))
+    authChecks(".submit", TestDeregistrationReasonController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody((reason, other)))
   }
 }
