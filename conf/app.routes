@@ -48,5 +48,7 @@ POST       /why-turnover-below           controllers.WhyTurnoverBelowController.
 
 GET        /cannot-deregister-threshold  controllers.CannotDeregisterThresholdController.show
 
+GET        /assets/*file           controllers.Assets.at(path="/public", file)
+
 #Sign Out Routes
 GET        /sign-out                 controllers.SignOutController.signOut(authorised: Boolean)
