@@ -16,15 +16,20 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
-@import templates.inputs.boldRadioGroup
+@import templates.inputs.multipleLineRadioGroup
 @import templates.headings
+@import models.MultipleLineRadioGroupModel
 
 @(form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
+@additionalContent = {
+    <p>@Messages("vatAccounts.accountant")</p>
+}
+
 @views.html.main_template(
-title = messages("vatAccounts.title"),
-bodyClasses = None,
-appConfig = appConfig) {
+  title = messages("vatAccounts.title"),
+  bodyClasses = None,
+  appConfig = appConfig) {
 
     <a class="link-back" href="#">@messages("common.back")</a>
 
@@ -35,19 +40,18 @@ appConfig = appConfig) {
     @helpers.form(action = controllers.routes.VATAccountsController.submit) {
 
         <div class="form-group" id="accountingMethod">
-            @boldRadioGroup(
-                parentForm = form,
+            @multipleLineRadioGroup(
                 field = form("accountingMethod"),
                 choices = Seq(
-                    ("standard", Messages("vatAccounts.method.standard"), Some(Messages("vatAccounts.description.standard"))),
-                    ("cash", Messages("vatAccounts.method.cash"), Some(Messages("vatAccounts.description.cash")))
+                    MultipleLineRadioGroupModel("standard", Messages("vatAccounts.method.standard"), Messages("vatAccounts.description.standard")),
+                    MultipleLineRadioGroupModel("cash", Messages("vatAccounts.method.cash"), Messages("vatAccounts.description.cash"))
                 ),
                 question = messages("vatAccounts.title"),
-                additionalContent = Some(Messages("vatAccounts.accountant"), "accountant")
+                additionalContent = Some(additionalContent)
             )
         </div>
 
-        <button class="button" type ="submit" id="continue">
+        <button class="button" type="submit" id="continue">
             @messages("common.continue")
         </button>
     }

@@ -24,34 +24,33 @@
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-title = messages("optionOwesMoney.title"),
-bodyClasses = None,
-appConfig = appConfig) {
+    title = messages("optionOwesMoney.title"),
+    bodyClasses = None,
+    appConfig = appConfig) {
 
-<a class="link-back" href="#">@messages("common.back")</a>
+    <a class="link-back" href="#">@messages("common.back")</a>
 
-@errorSummary("common.errorSummary.heading", form)
+    @errorSummary("common.errorSummary.heading", form)
 
-@headings(messages("optionOwesMoney.title"))
+    @headings(messages("optionOwesMoney.title"))
 
-<p>@messages("optionOwesMoney.text.1")</p>
+    <p>@messages("optionOwesMoney.text.1")</p>
 
-@helpers.form(action = controllers.routes.OptionOwesMoneyController.submit) {
+    @helpers.form(action = controllers.routes.OptionOwesMoneyController.submit) {
 
-<div class="form-group" id="reason">
-    @radioHelper(
-    field = form(yesNo),
-    choices = Seq(
-    (yes, Messages("common.yes")),
-    (no, Messages("common.no"))
-    ),
-    question = Messages("optionOwesMoney.title"),
-    inline = true
-    )
-</div>
+        <div class="form-group" id="reason">
+            @radioHelper(
+                field = form(yesNo),
+                choices = Seq(
+                    (yes, Messages("common.yes")),
+                    (no, Messages("common.no"))),
+                question = Messages("optionOwesMoney.title"),
+                inline = true
+            )
+        </div>
 
-<button class="button" type ="submit" id="continue">
-    @messages("common.continue")
-</button>
-}
+        <button class="button" type="submit" id="continue">
+            @messages("common.continue")
+        </button>
+    }
 }
