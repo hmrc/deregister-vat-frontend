@@ -39,7 +39,7 @@ class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
 
     CeasedTradingDateForm.ceasedTradingDateForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.ceasedTradingDate(error))),
-      _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
+      _ => Future.successful(Redirect(controllers.routes.VATAccountsController.show()))
     )
   }
 }
