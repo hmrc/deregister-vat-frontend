@@ -39,7 +39,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     val errorDay = "#dateDay-error-summary"
     val errorMonth = "#dateMonth-error-summary"
     val errorYear = "#dateYear-error-summary"
-    val errorField = "#date-fieldset > span.error-notification"
+    val errorField = "#date-fieldset > span.error-message"
   }
 
   "Rendering the Ceased trading date page" should {
