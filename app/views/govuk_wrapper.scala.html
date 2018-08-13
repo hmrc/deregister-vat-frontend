@@ -52,6 +52,10 @@
       navLinks = Some(headerNavLinks))
 }
 
+@scriptElement = {
+    <script type="text/javascript" src='@routes.Assets.at("javascript/deregister.js")'></script>
+}
+
 @afterHeader = {}
 
 @bodyEnd = {
@@ -59,7 +63,7 @@
       analyticsToken = Some(appConfig.analyticsToken),
       analyticsHost = appConfig.analyticsHost,
       ssoUrl = None,
-      scriptElem = scriptElem,
+      scriptElem = Some(scriptElement),
       gaCalls = None)
 }
 
