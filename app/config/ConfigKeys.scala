@@ -45,4 +45,7 @@ object ConfigKeys {
 
   val govUkSetupClientServices: String = "gov-uk.setupClientServices.url"
 
+  val manageVatSubscriptionFrontendHost: String = "manage-vat-subscription-frontend.host"
+  val manageVatSubscriptionFrontendUrl: String = "manage-vat-subscription-frontend.url"
+
 }

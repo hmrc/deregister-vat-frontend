@@ -8,8 +8,8 @@ POST       /deregistration-reason  controllers.DeregistrationReasonController.su
 GET        /deregistration-property     controllers.DeregistrationPropertyController.show
 POST       /deregistration-property     controllers.DeregistrationPropertyController.submit
 
-GET         /accounting-method      @controllers.VATAccountsController.show
-POST        /accounting-method      @controllers.VATAccountsController.submit
+GET        /accounting-method      @controllers.VATAccountsController.show
+POST       /accounting-method      @controllers.VATAccountsController.submit
 
 GET        /ceased-trading-date    controllers.CeasedTradingDateController.show
 POST       /ceased-trading-date    controllers.CeasedTradingDateController.submit
@@ -31,6 +31,8 @@ POST       /taxable-turnover       controllers.TaxableTurnoverController.submit
 
 GET        /why-turnover-below     controllers.WhyTurnoverBelowController.show
 POST       /why-turnover-below     controllers.WhyTurnoverBelowController.submit
+
+GET        /cannot-deregister-threshold         controllers.CannotDeregisterThresholdController.show
 
 GET        /next-taxable-turnover  controllers.NextTaxableTurnoverController.show
 POST       /next-taxable-turnover  controllers.NextTaxableTurnoverController.submit
