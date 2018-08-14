@@ -98,8 +98,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
           response should have(
             httpStatus(SEE_OTHER),
 
-            //TODO: Redirect needs updating as part of the routing Sub-Task
-            redirectURI(controllers.routes.HelloWorldController.helloWorld().url)
+            redirectURI(controllers.routes.CheckAnswersController.show().url)
           )
         }
       }
@@ -116,7 +115,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
             httpStatus(SEE_OTHER),
 
             //TODO: Redirect needs updating as part of the routing Sub-Task
-            redirectURI(controllers.routes.HelloWorldController.helloWorld().url)
+            redirectURI(controllers.routes.CheckAnswersController.show().url)
           )
         }
       }

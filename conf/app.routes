@@ -43,8 +43,11 @@ POST       /deregistration-date      controllers.DeregistrationDateController.su
 GET        /next-taxable-turnover    controllers.NextTaxableTurnoverController.show
 POST       /next-taxable-turnover    controllers.NextTaxableTurnoverController.submit
 
-GET        /why-turnover-below           controllers.WhyTurnoverBelowController.show
-POST       /why-turnover-below           controllers.WhyTurnoverBelowController.submit
+GET        /why-turnover-below       controllers.WhyTurnoverBelowController.show
+POST       /why-turnover-below       controllers.WhyTurnoverBelowController.submit
+
+GET        /check-your-answers       controllers.CheckAnswersController.show
+POST       /check-your-answers       controllers.CheckAnswersController.submit
 
 GET        /cannot-deregister-threshold  controllers.CannotDeregisterThresholdController.show
 

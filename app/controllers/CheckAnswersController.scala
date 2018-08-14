@@ -20,27 +20,16 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.DeregistrationDateForm
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
-
 @Singleton
-class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
-                                             val authenticate: AuthPredicate,
-                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
+                                       val authenticate: AuthPredicate,
+                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm)))
-  }
+  val show: Action[AnyContent] = TODO
 
-  val submit: Action[AnyContent] = authenticate.async { implicit user =>
-
-    DeregistrationDateForm.deregistrationDateForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.deregistrationDate(error))),
-      _ => Future.successful(Redirect(controllers.routes.CheckAnswersController.show()))
-    )
-  }
+  val submit: Action[AnyContent] = TODO
 }
