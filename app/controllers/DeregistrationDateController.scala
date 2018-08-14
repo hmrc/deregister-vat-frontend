@@ -41,11 +41,7 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
 
     DeregistrationDateForm.deregistrationDateForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.deregistrationDate(error))),
-      success => success.yesNo match
-      {
-        case Yes => Future.successful(Ok(success.date.toString))
-        case No => Future.successful(Ok(success.date.toString))
-      }
+      _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
     )
   }
 }
