@@ -21,55 +21,58 @@
 @defining(form.errors.filter(_.message match {
     case "common.dateError" => true
     case "error.number" => true
-    case test => false
+    case _ => false
 })){ dateErrors =>
 
-    <fieldset id="@fieldName-fieldset" class="form-group form-date @if(dateErrors.nonEmpty) {form-field--error}">
+    @defining(dateErrors.filter(_.message == "common.dateError").nonEmpty){ hasInvalidDate =>
 
-        @if(renderQuestionAsHeading){
-            <legend>
-                @headings(messages("ceasedTrading.title"))
-            </legend>
-        } else {
-            <legend class="form-label">@question</legend>
+        <fieldset id="@fieldName-fieldset" class="form-group form-date @if(dateErrors.nonEmpty) {form-field--error}">
+
+            @if(renderQuestionAsHeading){
+                <legend>
+                    @headings(messages("ceasedTrading.title"))
+                </legend>
+            } else {
+                <legend class="form-label">@question</legend>
+            }
+
+            @hint.map { hint =>
+                <span class="form-hint">
+                    @hint
+                </span>
+            }
+
+            @if(dateErrors.nonEmpty) {
+                <span class="error-message" role="tooltip">
+                    @if(form.errors.length > 1) {
+                      @messages("common.dateError")
+                    } else {
+                      @messages(form.errors.head.message)
+                    }
+                </span>
+            }
+
+            @dateEntryField(
+                form(fieldName + "Day"),
+                messages("common.day"),
+                "day",
+                form(fieldName + "Day").hasErrors || hasInvalidDate
+            )
+
+            @dateEntryField(
+                form(fieldName + "Month"),
+                messages("common.month"),
+                "month",
+                form(fieldName + "Month").hasErrors || hasInvalidDate
+            )
+
+            @dateEntryField(
+                form(fieldName + "Year"),
+                messages("common.year"),
+                "year",
+                form(fieldName + "Year").hasErrors || hasInvalidDate
+            )
         }
-
-        @hint.map { hint =>
-            <span class="form-hint">
-                @hint
-            </span>
         }
-
-        @if(dateErrors.nonEmpty) {
-            <span class="error-message" role="tooltip">
-                @if(form.errors.length > 1) {
-                  @messages("common.dateError")
-                } else {
-                  @messages(form.errors.head.message)
-                }
-            </span>
-        }
-
-        @dateEntryField(
-            form(fieldName + "Day"),
-            messages("common.day"),
-            "day",
-            dateErrors.nonEmpty
-        )
-
-        @dateEntryField(
-            form(fieldName + "Month"),
-            messages("common.month"),
-            "month",
-            dateErrors.nonEmpty
-        )
-
-        @dateEntryField(
-            form(fieldName + "Year"),
-            messages("common.year"),
-            "year",
-            dateErrors.nonEmpty
-        )
-    }
 
 </fieldset>
