@@ -40,7 +40,7 @@ class SellCapitalAssetsController @Inject()(val messagesApi: MessagesApi,
 
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.sellCapitalAssets(error))),
-      success => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
+      _ => Future.successful(Redirect(controllers.routes.OptionOwesMoneyController.show()))
     )
   }
 }
