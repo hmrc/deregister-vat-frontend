@@ -39,7 +39,7 @@ class OptionOwesMoneyController @Inject()(val messagesApi: MessagesApi,
 
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionOwesMoney(error))),
-      success => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
+      _ => Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
     )
   }
 }

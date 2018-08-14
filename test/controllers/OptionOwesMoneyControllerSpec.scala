@@ -77,9 +77,8 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        //TODO: This needs to be updated as part of the routing sub-task
-        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        s"Redirect to the '${controllers.routes.DeregistrationDateController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
         }
       }
 
@@ -94,9 +93,8 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        //TODO: This needs to be updated as part of the routing sub-task
-        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        s"Redirect to the '${controllers.routes.DeregistrationDateController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
         }
       }
 
