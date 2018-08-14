@@ -39,7 +39,12 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
 
     TaxableTurnoverForm.taxableTurnoverForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.nextTaxableTurnover(error))),
-      _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
+      {
+        case success if success.turnover >= appConfig.deregThreshold =>
+          Future.successful(Redirect(controllers.routes.CannotDeregisterThresholdController.show()))
+        case _ =>
+          Future.successful(Redirect(controllers.routes.WhyTurnoverBelowController.show()))
+      }
     )
   }
 
