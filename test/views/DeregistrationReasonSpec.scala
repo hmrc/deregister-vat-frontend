@@ -44,7 +44,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe "#"
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.show().url
     }
 
     s"have the correct page heading" in {
@@ -81,7 +81,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe "#"
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.show().url
     }
 
     s"have the correct page heading" in {
@@ -89,7 +89,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} This field is required"
+      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
     }
 
     s"have the correct a radio button form with the correct 3 options" in {
@@ -103,7 +103,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe "This field is required"
+      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
     }
   }
 }

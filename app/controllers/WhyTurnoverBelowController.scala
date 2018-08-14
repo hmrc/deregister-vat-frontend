@@ -38,7 +38,7 @@ class WhyTurnoverBelowController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     WhyTurnoverBelowForm.whyTurnoverBelowForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.whyTurnoverBelow(error))),
-      _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
+      _ => Future.successful(Redirect(controllers.routes.VATAccountsController.show()))
     )
   }
 }

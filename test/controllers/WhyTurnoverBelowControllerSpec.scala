@@ -80,9 +80,8 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        //TODO: This test needs updating as part of the routing story
-        s"redirect to ${controllers.routes.HelloWorldController.helloWorld().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        s"redirect to ${controllers.routes.VATAccountsController.show().url}" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
         }
       }
 

@@ -18,16 +18,17 @@
 @import views.html.templates.errors.errorSummary
 @import templates.headings
 @import views.html.templates.inputs.radioHelper
+@import forms.DeregistrationReasonForm._
 
 
-@(form: Form[DeregistrationReasonModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[DeregistrationReason])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = messages("deregistrationReason.title"),
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="#">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.DeregisterForVATController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -39,9 +40,9 @@
             @radioHelper(
                 field = form("reason"),
                 choices = Seq(
-                    ("stoppedTrading", Messages("deregistrationReason.reason.stoppedTrading")),
-                    ("turnoverBelowThreshold", Messages("deregistrationReason.reason.turnoverBelowThreshold")),
-                    ("other", Messages("deregistrationReason.reason.other"))
+                    (ceased, Messages("deregistrationReason.reason.stoppedTrading")),
+                    (belowThreshold, Messages("deregistrationReason.reason.turnoverBelowThreshold")),
+                    (other, Messages("deregistrationReason.reason.other"))
                 ),
                 question = Messages("deregistrationReason.title")
             )

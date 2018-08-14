@@ -65,6 +65,10 @@ class DeregistrationPropertyControllerSpec extends ControllerBaseSpec {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
+
+        s"Redirect to '${controllers.routes.OptionTaxController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.OptionTaxController.show().url)
+        }
       }
 
       "the user submits after selecting a 'No' option" should {
@@ -76,6 +80,10 @@ class DeregistrationPropertyControllerSpec extends ControllerBaseSpec {
         "return 303 (SEE OTHER)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
+        }
+
+        s"Redirect to '${controllers.routes.CapitalAssetsController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show().url)
         }
       }
 

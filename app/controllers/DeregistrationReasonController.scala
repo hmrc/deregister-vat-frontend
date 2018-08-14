@@ -20,6 +20,7 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.DeregistrationReasonForm
+import models.{BelowThreshold, Ceased, Other}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -39,11 +40,11 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
 
     DeregistrationReasonForm.deregistrationReasonForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.deregistrationReason(error))),
-      success =>
-        success.reason match {
-          case "other" => Future.successful(Redirect(appConfig.govUkCancelVatRegistration))
-          case _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
-        }
+      {
+        case Ceased => Future.successful(Redirect(controllers.routes.CeasedTradingDateController.show()))
+        case BelowThreshold => Future.successful(Redirect(controllers.routes.TaxableTurnoverController.show()))
+        case Other => Future.successful(Redirect(appConfig.govUkCancelVatRegistration))
+      }
     )
   }
 }

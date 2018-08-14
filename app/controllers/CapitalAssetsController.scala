@@ -20,6 +20,7 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
+import models.{No, Yes}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -38,7 +39,10 @@ class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authentication.async { implicit user =>
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.capitalAssets(error))),
-      _ => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
+      {
+        case Yes => Future.successful(Redirect(controllers.routes.SellCapitalAssetsController.show()))
+        case No => Future.successful(Redirect(controllers.routes.OptionOwesMoneyController.show()))
+      }
     )
   }
 }

@@ -44,6 +44,7 @@ trait AppConfig extends ServicesConfig {
   val clientServicesGovUkGuidance: String
   val govUkCancelVatRegistration: String
   val manageVatSubscriptionFrontendUrl: String
+  val deregThreshold: Int
   val features: Features
 }
 
@@ -91,6 +92,8 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val clientServicesGovUkGuidance:String = getString(Keys.govUkSetupClientServices)
 
   override lazy val govUkCancelVatRegistration: String = getString(Keys.govUkCancelVatRegistration)
+
+  override lazy val deregThreshold: Int = getInt(Keys.deregThreshold)
 
   override val features = new Features(runModeConfiguration)
 }

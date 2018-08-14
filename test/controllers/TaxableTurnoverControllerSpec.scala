@@ -67,10 +67,10 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
 
     "Calling the .submit action" when {
 
-      "the user submits after inputting an amount" should {
+      "the user submits after inputting an amount which is equal to the threshold" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", "1000.01"))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", mockConfig.deregThreshold.toString))
         lazy val result = TestTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -78,9 +78,40 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        //TODO: This needs to be updated as part of the routing sub-task
-        s"Redirect to the '${controllers.routes.HelloWorldController.helloWorld().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        s"Redirect to the '${controllers.routes.NextTaxableTurnoverController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
+        }
+      }
+
+      "the user submits after inputting an amount which is greater than the threshold" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", (mockConfig.deregThreshold + 0.01).toString))
+        lazy val result = TestTaxableTurnoverController.submit()(request)
+
+        "return 303 (SEE OTHER)" in {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        s"Redirect to the '${controllers.routes.NextTaxableTurnoverController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
+        }
+      }
+
+      "the user submits after inputting an amount which is less than the threshold" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", (mockConfig.deregThreshold - 0.01).toString))
+        lazy val result = TestTaxableTurnoverController.submit()(request)
+
+        "return 303 (SEE OTHER)" in {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        s"Redirect to the '${controllers.routes.VATAccountsController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
         }
       }
 

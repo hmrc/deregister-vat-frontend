@@ -26,7 +26,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="#">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.NextTaxableTurnoverController.show().url">@messages("common.back")</a>
 
     @headings(messages("cannotDeregister.title"))
 

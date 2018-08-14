@@ -78,9 +78,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        //TODO: This needs to be update as part of the routing sub-task
-        "redirect to the HelloWorld controller" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        s"redirect to '${controllers.routes.SellCapitalAssetsController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.SellCapitalAssetsController.show().url)
         }
       }
 
@@ -95,9 +94,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        //TODO: This needs to be update as part of the routing sub-task
-        "redirect to the HelloWorld controller" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.HelloWorldController.helloWorld().url)
+        s"redirect to '${controllers.routes.OptionOwesMoneyController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.OptionOwesMoneyController.show().url)
         }
       }
 

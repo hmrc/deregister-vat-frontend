@@ -39,7 +39,9 @@ class OptionOwesMoneyController @Inject()(val messagesApi: MessagesApi,
 
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionOwesMoney(error))),
-      success => Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
+      _ =>
+        //TODO: In future, this routing will need to be dependent on previous stored answers, for now it is always shown
+        Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
     )
   }
 }
