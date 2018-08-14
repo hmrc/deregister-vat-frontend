@@ -43,7 +43,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe "#"
+      element(Selectors.back).attr("href") shouldBe controllers.routes.TaxableTurnoverController.show().url
     }
 
     s"have the correct page heading" in {
@@ -74,7 +74,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe "#"
+      element(Selectors.back).attr("href") shouldBe controllers.routes.TaxableTurnoverController.show().url
     }
 
     s"have the correct page heading" in {
