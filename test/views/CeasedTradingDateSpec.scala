@@ -53,7 +53,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe "#"
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
     }
 
     "have no error heading message being displayed" in {

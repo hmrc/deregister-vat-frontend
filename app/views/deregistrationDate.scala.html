@@ -32,7 +32,7 @@
 
     <a class="link-back" href="#">@messages("common.back")</a>
 
-    @errorSummary("common.errorSummary.heading", form)
+    @errorSummary("common.errorSummary.heading", form, Some("deregistrationDate-fieldset"))
 
     @headings(messages("deregistrationDate.title"))
 
@@ -42,7 +42,7 @@
 
     @helpers.form(action = controllers.routes.DeregistrationDateController.submit) {
 
-        <div class="form-group" id="chooseDate">
+        <div class="form-group" id="@yesNo">
             @yesNoRevealHelper(
                 choices = Seq(
                     (yes, Messages("common.yes")),
