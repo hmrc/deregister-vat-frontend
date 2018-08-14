@@ -43,7 +43,7 @@ class VATAccountsSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.CeasedTradingDateController.show().url
+      element(Selectors.back).attr("href") shouldBe "#"
     }
 
     s"have the correct page heading" in {
@@ -80,7 +80,7 @@ class VATAccountsSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.CeasedTradingDateController.show().url
+      element(Selectors.back).attr("href") shouldBe "#"
     }
 
     s"have the correct page heading" in {
