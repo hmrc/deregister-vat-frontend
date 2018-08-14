@@ -47,8 +47,8 @@ object DeregistrationDateModel {
       case Some(date) => (
         dateModel.yesNo,
         Some(date.dateDay),
-        Some(date.dateDay),
-        Some(date.dateDay)
+        Some(date.dateMonth),
+        Some(date.dateYear)
       )
       case _ => (dateModel.yesNo,None,None,None)
     })
