@@ -27,7 +27,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="#">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.VATAccountsController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
