@@ -16,21 +16,10 @@
 
 package assets.messages
 
-object CommonMessages {
+object DeregistrationDateMessages {
 
-  val continue = "Continue"
-  val back = "Back"
-  val signOut = "Sign out"
-  val yes = "Yes"
-  val no = "No"
-  val agentServiceName = "Update your client's VAT details"
-  val day = "Day"
-  val month = "Month"
-  val year = "Year"
-  val errorHeading = "You have one or more errors"
-  val errorMandatoryRadioOption = "No option selected"
-  val errorMandatoryAmountInput = "Real number value expected"
-  val numericValueError = "Numeric value expected"
-  val invalidDate= "Invalid date"
+  val title = "Does the business want to choose its own deregistration date?"
+  val p1 = "The deregistration date can be up to a maximum of 3 months from the date you submit your request."
+  val p2 = "We will confirm the deregistration date when your deregistration request is accepted."
 
 }

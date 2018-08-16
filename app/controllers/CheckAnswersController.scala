@@ -14,28 +14,22 @@
  * limitations under the License.
  */
 
-package models
+package controllers
 
-import java.time.LocalDate
+import javax.inject.{Inject, Singleton}
 
-import utils.TestUtil
+import config.AppConfig
+import controllers.predicates.AuthPredicate
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc._
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-class CeasedTradingDateModelSpec extends TestUtil {
+@Singleton
+class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
+                                       val authenticate: AuthPredicate,
+                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  "CeasedTradingModel.date" when {
+  val show: Action[AnyContent] = TODO
 
-    "given a valid date" should {
-
-      "return Some(LocalDate)" in {
-        CeasedTradingDateModel(1,1,2018).date shouldBe Some(LocalDate.of(2018,1,1))
-      }
-    }
-
-    "given an invalid date" should {
-
-      "return None" in {
-        CeasedTradingDateModel(99,99,9999).date shouldBe None
-      }
-    }
-  }
+  val submit: Action[AnyContent] = TODO
 }

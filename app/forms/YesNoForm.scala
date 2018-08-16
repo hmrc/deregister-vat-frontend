@@ -31,7 +31,7 @@ object YesNoForm {
 
   val yesNoError: String = "common.error.mandatoryRadioOption"
 
-  private val formatter: Formatter[YesNo] = new Formatter[YesNo] {
+  val formatter: Formatter[YesNo] = new Formatter[YesNo] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], YesNo] = {
       data.get(key) match {
         case Some(`yes`) => Right(Yes)

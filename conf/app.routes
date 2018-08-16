@@ -19,6 +19,12 @@ POST       /ceased-trading-date      controllers.CeasedTradingDateController.sub
 GET        /option-to-tax            controllers.OptionTaxController.show
 POST       /option-to-tax            controllers.OptionTaxController.submit
 
+GET        /deregistration-date      controllers.DeregistrationDateController.show
+POST       /deregistration-date      controllers.DeregistrationDateController.submit
+
+GET        /option-to-tax            controllers.OptionTaxController.show
+POST       /option-to-tax            controllers.OptionTaxController.submit
+
 GET        /option-owes-money        controllers.OptionOwesMoneyController.show
 POST       /option-owes-money        controllers.OptionOwesMoneyController.submit
 
@@ -37,10 +43,15 @@ POST       /deregistration-date      controllers.DeregistrationDateController.su
 GET        /next-taxable-turnover    controllers.NextTaxableTurnoverController.show
 POST       /next-taxable-turnover    controllers.NextTaxableTurnoverController.submit
 
-GET        /why-turnover-below           controllers.WhyTurnoverBelowController.show
-POST       /why-turnover-below           controllers.WhyTurnoverBelowController.submit
+GET        /why-turnover-below       controllers.WhyTurnoverBelowController.show
+POST       /why-turnover-below       controllers.WhyTurnoverBelowController.submit
+
+GET        /check-your-answers       controllers.CheckAnswersController.show
+POST       /check-your-answers       controllers.CheckAnswersController.submit
 
 GET        /cannot-deregister-threshold  controllers.CannotDeregisterThresholdController.show
+
+GET        /assets/*file           controllers.Assets.at(path="/public", file)
 
 #Sign Out Routes
 GET        /sign-out                 controllers.SignOutController.signOut(authorised: Boolean)

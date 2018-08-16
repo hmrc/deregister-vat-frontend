@@ -17,26 +17,34 @@
 package views
 
 import assets.messages.{CeasedTradingDateMessages, CommonMessages}
-import forms.CeasedTradingDateForm
+import forms.DateForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
 
 class CeasedTradingDateSpec extends ViewBaseSpec {
 
+  object Selectors {
+    val back = ".link-back"
+    val pageHeading = "#content h1"
+    val hint = ".form-hint"
+    val button = ".button"
+    val dayField = "#dateDay"
+    val monthField = "#dateMonth"
+    val yearField = "#dateYear"
+    val dayText = "#date-fieldset > label.form-group.form-group-day > span"
+    val monthText = "#date-fieldset > label.form-group.form-group-month > span"
+    val yearText = "#date-fieldset > label.form-group.form-group-year > span"
+    val errorHeading = "#error-summary-heading"
+    val errorDay = "#dateDay-error-summary"
+    val errorMonth = "#dateMonth-error-summary"
+    val errorYear = "#dateYear-error-summary"
+    val errorField = "#date-fieldset > span.error-message"
+  }
+
   "Rendering the Ceased trading date page" should {
 
-    object Selectors {
-      val back = ".link-back"
-      val pageHeading = "#content h1"
-      val hint = ".form-hint"
-      val button = ".button"
-      val day = "#ceasedTradingDate-fieldset > label.form-group.form-group-day > span"
-      val month = "#ceasedTradingDate-fieldset > label.form-group.form-group-month > span"
-      val year = "#ceasedTradingDate-fieldset > label.form-group.form-group-year > span"
-    }
-
-    lazy val view = views.html.ceasedTradingDate(CeasedTradingDateForm.ceasedTradingDateForm)
+    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -48,18 +56,77 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
     }
 
+    "have no error heading message being displayed" in {
+      document.select(Selectors.errorHeading).isEmpty shouldBe true
+    }
+
     s"have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe CeasedTradingDateMessages.title
     }
 
     s"have the correct a radio " in {
-      elementText(Selectors.day) shouldBe CommonMessages.day
-      elementText(Selectors.month) shouldBe CommonMessages.month
-      elementText(Selectors.year) shouldBe CommonMessages.year
+      elementText(Selectors.dayText) shouldBe CommonMessages.day
+      elementText(Selectors.monthText) shouldBe CommonMessages.month
+      elementText(Selectors.yearText) shouldBe CommonMessages.year
     }
 
     s"have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
+
+    "have no error message being displayed for the fields" in {
+      document.select(Selectors.errorField).isEmpty shouldBe true
+    }
+  }
+
+  "Rendering the Ceased trading date page with missing fields" should {
+
+    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+      "dateDay" -> "",
+      "dateMonth" -> "",
+      "dateYear" -> ""
+    )))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    s"have the correct document title" in {
+      document.title shouldBe CeasedTradingDateMessages.title
+    }
+
+    s"have the correct back text" in {
+      elementText(Selectors.back) shouldBe CommonMessages.back
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
+    }
+
+    "have an error heading message being displayed" in {
+      elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
+    }
+
+    "have an error for each missing field linking to the correct field" in {
+      elementText(Selectors.errorDay) shouldBe CommonMessages.numericValueError
+      element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
+      elementText(Selectors.errorMonth) shouldBe CommonMessages.numericValueError
+      element(Selectors.errorMonth).attr("href") shouldBe Selectors.monthField
+      elementText(Selectors.errorYear) shouldBe CommonMessages.numericValueError
+      element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
+    }
+
+    s"have the correct page heading" in {
+      elementText(Selectors.pageHeading) shouldBe CeasedTradingDateMessages.title
+    }
+
+    s"have the correct a radio " in {
+      elementText(Selectors.dayText) shouldBe CommonMessages.day
+      elementText(Selectors.monthText) shouldBe CommonMessages.month
+      elementText(Selectors.yearText) shouldBe CommonMessages.year
+    }
+
+    s"have the correct continue button text and url" in {
+      elementText(Selectors.button) shouldBe CommonMessages.continue
+    }
+
+    "have an error message being displayed for the fields" in {
+      elementText(Selectors.errorField) shouldBe CommonMessages.invalidDate
+    }
   }
 }
+

@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import java.time.LocalDate
+import forms.YesNoForm._
+import models._
+import play.api.data.Form
+import play.api.data.Forms._
 
-import play.api.libs.json.{Json, OFormat}
+object DeregistrationDateForm {
 
-import scala.util.{Failure, Success, Try}
-
-
-case class CeasedTradingDateModel(ceasedTradingDateDay: Int, ceasedTradingDateMonth: Int, ceasedTradingDateYear: Int){
-
-  val date: Option[LocalDate] =
-    Try(LocalDate.of(ceasedTradingDateYear,ceasedTradingDateMonth,ceasedTradingDateDay)) match {
-      case Success(validDate) => Some(validDate)
-      case Failure(_) => None
-    }
+  val deregistrationDateForm: Form[DeregistrationDateModel] = Form(
+    mapping(
+      yesNo -> of(YesNoForm.formatter),
+      "deregistrationDateDay" -> optional(number),
+      "deregistrationDateMonth" -> optional(number),
+      "deregistrationDateYear" -> optional(number)
+    )(DeregistrationDateModel.customApply)(DeregistrationDateModel.customUnapply)
+      .verifying("common.dateError", _.checkValidDateIfYes)
+  )
 }
 
-object CeasedTradingDateModel {
-  implicit val format: OFormat[CeasedTradingDateModel] = Json.format[CeasedTradingDateModel]
-}
+
+
+

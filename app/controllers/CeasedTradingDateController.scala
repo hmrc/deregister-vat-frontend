@@ -18,7 +18,7 @@ package controllers
 
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.CeasedTradingDateForm
+import forms.DateForm
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -32,12 +32,12 @@ class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.ceasedTradingDate(CeasedTradingDateForm.ceasedTradingDateForm)))
+    Future.successful(Ok(views.html.ceasedTradingDate(DateForm.dateForm)))
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
-    CeasedTradingDateForm.ceasedTradingDateForm.bindFromRequest().fold(
+    DateForm.dateForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.ceasedTradingDate(error))),
       _ => Future.successful(Redirect(controllers.routes.VATAccountsController.show()))
     )
