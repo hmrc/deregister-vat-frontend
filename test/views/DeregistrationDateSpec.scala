@@ -113,9 +113,9 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     lazy val view = views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm
       .bind(Map(
         "yes_no" -> "yes",
-        "deregistrationDateDay" -> "1",
-        "deregistrationDateMonth" -> "1",
-        "deregistrationDateYear" -> "2018"
+        "dateDay" -> "1",
+        "dateMonth" -> "1",
+        "dateYear" -> "2018"
       ))
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -161,9 +161,9 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
     lazy val view = views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm.bind(Map(
       "yes_no" -> "yes",
-      "deregistrationDateDay" -> "",
-      "deregistrationDateMonth" -> "",
-      "deregistrationDateYear" -> ""
+      "dateDay" -> "",
+      "dateMonth" -> "",
+      "dateYear" -> ""
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

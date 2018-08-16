@@ -55,9 +55,9 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
             ("yes_no", "yes"),
-            ("deregistrationDateDay","1"),
-            ("deregistrationDateMonth","1"),
-            ("deregistrationDateYear","2018")
+            ("dateDay","1"),
+            ("dateMonth","1"),
+            ("dateYear","2018")
           )
         lazy val result = TestDeregistrationDateController.submit()(request)
 
@@ -84,9 +84,9 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
             ("yes_no", "yes"),
-            ("deregistrationDateDay",""),
-            ("deregistrationDateMonth",""),
-            ("deregistrationDateYear","")
+            ("dateDay",""),
+            ("dateMonth",""),
+            ("dateYear","")
           )
         lazy val result = TestDeregistrationDateController.submit()(request)
 
@@ -106,9 +106,9 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
             ("yes_no", ""),
-            ("deregistrationDateDay",""),
-            ("deregistrationDateMonth",""),
-            ("deregistrationDateYear","")
+            ("dateDay",""),
+            ("dateMonth",""),
+            ("dateYear","")
           )
         lazy val result = TestDeregistrationDateController.submit()(request)
 

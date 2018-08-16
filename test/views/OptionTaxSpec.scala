@@ -17,7 +17,7 @@
 package views
 
 import assets.messages.{CommonMessages, OptionTaxMessages}
-import forms.YesNoForm
+import forms.YesNoAmountForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -31,6 +31,8 @@ class OptionTaxSpec extends ViewBaseSpec {
     val text = (number: Int) => s"#content > article > p:nth-child($number)"
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
     val noOption = "fieldset > div > div:nth-of-type(2) > label"
+    val hiddenField = "#hiddenContent"
+    val hint = "#hiddenContent > div > label"
     val button = ".button"
     val errorHeading = "#error-summary-display"
     val error = "#yes_no-error-summary"
@@ -38,7 +40,7 @@ class OptionTaxSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.optionTax(YesNoForm.yesNoForm)
+    lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -59,13 +61,17 @@ class OptionTaxSpec extends ViewBaseSpec {
     }
 
     s"have the correct content displayed" in {
-      elementText(Selectors.text(3)) shouldBe OptionTaxMessages.text1
-      elementText(Selectors.text(4)) shouldBe OptionTaxMessages.text2
+      elementText(Selectors.text(3)) shouldBe OptionTaxMessages.text
     }
 
     s"have the correct a radio button form with yes/no answers" in {
       elementText(Selectors.yesOption) shouldBe CommonMessages.yes
       elementText(Selectors.noOption) shouldBe CommonMessages.no
+    }
+
+    "have the correct hint text for the hidden field and be hidden" in {
+      document.select(Selectors.hiddenField).hasClass("js-hidden") shouldBe true
+      elementText(Selectors.hint) shouldBe OptionTaxMessages.hint
     }
 
     s"have the correct continue button text and url" in {
@@ -77,44 +83,41 @@ class OptionTaxSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the option to tax page with errors" should {
+  "Rendering the option to tax page with errors" when {
 
-    lazy val view = views.html.optionTax(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
-    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "nothing was entered" should {
 
-    s"have the correct document title" in {
-      document.title shouldBe OptionTaxMessages.title
+      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm.bind(Map("yes_no" -> "")))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      s"have the correct document title" in {
+        document.title shouldBe OptionTaxMessages.title
+      }
+
+      "display the correct error heading" in {
+        elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
+      }
+
+      "display the correct error messages" in {
+        elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
+      }
     }
 
-    s"have the correct back text" in {
-      elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationPropertyController.show().url
-    }
+    "Yes was entered but no amount" should {
 
-    s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe OptionTaxMessages.title
-    }
+      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm.bind(Map(
+        "yes_no" -> "yes",
+        "amount" -> ""
+      )))
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
-    }
+      s"have the correct document title" in {
+        document.title shouldBe OptionTaxMessages.title
+      }
 
-    s"have the correct content displayed" in {
-      elementText(Selectors.text(4)) shouldBe OptionTaxMessages.text1
-      elementText(Selectors.text(5)) shouldBe OptionTaxMessages.text2
-    }
-
-    s"have the correct a radio button form with yes/no answers" in {
-      elementText(Selectors.yesOption) shouldBe CommonMessages.yes
-      elementText(Selectors.noOption) shouldBe CommonMessages.no
-    }
-
-    s"have the correct continue button text and url" in {
-      elementText(Selectors.button) shouldBe CommonMessages.continue
-    }
-
-    "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
+      "display the correct error heading" in {
+        elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.enterAmount}"
+      }
     }
   }
 }
