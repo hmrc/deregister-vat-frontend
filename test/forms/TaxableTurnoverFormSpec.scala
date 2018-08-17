@@ -16,12 +16,14 @@
 
 package forms
 
-import forms.TaxableTurnoverForm._
+import _root_.utils.TestUtil
+import assets.messages.TaxableTurnoverMessages
+import common.Constants
 import models.TaxableTurnoverModel
-import play.api.data.FormError
-import uk.gov.hmrc.play.test.UnitSpec
+import play.api.i18n.Messages
+import play.twirl.api.Html
 
-class TaxableTurnoverFormSpec extends UnitSpec {
+class TaxableTurnoverFormSpec extends TestUtil {
 
   "Binding a form with valid data" should {
 
@@ -48,8 +50,60 @@ class TaxableTurnoverFormSpec extends UnitSpec {
         form.hasErrors shouldBe true
       }
 
-      "throw one error" in {
-        form.errors.size shouldBe 1
+      "throw the mandatory data error" in {
+        Messages(form.errors.head.message) shouldBe TaxableTurnoverMessages.mandatory
+      }
+    }
+
+    "non-numeric input is supplied" should {
+
+      val form = TaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "ABC"))
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "throw the non-numeric error" in {
+        Messages(form.errors.head.message) shouldBe TaxableTurnoverMessages.nonNumeric
+      }
+    }
+
+    "negative input is supplied" should {
+
+      val form = TaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "-1"))
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "throw the non-numeric error" in {
+        Messages(form.errors.head.message) shouldBe TaxableTurnoverMessages.negative
+      }
+    }
+
+    "too many decimal places are input" should {
+
+      val form = TaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "0.001"))
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "throw the non-numeric error" in {
+        Messages(form.errors.head.message) shouldBe TaxableTurnoverMessages.decimals
+      }
+    }
+
+    "exceeds the maximum" should {
+
+      val form = TaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> (Constants.maxAmount + 0.01).toString))
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "throw a maximum value exceeded error" in {
+        Messages(form.errors.head.message, form.errors.head.args: _*) shouldBe TaxableTurnoverMessages.maximum(Constants.maxAmount)
       }
     }
   }
