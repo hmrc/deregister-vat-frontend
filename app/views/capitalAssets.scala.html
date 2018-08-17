@@ -18,11 +18,12 @@
 @import views.html.templates.errors.errorSummary
 @import views.html.templates.inputs.radioHelper
 @import views.html.templates.inputs.moneyInput
+@import views.html.templates.inputs.yesNoRevealHelper
 @import templates.headings
 @import forms.YesNoForm._
 
 
-@(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = messages("capitalAssets.title"),
@@ -30,7 +31,7 @@
     appConfig = appConfig) {
 
     <!--TODO: Update this as part of the back linking story as the redirect is dynamic-->
-    <a class="link-back" href="#">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.OptionOwesMoneyController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -52,11 +53,10 @@
                 field = form(yesNo),
                 inline = true,
                 hiddenContent = moneyInput(
-                    field = form("money"),
-                    question = "",
-                    fieldName = "deregistrationDate",
-                    hint = Some(messages("ceasedTrading.hint")),
-                    renderQuestionAsHeading = false
+                    field = form("amount"),
+                    label = messages("capitalAssets.totalSaleValue"),
+                    labelHidden = false,
+                    decimalPlace = true
                 )
             )
         </div>

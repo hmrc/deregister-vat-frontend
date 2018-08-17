@@ -16,6 +16,7 @@ common.agentService = Update your client’s VAT details
 common.yes = Yes
 common.no = No
 common.error.mandatoryRadioOption = Select an option
+common.error.enterAmount = No amount entered
 
 deregisterForVAT.title = Deregister for VAT
 deregisterForVAT.p1 = You can deregister from VAT if the business no longer needs to submit VAT Returns. We will review your reasons for deregistering within 3 weeks.

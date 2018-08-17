@@ -18,9 +18,8 @@ package controllers
 
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.YesNoForm
+import forms.YesNoAmountForm
 import javax.inject.{Inject, Singleton}
-import models.{No, Yes}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -33,16 +32,13 @@ class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
                                         implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
-    Future.successful(Ok(views.html.capitalAssets(YesNoForm.yesNoForm)))
+    Future.successful(Ok(views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm)))
   }
 
   val submit: Action[AnyContent] = authentication.async { implicit user =>
-    YesNoForm.yesNoForm.bindFromRequest().fold(
+    YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.capitalAssets(error))),
-      {
-        case Yes => Future.successful(Redirect(controllers.routes.SellCapitalAssetsController.show()))
-        case No => Future.successful(Redirect(controllers.routes.OptionOwesMoneyController.show()))
-      }
+      _ => Future.successful(Redirect(controllers.routes.OptionOwesMoneyController.show()))
     )
   }
 }
