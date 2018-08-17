@@ -29,7 +29,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregistrationPropertyController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.VATAccountsController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -39,7 +39,7 @@
 
     @helpers.form(action = controllers.routes.OptionTaxController.submit) {
 
-        <div class="form-group" id="@yesNo">
+        <div id="@yesNo">
             @yesNoRevealHelper(
                 field = form(yesNo),
                 choices = Seq(
@@ -57,15 +57,15 @@
             )
         </div>
 
-        <button class="button form-group" type ="submit" id="continue">
-            @messages("common.continue")
-        </button>
-
-        <details>
+        <details class="form-group">
             <summary><span class="summary">@messages("common.moreInfo")</span></summary>
             <div class="panel panel-border-narrow">
                 <p>@messages("optionTax.hidden.text")</p>
             </div>
         </details>
+
+        <button class="button form-group" type ="submit" id="continue">
+            @messages("common.continue")
+        </button>
     }
 }

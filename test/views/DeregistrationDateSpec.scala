@@ -37,12 +37,12 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     val dayField = "#dateDay"
     val monthField = "#dateMonth"
     val yearField = "#dateYear"
-    val dayText = "#deregistrationDate-fieldset > label.form-group.form-group-day > span"
-    val monthText = "#deregistrationDate-fieldset > label.form-group.form-group-month > span"
-    val yearText = "#deregistrationDate-fieldset > label.form-group.form-group-year > span"
+    val dayText = "#date-fieldset > label.form-group.form-group-day > span"
+    val monthText = "#date-fieldset > label.form-group.form-group-month > span"
+    val yearText = "#date-fieldset > label.form-group.form-group-year > span"
     val errorHeading = "#error-summary-display"
     val errorField = "#yes_no > div > fieldset > span"
-    val errorHiddenField = "#deregistrationDate-fieldset > span.error-message"
+    val errorHiddenField = "#date-fieldset > span.error-message"
 
   }
 

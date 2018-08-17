@@ -52,7 +52,7 @@ optionTax.hidden.text = Although land and commercial property is usually exempt 
 
 capitalAssets.title = Does the business have any capital assets?
 capitalAssets.text.1 = This includes things like buildings, land, unsold stock, furniture and computers.
-capitalAssets.text.2 = Do not include intangible assets, f  or example patents, copyrights or goodwill.
+capitalAssets.text.2 = Do not include intangible assets, for example patents, copyrights or goodwill.
 
 sellCapitalAssets.title = Does the business plan to sell any of its capital assets?
 

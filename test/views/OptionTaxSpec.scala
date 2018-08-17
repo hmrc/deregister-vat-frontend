@@ -49,7 +49,7 @@ class OptionTaxSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationPropertyController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.VATAccountsController.show().url
     }
 
     s"have the correct page heading" in {
