@@ -17,6 +17,7 @@
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
 @import views.html.templates.inputs.radioHelper
+@import views.html.templates.inputs.moneyInput
 @import templates.headings
 @import forms.YesNoForm._
 
@@ -42,14 +43,21 @@
     @helpers.form(action = controllers.routes.CapitalAssetsController.submit) {
 
         <div class="form-group" id="@yesNo">
-            @radioHelper(
-                field = form(yesNo),
+            @yesNoRevealHelper(
                 choices = Seq(
                     (yes, Messages("common.yes")),
                     (no, Messages("common.no"))
                 ),
                 question = Messages("capitalAssets.title"),
-                inline = true
+                field = form(yesNo),
+                inline = true,
+                hiddenContent = moneyInput(
+                    field = form("money"),
+                    question = "",
+                    fieldName = "deregistrationDate",
+                    hint = Some(messages("ceasedTrading.hint")),
+                    renderQuestionAsHeading = false
+                )
             )
         </div>
 
@@ -57,4 +65,5 @@
             @messages("common.continue")
         </button>
     }
+
 }
