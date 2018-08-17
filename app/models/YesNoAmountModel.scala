@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package assets.messages
+package models
 
-object CommonMessages {
+case class YesNoAmountModel(yesNo: YesNo, amount: Option[BigDecimal]) {
 
-  val continue = "Continue"
-  val back = "Back"
-  val signOut = "Sign out"
-  val yes = "Yes"
-  val no = "No"
-  val agentServiceName = "Update your client's VAT details"
-  val day = "Day"
-  val month = "Month"
-  val year = "Year"
-  val errorHeading = "There is a problem"
-  val errorMandatoryRadioOption = "Select an option"
-  val errorMandatoryAmountInput = "Real number value expected"
-  val numericValueError = "Numeric value expected"
-  val invalidDate= "Invalid date"
-
+  val isValid: Boolean = {
+    yesNo match {
+      case Yes => amount.isDefined
+      case _ => true
+    }
+  }
 }
