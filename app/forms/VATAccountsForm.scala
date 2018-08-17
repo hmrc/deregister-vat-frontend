@@ -24,7 +24,7 @@ object VATAccountsForm {
 
   val vatAccountsForm: Form[VATAccountsModel] = Form(
     mapping(
-      "accountingMethod" -> nonEmptyText
+      "accountingMethod" -> nonEmptyText.verifying("common.errorSummary", option => option.nonEmpty)
     )(VATAccountsModel.apply)(VATAccountsModel.unapply)
   )
 

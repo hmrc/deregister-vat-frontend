@@ -24,6 +24,6 @@ object VATAccountsMessages {
   val invoice = "You record VAT whenever you send or receive an invoice"
   val cash = "Cash accounting"
   val payment = "You record VAT whenever you make or receive a payment"
-  val error = "This field is required"
+  val error = "Select an option"
 
 }
