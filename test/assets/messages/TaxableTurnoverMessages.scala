@@ -20,4 +20,6 @@ object TaxableTurnoverMessages {
 
   val title = "What was the business’s taxable turnover in the last 12 months?"
 
+  val mandatory = "Enter the business’s taxable turnover"
+
 }

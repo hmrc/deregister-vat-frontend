@@ -82,7 +82,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
     }
 
     "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryAmountInput}"
+      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${TaxableTurnoverMessages.mandatory}"
     }
 
     s"have the correct continue button text and url" in {
@@ -90,7 +90,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryAmountInput
+      elementText(Selectors.error) shouldBe TaxableTurnoverMessages.mandatory
     }
   }
 
