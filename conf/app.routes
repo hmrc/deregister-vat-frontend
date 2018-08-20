@@ -28,6 +28,9 @@ POST       /option-to-tax            controllers.OptionTaxController.submit
 GET        /option-owes-money        controllers.OptionOwesMoneyController.show
 POST       /option-owes-money        controllers.OptionOwesMoneyController.submit
 
+GET        /option-stocks-to-sell    controllers.OptionStocksToSellController.show
+POST       /option-stocks-to-sell    controllers.OptionStocksToSellController.submit
+
 GET        /capital-assets           controllers.CapitalAssetsController.show
 POST       /capital-assets           controllers.CapitalAssetsController.submit
 
