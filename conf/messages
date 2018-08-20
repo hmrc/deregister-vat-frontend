@@ -8,7 +8,6 @@ common.errorSummary.heading = There is a problem
 common.day = Day
 common.month = Month
 common.year = Year
-common.dateError = Invalid date
 common.fullStop = .
 common.agentService = Update your client’s VAT details
 common.clientService = Business tax account
@@ -23,6 +22,14 @@ common.error.nonNumeric = Enter an amount using numbers 0 to 9
 common.error.negative = You must enter a positive number
 common.error.tooManyDecimals = Enter a number with a maximum of 2 decimal places
 common.error.greaterThanMax = You can not enter a number greater than 10,000,000,000
+
+error.date.invalidCharacters = Enter a date using numbers 0 to 9
+error.date.day = Enter 1 or 2 numbers
+error.date.month = Enter 1 or 2 numbers
+error.date.year = Enter 4 numbers
+error.date.invalid = Invalid date
+ceasedTrading.error.date.noEntry = Enter the date your business ceased or will cease trading
+ceasedTrading.error.date.invalidDate = Enter a real ceased trading date
 
 deregisterForVAT.title = Deregister for VAT
 deregisterForVAT.p1 = You can deregister from VAT if the business no longer needs to submit VAT Returns. We will review your reasons for deregistering within 3 weeks.

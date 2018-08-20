@@ -16,9 +16,12 @@
 
 package forms.utils
 
+import java.time.LocalDate
+
+import models.DateModel
 import play.api.data.validation.{Constraint, Invalid, Valid}
 
-import scala.util.{Success, Try}
+import scala.util.{Failure, Success, Try}
 
 trait FormValidation {
 
@@ -46,4 +49,23 @@ trait FormValidation {
     amt => if(amt <= max) Valid else Invalid(errMsg, max)
   }
 
+  def isValidDay(errMsg: String): Constraint[Int] = Constraint[Int]("isValidDate") {
+    day => if(1 to 31 contains day) Valid else Invalid(errMsg)
+  }
+
+  def isValidMonth(errMsg: String): Constraint[Int] = Constraint[Int]("isValidDate") {
+    month => if(1 to 12 contains month) Valid else Invalid(errMsg)
+  }
+
+  def isValidYear(errMsg: String): Constraint[Int] = Constraint[Int]("isValidDate") {
+    year => if(year.toString().length == 4) Valid else Invalid(errMsg)
+  }
+
+  def isValidDate(errMsg: String): Constraint[DateModel] = Constraint[DateModel]("isValidDate") {
+    date =>
+      Try(LocalDate.of(date.dateYear,date.dateMonth,date.dateDay)) match {
+        case Success(_) => Valid
+        case Failure(_) => Invalid(errMsg)
+    }
+  }
 }

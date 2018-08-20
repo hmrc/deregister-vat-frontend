@@ -16,19 +16,25 @@
 
 package forms
 
+import forms.utils.FormValidation
 import models.DateModel
 import play.api.data.Form
 import play.api.data.Forms._
 
-
-object DateForm {
+object DateForm extends FormValidation{
 
   val dateForm: Form[DateModel] = Form(
     mapping(
-      "dateDay" -> number,
-      "dateMonth" -> number,
-      "dateYear" -> number
+      "dateDay" -> optional(text).verifying("error.date.day", _.isDefined)
+        .transform[String](_.get, Some(_)).verifying(isNumeric("error.date.invalidCharacters"))
+        .transform[Int](_.toInt, _.toString).verifying(isValidDay("error.date.day")),
+      "dateMonth" -> optional(text).verifying("error.date.month", _.isDefined)
+        .transform[String](_.get, Some(_)).verifying(isNumeric("error.date.invalidCharacters"))
+        .transform[Int](_.toInt, _.toString).verifying(isValidMonth("error.date.month")),
+      "dateYear" -> optional(text).verifying("error.date.year", _.isDefined)
+        .transform[String](_.get, Some(_)).verifying(isNumeric("error.date.invalidCharacters"))
+        .transform[Int](_.toInt, _.toString).verifying(isValidYear("error.date.year"))
     )(DateModel.apply)(DateModel.unapply)
-      .verifying("common.dateError", _.isValidDate)
+      .verifying(isValidDate("ceasedTrading.error.date.invalidDate"))
   )
 }

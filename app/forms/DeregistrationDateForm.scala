@@ -30,7 +30,7 @@ object DeregistrationDateForm {
       "dateMonth" -> optional(number),
       "dateYear" -> optional(number)
     )(DeregistrationDateModel.customApply)(DeregistrationDateModel.customUnapply)
-      .verifying("common.dateError", _.checkValidDateIfYes)
+      .verifying("error.date.invalid", _.checkValidDateIfYes)
   )
 }
 
