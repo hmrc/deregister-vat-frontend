@@ -18,7 +18,7 @@ package controllers
 
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.YesNoForm
+import forms.YesNoAmountForm
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -31,12 +31,12 @@ class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.optionStocksToSell(YesNoForm.yesNoForm)))
+    Future.successful(Ok(views.html.optionStocksToSell(YesNoAmountForm.yesNoAmountForm)))
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
-    YesNoForm.yesNoForm.bindFromRequest().fold(
+    YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionStocksToSell(error))),
       _ =>
         Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
