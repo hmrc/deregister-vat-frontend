@@ -75,6 +75,7 @@ optionOwesMoney.text.1 = We need to know if the business owes any money for serv
 
 optionOwnsStockToSell.title = Does the business have any stocks to sell?
 optionOwnsStockToSell.text.1 = For example, goods bought or manufactured for resale.
+optionOwnsStockToSell.hint = What is the total value of the stock you are planning to sell?
 
 whyTurnoverBelow.title = Why does the business expect its turnover to be below the threshold?
 whyTurnoverBelow.text.1 = Select all that apply
