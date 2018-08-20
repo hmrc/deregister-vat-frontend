@@ -27,10 +27,12 @@ object CommonMessages {
   val day = "Day"
   val month = "Month"
   val year = "Year"
-  val errorHeading = "You have one or more errors"
-  val errorMandatoryRadioOption = "No option selected"
+  val errorHeading = "There is a problem"
+  val errorMandatoryRadioOption = "Select an option"
   val errorMandatoryAmountInput = "Real number value expected"
   val numericValueError = "Numeric value expected"
-  val invalidDate= "Invalid date"
+  val invalidDate = "Invalid date"
+  val enterAmount = "No amount entered"
+  val moreInfo = "More information"
 
 }

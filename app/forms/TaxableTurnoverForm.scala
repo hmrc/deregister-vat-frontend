@@ -16,15 +16,22 @@
 
 package forms
 
+import forms.utils.FormValidation
 import models.TaxableTurnoverModel
 import play.api.data.Form
 import play.api.data.Forms._
+import common.Constants._
 
-object TaxableTurnoverForm {
+object TaxableTurnoverForm extends FormValidation {
 
   val taxableTurnoverForm: Form[TaxableTurnoverModel] = Form(
     mapping(
-      "turnover" -> bigDecimal
+      "turnover" -> optional(text)
+        .verifying("taxableTurnover.error.mandatory", _.isDefined)
+        .transform[String](x => x.get, x => Some(x))
+        .verifying(isNumeric("taxableTurnover.error.nonNumeric"), hasMaxTwoDecimals("taxableTurnover.error.decimals"))
+        .transform[BigDecimal](x => BigDecimal(x), x => x.toString)
+        .verifying(isPositive("taxableTurnover.error.negative"), doesNotExceed(maxAmount, "taxableTurnover.error.maximum"))
     )(TaxableTurnoverModel.apply)(TaxableTurnoverModel.unapply)
   )
 

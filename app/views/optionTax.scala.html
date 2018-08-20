@@ -16,43 +16,55 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
-@import views.html.templates.inputs.radioHelper
+@import views.html.templates.inputs.yesNoRevealHelper
+@import views.html.templates.inputs.moneyInput
 @import templates.headings
 @import forms.YesNoForm._
 
 
-@(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = messages("optionTax.title"),
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregistrationPropertyController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.VATAccountsController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
     @headings(messages("optionTax.title"))
 
-    <p>@messages("optionTax.text.1")</p>
-
-    <p>@messages("optionTax.text.2")</p>
+    <p>@messages("optionTax.text")</p>
 
     @helpers.form(action = controllers.routes.OptionTaxController.submit) {
 
-        <div class="form-group" id="@yesNo">
-            @radioHelper(
+        <div id="@yesNo">
+            @yesNoRevealHelper(
                 field = form(yesNo),
                 choices = Seq(
                     (yes, Messages("common.yes")),
                     (no, Messages("common.no"))
                 ),
                 question = Messages("optionTax.title"),
-                inline = true
+                inline = true,
+                hiddenContent = moneyInput(
+                    field = form("amount"),
+                    label = messages("optionTax.hint"),
+                    labelHidden = false,
+                    decimalPlace = true
+                )
             )
         </div>
 
-        <button class="button" type ="submit" id="continue">
+        <details class="form-group">
+            <summary><span class="summary">@messages("common.moreInfo")</span></summary>
+            <div class="panel panel-border-narrow">
+                <p>@messages("optionTax.hidden.text")</p>
+            </div>
+        </details>
+
+        <button class="button form-group" type ="submit" id="continue">
             @messages("common.continue")
         </button>
     }

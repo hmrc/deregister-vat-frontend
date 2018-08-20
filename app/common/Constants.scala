@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package assets.messages
+package common
 
-object OptionTaxMessages {
+object Constants {
 
-  val title = "Did the business charge VAT on land or commercial property?"
-  val text = "You can choose to charge VAT on any income earned from renting or selling land or commercial property. This is known as ‘Option to Tax’."
-  val hint = "What was the total value of what the business charged?"
-  val hiddenText = "Although land and commercial property is usually exempt from VAT, some businesses choose to charge VAT so they can recover costs from construction or repairs."
+  //TODO: This amount has been assumed, it needs to be updated with the max that the DES API supports
+  val maxAmount: BigDecimal = 10000000000.0
 
 }

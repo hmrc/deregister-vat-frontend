@@ -18,7 +18,7 @@ package controllers
 
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.YesNoForm
+import forms.YesNoAmountForm
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -32,12 +32,12 @@ class OptionTaxController @Inject()(val messagesApi: MessagesApi,
                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.optionTax(YesNoForm.yesNoForm)))
+    Future.successful(Ok(views.html.optionTax(YesNoAmountForm.yesNoAmountForm)))
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
-    YesNoForm.yesNoForm.bindFromRequest().fold(
+    YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionTax(error))),
       _ => Future.successful(Redirect(controllers.routes.CapitalAssetsController.show()))
     )

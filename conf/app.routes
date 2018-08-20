@@ -7,9 +7,6 @@ GET        /deregister               controllers.DeregisterForVATController.show
 GET        /deregistration-reason    controllers.DeregistrationReasonController.show
 POST       /deregistration-reason    controllers.DeregistrationReasonController.submit
 
-GET        /deregistration-property  controllers.DeregistrationPropertyController.show
-POST       /deregistration-property  controllers.DeregistrationPropertyController.submit
-
 GET        /accounting-method        controllers.VATAccountsController.show
 POST       /accounting-method        controllers.VATAccountsController.submit
 
