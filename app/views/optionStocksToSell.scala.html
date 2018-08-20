@@ -17,11 +17,13 @@
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
 @import views.html.templates.inputs.radioHelper
+@import views.html.templates.inputs.yesNoRevealHelper
+@import views.html.templates.inputs.moneyInput
 @import templates.headings
 @import forms.YesNoForm._
 
 
-@(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
 title = messages("optionOwnsStockToSell.title"),
@@ -39,15 +41,21 @@ appConfig = appConfig) {
 
 @helpers.form(action = controllers.routes.OptionStocksToSellController.submit) {
 
-<div class="form-group" id="reason">
-    @radioHelper(
-    field = form(yesNo),
-    choices = Seq(
-    (yes, Messages("common.yes")),
-    (no, Messages("common.no"))),
-    question = Messages("optionOwnsStockToSell.title"),
-    inline = true
-    )
+<div id="@yesNo">
+       @yesNoRevealHelper(
+          field = form(yesNo),
+          choices = Seq(
+           (yes, Messages("common.yes")),
+           (no, Messages("common.no"))),
+          question = Messages("optionOwnsStockToSell.title"),
+          inline = true,
+          hiddenContent = moneyInput(
+               field = form("amount"),
+               label = messages("optionOwnsStockToSell.hint"),
+               labelHidden = false,
+               decimalPlace = true
+           )
+       )
 
 </div>
 
