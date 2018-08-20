@@ -37,12 +37,12 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     val dayField = "#dateDay"
     val monthField = "#dateMonth"
     val yearField = "#dateYear"
-    val dayText = "#deregistrationDate-fieldset > label.form-group.form-group-day > span"
-    val monthText = "#deregistrationDate-fieldset > label.form-group.form-group-month > span"
-    val yearText = "#deregistrationDate-fieldset > label.form-group.form-group-year > span"
+    val dayText = "#date-fieldset > label.form-group.form-group-day > span"
+    val monthText = "#date-fieldset > label.form-group.form-group-month > span"
+    val yearText = "#date-fieldset > label.form-group.form-group-year > span"
     val errorHeading = "#error-summary-display"
     val errorField = "#yes_no > div > fieldset > span"
-    val errorHiddenField = "#deregistrationDate-fieldset > span.error-message"
+    val errorHiddenField = "#date-fieldset > span.error-message"
 
   }
 
@@ -113,9 +113,9 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     lazy val view = views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm
       .bind(Map(
         "yes_no" -> "yes",
-        "deregistrationDateDay" -> "1",
-        "deregistrationDateMonth" -> "1",
-        "deregistrationDateYear" -> "2018"
+        "dateDay" -> "1",
+        "dateMonth" -> "1",
+        "dateYear" -> "2018"
       ))
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -161,9 +161,9 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
     lazy val view = views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm.bind(Map(
       "yes_no" -> "yes",
-      "deregistrationDateDay" -> "",
-      "deregistrationDateMonth" -> "",
-      "deregistrationDateYear" -> ""
+      "dateDay" -> "",
+      "dateMonth" -> "",
+      "dateYear" -> ""
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

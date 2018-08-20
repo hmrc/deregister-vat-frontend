@@ -25,9 +25,9 @@ class DeregistrationDateFormSpec extends UnitSpec {
 
     val data = Map(
       "yes_no" -> "yes",
-      "deregistrationDateDay" -> "1",
-      "deregistrationDateMonth" -> "1",
-      "deregistrationDateYear" -> "2018"
+      "dateDay" -> "1",
+      "dateMonth" -> "1",
+      "dateYear" -> "2018"
     )
     val form = DeregistrationDateForm.deregistrationDateForm.bind(data)
 
@@ -44,9 +44,9 @@ class DeregistrationDateFormSpec extends UnitSpec {
 
     val data = Map(
       "yes_no" -> "no",
-      "deregistrationDateDay" -> "1",
-      "deregistrationDateMonth" -> "1",
-      "deregistrationDateYear" -> "2018"
+      "dateDay" -> "1",
+      "dateMonth" -> "1",
+      "dateYear" -> "2018"
     )
     val form = DeregistrationDateForm.deregistrationDateForm.bind(data)
 
@@ -63,9 +63,9 @@ class DeregistrationDateFormSpec extends UnitSpec {
 
     val data = Map(
       "yes_no" -> "no",
-      "deregistrationDateDay" -> "99",
-      "deregistrationDateMonth" -> "99",
-      "deregistrationDateYear" -> "9999"
+      "dateDay" -> "99",
+      "dateMonth" -> "99",
+      "dateYear" -> "9999"
     )
     val form = DeregistrationDateForm.deregistrationDateForm.bind(data)
 
@@ -137,9 +137,9 @@ class DeregistrationDateFormSpec extends UnitSpec {
       val form = DeregistrationDateForm.deregistrationDateForm.fill(model)
       form.data shouldBe Map(
         "yes_no" -> "yes",
-        "deregistrationDateDay" -> "1",
-        "deregistrationDateMonth" -> "1",
-        "deregistrationDateYear" -> "2018"
+        "dateDay" -> "1",
+        "dateMonth" -> "1",
+        "dateYear" -> "2018"
       )
     }
   }

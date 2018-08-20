@@ -18,8 +18,9 @@ package assets.messages
 
 object OptionTaxMessages {
 
-  val title = "Did you notify HMRC of option to tax?"
-  val text1 = "This means that the business chose to charge VAT on any income it earns from renting or selling its commercial property."
-  val text2 = "Commercial property is usually exempt from VAT. Some businesses choose to charge VAT so they can recover costs, such as from construction and repairs."
+  val title = "Did the business charge VAT on land or commercial property?"
+  val text = "You can choose to charge VAT on any income earned from renting or selling land or commercial property. This is known as ‘Option to Tax’."
+  val hint = "What was the total value of what the business charged?"
+  val hiddenText = "Although land and commercial property is usually exempt from VAT, some businesses choose to charge VAT so they can recover costs from construction or repairs."
 
 }

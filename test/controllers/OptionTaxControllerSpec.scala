@@ -54,7 +54,10 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
       "the user submits after selecting an 'Yes' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes"))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(
+            ("yes_no", "yes"),
+            ("amount", "1000.01")
+          )
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
