@@ -59,6 +59,11 @@ cannotDeregister.link.text = You can
 cannotDeregister.link = update the business’s other VAT details.
 
 taxableTurnover.title = What was the business’s taxable turnover in the last 12 months?
+taxableTurnover.error.mandatory = Enter the business’s taxable turnover
+taxableTurnover.error.nonNumeric = Enter the turnover using numbers 0 to 9
+taxableTurnover.error.decimals = Enter a number with a maximum of 2 decimal places
+taxableTurnover.error.negative = You must enter a positive number
+taxableTurnover.error.maximum = You can not enter a number greater than {0}
 
 nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
 

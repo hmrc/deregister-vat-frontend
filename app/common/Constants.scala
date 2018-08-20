@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package assets.messages
+package common
 
-object NextTaxableTurnoverMessages {
+object Constants {
 
-  val title = "What is the business’s expected taxable turnover for the next 12 months?"
-
-  val mandatory = "Enter the business’s taxable turnover"
+  //TODO: This amount has been assumed, it needs to be updated with the max that the DES API supports
+  val maxAmount: BigDecimal = 10000000000.0
 
 }

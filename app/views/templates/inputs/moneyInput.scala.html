@@ -34,7 +34,7 @@
 
     @field.errors.headOption.map { error =>
         <span class="error-message" role="tooltip">
-            @messages(error.message)
+            @messages(error.message, error.args: _*)
         </span>
     }
 

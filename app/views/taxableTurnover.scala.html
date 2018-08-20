@@ -33,7 +33,7 @@ appConfig = appConfig) {
 
     @headings(messages("taxableTurnover.title"))
 
-    @helpers.form(action = controllers.routes.TaxableTurnoverController.submit) {
+    @helpers.form(action = controllers.routes.TaxableTurnoverController.submit, 'novalidate -> "novalidate") {
 
         <div class="form-group" id="turnover">
             @moneyInput(
