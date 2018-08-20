@@ -16,10 +16,12 @@
 
 package forms
 
+import assets.messages.CommonMessages
 import models.VATAccountsModel
-import uk.gov.hmrc.play.test.UnitSpec
+import play.api.i18n.Messages
+import utils.TestUtil
 
-class VATAccountsFormSpec extends UnitSpec {
+class VATAccountsFormSpec extends TestUtil {
 
   "Binding a form with valid data" should {
 
@@ -46,8 +48,8 @@ class VATAccountsFormSpec extends UnitSpec {
         form.hasErrors shouldBe true
       }
 
-      "throw one error" in {
-        form.errors.size shouldBe 1
+      "throw the correct error message" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorMandatoryRadioOption
       }
     }
   }
