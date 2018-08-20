@@ -4,7 +4,7 @@ base.sign-out = Sign out
 
 common.continue = Continue
 common.back = Back
-common.errorSummary.heading = You have one or more errors
+common.errorSummary.heading = There is a problem
 common.errorSummary = This field is required
 common.errorSummary.field = This field is required
 common.day = Day
@@ -15,9 +15,9 @@ common.fullStop = .
 common.agentService = Update your client’s VAT details
 common.yes = Yes
 common.no = No
-common.error.mandatoryRadioOption = No option selected
 common.error.enterAmount = No amount entered
 common.moreInfo = More information
+common.error.mandatoryRadioOption = Select an option
 
 deregisterForVAT.title = Deregister for VAT
 deregisterForVAT.p1 = You can deregister from VAT if the business no longer needs to submit VAT Returns. We will review your reasons for deregistering within 3 weeks.
