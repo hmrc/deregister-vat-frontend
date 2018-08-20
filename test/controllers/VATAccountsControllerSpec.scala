@@ -74,8 +74,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.routes.DeregistrationPropertyController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationPropertyController.show().url)
+        s"Redirect to the '${controllers.routes.OptionTaxController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.OptionTaxController.show().url)
         }
       }
 
@@ -90,8 +90,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.routes.DeregistrationPropertyController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationPropertyController.show().url)
+        s"Redirect to the '${controllers.routes.OptionTaxController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.OptionTaxController.show().url)
         }
       }
 

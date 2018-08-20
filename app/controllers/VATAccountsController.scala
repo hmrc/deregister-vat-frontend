@@ -38,7 +38,7 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
 
     VATAccountsForm.vatAccountsForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.vatAccounts(error))),
-      _ => Future.successful(Redirect(controllers.routes.DeregistrationPropertyController.show()))
+      _ => Future.successful(Redirect(controllers.routes.OptionTaxController.show()))
     )
   }
 

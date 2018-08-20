@@ -26,9 +26,9 @@ object DeregistrationDateForm {
   val deregistrationDateForm: Form[DeregistrationDateModel] = Form(
     mapping(
       yesNo -> of(YesNoForm.formatter),
-      "deregistrationDateDay" -> optional(number),
-      "deregistrationDateMonth" -> optional(number),
-      "deregistrationDateYear" -> optional(number)
+      "dateDay" -> optional(number),
+      "dateMonth" -> optional(number),
+      "dateYear" -> optional(number)
     )(DeregistrationDateModel.customApply)(DeregistrationDateModel.customUnapply)
       .verifying("common.dateError", _.checkValidDateIfYes)
   )
