@@ -78,8 +78,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.routes.CannotDeregisterThresholdController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CannotDeregisterThresholdController.show().url)
+        s"Redirect to the '${controllers.routes.WhyTurnoverBelowController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.WhyTurnoverBelowController.show().url)
         }
       }
 
