@@ -16,8 +16,11 @@
 
 package assets.messages
 
-object SellCapitalAssetsMessages {
+object CapitalAssetsMessages {
 
-  val title = "Does the business plan to sell any of its capital assets?"
+  val title = "Does the business have any capital assets to sell?"
+  val p1 = "This includes things like buildings, land, furniture, computers and other raw material or equipment."
+  val p2 = "Do not include intangible assets, for example patents, copyrights or goodwill."
+  val hint = "What is the total value of what you are planning to sell?"
 
 }
