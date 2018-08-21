@@ -39,7 +39,7 @@ class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
     YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionStocksToSell(error))),
       _ =>
-        Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
+        Future.successful(Redirect(controllers.routes.CapitalAssetsController.show()))
     )
   }
 }
