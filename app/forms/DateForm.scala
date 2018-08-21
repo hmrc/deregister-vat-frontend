@@ -18,22 +18,55 @@ package forms
 
 import forms.utils.FormValidation
 import models.DateModel
-import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.format.Formatter
+import play.api.data.{Form, FormError}
+
+import scala.util.{Failure, Success, Try}
+
 
 object DateForm extends FormValidation{
 
+  val day = "dateDay"
+  val month = "dateMonth"
+  val year = "dateYear"
+
+  def invalidDateError(key: String): FormError = key match {
+    case `day` => FormError(key, "error.date.day")
+    case `month` => FormError(key, "error.date.month")
+    case `year` => FormError(key, "error.date.year")
+  }
+
+  def isValidDate(key: String, value: Int): Boolean = key match {
+    case `day` => 1 to 31 contains value
+    case `month` => 1 to 12 contains value
+    case `year` => value.toString.length == 4
+  }
+
+  val formatter: Formatter[Int] = new Formatter[Int] {
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] = {
+      data.get(key) match {
+        case Some(stringValue) => Try(stringValue.toInt) match {
+          case Success(intValue) => isValidDate(key, intValue) match{
+            case true => Right(intValue)
+            case false => Left(Seq(invalidDateError(key)))
+          }
+          case Failure(_) => Left(Seq(FormError(key, "error.date.invalidCharacters")))
+        }
+        case None => Left(Seq(invalidDateError(key)))
+      }
+    }
+
+    override def unbind(key: String, value: Int): Map[String, String] = {
+      Map(key -> value.toString)
+    }
+  }
+
   val dateForm: Form[DateModel] = Form(
     mapping(
-      "dateDay" -> optional(text).verifying("error.date.day", _.isDefined)
-        .transform[String](_.get, Some(_)).verifying(isNumeric("error.date.invalidCharacters"))
-        .transform[Int](_.toInt, _.toString).verifying(isValidDay("error.date.day")),
-      "dateMonth" -> optional(text).verifying("error.date.month", _.isDefined)
-        .transform[String](_.get, Some(_)).verifying(isNumeric("error.date.invalidCharacters"))
-        .transform[Int](_.toInt, _.toString).verifying(isValidMonth("error.date.month")),
-      "dateYear" -> optional(text).verifying("error.date.year", _.isDefined)
-        .transform[String](_.get, Some(_)).verifying(isNumeric("error.date.invalidCharacters"))
-        .transform[Int](_.toInt, _.toString).verifying(isValidYear("error.date.year"))
+      day -> of(formatter),
+      month -> of(formatter),
+      year -> of(formatter)
     )(DateModel.apply)(DateModel.unapply)
       .verifying(isValidDate("ceasedTrading.error.date.invalidDate"))
   )

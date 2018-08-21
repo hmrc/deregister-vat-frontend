@@ -16,18 +16,20 @@
 
 package forms
 
+import _root_.utils.TestUtil
+import assets.messages.CommonMessages
 import models.{DateModel, DeregistrationDateModel, No, Yes}
-import uk.gov.hmrc.play.test.UnitSpec
+import play.api.i18n.Messages
 
-class DeregistrationDateFormSpec extends UnitSpec {
+class DeregistrationDateFormSpec extends TestUtil {
 
   "Binding a form with valid Yes data" should {
 
     val data = Map(
-      "yes_no" -> "yes",
-      "dateDay" -> "1",
-      "dateMonth" -> "1",
-      "dateYear" -> "2018"
+      YesNoForm.yesNo -> "yes",
+      DateForm.day -> "1",
+      DateForm.month -> "1",
+      DateForm.year -> "2018"
     )
     val form = DeregistrationDateForm.deregistrationDateForm.bind(data)
 
@@ -43,10 +45,10 @@ class DeregistrationDateFormSpec extends UnitSpec {
   "Binding a form with No and a date" should {
 
     val data = Map(
-      "yes_no" -> "no",
-      "dateDay" -> "1",
-      "dateMonth" -> "1",
-      "dateYear" -> "2018"
+      YesNoForm.yesNo -> "no",
+      DateForm.day -> "1",
+      DateForm.month -> "1",
+      DateForm.year -> "2018"
     )
     val form = DeregistrationDateForm.deregistrationDateForm.bind(data)
 
@@ -62,10 +64,10 @@ class DeregistrationDateFormSpec extends UnitSpec {
   "Binding a form with No and an invalid date" should {
 
     val data = Map(
-      "yes_no" -> "no",
-      "dateDay" -> "99",
-      "dateMonth" -> "99",
-      "dateYear" -> "9999"
+      YesNoForm.yesNo -> "no",
+      DateForm.day -> "99",
+      DateForm.month -> "99",
+      DateForm.year -> "9999"
     )
     val form = DeregistrationDateForm.deregistrationDateForm.bind(data)
 
@@ -81,7 +83,7 @@ class DeregistrationDateFormSpec extends UnitSpec {
   "Binding a form with No and no date" should {
 
     val data = Map(
-      "yes_no" -> "no"
+      YesNoForm.yesNo -> "no"
     )
     val form = DeregistrationDateForm.deregistrationDateForm.bind(data)
 
@@ -113,10 +115,10 @@ class DeregistrationDateFormSpec extends UnitSpec {
     "an invalid date has been entered" should {
 
       val data = Map(
-        "yes_no" -> "yes",
-        "dateDay" -> "99",
-        "dateMonth" -> "99",
-        "dateYear" -> "9999"
+        YesNoForm.yesNo -> "yes",
+        DateForm.day -> "99",
+        DateForm.month -> "99",
+        DateForm.year -> "99999"
       )
       val form = DeregistrationDateForm.deregistrationDateForm.bind(data)
 
@@ -124,8 +126,11 @@ class DeregistrationDateFormSpec extends UnitSpec {
         form.hasErrors shouldBe true
       }
 
-      "have three error" in {
-        form.errors.size shouldBe 1
+      "have three errors" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorDateDay
+        Messages(form.errors(1).message) shouldBe CommonMessages.errorDateMonth
+        Messages(form.errors(2).message) shouldBe CommonMessages.errorDateYear
+        form.errors.size shouldBe 3
       }
     }
   }
@@ -136,10 +141,10 @@ class DeregistrationDateFormSpec extends UnitSpec {
       val model = DeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
       val form = DeregistrationDateForm.deregistrationDateForm.fill(model)
       form.data shouldBe Map(
-        "yes_no" -> "yes",
-        "dateDay" -> "1",
-        "dateMonth" -> "1",
-        "dateYear" -> "2018"
+        YesNoForm.yesNo -> "yes",
+        DateForm.day -> "1",
+        DateForm.month -> "1",
+        DateForm.year -> "2018"
       )
     }
   }

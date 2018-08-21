@@ -28,8 +28,6 @@ error.date.day = Enter 1 or 2 numbers
 error.date.month = Enter 1 or 2 numbers
 error.date.year = Enter 4 numbers
 error.date.invalid = Invalid date
-ceasedTrading.error.date.noEntry = Enter the date your business ceased or will cease trading
-ceasedTrading.error.date.invalidDate = Enter a real ceased trading date
 
 deregisterForVAT.title = Deregister for VAT
 deregisterForVAT.p1 = You can deregister from VAT if the business no longer needs to submit VAT Returns. We will review your reasons for deregistering within 3 weeks.
@@ -60,6 +58,8 @@ vatAccounts.showMeAnExample.bullet2 = June, then you use cash accounting
 
 ceasedTrading.title = The date your business ceased or will cease trading
 ceasedTrading.hint = For example, 31 3 1980
+ceasedTrading.error.date.noEntry = Enter the date your business ceased or will cease trading
+ceasedTrading.error.date.invalidDate = Enter a real ceased trading date
 
 optionTax.title = Did the business charge VAT on land or commercial property?
 optionTax.text = You can choose to charge VAT on any income earned from renting or selling land or commercial property. This is known as ‘Option to Tax’.

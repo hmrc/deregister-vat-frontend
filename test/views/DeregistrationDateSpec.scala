@@ -17,7 +17,7 @@
 package views
 
 import assets.messages.{CommonMessages, DeregistrationDateMessages}
-import forms.{DateForm, DeregistrationDateForm}
+import forms.{DateForm, DeregistrationDateForm, YesNoForm}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -112,10 +112,10 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
     lazy val view = views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm
       .bind(Map(
-        "yes_no" -> "yes",
-        "dateDay" -> "1",
-        "dateMonth" -> "1",
-        "dateYear" -> "2018"
+        YesNoForm.yesNo -> YesNoForm.yes,
+        DateForm.day -> "1",
+        DateForm.month -> "1",
+        DateForm.year -> "2018"
       ))
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -139,9 +139,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with missing first field" should {
 
-    lazy val view = views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm.bind(Map(
-      "yes_no" -> ""
-    )))
+    lazy val view = views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm.bind(Map.empty[String,String]))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -160,10 +158,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
   "Rendering the Ceased trading date page with a yes and a missing date field" should {
 
     lazy val view = views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm.bind(Map(
-      "yes_no" -> "yes",
-      "dateDay" -> "",
-      "dateMonth" -> "",
-      "dateYear" -> ""
+      YesNoForm.yesNo -> YesNoForm.yes
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -172,7 +167,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error heading message being displayed" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.invalidDate}"
+      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorDateDay} ${CommonMessages.errorDateMonth} ${CommonMessages.errorDateYear}"
     }
 
     "have an error message being displayed for the fields" in {

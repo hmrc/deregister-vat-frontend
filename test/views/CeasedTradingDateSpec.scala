@@ -84,7 +84,6 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
   "Rendering the Ceased trading date page with one missing field" should {
 
     lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
-      "dateDay" -> "",
       "dateMonth" -> "1",
       "dateYear" -> "2018"
     )))
@@ -111,11 +110,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with missing fields" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
-      "dateDay" -> "",
-      "dateMonth" -> "",
-      "dateYear" -> ""
-    )))(agentUser,messages,mockConfig)
+    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map.empty[String,String]))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

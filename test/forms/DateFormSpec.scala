@@ -27,9 +27,9 @@ class DateFormSpec extends TestUtil {
 
     "max values are given" should {
       val data = Map(
-        "dateDay" -> "31",
-        "dateMonth" -> "12",
-        "dateYear" -> "9999"
+        DateForm.day -> "31",
+        DateForm.month -> "12",
+        DateForm.year -> "9999"
       )
       val form = DateForm.dateForm.bind(data)
 
@@ -44,9 +44,9 @@ class DateFormSpec extends TestUtil {
 
     "minimum values are given" should {
       val data = Map(
-        "dateDay" -> "1",
-        "dateMonth" -> "1",
-        "dateYear" -> "1000"
+        DateForm.day -> "1",
+        DateForm.month -> "1",
+        DateForm.year -> "1000"
       )
       val form = DateForm.dateForm.bind(data)
 
@@ -82,9 +82,9 @@ class DateFormSpec extends TestUtil {
     "values given are too high" should {
 
       val data = Map(
-        "dateDay" -> "32",
-        "dateMonth" -> "13",
-        "dateYear" -> "10000"
+        DateForm.day -> "32",
+        DateForm.month -> "13",
+        DateForm.year -> "10000"
       )
       val form = DateForm.dateForm.bind(data)
 
@@ -103,9 +103,9 @@ class DateFormSpec extends TestUtil {
     "values given are too low" should {
 
       val data = Map(
-        "dateDay" -> "0",
-        "dateMonth" -> "0",
-        "dateYear" -> "999"
+        DateForm.day -> "0",
+        DateForm.month -> "0",
+        DateForm.year -> "999"
       )
       val form = DateForm.dateForm.bind(data)
 
@@ -124,9 +124,9 @@ class DateFormSpec extends TestUtil {
     "an invalid date has been entered" should {
 
       val data = Map(
-        "dateDay" -> "31",
-        "dateMonth" -> "2",
-        "dateYear" -> "2018"
+        DateForm.day -> "31",
+        DateForm.month -> "2",
+        DateForm.year -> "2018"
       )
       val form = DateForm.dateForm.bind(data)
 
@@ -147,9 +147,9 @@ class DateFormSpec extends TestUtil {
       val model = DateModel(1,1,2018)
       val form = DateForm.dateForm.fill(model)
       form.data shouldBe Map(
-        "dateDay" -> "1",
-        "dateMonth" -> "1",
-        "dateYear" -> "2018"
+        DateForm.day -> "1",
+        DateForm.month -> "1",
+        DateForm.year -> "2018"
       )
     }
   }
