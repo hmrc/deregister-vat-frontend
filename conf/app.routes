@@ -28,9 +28,6 @@ POST       /option-owes-money        controllers.OptionOwesMoneyController.submi
 GET        /capital-assets           controllers.CapitalAssetsController.show
 POST       /capital-assets           controllers.CapitalAssetsController.submit
 
-GET        /sell-capital-assets      controllers.SellCapitalAssetsController.show
-POST       /sell-capital-assets      controllers.SellCapitalAssetsController.submit
-
 GET        /taxable-turnover         controllers.TaxableTurnoverController.show
 POST       /taxable-turnover         controllers.TaxableTurnoverController.submit
 

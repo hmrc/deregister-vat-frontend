@@ -18,6 +18,7 @@ common.no = No
 common.error.enterAmount = No amount entered
 common.moreInfo = More information
 common.error.mandatoryRadioOption = Select an option
+common.error.enterAmount = No amount entered
 
 deregisterForVAT.title = Deregister for VAT
 deregisterForVAT.p1 = You can deregister from VAT if the business no longer needs to submit VAT Returns. We will review your reasons for deregistering within 3 weeks.
@@ -50,11 +51,10 @@ optionTax.text = You can choose to charge VAT on any income earned from renting 
 optionTax.hint = What was the total value of what the business charged?
 optionTax.hidden.text = Although land and commercial property is usually exempt from VAT, some businesses choose to charge VAT so they can recover costs from construction or repairs.
 
-capitalAssets.title = Does the business have any capital assets?
-capitalAssets.text.1 = This includes things like buildings, land, unsold stock, furniture and computers.
+capitalAssets.title = Does the business have any capital assets to sell?
+capitalAssets.text.1 = This includes things like buildings, land, furniture, computers and other raw material or equipment.
 capitalAssets.text.2 = Do not include intangible assets, for example patents, copyrights or goodwill.
-
-sellCapitalAssets.title = Does the business plan to sell any of its capital assets?
+capitalAssets.totalSaleValue = What is the total value of what you are planning to sell?
 
 cannotDeregister.title = The business cannot deregister from VAT
 cannotDeregister.text = This is because the business expects its taxable turnover for the next 12 months to be above £83,000.

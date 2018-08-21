@@ -66,20 +66,33 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
 
     "Calling the .submit action" when {
 
-      "the user submits after selecting an 'Yes' option" should {
+      "the user submits after selecting an 'Yes' option without entering an amount" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes"))
         lazy val result = TestCapitalAssetsController.submit()(request)
 
 
-        "return 303 (SEE OTHER)" in {
+        "return 400 (BAD_REQUEST)" in {
+          mockAuthResult(mockAuthorisedIndividual)
+          status(result) shouldBe Status.BAD_REQUEST
+        }
+      }
+
+      "the user submits after selecting an 'Yes' option and entering an amount" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes"), ("amount", "100"))
+        lazy val result = TestCapitalAssetsController.submit()(request)
+
+
+        "return 303 (SEE_OTHER)" in {
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.SellCapitalAssetsController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.SellCapitalAssetsController.show().url)
+        s"redirect to '${controllers.routes.OptionOwesMoneyController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.OptionOwesMoneyController.show().url)
         }
       }
 
