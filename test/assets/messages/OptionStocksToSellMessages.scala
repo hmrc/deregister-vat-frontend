@@ -21,5 +21,6 @@ object OptionStocksToSellMessages {
   val title = "Does the business have any stocks to sell?"
   val text1 = "For example, goods bought or manufactured for resale."
   val hiddenText = "What is the total value of the stock you are planning to sell?"
+  val backText = "Back"
 
 }
