@@ -22,6 +22,7 @@ import models._
 import play.api.data.{Form, FormError}
 import play.api.data.Forms._
 import play.api.data.format.Formatter
+import play.api.data.validation.{Constraint, Valid}
 
 import scala.util.{Failure, Success, Try}
 
@@ -30,14 +31,13 @@ object DeregistrationDateForm {
   val formatter: Formatter[Option[Int]] = new Formatter[Option[Int]] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Option[Int]] = {
       (data.get(YesNoForm.yesNo), data.get(key)) match {
+        case (Some(YesNoForm.yes), Some(value)) if value.trim == "" => Left(Seq(invalidDateError(key)))
         case (Some(YesNoForm.yes), Some(stringValue)) => Try(stringValue.toInt) match {
-          case Success(intValue) => isValidDate(key, intValue) match{
-            case true => Right(Some(intValue))
-            case false => Left(Seq(invalidDateError(key)))
-          }
+          case Success(intValue) =>
+            if(isValidDate(key, intValue)) {Right(Some(intValue))}
+            else {Left(Seq(invalidDateError(key)))}
           case Failure(_) => Left(Seq(FormError(key, "error.date.invalidCharacters")))
         }
-        case (Some(YesNoForm.yes), None)=> Left(Seq(invalidDateError(key)))
         case _ => Right(None)
       }
     }
@@ -50,6 +50,13 @@ object DeregistrationDateForm {
       Map(key -> stringValue)
     }
   }
+
+//  def checkValidDateIfYes(errMsg: String): Constraint[DateModel] = Constraint[DeregistrationDateModel]("checkValidDateIfYes") {
+//    yesNo match {
+//      case YesNoForm.yes => isValidDate(errMsg)
+//      case _ => Valid
+//    }
+//  }
 
   val deregistrationDateForm: Form[DeregistrationDateModel] = Form(
     mapping(

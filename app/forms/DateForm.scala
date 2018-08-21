@@ -16,16 +16,18 @@
 
 package forms
 
-import forms.utils.FormValidation
+import java.time.LocalDate
+
 import models.DateModel
 import play.api.data.Forms._
 import play.api.data.format.Formatter
+import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.{Form, FormError}
 
 import scala.util.{Failure, Success, Try}
 
 
-object DateForm extends FormValidation{
+object DateForm {
 
   val day = "dateDay"
   val month = "dateMonth"
@@ -46,20 +48,28 @@ object DateForm extends FormValidation{
   val formatter: Formatter[Int] = new Formatter[Int] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] = {
       data.get(key) match {
+        case Some(value) if value.trim == "" => Left(Seq(invalidDateError(key)))
         case Some(stringValue) => Try(stringValue.toInt) match {
-          case Success(intValue) => isValidDate(key, intValue) match{
-            case true => Right(intValue)
-            case false => Left(Seq(invalidDateError(key)))
-          }
+          case Success(intValue) =>
+            if(isValidDate(key, intValue)) {Right(intValue)}
+            else {Left(Seq(invalidDateError(key)))}
           case Failure(_) => Left(Seq(FormError(key, "error.date.invalidCharacters")))
         }
-        case None => Left(Seq(invalidDateError(key)))
+        case _ => Left(Seq(invalidDateError(key)))
       }
     }
 
     override def unbind(key: String, value: Int): Map[String, String] = {
       Map(key -> value.toString)
     }
+  }
+
+  def isValidDate(errMsg: String): Constraint[DateModel] = Constraint[DateModel]("isValidDate") {
+    date =>
+      Try(LocalDate.of(date.dateYear,date.dateMonth,date.dateDay)) match {
+        case Success(_) => Valid
+        case Failure(_) => Invalid(errMsg)
+      }
   }
 
   val dateForm: Form[DateModel] = Form(
