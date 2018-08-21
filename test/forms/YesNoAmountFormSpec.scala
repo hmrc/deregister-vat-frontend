@@ -111,6 +111,23 @@ class YesNoAmountFormSpec extends TestUtil {
       }
     }
 
+    "Yes but an invalid amount has been entered" should {
+
+      val missingOption: Map[String, String] = Map(
+        "yes_no" -> "yes",
+        "amount" -> "ABC"
+      )
+      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "have the Mandatory Amount error" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.mandatoryAmount
+      }
+    }
+
     "Yes but a negative amount has been entered" should {
 
       val missingOption: Map[String, String] = Map(
