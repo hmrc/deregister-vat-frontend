@@ -30,7 +30,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec{
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
     val noOption = "fieldset > div > div:nth-of-type(2) > label"
     val hiddenField = "#hiddenContent"
-    val hint = "#hiddenContent > div > label"
+    val hint = ".form-label"
     val button = ".button"
     val errorHeading = "#error-summary-display"
     val error = "#yes_no-error-summary"
@@ -45,10 +45,10 @@ class OptionStocksToSellSpec extends ViewBaseSpec{
       document.title shouldBe OptionStocksToSellMessages.title
     }
 
-//    s"have the correct back text" in {
-//      elementText(Selectors.back) shouldBe CommonMessages.back
-//      element(Selectors.back).attr("href") shouldBe controllers.routes.VATAccountsController.show().url
-//    }
+    s"have the correct back text" in {
+      elementText(Selectors.back) shouldBe CommonMessages.back
+      element(Selectors.back).attr("href") shouldBe OptionStocksToSellMessages.backText
+    }
 
     s"have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe OptionStocksToSellMessages.title
