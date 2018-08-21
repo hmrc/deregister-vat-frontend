@@ -78,8 +78,8 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.routes.NextTaxableTurnoverController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
+        s"Redirect to the '${controllers.routes.VATAccountsController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
         }
       }
 
