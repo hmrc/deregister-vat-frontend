@@ -17,11 +17,10 @@
 package forms
 
 import _root_.utils.TestUtil
-import assets.messages.TaxableTurnoverMessages
+import assets.messages.{CommonMessages, TaxableTurnoverMessages}
 import common.Constants
 import models.TaxableTurnoverModel
 import play.api.i18n.Messages
-import play.twirl.api.Html
 
 class TaxableTurnoverFormSpec extends TestUtil {
 
@@ -77,7 +76,7 @@ class TaxableTurnoverFormSpec extends TestUtil {
       }
 
       "throw the non-numeric error" in {
-        Messages(form.errors.head.message) shouldBe TaxableTurnoverMessages.negative
+        Messages(form.errors.head.message) shouldBe CommonMessages.negative
       }
     }
 
@@ -90,7 +89,7 @@ class TaxableTurnoverFormSpec extends TestUtil {
       }
 
       "throw the non-numeric error" in {
-        Messages(form.errors.head.message) shouldBe TaxableTurnoverMessages.decimals
+        Messages(form.errors.head.message) shouldBe CommonMessages.decimals
       }
     }
 
@@ -103,7 +102,7 @@ class TaxableTurnoverFormSpec extends TestUtil {
       }
 
       "throw a maximum value exceeded error" in {
-        Messages(form.errors.head.message, form.errors.head.args: _*) shouldBe TaxableTurnoverMessages.maximum(Constants.maxAmount)
+        Messages(form.errors.head.message, form.errors.head.args: _*) shouldBe CommonMessages.maximum(Constants.maxAmount)
       }
     }
   }

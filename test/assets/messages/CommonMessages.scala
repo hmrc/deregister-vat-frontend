@@ -18,6 +18,8 @@ package assets.messages
 
 object CommonMessages {
 
+  val formatter = java.text.NumberFormat.getIntegerInstance
+
   val continue = "Continue"
   val back = "Back"
   val signOut = "Sign out"
@@ -35,5 +37,9 @@ object CommonMessages {
   val invalidDate = "Invalid date"
   val enterAmount = "No amount entered"
   val moreInfo = "More information"
+  val mandatoryAmount = "Enter an amount using numbers 0 to 9"
+  val decimals = "Enter a number with a maximum of 2 decimal places"
+  val negative = "You must enter a positive number"
+  def maximum(amt: BigDecimal) = s"You can not enter a number greater than ${formatter.format(amt)}"
 
 }

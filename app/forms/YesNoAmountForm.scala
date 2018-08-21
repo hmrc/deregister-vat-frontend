@@ -16,18 +16,46 @@
 
 package forms
 
+import common.Constants
 import forms.YesNoForm._
+import forms.utils.FormValidation
 import models.YesNoAmountModel
-import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.format.Formatter
+import play.api.data.{Form, FormError}
 
-object YesNoAmountForm {
+object YesNoAmountForm extends FormValidation {
+
+  private def validateAmount(key: String): BigDecimal => Either[Seq[FormError], Option[BigDecimal]] = {
+    case x if x < 0 => Left(Seq(FormError(key, "common.error.negative")))
+    case x if x >= Constants.maxAmount => Left(Seq(FormError(key, "common.error.greaterThanMax")))
+    case x if hasMoreThanTwoDecimals(x.toString) => Left(Seq(FormError(key, "common.error.tooManyDecimals")))
+    case x => Right(Some(x))
+  }
+
+  private val formatter: Formatter[Option[BigDecimal]] = new Formatter[Option[BigDecimal]] {
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Option[BigDecimal]] = {
+      (data.get(yesNo), data.get(key)) match {
+        case (Some(a), _) if a == no => Right(None)
+        case (Some(a), Some(x)) if a == yes && (x.trim == "" || !isNumeric(x)) => Left(Seq(FormError(key, "common.error.mandatoryAmount")))
+        case (Some(a), Some(x)) if a == yes && isNumeric(x) => validateAmount(key)(BigDecimal(x))
+        case _ => Right(None)
+      }
+    }
+
+    override def unbind(key: String, value: Option[BigDecimal]): Map[String, String] = {
+      val stringValue = value match {
+        case Some(x) => x.toString
+        case _ => ""
+      }
+      Map(key -> stringValue)
+    }
+  }
 
   val yesNoAmountForm: Form[YesNoAmountModel] = Form(
     mapping(
       yesNo -> of(YesNoForm.formatter),
-      "amount" -> optional(bigDecimal)
+      "amount" -> of(formatter)
     )(YesNoAmountModel.apply)(YesNoAmountModel.unapply)
-      .verifying("common.error.enterAmount", _.isValid)
   )
 }

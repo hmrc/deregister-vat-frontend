@@ -18,6 +18,11 @@ common.error.enterAmount = No amount entered
 common.moreInfo = More information
 common.error.mandatoryRadioOption = Select an option
 common.error.enterAmount = No amount entered
+common.error.mandatoryAmount = Enter an amount using numbers 0 to 9
+common.error.nonNumeric = Enter an amount using numbers 0 to 9
+common.error.negative = You must enter a positive number
+common.error.tooManyDecimals = Enter a number with a maximum of 2 decimal places
+common.error.greaterThanMax = You can not enter a number greater than 10,000,000,000
 
 deregisterForVAT.title = Deregister for VAT
 deregisterForVAT.p1 = You can deregister from VAT if the business no longer needs to submit VAT Returns. We will review your reasons for deregistering within 3 weeks.
@@ -63,9 +68,6 @@ cannotDeregister.link = update the business’s other VAT details.
 taxableTurnover.title = What was the business’s taxable turnover in the last 12 months?
 taxableTurnover.error.mandatory = Enter the business’s taxable turnover
 taxableTurnover.error.nonNumeric = Enter the turnover using numbers 0 to 9
-taxableTurnover.error.decimals = Enter a number with a maximum of 2 decimal places
-taxableTurnover.error.negative = You must enter a positive number
-taxableTurnover.error.maximum = You can not enter a number greater than {0}
 
 nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
 
