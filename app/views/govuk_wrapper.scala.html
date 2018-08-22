@@ -16,6 +16,8 @@
 
 @import config.AppConfig
 
+@import views.utils.ServiceNameUtil
+
 @(appConfig: AppConfig,
   title: String,
   mainClass: Option[String] = None,
@@ -44,9 +46,17 @@
 
 @headerNavLinks = {}
 
+@navTitle = @{
+    serviceName.fold{
+        ServiceNameUtil.generateHeader
+    }{
+        name => name
+    }
+}
+
 @insideHeader = {
     @uiLayouts.header_nav(
-      navTitle = Some("deregister-vat-frontend"),
+      navTitle = Some(navTitle),
       navTitleLink = None,
       showBetaLink = false,
       navLinks = Some(headerNavLinks))
