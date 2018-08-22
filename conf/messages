@@ -41,6 +41,9 @@ deregistrationReason.reason.other = Other
 deregistrationDate.title = Does the business want to choose its own deregistration date?
 deregistrationDate.p1 = The deregistration date can be up to a maximum of 3 months from the date you submit your request.
 deregistrationDate.p2 = We will confirm the deregistration date when your deregistration request is accepted.
+deregistrationDate.error.date.invalidDate = Enter a real deregistration date
+deregistrationDate.error.date.past = The deregistration date must be in the future
+deregistrationDate.error.date.future = The deregistration date must not be more than 3 months from today
 
 deregistrationProperty.title = Does the business have any commercial property?
 deregistrationProperty.p1 = This includes both land and buildings.

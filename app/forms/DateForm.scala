@@ -16,18 +16,16 @@
 
 package forms
 
-import java.time.LocalDate
-
+import forms.utils.FormValidation
 import models.DateModel
 import play.api.data.Forms._
 import play.api.data.format.Formatter
-import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.{Form, FormError}
 
 import scala.util.{Failure, Success, Try}
 
 
-object DateForm {
+object DateForm extends FormValidation {
 
   val day = "dateDay"
   val month = "dateMonth"
@@ -64,20 +62,12 @@ object DateForm {
     }
   }
 
-  def isValidDate(errMsg: String): Constraint[DateModel] = Constraint[DateModel]("isValidDate") {
-    date =>
-      Try(LocalDate.of(date.dateYear,date.dateMonth,date.dateDay)) match {
-        case Success(_) => Valid
-        case Failure(_) => Invalid(errMsg)
-      }
-  }
-
   val dateForm: Form[DateModel] = Form(
     mapping(
       day -> of(formatter),
       month -> of(formatter),
       year -> of(formatter)
     )(DateModel.apply)(DateModel.unapply)
-      .verifying(isValidDate("ceasedTrading.error.date.invalidDate"))
+      .verifying(isValidDateConstraint("ceasedTrading.error.date.invalidDate"))
   )
 }

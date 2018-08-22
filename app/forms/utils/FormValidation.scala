@@ -49,4 +49,14 @@ trait FormValidation {
     amt => if(amt <= max) Valid else Invalid(errMsg, max)
   }
 
+  def isValidDateConstraint(errMsg: String): Constraint[DateModel] = Constraint[DateModel]("isValidDate") {
+    date => if (isValidDate(date)) Valid else Invalid(errMsg)
+  }
+
+  def isValidDate(date: DateModel): Boolean = {
+    Try(LocalDate.of(date.dateYear, date.dateMonth, date.dateDay)) match {
+      case Success(_) => true
+      case Failure(_) => false
+    }
+  }
 }

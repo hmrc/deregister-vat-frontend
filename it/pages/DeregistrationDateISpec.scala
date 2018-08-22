@@ -16,6 +16,8 @@
 
 package pages
 
+import java.time.LocalDate
+
 import forms.DeregistrationDateForm
 import helpers.IntegrationBaseSpec
 import models.{DateModel, DeregistrationDateModel, No, Yes}
@@ -80,7 +82,11 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
     def postRequest(data: DeregistrationDateModel): WSResponse =
       post("/deregistration-date")(toFormData(DeregistrationDateForm.deregistrationDateForm, data))
 
-    val validYesModel = DeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
+    val validYesModel = DeregistrationDateModel(Yes,Some(DateModel(
+      LocalDate.now.getDayOfMonth,
+      LocalDate.now.getMonthValue,
+      LocalDate.now.getYear
+    )))
     val validNoModel = DeregistrationDateModel(No,None)
     val invalidYesModel = DeregistrationDateModel(Yes,None)
 
@@ -97,7 +103,6 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-
             redirectURI(controllers.routes.CheckAnswersController.show().url)
           )
         }

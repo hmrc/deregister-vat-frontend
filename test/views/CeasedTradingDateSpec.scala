@@ -135,6 +135,64 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
   }
 
+  "Rendering the Ceased trading date page with no values" should {
+
+    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+      "dateDay" -> "",
+      "dateMonth" -> "",
+      "dateYear" -> ""
+    )))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    s"have the correct document title" in {
+      document.title shouldBe CeasedTradingDateMessages.title
+    }
+
+    "have an error heading message being displayed" in {
+      elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
+    }
+
+    "have an error for each missing field linking to the correct field" in {
+      elementText(Selectors.errorDay) shouldBe CommonMessages.errorDateDay
+      element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
+      elementText(Selectors.errorMonth) shouldBe CommonMessages.errorDateMonth
+      element(Selectors.errorMonth).attr("href") shouldBe Selectors.monthField
+      elementText(Selectors.errorYear) shouldBe CommonMessages.errorDateYear
+      element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
+    }
+
+    "have an error message being displayed for the fields" in {
+      elementText(Selectors.errorField) shouldBe CommonMessages.invalidDate
+    }
+  }
+
+  "Rendering the Ceased trading date page with one value missing" should {
+
+    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+      "dateDay" -> "1",
+      "dateMonth" -> "1",
+      "dateYear" -> ""
+    )))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    s"have the correct document title" in {
+      document.title shouldBe CeasedTradingDateMessages.title
+    }
+
+    "have an error heading message being displayed" in {
+      elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
+    }
+
+    "have an error for each missing field linking to the correct field" in {
+      elementText(Selectors.errorYear) shouldBe CommonMessages.errorDateYear
+      element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
+    }
+
+    "have an error message being displayed for the fields" in {
+      elementText(Selectors.errorField) shouldBe CommonMessages.errorDateYear
+    }
+  }
+
   "Rendering the Ceased trading date page with one incorrect value" should {
 
     lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(

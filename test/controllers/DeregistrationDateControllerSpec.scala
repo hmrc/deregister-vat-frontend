@@ -16,6 +16,8 @@
 
 package controllers
 
+import java.time.LocalDate
+
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
@@ -55,9 +57,9 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
             ("yes_no", "yes"),
-            ("dateDay","1"),
-            ("dateMonth","1"),
-            ("dateYear","2018")
+            ("dateDay",LocalDate.now.getDayOfMonth.toString),
+            ("dateMonth",LocalDate.now.getMonthValue.toString),
+            ("dateYear",LocalDate.now.getYear.toString)
           )
         lazy val result = TestDeregistrationDateController.submit()(request)
 
