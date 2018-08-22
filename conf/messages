@@ -11,6 +11,7 @@ common.year = Year
 common.dateError = Invalid date
 common.fullStop = .
 common.agentService = Update your client’s VAT details
+common.clientService = Business tax account
 common.yes = Yes
 common.no = No
 common.error.enterAmount = No amount entered
