@@ -19,7 +19,7 @@ package forms
 import assets.messages.CommonMessages
 import models.VATAccountsModel
 import play.api.i18n.Messages
-import utils.TestUtil
+import _root_.utils.TestUtil
 
 class VATAccountsFormSpec extends TestUtil {
 
