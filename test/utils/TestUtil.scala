@@ -34,5 +34,6 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
   implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)
   implicit lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type]("12344566789",true)(request)
+  lazy val agentUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type]("12344566789",true, Some("XAIT1234"))(request)
 
 }

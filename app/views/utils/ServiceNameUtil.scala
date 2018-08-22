@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package assets.messages
+package views.utils
 
-object VATAccountsMessages {
+import models.User
+import play.api.i18n.Messages
+import play.api.mvc.Request
 
-  val title = "How are the business’s VAT accounts prepared?"
-  val accountant = "If you have an accountant, ask them what accounting method they use."
-  val standard = "Standard accounting"
-  val invoice = "You record VAT whenever you send or receive an invoice"
-  val cash = "Cash accounting"
-  val payment = "You record VAT whenever you make or receive a payment"
+object ServiceNameUtil{
+
+  def generateHeader(implicit request: Request[_], messages: Messages): String = {
+    request match {
+      case user: User[_] => if (user.isAgent) messages("common.agentService") else messages("common.clientService")
+      case _ => messages("common.clientService")
+    }
+  }
 
 }
