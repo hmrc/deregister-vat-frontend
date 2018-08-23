@@ -28,7 +28,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregisterForVATController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.DeregisterForVATController.show(user.isAgent).url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 

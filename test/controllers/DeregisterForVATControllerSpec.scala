@@ -29,7 +29,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
     "Calling the .show action" should {
 
-      lazy val result = TestDeregisterForVATController.show()(request)
+      lazy val result = TestDeregisterForVATController.show(true)(request)
 
       "return 200 (OK)" in {
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
