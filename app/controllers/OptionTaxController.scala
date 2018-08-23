@@ -39,7 +39,7 @@ class OptionTaxController @Inject()(val messagesApi: MessagesApi,
 
     YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionTax(error))),
-      _ => Future.successful(Redirect(controllers.routes.CapitalAssetsController.show()))
+      _ => Future.successful(Redirect(controllers.routes.OptionStocksToSellController.show()))
     )
   }
 }
