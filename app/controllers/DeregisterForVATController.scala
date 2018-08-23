@@ -30,7 +30,7 @@ class DeregisterForVATController @Inject()(val messagesApi: MessagesApi,
                                           val authenticate: AuthPredicate,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authenticate.async { implicit user =>
+  val show: Boolean => Action[AnyContent] = _ => authenticate.async { implicit user =>
     Future.successful(Ok(views.html.deregisterForVAT()))
   }
 

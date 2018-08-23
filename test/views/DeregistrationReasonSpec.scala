@@ -35,7 +35,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration reason page" should {
 
-    lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
+    lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -44,7 +44,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.show(user.isAgent).url
     }
 
     s"have the correct page heading" in {
@@ -72,7 +72,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration reason page with errors" should {
 
-    lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm.bind(Map("" -> "")))
+    lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm.bind(Map("" -> "")))(agentUser,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -81,7 +81,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.show(agentUser.isAgent).url
     }
 
     s"have the correct page heading" in {
