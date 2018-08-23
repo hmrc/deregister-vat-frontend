@@ -47,7 +47,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec{
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe OptionStocksToSellMessages.backText
+      element(Selectors.back).attr("href") shouldBe controllers.routes.OptionTaxController.show().url
     }
 
     s"have the correct page heading" in {
