@@ -36,7 +36,7 @@ appConfig = appConfig) {
         </p>
     </div>
 
-    <a class="button" type ="submit" href="@{controllers.routes.DeregistrationReasonController.show().url}" id="continue">
+    <a class="button" type ="submit" href="@{controllers.routes.DeregistrationReasonController.show(user.isAgent).url}" id="continue">
         @messages("common.continue")
     </a>
 

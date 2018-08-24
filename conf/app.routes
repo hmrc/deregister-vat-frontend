@@ -4,7 +4,7 @@ GET        /hello-world              controllers.HelloWorldController.helloWorld
 
 GET        /deregister               controllers.DeregisterForVATController.show
 
-GET        /deregistration-reason    controllers.DeregistrationReasonController.show
+GET        /deregistration-reason    controllers.DeregistrationReasonController.show(isAgent: Boolean)
 POST       /deregistration-reason    controllers.DeregistrationReasonController.submit
 
 GET        /accounting-method        controllers.VATAccountsController.show

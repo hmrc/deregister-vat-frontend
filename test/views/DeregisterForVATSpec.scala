@@ -30,7 +30,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration reason page" should {
 
-    lazy val view = views.html.deregisterForVAT()
+    lazy val view = views.html.deregisterForVAT()(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -48,7 +48,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
 
     s"have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
-      element(Selectors.button).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
+      element(Selectors.button).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show(user.isAgent).url
     }
 
   }

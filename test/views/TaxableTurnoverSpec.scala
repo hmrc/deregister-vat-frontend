@@ -34,7 +34,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.taxableTurnover(TaxableTurnoverForm.taxableTurnoverForm)
+    lazy val view = views.html.taxableTurnover(TaxableTurnoverForm.taxableTurnoverForm)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -43,7 +43,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show(user.isAgent).url
     }
 
     s"have the correct page heading" in {
@@ -65,7 +65,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.taxableTurnover(TaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "")))
+    lazy val view = views.html.taxableTurnover(TaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "")))(agentUser,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -74,7 +74,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show(agentUser.isAgent).url
     }
 
     s"have the correct page heading" in {

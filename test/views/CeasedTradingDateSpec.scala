@@ -44,7 +44,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm)
+    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -53,7 +53,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show(user.isAgent).url
     }
 
     "have no error heading message being displayed" in {
@@ -85,7 +85,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       "dateDay" -> "",
       "dateMonth" -> "",
       "dateYear" -> ""
-    )))
+    )))(agentUser,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -94,7 +94,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show(agentUser.isAgent).url
     }
 
     "have an error heading message being displayed" in {
