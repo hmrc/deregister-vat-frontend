@@ -16,14 +16,12 @@
 
 package views
 
-import assets.messages.{CommonMessages, CapitalAssetsMessages}
+import assets.messages.{CommonMessages, OptionStocksToSellMessages, OptionTaxMessages}
 import forms.YesNoAmountForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-
-class CapitalAssetsSpec extends ViewBaseSpec {
-
+class OptionStocksToSellSpec extends ViewBaseSpec{
 
   object Selectors {
     val back = ".link-back"
@@ -32,7 +30,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
     val noOption = "fieldset > div > div:nth-of-type(2) > label"
     val hiddenField = "#hiddenContent"
-    val hint = "#hiddenContent > div > label"
+    val hint = ".form-label"
     val button = ".button"
     val errorHeading = "#error-summary-display"
     val error = "#yes_no-error-summary"
@@ -40,20 +38,20 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm)
+    lazy val view = views.html.optionStocksToSell(YesNoAmountForm.yesNoAmountForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe CapitalAssetsMessages.title
+      document.title shouldBe OptionStocksToSellMessages.title
     }
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.OptionStocksToSellController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.OptionTaxController.show().url
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe CapitalAssetsMessages.title
+      elementText(Selectors.pageHeading) shouldBe OptionStocksToSellMessages.title
     }
 
     "not display an error heading" in {
@@ -61,8 +59,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
     }
 
     s"have the correct content displayed" in {
-      elementText(Selectors.text(3)) shouldBe CapitalAssetsMessages.p1
-      elementText(Selectors.text(4)) shouldBe CapitalAssetsMessages.p2
+      elementText(Selectors.text(3)) shouldBe OptionStocksToSellMessages.text1
     }
 
     s"have the correct a radio button form with yes/no answers" in {
@@ -72,7 +69,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
     "have the correct hint text for the hidden field and be hidden" in {
       document.select(Selectors.hiddenField).hasClass("js-hidden") shouldBe true
-      elementText(Selectors.hint) shouldBe CapitalAssetsMessages.hint
+      elementText(Selectors.hint) shouldBe OptionStocksToSellMessages.hiddenText
     }
 
     s"have the correct continue button text and url" in {
@@ -88,11 +85,11 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
     "nothing was entered" should {
 
-      lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm.bind(Map("yes_no" -> "")))
+      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm.bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe CapitalAssetsMessages.title
+        document.title shouldBe OptionTaxMessages.title
       }
 
       "display the correct error heading" in {
@@ -106,14 +103,14 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
     "Yes was entered but no amount" should {
 
-      lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm.bind(Map(
+      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm.bind(Map(
         "yes_no" -> "yes",
         "amount" -> ""
       )))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe CapitalAssetsMessages.title
+        document.title shouldBe OptionTaxMessages.title
       }
 
       "display the correct error heading" in {
@@ -121,4 +118,5 @@ class CapitalAssetsSpec extends ViewBaseSpec {
       }
     }
   }
+
 }

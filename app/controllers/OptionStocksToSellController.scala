@@ -19,27 +19,27 @@ package controllers
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.YesNoAmountForm
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
-@Singleton
-class OptionTaxController @Inject()(val messagesApi: MessagesApi,
-                                    val authenticate: AuthPredicate,
-                                    implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
+                                             val authenticate: AuthPredicate,
+                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.optionTax(YesNoAmountForm.yesNoAmountForm)))
+    Future.successful(Ok(views.html.optionStocksToSell(YesNoAmountForm.yesNoAmountForm)))
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
     YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.optionTax(error))),
-      _ => Future.successful(Redirect(controllers.routes.OptionStocksToSellController.show()))
+      error => Future.successful(BadRequest(views.html.optionStocksToSell(error))),
+      _ =>
+        Future.successful(Redirect(controllers.routes.CapitalAssetsController.show()))
     )
   }
 }

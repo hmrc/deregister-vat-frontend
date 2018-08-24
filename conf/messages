@@ -72,6 +72,10 @@ nextTaxableTurnover.title = What is the business’s expected taxable turnover f
 optionOwesMoney.title = Does the business owe any money?
 optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
 
+optionOwnsStockToSell.title = Does the business have any stocks to sell?
+optionOwnsStockToSell.text.1 = For example, goods bought or manufactured for resale.
+optionOwnsStockToSell.hint = What is the total value of the stock you are planning to sell?
+
 whyTurnoverBelow.title = Why does the business expect its turnover to be below the threshold?
 whyTurnoverBelow.text.1 = Select all that apply
 whyTurnoverBelow.reason.lostContract = Lost a contract
