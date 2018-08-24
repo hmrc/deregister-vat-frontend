@@ -69,7 +69,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
       "the user submits after selecting an 'Yes' option without entering an amount" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes"))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes"),("amount", ""))
         lazy val result = TestCapitalAssetsController.submit()(request)
 
 
