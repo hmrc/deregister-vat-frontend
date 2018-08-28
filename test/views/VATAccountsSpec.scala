@@ -30,6 +30,11 @@ class VATAccountsSpec extends ViewBaseSpec {
     val button = ".button"
     val error = "#accountingMethod-error-summary"
     val accountantsContent = "#content p"
+    object ProgressiveDisclosure {
+      val heading = "details > summary > span"
+      val p1 = "details > div > p"
+      val bullet: Int => String = i => s"details > div > ul > li:nth-of-type($i)"
+    }
   }
 
   "Rendering the VAT Accounts page with no errors" should {
@@ -57,6 +62,25 @@ class VATAccountsSpec extends ViewBaseSpec {
     s"have the correct a radio button form with the correct 2 options" in {
       elementText(Selectors.methodOption(1)) shouldBe VATAccountsMessages.standard + " " + VATAccountsMessages.invoice
       elementText(Selectors.methodOption(2)) shouldBe VATAccountsMessages.cash + " " + VATAccountsMessages.payment
+    }
+
+    "have a progressive disclosure" which {
+
+      s"has the heading '${VATAccountsMessages.ProgressiveDisclosure.heading}'" in {
+        elementText(Selectors.ProgressiveDisclosure.heading) shouldBe VATAccountsMessages.ProgressiveDisclosure.heading
+      }
+
+      s"has the paragraph '${VATAccountsMessages.ProgressiveDisclosure.p1}'" in {
+        elementText(Selectors.ProgressiveDisclosure.p1) shouldBe VATAccountsMessages.ProgressiveDisclosure.p1
+      }
+
+      s"has the bullet1 '${VATAccountsMessages.ProgressiveDisclosure.bullet1}'" in {
+        elementText(Selectors.ProgressiveDisclosure.bullet(1)) shouldBe VATAccountsMessages.ProgressiveDisclosure.bullet1
+      }
+
+      s"has the bullet2 '${VATAccountsMessages.ProgressiveDisclosure.bullet2}'" in {
+        elementText(Selectors.ProgressiveDisclosure.bullet(2)) shouldBe VATAccountsMessages.ProgressiveDisclosure.bullet2
+      }
     }
 
     s"have the correct continue button text and url" in {

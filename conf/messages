@@ -46,6 +46,10 @@ vatAccounts.method.standard = Standard accounting
 vatAccounts.method.cash = Cash accounting
 vatAccounts.description.standard = You record VAT whenever you send or receive an invoice
 vatAccounts.description.cash = You record VAT whenever you make or receive a payment
+vatAccounts.showMeAnExample = Show me an example
+vatAccounts.showMeAnExample.p1 = You invoice someone in March but do not receive the money until June. If you record the VAT on this payment in:
+vatAccounts.showMeAnExample.bullet1 = March, then you use standard accounting
+vatAccounts.showMeAnExample.bullet2 = June, then you use cash accounting
 
 ceasedTrading.title = The date your business ceased or will cease trading
 ceasedTrading.hint = For example, 31 3 1980
