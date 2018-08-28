@@ -25,4 +25,11 @@ object VATAccountsMessages {
   val cash = "Cash accounting"
   val payment = "You record VAT whenever you make or receive a payment"
 
+  object ProgressiveDisclosure {
+    val heading = "Show me an example"
+    val p1 = "You invoice someone in March but do not receive the money until June. If you record the VAT on this payment in:"
+    val bullet1 = "March, then you use standard accounting"
+    val bullet2 = "June, then you use cash accounting"
+  }
+
 }
