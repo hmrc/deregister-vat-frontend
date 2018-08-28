@@ -116,7 +116,7 @@ class OptionTaxSpec extends ViewBaseSpec {
       }
 
       "display the correct error heading" in {
-        elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.mandatoryAmount}"
+        elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryAmount}"
       }
     }
   }
