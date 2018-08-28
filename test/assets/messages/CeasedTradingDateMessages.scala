@@ -20,5 +20,6 @@ object CeasedTradingDateMessages {
 
   val title = "The date your business ceased or will cease trading"
   val hint = "For example, 31 3 1980"
-
+  val errorNoEntry = "Enter the date your business ceased or will cease trading"
+  val errorInvalidDate = "Enter a real ceased trading date"
 }

@@ -22,31 +22,6 @@ class DeregistrationDateModelSpec extends TestUtil {
 
   val validDate = DateModel(1,1,2018)
 
-  "DeregistrationDateModel.checkValidDateIfYes" should {
-
-    "return true" when{
-
-      "given a Yes and a date" in {
-        DeregistrationDateModel(Yes,Some(validDate)).checkValidDateIfYes shouldBe true
-      }
-
-      "given a No and a date" in {
-        DeregistrationDateModel(No,Some(validDate)).checkValidDateIfYes shouldBe true
-      }
-
-      "given a No and no date" in {
-        DeregistrationDateModel(No,None).checkValidDateIfYes shouldBe true
-      }
-    }
-
-    "return false" when {
-
-      "given a Yes but no date" in {
-        DeregistrationDateModel(Yes, None).checkValidDateIfYes shouldBe false
-      }
-    }
-  }
-
   "DeregistrationDateModel.customerApply" should{
 
     "return a model with a yes and a date" when {

@@ -25,11 +25,12 @@ import scala.util.{Failure, Success, Try}
 
 case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int){
 
-  val isValidDate: Boolean =
+  val date: Option[LocalDate] =
     Try(LocalDate.of(dateYear,dateMonth,dateDay)) match {
-      case Success(_) => true
-      case Failure(_) => false
+      case Success(date) => Some(date)
+      case Failure(_) => None
     }
+
 }
 
 object DateModel {

@@ -16,26 +16,47 @@
 
 package forms
 
+import _root_.utils.TestUtil
+import assets.messages.{CeasedTradingDateMessages, CommonMessages}
 import models.DateModel
-import uk.gov.hmrc.play.test.UnitSpec
+import play.api.i18n.Messages
 
-class DateFormSpec extends UnitSpec {
+class DateFormSpec extends TestUtil {
 
-  "Binding a form with valid date" should {
+  "Binding a form with valid date" when {
 
-    val data = Map(
-      "dateDay" -> "1",
-      "dateMonth" -> "1",
-      "dateYear" -> "2018"
-    )
-    val form = DateForm.dateForm.bind(data)
+    "max values are given" should {
+      val data = Map(
+        DateForm.day -> "31",
+        DateForm.month -> "12",
+        DateForm.year -> "9999"
+      )
+      val form = DateForm.dateForm.bind(data)
 
-    "result in a form with no errors" in {
-      form.hasErrors shouldBe false
+      "result in a form with no errors" in {
+        form.hasErrors shouldBe false
+      }
+
+      "generate a DateModel" in {
+        form.value shouldBe Some(DateModel(31, 12, 9999))
+      }
     }
 
-    "generate a DateModel" in {
-      form.value shouldBe Some(DateModel(1,1,2018))
+    "minimum values are given" should {
+      val data = Map(
+        DateForm.day -> "1",
+        DateForm.month -> "1",
+        DateForm.year -> "1000"
+      )
+      val form = DateForm.dateForm.bind(data)
+
+      "result in a form with no errors" in {
+        form.hasErrors shouldBe false
+      }
+
+      "generate a DateModel" in {
+        form.value shouldBe Some(DateModel(1, 1, 1000))
+      }
     }
   }
 
@@ -50,17 +71,62 @@ class DateFormSpec extends UnitSpec {
         form.hasErrors shouldBe true
       }
 
+      "have three errors" in {
+        form.errors.size shouldBe 3
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorDateDay
+        Messages(form.errors(1).message) shouldBe CommonMessages.errorDateMonth
+        Messages(form.errors(2).message) shouldBe CommonMessages.errorDateYear
+      }
+    }
+
+    "values given are too high" should {
+
+      val data = Map(
+        DateForm.day -> "32",
+        DateForm.month -> "13",
+        DateForm.year -> "10000"
+      )
+      val form = DateForm.dateForm.bind(data)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
       "have three error" in {
         form.errors.size shouldBe 3
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorDateDay
+        Messages(form.errors(1).message) shouldBe CommonMessages.errorDateMonth
+        Messages(form.errors(2).message) shouldBe CommonMessages.errorDateYear
+      }
+    }
+
+    "values given are too low" should {
+
+      val data = Map(
+        DateForm.day -> "0",
+        DateForm.month -> "0",
+        DateForm.year -> "999"
+      )
+      val form = DateForm.dateForm.bind(data)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "have three error" in {
+        form.errors.size shouldBe 3
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorDateDay
+        Messages(form.errors(1).message) shouldBe CommonMessages.errorDateMonth
+        Messages(form.errors(2).message) shouldBe CommonMessages.errorDateYear
       }
     }
 
     "an invalid date has been entered" should {
 
       val data = Map(
-        "dateDay" -> "99",
-        "dateMonth" -> "99",
-        "dateYear" -> "9999"
+        DateForm.day -> "31",
+        DateForm.month -> "2",
+        DateForm.year -> "2018"
       )
       val form = DateForm.dateForm.bind(data)
 
@@ -70,6 +136,7 @@ class DateFormSpec extends UnitSpec {
 
       "have three error" in {
         form.errors.size shouldBe 1
+        Messages(form.errors.head.message) shouldBe CeasedTradingDateMessages.errorInvalidDate
       }
     }
   }
@@ -80,9 +147,9 @@ class DateFormSpec extends UnitSpec {
       val model = DateModel(1,1,2018)
       val form = DateForm.dateForm.fill(model)
       form.data shouldBe Map(
-        "dateDay" -> "1",
-        "dateMonth" -> "1",
-        "dateYear" -> "2018"
+        DateForm.day -> "1",
+        DateForm.month -> "1",
+        DateForm.year -> "2018"
       )
     }
   }
