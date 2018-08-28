@@ -16,10 +16,13 @@
 
 package forms
 
+import _root_.utils.TestUtil
+import assets.messages.CommonMessages
+import common.Constants
 import models._
-import uk.gov.hmrc.play.test.UnitSpec
+import play.api.i18n.Messages
 
-class YesNoAmountFormSpec extends UnitSpec {
+class YesNoAmountFormSpec extends TestUtil {
 
   "Binding a form with valid Yes data" should {
 
@@ -61,7 +64,7 @@ class YesNoAmountFormSpec extends UnitSpec {
 
       val data = Map(
         "yes_no" -> "no",
-        "amount" -> ""
+        "amount" -> "1000.01"
       )
       val form = YesNoAmountForm.yesNoAmountForm.bind(data)
 
@@ -86,8 +89,8 @@ class YesNoAmountFormSpec extends UnitSpec {
         form.hasErrors shouldBe true
       }
 
-      "have an error" in {
-        form.errors.size shouldBe 1
+      "have the Select and Option error" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorMandatoryRadioOption
       }
     }
 
@@ -103,8 +106,76 @@ class YesNoAmountFormSpec extends UnitSpec {
         form.hasErrors shouldBe true
       }
 
-      "have an error" in {
-        form.errors.size shouldBe 1
+      "have the Mandatory Amount error" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.mandatoryAmount
+      }
+    }
+
+    "Yes but an invalid amount has been entered" should {
+
+      val missingOption: Map[String, String] = Map(
+        "yes_no" -> "yes",
+        "amount" -> "ABC"
+      )
+      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "have the Mandatory Amount error" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.mandatoryAmount
+      }
+    }
+
+    "Yes but a negative amount has been entered" should {
+
+      val missingOption: Map[String, String] = Map(
+        "yes_no" -> "yes",
+        "amount" -> "-1"
+      )
+      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "have the Mandatory Amount error" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.negative
+      }
+    }
+
+    "Yes but an amount with too many decimals has been entered" should {
+
+      val missingOption: Map[String, String] = Map(
+        "yes_no" -> "yes",
+        "amount" -> "0.001"
+      )
+      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "have the Mandatory Amount error" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.decimals
+      }
+    }
+
+    "Yes but an amount > max has been entered" should {
+
+      val missingOption: Map[String, String] = Map(
+        "yes_no" -> "yes",
+        "amount" -> (Constants.maxAmount + 0.01).toString
+      )
+      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+
+      "result in a form with errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "have the Mandatory Amount error" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.maximum(Constants.maxAmount)
       }
     }
   }

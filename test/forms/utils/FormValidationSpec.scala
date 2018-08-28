@@ -29,21 +29,21 @@ class FormValidationSpec extends UnitSpec with FormValidation {
     "for non-numeric values" should {
 
       "return Invalid(errMsg)" in {
-        isNumeric(errMsg)("ABCD") shouldBe Invalid(errMsg)
-        isNumeric(errMsg)("") shouldBe Invalid(errMsg)
-        isNumeric(errMsg)(".") shouldBe Invalid(errMsg)
-        isNumeric(errMsg)("e") shouldBe Invalid(errMsg)
-        isNumeric(errMsg)("&") shouldBe Invalid(errMsg)
+        isNumericConstraint(errMsg)("ABCD") shouldBe Invalid(errMsg)
+        isNumericConstraint(errMsg)("") shouldBe Invalid(errMsg)
+        isNumericConstraint(errMsg)(".") shouldBe Invalid(errMsg)
+        isNumericConstraint(errMsg)("e") shouldBe Invalid(errMsg)
+        isNumericConstraint(errMsg)("&") shouldBe Invalid(errMsg)
       }
     }
 
     "for numeric values" should {
 
       "return Valid" in {
-        isNumeric("error")("1234") shouldBe Valid
-        isNumeric("error")("1234.12345") shouldBe Valid
-        isNumeric("error")("0.01") shouldBe Valid
-        isNumeric("error")(".01") shouldBe Valid
+        isNumericConstraint("error")("1234") shouldBe Valid
+        isNumericConstraint("error")("1234.12345") shouldBe Valid
+        isNumericConstraint("error")("0.01") shouldBe Valid
+        isNumericConstraint("error")(".01") shouldBe Valid
       }
     }
   }
@@ -53,22 +53,22 @@ class FormValidationSpec extends UnitSpec with FormValidation {
     "for values with more that two decimals" should {
 
       "return Invalid(errMsg)" in {
-        hasMaxTwoDecimals(errMsg)("0.001") shouldBe Invalid(errMsg)
-        hasMaxTwoDecimals(errMsg)("0.000") shouldBe Invalid(errMsg)
-        hasMaxTwoDecimals(errMsg)(".001") shouldBe Invalid(errMsg)
-        hasMaxTwoDecimals(errMsg)(".000") shouldBe Invalid(errMsg)
+        hasMaxTwoDecimalsConstraint(errMsg)("0.001") shouldBe Invalid(errMsg)
+        hasMaxTwoDecimalsConstraint(errMsg)("0.000") shouldBe Invalid(errMsg)
+        hasMaxTwoDecimalsConstraint(errMsg)(".001") shouldBe Invalid(errMsg)
+        hasMaxTwoDecimalsConstraint(errMsg)(".000") shouldBe Invalid(errMsg)
       }
     }
 
     "for values with less than two decimlas" should {
 
       "return Valid" in {
-        hasMaxTwoDecimals(errMsg)("0.01") shouldBe Valid
-        hasMaxTwoDecimals(errMsg)("0.00") shouldBe Valid
-        hasMaxTwoDecimals(errMsg)(".1") shouldBe Valid
-        hasMaxTwoDecimals(errMsg)("0.") shouldBe Valid
-        hasMaxTwoDecimals(errMsg)("0") shouldBe Valid
-        hasMaxTwoDecimals(errMsg)("100") shouldBe Valid
+        hasMaxTwoDecimalsConstraint(errMsg)("0.01") shouldBe Valid
+        hasMaxTwoDecimalsConstraint(errMsg)("0.00") shouldBe Valid
+        hasMaxTwoDecimalsConstraint(errMsg)(".1") shouldBe Valid
+        hasMaxTwoDecimalsConstraint(errMsg)("0.") shouldBe Valid
+        hasMaxTwoDecimalsConstraint(errMsg)("0") shouldBe Valid
+        hasMaxTwoDecimalsConstraint(errMsg)("100") shouldBe Valid
       }
     }
   }

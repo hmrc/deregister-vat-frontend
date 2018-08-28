@@ -24,8 +24,5 @@ object TaxableTurnoverMessages {
 
   val mandatory = "Enter the business’s taxable turnover"
   val nonNumeric = "Enter the turnover using numbers 0 to 9"
-  val decimals = "Enter a number with a maximum of 2 decimal places"
-  val negative = "You must enter a positive number"
-  def maximum(amt: BigDecimal) = s"You can not enter a number greater than ${formatter.format(amt)}"
 
 }

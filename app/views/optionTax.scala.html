@@ -37,7 +37,7 @@
 
     <p>@messages("optionTax.text")</p>
 
-    @helpers.form(action = controllers.routes.OptionTaxController.submit) {
+    @helpers.form(action = controllers.routes.OptionTaxController.submit, 'novalidate -> "novalidate") {
 
         <div id="@yesNo">
             @yesNoRevealHelper(

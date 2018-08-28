@@ -29,9 +29,9 @@ object TaxableTurnoverForm extends FormValidation {
       "turnover" -> optional(text)
         .verifying("taxableTurnover.error.mandatory", _.isDefined)
         .transform[String](x => x.get, x => Some(x))
-        .verifying(isNumeric("taxableTurnover.error.nonNumeric"), hasMaxTwoDecimals("taxableTurnover.error.decimals"))
+        .verifying(isNumericConstraint("taxableTurnover.error.nonNumeric"), hasMaxTwoDecimalsConstraint("common.error.tooManyDecimals"))
         .transform[BigDecimal](x => BigDecimal(x), x => x.toString)
-        .verifying(isPositive("taxableTurnover.error.negative"), doesNotExceed(maxAmount, "taxableTurnover.error.maximum"))
+        .verifying(isPositive("common.error.negative"), doesNotExceed(maxAmount, "common.error.greaterThanMax"))
     )(TaxableTurnoverModel.apply)(TaxableTurnoverModel.unapply)
   )
 

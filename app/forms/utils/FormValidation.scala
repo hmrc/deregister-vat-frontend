@@ -22,15 +22,20 @@ import scala.util.{Success, Try}
 
 trait FormValidation {
 
-  def isNumeric(errMsg: String): Constraint[String] = Constraint("isNumeric"){
-    amt => Try(BigDecimal(amt)) match {
-      case Success(_) => Valid
-      case _ => Invalid(errMsg)
-    }
+  val isNumeric: String => Boolean = amt => Try(BigDecimal(amt)) match {
+    case Success(_) => true
+    case _ => false
   }
 
-  def hasMaxTwoDecimals(errMsg: String): Constraint[String] = Constraint("isNumeric") {
-    amt => if(amt.lastIndexOf(".") >= 0  && (amt.length - amt.lastIndexOf(".") - 1) > 2) Invalid(errMsg) else Valid
+  val hasMoreThanTwoDecimals: String => Boolean = amtAsString =>
+    amtAsString.lastIndexOf(".") >= 0  && (amtAsString.length - amtAsString.lastIndexOf(".") - 1) > 2
+
+  def isNumericConstraint(errMsg: String): Constraint[String] = Constraint("isNumeric"){
+    amt => if (isNumeric(amt)) Valid else Invalid(errMsg)
+  }
+
+  def hasMaxTwoDecimalsConstraint(errMsg: String): Constraint[String] = Constraint("isNumeric") {
+    amt => if(hasMoreThanTwoDecimals(amt)) Invalid(errMsg) else Valid
   }
 
   def isPositive(errMsg: String): Constraint[BigDecimal] = Constraint[BigDecimal]("isPositive") {
