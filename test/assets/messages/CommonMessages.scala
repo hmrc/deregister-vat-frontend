@@ -37,10 +37,12 @@ object CommonMessages {
   val invalidDate = "Invalid date"
   val enterAmount = "No amount entered"
   val moreInfo = "More information"
-  val mandatoryAmount = "Enter an amount using numbers 0 to 9"
-  val decimals = "Enter a number with a maximum of 2 decimal places"
-  val negative = "You must enter a positive number"
-  def maximum(amt: BigDecimal) = s"You can not enter a number greater than ${formatter.format(amt)}"
+
+
+  val errorMandatoryAmount = "Enter the amount using numbers 0 to 9"
+  val errorTooManyDecimals = "Enter a maximum of 2 decimal places for pence"
+  val errorNegative = "Enter positive numbers only (no -)"
+  val errorMaximum = "You have entered too many numbers"
 
   val errorDateInvalidCharacters = "Enter a date using numbers 0 to 9"
   val errorDateDay = "Enter numbers between 1 and 31"

@@ -76,7 +76,7 @@ class TaxableTurnoverFormSpec extends TestUtil {
       }
 
       "throw the non-numeric error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.negative
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorNegative
       }
     }
 
@@ -89,7 +89,7 @@ class TaxableTurnoverFormSpec extends TestUtil {
       }
 
       "throw the non-numeric error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.decimals
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorTooManyDecimals
       }
     }
 
@@ -102,7 +102,7 @@ class TaxableTurnoverFormSpec extends TestUtil {
       }
 
       "throw a maximum value exceeded error" in {
-        Messages(form.errors.head.message, form.errors.head.args: _*) shouldBe CommonMessages.maximum(Constants.maxAmount)
+        Messages(form.errors.head.message, form.errors.head.args: _*) shouldBe CommonMessages.errorMaximum
       }
     }
   }

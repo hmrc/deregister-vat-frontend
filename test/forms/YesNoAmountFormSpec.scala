@@ -107,7 +107,7 @@ class YesNoAmountFormSpec extends TestUtil {
       }
 
       "have the Mandatory Amount error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.mandatoryAmount
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorMandatoryAmount
       }
     }
 
@@ -124,7 +124,7 @@ class YesNoAmountFormSpec extends TestUtil {
       }
 
       "have the Mandatory Amount error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.mandatoryAmount
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorMandatoryAmount
       }
     }
 
@@ -141,7 +141,7 @@ class YesNoAmountFormSpec extends TestUtil {
       }
 
       "have the Mandatory Amount error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.negative
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorNegative
       }
     }
 
@@ -158,7 +158,7 @@ class YesNoAmountFormSpec extends TestUtil {
       }
 
       "have the Mandatory Amount error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.decimals
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorTooManyDecimals
       }
     }
 
@@ -175,7 +175,7 @@ class YesNoAmountFormSpec extends TestUtil {
       }
 
       "have the Mandatory Amount error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.maximum(Constants.maxAmount)
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorMaximum
       }
     }
   }
