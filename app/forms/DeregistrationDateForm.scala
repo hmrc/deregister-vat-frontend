@@ -30,7 +30,7 @@ import scala.util.{Failure, Success, Try}
 
 object DeregistrationDateForm {
 
-  val daysAllowed = 30
+  val monthsAllowed = 3
 
   val formatter: Formatter[Option[Int]] = new Formatter[Option[Int]] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Option[Int]] = {
@@ -67,7 +67,7 @@ object DeregistrationDateForm {
   }
 
   private def isDateRangeValid(date: LocalDate) = {
-    if (date.isAfter(LocalDate.now.plusDays(daysAllowed))) {
+    if (date.isAfter(LocalDate.now.plusMonths(monthsAllowed))) {
       Invalid("deregistrationDate.error.date.future")
     } else if (date.isBefore(LocalDate.now)) {
       Invalid("deregistrationDate.error.date.past")

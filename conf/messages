@@ -24,8 +24,8 @@ common.error.tooManyDecimals = Enter a number with a maximum of 2 decimal places
 common.error.greaterThanMax = You can not enter a number greater than 10,000,000,000
 
 error.date.invalidCharacters = Enter a date using numbers 0 to 9
-error.date.day = Enter 1 or 2 numbers
-error.date.month = Enter 1 or 2 numbers
+error.date.day = Enter numbers between 1 and 31
+error.date.month = Enter numbers between 1 and 12
 error.date.year = Enter 4 numbers
 error.date.invalid = Invalid date
 

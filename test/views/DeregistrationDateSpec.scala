@@ -480,9 +480,9 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the deregistration date page with a yes and a date within 30 days" should {
+  "Rendering the deregistration date page with a yes and a date within 3 months" should {
 
-    val testDate = LocalDate.now().plusDays(29)
+    val testDate = LocalDate.now().plusMonths(3)
 
     lazy val view = views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm.bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
@@ -505,9 +505,9 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the deregistration date page with a yes and a date after 30 days" should {
+  "Rendering the deregistration date page with a yes and a date after 3 months" should {
 
-    val testDate = LocalDate.now().plusDays(31)
+    val testDate = LocalDate.now().plusMonths(3).plusDays(1)
 
     lazy val view = views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm.bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,

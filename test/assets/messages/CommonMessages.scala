@@ -43,8 +43,8 @@ object CommonMessages {
   def maximum(amt: BigDecimal) = s"You can not enter a number greater than ${formatter.format(amt)}"
 
   val errorDateInvalidCharacters = "Enter a date using numbers 0 to 9"
-  val errorDateDay = "Enter 1 or 2 numbers"
-  val errorDateMonth = "Enter 1 or 2 numbers"
+  val errorDateDay = "Enter numbers between 1 and 31"
+  val errorDateMonth = "Enter numbers between 1 and 12"
   val errorDateYear = "Enter 4 numbers"
 
 }

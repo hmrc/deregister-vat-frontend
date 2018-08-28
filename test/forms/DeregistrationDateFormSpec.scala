@@ -50,7 +50,7 @@ class DeregistrationDateFormSpec extends TestUtil {
 
     "a valid future date is entered" should {
 
-      val testDate = LocalDate.now.plusDays(30)
+      val testDate = LocalDate.now.plusMonths(3)
       val data = Map(
         YesNoForm.yesNo -> YesNoForm.yes,
         DateForm.day -> testDate.getDayOfMonth.toString,
@@ -344,7 +344,7 @@ class DeregistrationDateFormSpec extends TestUtil {
 
     "Yes and a future date" should {
 
-      val testDate = LocalDate.now.plusDays(31)
+      val testDate = LocalDate.now.plusMonths(3).plusDays(1)
       val data = Map(
         YesNoForm.yesNo -> YesNoForm.yes,
         DateForm.day -> testDate.getDayOfMonth.toString,
