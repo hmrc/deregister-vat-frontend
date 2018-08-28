@@ -44,7 +44,15 @@
     <meta name="format-detection" content="telephone=no" />
 }
 
-@headerNavLinks = {}
+@headerNavLinks = {
+    @if(showSignOut) {
+        <li>
+            <a id="sign-out" href="@routes.SignOutController.signOut(feedbackOnSignOut)">
+                @messages("base.sign-out")
+            </a>
+        </li>
+    }
+}
 
 @navTitle = @{
     serviceName.fold{
