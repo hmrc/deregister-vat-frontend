@@ -40,7 +40,7 @@
 
     <p>@messages("deregistrationDate.p2")</p>
 
-    @helpers.form(action = controllers.routes.DeregistrationDateController.submit) {
+    @helpers.form(action = controllers.routes.DeregistrationDateController.submit, 'novalidate -> "novalidate") {
 
         <div class="form-group" id="@yesNo">
             @yesNoRevealHelper(

@@ -34,7 +34,7 @@
 
     <p>@messages("whyTurnoverBelow.text.1")</p>
 
-    @helpers.form(action = controllers.routes.WhyTurnoverBelowController.submit) {
+    @helpers.form(action = controllers.routes.WhyTurnoverBelowController.submit, 'novalidate -> "novalidate") {
 
         <div class="form-group" id="reason">
             @checkboxHelper(

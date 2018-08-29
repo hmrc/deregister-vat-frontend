@@ -38,7 +38,7 @@
 
     @headings(messages("vatAccounts.title"))
 
-    @helpers.form(action = controllers.routes.VATAccountsController.submit) {
+    @helpers.form(action = controllers.routes.VATAccountsController.submit, 'novalidate -> "novalidate") {
 
         <div class="form-group" id="accountingMethod">
             @multipleLineRadioGroup(

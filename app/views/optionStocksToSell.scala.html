@@ -30,38 +30,36 @@ title = messages("optionOwnsStockToSell.title"),
 bodyClasses = None,
 appConfig = appConfig) {
 
-<!--TODO: Update this as part of the back linking story as the redirect is dynamic-->
-<a class="link-back" href="@controllers.routes.OptionTaxController.show().url">@messages("common.back")</a>
+    <!--TODO: Update this as part of the back linking story as the redirect is dynamic-->
+    <a class="link-back" href="@controllers.routes.OptionTaxController.show().url">@messages("common.back")</a>
 
-@errorSummary("common.errorSummary.heading", form)
+    @errorSummary("common.errorSummary.heading", form)
 
-@headings(messages("optionOwnsStockToSell.title"))
+    @headings(messages("optionOwnsStockToSell.title"))
 
-<p>@messages("optionOwnsStockToSell.text.1")</p>
+    <p>@messages("optionOwnsStockToSell.text.1")</p>
 
-@helpers.form(action = controllers.routes.OptionStocksToSellController.submit) {
+    @helpers.form(action = controllers.routes.OptionStocksToSellController.submit, 'novalidate -> "novalidate") {
 
-<div id="@yesNo">
-       @yesNoRevealHelper(
-          field = form(yesNo),
-          choices = Seq(
-           (yes, Messages("common.yes")),
-           (no, Messages("common.no"))),
-          question = Messages("optionOwnsStockToSell.title"),
-          inline = true,
-          hiddenContent = moneyInput(
-               field = form("amount"),
-               label = messages("optionOwnsStockToSell.hint"),
-               labelHidden = false,
-               decimalPlace = true
-           )
-       )
+        <div class="form-group" id="@yesNo">
+               @yesNoRevealHelper(
+                  field = form(yesNo),
+                  choices = Seq(
+                   (yes, Messages("common.yes")),
+                   (no, Messages("common.no"))),
+                  question = Messages("optionOwnsStockToSell.title"),
+                  inline = true,
+                  hiddenContent = moneyInput(
+                       field = form("amount"),
+                       label = messages("optionOwnsStockToSell.hint"),
+                       labelHidden = false,
+                       decimalPlace = true
+                   )
+               )
+        </div>
 
-</div>
-
-
-<button class="button" type="submit" id="continue">
-    @messages("common.continue")
-</button>
-}
+        <button class="button" type="submit" id="continue">
+            @messages("common.continue")
+        </button>
+    }
 }
