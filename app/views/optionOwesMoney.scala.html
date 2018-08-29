@@ -36,7 +36,7 @@
 
     <p>@messages("optionOwesMoney.text.1")</p>
 
-    @helpers.form(action = controllers.routes.OptionOwesMoneyController.submit) {
+    @helpers.form(action = controllers.routes.OptionOwesMoneyController.submit, 'novalidate -> "novalidate") {
 
         <div class="form-group" id="reason">
             @radioHelper(

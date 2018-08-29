@@ -34,7 +34,7 @@
 
     @headings(messages("deregistrationReason.title"))
 
-    @helpers.form(action = controllers.routes.DeregistrationReasonController.submit) {
+    @helpers.form(action = controllers.routes.DeregistrationReasonController.submit, 'novalidate -> "novalidate") {
 
         <div class="form-group" id="reason">
             @radioHelper(

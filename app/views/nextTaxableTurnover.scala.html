@@ -27,27 +27,26 @@ title = messages("nextTaxableTurnover.title"),
 bodyClasses = None,
 appConfig = appConfig) {
 
-<a class="link-back" href="@controllers.routes.TaxableTurnoverController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.TaxableTurnoverController.show().url">@messages("common.back")</a>
 
-@errorSummary("common.errorSummary.heading", form)
+    @errorSummary("common.errorSummary.heading", form)
 
-@headings(messages("nextTaxableTurnover.title"))
+    @headings(messages("nextTaxableTurnover.title"))
 
-@helpers.form(action = controllers.routes.NextTaxableTurnoverController.submit) {
+    @helpers.form(action = controllers.routes.NextTaxableTurnoverController.submit, 'novalidate -> "novalidate") {
 
-<div class="form-group" id="turnover">
-    @moneyInput(
-        field = form("turnover"),
-        label = messages("nextTaxableTurnover.title"),
-        labelHidden = true,
-        decimalPlace = true
-    )
-</div>
+        <div class="form-group" id="turnover">
+            @moneyInput(
+                field = form("turnover"),
+                label = messages("nextTaxableTurnover.title"),
+                labelHidden = true,
+                decimalPlace = true
+            )
+        </div>
 
-<button class="button" type ="submit" id="continue">
-    @messages("common.continue")
-</button>
+        <button class="button" type ="submit" id="continue">
+            @messages("common.continue")
+        </button>
 
-}
-
+    }
 }
