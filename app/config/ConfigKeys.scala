@@ -48,6 +48,9 @@ object ConfigKeys {
   val manageVatSubscriptionFrontendHost: String = "manage-vat-subscription-frontend.host"
   val manageVatSubscriptionFrontendUrl: String = "manage-vat-subscription-frontend.url"
 
+  val deregisterVatHost: String = "deregister-vat.host"
+  val deregisterVatUrl: String = "deregister-vat.url"
+
   val deregThreshold: String = "thresholds.deregistrationThreshold"
 
 }
