@@ -44,7 +44,7 @@ object DeregisterVatHttpParser {
     }
   }
 
-  def deleteReads[T](implicit fmt: Format[T]): HttpReads[Either[ErrorModel, DeregisterVatResponse]] = new HttpReads[Either[ErrorModel, DeregisterVatResponse]] {
+  def updateReads[T](implicit fmt: Format[T]): HttpReads[Either[ErrorModel, DeregisterVatResponse]] = new HttpReads[Either[ErrorModel, DeregisterVatResponse]] {
     override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, DeregisterVatResponse] = {
       response.status match {
         case Status.NO_CONTENT => Right(DeregisterVatSuccess)

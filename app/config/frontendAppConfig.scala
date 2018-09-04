@@ -80,8 +80,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val manageVatSubscriptionFrontendUrl: String =
     getString(Keys.manageVatSubscriptionFrontendHost) + getString(Keys.manageVatSubscriptionFrontendUrl)
 
-  override lazy val deregisterVatUrl: String =
-    getString(Keys.deregisterVatHost) + getString(Keys.deregisterVatUrl)
+  override lazy val deregisterVatUrl: String = getString(Keys.deregisterVatHost) + getString(Keys.deregisterVatUrl)
 
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 

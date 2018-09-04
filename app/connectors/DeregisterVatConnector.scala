@@ -32,17 +32,18 @@ class DeregisterVatConnector @Inject()(val http: HttpClient,
                                        val config: AppConfig)
                                       (implicit hc: HeaderCarrier, ec: ExecutionContext){
 
-  val url: ((String, String) => String) = (vrn, key) => s"data/:$vrn/:$key"
+  val url: ((String, String) => String) = (vrn, key) => s"${config.deregisterVatUrl}/data/$vrn/$key"
 
-  def getAnswers[T](vrn: String, key: String)(implicit fmt: Format[T]): Future[Either[ErrorModel, T]] =
+  def getAnswers[T](vrn: String, key: String)(implicit fmt: Format[T]): Future[Either[ErrorModel, T]] = {
     http.GET(url(vrn, key))(DeregisterVatHttpParser.getReads[T], hc, ec)
+  }
 
-  def putAnswers[T](model: T, vrn: String, key: String)(implicit fmt: Format[T]): Future[Either[ErrorModel, DeregisterVatResponse]] = {
-    http.PUT[T, Either[ErrorModel, DeregisterVatResponse]](url(vrn, key), model)(implicitly,DeregisterVatHttpParser.deleteReads[T], hc, ec)
+  def putAnswers[T](vrn: String, key: String, model: T)(implicit fmt: Format[T]): Future[Either[ErrorModel, DeregisterVatResponse]] = {
+    http.PUT[T, Either[ErrorModel, DeregisterVatResponse]](url(vrn, key), model)(implicitly,DeregisterVatHttpParser.updateReads[T], hc, ec)
   }
 
   def deleteAnswers[T](vrn: String, key: String)(implicit fmt: Format[T]): Future[Either[ErrorModel, DeregisterVatResponse]] = {
-    http.DELETE(url(vrn, key))(DeregisterVatHttpParser.deleteReads[T], hc, ec)
+    http.DELETE(url(vrn, key))(DeregisterVatHttpParser.updateReads[T], hc, ec)
   }
 
 }
