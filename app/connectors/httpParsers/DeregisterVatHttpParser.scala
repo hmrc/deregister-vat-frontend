@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package connectors
+package connectors.httpParsers
 
 import models.{DeregisterVatResponse, DeregisterVatSuccess, ErrorModel}
 import play.api.Logger
@@ -31,8 +31,9 @@ object DeregisterVatHttpParser {
           Logger.debug("[DeregisterVatHttpParser][getReads]: Status OK")
           response.json.validate[T].fold(
             invalid => {
-              Logger.warn(s"[DeregisterVatHttpParser][getReads]: Invalid Json - $invalid")
-              Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from Address Lookup"))
+              Logger.warn(s"[DeregisterVatHttpParser][getReads]: Invalid Json $invalid")
+              Logger.warn(s"[DeregisterVatHttpParser][getReads]: Invalid Json from deregister-vat")
+              Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from deregister-vat"))
             },
             valid => Right(valid)
           )
@@ -50,7 +51,7 @@ object DeregisterVatHttpParser {
         case Status.NO_CONTENT => Right(DeregisterVatSuccess)
         case status =>
           Logger.warn(s"[DeregisterVatHttpParser][deleteReads]: Unexpected Response, Status $status returned")
-          Left(ErrorModel(status, s"Downstream error returned when retrieving Model from Deregister Vat"))
+          Left(ErrorModel(status, s"Downstream error returned when updating Deregister Vat"))
       }
     }
   }

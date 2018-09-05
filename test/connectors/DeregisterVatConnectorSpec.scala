@@ -17,13 +17,10 @@
 package connectors
 
 import assets.constants.BaseTestConstants.vrn
-import assets.messages.DeregistrationReasonMessages
 import mocks.MockHttp
-import models.{DeregistrationReason, _}
+import models._
 import play.api.http.Status
 import utils.TestUtil
-
-import scala.concurrent.Future
 
 
 class DeregisterVatConnectorSpec extends TestUtil with MockHttp{
@@ -39,20 +36,19 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp{
     s"given vrn: $vrn and key: key for the url" should {
 
       "return the correct url" in {
-
         TestDeregisterVatConnector.url(vrn,testKey) shouldBe s"${mockConfig.deregisterVatUrl}/data/$vrn/$testKey"
       }
     }
 
-    s"successfully calling getAnswers" should {
+    s"successfully calling .getAnswers" should {
 
       "return a valid model" in {
-        setupMockHttpGet[DeregistrationReason](TestDeregisterVatConnector.url(vrn, testKey))(Right(Ceased))
-        await(TestDeregisterVatConnector.getAnswers(vrn, testKey)(Ceased.format)) shouldBe Right(Ceased)
+        setupMockHttpGet[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey))(Right(testModel))
+        await(TestDeregisterVatConnector.getAnswers(vrn, testKey)(Ceased.format)) shouldBe Right(testModel)
       }
     }
 
-    s"successfully calling putAnswers" should {
+    s"successfully calling .putAnswers" should {
 
       "return a DeregisterVatResponse model" in {
         setupMockHttpPut[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey), testModel)(Right(DeregisterVatSuccess))
@@ -60,7 +56,7 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp{
       }
     }
 
-    s"successfully calling deleteAnswers" should {
+    s"successfully calling .deleteAnswers" should {
 
       "return a DeregisterVatResponse model" in {
         setupMockHttpDelete[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey))(Right(DeregisterVatSuccess))
