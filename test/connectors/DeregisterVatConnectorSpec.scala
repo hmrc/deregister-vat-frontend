@@ -33,34 +33,93 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp{
 
   "DeregisterVatConnector" when {
 
-    s"given vrn: $vrn and key: key for the url" should {
+    s"given vrn: $vrn and key: $testKey for the url" should {
 
       "return the correct url" in {
         TestDeregisterVatConnector.url(vrn,testKey) shouldBe s"${mockConfig.deregisterVatUrl}/data/$vrn/$testKey"
       }
     }
 
-    s"successfully calling .getAnswers" should {
+    s"given vrn: $vrn only for the url" should {
 
-      "return a valid model" in {
-        setupMockHttpGet[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey))(Right(testModel))
-        await(TestDeregisterVatConnector.getAnswers(vrn, testKey)(Ceased.format)) shouldBe Right(testModel)
+      "return the correct url" in {
+        TestDeregisterVatConnector.url(vrn) shouldBe s"${mockConfig.deregisterVatUrl}/data/$vrn"
       }
     }
 
-    s"successfully calling .putAnswers" should {
+    s"Calling .getAnswers" when {
 
-      "return a DeregisterVatResponse model" in {
-        setupMockHttpPut[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey), testModel)(Right(DeregisterVatSuccess))
-        await(TestDeregisterVatConnector.putAnswers(vrn, testKey, testModel)(VATAccountsModel.format)) shouldBe Right(DeregisterVatSuccess)
+      "A valid response is parsed" should {
+
+        "return a valid model" in {
+          setupMockHttpGet[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey))(Right(testModel))
+          await(TestDeregisterVatConnector.getAnswers(vrn, testKey)(Ceased.format)) shouldBe Right(testModel)
+        }
+      }
+
+      "An error response is parsed" should {
+
+        "return an error model" in {
+          setupMockHttpGet[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey))(Left(errorModel))
+          await(TestDeregisterVatConnector.getAnswers(vrn, testKey)(Ceased.format)) shouldBe Left(errorModel)
+        }
       }
     }
 
-    s"successfully calling .deleteAnswers" should {
+    s"Calling .putAnswers" when {
 
-      "return a DeregisterVatResponse model" in {
-        setupMockHttpDelete[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey))(Right(DeregisterVatSuccess))
-        await(TestDeregisterVatConnector.deleteAnswers(vrn, testKey)(VATAccountsModel.format)) shouldBe Right(DeregisterVatSuccess)
+      "A valid response is parsed" should {
+
+        "return a DeregisterVatSuccess object" in {
+          setupMockHttpPut[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey), testModel)(Right(DeregisterVatSuccess))
+          await(TestDeregisterVatConnector.putAnswers(vrn, testKey, testModel)(VATAccountsModel.format)) shouldBe Right(DeregisterVatSuccess)
+        }
+      }
+
+      "An invalid response is parsed" should {
+
+        "return an error model" in {
+          setupMockHttpPut[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey), testModel)(Left(errorModel))
+          await(TestDeregisterVatConnector.putAnswers(vrn, testKey, testModel)(VATAccountsModel.format)) shouldBe Left(errorModel)
+        }
+      }
+    }
+
+    s"Calling .deleteAnswer" when {
+
+      "A valid response is parsed" should {
+
+        "return a DeregisterVatSuccess object" in {
+          setupMockHttpDelete[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey))(Right(DeregisterVatSuccess))
+          await(TestDeregisterVatConnector.deleteAnswer(vrn, testKey)(VATAccountsModel.format)) shouldBe Right(DeregisterVatSuccess)
+        }
+      }
+
+      "An invalid response is parsed" should {
+
+        "return an error model" in {
+          setupMockHttpDelete[VATAccountsModel](TestDeregisterVatConnector.url(vrn, testKey))(Left(errorModel))
+          await(TestDeregisterVatConnector.deleteAnswer(vrn, testKey)(VATAccountsModel.format)) shouldBe Left(errorModel)
+        }
+      }
+    }
+
+    s"Calling .deleteAllAnswers" when {
+
+      "A valid response is parsed" should {
+
+        "return a DeregisterVatSuccess object" in {
+          setupMockHttpDelete[VATAccountsModel](TestDeregisterVatConnector.url(vrn))(Right(DeregisterVatSuccess))
+          await(TestDeregisterVatConnector.deleteAllAnswers(vrn)(VATAccountsModel.format)) shouldBe Right(DeregisterVatSuccess)
+        }
+      }
+
+      "An invalid response is parsed" should {
+
+        "return an error model" in {
+          setupMockHttpDelete[VATAccountsModel](TestDeregisterVatConnector.url(vrn))(Left(errorModel))
+          await(TestDeregisterVatConnector.deleteAllAnswers(vrn)(VATAccountsModel.format)) shouldBe Left(errorModel)
+        }
       }
     }
   }
