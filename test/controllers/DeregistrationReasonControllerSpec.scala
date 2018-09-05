@@ -17,16 +17,22 @@
 package controllers
 
 import forms.DeregistrationReasonForm._
+import models._
+import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
+import services.mocks.MockDeregReasonAnswerService
+import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
+class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockDeregReasonAnswerService {
 
-  object TestDeregistrationReasonController extends DeregistrationReasonController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestDeregistrationReasonController extends DeregistrationReasonController(
+    messagesApi,mockAuthPredicate, mockStoredAnswersService, mockConfig
+  )
 
   "the user is authorised" when {
 
@@ -37,6 +43,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationReasonController.show(user.isAgent)(user)
 
         "return 200 (OK)" in {
+          setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -44,6 +51,26 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      "the user does have a pre selected option" should {
+
+        lazy val result = TestDeregistrationReasonController.show(user.isAgent)(user)
+
+        "return 200 (OK)" in {
+          setupMockGetAnswers(Right(Some(Ceased)))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "should have the 'Ceased' option checked" in {
+          Jsoup.parse(bodyOf(result)).select("#reason-stoppedtrading").hasAttr("checked") shouldBe true
         }
       }
 
@@ -59,6 +86,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(Ceased)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -76,6 +104,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(BelowThreshold)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -92,6 +121,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(Other)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -115,6 +145,19 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      "if an error is returned when storing" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, other))
+        lazy val result = TestDeregistrationReasonController.submit()(request)
+
+        "return ISE (INTERNAL SERVER ERROR)" in {
+          setupMockStoreAnswers(Other)(Left(errorModel))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
     }
