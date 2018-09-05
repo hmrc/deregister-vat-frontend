@@ -17,7 +17,7 @@
 package services
 
 import connectors.DeregisterVatConnector
-import models.{DeregisterVatResponse, ErrorModel, User}
+import models._
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.HeaderCarrier
 

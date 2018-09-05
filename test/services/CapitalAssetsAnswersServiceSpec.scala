@@ -14,33 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package services
 
-import play.api.libs.json._
+import connectors.mocks.MockDeregisterVatConnector
+import utils.TestUtil
 
-sealed trait YesNo {
 
-  val id = "isYes"
-  val value: Boolean
+class CapitalAssetsAnswersServiceSpec extends TestUtil with MockDeregisterVatConnector {
 
-  implicit val writes: Writes[YesNo] = Writes {
-    isYes => Json.obj(id -> isYes.value)
-  }
+  object CapitalAssetsAnswerService extends CapitalAssetsAnswerService(mockDeregisterVatConnector)
 
-  implicit val reads: Reads[YesNo] = for {
-    status <- (__ \ id).read[Boolean].map {
-      case true => Yes
-      case _ => No
+  "The AccountingMethodAnswerService" should {
+
+    "have the key 'capitalAssets'" in {
+      CapitalAssetsAnswerService.answerKey shouldBe "capitalAssets"
     }
-  } yield status
-
-  implicit val format: Format[YesNo] = Format(reads, writes)
-}
-
-object Yes extends YesNo {
-  override val value: Boolean = true
-}
-
-object No extends YesNo {
-  override val value: Boolean = false
+  }
 }

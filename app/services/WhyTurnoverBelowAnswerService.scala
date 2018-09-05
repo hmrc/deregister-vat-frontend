@@ -14,33 +14,13 @@
  * limitations under the License.
  */
 
-package models
+package services
 
-import play.api.libs.json._
+import connectors.DeregisterVatConnector
+import javax.inject.{Inject, Singleton}
+import models.WhyTurnoverBelowModel
 
-sealed trait YesNo {
-
-  val id = "isYes"
-  val value: Boolean
-
-  implicit val writes: Writes[YesNo] = Writes {
-    isYes => Json.obj(id -> isYes.value)
-  }
-
-  implicit val reads: Reads[YesNo] = for {
-    status <- (__ \ id).read[Boolean].map {
-      case true => Yes
-      case _ => No
-    }
-  } yield status
-
-  implicit val format: Format[YesNo] = Format(reads, writes)
-}
-
-object Yes extends YesNo {
-  override val value: Boolean = true
-}
-
-object No extends YesNo {
-  override val value: Boolean = false
+@Singleton()
+class WhyTurnoverBelowAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[WhyTurnoverBelowModel] {
+  override val answerKey: String = "whyTurnoverBelow"
 }
