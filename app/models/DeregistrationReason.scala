@@ -19,9 +19,12 @@ package models
 import play.api.libs.json._
 
 sealed trait DeregistrationReason {
+  val value: String
+}
+
+object DeregistrationReason {
 
   val id = "deregistrationReason"
-  val value: String
 
   implicit val writes: Writes[DeregistrationReason] = Writes {
     reason => Json.obj(id -> reason.value)
