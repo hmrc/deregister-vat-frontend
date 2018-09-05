@@ -29,22 +29,23 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeregisterVatConnector @Inject()(val http: HttpClient,
-                                       val config: AppConfig)
-                                      (implicit hc: HeaderCarrier, ec: ExecutionContext){
+                                       val config: AppConfig) {
 
   def url(vrn: String, key: String): String = s"${config.deregisterVatUrl}/data/$vrn/$key"
   def url(vrn: String): String = s"${config.deregisterVatUrl}/data/$vrn"
 
-  def getAnswers[T](vrn: String, key: String)(implicit fmt: Format[T]): Future[Either[ErrorModel, T]] =
+  def getAnswers[T](vrn: String, key: String)(implicit fmt: Format[T], hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, Option[T]]] =
     http.GET(url(vrn, key))(DeregisterVatHttpParser.getReads[T], hc, ec)
 
-  def putAnswers[T](vrn: String, key: String, model: T)(implicit fmt: Format[T]): Future[Either[ErrorModel, DeregisterVatResponse]] =
-    http.PUT[T, Either[ErrorModel, DeregisterVatResponse]](url(vrn, key), model)(fmt, DeregisterVatHttpParser.updateReads[T], hc, ec)
+  def putAnswers[T](vrn: String, key: String, model: T)(implicit fmt: Format[T], hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, DeregisterVatResponse]] =
+    http.PUT[T, Either[ErrorModel, DeregisterVatResponse]](url(vrn, key), model)(fmt, DeregisterVatHttpParser.updateReads, hc, ec)
 
-  def deleteAnswer[T](vrn: String, key: String)(implicit fmt: Format[T]): Future[Either[ErrorModel, DeregisterVatResponse]] =
-    http.DELETE(url(vrn, key))(DeregisterVatHttpParser.updateReads[T], hc, ec)
+  def deleteAnswer(vrn: String, key: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] =
+    http.DELETE(url(vrn, key))(DeregisterVatHttpParser.updateReads, hc, ec)
 
-  def deleteAllAnswers[T](vrn: String)(implicit fmt: Format[T]): Future[Either[ErrorModel, DeregisterVatResponse]] =
-    http.DELETE(url(vrn))(DeregisterVatHttpParser.updateReads[T], hc, ec)
+  def deleteAllAnswers(vrn: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] =
+    http.DELETE(url(vrn))(DeregisterVatHttpParser.updateReads, hc, ec)
 
 }

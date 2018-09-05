@@ -24,8 +24,8 @@ import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object DeregisterVatHttpParser {
 
-  def getReads[T](implicit fmt: Format[T]): HttpReads[Either[ErrorModel, T]] = new HttpReads[Either[ErrorModel, T]] {
-    override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, T] = {
+  def getReads[T](implicit fmt: Format[T]): HttpReads[Either[ErrorModel, Option[T]]] = new HttpReads[Either[ErrorModel, Option[T]]] {
+    override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, Option[T]] = {
       response.status match {
         case Status.OK => {
           Logger.debug("[DeregisterVatHttpParser][getReads]: Status OK")
@@ -35,9 +35,10 @@ object DeregisterVatHttpParser {
               Logger.warn(s"[DeregisterVatHttpParser][getReads]: Invalid Json from deregister-vat")
               Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from deregister-vat"))
             },
-            valid => Right(valid)
+            valid => Right(Some(valid))
           )
         }
+        case Status.NOT_FOUND => Right(None)
         case status =>
           Logger.warn(s"[DeregisterVatHttpParser][getReads]: Unexpected Response, Status $status returned")
           Left(ErrorModel(status, s"Downstream error returned when retrieving Model from Deregister Vat"))
@@ -45,7 +46,7 @@ object DeregisterVatHttpParser {
     }
   }
 
-  def updateReads[T](implicit fmt: Format[T]): HttpReads[Either[ErrorModel, DeregisterVatResponse]] = new HttpReads[Either[ErrorModel, DeregisterVatResponse]] {
+  def updateReads: HttpReads[Either[ErrorModel, DeregisterVatResponse]] = new HttpReads[Either[ErrorModel, DeregisterVatResponse]] {
     override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, DeregisterVatResponse] = {
       response.status match {
         case Status.NO_CONTENT => Right(DeregisterVatSuccess)
