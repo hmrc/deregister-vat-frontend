@@ -20,8 +20,11 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.DateForm
 import javax.inject.{Inject, Singleton}
+import models.{DateModel, User}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.CeasedTradingDateAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -29,17 +32,25 @@ import scala.concurrent.Future
 @Singleton
 class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
                                             val authenticate: AuthPredicate,
+                                            val ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+  private def renderView(form: Form[DateModel] = DateForm.dateForm)(implicit user: User[_]) = views.html.ceasedTradingDate(form)
+
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.ceasedTradingDate(DateForm.dateForm)))
+    ceasedTradingDateAnswerService.getAnswer map {
+      case Right(Some(data)) => Ok(renderView(DateForm.dateForm.fill(data)))
+      case _ => Ok(renderView())
+    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-
     DateForm.dateForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.ceasedTradingDate(error))),
-      _ => Future.successful(Redirect(controllers.routes.VATAccountsController.show()))
+      data => ceasedTradingDateAnswerService.storeAnswer(data) map {
+        case Right(_) => Redirect(controllers.routes.VATAccountsController.show())
+        case _ => InternalServerError //TODO: Render ISE Page
+      }
     )
   }
 }
