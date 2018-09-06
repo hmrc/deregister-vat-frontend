@@ -16,16 +16,26 @@
 
 package controllers
 
+import models.{DateModel, DeregisterVatSuccess}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
+import services.mocks.MockCeasedTradingDateAnswerService
+import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
+class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeasedTradingDateAnswerService {
 
-  object TestCeasedTradingDateController extends CeasedTradingDateController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestCeasedTradingDateController extends CeasedTradingDateController(
+    messagesApi, mockAuthPredicate, mockStoredAnswersService, mockConfig
+  )
+
+  val testDay = 12
+  val testMonth = 9
+  val testYear = 1990
+  val testDateModel = DateModel(testDay, testMonth, testYear)
 
   "the user is authorised" when {
 
@@ -36,6 +46,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCeasedTradingDateController.show()(request)
 
         "return 200 (OK)" in {
+          setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -51,6 +62,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCeasedTradingDateController.show()(request)
 
         "return 200 (OK)" in {
+          setupMockGetAnswers(Right(Some(testDateModel)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -58,6 +70,18 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+
+        s"have the correct value '$testDay' for the day" in {
+          document(result).select("#dateDay").attr("value") shouldBe testDay.toString
+        }
+
+        s"have the correct value '$testMonth' for the month" in {
+          document(result).select("#dateMonth").attr("value") shouldBe testMonth.toString
+        }
+
+        s"have the correct value '$testYear' for the year" in {
+          document(result).select("#dateYear").attr("value") shouldBe testYear.toString
         }
       }
 
@@ -70,19 +94,37 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
-            ("dateDay", "1"),
-            ("dateMonth", "1"),
-            ("dateYear", "2018")
+            ("dateDay", testDay.toString),
+            ("dateMonth", testMonth.toString),
+            ("dateYear", testYear.toString)
           )
         lazy val result = TestCeasedTradingDateController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(testDateModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
 
         s"redirect to the ${controllers.routes.VATAccountsController.show().url}" in {
           redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
+        }
+      }
+
+      "the user submits entering a date and an error is returned from stored data service" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(
+            ("dateDay", testDay.toString),
+            ("dateMonth", testMonth.toString),
+            ("dateYear", testYear.toString)
+          )
+        lazy val result = TestCeasedTradingDateController.submit()(request)
+
+        "return 500 (ISE)" in {
+          setupMockStoreAnswers(testDateModel)(Left(errorModel))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
 
