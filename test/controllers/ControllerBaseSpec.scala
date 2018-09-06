@@ -17,9 +17,11 @@
 package controllers
 
 import mocks.MockAuth
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
-import play.api.mvc.{Action, AnyContent, Request}
+import play.api.mvc.{Action, AnyContent, Request, Result}
 import play.api.test.FakeRequest
 import play.filters.csrf.CSRF.Token
 import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
@@ -61,4 +63,6 @@ trait ControllerBaseSpec extends TestUtil with MockAuth with GuiceOneAppPerSuite
       }
     }
   }
+
+  def document(result: Future[Result]): Document = Jsoup.parse(bodyOf(result))
 }
