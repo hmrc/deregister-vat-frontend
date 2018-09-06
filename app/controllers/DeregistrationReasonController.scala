@@ -20,9 +20,11 @@ import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.DeregistrationReasonForm
-import models.{BelowThreshold, Ceased, Other}
+import models._
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.DeregReasonAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -30,20 +32,32 @@ import scala.concurrent.Future
 @Singleton
 class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
                                                val authenticate: AuthPredicate,
+                                               val deregReasonAnswerService: DeregReasonAnswerService,
                                                implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+  private def renderView(data: Form[DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
+    views.html.deregistrationReason(data)
+
   val show: Boolean => Action[AnyContent] = _ => authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)))
+    deregReasonAnswerService.getAnswer map {
+      case Right(Some(data)) => Ok(renderView(DeregistrationReasonForm.deregistrationReasonForm.fill(data)))
+      case _ => Ok(renderView())
+    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
 
     DeregistrationReasonForm.deregistrationReasonForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.deregistrationReason(error))),
-      {
-        case Ceased => Future.successful(Redirect(controllers.routes.CeasedTradingDateController.show()))
-        case BelowThreshold => Future.successful(Redirect(controllers.routes.TaxableTurnoverController.show()))
-        case Other => Future.successful(Redirect(appConfig.govUkCancelVatRegistration))
+      error => Future.successful(BadRequest(renderView(error))),
+      data => {
+        deregReasonAnswerService.storeAnswer(data) map {
+          case Right(_) => data match {
+            case Ceased => Redirect(controllers.routes.CeasedTradingDateController.show())
+            case BelowThreshold => Redirect(controllers.routes.TaxableTurnoverController.show())
+            case Other => Redirect(appConfig.govUkCancelVatRegistration)
+          }
+          case Left(_) => InternalServerError //TODO: Render ISE Page
+        }
       }
     )
   }
