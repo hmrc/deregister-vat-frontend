@@ -19,7 +19,7 @@ package services.mocks
 import models._
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Format
-import services.{CeasedTradingDateAnswerService, DeregReasonAnswerService, StoredAnswersService}
+import services._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
@@ -50,6 +50,14 @@ trait MockStoredAnswersService[T] extends TestUtil with MockFactory {
 
 trait MockDeregReasonAnswerService extends MockStoredAnswersService[DeregistrationReason] {
   override val mockStoredAnswersService: DeregReasonAnswerService = mock[DeregReasonAnswerService]
+}
+
+trait MockTaxableTurnoverAnswerService extends MockStoredAnswersService[TaxableTurnoverModel] {
+  override val mockStoredAnswersService: TaxableTurnoverAnswerService = mock[TaxableTurnoverAnswerService]
+}
+
+trait MockNextTaxableTurnoverAnswerService extends MockStoredAnswersService[TaxableTurnoverModel] {
+  override val mockStoredAnswersService: NextTaxableTurnoverAnswerService = mock[NextTaxableTurnoverAnswerService]
 }
 
 trait MockCeasedTradingDateAnswerService extends MockStoredAnswersService[DateModel] {

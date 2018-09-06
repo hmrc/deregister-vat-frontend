@@ -20,32 +20,43 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.TaxableTurnoverForm
 import javax.inject.{Inject, Singleton}
+import models.{TaxableTurnoverModel, User}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import services.NextTaxableTurnoverAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
 class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
-                                          val authenticate: AuthPredicate,
-                                          implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                              val authenticate: AuthPredicate,
+                                              val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
+                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+
+  private def renderView(form: Form[TaxableTurnoverModel] = TaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
+    views.html.nextTaxableTurnover(form)
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.nextTaxableTurnover(TaxableTurnoverForm.taxableTurnoverForm)))
+    nextTaxableTurnoverAnswerService.getAnswer map {
+      case Right(Some(data)) => Ok(renderView(TaxableTurnoverForm.taxableTurnoverForm.fill(data)))
+      case _ => Ok(renderView())
+    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-
     TaxableTurnoverForm.taxableTurnoverForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.nextTaxableTurnover(error))),
-      {
-        case success if success.turnover > appConfig.deregThreshold =>
-          Future.successful(Redirect(controllers.routes.CannotDeregisterThresholdController.show()))
-        case _ =>
-          Future.successful(Redirect(controllers.routes.WhyTurnoverBelowController.show()))
+      data => nextTaxableTurnoverAnswerService.storeAnswer(data) map {
+        case Right(_) =>
+          if (data.turnover > appConfig.deregThreshold) {
+            Redirect(controllers.routes.CannotDeregisterThresholdController.show())
+          } else {
+            Redirect(controllers.routes.WhyTurnoverBelowController.show())
+          }
+        case _ => InternalServerError //TODO: Update to render ISE page
       }
     )
   }
-
 }
