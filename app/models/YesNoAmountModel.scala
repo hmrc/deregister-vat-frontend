@@ -29,5 +29,5 @@ case class YesNoAmountModel(yesNo: YesNo, amount: Option[BigDecimal]) {
 }
 
 object YesNoAmountModel {
-  implicit val fmt: Format[YesNoAmountModel] = Json.format[YesNoAmountModel]
+  implicit val format: Format[YesNoAmountModel] = Json.format[YesNoAmountModel]
 }

@@ -26,6 +26,8 @@ import play.api.data.{Form, FormError}
 
 object YesNoAmountForm extends FormValidation {
 
+  val amount = "amount"
+
   private def validateAmount(key: String): BigDecimal => Either[Seq[FormError], Option[BigDecimal]] = {
     case x if x < 0 => Left(Seq(FormError(key, "common.error.negative")))
     case x if x >= Constants.maxAmount => Left(Seq(FormError(key, "common.error.greaterThanMax")))
@@ -55,7 +57,7 @@ object YesNoAmountForm extends FormValidation {
   val yesNoAmountForm: Form[YesNoAmountModel] = Form(
     mapping(
       yesNo -> of(YesNoForm.formatter),
-      "amount" -> of(formatter)
+      amount -> of(formatter)
     )(YesNoAmountModel.apply)(YesNoAmountModel.unapply)
   )
 }
