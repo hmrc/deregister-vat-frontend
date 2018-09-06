@@ -16,6 +16,8 @@
 
 package models
 
+import play.api.libs.json.{Format, Json}
+
 case class YesNoAmountModel(yesNo: YesNo, amount: Option[BigDecimal]) {
 
   val isValid: Boolean = {
@@ -24,4 +26,8 @@ case class YesNoAmountModel(yesNo: YesNo, amount: Option[BigDecimal]) {
       case _ => true
     }
   }
+}
+
+object YesNoAmountModel {
+  implicit val format: Format[YesNoAmountModel] = Json.format[YesNoAmountModel]
 }
