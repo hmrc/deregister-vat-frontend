@@ -16,20 +16,22 @@
 
 package models
 
+import play.api.libs.json.Json
 import utils.TestUtil
 
 class YesNoAmountModelSpec extends TestUtil {
 
+  val testAmount = 99999
   "YesNoAmount.isValid" should {
 
     "return true" when {
 
       "given a Yes and an amount" in {
-        YesNoAmountModel(Yes,Some(99999)).isValid shouldBe true
+        YesNoAmountModel(Yes,Some(testAmount)).isValid shouldBe true
       }
 
       "given a No and an amount" in {
-        YesNoAmountModel(No,Some(99999)).isValid shouldBe true
+        YesNoAmountModel(No,Some(testAmount)).isValid shouldBe true
       }
 
       "given a No and no amount" in {
@@ -42,6 +44,25 @@ class YesNoAmountModelSpec extends TestUtil {
       "given a Yes and no amount" in {
         YesNoAmountModel(Yes,None).isValid shouldBe false
       }
+    }
+  }
+
+  "YesNoAmountModel.format" should {
+
+    "serialize to the correct JSON" in {
+      Json.toJson(YesNoAmountModel(Yes,Some(testAmount))) shouldBe
+        Json.obj(
+          "yesNo" -> Json.obj(YesNo.id -> true),
+          "amount" -> testAmount
+        )
+    }
+
+    "deserialize from JSON correctly" in {
+      Json.obj(
+        "yesNo" -> Json.obj(YesNo.id -> true),
+        "amount" -> testAmount
+      ).as[YesNoAmountModel] shouldBe YesNoAmountModel(Yes,Some(testAmount))
+
     }
   }
 }
