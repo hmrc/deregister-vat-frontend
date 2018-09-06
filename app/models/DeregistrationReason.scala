@@ -24,7 +24,7 @@ sealed trait DeregistrationReason {
 
 object DeregistrationReason {
 
-  val id = "deregistrationReason"
+  val id = "deregReason"
 
   implicit val writes: Writes[DeregistrationReason] = Writes {
     reason => Json.obj(id -> reason.value)
