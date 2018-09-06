@@ -54,6 +54,7 @@ trait MockDeregReasonAnswerService extends MockStoredAnswersService[Deregistrati
 
 trait MockTaxableTurnoverAnswerService extends MockStoredAnswersService[TaxableTurnoverModel] {
   override val mockStoredAnswersService: TaxableTurnoverAnswerService = mock[TaxableTurnoverAnswerService]
+}
 
 trait MockCeasedTradingDateAnswerService extends MockStoredAnswersService[DateModel] {
   override val mockStoredAnswersService: CeasedTradingDateAnswerService = mock[CeasedTradingDateAnswerService]
