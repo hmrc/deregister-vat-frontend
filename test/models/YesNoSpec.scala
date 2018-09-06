@@ -16,34 +16,30 @@
 
 package models
 
-import play.api.libs.json._
+import play.api.libs.json.Json
+import utils.TestUtil
 
-sealed trait YesNo {
-  val value: Boolean
-}
+class YesNoSpec extends TestUtil {
 
-object YesNo {
+  "YesNo.Yes" should {
 
-  val id = "isYes"
+    "serialize to the correct JSON" in {
+      Json.toJson(Yes) shouldBe Json.obj(YesNo.id -> Yes.value)
+    }
 
-  implicit val writes: Writes[YesNo] = Writes {
-    isYes => Json.obj(id -> isYes.value)
+    "deserialize from the correct JSON" in {
+      Json.obj(YesNo.id -> Yes.value).as[YesNo] shouldBe Yes
+    }
   }
 
-  implicit val reads: Reads[YesNo] = for {
-    status <- (__ \ id).read[Boolean].map {
-      case true => Yes
-      case _ => No
+  "YesNo.No" should {
+
+    "serialize to the correct JSON" in {
+      Json.toJson(No) shouldBe Json.obj(YesNo.id -> No.value)
     }
-  } yield status
 
-  implicit val format: Format[YesNo] = Format(reads, writes)
-}
-
-object Yes extends YesNo {
-  override val value: Boolean = true
-}
-
-object No extends YesNo {
-  override val value: Boolean = false
+    "deserialize from the correct JSON" in {
+      Json.obj(YesNo.id -> No.value).as[YesNo] shouldBe No
+    }
+  }
 }

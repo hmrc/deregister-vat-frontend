@@ -14,36 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package services
 
-import play.api.libs.json._
+import connectors.mocks.MockDeregisterVatConnector
+import utils.TestUtil
 
-sealed trait YesNo {
-  val value: Boolean
-}
 
-object YesNo {
+class NextTaxableTurnoverAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector {
 
-  val id = "isYes"
+  object NextTaxableTurnoverAnswerService extends NextTaxableTurnoverAnswerService(mockDeregisterVatConnector)
 
-  implicit val writes: Writes[YesNo] = Writes {
-    isYes => Json.obj(id -> isYes.value)
-  }
+  "The NextTaxableTurnoverAnswerService" should {
 
-  implicit val reads: Reads[YesNo] = for {
-    status <- (__ \ id).read[Boolean].map {
-      case true => Yes
-      case _ => No
+    "have the key 'nextTaxableTurnover'" in {
+      NextTaxableTurnoverAnswerService.answerKey shouldBe "nextTaxableTurnover"
     }
-  } yield status
-
-  implicit val format: Format[YesNo] = Format(reads, writes)
-}
-
-object Yes extends YesNo {
-  override val value: Boolean = true
-}
-
-object No extends YesNo {
-  override val value: Boolean = false
+  }
 }

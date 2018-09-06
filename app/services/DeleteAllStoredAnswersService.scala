@@ -14,36 +14,19 @@
  * limitations under the License.
  */
 
-package models
+package services
 
-import play.api.libs.json._
+import com.google.inject.{Inject, Singleton}
+import connectors.DeregisterVatConnector
+import models._
+import uk.gov.hmrc.http.HeaderCarrier
 
-sealed trait YesNo {
-  val value: Boolean
-}
+import scala.concurrent.{ExecutionContext, Future}
 
-object YesNo {
+@Singleton()
+class DeleteAllStoredAnswersService @Inject()(val deregisterVatConnector: DeregisterVatConnector) {
 
-  val id = "isYes"
+  def deleteAllAnswers(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] =
+    deregisterVatConnector.deleteAllAnswers(user.vrn)
 
-  implicit val writes: Writes[YesNo] = Writes {
-    isYes => Json.obj(id -> isYes.value)
-  }
-
-  implicit val reads: Reads[YesNo] = for {
-    status <- (__ \ id).read[Boolean].map {
-      case true => Yes
-      case _ => No
-    }
-  } yield status
-
-  implicit val format: Format[YesNo] = Format(reads, writes)
-}
-
-object Yes extends YesNo {
-  override val value: Boolean = true
-}
-
-object No extends YesNo {
-  override val value: Boolean = false
 }

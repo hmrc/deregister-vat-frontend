@@ -16,6 +16,25 @@
 
 package assets.constants
 
+import models.ErrorModel
+import play.api.http.Status
+import play.api.libs.json.{Format, JsObject, Json}
+
 object BaseTestConstants {
+
   val vrn = "999999999"
+  val arn = "TARN1234567"
+
+  case class TestModel(foo: String)
+
+  object TestModel {
+    implicit val fmt: Format[TestModel] = Json.format[TestModel]
+  }
+
+  val testKey = "testKey"
+  val testModel = TestModel("bar")
+  val testValidJson: JsObject = Json.obj("foo" -> "bar")
+  val testInvalidJson: JsObject = Json.obj()
+  val errorModel = ErrorModel(Status.INTERNAL_SERVER_ERROR, "Error")
+
 }

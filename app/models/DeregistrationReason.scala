@@ -16,8 +16,39 @@
 
 package models
 
-sealed trait DeregistrationReason
+import play.api.libs.json._
 
-object Ceased extends DeregistrationReason
-object BelowThreshold extends DeregistrationReason
-object Other extends DeregistrationReason
+sealed trait DeregistrationReason {
+  val value: String
+}
+
+object DeregistrationReason {
+
+  val id = "deregReason"
+
+  implicit val writes: Writes[DeregistrationReason] = Writes {
+    reason => Json.obj(id -> reason.value)
+  }
+
+  implicit val reads: Reads[DeregistrationReason] = for {
+    status <- (__ \ id).read[String].map {
+      case Ceased.value => Ceased
+      case BelowThreshold.value => BelowThreshold
+      case Other.value => Other
+    }
+  } yield status
+
+  implicit val format: Format[DeregistrationReason] = Format(reads, writes)
+}
+
+object Ceased extends DeregistrationReason {
+  override val value = "ceased"
+}
+
+object BelowThreshold extends DeregistrationReason {
+  override val value = "belowThreshold"
+}
+
+object Other extends DeregistrationReason {
+  override val value = "other"
+}

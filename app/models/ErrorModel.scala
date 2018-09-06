@@ -16,34 +16,10 @@
 
 package models
 
-import play.api.libs.json._
+import play.api.libs.json.{Format, Json}
 
-sealed trait YesNo {
-  val value: Boolean
-}
+case class ErrorModel(status: Int, message: String)
 
-object YesNo {
-
-  val id = "isYes"
-
-  implicit val writes: Writes[YesNo] = Writes {
-    isYes => Json.obj(id -> isYes.value)
-  }
-
-  implicit val reads: Reads[YesNo] = for {
-    status <- (__ \ id).read[Boolean].map {
-      case true => Yes
-      case _ => No
-    }
-  } yield status
-
-  implicit val format: Format[YesNo] = Format(reads, writes)
-}
-
-object Yes extends YesNo {
-  override val value: Boolean = true
-}
-
-object No extends YesNo {
-  override val value: Boolean = false
+object ErrorModel {
+  implicit val format: Format[ErrorModel] = Json.format[ErrorModel]
 }

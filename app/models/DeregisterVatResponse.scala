@@ -16,34 +16,5 @@
 
 package models
 
-import play.api.libs.json._
-
-sealed trait YesNo {
-  val value: Boolean
-}
-
-object YesNo {
-
-  val id = "isYes"
-
-  implicit val writes: Writes[YesNo] = Writes {
-    isYes => Json.obj(id -> isYes.value)
-  }
-
-  implicit val reads: Reads[YesNo] = for {
-    status <- (__ \ id).read[Boolean].map {
-      case true => Yes
-      case _ => No
-    }
-  } yield status
-
-  implicit val format: Format[YesNo] = Format(reads, writes)
-}
-
-object Yes extends YesNo {
-  override val value: Boolean = true
-}
-
-object No extends YesNo {
-  override val value: Boolean = false
-}
+sealed trait DeregisterVatResponse
+case object DeregisterVatSuccess extends DeregisterVatResponse
