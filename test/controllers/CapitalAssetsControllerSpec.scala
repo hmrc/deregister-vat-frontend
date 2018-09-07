@@ -16,14 +16,22 @@
 
 package controllers
 
+import models.{DeregisterVatSuccess, No, Yes, YesNoAmountModel}
+import assets.constants.BaseTestConstants._
+import forms.YesNoAmountForm.{amount => amountField}
+import forms.YesNoForm.{no => noChecked, yes => yesChecked, yesNo => yesNoField}
+import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
+import services.mocks.MockCapitalAssetsAnswerService
 
-class CapitalAssetsControllerSpec extends ControllerBaseSpec {
+class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockCapitalAssetsAnswerService{
 
-  object TestCapitalAssetsController extends CapitalAssetsController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestCapitalAssetsController extends CapitalAssetsController(messagesApi, mockAuthPredicate, mockStoredAnswersService, mockConfig)
+
+  val amount = 12345
 
   "the user is authorised" when {
 
@@ -34,6 +42,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
+          setupMockGetAnswers(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -44,12 +53,12 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      //TODO: These tests need to be updated once a stored value is retrieved from Mongo
-      "the user is has pre selected option" ignore {
+      "the user is has pre selected option" should {
 
         lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
+          setupMockGetAnswers(Right(Some(YesNoAmountModel(Yes,Some(amount)))))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -57,6 +66,11 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+
+        "should have the 'Yes' option checked and an amount already entered" in {
+          Jsoup.parse(bodyOf(result)).select("#yes_no-yes").hasAttr("checked") shouldBe true
+          Jsoup.parse(bodyOf(result)).select("#amount").attr("value") shouldBe amount.toString
         }
       }
 
@@ -69,7 +83,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
       "the user submits after selecting an 'Yes' option without entering an amount" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes"),("amount", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, yesChecked),(amountField, ""))
         lazy val result = TestCapitalAssetsController.submit()(request)
 
 
@@ -82,11 +96,12 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
       "the user submits after selecting an 'Yes' option and entering an amount" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes"), ("amount", "100"))
+          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, yesChecked), (amountField, amount.toString))
         lazy val result = TestCapitalAssetsController.submit()(request)
 
 
         "return 303 (SEE_OTHER)" in {
+          setupMockStoreAnswers(YesNoAmountModel(Yes, Some(amount)))(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -99,10 +114,11 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
       "the user submits after selecting the 'No' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no"))
+          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, noChecked))
         lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -115,7 +131,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
       "the user submits without selecting an option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, ""))
         lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -130,7 +146,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    authChecks(".submit", TestCapitalAssetsController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "yes")))
+    authChecks(".submit", TestCapitalAssetsController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, yesChecked)))
 
   }
 }
