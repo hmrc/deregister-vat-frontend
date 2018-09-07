@@ -31,14 +31,14 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp {
     s"given vrn: $vrn and key: $testKey for the url" should {
 
       "return the correct url" in {
-        TestDeregisterVatConnector.url(vrn,testKey) shouldBe s"${mockConfig.deregisterVatUrl}/data/$vrn/$testKey"
+        TestDeregisterVatConnector.url(vrn,testKey) shouldBe s"${mockConfig.deregisterVatUrl}/deregister-vat/data/$vrn/$testKey"
       }
     }
 
     s"given vrn: $vrn only for the url" should {
 
       "return the correct url" in {
-        TestDeregisterVatConnector.url(vrn) shouldBe s"${mockConfig.deregisterVatUrl}/data/$vrn"
+        TestDeregisterVatConnector.url(vrn) shouldBe s"${mockConfig.deregisterVatUrl}/deregister-vat/data/$vrn"
       }
     }
 

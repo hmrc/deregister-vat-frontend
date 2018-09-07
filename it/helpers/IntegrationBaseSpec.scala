@@ -25,7 +25,7 @@ import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.{Application, Environment, Mode}
-import stubs.AuthStub
+import stubs.{AuthStub, DeregisterVatStub}
 import uk.gov.hmrc.play.test.UnitSpec
 
 trait IntegrationBaseSpec extends UnitSpec
@@ -77,7 +77,9 @@ trait IntegrationBaseSpec extends UnitSpec
   def servicesConfig: Map[String, String] = Map(
     "play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
     "microservice.services.auth.host" -> mockHost,
-    "microservice.services.auth.port" -> mockPort
+    "microservice.services.auth.port" -> mockPort,
+    "microservice.services.deregister-vat.host" -> mockHost,
+    "microservice.services.deregister-vat.port" -> mockPort
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
@@ -101,6 +103,10 @@ trait IntegrationBaseSpec extends UnitSpec
 
   def post(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse = await(
     buildRequest(path, additionalCookies).post(body)
+  )
+
+  def put(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse = await(
+    buildRequest(path, additionalCookies).put(body)
   )
 
   def buildRequest(path: String, additionalCookies: Map[String, String] = Map.empty): WSRequest =

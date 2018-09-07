@@ -21,6 +21,7 @@ import helpers.IntegrationBaseSpec
 import models.WhyTurnoverBelowModel
 import play.api.http.Status._
 import play.api.libs.ws.WSResponse
+import stubs.DeregisterVatStub
 
 class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
@@ -90,6 +91,8 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
+
+          DeregisterVatStub.successfulPutAnswer("VRN1234567890","whyTurnoverBelow")
 
           val response: WSResponse = postRequest(validModel)
 

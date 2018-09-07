@@ -17,9 +17,11 @@
 package connectors
 
 import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
 import connectors.httpParsers.DeregisterVatHttpParser
 import models.{DeregisterVatResponse, ErrorModel}
+import play.api.Logger
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -31,16 +33,18 @@ import scala.concurrent.{ExecutionContext, Future}
 class DeregisterVatConnector @Inject()(val http: HttpClient,
                                        val config: AppConfig) {
 
-  def url(vrn: String, key: String): String = s"${config.deregisterVatUrl}/data/$vrn/$key"
-  def url(vrn: String): String = s"${config.deregisterVatUrl}/data/$vrn"
+  def url(vrn: String, key: String): String = s"${config.deregisterVatUrl}/deregister-vat/data/$vrn/$key"
+  def url(vrn: String): String = s"${config.deregisterVatUrl}/deregister-vat/data/$vrn"
 
   def getAnswers[T](vrn: String, key: String)(implicit fmt: Format[T], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, Option[T]]] =
     http.GET(url(vrn, key))(DeregisterVatHttpParser.getReads[T], hc, ec)
 
   def putAnswers[T](vrn: String, key: String, model: T)(implicit fmt: Format[T], hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[Either[ErrorModel, DeregisterVatResponse]] =
+  : Future[Either[ErrorModel, DeregisterVatResponse]] = {
+    Logger.debug(s"[DeregisterVatConnector][putAnswers] Calling PUT method to store data for URL: ${url(vrn, key)}")
     http.PUT[T, Either[ErrorModel, DeregisterVatResponse]](url(vrn, key), model)(fmt, DeregisterVatHttpParser.updateReads, hc, ec)
+  }
 
   def deleteAnswer(vrn: String, key: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] =
     http.DELETE(url(vrn, key))(DeregisterVatHttpParser.updateReads, hc, ec)

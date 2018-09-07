@@ -20,8 +20,11 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.WhyTurnoverBelowForm
 import javax.inject.{Inject, Singleton}
+
+import models.DeregisterVatSuccess
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.WhyTurnoverBelowAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -29,16 +32,25 @@ import scala.concurrent.Future
 @Singleton
 class WhyTurnoverBelowController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
+                                           val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm)))
+    whyTurnoverBelowAnswerService.getAnswer.map {
+      case Right(Some(data)) => Ok(views.html.whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm.fill(data)))
+      case _ => Ok(views.html.whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm))
+    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     WhyTurnoverBelowForm.whyTurnoverBelowForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.whyTurnoverBelow(error))),
-      _ => Future.successful(Redirect(controllers.routes.VATAccountsController.show()))
+      data => {
+        whyTurnoverBelowAnswerService.storeAnswer(data).map {
+          case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show())
+          case Left(_) => InternalServerError //TODO: Render ISE Page
+        }
+      }
     )
   }
 }

@@ -51,7 +51,7 @@ object DeregisterVatHttpParser {
       response.status match {
         case Status.NO_CONTENT => Right(DeregisterVatSuccess)
         case status =>
-          Logger.warn(s"[DeregisterVatHttpParser][deleteReads]: Unexpected Response, Status $status returned")
+          Logger.warn(s"[DeregisterVatHttpParser][updateReads]: Unexpected Response, Status $status returned")
           Left(ErrorModel(status, s"Downstream error returned when updating Deregister Vat"))
       }
     }
