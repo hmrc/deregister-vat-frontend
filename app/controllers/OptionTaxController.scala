@@ -20,8 +20,11 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.YesNoAmountForm
 import javax.inject.{Inject, Singleton}
+import models.{User, YesNoAmountModel}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.OptionTaxAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -29,17 +32,26 @@ import scala.concurrent.Future
 @Singleton
 class OptionTaxController @Inject()(val messagesApi: MessagesApi,
                                     val authenticate: AuthPredicate,
+                                    val optionTaxAnswerService: OptionTaxAnswerService,
                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+  private def renderView(form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm)(implicit user: User[_]) =
+    views.html.optionTax(form)
+
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.optionTax(YesNoAmountForm.yesNoAmountForm)))
+    optionTaxAnswerService.getAnswer map {
+      case Right(Some(data)) => Ok(renderView(YesNoAmountForm.yesNoAmountForm.fill(data)))
+      case _ => Ok(renderView())
+    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-
     YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionTax(error))),
-      _ => Future.successful(Redirect(controllers.routes.OptionStocksToSellController.show()))
+      data => optionTaxAnswerService.storeAnswer(data) map {
+        case Right(_) => Redirect(controllers.routes.OptionStocksToSellController.show())
+        case _ => InternalServerError //TODO: Render the ISE page
+      }
     )
   }
 }
