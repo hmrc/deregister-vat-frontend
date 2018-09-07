@@ -16,11 +16,13 @@
 
 package stubs
 
+import assets.IntegrationTestConstants
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.Status.{OK, UNAUTHORIZED}
 import play.api.libs.json.{JsObject, Json}
 import helpers.WireMockMethods
 import uk.gov.hmrc.auth.core.AffinityGroup
+import assets.IntegrationTestConstants._
 
 object AuthStub extends WireMockMethods {
 
@@ -31,7 +33,7 @@ object AuthStub extends WireMockMethods {
     "identifiers" -> Json.arr(
       Json.obj(
         "key" -> "VRN",
-        "value" -> "VRN1234567890"
+        "value" -> vrn
       )
     )
   )

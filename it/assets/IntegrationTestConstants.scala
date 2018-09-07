@@ -21,7 +21,7 @@ import play.api.libs.json.Json
 
 object IntegrationTestConstants {
 
-  val vrn = "VRN1234567890"
+  val vrn = "999999999"
 
   val whyTurnoverBelowModel = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
 
