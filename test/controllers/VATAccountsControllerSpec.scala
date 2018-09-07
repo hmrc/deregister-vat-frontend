@@ -16,11 +16,15 @@
 
 package controllers
 
+import assets.constants.BaseTestConstants.errorModel
+import models.{DeregisterVatSuccess, Other, VATAccountsModel}
+import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.EnrolmentsAuthService
+import services.mocks.MockAccountingMethodAnswerService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
@@ -28,9 +32,14 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class VATAccountsControllerSpec extends ControllerBaseSpec {
+class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMethodAnswerService {
 
-  object TestVATAccountsController extends VATAccountsController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestVATAccountsController extends VATAccountsController(
+    messagesApi, mockAuthPredicate, mockStoredAnswersService, mockConfig
+  )
+
+  val cashAccountingModel = VATAccountsModel("cash")
+  val standardAccountingModel = VATAccountsModel("standard")
 
   "the user is authorised" when {
 
@@ -50,6 +59,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestVATAccountsController.show()(request)
 
         "return 200 (OK)" in {
+          setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -57,6 +67,26 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      "the user is has previously entered values" should {
+
+        lazy val result = TestVATAccountsController.show()(request)
+
+        "return 200 (OK)" in {
+          setupMockGetAnswers(Right(Some(standardAccountingModel)))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        s"have the correct value 'standard' for the accounting method" in {
+          Jsoup.parse(bodyOf(result)).select("#accountingMethod-standard").hasAttr("checked") shouldBe true
         }
       }
     }
@@ -70,6 +100,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(standardAccountingModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -86,6 +117,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(cashAccountingModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -98,7 +130,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
       "the user submits without selecting an option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", ""))
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -110,6 +142,19 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
         }
+      }
+    }
+
+    "if an error is returned when storing" should {
+
+      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+        FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", "cash"))
+      lazy val result = TestVATAccountsController.submit()(request)
+
+      "return ISE (INTERNAL SERVER ERROR)" in {
+        setupMockStoreAnswers(cashAccountingModel)(Left(errorModel))
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
   }

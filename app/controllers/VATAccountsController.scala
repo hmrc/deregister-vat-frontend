@@ -19,26 +19,38 @@ package controllers
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.VATAccountsForm
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
+import models.{User, VATAccountsModel}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import services.AccountingMethodAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
+@Singleton
 class VATAccountsController @Inject()(val messagesApi: MessagesApi,
                                       val authenticate: AuthPredicate,
+                                      val accountingMethodAnswerService: AccountingMethodAnswerService,
                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+  private def renderView(form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)(implicit user: User[_]) = views.html.vatAccounts(form)
+
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.vatAccounts(VATAccountsForm.vatAccountsForm)))
+    accountingMethodAnswerService.getAnswer.map {
+      case Right(Some(data)) => Ok(renderView(VATAccountsForm.vatAccountsForm.fill(data)))
+      case _ => Ok(renderView())
+    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-
     VATAccountsForm.vatAccountsForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.vatAccounts(error))),
-      _ => Future.successful(Redirect(controllers.routes.OptionTaxController.show()))
+      data => accountingMethodAnswerService.storeAnswer(data) map {
+        case Right(_) => Redirect(controllers.routes.OptionTaxController.show())
+        case _ => InternalServerError //TODO: Render ISE Page
+      }
     )
   }
 
