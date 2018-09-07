@@ -28,10 +28,10 @@ import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockDeregReasonAnswerService {
+class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
   object TestDeregistrationReasonController extends DeregistrationReasonController(
-    messagesApi,mockAuthPredicate, mockStoredAnswersService, mockConfig
+    messagesApi,mockAuthPredicate, MockDeregReasonAnswerService.mockStoredAnswersService, mockConfig
   )
 
   "the user is authorised" when {
@@ -43,7 +43,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockDer
         lazy val result = TestDeregistrationReasonController.show(user.isAgent)(user)
 
         "return 200 (OK)" in {
-          setupMockGetAnswers(Right(None))
+          MockDeregReasonAnswerService.setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -59,7 +59,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockDer
         lazy val result = TestDeregistrationReasonController.show(user.isAgent)(user)
 
         "return 200 (OK)" in {
-          setupMockGetAnswers(Right(Some(Ceased)))
+          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -86,7 +86,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockDer
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreAnswers(Ceased)(Right(DeregisterVatSuccess))
+          MockDeregReasonAnswerService.setupMockStoreAnswers(Ceased)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -104,7 +104,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockDer
 
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreAnswers(BelowThreshold)(Right(DeregisterVatSuccess))
+          MockDeregReasonAnswerService.setupMockStoreAnswers(BelowThreshold)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -121,7 +121,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockDer
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreAnswers(Other)(Right(DeregisterVatSuccess))
+          MockDeregReasonAnswerService.setupMockStoreAnswers(Other)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -155,7 +155,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockDer
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return ISE (INTERNAL SERVER ERROR)" in {
-          setupMockStoreAnswers(Other)(Left(errorModel))
+          MockDeregReasonAnswerService.setupMockStoreAnswers(Other)(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
