@@ -23,8 +23,19 @@ import helpers.IntegrationBaseSpec
 import models.{DateModel, DeregistrationDateModel, No, Yes}
 import play.api.http.Status._
 import play.api.libs.ws.WSResponse
+import stubs.DeregisterVatStub
+import assets.IntegrationTestConstants._
+import play.api.libs.json.Json
+import services.DeregDateAnswerService
 
 class DeregistrationDateISpec extends IntegrationBaseSpec {
+
+  val testDay = LocalDate.now().getDayOfMonth
+  val testMonth = LocalDate.now().getMonthValue
+  val testYear = LocalDate.now().getYear
+  val validYesModel = DeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
+  val validNoModel = DeregistrationDateModel(No,None)
+  val invalidYesModel = DeregistrationDateModel(Yes,None)
 
   "Calling the GET Deregistration Date endpoint" when {
 
@@ -35,6 +46,8 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
       "return 200 OK" in {
 
         given.user.isAuthorised
+
+        DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(validYesModel))
 
         val response: WSResponse = getRequest()
 
@@ -82,15 +95,6 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
     def postRequest(data: DeregistrationDateModel): WSResponse =
       post("/deregistration-date")(toFormData(DeregistrationDateForm.deregistrationDateForm, data))
 
-    val validYesModel = DeregistrationDateModel(Yes,Some(DateModel(
-      LocalDate.now.getDayOfMonth,
-      LocalDate.now.getMonthValue,
-      LocalDate.now.getYear
-    )))
-    val validNoModel = DeregistrationDateModel(No,None)
-    val invalidYesModel = DeregistrationDateModel(Yes,None)
-
-
     "the user is authorised" when {
 
       "the post request includes valid Yes data" should {
@@ -98,6 +102,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
+          DeregisterVatStub.successfulPutAnswer(vrn, DeregDateAnswerService.key)
 
           val response: WSResponse = postRequest(validYesModel)
 
@@ -118,8 +123,6 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-
-            //TODO: Redirect needs updating as part of the routing Sub-Task
             redirectURI(controllers.routes.CheckAnswersController.show().url)
           )
         }
