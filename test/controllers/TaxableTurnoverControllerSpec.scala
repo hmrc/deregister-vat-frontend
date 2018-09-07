@@ -16,16 +16,24 @@
 
 package controllers
 
+import models.{DeregisterVatSuccess, TaxableTurnoverModel}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.mocks.MockTaxableTurnoverAnswerService
+import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
+class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxableTurnoverAnswerService {
 
-  object TestTaxableTurnoverController extends TaxableTurnoverController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestTaxableTurnoverController extends TaxableTurnoverController(
+    messagesApi, mockAuthPredicate, mockStoredAnswersService, mockConfig
+  )
+
+  val testTurnoverAmt = 500
+  val testTaxableTurnoverModel = TaxableTurnoverModel(testTurnoverAmt)
 
   "the user is authorised" when {
 
@@ -36,6 +44,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
         lazy val result = TestTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
+          setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -46,12 +55,12 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      //TODO - update once stored data can be retrieved from Mongo
       "the user is has pre selected amount" should {
 
         lazy val result = TestTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
+          setupMockGetAnswers(Right(Some(testTaxableTurnoverModel)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -59,6 +68,10 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+
+        "have the correct amount prep-populated" in {
+          document(result).select("#turnover").attr("value") shouldBe testTurnoverAmt.toString
         }
       }
 
@@ -69,11 +82,14 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
 
       "the user submits after inputting an amount which is equal to the threshold" should {
 
+        val testTurnoverAmt = mockConfig.deregThreshold
+
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", mockConfig.deregThreshold.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
         lazy val result = TestTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(TaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -85,11 +101,14 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
 
       "the user submits after inputting an amount which is greater than the threshold" should {
 
+        val testTurnoverAmt = mockConfig.deregThreshold + 0.01
+
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", (mockConfig.deregThreshold + 0.01).toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
         lazy val result = TestTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(TaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -101,17 +120,33 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec {
 
       "the user submits after inputting an amount which is less than the threshold" should {
 
+        val testTurnoverAmt = mockConfig.deregThreshold - 0.01
+
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", (mockConfig.deregThreshold - 0.01).toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
         lazy val result = TestTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(TaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
 
         s"Redirect to the '${controllers.routes.VATAccountsController.show().url}'" in {
           redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
+        }
+      }
+
+      "the user submits after inputting an amount but the store fails" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+        lazy val result = TestTaxableTurnoverController.submit()(request)
+
+        "return 500 (ISE)" in {
+          setupMockStoreAnswers(TaxableTurnoverModel(testTurnoverAmt))(Left(errorModel))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
 

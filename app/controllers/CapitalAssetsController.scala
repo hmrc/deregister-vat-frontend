@@ -16,12 +16,16 @@
 
 package controllers
 
+import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.YesNoAmountForm
-import javax.inject.{Inject, Singleton}
+import models.{User, YesNoAmountModel}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.CapitalAssetsAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -29,16 +33,29 @@ import scala.concurrent.Future
 @Singleton
 class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
                                         val authentication: AuthPredicate,
+                                        val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                         implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+  private def renderView(data: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm)(implicit user: User[_]) =
+    views.html.capitalAssets(data)
+
   val show: Action[AnyContent] = authentication.async { implicit user =>
-    Future.successful(Ok(views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm)))
+    capitalAssetsAnswerService.getAnswer.map {
+      case Right(Some(data)) => Ok(renderView(YesNoAmountForm.yesNoAmountForm.fill(data)))
+      case _ => Ok(renderView())
+    }
   }
 
   val submit: Action[AnyContent] = authentication.async { implicit user =>
+
     YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.capitalAssets(error))),
-      _ => Future.successful(Redirect(controllers.routes.OptionOwesMoneyController.show()))
+      error => Future.successful(BadRequest(renderView(error))),
+      data => {
+        capitalAssetsAnswerService.storeAnswer(data).map{
+          case Right(_) => Redirect(controllers.routes.OptionOwesMoneyController.show())
+          case Left(_) => InternalServerError
+        }
+      }
     )
   }
 }
