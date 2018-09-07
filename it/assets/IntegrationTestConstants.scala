@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     http -> //www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package services
+package assets
 
-import connectors.DeregisterVatConnector
-import javax.inject.{Inject, Singleton}
 import models.WhyTurnoverBelowModel
+import play.api.libs.json.Json
 
-@Singleton()
-class WhyTurnoverBelowAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[WhyTurnoverBelowModel] {
-  override val answerKey: String = WhyTurnoverBelowAnswerService.key
-}
+object IntegrationTestConstants {
 
-object WhyTurnoverBelowAnswerService {
-  val key: String = "whyTurnoverBelow"
+  val vrn = "VRN1234567890"
+
+  val whyTurnoverBelowModel = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
+
+  val whyTurnoverBelowJson = Json.obj(
+    "lostContract" -> true,
+    "semiRetiring" -> true,
+    "moreCompetitors" -> true,
+    "reducedTradingHours" -> true,
+    "seasonalBusiness" -> true,
+    "closedPlacesOfBusiness" -> true,
+    "turnoverLowerThanExpected" -> true
+  )
+
 }

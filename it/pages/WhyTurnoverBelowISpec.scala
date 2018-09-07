@@ -16,11 +16,15 @@
 
 package pages
 
+import assets.IntegrationTestConstants._
 import forms.WhyTurnoverBelowForm
 import helpers.IntegrationBaseSpec
 import models.WhyTurnoverBelowModel
 import play.api.http.Status._
 import play.api.libs.ws.WSResponse
+import stubs.DeregisterVatStub
+import services.WhyTurnoverBelowAnswerService
+
 
 class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
@@ -33,6 +37,8 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
       "return 200 OK" in {
 
         given.user.isAuthorised
+
+        DeregisterVatStub.successfulGetAnswer(vrn,WhyTurnoverBelowAnswerService.key)(whyTurnoverBelowJson)
 
         val response: WSResponse = getRequest()
 
@@ -90,6 +96,8 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
+
+          DeregisterVatStub.successfulPutAnswer(vrn,WhyTurnoverBelowAnswerService.key)
 
           val response: WSResponse = postRequest(validModel)
 
