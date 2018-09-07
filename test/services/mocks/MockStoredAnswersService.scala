@@ -71,3 +71,7 @@ trait MockCapitalAssetsAnswerService extends MockStoredAnswersService[YesNoAmoun
 trait MockOwesMoneyAnswerService extends MockStoredAnswersService[YesNo] {
   override val mockStoredAnswersService: OwesMoneyAnswerService = mock[OwesMoneyAnswerService]
 }
+
+trait MockOptionTaxAnswerService extends MockStoredAnswersService[YesNoAmountModel] {
+  override val mockStoredAnswersService: OptionTaxAnswerService = mock[OptionTaxAnswerService]
+}
