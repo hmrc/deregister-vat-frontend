@@ -20,12 +20,23 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
+import services.mocks.MockOptionTaxAnswerService
+import forms.YesNoForm._
+import forms.YesNoAmountForm._
+import models.{DeregisterVatSuccess, No, Yes, YesNoAmountModel}
+import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class OptionTaxControllerSpec extends ControllerBaseSpec {
+class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswerService {
 
-  object TestOptionTaxController extends OptionTaxController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestOptionTaxController extends OptionTaxController(
+    messagesApi, mockAuthPredicate, mockStoredAnswersService, mockConfig
+  )
+
+  val testAmt = 500
+  val testYesModel = YesNoAmountModel(Yes, Some(testAmt))
+  val testNoModel = YesNoAmountModel(No, None)
 
   "the user is authorised" when {
 
@@ -36,6 +47,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
         lazy val result = TestOptionTaxController.show()(request)
 
         "return 200 (OK)" in {
+          setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -43,6 +55,30 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      "the user has a pre selected option" should {
+
+        lazy val result = TestOptionTaxController.show()(request)
+
+        "return 200 (OK)" in {
+          setupMockGetAnswers(Right(Some(testYesModel)))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "have the yes radio option checked" in {
+          document(result).select(s"#$yesNo-yes").hasAttr("checked") shouldBe true
+        }
+
+        "have the correct value in the amount field" in {
+          document(result).select("#amount").attr("value") shouldBe testAmt.toString
         }
       }
 
@@ -55,12 +91,13 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
-            ("yes_no", "yes"),
-            ("amount", "1000.01")
+            (yesNo, "yes"),
+            (amount, testAmt.toString)
           )
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(testYesModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -73,16 +110,30 @@ class OptionTaxControllerSpec extends ControllerBaseSpec {
       "the user submits after selecting the 'No' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no"))
+          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(testNoModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
 
         s"redirect to '${controllers.routes.OptionStocksToSellController.show().url}'" in {
           redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show().url)
+        }
+      }
+
+      "the user submits after selecting an option but an error is returned when storing answer" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+        lazy val result = TestOptionTaxController.submit()(request)
+
+        "return 500 (ISE)" in {
+          setupMockStoreAnswers(testNoModel)(Left(errorModel))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
 
