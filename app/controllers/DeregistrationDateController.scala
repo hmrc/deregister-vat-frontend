@@ -16,13 +16,15 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.DeregistrationDateForm
+import javax.inject.{Inject, Singleton}
+import models.{DeregistrationDateModel, User}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.DeregDateAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -30,17 +32,26 @@ import scala.concurrent.Future
 @Singleton
 class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
                                              val authenticate: AuthPredicate,
+                                             val deregDateAnswerService: DeregDateAnswerService,
                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+  private def renderView(form: Form[DeregistrationDateModel] = DeregistrationDateForm.deregistrationDateForm)(implicit user: User[_]) =
+    views.html.deregistrationDate(form)
+
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.deregistrationDate(DeregistrationDateForm.deregistrationDateForm)))
+    deregDateAnswerService.getAnswer map {
+      case Right(Some(data)) => Ok(renderView(DeregistrationDateForm.deregistrationDateForm.fill(data)))
+      case _ => Ok(renderView())
+    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-
     DeregistrationDateForm.deregistrationDateForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.deregistrationDate(error))),
-      _ => Future.successful(Redirect(controllers.routes.CheckAnswersController.show()))
+      data => deregDateAnswerService.storeAnswer(data) map {
+        case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
+        case _ => InternalServerError //TODO: Update to render ISE page
+      }
     )
   }
 }

@@ -16,6 +16,8 @@
 
 package models
 
+import play.api.libs.json.{Format, Json}
+
 case class DeregistrationDateModel(yesNo: YesNo, date: Option[DateModel])
 
 object DeregistrationDateModel {
@@ -45,4 +47,6 @@ object DeregistrationDateModel {
       case _ => (dateModel.yesNo,None,None,None)
     })
   }
+
+  implicit val format: Format[DeregistrationDateModel] = Json.format[DeregistrationDateModel]
 }
