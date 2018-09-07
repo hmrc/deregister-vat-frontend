@@ -20,8 +20,11 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
+import models.{User, YesNo}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.OwesMoneyAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -29,19 +32,28 @@ import scala.concurrent.Future
 @Singleton
 class OptionOwesMoneyController @Inject()(val messagesApi: MessagesApi,
                                           val authenticate: AuthPredicate,
+                                          val owesMoneyAnswerService: OwesMoneyAnswerService,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+  private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) = views.html.optionOwesMoney(form)
+
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.optionOwesMoney(YesNoForm.yesNoForm)))
+    owesMoneyAnswerService.getAnswer map {
+      case Right(Some(data)) => Ok(renderView(YesNoForm.yesNoForm.fill(data)))
+      case _ => Ok(renderView())
+    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionOwesMoney(error))),
-      _ =>
-        //TODO: In future, this routing will need to be dependent on previous stored answers, for now it is always shown
-        Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
+      data => owesMoneyAnswerService.storeAnswer(data) map {
+        case Right(_) =>
+          //TODO: In future, this routing will need to be dependent on previous stored answers, for now it is always shown
+          Redirect(controllers.routes.DeregistrationDateController.show())
+        case Left(_) =>
+          InternalServerError //TODO: Render ISE Page
+      }
     )
   }
 }
