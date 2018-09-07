@@ -20,26 +20,37 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.YesNoAmountForm
 import javax.inject.Inject
+import models.{User, YesNoAmountModel}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import services.StocksAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
                                              val authenticate: AuthPredicate,
+                                             val stocksAnswerService: StocksAnswerService,
                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+  private def renderView(form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm)(implicit user: User[_]) =
+    views.html.optionStocksToSell(form)
+
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    Future.successful(Ok(views.html.optionStocksToSell(YesNoAmountForm.yesNoAmountForm)))
+    stocksAnswerService.getAnswer map {
+      case Right(Some(data)) => Ok(renderView(YesNoAmountForm.yesNoAmountForm.fill(data)))
+      case _ => Ok(renderView())
+    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-
     YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionStocksToSell(error))),
-      _ =>
-        Future.successful(Redirect(controllers.routes.CapitalAssetsController.show()))
+      data => stocksAnswerService.storeAnswer(data) map {
+        case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show())
+        case Left(_) => InternalServerError //TODO: Render the ISE page
+      }
     )
   }
 }

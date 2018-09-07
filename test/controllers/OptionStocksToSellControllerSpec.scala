@@ -16,17 +16,26 @@
 
 package controllers
 
+import assets.constants.BaseTestConstants._
+import models.{DeregisterVatSuccess, No, Yes, YesNoAmountModel}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.mocks.MockStocksAnswerService
 
 import scala.concurrent.Future
 
 
-class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
+class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStocksAnswerService {
 
-  object TestOptionTaxController extends OptionStocksToSellController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestOptionTaxController extends OptionStocksToSellController(
+    messagesApi, mockAuthPredicate, mockStoredAnswersService, mockConfig
+  )
+
+  val testAmt = 500
+  val testYesStocksModel = YesNoAmountModel(Yes, Some(testAmt))
+  val testNoStocksModel = YesNoAmountModel(No, None)
 
   "the user is authorised" when {
 
@@ -37,6 +46,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
         lazy val result = TestOptionTaxController.show()(request)
 
         "return 200 (OK)" in {
+          setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -44,6 +54,30 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      "the user has a pre selected option" should {
+
+        lazy val result = TestOptionTaxController.show()(request)
+
+        "return 200 (OK)" in {
+          setupMockGetAnswers(Right(Some(testYesStocksModel)))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "prepopulate the radio option" in {
+          document(result).select("#yes_no-yes").hasAttr("checked") shouldBe true
+        }
+
+        "prepopulate the amount" in {
+          document(result).select("#amount").attr("value") shouldBe testAmt.toString
         }
       }
 
@@ -57,11 +91,12 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
             ("yes_no", "yes"),
-            ("amount", "1000.01")
+            ("amount", testAmt.toString)
           )
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(testYesStocksModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -78,12 +113,26 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockStoreAnswers(testNoStocksModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
 
         s"redirect to '${controllers.routes.CapitalAssetsController.show().url}'" in {
           redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show().url)
+        }
+      }
+
+      "the user submits after selecting the 'No' option but an error is returned when storing" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no"))
+        lazy val result = TestOptionTaxController.submit()(request)
+
+        "return 500 (ISE)" in {
+          setupMockStoreAnswers(testNoStocksModel)(Left(errorModel))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
 
