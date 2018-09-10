@@ -13,6 +13,7 @@ common.agentService = Update your client’s VAT details
 common.clientService = Business tax account
 common.yes = Yes
 common.no = No
+common.finish = Finish
 common.moreInfo = More information
 common.error.mandatoryRadioOption = Select an option
 common.error.mandatoryAmount = Enter the amount using numbers 0 to 9
@@ -99,6 +100,12 @@ whyTurnoverBelow.reason.seasonalBusiness = Seasonal business
 whyTurnoverBelow.reason.closedPlacesOfBusiness = Closed some places of business
 whyTurnoverBelow.reason.turnoverLowerThanExpected = Turnover lower than expected
 whyTurnoverBelow.error.atLeastOne = Select at least one option
+
+deregistrationConfirmation.title = We have received the request to deregister from VAT
+deregistrationConfirmation.heading = What happens next
+deregistrationConfirmation.text = If the business can deregister from VAT, we will send a confirmation letter. This usually takes 2 working days.
+deregistrationConfirmation.link = Check your contact details
+deregistrationConfirmation.link.text = are up to date.
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
