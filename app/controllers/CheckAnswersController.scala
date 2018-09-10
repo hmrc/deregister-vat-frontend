@@ -17,19 +17,56 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import controllers.predicates.AuthPredicate
+import models.{DeregCheckYourAnswersModel, ErrorModel, VATAccountsModel, YesNoAmountModel}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
+import scala.concurrent.Future
 
 @Singleton
 class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        val authenticate: AuthPredicate,
+                                       val accountingMethodAnswerService: AccountingMethodAnswerService,
+                                       val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+                                       val ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
+                                       val deregDateAnswerService: DeregDateAnswerService,
+                                       val deregReasonAnswerService: DeregReasonAnswerService,
+                                       val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
+                                       val optionTaxAnswerService: OptionTaxAnswerService,
+                                       val owesMoneyAnswerService: OwesMoneyAnswerService,
+                                       val stocksAnswerService: StocksAnswerService,
+                                       val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
+                                       val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = TODO
+  val show: Action[AnyContent] = authenticate.async { implicit user =>
+    for {
+      accounting <- method(accountingMethodAnswerService.getAnswer, "theMessage", "theChangeUrl")
+      capital <- method(capitalAssetsAnswerService.getAnswer, "theMessage", "theChangeUrl")
+      ceased <- method(ceasedTradingDateAnswerService.getAnswer, "theMessage", "theChangeUrl")
+      deregDate <- method(deregDateAnswerService.getAnswer, "theMessage", "theChangeUrl")
+      deregReason <- method(deregReasonAnswerService.getAnswer, "theMessage", "theChangeUrl")
+      nextTurnover <- method(nextTaxableTurnoverAnswerService.getAnswer, "theMessage", "theChangeUrl")
+      optionTax <- method(optionTaxAnswerService.getAnswer, "theMessage", "theChangeUrl")
+      owesMoney <- method(owesMoneyAnswerService.getAnswer, "theMessage", "theChangeUrl")
+      stocks <- method(stocksAnswerService.getAnswer, "theMessage", "theChangeUrl")
+      turnover <- method(taxableTurnoverAnswerService.getAnswer, "theMessage", "theChangeUrl")
+      whyBelow <- method(whyTurnoverBelowAnswerService.getAnswer, "theMessage", "theChangeUrl")
+    } yield Ok(Seq(accounting, capital, ceased, deregDate, deregReason, nextTurnover, optionTax, owesMoney, stocks, turnover, whyBelow))
+  }
 
   val submit: Action[AnyContent] = TODO
+
+  private[CheckAnswersController] def method[T](thingy: Future[Either[ErrorModel, Option[T]]], message: String, url: String) = {
+    thingy.map {
+      case Right(Some(answer: VATAccountsModel)) => DeregCheckYourAnswersModel(message, answer.accountingMethod, url)
+        //TODO all the other cases
+      case _ => ""
+    }
+  }
+
 }
