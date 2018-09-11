@@ -19,7 +19,7 @@ package controllers
 import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import models.{DeregCheckYourAnswersModel, ErrorModel, VATAccountsModel, YesNoAmountModel}
+import models._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services._
@@ -43,30 +43,45 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+
+
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    for {
-      accounting <- method(accountingMethodAnswerService.getAnswer, "theMessage", "theChangeUrl")
-      capital <- method(capitalAssetsAnswerService.getAnswer, "theMessage", "theChangeUrl")
-      ceased <- method(ceasedTradingDateAnswerService.getAnswer, "theMessage", "theChangeUrl")
-      deregDate <- method(deregDateAnswerService.getAnswer, "theMessage", "theChangeUrl")
-      deregReason <- method(deregReasonAnswerService.getAnswer, "theMessage", "theChangeUrl")
-      nextTurnover <- method(nextTaxableTurnoverAnswerService.getAnswer, "theMessage", "theChangeUrl")
-      optionTax <- method(optionTaxAnswerService.getAnswer, "theMessage", "theChangeUrl")
-      owesMoney <- method(owesMoneyAnswerService.getAnswer, "theMessage", "theChangeUrl")
-      stocks <- method(stocksAnswerService.getAnswer, "theMessage", "theChangeUrl")
-      turnover <- method(taxableTurnoverAnswerService.getAnswer, "theMessage", "theChangeUrl")
-      whyBelow <- method(whyTurnoverBelowAnswerService.getAnswer, "theMessage", "theChangeUrl")
-    } yield Ok(Seq(accounting, capital, ceased, deregDate, deregReason, nextTurnover, optionTax, owesMoney, stocks, turnover, whyBelow))
+    val seq = for {
+      accounting <- accountingMethodAnswerService.getAnswer
+      capital <- capitalAssetsAnswerService.getAnswer
+      ceased <- ceasedTradingDateAnswerService.getAnswer
+      deregDate <- deregDateAnswerService.getAnswer
+      deregReason <- deregReasonAnswerService.getAnswer
+      nextTurnover <- nextTaxableTurnoverAnswerService.getAnswer
+      optionTax <- optionTaxAnswerService.getAnswer
+      owesMoney <- owesMoneyAnswerService.getAnswer
+      stocks <- stocksAnswerService.getAnswer
+      turnover <- taxableTurnoverAnswerService.getAnswer
+      whyBelow <- whyTurnoverBelowAnswerService.getAnswer
+    } yield {
+      DeregCheckYourAnswersModel.customApply(
+        method(accounting),
+        method(capital),
+        method(ceased),
+        method(deregDate),
+        method(deregReason),
+        method(nextTurnover),
+        method(optionTax),
+        method(owesMoney),
+        method(stocks),
+        method(turnover),
+        method(whyBelow)
+      )
+    }
+    Future.successful(Ok(""))
   }
 
   val submit: Action[AnyContent] = TODO
 
-  private[CheckAnswersController] def method[T](thingy: Future[Either[ErrorModel, Option[T]]], message: String, url: String) = {
-    thingy.map {
-      case Right(Some(answer: VATAccountsModel)) => DeregCheckYourAnswersModel(message, answer.accountingMethod, url)
-        //TODO all the other cases
-      case _ => ""
+  private[CheckAnswersController] def method[T](thingy: Either[ErrorModel, Option[T]]): Option[T] = {
+    thingy match {
+      case Right(answer) => answer
+      case _ => None
     }
   }
-
 }
