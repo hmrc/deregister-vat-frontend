@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json._
 
-sealed trait DeregistrationReason {
+sealed trait DeregistrationReason extends BaseAnswerModel {
   val value: String
 }
 
@@ -43,12 +43,15 @@ object DeregistrationReason {
 
 object Ceased extends DeregistrationReason {
   override val value = "ceased"
+  override val getAnswer: Seq[String] = Seq(value)
 }
 
 object BelowThreshold extends DeregistrationReason {
   override val value = "belowThreshold"
+  override val getAnswer: Seq[String] = Seq(value)
 }
 
 object Other extends DeregistrationReason {
   override val value = "other"
+  override val getAnswer: Seq[String] = Seq(value)
 }

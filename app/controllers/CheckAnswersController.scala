@@ -17,6 +17,7 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
+
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import models._
@@ -24,8 +25,6 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-
-import scala.concurrent.Future
 
 @Singleton
 class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
@@ -46,7 +45,7 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
 
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    val seq = for {
+    for {
       accounting <- accountingMethodAnswerService.getAnswer
       capital <- capitalAssetsAnswerService.getAnswer
       ceased <- ceasedTradingDateAnswerService.getAnswer
@@ -59,29 +58,41 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
       turnover <- taxableTurnoverAnswerService.getAnswer
       whyBelow <- whyTurnoverBelowAnswerService.getAnswer
     } yield {
-      DeregCheckYourAnswersModel.customApply(
-        method(accounting),
-        method(capital),
-        method(ceased),
-        method(deregDate),
-        method(deregReason),
-        method(nextTurnover),
-        method(optionTax),
-        method(owesMoney),
-        method(stocks),
-        method(turnover),
-        method(whyBelow)
+      Ok(views.html.checkYourAnswers(
+          createAnswers(retrieveModel(accounting),Seq("accounting"),"a") ++
+          createAnswers(retrieveModel(capital),Seq("capital","b"),"url") ++
+          createAnswers(retrieveModel(ceased),Seq("ceased"),"c") ++
+          createAnswers(retrieveModel(deregDate),Seq("deregDate",""),"d") ++
+          createAnswers(retrieveModel(deregReason),Seq("deregReason"),"e") ++
+          createAnswers(retrieveModel(nextTurnover),Seq("nextTurnover"),"f") ++
+          createAnswers(retrieveModel(optionTax),Seq("optionTax",""),"g") ++
+          createAnswers(retrieveModel(owesMoney),Seq("owesMoney"),"h") ++
+          createAnswers(retrieveModel(stocks),Seq("stocks",""),"i") ++
+          createAnswers(retrieveModel(turnover),Seq("turnover"),"j") ++
+          createAnswers(retrieveModel(whyBelow),Seq("whyBelow"),"k")
+        )
       )
     }
-    Future.successful(Ok(""))
   }
 
   val submit: Action[AnyContent] = TODO
 
-  private[CheckAnswersController] def method[T](thingy: Either[ErrorModel, Option[T]]): Option[T] = {
-    thingy match {
+  def retrieveModel(answerModel: Either[ErrorModel,Option[BaseAnswerModel]]): Option[BaseAnswerModel] = {
+    answerModel match {
+      case Right(None) => None
       case Right(answer) => answer
       case _ => None
+    }
+  }
+
+  def createAnswers(model: Option[BaseAnswerModel], question: Seq[String], url: String): Seq[DeregCheckYourAnswerModel] = {
+    model match {
+      case Some(answer) if answer.getAnswer.size > 1 => {Seq(
+        DeregCheckYourAnswerModel(question.head, answer.getAnswer.head, url),
+        DeregCheckYourAnswerModel(question(1), answer.getAnswer(1), url)
+      )}
+      case Some(answer) => Seq(DeregCheckYourAnswerModel(question.head, answer.getAnswer.head, url))
+      case _ => Seq.empty[DeregCheckYourAnswerModel]
     }
   }
 }

@@ -18,7 +18,9 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class TaxableTurnoverModel(turnover: BigDecimal)
+case class TaxableTurnoverModel(turnover: BigDecimal) extends BaseAnswerModel {
+  override val getAnswer: Seq[String] = Seq(turnover.toString)
+}
 
 object TaxableTurnoverModel {
   implicit val format: OFormat[TaxableTurnoverModel] = Json.format[TaxableTurnoverModel]

@@ -23,7 +23,7 @@ import play.api.libs.json.{Json, OFormat}
 import scala.util.{Failure, Success, Try}
 
 
-case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int){
+case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int) extends BaseAnswerModel{
 
   val date: Option[LocalDate] =
     Try(LocalDate.of(dateYear,dateMonth,dateDay)) match {
@@ -31,6 +31,7 @@ case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int){
       case Failure(_) => None
     }
 
+  override val getAnswer: Seq[String] = Seq(date.fold("")(_.toString))
 }
 
 object DateModel {

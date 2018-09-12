@@ -16,12 +16,13 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.{Format, Json}
 
-case class VATAccountsModel(accountingMethod: String) extends BaseAnswerModel {
-  override val getAnswer: Seq[String] = Seq(accountingMethod)
+case class DeregCheckYourAnswerModel(question: String, answer: String, url: String)
+
+object DeregCheckYourAnswerModel {
+
+  implicit val format: Format[DeregCheckYourAnswerModel] = Json.format[DeregCheckYourAnswerModel]
+
 }
 
-object VATAccountsModel {
-  implicit val format: OFormat[VATAccountsModel] = Json.format[VATAccountsModel]
-}

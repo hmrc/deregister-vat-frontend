@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.{Format, Json}
 
-case class YesNoAmountModel(yesNo: YesNo, amount: Option[BigDecimal]) {
+case class YesNoAmountModel(yesNo: YesNo, amount: Option[BigDecimal]) extends BaseAnswerModel{
 
   val isValid: Boolean = {
     yesNo match {
@@ -26,6 +26,11 @@ case class YesNoAmountModel(yesNo: YesNo, amount: Option[BigDecimal]) {
       case _ => true
     }
   }
+
+  override val getAnswer: Seq[String] = {
+    amount.fold(yesNo.getAnswer)(someAmount => yesNo.getAnswer :+ someAmount.toString)
+  }
+
 }
 
 object YesNoAmountModel {
