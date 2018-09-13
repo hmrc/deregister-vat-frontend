@@ -20,11 +20,11 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
-import models.{User, YesNo}
+import models.{BelowThreshold, User, Yes, YesNo}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.OwesMoneyAnswerService
+import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OwesMoneyAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -33,6 +33,8 @@ import scala.concurrent.Future
 class OptionOwesMoneyController @Inject()(val messagesApi: MessagesApi,
                                           val authenticate: AuthPredicate,
                                           val owesMoneyAnswerService: OwesMoneyAnswerService,
+                                          val deregReasonAnswerService: DeregReasonAnswerService,
+                                          val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) = views.html.optionOwesMoney(form)
@@ -47,13 +49,29 @@ class OptionOwesMoneyController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionOwesMoney(error))),
-      data => owesMoneyAnswerService.storeAnswer(data) map {
-        case Right(_) =>
-          //TODO: In future, this routing will need to be dependent on previous stored answers, for now it is always shown
-          Redirect(controllers.routes.DeregistrationDateController.show())
-        case Left(_) =>
-          InternalServerError //TODO: Render ISE Page
+      data => owesMoneyAnswerService.storeAnswer(data) flatMap {
+        case Right(_) => submitRedirectLogic(data)
+        case Left(_) => Future.successful(InternalServerError) //TODO: Render ISE Page
       }
     )
+  }
+
+  private def submitRedirectLogic(data: YesNo)(implicit user: User[_]): Future[Result] = {
+    if (data == Yes) {
+      Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
+    } else {
+      deregReasonAnswerService.getAnswer flatMap {
+        case Right(Some(reason)) if reason == BelowThreshold =>
+          Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
+        case Right(Some(_)) => capitalAssetsAnswerService.getAnswer map {
+          case Right(Some(assets)) if assets.yesNo == Yes =>
+            Redirect(controllers.routes.DeregistrationDateController.show())
+          case Right(Some(_)) => Redirect(controllers.routes.CheckAnswersController.show())
+          case _ => InternalServerError //TODO: Render ISE Page
+        }
+        case _ =>
+          Future.successful(InternalServerError) //TODO: Render ISE Page
+      }
+    }
   }
 }

@@ -27,9 +27,11 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockCapitalAssetsAnswerService
 
-class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockCapitalAssetsAnswerService{
+class CapitalAssetsControllerSpec extends ControllerBaseSpec {
 
-  object TestCapitalAssetsController extends CapitalAssetsController(messagesApi, mockAuthPredicate, mockStoredAnswersService, mockConfig)
+  object TestCapitalAssetsController extends CapitalAssetsController(
+    messagesApi, mockAuthPredicate, MockCapitalAssetsAnswerService.mockStoredAnswersService, mockConfig
+  )
 
   val amount = 12345
 
@@ -42,7 +44,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockCapitalAss
         lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetAnswers(Right(None))
+          MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -58,7 +60,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockCapitalAss
         lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetAnswers(Right(Some(YesNoAmountModel(Yes,Some(amount)))))
+          MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(Yes,Some(amount)))))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -101,7 +103,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockCapitalAss
 
 
         "return 303 (SEE_OTHER)" in {
-          setupMockStoreAnswers(YesNoAmountModel(Yes, Some(amount)))(Right(DeregisterVatSuccess))
+          MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(Yes, Some(amount)))(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -118,7 +120,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockCapitalAss
         lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreAnswers(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
+          MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }

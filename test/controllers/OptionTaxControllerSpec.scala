@@ -28,10 +28,10 @@ import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswerService {
+class OptionTaxControllerSpec extends ControllerBaseSpec {
 
   object TestOptionTaxController extends OptionTaxController(
-    messagesApi, mockAuthPredicate, mockStoredAnswersService, mockConfig
+    messagesApi, mockAuthPredicate, MockOptionTaxAnswerService.mockStoredAnswersService, mockConfig
   )
 
   val testAmt = 500
@@ -47,7 +47,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetAnswers(Right(None))
+          MockOptionTaxAnswerService.setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -63,7 +63,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetAnswers(Right(Some(testYesModel)))
+          MockOptionTaxAnswerService.setupMockGetAnswers(Right(Some(testYesModel)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -97,7 +97,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreAnswers(testYesModel)(Right(DeregisterVatSuccess))
+          MockOptionTaxAnswerService.setupMockStoreAnswers(testYesModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -114,7 +114,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreAnswers(testNoModel)(Right(DeregisterVatSuccess))
+          MockOptionTaxAnswerService.setupMockStoreAnswers(testNoModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -131,7 +131,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreAnswers(testNoModel)(Left(errorModel))
+          MockOptionTaxAnswerService.setupMockStoreAnswers(testNoModel)(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

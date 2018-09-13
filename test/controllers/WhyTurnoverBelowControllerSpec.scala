@@ -26,9 +26,11 @@ import services.mocks.MockWhyTurnoverBelowAnswerService
 
 import scala.concurrent.Future
 
-class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurnoverBelowAnswerService{
+class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec {
 
-  object TestWhyTurnoverBelowController extends WhyTurnoverBelowController(messagesApi, mockAuthPredicate, mockStoredAnswersService, mockConfig)
+  object TestWhyTurnoverBelowController extends WhyTurnoverBelowController(
+    messagesApi, mockAuthPredicate, MockWhyTurnoverBelowAnswerService.mockStoredAnswersService, mockConfig
+  )
 
   "the user is authorised" when {
 
@@ -39,7 +41,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         lazy val result = TestWhyTurnoverBelowController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetAnswers(Right(None))
+          MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -55,7 +57,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         lazy val result = TestWhyTurnoverBelowController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetAnswers(Right(Some(WhyTurnoverBelowModel(true,true,true,true,true,true,true))))
+          MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(Some(WhyTurnoverBelowModel(true,true,true,true,true,true,true))))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -89,7 +91,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         lazy val result = TestWhyTurnoverBelowController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreAnswers(WhyTurnoverBelowModel(true,false,false,false,false,false,false))(Right(DeregisterVatSuccess))
+          MockWhyTurnoverBelowAnswerService.setupMockStoreAnswers(WhyTurnoverBelowModel(true,false,false,false,false,false,false))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }

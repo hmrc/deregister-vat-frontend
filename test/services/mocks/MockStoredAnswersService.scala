@@ -25,7 +25,7 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockStoredAnswersService[T] extends TestUtil with MockFactory {
+abstract class MockStoredAnswersService[T] extends TestUtil with MockFactory {
 
   val mockStoredAnswersService: StoredAnswersService[T]
 
@@ -48,45 +48,46 @@ trait MockStoredAnswersService[T] extends TestUtil with MockFactory {
   }
 }
 
-trait MockDeregReasonAnswerService extends MockStoredAnswersService[DeregistrationReason] {
+object MockDeregReasonAnswerService extends MockStoredAnswersService[DeregistrationReason] {
   override val mockStoredAnswersService: DeregReasonAnswerService = mock[DeregReasonAnswerService]
 }
 
-trait MockTaxableTurnoverAnswerService extends MockStoredAnswersService[TaxableTurnoverModel] {
+object MockTaxableTurnoverAnswerService extends MockStoredAnswersService[TaxableTurnoverModel] {
   override val mockStoredAnswersService: TaxableTurnoverAnswerService = mock[TaxableTurnoverAnswerService]
 }
 
-trait MockNextTaxableTurnoverAnswerService extends MockStoredAnswersService[TaxableTurnoverModel] {
+object MockNextTaxableTurnoverAnswerService extends MockStoredAnswersService[TaxableTurnoverModel] {
   override val mockStoredAnswersService: NextTaxableTurnoverAnswerService = mock[NextTaxableTurnoverAnswerService]
 }
 
-trait MockCeasedTradingDateAnswerService extends MockStoredAnswersService[DateModel] {
+object MockCeasedTradingDateAnswerService extends MockStoredAnswersService[DateModel] {
   override val mockStoredAnswersService: CeasedTradingDateAnswerService = mock[CeasedTradingDateAnswerService]
 }
 
-trait MockStocksAnswerService extends MockStoredAnswersService[YesNoAmountModel] {
+object MockStocksAnswerService extends MockStoredAnswersService[YesNoAmountModel] {
   override val mockStoredAnswersService: StocksAnswerService = mock[StocksAnswerService]
 }
 
-trait MockAccountingMethodAnswerService extends MockStoredAnswersService[VATAccountsModel] {
+object MockAccountingMethodAnswerService extends MockStoredAnswersService[VATAccountsModel] {
   override val mockStoredAnswersService: AccountingMethodAnswerService = mock[AccountingMethodAnswerService]
 }
 
-trait MockCapitalAssetsAnswerService extends MockStoredAnswersService[YesNoAmountModel] {
+object MockCapitalAssetsAnswerService extends MockStoredAnswersService[YesNoAmountModel] {
   override val mockStoredAnswersService: CapitalAssetsAnswerService = mock[CapitalAssetsAnswerService]
 }
 
-trait MockWhyTurnoverBelowAnswerService extends MockStoredAnswersService[WhyTurnoverBelowModel] {
+object MockWhyTurnoverBelowAnswerService extends MockStoredAnswersService[WhyTurnoverBelowModel] {
   override val mockStoredAnswersService: WhyTurnoverBelowAnswerService = mock[WhyTurnoverBelowAnswerService]
 }
-trait MockOwesMoneyAnswerService extends MockStoredAnswersService[YesNo] {
+
+object MockOwesMoneyAnswerService extends MockStoredAnswersService[YesNo] {
   override val mockStoredAnswersService: OwesMoneyAnswerService = mock[OwesMoneyAnswerService]
 }
 
-trait MockOptionTaxAnswerService extends MockStoredAnswersService[YesNoAmountModel] {
+object MockOptionTaxAnswerService extends MockStoredAnswersService[YesNoAmountModel] {
   override val mockStoredAnswersService: OptionTaxAnswerService = mock[OptionTaxAnswerService]
 }
 
-trait MockDeregDateAnswerService extends MockStoredAnswersService[DeregistrationDateModel] {
+object MockDeregDateAnswerService extends MockStoredAnswersService[DeregistrationDateModel] {
   override val mockStoredAnswersService: DeregDateAnswerService = mock[DeregDateAnswerService]
 }
