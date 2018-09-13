@@ -46,32 +46,31 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
     for {
-      accounting <- accountingMethodAnswerService.getAnswer
-      capital <- capitalAssetsAnswerService.getAnswer
-      ceased <- ceasedTradingDateAnswerService.getAnswer
-      deregDate <- deregDateAnswerService.getAnswer
       deregReason <- deregReasonAnswerService.getAnswer
-      nextTurnover <- nextTaxableTurnoverAnswerService.getAnswer
-      optionTax <- optionTaxAnswerService.getAnswer
-      owesMoney <- owesMoneyAnswerService.getAnswer
-      stocks <- stocksAnswerService.getAnswer
+      ceased <- ceasedTradingDateAnswerService.getAnswer
       turnover <- taxableTurnoverAnswerService.getAnswer
+      nextTurnover <- nextTaxableTurnoverAnswerService.getAnswer
       whyBelow <- whyTurnoverBelowAnswerService.getAnswer
+      accounting <- accountingMethodAnswerService.getAnswer
+      optionTax <- optionTaxAnswerService.getAnswer
+      stocks <- stocksAnswerService.getAnswer
+      capital <- capitalAssetsAnswerService.getAnswer
+      owesMoney <- owesMoneyAnswerService.getAnswer
+      deregDate <- deregDateAnswerService.getAnswer
     } yield {
       Ok(views.html.checkYourAnswers(
-          createAnswers(retrieveModel(accounting),Seq("accounting"),"a") ++
-          createAnswers(retrieveModel(capital),Seq("capital","b"),"url") ++
-          createAnswers(retrieveModel(ceased),Seq("ceased"),"c") ++
-          createAnswers(retrieveModel(deregDate),Seq("deregDate",""),"d") ++
-          createAnswers(retrieveModel(deregReason),Seq("deregReason"),"e") ++
-          createAnswers(retrieveModel(nextTurnover),Seq("nextTurnover"),"f") ++
-          createAnswers(retrieveModel(optionTax),Seq("optionTax",""),"g") ++
-          createAnswers(retrieveModel(owesMoney),Seq("owesMoney"),"h") ++
-          createAnswers(retrieveModel(stocks),Seq("stocks",""),"i") ++
-          createAnswers(retrieveModel(turnover),Seq("turnover"),"j") ++
-          createAnswers(retrieveModel(whyBelow),Seq("whyBelow"),"k")
-        )
-      )
+        createAnswers(retrieveModel(deregReason),Seq("checkYourAnswers.question.reason"),"e") ++
+        createAnswers(retrieveModel(ceased),Seq("checkYourAnswers.question.ceasedTrading"),"c") ++
+        createAnswers(retrieveModel(turnover),Seq("checkYourAnswers.question.taxableTurnover"),"j") ++
+        createAnswers(retrieveModel(nextTurnover),Seq("checkYourAnswers.question.owesMoney"),"f") ++
+        createAnswers(retrieveModel(whyBelow),Seq("checkYourAnswers.question.whyBelow"),"k") ++
+        createAnswers(retrieveModel(accounting),Seq("checkYourAnswers.question.VatAccounts"),"a") ++
+        createAnswers(retrieveModel(optionTax),Seq("checkYourAnswers.question.optionTax","checkYourAnswers.question.optionTaxValue"),"g") ++
+        createAnswers(retrieveModel(stocks),Seq("checkYourAnswers.question.stock","checkYourAnswers.question.stockValue"),"i") ++
+        createAnswers(retrieveModel(capital),Seq("checkYourAnswers.question.capitalAssets","checkYourAnswers.question.capitalAssetsValue"),"url") ++
+        createAnswers(retrieveModel(owesMoney),Seq("owesMoney"),"h") ++
+        createAnswers(retrieveModel(deregDate),Seq("checkYourAnswers.question.deregistrationDate",""),"d")
+      ))
     }
   }
 

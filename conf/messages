@@ -101,19 +101,20 @@ whyTurnoverBelow.reason.closedPlacesOfBusiness = Closed some places of business
 whyTurnoverBelow.reason.turnoverLowerThanExpected = Turnover lower than expected
 whyTurnoverBelow.error.atLeastOne = Select at least one option
 
+checkYourAnswers.title = Check your answers
+checkYourAnswers.change = Change
 checkYourAnswers.question.reason = Why the business is deregistering from VAT
 checkYourAnswers.question.ceasedTrading = The date your business ceased or will cease trading
 checkYourAnswers.question.taxableTurnover = What is the business’s expected taxable turnover for the next 12 months?
-checkYourAnswers.question.threshold = Why does the business expect its turnover to be below the threshold?
+checkYourAnswers.question.whyBelow = Why does the business expect its turnover to be below the threshold?
 checkYourAnswers.question.VatAccounts = How are the business’s VAT accounts prepared?
-checkYourAnswers.question.property = Did the business charge VAT on land or commercial property?
-checkYourAnswers.question.propertyValue = What was the total value of what the business charged or claimed?
+checkYourAnswers.question.optionTax = Did the business charge VAT on land or commercial property?
+checkYourAnswers.question.optionTaxValue = What was the total value of what the business charged or claimed?
 checkYourAnswers.question.stock = Does the business intend to keep any stock?
 checkYourAnswers.question.stockValue = What is the total value of the stock?
 checkYourAnswers.question.capitalAssets = Does the business intend to keep any capital assets?
 checkYourAnswers.question.capitalAssetsValue = What is the total value of capital assets
-checkYourAnswers.question.invoices = Is the business expecting to issue any new invoices after deregistering?
-checkYourAnswers.question.outstandingInvoices = Is the business expecting to receive payment for outstanding invoices after deregistering?
+checkYourAnswers.question.owesMoney = Does the business owe any money?
 checkYourAnswers.question.deregistrationDate = Does the business want to choose its own deregistration date?
 
 deregistrationConfirmation.title = We have received the request to deregister from VAT
