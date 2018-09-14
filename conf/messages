@@ -116,6 +116,11 @@ checkYourAnswers.question.capitalAssets = Does the business intend to keep any c
 checkYourAnswers.question.capitalAssetsValue = What is the total value of capital assets
 checkYourAnswers.question.owesMoney = Does the business owe any money?
 checkYourAnswers.question.deregistrationDate = Does the business want to choose its own deregistration date?
+checkYourAnswers.answer.noDate = Not Specified
+checkYourAnswers.answer.standard = Standard accounting
+checkYourAnswers.answer.cash = Cash accounting
+checkYourAnswers.text = By confirming this change, I, John Beadley of ABC Digital LTD, agree that the information I have given is complete and correct.
+checkYourAnswers.confirm = Confirm and deregister
 
 deregistrationConfirmation.title = We have received the request to deregister from VAT
 deregistrationConfirmation.heading = What happens next

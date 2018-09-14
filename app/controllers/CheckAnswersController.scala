@@ -59,17 +59,26 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
       deregDate <- deregDateAnswerService.getAnswer
     } yield {
       Ok(views.html.checkYourAnswers(
-        createAnswers(retrieveModel(deregReason),Seq("checkYourAnswers.question.reason"),"e") ++
-        createAnswers(retrieveModel(ceased),Seq("checkYourAnswers.question.ceasedTrading"),"c") ++
-        createAnswers(retrieveModel(turnover),Seq("checkYourAnswers.question.taxableTurnover"),"j") ++
-        createAnswers(retrieveModel(nextTurnover),Seq("checkYourAnswers.question.owesMoney"),"f") ++
-        createAnswers(retrieveModel(whyBelow),Seq("checkYourAnswers.question.whyBelow"),"k") ++
-        createAnswers(retrieveModel(accounting),Seq("checkYourAnswers.question.VatAccounts"),"a") ++
-        createAnswers(retrieveModel(optionTax),Seq("checkYourAnswers.question.optionTax","checkYourAnswers.question.optionTaxValue"),"g") ++
-        createAnswers(retrieveModel(stocks),Seq("checkYourAnswers.question.stock","checkYourAnswers.question.stockValue"),"i") ++
-        createAnswers(retrieveModel(capital),Seq("checkYourAnswers.question.capitalAssets","checkYourAnswers.question.capitalAssetsValue"),"url") ++
-        createAnswers(retrieveModel(owesMoney),Seq("owesMoney"),"h") ++
-        createAnswers(retrieveModel(deregDate),Seq("checkYourAnswers.question.deregistrationDate",""),"d")
+        createAnswers(retrieveModel(deregReason),Seq("checkYourAnswers.question.reason"),
+          controllers.routes.DeregistrationReasonController.show(user.isAgent).url) ++
+        createAnswers(retrieveModel(ceased),Seq("checkYourAnswers.question.ceasedTrading"),
+          controllers.routes.CeasedTradingDateController.show().url) ++
+        createAnswers(retrieveModel(turnover),Seq("checkYourAnswers.question.taxableTurnover"),
+          controllers.routes.OptionOwesMoneyController.show().url) ++
+        createAnswers(retrieveModel(whyBelow),Seq("checkYourAnswers.question.whyBelow"),
+          controllers.routes.WhyTurnoverBelowController.show().url) ++
+        createAnswers(retrieveModel(accounting),Seq("checkYourAnswers.question.VatAccounts"),
+          controllers.routes.VATAccountsController.show().url) ++
+        createAnswers(retrieveModel(optionTax),Seq("checkYourAnswers.question.optionTax","checkYourAnswers.question.optionTaxValue"),
+          controllers.routes.OptionTaxController.show().url) ++
+        createAnswers(retrieveModel(stocks),Seq("checkYourAnswers.question.stock","checkYourAnswers.question.stockValue"),
+          controllers.routes.OptionStocksToSellController.show().url) ++
+        createAnswers(retrieveModel(capital),Seq("checkYourAnswers.question.capitalAssets","checkYourAnswers.question.capitalAssetsValue"),
+          controllers.routes.CapitalAssetsController.show().url) ++
+        createAnswers(retrieveModel(owesMoney),Seq("checkYourAnswers.question.owesMoney"),
+          controllers.routes.OptionOwesMoneyController.show().url) ++
+        createAnswers(retrieveModel(deregDate),Seq("checkYourAnswers.question.deregistrationDate",""),
+          controllers.routes.DeregistrationDateController.show().url)
       ))
     }
   }

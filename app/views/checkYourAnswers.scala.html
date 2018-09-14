@@ -21,14 +21,14 @@
 @(answers: Seq[DeregCheckYourAnswerModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @answerRow(answerModel: DeregCheckYourAnswerModel) = {
-<div>
-    <dl class="govuk-check-your-answers cya-questions-short">
-        <div>
+<div class="check-your-answer-row">
+    <dl class="cya-questions-long govuk-check-your-answers">
+        <div class="form-group">
             <dt class="cya-question">
-                @answerModel.question
+                @messages(answerModel.question)
             </dt>
             <dd class="cya-answer">
-                @answerModel.answer
+                @messages(answerModel.answer)
             </dd>
             <dd class="cya-change">
                 <a href="@answerModel.url">@messages("checkYourAnswers.change")</a>
@@ -48,8 +48,18 @@ appConfig = appConfig) {
 
     @headings(messages("checkYourAnswers.title"))
 
-    @answers.map{ answer =>
-        @answerRow(answer)
-    }
+    <div class="form-group">
+        @answers.map{ answer =>
+            @answerRow(answer)
+        }
+    </div>
+
+    <p class="form-group">
+        @messages("checkYourAnswers.text")
+    </p>
+
+    <button class="button" type ="submit" id="continue">
+        @messages("checkYourAnswers.confirm")
+    </button>
 
 }
