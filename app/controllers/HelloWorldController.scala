@@ -19,7 +19,6 @@ package controllers
 import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.YesNoForm
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -35,7 +34,7 @@ class HelloWorldController @Inject()(val messagesApi: MessagesApi,
   def helloWorld(): Action[AnyContent] = authenticate.async {
     implicit user =>
       Logger.debug(s"THE USERS VRN IS: ${user.vrn}vrn")
-      Future.successful(Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm)))
+      Future.successful(Ok(views.html.helloworld.hello_world()))
   }
 
 }
