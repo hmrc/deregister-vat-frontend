@@ -29,11 +29,12 @@ appConfig = appConfig) {
 
 <p>@messages("deregistrationConfirmation.text")</p>
 
-<p><a href="@appConfig.manageVatSubscriptionFrontendUrl">
-    @messages("deregistrationConfirmation.link")
-   </a> @messages("deregistrationConfirmation.link.text")</p>
+<p>
+    <a href="@appConfig.manageVatSubscriptionFrontendUrl">@messages("deregistrationConfirmation.link")</a>
+    @messages("deregistrationConfirmation.link.text")
+</p>
 
-<a  href="@appConfig.manageVatSubscriptionFrontendUrl"
-    class="button"
-    type="submit">@messages("common.finish")</a>
+<a href="@appConfig.manageVatSubscriptionFrontendUrl" class="button">
+    @messages("common.finish")
+</a>
 }
