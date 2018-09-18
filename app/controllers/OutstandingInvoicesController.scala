@@ -16,13 +16,36 @@
 
 package controllers
 
+import config.AppConfig
+import controllers.predicates.AuthPredicate
+import forms.YesNoForm
+import javax.inject.Inject
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import services.OutstandingInvoicesAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-class OutstandingInvoicesController extends FrontendController {
+import scala.concurrent.Future
 
-  val show: Action[AnyContent] = TODO
+class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
+                                              val authenticate: AuthPredicate,
+                                              val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
+                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val submit: Action[AnyContent] = TODO
+  val show: Action[AnyContent] = authenticate.async { implicit user =>
+    outstandingInvoicesAnswerService.getAnswer map {
+      case Right(Some(data)) => Ok(views.html.optionTax(YesNoForm.yesNoForm.fill(data)))
+      case _ => Ok(views.html.optionTax(YesNoForm.yesNoForm))
+    }
+  }
 
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
+    YesNoForm.yesNoForm.bindFromRequest().fold(
+      error => Future.successful(BadRequest(views.html.optionTax(error))),
+      data => outstandingInvoicesAnswerService.storeAnswer(data) map {
+        case Right(_) => Redirect(controllers.routes.OptionStocksToSellController.show())
+        case _ => InternalServerError
+      }
+    )
+  }
 }
