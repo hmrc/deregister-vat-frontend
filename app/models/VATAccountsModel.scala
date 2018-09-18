@@ -18,9 +18,7 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class VATAccountsModel(accountingMethod: String) extends BaseAnswerModel {
-  override val getAnswer: Seq[String] = Seq(s"checkYourAnswers.answer.$accountingMethod")
-}
+case class VATAccountsModel(accountingMethod: String)
 
 object VATAccountsModel {
   implicit val format: OFormat[VATAccountsModel] = Json.format[VATAccountsModel]

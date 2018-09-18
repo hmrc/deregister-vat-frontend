@@ -16,19 +16,19 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import templates.headings
-@import models.DeregCheckYourAnswerModel
+@import models.CheckYourAnswersRowModel
 
-@(answers: Seq[DeregCheckYourAnswerModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(answers: Seq[CheckYourAnswersRowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@answerRow(answerModel: DeregCheckYourAnswerModel) = {
+@answerRow(answerModel: CheckYourAnswersRowModel) = {
 <div class="check-your-answer-row">
     <dl class="cya-questions-long govuk-check-your-answers">
         <div class="form-group">
             <dt class="cya-question">
-                @messages(answerModel.question)
+                @answerModel.question
             </dt>
             <dd class="cya-answer">
-                @messages(answerModel.answer)
+                @answerModel.answer
             </dd>
             <dd class="cya-change">
                 <a href="@answerModel.url">@messages("checkYourAnswers.change")</a>

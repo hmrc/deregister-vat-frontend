@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json._
 
-sealed trait YesNo extends BaseAnswerModel {
+sealed trait YesNo {
   val value: Boolean
 }
 
@@ -41,11 +41,11 @@ object YesNo {
 }
 
 object Yes extends YesNo {
-  override val getAnswer: Seq[String] = Seq("Yes")
+  override def toString: String = "yes"
   override val value: Boolean = true
 }
 
 object No extends YesNo {
-  override val getAnswer: Seq[String] = Seq("No")
+  override def toString: String = "no"
   override val value: Boolean = false
 }

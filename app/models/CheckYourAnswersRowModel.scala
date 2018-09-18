@@ -16,13 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Format, Json}
+import play.twirl.api.Html
 
-case class DeregCheckYourAnswerModel(question: String, answer: String, url: String)
-
-object DeregCheckYourAnswerModel {
-
-  implicit val format: Format[DeregCheckYourAnswerModel] = Json.format[DeregCheckYourAnswerModel]
-
-}
+case class CheckYourAnswersRowModel(question: String, answer: Html, url: String)
 

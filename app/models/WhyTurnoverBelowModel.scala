@@ -24,12 +24,10 @@ case class WhyTurnoverBelowModel(lostContract: Boolean,
                                  reducedTradingHours: Boolean,
                                  seasonalBusiness: Boolean,
                                  closedPlacesOfBusiness: Boolean,
-                                 turnoverLowerThanExpected: Boolean) extends BaseAnswerModel{
+                                 turnoverLowerThanExpected: Boolean) {
 
   val hasAtLeastOneSelected: Boolean = lostContract || semiRetiring || moreCompetitors || reducedTradingHours ||
     seasonalBusiness || closedPlacesOfBusiness || turnoverLowerThanExpected
-
-  override val getAnswer: Seq[String] = Seq(hasAtLeastOneSelected.toString)
 
 }
 

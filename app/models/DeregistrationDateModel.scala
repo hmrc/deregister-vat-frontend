@@ -18,11 +18,7 @@ package models
 
 import play.api.libs.json.{Format, Json}
 
-case class DeregistrationDateModel(yesNo: YesNo, date: Option[DateModel]) extends BaseAnswerModel {
-  override val getAnswer: Seq[String] = {
-    date.fold(Seq("checkYourAnswers.answer.noDate"))(dateModel => dateModel.getAnswer)
-  }
-}
+case class DeregistrationDateModel(yesNo: YesNo, date: Option[DateModel])
 
 object DeregistrationDateModel {
 

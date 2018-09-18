@@ -17,5 +17,5 @@
 package models
 
 trait BaseAnswerModel {
-  val getAnswer: Seq[String]
+  val getAnswer: String
 }
