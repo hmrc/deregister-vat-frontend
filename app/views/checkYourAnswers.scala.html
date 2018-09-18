@@ -21,21 +21,17 @@
 @(answers: Seq[CheckYourAnswersRowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @answerRow(answerModel: CheckYourAnswersRowModel) = {
-<div class="check-your-answer-row">
-    <dl class="cya-questions-long govuk-check-your-answers">
-        <div class="form-group">
-            <dt class="cya-question">
-                @answerModel.question
-            </dt>
-            <dd class="cya-answer">
-                @answerModel.answer
-            </dd>
-            <dd class="cya-change">
-                <a href="@answerModel.url">@messages("checkYourAnswers.change")</a>
-            </dd>
-        </div>
-    </dl>
-</div>
+    <div>
+        <dt class="cya-question">
+            @answerModel.question
+        </dt>
+        <dd class="cya-answer">
+            @answerModel.answer
+        </dd>
+        <dd class="cya-change">
+            <a href="@answerModel.url">@messages("checkYourAnswers.change")</a>
+        </dd>
+    </div>
 }
 
 
@@ -49,9 +45,11 @@ appConfig = appConfig) {
     @headings(messages("checkYourAnswers.title"))
 
     <div class="form-group">
+        <dl class="govuk-check-your-answers cya-questions-long">
         @answers.map{ answer =>
             @answerRow(answer)
         }
+        </dl>
     </div>
 
     <p class="form-group">

@@ -32,7 +32,7 @@ case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int) {
       case Failure(_) => None
     }
 
-  private val formatter = DateTimeFormatter.ofPattern("d MMM uuuu")
+  private val formatter = DateTimeFormatter.ofPattern("d MMMM uuuu")
   val longDate: String = date.fold("")(x => formatter.format(x))
 }
 
