@@ -96,7 +96,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
         "user selects 'Yes'" should {
 
-          "return 303 SEE_OTHER" in {
+          s"redirect to ${controllers.routes.DeregistrationDateController.show().url}" in {
 
             given.user.isAuthorised
 
