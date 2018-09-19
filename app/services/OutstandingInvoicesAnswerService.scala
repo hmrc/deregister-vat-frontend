@@ -23,6 +23,10 @@ import models.YesNo
 class OutstandingInvoicesAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector)
   extends StoredAnswersService[YesNo] {
 
-  override val answerKey: String = "hasOutstandingInvoices"
+  override val answerKey: String = OutstandingInvoicesAnswerService.key
+}
+
+object OutstandingInvoicesAnswerService {
+  val key: String = "hasOutstandingInvoices"
 }
 

@@ -22,5 +22,9 @@ import models.DeregistrationReason
 
 @Singleton()
 class DeregReasonAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[DeregistrationReason] {
-  override val answerKey: String = "deregReason"
+  override val answerKey: String = DeregReasonAnswerService.key
+}
+
+object DeregReasonAnswerService {
+  val key: String = "deregReason"
 }
