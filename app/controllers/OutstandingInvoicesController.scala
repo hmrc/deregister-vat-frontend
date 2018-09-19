@@ -37,14 +37,14 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
     outstandingInvoicesAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(views.html.optionTax(YesNoForm.yesNoForm.fill(data)))
-      case _ => Ok(views.html.optionTax(YesNoForm.yesNoForm))
+      case Right(Some(data)) => Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm.fill(data)))
+      case _ => Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     YesNoForm.yesNoForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.optionTax(error))),
+      error => Future.successful(BadRequest(views.html.outstandingInvoices(error))),
       data => outstandingInvoicesAnswerService.storeAnswer(data) flatMap {
         case Right(_) => submitRedirectLogic(data)
         case Left(_) => Future.successful(InternalServerError)

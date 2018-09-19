@@ -18,10 +18,10 @@ package services
 
 import connectors.DeregisterVatConnector
 import javax.inject.Inject
-import models.TaxableTurnoverModel
+import models.YesNo
 
 class OutstandingInvoicesAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector)
-  extends StoredAnswersService[TaxableTurnoverModel] {
+  extends StoredAnswersService[YesNo] {
 
   override val answerKey: String = "hasOutstandingInvoices"
 }
