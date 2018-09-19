@@ -52,10 +52,8 @@ GET        /cannot-deregister-threshold     controllers.CannotDeregisterThreshol
 
 GET        /assets/*file                    controllers.Assets.at(path="/public", file)
 
-GET        /outstanding-invoices     controllers.OutstandingInvoicesController.show
-POST       /outstanding-invoices     controllers.OutstandingInvoicesController.submit
-
-GET        /assets/*file           controllers.Assets.at(path="/public", file)
+GET        /outstanding-invoices            controllers.OutstandingInvoicesController.show
+POST       /outstanding-invoices            controllers.OutstandingInvoicesController.submit
 
 #Sign Out Routes
 GET        /sign-out                        controllers.SignOutController.signOut(authorised: Boolean)
