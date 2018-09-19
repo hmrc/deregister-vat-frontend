@@ -44,10 +44,10 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
       "the user does not have a pre selected option" should {
 
         lazy val result = TestOutstandingInvoicesController.show()(request)
+        MockOwesMoneyAnswerService.setupMockGetAnswers(Right(None))
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
 
         "return 200 (OK)" in {
-          MockOwesMoneyAnswerService.setupMockGetAnswers(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
 
@@ -60,10 +60,10 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
       "the user is has pre selected option" should {
 
         lazy val result = TestOutstandingInvoicesController.show()(request)
+        MockOwesMoneyAnswerService.setupMockGetAnswers(Right(Some(Yes)))
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
 
         "return 200 (OK)" in {
-          MockOwesMoneyAnswerService.setupMockGetAnswers(Right(Some(Yes)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
 
@@ -85,8 +85,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
 
     "user selects 'Yes'" should {
 
-      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
+      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
       lazy val result = TestOutstandingInvoicesController.submit()(request)
 
       mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -104,8 +103,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
 
       "user is on 'below threshold' journey" should {
 
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
         lazy val result = TestOutstandingInvoicesController.submit()(request)
 
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -125,14 +123,15 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
 
         "user answered 'Yes' to having capital assets" should {
 
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
 
+          val capitalAssetsAmount: Int = 1000
+
           MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
-          MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(Yes, Some(1000)))))
+          MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(Yes, Some(capitalAssetsAmount)))))
 
           "return 303 (SEE OTHER)" in {
             status(result) shouldBe Status.SEE_OTHER
