@@ -1,54 +1,56 @@
 # microservice specific routes
 
-GET        /hello-world              controllers.HelloWorldController.helloWorld
+GET        /hello-world                     controllers.HelloWorldController.helloWorld
 
-GET        /deregister               controllers.DeregisterForVATController.show
+GET        /deregister                      controllers.DeregisterForVATController.show
 
-GET        /deregistration-reason    controllers.DeregistrationReasonController.show(isAgent: Boolean)
-POST       /deregistration-reason    controllers.DeregistrationReasonController.submit
+GET        /deregistration-reason           controllers.DeregistrationReasonController.show(isAgent: Boolean)
+POST       /deregistration-reason           controllers.DeregistrationReasonController.submit
 
-GET        /accounting-method        controllers.VATAccountsController.show
-POST       /accounting-method        controllers.VATAccountsController.submit
+GET        /accounting-method               controllers.VATAccountsController.show
+POST       /accounting-method               controllers.VATAccountsController.submit
 
-GET        /ceased-trading-date      controllers.CeasedTradingDateController.show
-POST       /ceased-trading-date      controllers.CeasedTradingDateController.submit
+GET        /ceased-trading-date             controllers.CeasedTradingDateController.show
+POST       /ceased-trading-date             controllers.CeasedTradingDateController.submit
 
-GET        /option-to-tax            controllers.OptionTaxController.show
-POST       /option-to-tax            controllers.OptionTaxController.submit
+GET        /option-to-tax                   controllers.OptionTaxController.show
+POST       /option-to-tax                   controllers.OptionTaxController.submit
 
-GET        /deregistration-date      controllers.DeregistrationDateController.show
-POST       /deregistration-date      controllers.DeregistrationDateController.submit
+GET        /deregistration-date             controllers.DeregistrationDateController.show
+POST       /deregistration-date             controllers.DeregistrationDateController.submit
 
-GET        /option-to-tax            controllers.OptionTaxController.show
-POST       /option-to-tax            controllers.OptionTaxController.submit
+GET        /option-to-tax                   controllers.OptionTaxController.show
+POST       /option-to-tax                   controllers.OptionTaxController.submit
 
-GET        /option-owes-money        controllers.OptionOwesMoneyController.show
-POST       /option-owes-money        controllers.OptionOwesMoneyController.submit
+GET        /option-owes-money               controllers.OptionOwesMoneyController.show
+POST       /option-owes-money               controllers.OptionOwesMoneyController.submit
 
-GET        /option-stocks-to-sell    controllers.OptionStocksToSellController.show
-POST       /option-stocks-to-sell    controllers.OptionStocksToSellController.submit
+GET        /option-stocks-to-sell           controllers.OptionStocksToSellController.show
+POST       /option-stocks-to-sell           controllers.OptionStocksToSellController.submit
 
-GET        /capital-assets           controllers.CapitalAssetsController.show
-POST       /capital-assets           controllers.CapitalAssetsController.submit
+GET        /capital-assets                  controllers.CapitalAssetsController.show
+POST       /capital-assets                  controllers.CapitalAssetsController.submit
 
-GET        /taxable-turnover         controllers.TaxableTurnoverController.show
-POST       /taxable-turnover         controllers.TaxableTurnoverController.submit
+GET        /taxable-turnover                controllers.TaxableTurnoverController.show
+POST       /taxable-turnover                controllers.TaxableTurnoverController.submit
 
-GET        /deregistration-date      controllers.DeregistrationDateController.show
-POST       /deregistration-date      controllers.DeregistrationDateController.submit
+GET        /deregistration-date             controllers.DeregistrationDateController.show
+POST       /deregistration-date             controllers.DeregistrationDateController.submit
 
-GET        /next-taxable-turnover    controllers.NextTaxableTurnoverController.show
-POST       /next-taxable-turnover    controllers.NextTaxableTurnoverController.submit
+GET        /next-taxable-turnover           controllers.NextTaxableTurnoverController.show
+POST       /next-taxable-turnover           controllers.NextTaxableTurnoverController.submit
 
-GET        /why-turnover-below       controllers.WhyTurnoverBelowController.show
-POST       /why-turnover-below       controllers.WhyTurnoverBelowController.submit
+GET        /why-turnover-below              controllers.WhyTurnoverBelowController.show
+POST       /why-turnover-below              controllers.WhyTurnoverBelowController.submit
 
-GET        /check-your-answers       controllers.CheckAnswersController.show
-POST       /check-your-answers       controllers.CheckAnswersController.submit
+GET        /check-your-answers              controllers.CheckAnswersController.show
+POST       /check-your-answers              controllers.CheckAnswersController.submit
 
-GET        /cannot-deregister-threshold  controllers.CannotDeregisterThresholdController.show
+GET        /deregistration-confirmation     controllers.DeregistrationConfirmationController.show
 
-GET        /assets/*file           controllers.Assets.at(path="/public", file)
+GET        /cannot-deregister-threshold     controllers.CannotDeregisterThresholdController.show
+
+GET        /assets/*file                    controllers.Assets.at(path="/public", file)
 
 #Sign Out Routes
-GET        /sign-out                 controllers.SignOutController.signOut(authorised: Boolean)
+GET        /sign-out                        controllers.SignOutController.signOut(authorised: Boolean)
