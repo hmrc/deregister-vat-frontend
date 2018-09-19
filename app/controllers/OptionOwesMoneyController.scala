@@ -50,28 +50,14 @@ class OptionOwesMoneyController @Inject()(val messagesApi: MessagesApi,
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionOwesMoney(error))),
       data => owesMoneyAnswerService.storeAnswer(data) flatMap {
-        case Right(_) => submitRedirectLogic(data)
+        case Right(_) =>
+          if (data == Yes) {
+            Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
+          } else {
+            Future.successful(Redirect(controllers.routes.OutstandingInvoicesController.show()))
+          }
         case Left(_) => Future.successful(InternalServerError) //TODO: Render ISE Page
       }
     )
-  }
-
-  private def submitRedirectLogic(data: YesNo)(implicit user: User[_]): Future[Result] = {
-    if (data == Yes) {
-      Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
-    } else {
-      deregReasonAnswerService.getAnswer flatMap {
-        case Right(Some(reason)) if reason == BelowThreshold =>
-          Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
-        case Right(Some(_)) => capitalAssetsAnswerService.getAnswer map {
-          case Right(Some(assets)) if assets.yesNo == Yes =>
-            Redirect(controllers.routes.DeregistrationDateController.show())
-          case Right(Some(_)) => Redirect(controllers.routes.CheckAnswersController.show())
-          case _ => InternalServerError //TODO: Render ISE Page
-        }
-        case _ =>
-          Future.successful(InternalServerError) //TODO: Render ISE Page
-      }
-    }
   }
 }
