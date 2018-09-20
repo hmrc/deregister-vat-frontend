@@ -16,8 +16,7 @@
 
 package assets.constants
 
-import assets.messages.CheckYourAnswersMessages
-import assets.messages.CommonMessages
+import assets.messages.{CheckYourAnswersMessages, CommonMessages, WhyTurnoverBelowMessages}
 import models._
 import play.twirl.api.Html
 import utils.MoneyFormatter
@@ -29,6 +28,7 @@ object CheckYourAnswersTestConstants {
   val taxableTurnoverAbove = TaxableTurnoverModel(BigDecimal(90000))
   val taxableTurnoverBelow = TaxableTurnoverModel(BigDecimal(200))
   val whyTurnoverBelowAll = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
+  val whyTurnoverBelowMin = WhyTurnoverBelowModel(true,false,false,false,false,false,false)
   val vatAccountsModel = VATAccountsModel("standard")
   val yesNoAmountYes = YesNoAmountModel(Yes,Some(BigDecimal(1000)))
   val yesNoAmountNo = YesNoAmountModel(No,None)
@@ -58,9 +58,22 @@ object CheckYourAnswersTestConstants {
     controllers.routes.NextTaxableTurnoverController.show().url
   )
 
-  val whyBelowRow = CheckYourAnswersRowModel(
+  val whyBelowRowMax = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.whyBelow,
-    Html("TBC"),
+    Html(s"${WhyTurnoverBelowMessages.reason1}, " +
+         s"${WhyTurnoverBelowMessages.reason2}, " +
+         s"${WhyTurnoverBelowMessages.reason3}, " +
+         s"${WhyTurnoverBelowMessages.reason4}, " +
+         s"${WhyTurnoverBelowMessages.reason5}, " +
+         s"${WhyTurnoverBelowMessages.reason6}, " +
+         s"${WhyTurnoverBelowMessages.reason7}"
+    ),
+    controllers.routes.WhyTurnoverBelowController.show().url
+  )
+
+  val whyBelowRowMin = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.whyBelow,
+    Html(WhyTurnoverBelowMessages.reason1),
     controllers.routes.WhyTurnoverBelowController.show().url
   )
 

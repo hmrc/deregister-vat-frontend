@@ -29,6 +29,16 @@ case class WhyTurnoverBelowModel(lostContract: Boolean,
   val hasAtLeastOneSelected: Boolean = lostContract || semiRetiring || moreCompetitors || reducedTradingHours ||
     seasonalBusiness || closedPlacesOfBusiness || turnoverLowerThanExpected
 
+  val asSequence = Seq(
+    lostContract -> WhyTurnoverBelowModel.lostContract,
+    semiRetiring -> WhyTurnoverBelowModel.semiRetiring,
+    moreCompetitors -> WhyTurnoverBelowModel.moreCompetitors,
+    reducedTradingHours -> WhyTurnoverBelowModel.reducedTradingHours,
+    seasonalBusiness -> WhyTurnoverBelowModel.seasonalBusiness,
+    closedPlacesOfBusiness -> WhyTurnoverBelowModel.closedPlacesOfBusiness,
+    turnoverLowerThanExpected -> WhyTurnoverBelowModel.turnoverLowerThanExpected
+  )
+
 }
 
 object WhyTurnoverBelowModel {

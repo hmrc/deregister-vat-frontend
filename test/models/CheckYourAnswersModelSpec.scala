@@ -44,7 +44,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             ceasedTradingRow,
             taxableTurnoverRow,
             nextTaxableTurnoverRow,
-            whyBelowRow,
+            whyBelowRowMax,
             vatAccountsRow,
             optionTaxRowYes,
             optionTaxValueRow,
@@ -78,7 +78,39 @@ class CheckYourAnswersModelSpec extends TestUtil {
               ceasedTradingRow,
               taxableTurnoverRow,
               nextTaxableTurnoverRow,
-              whyBelowRow,
+              whyBelowRowMax,
+              vatAccountsRow,
+              optionTaxRowNo,
+              stocksRowNo,
+              captialAssetsRowNo,
+              owesMoneyRow,
+              deregDateRow
+            )
+        }
+      }
+
+      "given one answer for the whyTurnover question" should {
+
+        "return a sequence with only one entry for the whyTurnover" in {
+          CheckYourAnswersModel(
+            Some(Ceased),
+            Some(dateModel),
+            Some(taxableTurnoverAbove),
+            Some(taxableTurnoverBelow),
+            Some(whyTurnoverBelowMin),
+            Some(vatAccountsModel),
+            Some(yesNoAmountNo),
+            Some(yesNoAmountNo),
+            Some(yesNoAmountNo),
+            Some(Yes),
+            Some(deregistrationDate)
+          ).seqAnswers shouldBe
+            Seq(
+              deregReasonRow,
+              ceasedTradingRow,
+              taxableTurnoverRow,
+              nextTaxableTurnoverRow,
+              whyBelowRowMin,
               vatAccountsRow,
               optionTaxRowNo,
               stocksRowNo,

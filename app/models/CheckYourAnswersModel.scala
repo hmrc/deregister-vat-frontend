@@ -74,10 +74,13 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     controllers.routes.NextTaxableTurnoverController.show().url
   ))
 
-  private val whyTurnoverBelowAnswer = whyTurnoverBelow.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.whyBelow"),
-    Html("TBC"), //TODO: Speak to Designers
-    controllers.routes.WhyTurnoverBelowController.show().url
+  private val whyTurnoverBelowAnswer = whyTurnoverBelow.map(answer =>
+    CheckYourAnswersRowModel(
+      messages("checkYourAnswers.question.whyBelow"),
+      Html(answer.asSequence.collect {
+        case (true, message) => messages(s"whyTurnoverBelow.reason.$message")
+      }.mkString(", ")),
+      controllers.routes.WhyTurnoverBelowController.show().url
   ))
 
   private val accountingAnswer = accounting.map(answer => CheckYourAnswersRowModel(
