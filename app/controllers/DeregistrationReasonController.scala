@@ -16,6 +16,8 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.instances.future._
 import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.AuthPredicate
@@ -24,7 +26,7 @@ import models._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.DeregReasonAnswerService
+import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -33,6 +35,10 @@ import scala.concurrent.Future
 class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
                                                val authenticate: AuthPredicate,
                                                val deregReasonAnswerService: DeregReasonAnswerService,
+                                               val ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
+                                               val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
+                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
+                                               val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
                                                implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(data: Form[DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
@@ -50,15 +56,35 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
     DeregistrationReasonForm.deregistrationReasonForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(renderView(error))),
       data => {
-        deregReasonAnswerService.storeAnswer(data) map {
+        deregReasonAnswerService.storeAnswer(data) flatMap {
           case Right(_) => data match {
-            case Ceased => Redirect(controllers.routes.CeasedTradingDateController.show())
-            case BelowThreshold => Redirect(controllers.routes.TaxableTurnoverController.show())
-            case Other => Redirect(appConfig.govUkCancelVatRegistration)
+            case Ceased => deleteAndRedirectCeased
+            case BelowThreshold => deleteAndRedirectThreshold
+            case Other => Future.successful(Redirect(appConfig.govUkCancelVatRegistration))
           }
-          case Left(_) => InternalServerError //TODO: Render ISE Page
+          case Left(_) => Future.successful(InternalServerError) //TODO: Render ISE Page
         }
       }
     )
   }
+
+  private def deleteAndRedirectCeased(implicit user: User[_]): Future[Result] = {
+    val deleteAnswerResults = for {
+      x <- EitherT(taxableTurnoverAnswerService.deleteAnswer)
+      y <- EitherT(nextTaxableTurnoverAnswerService.deleteAnswer)
+      z <- EitherT(whyTurnoverBelowAnswerService.deleteAnswer)
+    } yield (x,y,z)
+    deleteAnswerResults.fold[Result](
+      _ => InternalServerError,
+      _ => Redirect(controllers.routes.CeasedTradingDateController.show())
+    )
+  }
+
+  private def deleteAndRedirectThreshold(implicit user: User[_]): Future[Result] = {
+    EitherT(ceasedTradingDateAnswerService.deleteAnswer).fold[Result](
+      _ => InternalServerError,
+      _ => Redirect(controllers.routes.TaxableTurnoverController.show())
+    )
+  }
 }
+
