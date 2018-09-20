@@ -56,8 +56,8 @@ appConfig = appConfig) {
         @messages("checkYourAnswers.text")
     </p>
 
-    <button class="button" type ="submit" id="continue">
+    <a class="button" href="@controllers.routes.DeregistrationConfirmationController.show().url" id="continue">
         @messages("checkYourAnswers.confirm")
-    </button>
+    </a>
 
 }

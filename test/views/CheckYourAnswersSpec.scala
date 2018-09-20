@@ -68,9 +68,9 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
 
     "have the correct links being displayed being displayed" in {
       elementText(Selectors.changeColumn(1)) shouldBe CheckYourAnswersMessages.change
-      document.select(Selectors.changeColumn(1)).attr("href") shouldBe "test/url/1"
+      element(Selectors.changeColumn(1)).attr("href") shouldBe "test/url/1"
       elementText(Selectors.changeColumn(2)) shouldBe CheckYourAnswersMessages.change
-      document.select(Selectors.changeColumn(2)).attr("href") shouldBe "test/url/2"
+      element(Selectors.changeColumn(2)).attr("href") shouldBe "test/url/2"
     }
 
     s"have the correct confirmation text displayed" in {
@@ -79,6 +79,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
 
     s"have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CheckYourAnswersMessages.confirm
+      element(Selectors.button).attr("href") shouldBe controllers.routes.DeregistrationConfirmationController.show().url
     }
   }
 

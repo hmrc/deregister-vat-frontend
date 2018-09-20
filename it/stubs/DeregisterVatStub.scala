@@ -41,6 +41,11 @@ object DeregisterVatStub extends WireMockMethods {
       .thenReturn(status = NO_CONTENT)
   }
 
+  def getAnswerError(vrn: String, key: String): StubMapping = {
+    when(method = GET, uri = deregisterVatUri(vrn,key))
+      .thenReturn(status = INTERNAL_SERVER_ERROR, body = ErrorModel(INTERNAL_SERVER_ERROR,"error"))
+  }
+
   def deleteAnswerError(vrn: String, key: String): StubMapping = {
     when(method = DELETE, uri = deregisterVatUri(vrn,key))
       .thenReturn(status = INTERNAL_SERVER_ERROR, body = ErrorModel(INTERNAL_SERVER_ERROR,"error"))

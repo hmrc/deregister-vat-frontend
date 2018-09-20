@@ -22,5 +22,9 @@ import models.YesNo
 
 @Singleton()
 class OwesMoneyAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[YesNo] {
-  override val answerKey: String = "owesMoney"
+  override val answerKey: String = OwesMoneyAnswerService.key
+}
+
+object OwesMoneyAnswerService {
+  val key: String = "owesMoney"
 }

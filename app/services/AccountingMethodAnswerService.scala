@@ -22,5 +22,9 @@ import models.VATAccountsModel
 
 @Singleton()
 class AccountingMethodAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[VATAccountsModel] {
-  override val answerKey: String = "accountingMethod"
+  override val answerKey: String = AccountingMethodAnswerService.key
+}
+
+object AccountingMethodAnswerService {
+  val key: String = "accountingMethod"
 }
