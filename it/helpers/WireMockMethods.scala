@@ -79,6 +79,10 @@ trait WireMockMethods {
     override def wireMockMapping(pattern: UrlPattern): MappingBuilder = put(pattern)
   }
 
+  case object DELETE extends HTTPMethod {
+    override def wireMockMapping(pattern: UrlPattern): MappingBuilder = delete(pattern)
+  }
+
   case object GET extends HTTPMethod {
     override def wireMockMapping(pattern: UrlPattern): MappingBuilder = get(pattern)
   }

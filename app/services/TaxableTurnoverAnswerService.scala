@@ -22,5 +22,9 @@ import models.TaxableTurnoverModel
 
 @Singleton()
 class TaxableTurnoverAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[TaxableTurnoverModel] {
-  override val answerKey: String = "taxableTurnover"
+  override val answerKey: String = TaxableTurnoverAnswerService.key
+}
+
+object TaxableTurnoverAnswerService {
+  val key: String = "taxableTurnover"
 }
