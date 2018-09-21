@@ -16,15 +16,17 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.instances.future._
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
-import models.{BelowThreshold, User, Yes, YesNo}
+import models._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, IssueNewInvoicesAnswerService}
+import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, IssueNewInvoicesAnswerService, OutstandingInvoicesAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -32,15 +34,16 @@ import scala.concurrent.Future
 @Singleton
 class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
-                                           val owesMoneyAnswerService: IssueNewInvoicesAnswerService,
+                                           val issueNewInvoiceAnswerService: IssueNewInvoicesAnswerService,
+                                           val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                            val deregReasonAnswerService: DeregReasonAnswerService,
                                            val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) = views.html.optionOwesMoney(form)
+  private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) = views.html.issueNewInvoices(form)
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    owesMoneyAnswerService.getAnswer map {
+    issueNewInvoiceAnswerService.getAnswer map {
       case Right(Some(data)) => Ok(renderView(YesNoForm.yesNoForm.fill(data)))
       case _ => Ok(renderView())
     }
@@ -48,15 +51,18 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     YesNoForm.yesNoForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.optionOwesMoney(error))),
-      data => owesMoneyAnswerService.storeAnswer(data) map {
+      error => Future.successful(BadRequest(views.html.issueNewInvoices(error))),
+      data => issueNewInvoiceAnswerService.storeAnswer(data) flatMap {
         case Right(_) =>
           if (data == Yes) {
-            Redirect(controllers.routes.DeregistrationDateController.show())
+            EitherT(outstandingInvoicesAnswerService.deleteAnswer).fold(
+              _ => InternalServerError,
+              _ => Redirect(controllers.routes.DeregistrationDateController.show())
+            )
           } else {
-            Redirect(controllers.routes.OutstandingInvoicesController.show())
+            Future.successful(Redirect(controllers.routes.OutstandingInvoicesController.show()))
           }
-        case Left(_) => InternalServerError //TODO: Render ISE Page
+        case Left(_) => Future.successful(InternalServerError) //TODO: Render ISE Page
       }
     )
   }

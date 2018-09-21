@@ -23,7 +23,7 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.{MockCapitalAssetsAnswerService, MockDeregReasonAnswerService, MockOwesMoneyAnswerService}
+import services.mocks.{MockCapitalAssetsAnswerService, MockDeregReasonAnswerService, MockIssueNewInvoicesAnswerService, MockOutstandingInvoicesService}
 
 import scala.concurrent.Future
 
@@ -32,7 +32,8 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
   object TestIssueNewInvoicesController extends IssueNewInvoicesController(
     messagesApi,
     mockAuthPredicate,
-    MockOwesMoneyAnswerService.mockStoredAnswersService,
+    MockIssueNewInvoicesAnswerService.mockStoredAnswersService,
+    MockOutstandingInvoicesService.mockStoredAnswersService,
     MockDeregReasonAnswerService.mockStoredAnswersService,
     MockCapitalAssetsAnswerService.mockStoredAnswersService,
     mockConfig
@@ -47,7 +48,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
         lazy val result = TestIssueNewInvoicesController.show()(request)
 
         "return 200 (OK)" in {
-          MockOwesMoneyAnswerService.setupMockGetAnswers(Right(None))
+          MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -63,7 +64,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
         lazy val result = TestIssueNewInvoicesController.show()(request)
 
         "return 200 (OK)" in {
-          MockOwesMoneyAnswerService.setupMockGetAnswers(Right(Some(Yes)))
+          MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(Some(Yes)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -90,7 +91,8 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockOwesMoneyAnswerService.setupMockStoreAnswers(Yes)(Right(DeregisterVatSuccess))
+          MockIssueNewInvoicesAnswerService.setupMockStoreAnswers(Yes)(Right(DeregisterVatSuccess))
+          MockOutstandingInvoicesService.setupMockDeleteAnswer(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -106,13 +108,26 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
+          MockIssueNewInvoicesAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
 
         s"Redirect to the '${controllers.routes.OutstandingInvoicesController.show().url}'" in {
           redirectLocation(result) shouldBe Some(controllers.routes.OutstandingInvoicesController.show().url)
+        }
+      }
+
+      "the user submits a 'Yes' but an error is returned when deleting redundant questions" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
+        lazy val result = TestIssueNewInvoicesController.submit()(request)
+
+        "return 303 (SEE OTHER)" in {
+          MockIssueNewInvoicesAnswerService.setupMockStoreAnswers(Yes)(Right(DeregisterVatSuccess))
+          MockOutstandingInvoicesService.setupMockDeleteAnswer(Left(ErrorModel(INTERNAL_SERVER_ERROR,"error")))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
 
@@ -123,7 +138,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 500 (ISE)" in {
-          MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Left(errorModel))
+          MockIssueNewInvoicesAnswerService.setupMockStoreAnswers(No)(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

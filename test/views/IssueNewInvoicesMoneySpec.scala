@@ -35,7 +35,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.optionOwesMoney(YesNoForm.yesNoForm)
+    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -71,7 +71,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.optionOwesMoney(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
+    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

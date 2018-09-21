@@ -80,7 +80,7 @@ object MockWhyTurnoverBelowAnswerService extends MockStoredAnswersService[WhyTur
   override val mockStoredAnswersService: WhyTurnoverBelowAnswerService = mock[WhyTurnoverBelowAnswerService]
 }
 
-object MockOwesMoneyAnswerService extends MockStoredAnswersService[YesNo] {
+object MockIssueNewInvoicesAnswerService extends MockStoredAnswersService[YesNo] {
   override val mockStoredAnswersService: IssueNewInvoicesAnswerService = mock[IssueNewInvoicesAnswerService]
 }
 
