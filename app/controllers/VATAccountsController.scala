@@ -20,11 +20,11 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.VATAccountsForm
 import javax.inject.{Inject, Singleton}
-import models.{User, VATAccountsModel}
+import models.{DeregistrationReason, User, VATAccountsModel}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.AccountingMethodAnswerService
+import services.{AccountingMethodAnswerService, DeregReasonAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -33,14 +33,21 @@ import scala.concurrent.Future
 class VATAccountsController @Inject()(val messagesApi: MessagesApi,
                                       val authenticate: AuthPredicate,
                                       val accountingMethodAnswerService: AccountingMethodAnswerService,
+                                      val deregReasonAnswerService: DeregReasonAnswerService,
                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)(implicit user: User[_]) = views.html.vatAccounts(form)
+  private def renderView(deregReason: DeregistrationReason, form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)
+                        (implicit user: User[_]) = views.html.vatAccounts(form)
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    accountingMethodAnswerService.getAnswer.map {
-      case Right(Some(data)) => Ok(renderView(VATAccountsForm.vatAccountsForm.fill(data)))
-      case _ => Ok(renderView())
+    for {
+      reasonResult <- deregReasonAnswerService.getAnswer
+      accountingResult <- accountingMethodAnswerService.getAnswer
+    } yield (reasonResult,accountingResult) match {
+      case (Right(Some(deregReason)),Right(Some(accountingMethod))) =>
+        Ok(renderView(deregReason,VATAccountsForm.vatAccountsForm.fill(accountingMethod)))
+      case (Right(Some(deregReason)),Right(_)) => Ok(renderView(deregReason))
+      case (_,_) => InternalServerError
     }
   }
 
