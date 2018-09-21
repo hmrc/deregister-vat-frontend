@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package models
+package utils
 
-import play.api.libs.json.{Format, Json}
+import java.text.DecimalFormat
 
-case class YesNoAmountModel(yesNo: YesNo, amount: Option[BigDecimal]) {
+import play.twirl.api.Html
 
-  val isValid: Boolean = {
-    yesNo match {
-      case Yes => amount.isDefined
-      case _ => true
-    }
-  }
+object MoneyFormatter {
 
-}
+  private val formatter = new DecimalFormat("#,##0.00")
+  private val removeZeroDecimals: String => String = _.replace(".00","")
+  val formatHtmlAmount: BigDecimal => Html = x => Html(s"&pound;${removeZeroDecimals(formatter.format(x))}")
 
-object YesNoAmountModel {
-  implicit val format: Format[YesNoAmountModel] = Json.format[YesNoAmountModel]
 }

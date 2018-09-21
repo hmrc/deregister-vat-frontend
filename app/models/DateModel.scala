@@ -17,13 +17,14 @@
 package models
 
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 import play.api.libs.json.{Json, OFormat}
 
 import scala.util.{Failure, Success, Try}
 
 
-case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int){
+case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int) {
 
   val date: Option[LocalDate] =
     Try(LocalDate.of(dateYear,dateMonth,dateDay)) match {
@@ -31,6 +32,8 @@ case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int){
       case Failure(_) => None
     }
 
+  private val formatter = DateTimeFormatter.ofPattern("d MMMM uuuu")
+  val longDate: String = date.fold("")(x => formatter.format(x))
 }
 
 object DateModel {

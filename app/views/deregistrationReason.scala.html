@@ -40,8 +40,8 @@
             @radioHelper(
                 field = form("reason"),
                 choices = Seq(
-                    (ceased, Messages("deregistrationReason.reason.stoppedTrading")),
-                    (belowThreshold, Messages("deregistrationReason.reason.turnoverBelowThreshold")),
+                    (ceased, Messages("deregistrationReason.reason.ceased")),
+                    (belowThreshold, Messages("deregistrationReason.reason.belowThreshold")),
                     (other, Messages("deregistrationReason.reason.other"))
                 ),
                 question = Messages("deregistrationReason.title")

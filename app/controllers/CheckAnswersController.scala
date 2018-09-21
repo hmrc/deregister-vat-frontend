@@ -20,16 +20,26 @@ import javax.inject.{Inject, Singleton}
 
 import config.AppConfig
 import controllers.predicates.AuthPredicate
+import models._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
 class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        val authenticate: AuthPredicate,
+                                       checkAnswersService: CheckAnswersService,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = TODO
+
+
+  val show: Action[AnyContent] = authenticate.async { implicit user =>
+    checkAnswersService.checkYourAnswersModel() map {
+      case Right(answers) => Ok(views.html.checkYourAnswers(answers.seqAnswers))
+      case Left(_) => InternalServerError
+    }
+  }
 
   val submit: Action[AnyContent] = TODO
 }

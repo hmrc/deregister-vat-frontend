@@ -1,0 +1,63 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.play.views.html.helpers
+@import templates.headings
+@import models.CheckYourAnswersRowModel
+
+@(answers: Seq[CheckYourAnswersRowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+
+@answerRow(answerModel: CheckYourAnswersRowModel) = {
+    <div>
+        <dt class="cya-question">
+            @answerModel.question
+        </dt>
+        <dd class="cya-answer">
+            @answerModel.answer
+        </dd>
+        <dd class="cya-change">
+            <a href="@answerModel.url">@messages("checkYourAnswers.change")</a>
+        </dd>
+    </div>
+}
+
+
+@views.html.main_template(
+title = messages("checkYourAnswers.title"),
+bodyClasses = None,
+appConfig = appConfig) {
+
+    <a class="link-back" href="@controllers.routes.DeregistrationDateController.show().url">@messages("common.back")</a>
+
+    @headings(messages("checkYourAnswers.title"))
+
+    <div class="form-group">
+        <dl class="govuk-check-your-answers cya-questions-long">
+        @answers.map{ answer =>
+            @answerRow(answer)
+        }
+        </dl>
+    </div>
+
+    <p class="form-group">
+        @messages("checkYourAnswers.text")
+    </p>
+
+    <a class="button" href="@controllers.routes.DeregistrationConfirmationController.show().url" id="continue">
+        @messages("checkYourAnswers.confirm")
+    </a>
+
+}

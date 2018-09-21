@@ -29,7 +29,7 @@ import scala.concurrent.Future
 
 class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
 
-  object TestOptionTaxController extends OptionStocksToSellController(
+  object TestOptionStocksToSellController extends OptionStocksToSellController(
     messagesApi, mockAuthPredicate, MockStocksAnswerService.mockStoredAnswersService, mockConfig
   )
 
@@ -43,7 +43,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestOptionTaxController.show()(request)
+        lazy val result = TestOptionStocksToSellController.show()(request)
 
         "return 200 (OK)" in {
           MockStocksAnswerService.setupMockGetAnswers(Right(None))
@@ -59,7 +59,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
 
       "the user has a pre selected option" should {
 
-        lazy val result = TestOptionTaxController.show()(request)
+        lazy val result = TestOptionStocksToSellController.show()(request)
 
         "return 200 (OK)" in {
           MockStocksAnswerService.setupMockGetAnswers(Right(Some(testYesStocksModel)))
@@ -81,7 +81,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      authChecks(".show", TestOptionTaxController.show(), request)
+      authChecks(".show", TestOptionStocksToSellController.show(), request)
     }
 
     "Calling the .submit action" when {
@@ -93,7 +93,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
             ("yes_no", "yes"),
             ("amount", testAmt.toString)
           )
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           MockStocksAnswerService.setupMockStoreAnswers(testYesStocksModel)(Right(DeregisterVatSuccess))
@@ -110,7 +110,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no"))
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           MockStocksAnswerService.setupMockStoreAnswers(testNoStocksModel)(Right(DeregisterVatSuccess))
@@ -127,7 +127,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no"))
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 500 (ISE)" in {
           MockStocksAnswerService.setupMockStoreAnswers(testNoStocksModel)(Left(errorModel))
@@ -140,7 +140,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -154,7 +154,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    authChecks(".submit", TestOptionTaxController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestOptionStocksToSellController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no")))
   }
 
 }

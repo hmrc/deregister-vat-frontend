@@ -41,9 +41,11 @@ object YesNo {
 }
 
 object Yes extends YesNo {
+  override def toString: String = "yes"
   override val value: Boolean = true
 }
 
 object No extends YesNo {
+  override def toString: String = "no"
   override val value: Boolean = false
 }
