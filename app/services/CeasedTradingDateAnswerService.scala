@@ -22,5 +22,9 @@ import models.DateModel
 
 @Singleton()
 class CeasedTradingDateAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[DateModel] {
-  override val answerKey: String = "ceasedTradingDate"
+  override val answerKey: String = CeasedTradingDateAnswerService.key
+}
+
+object CeasedTradingDateAnswerService {
+  val key: String = "ceasedTradingDate"
 }
