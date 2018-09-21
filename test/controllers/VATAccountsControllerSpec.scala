@@ -157,6 +157,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
+          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(BelowThreshold)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
@@ -164,6 +165,19 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      "the user submits without selecting an option and an error is returned from DeregReasonAnswerService" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", ""))
+        lazy val result = TestVATAccountsController.submit()(request)
+
+        "return 400 (BAD REQUEST)" in {
+          MockDeregReasonAnswerService.setupMockGetAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR,"error")))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
     }

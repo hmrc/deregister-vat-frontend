@@ -27,8 +27,6 @@ import play.api.mvc.{Action, AnyContent}
 import services.{AccountingMethodAnswerService, DeregReasonAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
-
 @Singleton
 class VATAccountsController @Inject()(val messagesApi: MessagesApi,
                                       val authenticate: AuthPredicate,
@@ -37,7 +35,7 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(deregReason: DeregistrationReason, form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)
-                        (implicit user: User[_]) = views.html.vatAccounts(form)
+                        (implicit user: User[_]) = views.html.vatAccounts(deregReason, form)
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
     for {
@@ -47,13 +45,16 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
       case (Right(Some(deregReason)),Right(Some(accountingMethod))) =>
         Ok(renderView(deregReason,VATAccountsForm.vatAccountsForm.fill(accountingMethod)))
       case (Right(Some(deregReason)),Right(_)) => Ok(renderView(deregReason))
-      case (_,_) => InternalServerError
+      case (_,_) => InternalServerError //TODO: Render ISE Page
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     VATAccountsForm.vatAccountsForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.vatAccounts(error))),
+      error => deregReasonAnswerService.getAnswer.map {
+        case Right(Some(deregReason)) => BadRequest(views.html.vatAccounts(deregReason ,error))
+        case _ => InternalServerError
+      },
       data => accountingMethodAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.OptionTaxController.show())
         case _ => InternalServerError //TODO: Render ISE Page
