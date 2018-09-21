@@ -16,10 +16,34 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json._
 
-case class VATAccountsModel(accountingMethod: String)
+trait VATAccountsModel {
+  val value: String
+}
 
 object VATAccountsModel {
-  implicit val format: OFormat[VATAccountsModel] = Json.format[VATAccountsModel]
+
+  val id: String = "accountingMethod"
+
+  implicit val writes: Writes[VATAccountsModel] = Writes {
+    accountType => Json.obj(id -> accountType.value)
+  }
+
+  implicit val reads: Reads[VATAccountsModel] = for {
+    accountType <- (__ \ id).read[String].map{
+      case StandardAccounting.value => StandardAccounting
+      case CashAccounting.value => CashAccounting
+    }
+  } yield accountType
+
+  implicit val format: Format[VATAccountsModel] = Format(reads, writes)
+}
+
+object StandardAccounting extends VATAccountsModel {
+  override val value = "standard"
+}
+
+object CashAccounting extends VATAccountsModel {
+  override val value = "cash"
 }

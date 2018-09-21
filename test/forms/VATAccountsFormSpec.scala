@@ -17,7 +17,7 @@
 package forms
 
 import assets.messages.CommonMessages
-import models.VATAccountsModel
+import models.{CashAccounting, StandardAccounting, VATAccountsModel}
 import play.api.i18n.Messages
 import _root_.utils.TestUtil
 
@@ -25,7 +25,7 @@ class VATAccountsFormSpec extends TestUtil {
 
   "Binding a form with valid data" should {
 
-    val data = Map("accountingMethod" -> "Reason")
+    val data = Map(VATAccountsModel.id -> StandardAccounting.value)
     val form = VATAccountsForm.vatAccountsForm.bind(data)
 
     "result in a form with no errors" in {
@@ -33,7 +33,7 @@ class VATAccountsFormSpec extends TestUtil {
     }
 
     "generate the correct model" in {
-      form.value shouldBe Some(VATAccountsModel("Reason"))
+      form.value shouldBe Some(StandardAccounting)
     }
   }
 
@@ -54,13 +54,22 @@ class VATAccountsFormSpec extends TestUtil {
     }
   }
 
-  "A form built from a valid model" should {
+  "A form built from a valid model" when {
 
-    "generate the correct mapping" in {
-      val model = VATAccountsModel("Another Reason")
-      val form = VATAccountsForm.vatAccountsForm.fill(model)
-      form.data shouldBe Map("accountingMethod" -> "Another Reason")
+    "Standard Accounting" should {
+
+      "generate the correct mapping" in {
+        val form = VATAccountsForm.vatAccountsForm.fill(StandardAccounting)
+        form.data shouldBe Map(VATAccountsModel.id -> StandardAccounting.value)
+      }
+    }
+
+    "Cash Accounting" should {
+
+      "generate the correct mapping" in {
+        val form = VATAccountsForm.vatAccountsForm.fill(CashAccounting)
+        form.data shouldBe Map(VATAccountsModel.id -> CashAccounting.value)
+      }
     }
   }
-
 }

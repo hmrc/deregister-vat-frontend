@@ -53,5 +53,4 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
       }
     )
   }
-
 }
