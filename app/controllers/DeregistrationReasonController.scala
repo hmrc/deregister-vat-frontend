@@ -70,21 +70,21 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
 
   private def deleteAndRedirectCeased(implicit user: User[_]): Future[Result] = {
     val deleteAnswerResults = for {
-      x <- EitherT(taxableTurnoverAnswerService.deleteAnswer)
-      y <- EitherT(nextTaxableTurnoverAnswerService.deleteAnswer)
-      z <- EitherT(whyTurnoverBelowAnswerService.deleteAnswer)
-    } yield (x,y,z)
-    deleteAnswerResults.fold[Result](
-      _ => InternalServerError,
-      _ => Redirect(controllers.routes.CeasedTradingDateController.show())
-    )
+      _ <- EitherT(taxableTurnoverAnswerService.deleteAnswer)
+      _ <- EitherT(nextTaxableTurnoverAnswerService.deleteAnswer)
+      _ <- EitherT(whyTurnoverBelowAnswerService.deleteAnswer)
+    } yield None
+    deleteAnswerResults.value.map {
+      case Right(_) => Redirect(controllers.routes.CeasedTradingDateController.show())
+      case Left(_) => InternalServerError //TODO: Render ISE Page
+    }
   }
 
   private def deleteAndRedirectThreshold(implicit user: User[_]): Future[Result] = {
-    EitherT(ceasedTradingDateAnswerService.deleteAnswer).fold[Result](
-      _ => InternalServerError,
-      _ => Redirect(controllers.routes.TaxableTurnoverController.show())
-    )
+    ceasedTradingDateAnswerService.deleteAnswer.map {
+      case Right(_) => Redirect(controllers.routes.TaxableTurnoverController.show())
+      case Left(_) => InternalServerError //TODO: Render ISE Page
+    }
   }
 }
 
