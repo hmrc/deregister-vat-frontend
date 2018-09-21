@@ -16,15 +16,17 @@
 
 package services
 
-import connectors.DeregisterVatConnector
-import javax.inject.{Inject, Singleton}
-import models.DeregistrationReason
+import connectors.mocks.MockDeregisterVatConnector
+import utils.TestUtil
 
-@Singleton()
-class DeregReasonAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[DeregistrationReason] {
-  override val answerKey: String = DeregReasonAnswerService.key
-}
+class OutstandingInvoicesAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector {
 
-object DeregReasonAnswerService {
-  val key: String = "deregReason"
+  object OutstandingInvoicesAnswerService extends OutstandingInvoicesAnswerService(mockDeregisterVatConnector)
+
+  "The OutstandingInvoicesAnswerService" should {
+
+    "have the key 'hasOutstandingInvoices'" in {
+      OutstandingInvoicesAnswerService.answerKey shouldBe "hasOutstandingInvoices"
+    }
+  }
 }

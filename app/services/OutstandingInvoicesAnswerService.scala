@@ -17,14 +17,16 @@
 package services
 
 import connectors.DeregisterVatConnector
-import javax.inject.{Inject, Singleton}
-import models.DeregistrationReason
+import javax.inject.Inject
+import models.YesNo
 
-@Singleton()
-class DeregReasonAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[DeregistrationReason] {
-  override val answerKey: String = DeregReasonAnswerService.key
+class OutstandingInvoicesAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector)
+  extends StoredAnswersService[YesNo] {
+
+  override val answerKey: String = OutstandingInvoicesAnswerService.key
 }
 
-object DeregReasonAnswerService {
-  val key: String = "deregReason"
+object OutstandingInvoicesAnswerService {
+  val key: String = "hasOutstandingInvoices"
 }
+

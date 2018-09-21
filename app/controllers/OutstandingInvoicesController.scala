@@ -16,13 +16,64 @@
 
 package controllers
 
-import play.api.mvc.{Action, AnyContent}
+import config.AppConfig
+import controllers.predicates.AuthPredicate
+import forms.YesNoForm
+import javax.inject.Inject
+import models._
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, Result}
+import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OutstandingInvoicesAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-class OutstandingInvoicesController extends FrontendController {
+import scala.concurrent.Future
 
-  val show: Action[AnyContent] = TODO
+class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
+                                              val authenticate: AuthPredicate,
+                                              val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
+                                              val deregReasonAnswerService: DeregReasonAnswerService,
+                                              val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val submit: Action[AnyContent] = TODO
+  val show: Action[AnyContent] = authenticate.async { implicit user =>
+    outstandingInvoicesAnswerService.getAnswer map {
+      case Right(Some(data)) => Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm.fill(data)))
+      case _ => Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm))
+    }
+  }
 
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
+    YesNoForm.yesNoForm.bindFromRequest().fold(
+      error => Future.successful(BadRequest(views.html.outstandingInvoices(error))),
+      data => outstandingInvoicesAnswerService.storeAnswer(data) flatMap {
+        case Right(_) => submitRedirectLogic(data)
+        case Left(_) => Future.successful(InternalServerError)
+      }
+    )
+  }
+
+  private def submitRedirectLogic(data: YesNo)(implicit user: User[_]): Future[Result] = {
+    if (data == Yes) {
+      Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
+    } else {
+      deregReasonAnswerService.getAnswer flatMap {
+        case Right(Some(reason)) if reason == BelowThreshold =>
+          Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
+        case Right(Some(_)) => ceasedTradingJourneyLogic(data)
+        case _ => Future.successful(InternalServerError)
+      }
+    }
+  }
+
+  private def ceasedTradingJourneyLogic(data: YesNo)(implicit user: User[_]): Future[Result] = {
+    capitalAssetsAnswerService.getAnswer map {
+      case Right(Some(assets)) =>
+        if (assets.yesNo == Yes) {
+          Redirect(controllers.routes.DeregistrationDateController.show())
+        } else {
+          Redirect(controllers.routes.CheckAnswersController.show())
+        }
+      case _ => InternalServerError
+    }
+  }
 }

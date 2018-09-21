@@ -102,121 +102,17 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
 
       "the user submits after selecting the 'No' option" should {
 
-        "if the user is on the BelowThreshold journey" should {
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+        lazy val result = TestOptionOwesMoneyController.submit()(request)
 
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestOptionOwesMoneyController.submit()(request)
-
-          "return 303 (SEE OTHER)" in {
-            MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
-            MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(BelowThreshold)))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            status(result) shouldBe Status.SEE_OTHER
-          }
-
-          s"Redirect to the '${controllers.routes.DeregistrationDateController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
-          }
+        "return 303 (SEE OTHER)" in {
+          MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.SEE_OTHER
         }
 
-        "if the user is on the Ceased to Trade journey" should {
-
-          "if the user has capital assets" should {
-
-            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-              FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-            lazy val result = TestOptionOwesMoneyController.submit()(request)
-
-            "return 303 (SEE OTHER)" in {
-              MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
-              MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
-              MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(Yes, Some(1000)))))
-              mockAuthResult(Future.successful(mockAuthorisedIndividual))
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            s"Redirect to the '${controllers.routes.DeregistrationDateController.show().url}'" in {
-              redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
-            }
-          }
-
-          "if the user does not have capital assets" should {
-
-            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-              FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-            lazy val result = TestOptionOwesMoneyController.submit()(request)
-
-            "return 303 (SEE OTHER)" in {
-              MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
-              MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
-              MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(No, None))))
-              mockAuthResult(Future.successful(mockAuthorisedIndividual))
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            s"Redirect to the '${controllers.routes.CheckAnswersController.show().url}'" in {
-              redirectLocation(result) shouldBe Some(controllers.routes.CheckAnswersController.show().url)
-            }
-          }
-
-          "if no value is returned for capital assets" should {
-
-            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-              FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-            lazy val result = TestOptionOwesMoneyController.submit()(request)
-
-            "return 500 (ISE)" in {
-              MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
-              MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
-              MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(None))
-              mockAuthResult(Future.successful(mockAuthorisedIndividual))
-              status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-            }
-          }
-
-          "if an error is returned for capital assets" should {
-
-            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-              FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-            lazy val result = TestOptionOwesMoneyController.submit()(request)
-
-            "return 500 (ISE)" in {
-              MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
-              MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
-              MockCapitalAssetsAnswerService.setupMockGetAnswers(Left(errorModel))
-              mockAuthResult(Future.successful(mockAuthorisedIndividual))
-              status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-            }
-          }
-        }
-
-        "if no answer is returned for Dereg Reason" should {
-
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestOptionOwesMoneyController.submit()(request)
-
-          "return 500 (ISE)" in {
-            MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
-            MockDeregReasonAnswerService.setupMockGetAnswers(Right(None))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-          }
-        }
-
-        "if an error is returned for Dereg Reason" should {
-
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestOptionOwesMoneyController.submit()(request)
-
-          "return 500 (ISE)" in {
-            MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
-            MockDeregReasonAnswerService.setupMockGetAnswers(Left(errorModel))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-          }
+        s"Redirect to the '${controllers.routes.OutstandingInvoicesController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.OutstandingInvoicesController.show().url)
         }
       }
 
