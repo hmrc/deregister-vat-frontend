@@ -27,9 +27,9 @@ import services.mocks.{MockCapitalAssetsAnswerService, MockDeregReasonAnswerServ
 
 import scala.concurrent.Future
 
-class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
+class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
 
-  object TestOptionOwesMoneyController extends OptionOwesMoneyController(
+  object TestIssueNewInvoicesController extends IssueNewInvoicesController(
     messagesApi,
     mockAuthPredicate,
     MockOwesMoneyAnswerService.mockStoredAnswersService,
@@ -44,7 +44,7 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestOptionOwesMoneyController.show()(request)
+        lazy val result = TestIssueNewInvoicesController.show()(request)
 
         "return 200 (OK)" in {
           MockOwesMoneyAnswerService.setupMockGetAnswers(Right(None))
@@ -60,7 +60,7 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
 
       "the user is has pre selected option" should {
 
-        lazy val result = TestOptionOwesMoneyController.show()(request)
+        lazy val result = TestIssueNewInvoicesController.show()(request)
 
         "return 200 (OK)" in {
           MockOwesMoneyAnswerService.setupMockGetAnswers(Right(Some(Yes)))
@@ -78,7 +78,7 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      authChecks(".show", TestOptionOwesMoneyController.show(), request)
+      authChecks(".show", TestIssueNewInvoicesController.show(), request)
     }
 
     "Calling the .submit action" when {
@@ -87,7 +87,7 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
-        lazy val result = TestOptionOwesMoneyController.submit()(request)
+        lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           MockOwesMoneyAnswerService.setupMockStoreAnswers(Yes)(Right(DeregisterVatSuccess))
@@ -103,7 +103,7 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
       "the user submits after selecting the 'No' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-        lazy val result = TestOptionOwesMoneyController.submit()(request)
+        lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
@@ -120,7 +120,7 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-        lazy val result = TestOptionOwesMoneyController.submit()(request)
+        lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 500 (ISE)" in {
           MockOwesMoneyAnswerService.setupMockStoreAnswers(No)(Left(errorModel))
@@ -133,7 +133,7 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
-        lazy val result = TestOptionOwesMoneyController.submit()(request)
+        lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -147,6 +147,6 @@ class OptionOwesMoneyControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    authChecks(".submit", TestOptionOwesMoneyController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestIssueNewInvoicesController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no")))
   }
 }

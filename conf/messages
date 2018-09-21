@@ -83,8 +83,7 @@ taxableTurnover.error.nonNumeric = Enter the turnover using numbers 0 to 9
 
 nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
 
-optionOwesMoney.title = Does the business owe any money?
-optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
+issueNewInvoices.title = Is the business expecting to issue any new invoices after deregistering?
 
 optionOwnsStockToSell.title = Does the business have any stocks to sell?
 optionOwnsStockToSell.text.1 = For example, goods bought or manufactured for resale.

@@ -24,18 +24,18 @@ import models.{BelowThreshold, User, Yes, YesNo}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OwesMoneyAnswerService}
+import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, IssueNewInvoicesAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
-class OptionOwesMoneyController @Inject()(val messagesApi: MessagesApi,
-                                          val authenticate: AuthPredicate,
-                                          val owesMoneyAnswerService: OwesMoneyAnswerService,
-                                          val deregReasonAnswerService: DeregReasonAnswerService,
-                                          val capitalAssetsAnswerService: CapitalAssetsAnswerService,
-                                          implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
+                                           val authenticate: AuthPredicate,
+                                           val owesMoneyAnswerService: IssueNewInvoicesAnswerService,
+                                           val deregReasonAnswerService: DeregReasonAnswerService,
+                                           val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) = views.html.optionOwesMoney(form)
 
