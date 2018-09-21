@@ -88,7 +88,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
 
   private val accountingAnswer = accounting.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.VatAccounts"),
-    Html(messages(s"checkYourAnswers.answer.${answer.accountingMethod}")),
+    Html(messages(s"checkYourAnswers.answer.${answer.value}")),
     controllers.routes.VATAccountsController.show().url
   ))
 

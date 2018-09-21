@@ -29,7 +29,6 @@ object CheckYourAnswersTestConstants {
   val taxableTurnoverBelow = TaxableTurnoverModel(BigDecimal(200))
   val whyTurnoverBelowAll = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
   val whyTurnoverBelowMin = WhyTurnoverBelowModel(true,false,false,false,false,false,false)
-  val vatAccountsModel = VATAccountsModel("standard")
   val yesNoAmountYes = YesNoAmountModel(Yes,Some(BigDecimal(1000)))
   val yesNoAmountNo = YesNoAmountModel(No,None)
   val deregistrationDate = DeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
