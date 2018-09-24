@@ -31,7 +31,8 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href=@if(deregReason == Ceased){
+    <a class="link-back"
+        href=@if(deregReason == Ceased){
         @controllers.routes.OptionStocksToSellController.show().url
         }else {
         @controllers.routes.OptionStocksToSellController.show().url
@@ -39,8 +40,6 @@
         >@messages("common.back")</a>
 
 
-
-        >@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
