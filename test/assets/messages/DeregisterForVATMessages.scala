@@ -19,7 +19,9 @@ package assets.messages
 object DeregisterForVATMessages {
 
   val title = "Deregister for VAT"
-  val p1 = "You can deregister from VAT if the business no longer needs to submit VAT Returns. We will review your reasons for deregistering within 3 weeks."
-  val p2 = "If the business needs to deregister from any other taxes or schemes, you must do this separately."
+  val p1 = "You can only deregister under certain circumstances, for example if the business:"
+  val bullet1 = "has stopped trading"
+  val bullet2 = "no longer makes VAT taxable supplies"
+  val bullet3 = "turnover falls below the VAT threshold"
 
 }

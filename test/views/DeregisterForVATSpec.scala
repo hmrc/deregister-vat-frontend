@@ -26,6 +26,8 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     val back = ".link-back"
     val pageHeading = "#content h1"
     val button = ".button"
+    val para = "#content p"
+    val bullets: Int => String = n => s"#content > article > ul > li:nth-child($n)"
   }
 
   "Rendering the Deregistration reason page" should {
@@ -49,6 +51,16 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     s"have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
       element(Selectors.button).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show(user.isAgent).url
+    }
+
+    s"have the correct paragraph" in {
+      elementText(Selectors.para) shouldBe DeregisterForVATMessages.p1
+    }
+
+    s"have the correct bullet points" in {
+      elementText(Selectors.bullets(1)) shouldBe DeregisterForVATMessages.bullet1
+      elementText(Selectors.bullets(2)) shouldBe DeregisterForVATMessages.bullet2
+      elementText(Selectors.bullets(3)) shouldBe DeregisterForVATMessages.bullet3
     }
 
   }
