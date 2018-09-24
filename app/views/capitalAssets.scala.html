@@ -23,7 +23,7 @@
 @import forms.YesNoForm._
 
 
-@(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(deregReason: DeregistrationReason,form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = messages("capitalAssets.title"),
@@ -31,7 +31,7 @@
     appConfig = appConfig) {
 
     <a class="link-back" href=@if(deregReason == Ceased){
-        @controllers.route.OptionStocksToSellController.show().url
+        @controllers.routes.OptionStocksToSellController.show().url
         }else {
         @controllers.routes.OptionStocksToSellController.show().url
         }
