@@ -21,6 +21,7 @@
 @import views.html.templates.inputs.yesNoRevealHelper
 @import templates.headings
 @import forms.YesNoForm._
+@import models.{DeregistrationReason, MultipleLineRadioGroupModel}
 
 
 @(deregReason: DeregistrationReason,form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
