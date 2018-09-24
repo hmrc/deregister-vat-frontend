@@ -18,6 +18,7 @@ package models
 
 import play.api.i18n.Messages
 import play.twirl.api.Html
+import services.OutstandingInvoicesAnswerService
 import utils.MoneyFormatter
 
 case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReason],
@@ -30,6 +31,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  stocks: Option[YesNoAmountModel],
                                  capitalAssets: Option[YesNoAmountModel],
                                  owesMoney: Option[YesNo],
+                                 outstandingInvoices: Option[YesNo],
                                  deregDate: Option[DeregistrationDateModel])(implicit user: User[_], messages: Messages) {
 
 
@@ -47,6 +49,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     capitalAssetsAnswer,
     capitalAssetsValueAnswer,
     owesMoneyAnswer,
+    outstandingInvoicesAnswer,
     deregDateAnswer
   ).flatten
 
@@ -124,6 +127,12 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     MoneyFormatter.formatHtmlAmount(answer),
     controllers.routes.CapitalAssetsController.show().url
   )))
+
+  private val outstandingInvoicesAnswer = outstandingInvoices.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.outstandingInvoice"),
+    Html(messages(s"common.${answer.toString}")),
+    controllers.routes.OutstandingInvoicesController.show().url
+  ))
 
   private val owesMoneyAnswer = owesMoney.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.owesMoney"),

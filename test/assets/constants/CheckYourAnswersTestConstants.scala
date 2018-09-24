@@ -137,6 +137,12 @@ object CheckYourAnswersTestConstants {
     controllers.routes.CapitalAssetsController.show().url
   )
 
+  val outstandingInvoicesRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.outstandingInvoices,
+    Html(CommonMessages.yes),
+    controllers.routes.OutstandingInvoicesController.show().url
+  )
+
   val owesMoneyRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.owesMoney,
     Html(CommonMessages.yes),
