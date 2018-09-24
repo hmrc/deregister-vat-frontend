@@ -62,10 +62,9 @@ ceasedTrading.hint = For example, 31 3 1980
 ceasedTrading.error.date.noEntry = Enter the date your business ceased or will cease trading
 ceasedTrading.error.date.invalidDate = Enter a real ceased trading date
 
-optionTax.title = Did the business charge VAT on land or commercial property?
+optionTax.title = Has the business charged or claimed VAT on land or commercial property?
 optionTax.text = You can choose to charge VAT on any income earned from renting or selling land or commercial property. This is known as ‘Option to Tax’.
-optionTax.hint = What was the total value of what the business charged?
-optionTax.hidden.text = Although land and commercial property is usually exempt from VAT, some businesses choose to charge VAT so they can recover costs from construction or repairs.
+optionTax.hint = What was the total value of what the business charged or claimed?
 
 capitalAssets.title = Does the business have any capital assets to sell?
 capitalAssets.text.1 = This includes things like buildings, land, furniture, computers and other raw material or equipment.
