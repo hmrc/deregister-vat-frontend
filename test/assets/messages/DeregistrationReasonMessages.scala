@@ -20,7 +20,7 @@ object DeregistrationReasonMessages {
 
   val title = "Why is the business deregistering from VAT?"
   val reason1 = "It has stopped trading"
-  val reason2 = "Annual turnover is below £83,000"
+  val reason2 = "Annual turnover will be below £83,000"
   val reason3 = "Other"
 
 }

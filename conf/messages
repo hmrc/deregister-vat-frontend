@@ -33,7 +33,7 @@ deregisterForVAT.p2 = If the business needs to deregister from any other taxes o
 
 deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.ceased = It has stopped trading
-deregistrationReason.reason.belowThreshold = Annual turnover is below £83,000
+deregistrationReason.reason.belowThreshold = Annual turnover will be below £83,000
 deregistrationReason.reason.other = Other
 
 deregistrationDate.title = Does the business want to choose its own deregistration date?
