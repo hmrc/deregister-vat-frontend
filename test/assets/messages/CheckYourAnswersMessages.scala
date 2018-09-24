@@ -35,6 +35,7 @@ object CheckYourAnswersMessages {
   val stocksValue = "What is the total value of the stock to sell?"
   val capitalAssets = "Does the business have any capital assets to sell?"
   val capitalAssetsValue = "What is the total value of what you are planning to sell?"
+  val outstandingInvoices = "Is the business expecting to receive payment for outstanding invoices after deregistering?"
   val owesMoney = "Does the business owe any money?"
   val deregistrationDate = "Deregistration date"
   val noDate = "Not Specified"

@@ -19,10 +19,10 @@ package pages
 import assets.IntegrationTestConstants.vrn
 import helpers.IntegrationBaseSpec
 import models._
+import services._
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import services._
 import stubs.DeregisterVatStub
 
 class CheckYourAnswersISpec extends IntegrationBaseSpec {
@@ -54,6 +54,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
         DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
         DeregisterVatStub.successfulGetAnswer(vrn, OptionTaxAnswerService.key)(Json.toJson(yesNoAmountNo))
         DeregisterVatStub.successfulGetAnswer(vrn, OwesMoneyAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
         DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(deregistrationDate))
 
         given.user.isAuthorised
@@ -81,6 +82,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
         DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
         DeregisterVatStub.successfulGetAnswer(vrn, OptionTaxAnswerService.key)(Json.toJson(yesNoAmountNo))
         DeregisterVatStub.successfulGetAnswer(vrn, OwesMoneyAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
         DeregisterVatStub.getAnswerError(vrn, DeregDateAnswerService.key)
 
