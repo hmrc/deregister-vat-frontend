@@ -115,6 +115,7 @@ checkYourAnswers.question.stocks = Does the business have any stock to sell?
 checkYourAnswers.question.stocksValue = What is the total value of the stock to sell?
 checkYourAnswers.question.capitalAssets = Does the business have any capital assets to sell?
 checkYourAnswers.question.capitalAssetsValue = What is the total value of what you are planning to sell?
+checkYourAnswers.question.outstandingInvoice = Is the business expecting to receive payment for outstanding invoices after deregistering?
 checkYourAnswers.question.owesMoney = Does the business owe any money?
 checkYourAnswers.question.deregistrationDate = Deregistration date
 checkYourAnswers.answer.noDate = Not Specified

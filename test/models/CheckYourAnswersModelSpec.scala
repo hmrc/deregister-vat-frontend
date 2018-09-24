@@ -37,6 +37,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
           Some(yesNoAmountYes),
           Some(yesNoAmountYes),
           Some(Yes),
+          Some(Yes),
           Some(deregistrationDate)
         ).seqAnswers shouldBe
           Seq(
@@ -53,6 +54,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             captialAssetsRowYes,
             captialAssetsValueRow,
             owesMoneyRow,
+            outstandingInvoicesRow,
             deregDateRow
           )
       }
@@ -71,6 +73,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             Some(yesNoAmountNo),
             Some(yesNoAmountNo),
             Some(Yes),
+            Some(Yes),
             Some(deregistrationDate)
           ).seqAnswers shouldBe
             Seq(
@@ -84,6 +87,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
               stocksRowNo,
               captialAssetsRowNo,
               owesMoneyRow,
+              outstandingInvoicesRow,
               deregDateRow
             )
         }
@@ -103,6 +107,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             Some(yesNoAmountNo),
             Some(yesNoAmountNo),
             Some(Yes),
+            Some(Yes),
             Some(deregistrationDate)
           ).seqAnswers shouldBe
             Seq(
@@ -116,6 +121,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
               stocksRowNo,
               captialAssetsRowNo,
               owesMoneyRow,
+              outstandingInvoicesRow,
               deregDateRow
             )
         }
@@ -124,7 +130,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
       "given no answers" should {
 
         "return an empty sequence" in {
-          CheckYourAnswersModel(None,None,None,None,None,None,None,None,None,None,None).seqAnswers shouldBe
+          CheckYourAnswersModel(None,None,None,None,None,None,None,None,None,None,None,None).seqAnswers shouldBe
             Seq.empty[CheckYourAnswersRowModel]
         }
       }
