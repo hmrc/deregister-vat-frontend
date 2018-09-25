@@ -21,25 +21,16 @@
 @import views.html.templates.inputs.yesNoRevealHelper
 @import templates.headings
 @import forms.YesNoForm._
-@import models.{DeregistrationReason, MultipleLineRadioGroupModel}
 
 
-@(deregReason: DeregistrationReason,form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = messages("capitalAssets.title"),
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back"
-        href=@if(deregReason == Ceased){
-        @controllers.routes.OptionStocksToSellController.show().url
-        }else {
-        @controllers.routes.OptionStocksToSellController.show().url
-        }
-        >@messages("common.back")</a>
-
-
+    <a class="link-back" href="@controllers.routes.OptionStocksToSellController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
