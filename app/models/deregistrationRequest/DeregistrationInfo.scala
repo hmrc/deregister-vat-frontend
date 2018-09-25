@@ -19,7 +19,8 @@ package models.deregistrationRequest
 import java.time.LocalDate
 
 import models.DeregistrationReason
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.{Json, Writes, __}
+import play.api.libs.functional.syntax._
 
 case class DeregistrationInfo(deregReason: DeregistrationReason,
                               deregDate: Option[LocalDate],
@@ -35,6 +36,18 @@ case class DeregistrationInfo(deregReason: DeregistrationReason,
 
 object DeregistrationInfo {
 
-  implicit val writes: Writes[DeregistrationInfo] = Json.writes[DeregistrationInfo]
+  implicit val writes: Writes[DeregistrationInfo] = (
+    (__ \ "deregReason").write[DeregistrationReason](DeregistrationReason.writes) and
+      (__ \ "deregDate").writeNullable[LocalDate] and
+      (__ \ "deregLaterDate").writeNullable[LocalDate] and
+      (__ \ "turnoverBelowThreshold").writeNullable[TurnoverBelowThreshold] and
+      (__ \ "optionToTax").write[Boolean] and
+      (__ \ "intendSellCapitalAssets").write[Boolean] and
+      (__ \ "additionalTaxInvoices").write[Boolean] and
+      (__ \ "cashAccountingScheme").write[Boolean] and
+      (__ \ "optionToTaxValue").writeNullable[BigDecimal] and
+      (__ \ "stocksValue").writeNullable[BigDecimal] and
+      (__ \ "capitalAssetsValue").writeNullable[BigDecimal]
+  )(unlift(DeregistrationInfo.unapply))
 
 }
