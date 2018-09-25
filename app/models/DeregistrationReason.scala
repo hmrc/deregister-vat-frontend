@@ -26,7 +26,11 @@ object DeregistrationReason {
 
   val id = "deregReason"
 
-  implicit val writes: Writes[DeregistrationReason] = Writes {
+  implicit val cacheWrites: Writes[DeregistrationReason] = Writes {
+    reason => Json.obj(id -> reason.value)
+  }
+
+  val writes: Writes[DeregistrationReason] = Writes {
     reason => JsString(reason.value)
   }
 
@@ -38,7 +42,6 @@ object DeregistrationReason {
     }
   } yield status
 
-  implicit val format: Format[DeregistrationReason] = Format(reads, writes)
 }
 
 object Ceased extends DeregistrationReason {
