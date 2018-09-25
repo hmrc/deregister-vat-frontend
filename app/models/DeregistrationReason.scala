@@ -27,7 +27,7 @@ object DeregistrationReason {
   val id = "deregReason"
 
   implicit val writes: Writes[DeregistrationReason] = Writes {
-    reason => Json.obj(id -> reason.value)
+    reason => JsString(reason.value)
   }
 
   implicit val reads: Reads[DeregistrationReason] = for {

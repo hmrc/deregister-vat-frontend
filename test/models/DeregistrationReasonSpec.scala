@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{JsString, Json}
 import utils.TestUtil
 
 class DeregistrationReasonSpec extends TestUtil {
@@ -24,7 +24,7 @@ class DeregistrationReasonSpec extends TestUtil {
   "DeregistrationReason.Ceased" should {
 
     "serialize to the correct JSON" in {
-      Json.toJson(Ceased) shouldBe Json.obj(DeregistrationReason.id -> Ceased.value)
+      Json.toJson(Ceased) shouldBe JsString(Ceased.value)
     }
 
     "deserialize from the correct JSON" in {
@@ -35,7 +35,7 @@ class DeregistrationReasonSpec extends TestUtil {
   "DeregistrationReason.BelowThreshold" should {
 
     "serialize to the correct JSON" in {
-      Json.toJson(BelowThreshold) shouldBe Json.obj(DeregistrationReason.id -> BelowThreshold.value)
+      Json.toJson(BelowThreshold) shouldBe JsString(BelowThreshold.value)
     }
 
     "deserialize from the correct JSON" in {
@@ -46,7 +46,7 @@ class DeregistrationReasonSpec extends TestUtil {
   "DeregistrationReason.Other" should {
 
     "serialize to the correct JSON" in {
-      Json.toJson(Other) shouldBe Json.obj(DeregistrationReason.id -> Other.value)
+      Json.toJson(Other) shouldBe JsString(Other.value)
     }
 
     "deserialize from the correct JSON" in {
