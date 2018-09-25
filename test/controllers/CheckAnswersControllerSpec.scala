@@ -18,7 +18,7 @@ package controllers
 
 import assets.constants.CheckYourAnswersTestConstants._
 import assets.messages.CheckYourAnswersMessages
-import models.{Ceased, CheckYourAnswersModel, ErrorModel, Yes}
+import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockCheckAnswersService
@@ -45,7 +45,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
               Some(taxableTurnoverAbove),
               Some(taxableTurnoverBelow),
               Some(whyTurnoverBelowAll),
-              Some(vatAccountsModel),
+              Some(StandardAccounting),
               Some(yesNoAmountNo),
               Some(yesNoAmountNo),
               Some(yesNoAmountNo),

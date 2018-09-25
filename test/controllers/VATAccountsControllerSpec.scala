@@ -17,29 +17,26 @@
 package controllers
 
 import assets.constants.BaseTestConstants.errorModel
-import models.{DeregisterVatSuccess, Other, VATAccountsModel}
+import models._
 import org.jsoup.Jsoup
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
+import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.EnrolmentsAuthService
-import services.mocks.MockAccountingMethodAnswerService
+import services.mocks.{MockAccountingMethodAnswerService,MockDeregReasonAnswerService}
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
 class VATAccountsControllerSpec extends ControllerBaseSpec {
 
   object TestVATAccountsController extends VATAccountsController(
-    messagesApi, mockAuthPredicate, MockAccountingMethodAnswerService.mockStoredAnswersService, mockConfig
+    messagesApi,
+    mockAuthPredicate,
+    MockAccountingMethodAnswerService.mockStoredAnswersService,
+    MockDeregReasonAnswerService.mockStoredAnswersService,
+    mockConfig
   )
-
-  val cashAccountingModel = VATAccountsModel("cash")
-  val standardAccountingModel = VATAccountsModel("standard")
 
   "the user is authorised" when {
 
@@ -59,6 +56,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestVATAccountsController.show()(request)
 
         "return 200 (OK)" in {
+          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
           MockAccountingMethodAnswerService.setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
@@ -75,7 +73,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestVATAccountsController.show()(request)
 
         "return 200 (OK)" in {
-          MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(standardAccountingModel)))
+          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(BelowThreshold)))
+          MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(StandardAccounting)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -89,6 +88,30 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
           Jsoup.parse(bodyOf(result)).select("#accountingMethod-standard").hasAttr("checked") shouldBe true
         }
       }
+
+      "an error is returned from the DeregReasonAnswerService" should {
+
+        lazy val result = TestVATAccountsController.show()(request)
+
+        "return 200 (OK)" in {
+          MockDeregReasonAnswerService.setupMockGetAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
+          MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(StandardAccounting)))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+      }
+
+      "an error is returned from the AccountingMethodAnswerService" should {
+
+        lazy val result = TestVATAccountsController.show()(request)
+
+        "return 200 (OK)" in {
+          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
+          MockAccountingMethodAnswerService.setupMockGetAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+      }
     }
 
     "Calling the .submit action" when {
@@ -100,7 +123,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockAccountingMethodAnswerService.setupMockStoreAnswers(standardAccountingModel)(Right(DeregisterVatSuccess))
+          MockAccountingMethodAnswerService.setupMockStoreAnswers(StandardAccounting)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -117,7 +140,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockAccountingMethodAnswerService.setupMockStoreAnswers(cashAccountingModel)(Right(DeregisterVatSuccess))
+          MockAccountingMethodAnswerService.setupMockStoreAnswers(CashAccounting)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -134,6 +157,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
+          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(BelowThreshold)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
@@ -141,6 +165,19 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      "the user submits without selecting an option and an error is returned from DeregReasonAnswerService" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", ""))
+        lazy val result = TestVATAccountsController.submit()(request)
+
+        "return 400 (BAD REQUEST)" in {
+          MockDeregReasonAnswerService.setupMockGetAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR,"error")))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
     }
@@ -152,7 +189,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec {
       lazy val result = TestVATAccountsController.submit()(request)
 
       "return ISE (INTERNAL SERVER ERROR)" in {
-        MockAccountingMethodAnswerService.setupMockStoreAnswers(cashAccountingModel)(Left(errorModel))
+        MockAccountingMethodAnswerService.setupMockStoreAnswers(CashAccounting)(Left(errorModel))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }

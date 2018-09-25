@@ -16,18 +16,35 @@
 
 package forms
 
-import models.VATAccountsModel
-import play.api.data.Form
+import models._
+import play.api.data.{Form, FormError}
 import play.api.data.Forms._
+import play.api.data.format.Formatter
 
 object VATAccountsForm {
 
+  private val formatter: Formatter[VATAccountsModel] = new Formatter[VATAccountsModel] {
+
+    override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], VATAccountsModel] = {
+      data.get(key) match {
+        case Some(StandardAccounting.value) => Right(StandardAccounting)
+        case Some(CashAccounting.value) => Right(CashAccounting)
+        case _ => Left(Seq(FormError(key, "common.error.mandatoryRadioOption")))
+      }
+    }
+
+    override def unbind(key: String, value: VATAccountsModel): Map[String, String] = {
+      val stringValue = value match {
+        case StandardAccounting => StandardAccounting.value
+        case CashAccounting => CashAccounting.value
+      }
+      Map(key -> stringValue)
+    }
+  }
   val vatAccountsForm: Form[VATAccountsModel] = Form(
-    mapping(
-      "accountingMethod" -> optional(text)
-        .verifying("common.error.mandatoryRadioOption", _.nonEmpty)
-        .transform[String](_.get, Some(_))
-    )(VATAccountsModel.apply)(VATAccountsModel.unapply)
+    single(
+      VATAccountsModel.id -> of(formatter)
+    )
   )
 
 }

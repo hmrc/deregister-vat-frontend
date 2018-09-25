@@ -50,7 +50,7 @@ class CheckAnswersServiceSpec extends TestUtil {
 
         MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
         MockCeasedTradingDateAnswerService.setupMockGetAnswers(Right(Some(dateModel)))
-        MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(vatAccountsModel)))
+        MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(StandardAccounting)))
         MockTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverAbove)))
         MockNextTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverBelow)))
         MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(Some(whyTurnoverBelowAll)))
@@ -68,7 +68,7 @@ class CheckAnswersServiceSpec extends TestUtil {
             Some(taxableTurnoverAbove),
             Some(taxableTurnoverBelow),
             Some(whyTurnoverBelowAll),
-            Some(vatAccountsModel),
+            Some(StandardAccounting),
             Some(yesNoAmountYes),
             Some(yesNoAmountYes),
             Some(yesNoAmountYes),
@@ -96,7 +96,7 @@ class CheckAnswersServiceSpec extends TestUtil {
 
         MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
         MockCeasedTradingDateAnswerService.setupMockGetAnswers(Right(Some(dateModel)))
-        MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(vatAccountsModel)))
+        MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(StandardAccounting)))
         MockTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverAbove)))
         MockNextTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverBelow)))
         MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(Some(whyTurnoverBelowAll)))
