@@ -50,6 +50,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
               Some(yesNoAmountNo),
               Some(yesNoAmountNo),
               Some(Yes),
+              Some(Yes),
               Some(deregistrationDate)
             )
           ))

@@ -30,11 +30,11 @@ appConfig = appConfig) {
 
     <p>@messages("deregisterForVAT.p1")</p>
 
-    <div class="panel panel-border-wide">
-        <p>
-            @messages("deregisterForVAT.p2")
-        </p>
-    </div>
+    <ul class="list list-bullet">
+        <li>@messages("deregisterForVAT.bullet1")</li>
+        <li>@messages("deregisterForVAT.bullet2")</li>
+        <li>@messages("deregisterForVAT.bullet3")</li>
+    </ul>
 
     <a class="button" type ="submit" href="@{controllers.routes.DeregistrationReasonController.show(user.isAgent).url}" id="continue">
         @messages("common.continue")

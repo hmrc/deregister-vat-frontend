@@ -28,12 +28,14 @@ error.date.year = Enter 4 numbers
 error.date.invalid = Invalid date
 
 deregisterForVAT.title = Deregister for VAT
-deregisterForVAT.p1 = You can deregister from VAT if the business no longer needs to submit VAT Returns. We will review your reasons for deregistering within 3 weeks.
-deregisterForVAT.p2 = If the business needs to deregister from any other taxes or schemes, you must do this separately.
+deregisterForVAT.p1 = You can only deregister under certain circumstances, for example if the business:
+deregisterForVAT.bullet1 = has stopped trading
+deregisterForVAT.bullet2 = no longer makes VAT taxable supplies
+deregisterForVAT.bullet3 = turnover falls below the VAT threshold
 
 deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.ceased = It has stopped trading
-deregistrationReason.reason.belowThreshold = Annual turnover is below £83,000
+deregistrationReason.reason.belowThreshold = Annual turnover will be below £83,000
 deregistrationReason.reason.other = Other
 
 deregistrationDate.title = Does the business want to choose its own deregistration date?
@@ -47,13 +49,11 @@ deregistrationProperty.title = Does the business have any commercial property?
 deregistrationProperty.p1 = This includes both land and buildings.
 
 vatAccounts.title = How are the business’s VAT accounts prepared?
-vatAccounts.accountant = If you have an accountant, ask them what accounting method they use.
 vatAccounts.method.standard = Standard accounting
 vatAccounts.method.cash = Cash accounting
 vatAccounts.description.standard = You record VAT whenever you send or receive an invoice
 vatAccounts.description.cash = You record VAT whenever you make or receive a payment
-vatAccounts.showMeAnExample = Show me an example
-vatAccounts.showMeAnExample.p1 = You invoice someone in March but do not receive the money until June. If you record the VAT on this payment in:
+vatAccounts.showMeAnExample.p1 = For example, you invoice someone in March but do not receive the money until June. If you record the VAT on this payment in:
 vatAccounts.showMeAnExample.bullet1 = March, then you use standard accounting
 vatAccounts.showMeAnExample.bullet2 = June, then you use cash accounting
 
@@ -115,6 +115,7 @@ checkYourAnswers.question.stocks = Does the business have any stock to sell?
 checkYourAnswers.question.stocksValue = What is the total value of the stock to sell?
 checkYourAnswers.question.capitalAssets = Does the business have any capital assets to sell?
 checkYourAnswers.question.capitalAssetsValue = What is the total value of what you are planning to sell?
+checkYourAnswers.question.outstandingInvoice = Is the business expecting to receive payment for outstanding invoices after deregistering?
 checkYourAnswers.question.owesMoney = Does the business owe any money?
 checkYourAnswers.question.deregistrationDate = Deregistration date
 checkYourAnswers.answer.noDate = Not Specified

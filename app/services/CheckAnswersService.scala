@@ -38,6 +38,7 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
                                     stocksAnswerService: StocksAnswerService,
                                     taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                     whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
+                                    outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                     implicit val appConfig: AppConfig) {
 
 
@@ -54,6 +55,7 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
       stocks <- EitherT(stocksAnswerService.getAnswer)
       capital <- EitherT(capitalAssetsAnswerService.getAnswer)
       owesMoney <- EitherT(owesMoneyAnswerService.getAnswer)
+      outstanding <- EitherT(outstandingInvoicesAnswerService.getAnswer)
       deregDate <- EitherT(deregDateAnswerService.getAnswer)
     } yield {
       CheckYourAnswersModel(
@@ -67,6 +69,7 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
         stocks,
         capital,
         owesMoney,
+        outstanding,
         deregDate)
     }
     answers.value
