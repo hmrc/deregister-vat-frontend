@@ -40,7 +40,12 @@ title = messages("checkYourAnswers.title"),
 bodyClasses = None,
 appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregistrationDateController.show().url">@messages("common.back")</a>
+    <a class="link-back"
+
+        href=@if(DeregistrationReason == Ceased){
+        @controllers.routes.OutstandingInvoicesController.show().url
+        }else{@controllers.routes.DeregistrationDateController.show().url}
+        >@messages("common.back")</a>
 
     @headings(messages("checkYourAnswers.title"))
 
