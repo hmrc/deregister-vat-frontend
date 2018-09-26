@@ -18,17 +18,23 @@
 @import views.html.templates.errors.errorSummary
 @import templates.inputs.multipleLineRadioGroup
 @import templates.headings
-@import models.MultipleLineRadioGroupModel
+@import models.{DeregistrationReason, MultipleLineRadioGroupModel}
 
-@(form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+
+@(deregReason: DeregistrationReason, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
   title = messages("vatAccounts.title"),
   bodyClasses = None,
   appConfig = appConfig) {
 
-    <!--TODO: Back link is dynamic, needs to be updated as part of the back linking story-->
-    <a class="link-back" href="#">@messages("common.back")</a>
+    <a class="link-back"
+       href=@if(deregReason == Ceased){
+         @controllers.routes.CeasedTradingDateController.show().url
+       } else {
+         @controllers.routes.WhyTurnoverBelowController.show().url
+       }
+    >@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 

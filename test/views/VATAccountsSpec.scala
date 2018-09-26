@@ -18,6 +18,7 @@ package views
 
 import assets.messages.{CommonMessages, VATAccountsMessages}
 import forms.VATAccountsForm
+import models.{BelowThreshold, Ceased}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -33,9 +34,9 @@ class VATAccountsSpec extends ViewBaseSpec {
     val bullet: Int => String = i => s"#content > article > ul > li:nth-child($i)"
   }
 
-  "Rendering the VAT Accounts page with no errors" should {
+  "Rendering the VAT Accounts page with no errors from the ceased journey" should {
 
-    lazy val view = views.html.vatAccounts(VATAccountsForm.vatAccountsForm)
+    lazy val view = views.html.vatAccounts(Ceased, VATAccountsForm.vatAccountsForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -44,7 +45,7 @@ class VATAccountsSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe "#"
+      element(Selectors.back).attr("href") shouldBe controllers.routes.CeasedTradingDateController.show().url
     }
 
     s"have the correct page heading" in {
@@ -78,9 +79,9 @@ class VATAccountsSpec extends ViewBaseSpec {
 
   }
 
-  "Rendering the VAT Accounts page with errors" should {
+  "Rendering the VAT Accounts page from the BelowThreshold journey with errors" should {
 
-    lazy val view = views.html.vatAccounts(VATAccountsForm.vatAccountsForm.bind(Map("accountingMethod" -> "")))
+    lazy val view = views.html.vatAccounts(BelowThreshold, VATAccountsForm.vatAccountsForm.bind(Map("accountingMethod" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -89,7 +90,7 @@ class VATAccountsSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe "#"
+      element(Selectors.back).attr("href") shouldBe controllers.routes.WhyTurnoverBelowController.show().url
     }
 
     s"have the correct page heading" in {
@@ -99,10 +100,6 @@ class VATAccountsSpec extends ViewBaseSpec {
     s"have the correct a radio button form with the correct 2 options" in {
       elementText(Selectors.methodOption(1)) shouldBe VATAccountsMessages.standard + " " + VATAccountsMessages.invoice
       elementText(Selectors.methodOption(2)) shouldBe VATAccountsMessages.cash + " " + VATAccountsMessages.payment
-    }
-
-    s"have the correct continue button text and url" in {
-      elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
     "display the correct error message" in {
