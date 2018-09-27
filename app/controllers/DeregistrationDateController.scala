@@ -42,9 +42,9 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
       deregDateResult <- deregDateAnswerService.getAnswer
       outstandingInvoicesResult <- outstandingInvoicesAnswerService.getAnswer
     } yield (outstandingInvoicesResult, deregDateResult) match {
-      case (Right(outstanding),Right(Some(deregDate))) =>
-        Ok(renderView(outstanding,DeregistrationDateForm.deregistrationDateForm.fill(deregDate)))
-      case (Right(outstanding),Right(None)) =>
+      case (Right(outstandingInvoices), Right(Some(deregDate))) =>
+        Ok(renderView(outstandingInvoices,DeregistrationDateForm.deregistrationDateForm.fill(deregDate)))
+      case (Right(outstanding), Right(None)) =>
         Ok(renderView(outstanding))
       case (_,_) =>
         InternalServerError
@@ -54,7 +54,7 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     DeregistrationDateForm.deregistrationDateForm.bindFromRequest().fold(
       error => outstandingInvoicesAnswerService.getAnswer map {
-        case Right(outstanding) => BadRequest(renderView(outstanding, error))
+        case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error))
         case _ => InternalServerError //TODO: Update to render ISE page
       },
       data => deregDateAnswerService.storeAnswer(data) map {
