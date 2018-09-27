@@ -18,7 +18,7 @@
 @import templates.headings
 @import models.CheckYourAnswersRowModel
 
-@(answers: Seq[CheckYourAnswersRowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(backUrl: String, answers: Seq[CheckYourAnswersRowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @answerRow(answerModel: CheckYourAnswersRowModel) = {
     <div>
@@ -42,9 +42,7 @@ appConfig = appConfig) {
 
     <a class="link-back"
 
-        href=@if(DeregistrationReason == Ceased){
-        @controllers.routes.OutstandingInvoicesController.show().url
-        }else{@controllers.routes.DeregistrationDateController.show().url}
+        href = "@backUrl"
         >@messages("common.back")</a>
 
     @headings(messages("checkYourAnswers.title"))
