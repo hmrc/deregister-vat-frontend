@@ -53,7 +53,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             stocksValueRow,
             captialAssetsRowYes,
             captialAssetsValueRow,
-            owesMoneyRow,
+            newInvoicesRow,
             outstandingInvoicesRow,
             deregDateRow
           )
@@ -86,7 +86,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
               optionTaxRowNo,
               stocksRowNo,
               captialAssetsRowNo,
-              owesMoneyRow,
+              newInvoicesRow,
               outstandingInvoicesRow,
               deregDateRow
             )
@@ -120,7 +120,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
               optionTaxRowNo,
               stocksRowNo,
               captialAssetsRowNo,
-              owesMoneyRow,
+              newInvoicesRow,
               outstandingInvoicesRow,
               deregDateRow
             )

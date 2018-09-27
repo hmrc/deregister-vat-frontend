@@ -34,7 +34,7 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
                                     deregReasonAnswerService: DeregReasonAnswerService,
                                     nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
                                     optionTaxAnswerService: OptionTaxAnswerService,
-                                    owesMoneyAnswerService: OwesMoneyAnswerService,
+                                    issueNewInvoicesAnswerService: IssueNewInvoicesAnswerService,
                                     stocksAnswerService: StocksAnswerService,
                                     taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                     whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
@@ -54,7 +54,7 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
       optionTax <- EitherT(optionTaxAnswerService.getAnswer)
       stocks <- EitherT(stocksAnswerService.getAnswer)
       capital <- EitherT(capitalAssetsAnswerService.getAnswer)
-      owesMoney <- EitherT(owesMoneyAnswerService.getAnswer)
+      issueInvoice <- EitherT(issueNewInvoicesAnswerService.getAnswer)
       outstanding <- EitherT(outstandingInvoicesAnswerService.getAnswer)
       deregDate <- EitherT(deregDateAnswerService.getAnswer)
     } yield {
@@ -68,7 +68,7 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
         optionTax,
         stocks,
         capital,
-        owesMoney,
+        issueInvoice,
         outstanding,
         deregDate)
     }
