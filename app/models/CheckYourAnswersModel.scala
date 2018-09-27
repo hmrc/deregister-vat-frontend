@@ -30,7 +30,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  optionTax: Option[YesNoAmountModel],
                                  stocks: Option[YesNoAmountModel],
                                  capitalAssets: Option[YesNoAmountModel],
-                                 owesMoney: Option[YesNo],
+                                 newInvoices: Option[YesNo],
                                  outstandingInvoices: Option[YesNo],
                                  deregDate: Option[DeregistrationDateModel])(implicit user: User[_], messages: Messages) {
 
@@ -48,7 +48,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     stocksValueAnswer,
     capitalAssetsAnswer,
     capitalAssetsValueAnswer,
-    owesMoneyAnswer,
+    newInvoicesAnswer,
     outstandingInvoicesAnswer,
     deregDateAnswer
   ).flatten
@@ -134,10 +134,10 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     controllers.routes.OutstandingInvoicesController.show().url
   ))
 
-  private val owesMoneyAnswer = owesMoney.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.owesMoney"),
+  private val newInvoicesAnswer = newInvoices.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.newInvoices"),
     Html(messages(s"common.${answer.toString}")),
-    controllers.routes.OptionOwesMoneyController.show().url
+    controllers.routes.IssueNewInvoicesController.show().url
   ))
 
   private val deregDateAnswer = deregDate.flatMap(_.date.map(answer => CheckYourAnswersRowModel(

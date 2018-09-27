@@ -52,7 +52,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
         DeregisterVatStub.successfulGetAnswer(vrn, StocksAnswerService.key)(Json.toJson(yesNoAmountYes))
         DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
         DeregisterVatStub.successfulGetAnswer(vrn, OptionTaxAnswerService.key)(Json.toJson(yesNoAmountNo))
-        DeregisterVatStub.successfulGetAnswer(vrn, OwesMoneyAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
         DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
         DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(deregistrationDate))
 
@@ -80,7 +80,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
         DeregisterVatStub.successfulGetAnswer(vrn, StocksAnswerService.key)(Json.toJson(yesNoAmountYes))
         DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
         DeregisterVatStub.successfulGetAnswer(vrn, OptionTaxAnswerService.key)(Json.toJson(yesNoAmountNo))
-        DeregisterVatStub.successfulGetAnswer(vrn, OwesMoneyAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
         DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
         DeregisterVatStub.getAnswerError(vrn, DeregDateAnswerService.key)

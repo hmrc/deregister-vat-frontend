@@ -44,7 +44,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.OptionOwesMoneyController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.IssueNewInvoicesController.show().url
     }
 
     s"have the correct page heading" in {

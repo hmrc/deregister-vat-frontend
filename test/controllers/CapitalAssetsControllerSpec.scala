@@ -108,8 +108,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.OptionOwesMoneyController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.OptionOwesMoneyController.show().url)
+        s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
         }
       }
 
@@ -125,8 +125,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.OptionOwesMoneyController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.OptionOwesMoneyController.show().url)
+        s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
         }
       }
 

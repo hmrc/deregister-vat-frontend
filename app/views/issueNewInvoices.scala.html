@@ -24,7 +24,7 @@
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("optionOwesMoney.title"),
+    title = messages("issueNewInvoices.title"),
     bodyClasses = None,
     appConfig = appConfig) {
 
@@ -32,11 +32,9 @@
 
     @errorSummary("common.errorSummary.heading", form)
 
-    @headings(messages("optionOwesMoney.title"))
+    @headings(messages("issueNewInvoices.title"))
 
-    <p>@messages("optionOwesMoney.text.1")</p>
-
-    @helpers.form(action = controllers.routes.OptionOwesMoneyController.submit, 'novalidate -> "novalidate") {
+    @helpers.form(action = controllers.routes.IssueNewInvoicesController.submit, 'novalidate -> "novalidate") {
 
         <div class="form-group" id="reason">
             @radioHelper(
@@ -44,7 +42,7 @@
                 choices = Seq(
                     (yes, Messages("common.yes")),
                     (no, Messages("common.no"))),
-                question = Messages("optionOwesMoney.title"),
+                question = Messages("issueNewInvoices.title"),
                 inline = true
             )
         </div>

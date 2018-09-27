@@ -14,11 +14,17 @@
  * limitations under the License.
  */
 
-package assets.messages
+package services
 
-object OptionOwesMoneyMessages {
+import connectors.DeregisterVatConnector
+import javax.inject.{Inject, Singleton}
+import models.YesNo
 
-  val title = "Does the business owe any money?"
-  val text1 = "We need to know if the business owes any money for services or supplies that relate to its activities."
+@Singleton()
+class IssueNewInvoicesAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[YesNo] {
+  override val answerKey: String = IssueNewInvoicesAnswerService.key
+}
 
+object IssueNewInvoicesAnswerService {
+  val key: String = "issueNewInvoices"
 }

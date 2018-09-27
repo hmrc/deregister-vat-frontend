@@ -22,8 +22,8 @@ POST       /deregistration-date             controllers.DeregistrationDateContro
 GET        /option-to-tax                   controllers.OptionTaxController.show
 POST       /option-to-tax                   controllers.OptionTaxController.submit
 
-GET        /option-owes-money               controllers.OptionOwesMoneyController.show
-POST       /option-owes-money               controllers.OptionOwesMoneyController.submit
+GET        /issue-new-invoices               controllers.IssueNewInvoicesController.show
+POST       /issue-new-invoices               controllers.IssueNewInvoicesController.submit
 
 GET        /option-stocks-to-sell           controllers.OptionStocksToSellController.show
 POST       /option-stocks-to-sell           controllers.OptionStocksToSellController.submit

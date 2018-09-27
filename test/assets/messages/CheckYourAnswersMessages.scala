@@ -36,7 +36,7 @@ object CheckYourAnswersMessages {
   val capitalAssets = "Does the business intend to keep any capital assets?"
   val capitalAssetsValue = "What is the total value of capital assets?"
   val outstandingInvoices = "Is the business expecting to receive payment for outstanding invoices after deregistering?"
-  val owesMoney = "Does the business owe any money?"
+  val newInvoices = "Is the business expecting to issue any new invoices after deregistering?"
   val deregistrationDate = "Deregistration date"
   val noDate = "Not Specified"
   val standard = "Standard accounting"

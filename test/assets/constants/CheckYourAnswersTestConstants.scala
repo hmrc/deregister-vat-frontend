@@ -142,10 +142,10 @@ object CheckYourAnswersTestConstants {
     controllers.routes.OutstandingInvoicesController.show().url
   )
 
-  val owesMoneyRow = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.owesMoney,
+  val newInvoicesRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.newInvoices,
     Html(CommonMessages.yes),
-    controllers.routes.OptionOwesMoneyController.show().url
+    controllers.routes.IssueNewInvoicesController.show().url
   )
 
   val deregDateRow = CheckYourAnswersRowModel(

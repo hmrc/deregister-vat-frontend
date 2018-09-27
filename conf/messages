@@ -81,8 +81,7 @@ taxableTurnover.error.nonNumeric = Enter the turnover using numbers 0 to 9
 
 nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
 
-optionOwesMoney.title = Does the business owe any money?
-optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
+issueNewInvoices.title = Is the business expecting to issue any new invoices after deregistering?
 
 optionOwnsStockToSell.title = Does the business intend to keep any stock?
 optionOwnsStockToSell.text.1 = For example, goods bought or manufactured for resale.
@@ -114,7 +113,7 @@ checkYourAnswers.question.stocksValue = What is the total value of the stock?
 checkYourAnswers.question.capitalAssets = Does the business intend to keep any capital assets?
 checkYourAnswers.question.capitalAssetsValue = What is the total value of capital assets?
 checkYourAnswers.question.outstandingInvoice = Is the business expecting to receive payment for outstanding invoices after deregistering?
-checkYourAnswers.question.owesMoney = Does the business owe any money?
+checkYourAnswers.question.newInvoices = Is the business expecting to issue any new invoices after deregistering?
 checkYourAnswers.question.deregistrationDate = Deregistration date
 checkYourAnswers.answer.noDate = Not Specified
 checkYourAnswers.answer.standard = Standard accounting

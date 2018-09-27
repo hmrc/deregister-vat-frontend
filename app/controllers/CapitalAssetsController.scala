@@ -52,7 +52,7 @@ class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
       error => Future.successful(BadRequest(renderView(error))),
       data => {
         capitalAssetsAnswerService.storeAnswer(data).map{
-          case Right(_) => Redirect(controllers.routes.OptionOwesMoneyController.show())
+          case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())
           case Left(_) => InternalServerError
         }
       }

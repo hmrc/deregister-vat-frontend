@@ -16,17 +16,16 @@
 
 package views
 
-import assets.messages.{CommonMessages, OptionOwesMoneyMessages}
+import assets.messages.{CommonMessages, IssueNewInvoicesMessages}
 import forms.YesNoForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-class OptionOwesMoneySpec extends ViewBaseSpec {
+class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
 
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val text = (number: Int) => s"#content > article > p:nth-child($number)"
     val yesOption = "div.multiple-choice:nth-child(1) > label:nth-child(2)"
     val noOption = "div.multiple-choice:nth-child(2) > label:nth-child(2)"
     val button = ".button"
@@ -36,11 +35,11 @@ class OptionOwesMoneySpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.optionOwesMoney(YesNoForm.yesNoForm)
+    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe OptionOwesMoneyMessages.title
+      document.title shouldBe IssueNewInvoicesMessages.title
     }
 
     s"have the correct back text" in {
@@ -49,15 +48,11 @@ class OptionOwesMoneySpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe OptionOwesMoneyMessages.title
+      elementText(Selectors.pageHeading) shouldBe IssueNewInvoicesMessages.title
     }
 
     "not display an error heading" in {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
-    }
-
-    s"have the correct content displayed" in {
-      elementText(Selectors.text(3)) shouldBe OptionOwesMoneyMessages.text1
     }
 
     s"have the correct a radio button form with yes/no answers" in {
@@ -76,11 +71,11 @@ class OptionOwesMoneySpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.optionOwesMoney(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
+    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe OptionOwesMoneyMessages.title
+      document.title shouldBe IssueNewInvoicesMessages.title
     }
 
     s"have the correct back text" in {
@@ -89,7 +84,7 @@ class OptionOwesMoneySpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe OptionOwesMoneyMessages.title
+      elementText(Selectors.pageHeading) shouldBe IssueNewInvoicesMessages.title
     }
 
     "display the correct error heading" in {
