@@ -32,7 +32,7 @@ class CheckAnswersServiceSpec extends TestUtil {
     MockDeregReasonAnswerService.mockStoredAnswersService,
     MockNextTaxableTurnoverAnswerService.mockStoredAnswersService,
     MockOptionTaxAnswerService.mockStoredAnswersService,
-    MockOwesMoneyAnswerService.mockStoredAnswersService,
+    MockIssueNewInvoicesAnswerService.mockStoredAnswersService,
     MockStocksAnswerService.mockStoredAnswersService,
     MockTaxableTurnoverAnswerService.mockStoredAnswersService,
     MockWhyTurnoverBelowAnswerService.mockStoredAnswersService,
@@ -57,7 +57,7 @@ class CheckAnswersServiceSpec extends TestUtil {
         MockOptionTaxAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
         MockStocksAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
         MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
-        MockOwesMoneyAnswerService.setupMockGetAnswers(Right(Some(Yes)))
+        MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(Some(Yes)))
         MockOutstandingInvoicesService.setupMockGetAnswers(Right(Some(Yes)))
         MockDeregDateAnswerService.setupMockGetAnswers(Right(Some(deregistrationDate)))
 
@@ -103,7 +103,7 @@ class CheckAnswersServiceSpec extends TestUtil {
         MockOptionTaxAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
         MockStocksAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
         MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
-        MockOwesMoneyAnswerService.setupMockGetAnswers(Right(Some(Yes)))
+        MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(Some(Yes)))
         MockOutstandingInvoicesService.setupMockGetAnswers(Right(Some(Yes)))
         MockDeregDateAnswerService.setupMockGetAnswers(Left(errorModel))
 

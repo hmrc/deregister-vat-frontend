@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-package services
+package assets.messages
 
-import connectors.mocks.MockDeregisterVatConnector
-import utils.TestUtil
+object IssueNewInvoicesMessages {
 
+  val title = "Is the business expecting to issue any new invoices after deregistering?"
 
-class OwesMoneyAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector {
-
-  object OwesMoneyAnswerService extends OwesMoneyAnswerService(mockDeregisterVatConnector)
-
-  "The OwesMoneyAnswerService" should {
-
-    "have the key 'owesMoney'" in {
-      OwesMoneyAnswerService.answerKey shouldBe "owesMoney"
-    }
-  }
 }

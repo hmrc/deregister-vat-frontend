@@ -40,7 +40,7 @@ deregistrationReason.reason.other = Other
 
 deregistrationDate.title = Does the business want to choose its own deregistration date?
 deregistrationDate.p1 = The deregistration date can be up to a maximum of 3 months from today.
-deregistrationDate.p2 = We will confirm the deregistration date when your deregistration request is accepted.
+deregistrationDate.p2 = We will confirm the deregistration date when your request is accepted.
 deregistrationDate.error.date.invalidDate = Enter a real deregistration date
 deregistrationDate.error.date.past = The deregistration date must be in the future
 deregistrationDate.error.date.future = The deregistration date must not be more than 3 months from today
@@ -62,15 +62,13 @@ ceasedTrading.hint = For example, 31 3 1980
 ceasedTrading.error.date.noEntry = Enter the date your business ceased or will cease trading
 ceasedTrading.error.date.invalidDate = Enter a real ceased trading date
 
-optionTax.title = Did the business charge VAT on land or commercial property?
+optionTax.title = Has the business charged or claimed VAT on land or commercial property?
 optionTax.text = You can choose to charge VAT on any income earned from renting or selling land or commercial property. This is known as ‘Option to Tax’.
-optionTax.hint = What was the total value of what the business charged?
-optionTax.hidden.text = Although land and commercial property is usually exempt from VAT, some businesses choose to charge VAT so they can recover costs from construction or repairs.
+optionTax.hint = What was the total value of what the business charged or claimed?
 
-capitalAssets.title = Does the business have any capital assets to sell?
+capitalAssets.title = Does the business intend to keep any capital assets?
 capitalAssets.text.1 = This includes things like buildings, land, furniture, computers and other raw material or equipment.
-capitalAssets.text.2 = Do not include intangible assets, for example patents, copyrights or goodwill.
-capitalAssets.totalSaleValue = What is the total value of what you are planning to sell?
+capitalAssets.totalSaleValue = What is the total value?
 
 cannotDeregister.title = The business cannot deregister from VAT
 cannotDeregister.text = This is because the business expects its taxable turnover for the next 12 months to be above £83,000.
@@ -83,12 +81,11 @@ taxableTurnover.error.nonNumeric = Enter the turnover using numbers 0 to 9
 
 nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
 
-optionOwesMoney.title = Does the business owe any money?
-optionOwesMoney.text.1 = We need to know if the business owes any money for services or supplies that relate to its activities.
+issueNewInvoices.title = Is the business expecting to issue any new invoices after deregistering?
 
-optionOwnsStockToSell.title = Does the business have any stocks to sell?
+optionOwnsStockToSell.title = Does the business intend to keep any stock?
 optionOwnsStockToSell.text.1 = For example, goods bought or manufactured for resale.
-optionOwnsStockToSell.hint = What is the total value of the stock you are planning to sell?
+optionOwnsStockToSell.hint = What is the total value of the stock?
 
 whyTurnoverBelow.title = Why does the business expect its turnover to be below the threshold?
 whyTurnoverBelow.text.1 = Select all that apply
@@ -105,18 +102,18 @@ checkYourAnswers.title = Check your answers
 checkYourAnswers.change = Change
 checkYourAnswers.question.reason = Why the business is deregistering from VAT
 checkYourAnswers.question.ceasedTrading = The date your business ceased or will cease trading
-checkYourAnswers.question.taxableTurnover = Taxable turnover in the last 12 months
-checkYourAnswers.question.nextTaxableTurnover = Expected taxable turnover for the next 12 months
-checkYourAnswers.question.whyBelow = Why will the turnover be below £83,000?
+checkYourAnswers.question.taxableTurnover = What is the business’s expected taxable turnover for the next 12 months?
+checkYourAnswers.question.nextTaxableTurnover = What is the business’s expected taxable turnover for the next 12 months?
+checkYourAnswers.question.whyBelow = Why does the business expect its turnover to be below the threshold?
 checkYourAnswers.question.VatAccounts = How are the business’s VAT accounts prepared?
 checkYourAnswers.question.optionTax = Did the business charge VAT on land or commercial property?
-checkYourAnswers.question.optionTaxValue = What was the total value of what the business charged?
-checkYourAnswers.question.stocks = Does the business have any stock to sell?
-checkYourAnswers.question.stocksValue = What is the total value of the stock to sell?
-checkYourAnswers.question.capitalAssets = Does the business have any capital assets to sell?
-checkYourAnswers.question.capitalAssetsValue = What is the total value of what you are planning to sell?
+checkYourAnswers.question.optionTaxValue = What was the total value of what the business charged or claimed?
+checkYourAnswers.question.stocks = Does the business intend to keep any stock?
+checkYourAnswers.question.stocksValue = What is the total value of the stock?
+checkYourAnswers.question.capitalAssets = Does the business intend to keep any capital assets?
+checkYourAnswers.question.capitalAssetsValue = What is the total value of capital assets?
 checkYourAnswers.question.outstandingInvoice = Is the business expecting to receive payment for outstanding invoices after deregistering?
-checkYourAnswers.question.owesMoney = Does the business owe any money?
+checkYourAnswers.question.newInvoices = Is the business expecting to issue any new invoices after deregistering?
 checkYourAnswers.question.deregistrationDate = Deregistration date
 checkYourAnswers.answer.noDate = Not Specified
 checkYourAnswers.answer.standard = Standard accounting

@@ -65,7 +65,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.OptionOwesMoneyController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.IssueNewInvoicesController.show().url
     }
 
     "have no error heading message being displayed" in {

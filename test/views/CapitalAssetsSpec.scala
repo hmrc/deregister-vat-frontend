@@ -62,7 +62,6 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
     s"have the correct content displayed" in {
       elementText(Selectors.text(3)) shouldBe CapitalAssetsMessages.p1
-      elementText(Selectors.text(4)) shouldBe CapitalAssetsMessages.p2
     }
 
     s"have the correct a radio button form with yes/no answers" in {
