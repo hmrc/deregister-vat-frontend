@@ -85,11 +85,11 @@ class OptionStocksToSellSpec extends ViewBaseSpec{
 
     "nothing was entered" should {
 
-      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm.bind(Map("yes_no" -> "")))
+      lazy val view = views.html.optionStocksToSell(YesNoAmountForm.yesNoAmountForm.bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe OptionTaxMessages.title
+        document.title shouldBe OptionStocksToSellMessages.title
       }
 
       "display the correct error heading" in {
@@ -103,14 +103,14 @@ class OptionStocksToSellSpec extends ViewBaseSpec{
 
     "Yes was entered but no amount" should {
 
-      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm.bind(Map(
+      lazy val view = views.html.optionStocksToSell(YesNoAmountForm.yesNoAmountForm.bind(Map(
         "yes_no" -> "yes",
         "amount" -> ""
       )))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe OptionTaxMessages.title
+        document.title shouldBe OptionStocksToSellMessages.title
       }
 
       "display the correct error heading" in {

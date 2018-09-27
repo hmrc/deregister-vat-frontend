@@ -18,9 +18,9 @@ package assets.messages
 
 object OptionStocksToSellMessages {
 
-  val title = "Does the business have any stocks to sell?"
+  val title = "Does the business intend to keep any stock?"
   val text1 = "For example, goods bought or manufactured for resale."
-  val hiddenText = "What is the total value of the stock you are planning to sell?"
+  val hiddenText = "What is the total value of the stock?"
   val backText = "Back"
 
 }
