@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import models._
@@ -26,18 +25,26 @@ import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
+import scala.concurrent.Future
+
 @Singleton
 class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        val authenticate: AuthPredicate,
                                        checkAnswersService: CheckAnswersService,
+                                       deregDateAnswerService: DeregDateAnswerService,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
 
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    checkAnswersService.checkYourAnswersModel() map {
-      case Right(answers) => Ok(views.html.checkYourAnswers(answers.seqAnswers))
-      case Left(_) => InternalServerError
+    checkAnswersService.checkYourAnswersModel() flatMap {
+      case Right(answers) =>
+        deregDateAnswerService.getAnswer map {
+          case Right(Some(_)) => Ok(views.html.checkYourAnswers(controllers.routes.DeregistrationDateController.show().url, answers.seqAnswers))
+          case Right(None) => Ok(views.html.checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
+          case Left(_) => InternalServerError
+        }
+      case Left(_) => Future.successful(InternalServerError)
     }
   }
 
