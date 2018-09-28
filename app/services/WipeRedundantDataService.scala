@@ -58,7 +58,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
     }
   }
 
-  private def wipeBelowThresholdJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  private[services] def wipeBelowThresholdJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     (for {
       _ <- EitherT(turnoverBelowAnswer.deleteAnswer)
@@ -67,8 +67,8 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
     } yield DeregisterVatSuccess).value
   }
 
-  private def wipeOutstandingInvoices(invoicesAnswer: Option[YesNo])
-                                     (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  private[services] def wipeOutstandingInvoices(invoicesAnswer: Option[YesNo])
+                                               (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     invoicesAnswer match {
       case Some(Yes) => outstandingInvoicesAnswer.deleteAnswer
