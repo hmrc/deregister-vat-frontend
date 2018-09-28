@@ -21,7 +21,6 @@ import cats.instances.future._
 import com.google.inject.{Inject, Singleton}
 import models._
 import uk.gov.hmrc.http.HeaderCarrier
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton()
@@ -29,7 +28,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                          val ceasedTradingDateAnswer: CeasedTradingDateAnswerService,
                                          val capitalAssetsAnswer: CapitalAssetsAnswerService,
                                          val taxableTurnoverAnswer: TaxableTurnoverAnswerService,
-                                         val nextTaxableTurnoverAnswer: TaxableTurnoverAnswerService,
+                                         val nextTaxableTurnoverAnswer: NextTaxableTurnoverAnswerService,
                                          val invoicesAnswer: IssueNewInvoicesAnswerService,
                                          val outstandingInvoicesAnswer: OutstandingInvoicesAnswerService,
                                          val turnoverBelowAnswer: WhyTurnoverBelowAnswerService,
@@ -42,15 +41,16 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
       capitalAssets <- EitherT(capitalAssetsAnswer.getAnswer)
       issueInvoices <- EitherT(invoicesAnswer.getAnswer)
       outstandingInvoices <- EitherT(outstandingInvoicesAnswer.getAnswer)
-      _ <- EitherT(wipeRedundantData(deregReason))
+      _ <- EitherT(wipeRedundantDeregReasonJourneyData(deregReason))
       _ <- EitherT(wipeOutstandingInvoices(issueInvoices))
       _ <- EitherT(wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices))
       } yield DeregisterVatSuccess).value
   }
 
 
-  def wipeRedundantData(reason: Option[DeregistrationReason])
-                       (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] = {
+  def wipeRedundantDeregReasonJourneyData(reason: Option[DeregistrationReason])
+                                         (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     reason match {
       case Some(Ceased) => wipeBelowThresholdJourney
       case Some(BelowThreshold) => ceasedTradingDateAnswer.deleteAnswer
@@ -58,7 +58,8 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
     }
   }
 
-  private def wipeBelowThresholdJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] = {
+  private def wipeBelowThresholdJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     (for {
       _ <- EitherT(turnoverBelowAnswer.deleteAnswer)
       _ <- EitherT(taxableTurnoverAnswer.deleteAnswer)
@@ -75,14 +76,14 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
     }
   }
 
-  private def wipeDeregDate(reason: Option[DeregistrationReason],
-                            capitalAssets: Option[YesNoAmountModel],
-                            issueInvoices: Option[YesNo],
-                            outstandingInvoices: Option[YesNo])
-                           (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  private[services] def wipeDeregDate(reason: Option[DeregistrationReason],
+                                      capitalAssets: Option[YesNoAmountModel],
+                                      issueInvoices: Option[YesNo],
+                                      outstandingInvoices: Option[YesNo])
+                                     (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     (reason, capitalAssets, issueInvoices, outstandingInvoices) match {
-      case (Some(BelowThreshold), Some(x), Some(No), Some(No)) if x.yesNo == No => deregDateAnswer.deleteAnswer
+      case (Some(Ceased), Some(x), Some(No), Some(No)) if x.yesNo == No => deregDateAnswer.deleteAnswer
       case _ => Future.successful(Right(DeregisterVatSuccess))
     }
   }

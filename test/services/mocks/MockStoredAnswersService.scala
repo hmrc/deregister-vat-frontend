@@ -46,6 +46,12 @@ abstract class MockStoredAnswersService[T] extends TestUtil with MockFactory {
       .expects(user, *, *)
       .returns(response)
   }
+
+  def setupMockDeleteAnswerNotCalled()(implicit user: User[_]): Unit = {
+    (mockStoredAnswersService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
+      .expects(user, *, *)
+      .never()
+  }
 }
 
 object MockDeregReasonAnswerService extends MockStoredAnswersService[DeregistrationReason] {
