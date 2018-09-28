@@ -20,34 +20,43 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.DeregistrationDateForm
 import javax.inject.{Inject, Singleton}
-import models.{DeregistrationDateModel, User}
+import models.{DeregistrationDateModel, User, YesNo}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.DeregDateAnswerService
+import services.{DeregDateAnswerService, OutstandingInvoicesAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-
-import scala.concurrent.Future
 
 @Singleton
 class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
                                              val authenticate: AuthPredicate,
                                              val deregDateAnswerService: DeregDateAnswerService,
+                                             val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[DeregistrationDateModel] = DeregistrationDateForm.deregistrationDateForm)(implicit user: User[_]) =
-    views.html.deregistrationDate(form)
+  private def renderView(outstanding: Option[YesNo], form: Form[DeregistrationDateModel] = DeregistrationDateForm.deregistrationDateForm)
+                        (implicit user: User[_]) = views.html.deregistrationDate(outstanding,form)
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    deregDateAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(DeregistrationDateForm.deregistrationDateForm.fill(data)))
-      case _ => Ok(renderView())
+    for {
+      deregDateResult <- deregDateAnswerService.getAnswer
+      outstandingInvoicesResult <- outstandingInvoicesAnswerService.getAnswer
+    } yield (outstandingInvoicesResult, deregDateResult) match {
+      case (Right(outstandingInvoices), Right(Some(deregDate))) =>
+        Ok(renderView(outstandingInvoices,DeregistrationDateForm.deregistrationDateForm.fill(deregDate)))
+      case (Right(outstanding), Right(None)) =>
+        Ok(renderView(outstanding))
+      case (_,_) =>
+        InternalServerError
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     DeregistrationDateForm.deregistrationDateForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.deregistrationDate(error))),
+      error => outstandingInvoicesAnswerService.getAnswer map {
+        case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error))
+        case _ => InternalServerError //TODO: Update to render ISE page
+      },
       data => deregDateAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
         case _ => InternalServerError //TODO: Update to render ISE page

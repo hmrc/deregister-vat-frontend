@@ -26,7 +26,7 @@ import play.api.libs.ws.WSResponse
 import stubs.DeregisterVatStub
 import assets.IntegrationTestConstants._
 import play.api.libs.json.Json
-import services.DeregDateAnswerService
+import services.{DeregDateAnswerService, OutstandingInvoicesAnswerService}
 
 class DeregistrationDateISpec extends IntegrationBaseSpec {
 
@@ -48,6 +48,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
         given.user.isAuthorised
 
         DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(validYesModel))
+        DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
         val response: WSResponse = getRequest()
 
@@ -132,6 +133,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         "return 400 BAD_REQUEST" in {
 
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
           given.user.isAuthorised
 
           val response: WSResponse = postRequest(invalidYesModel)
