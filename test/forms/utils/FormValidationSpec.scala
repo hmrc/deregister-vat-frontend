@@ -16,7 +16,6 @@
 
 package forms.utils
 
-import forms.utils.FormValidation
 import play.api.data.validation.{Invalid, Valid}
 import uk.gov.hmrc.play.test.UnitSpec
 
