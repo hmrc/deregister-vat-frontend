@@ -21,13 +21,13 @@ import assets.messages.CheckYourAnswersMessages
 import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.MockCheckAnswersService
+import services.mocks.{MockCheckAnswersService, MockDeregDateAnswerService}
 
 import scala.concurrent.Future
 
 class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswersService {
 
-  object TestCheckAnswersController extends CheckAnswersController(messagesApi, mockAuthPredicate, mockCheckAnswersService, mockConfig)
+  object TestCheckAnswersController extends CheckAnswersController(messagesApi, mockAuthPredicate, mockCheckAnswersService,MockDeregDateAnswerService.mockStoredAnswersService, mockConfig)
 
   "the user is authorised" when {
 
