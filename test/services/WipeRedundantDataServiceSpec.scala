@@ -38,7 +38,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory {
     MockDeregDateAnswerService.mockStoredAnswersService
   )
 
-  val vrn: String = "999999999"
+  val errorModel: ErrorModel = ErrorModel(1, "")
 
   "Calling .wipeDeregDate" when {
 
@@ -185,7 +185,6 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory {
       }
     }
 
-    val errorModel: ErrorModel = ErrorModel(1, "")
 
     "First deletion is unsuccessful" should {
 
@@ -304,6 +303,64 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory {
       "Perform no deletions" in {
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(None)
         await(result) shouldBe Right(DeregisterVatSuccess)
+      }
+    }
+  }
+
+  "Calling .wipeRedundantData" when {
+
+    "all data retrievals are successful" should {
+
+      "all data deletions are successful" should {
+
+        "make calls to wipe relevant data" in {
+
+          inSequence {
+            MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(BelowThreshold)))
+            MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(No, None))))
+            MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(Some(No)))
+            MockOutstandingInvoicesService.setupMockGetAnswers(Right(Some(No)))
+
+            MockCeasedTradingDateAnswerService.setupMockDeleteAnswer(Right(DeregisterVatSuccess))
+            MockOutstandingInvoicesService.setupMockDeleteAnswer(Right(DeregisterVatSuccess))
+          }
+
+          val result = TestWipeRedundantDataService.wipeRedundantData
+          await(result) shouldBe Right(DeregisterVatSuccess)
+        }
+      }
+
+      "a data deletion is unsuccessful" should {
+
+        "return an error model" in {
+
+          inSequence {
+            MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(BelowThreshold)))
+            MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(No, None))))
+            MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(Some(No)))
+            MockOutstandingInvoicesService.setupMockGetAnswers(Right(Some(No)))
+
+            MockCeasedTradingDateAnswerService.setupMockDeleteAnswer(Left(errorModel))
+          }
+
+          val result = TestWipeRedundantDataService.wipeRedundantData
+          await(result) shouldBe Left(errorModel)
+        }
+      }
+    }
+
+    "a data retrieval is unsuccessful" should {
+
+      "return an error model" in {
+
+        inSequence {
+          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(BelowThreshold)))
+          MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(No, None))))
+          MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Left(errorModel))
+        }
+
+        val result = TestWipeRedundantDataService.wipeRedundantData
+        await(result) shouldBe Left(errorModel)
       }
     }
   }

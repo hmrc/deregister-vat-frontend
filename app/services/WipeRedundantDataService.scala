@@ -47,9 +47,8 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
       } yield DeregisterVatSuccess).value
   }
 
-
-  def wipeRedundantDeregReasonJourneyData(reason: Option[DeregistrationReason])
-                                         (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  private[services] def wipeRedundantDeregReasonJourneyData(reason: Option[DeregistrationReason])
+                                                           (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     reason match {
       case Some(Ceased) => wipeBelowThresholdJourney
