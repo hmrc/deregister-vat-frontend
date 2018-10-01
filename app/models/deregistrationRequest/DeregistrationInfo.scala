@@ -19,8 +19,8 @@ package models.deregistrationRequest
 import java.time.LocalDate
 
 import models.DeregistrationReason
-import play.api.libs.json.{Json, Writes, __}
 import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 case class DeregistrationInfo(deregReason: DeregistrationReason,
                               deregDate: Option[LocalDate],
@@ -37,7 +37,7 @@ case class DeregistrationInfo(deregReason: DeregistrationReason,
 object DeregistrationInfo {
 
   implicit val writes: Writes[DeregistrationInfo] = (
-    (__ \ "deregReason").write[DeregistrationReason](DeregistrationReason.writes) and
+    (__ \ "deregReason").write[DeregistrationReason](DeregistrationReason.submissionWrites) and
       (__ \ "deregDate").writeNullable[LocalDate] and
       (__ \ "deregLaterDate").writeNullable[LocalDate] and
       (__ \ "turnoverBelowThreshold").writeNullable[TurnoverBelowThreshold] and
@@ -49,5 +49,19 @@ object DeregistrationInfo {
       (__ \ "stocksValue").writeNullable[BigDecimal] and
       (__ \ "capitalAssetsValue").writeNullable[BigDecimal]
   )(unlift(DeregistrationInfo.unapply))
+
+  implicit val reads: Reads[DeregistrationInfo] = (
+    __.read[DeregistrationReason] and
+      (__ \ "deregDate").readNullable[LocalDate] and
+      (__ \ "deregLaterDate").readNullable[LocalDate] and
+      (__ \ "turnoverBelowThreshold").readNullable[TurnoverBelowThreshold] and
+      (__ \ "optionToTax").read[Boolean] and
+      (__ \ "intendSellCapitalAssets").read[Boolean] and
+      (__ \ "additionalTaxInvoices").read[Boolean] and
+      (__ \ "cashAccountingScheme").read[Boolean] and
+      (__ \ "optionToTaxValue").readNullable[BigDecimal] and
+      (__ \ "stocksValue").readNullable[BigDecimal] and
+      (__ \ "capitalAssetsValue").readNullable[BigDecimal]
+    )(DeregistrationInfo.apply _)
 
 }

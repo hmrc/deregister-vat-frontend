@@ -39,6 +39,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val surveyUrl: String = "/some-survey-url"
   override val unauthorisedSignOutUrl: String = ""
   override val manageVatSubscriptionFrontendUrl: String = "http://localhost:9150/vat-through-software/account/change-business-details"
+  override val vatSubscriptionUrl: String = "http://localhost:9567/vat-subscription"
   override val deregisterVatUrl: String = "http://localhost:9164"
   override val deregThreshold: Int = 83000
 

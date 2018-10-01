@@ -14,17 +14,7 @@
  * limitations under the License.
  */
 
-package models.deregistrationRequest
+package models
 
-import models.WhyTurnoverBelowModel
-import play.api.libs.json.{Format, Json}
-
-case class TurnoverBelowThreshold(belowThreshold: BelowThresholdReason,
-                                  nextTwelveMonthsTurnover: BigDecimal,
-                                  whyTurnoverBelow: Option[WhyTurnoverBelowModel])
-
-object TurnoverBelowThreshold {
-
-  implicit val format: Format[TurnoverBelowThreshold] = Json.format[TurnoverBelowThreshold]
-
-}
+sealed trait VatSubscriptionResponse
+case object VatSubscriptionSuccess extends VatSubscriptionResponse
