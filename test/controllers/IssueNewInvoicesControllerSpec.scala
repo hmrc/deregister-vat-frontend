@@ -123,7 +123,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
-        "return 303 (SEE OTHER)" in {
+        "return 500 (ISE)" in {
           MockIssueNewInvoicesAnswerService.setupMockStoreAnswers(Yes)(Right(DeregisterVatSuccess))
           MockOutstandingInvoicesService.setupMockDeleteAnswer(Left(ErrorModel(INTERNAL_SERVER_ERROR,"error")))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
