@@ -66,17 +66,18 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
         }
 
         "display the correct page" in {
-          document(result).title() shouldBe CheckYourAnswersMessages.title
+          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.DeregistrationDateController.show().url
+
         }
       }
 
 
-      "a Right(CheckYourAnswersModel) nothing is returned" should {
+      "No deregistration date for DeregDateAnswerService is returned" should {
 
         lazy val result = TestCheckAnswersController.show()(request)
 
         "return 200 (OK)" in {
-          MockDeregDateAnswerService.setupMockGetAnswers(Right(Some(DeregistrationDateModel(Yes, None))))
+          MockDeregDateAnswerService.setupMockGetAnswers(Right(None))
 
           setupMockCheckYourAnswersModel(Right(
             CheckYourAnswersModel(
@@ -109,7 +110,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
       }
 
 
-      "a Right() nothing is returned" should {
+      "Error returned by DeregDateAnswerService" should {
 
         lazy val result = TestCheckAnswersController.show()(request)
 
