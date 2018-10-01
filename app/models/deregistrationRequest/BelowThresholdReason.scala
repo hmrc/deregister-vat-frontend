@@ -18,15 +18,28 @@ package models.deregistrationRequest
 
 import play.api.libs.json._
 
-sealed trait BelowThresholdReason
-case object BelowPast12Months extends BelowThresholdReason
-case object BelowNext12Months extends BelowThresholdReason
+sealed trait BelowThresholdReason {
+  val value: String
+}
+
+case object BelowPast12Months extends BelowThresholdReason {
+  override val value = "belowPast12Months"
+}
+
+case object BelowNext12Months extends BelowThresholdReason {
+  override val value = "belowNext12Months"
+}
+
 
 object BelowThresholdReason {
 
   implicit val writes: Writes[BelowThresholdReason] = Writes {
-    case BelowNext12Months => JsString("belowNext12Months")
-    case BelowPast12Months => JsString("belowPast12Months")
+    threshold => JsString(threshold.value)
+  }
+
+  implicit val reads: Reads[BelowThresholdReason] = __.read[String].map {
+    case BelowNext12Months.value => BelowNext12Months
+    case BelowPast12Months.value => BelowPast12Months
   }
 
 }

@@ -33,5 +33,16 @@ class BelowThresholdReasonSpec extends UnitSpec {
         Json.toJson(BelowNext12Months) shouldBe JsString("belowNext12Months")
       }
     }
+
+    "deserializing from JSON" should {
+
+      "for 'belowPast12Months' output BelowPast12Months" in {
+        JsString("belowPast12Months").as[BelowThresholdReason] shouldBe BelowPast12Months
+      }
+
+      "for 'belowNext12Months' output BelowNext12Months" in {
+        JsString("belowNext12Months").as[BelowThresholdReason] shouldBe BelowNext12Months
+      }
+    }
   }
 }

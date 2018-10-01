@@ -24,7 +24,11 @@ class DeregistrationReasonSpec extends TestUtil {
   "DeregistrationReason.Ceased" should {
 
     "serialize to the correct JSON" in {
-      Json.toJson(Ceased) shouldBe JsString(Ceased.value)
+      Json.toJson(Ceased) shouldBe Json.obj(DeregistrationReason.id -> Ceased.value)
+    }
+
+    "serialize to the correct JSON when using submissionWrites" in {
+      Json.toJson(Ceased)(DeregistrationReason.submissionWrites) shouldBe JsString(Ceased.value)
     }
 
     "deserialize from the correct JSON" in {
@@ -35,7 +39,11 @@ class DeregistrationReasonSpec extends TestUtil {
   "DeregistrationReason.BelowThreshold" should {
 
     "serialize to the correct JSON" in {
-      Json.toJson(BelowThreshold) shouldBe JsString(BelowThreshold.value)
+      Json.toJson(BelowThreshold) shouldBe Json.obj(DeregistrationReason.id -> BelowThreshold.value)
+    }
+
+    "serialize to the correct JSON when using submissionWrites" in {
+      Json.toJson(BelowThreshold)(DeregistrationReason.submissionWrites) shouldBe JsString(BelowThreshold.value)
     }
 
     "deserialize from the correct JSON" in {
@@ -46,7 +54,11 @@ class DeregistrationReasonSpec extends TestUtil {
   "DeregistrationReason.Other" should {
 
     "serialize to the correct JSON" in {
-      Json.toJson(Other) shouldBe JsString(Other.value)
+      Json.toJson(Other) shouldBe Json.obj(DeregistrationReason.id -> Other.value)
+    }
+
+    "serialize to the correct JSON when using submissionWrites" in {
+      Json.toJson(Other)(DeregistrationReason.submissionWrites) shouldBe JsString(Other.value)
     }
 
     "deserialize from the correct JSON" in {

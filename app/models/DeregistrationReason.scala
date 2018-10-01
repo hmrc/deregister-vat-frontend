@@ -26,22 +26,19 @@ object DeregistrationReason {
 
   val id = "deregReason"
 
-  implicit val cacheWrites: Writes[DeregistrationReason] = Writes {
+  implicit val writes: Writes[DeregistrationReason] = Writes {
     reason => Json.obj(id -> reason.value)
   }
 
-  val writes: Writes[DeregistrationReason] = Writes {
+  val submissionWrites: Writes[DeregistrationReason] = Writes {
     reason => JsString(reason.value)
   }
 
-  implicit val reads: Reads[DeregistrationReason] = for {
-    status <- (__ \ id).read[String].map {
+  implicit val reads: Reads[DeregistrationReason] = (__ \ id).read[String].map {
       case Ceased.value => Ceased
       case BelowThreshold.value => BelowThreshold
       case Other.value => Other
-    }
-  } yield status
-
+  }
 }
 
 object Ceased extends DeregistrationReason {
