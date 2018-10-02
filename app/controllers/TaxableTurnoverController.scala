@@ -16,6 +16,8 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.instances.future._
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.TaxableTurnoverForm
@@ -23,8 +25,8 @@ import javax.inject.{Inject, Singleton}
 import models.{TaxableTurnoverModel, User}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
-import services.TaxableTurnoverAnswerService
+import play.api.mvc.{Action, AnyContent, Result}
+import services.{TaxableTurnoverAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -33,6 +35,7 @@ import scala.concurrent.Future
 class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                           val authenticate: AuthPredicate,
                                           val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
+                                          val wipeRedundantDataService: WipeRedundantDataService,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[TaxableTurnoverModel] = TaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
@@ -48,15 +51,24 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     TaxableTurnoverForm.taxableTurnoverForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.taxableTurnover(error))),
-      data => taxableTurnoverAnswerService.storeAnswer(data) map {
-        case Right(_) =>
-          if (data.turnover > appConfig.deregThreshold) {
-            Redirect(controllers.routes.NextTaxableTurnoverController.show())
-          } else {
-            Redirect(controllers.routes.VATAccountsController.show())
-          }
-        case _ => InternalServerError //TODO: Render ISE Page
+      data => (for {
+        _ <- EitherT(taxableTurnoverAnswerService.storeAnswer(data))
+        _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
+        result = redirect(data)
+      } yield result).value.map {
+        case Right(result) => result
+        case Left(_) => InternalServerError //TODO: Render ISE Page
       }
     )
   }
+
+  private def redirect(taxableTurnover: TaxableTurnoverModel): Result = {
+    if (taxableTurnover.turnover > appConfig.deregThreshold) {
+      Redirect(controllers.routes.NextTaxableTurnoverController.show())
+    } else {
+      Redirect(controllers.routes.VATAccountsController.show())
+    }
+  }
+
+
 }
