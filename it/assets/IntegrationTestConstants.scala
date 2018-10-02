@@ -16,7 +16,8 @@
 
 package assets
 
-import models.WhyTurnoverBelowModel
+import forms.YesNoAmountForm
+import models.{No, WhyTurnoverBelowModel, Yes, YesNoAmountModel}
 import play.api.libs.json.Json
 
 object IntegrationTestConstants {
@@ -34,5 +35,11 @@ object IntegrationTestConstants {
     "closedPlacesOfBusiness" -> true,
     "turnoverLowerThanExpected" -> true
   )
+
+  val capitalAssetsYesModel = YesNoAmountModel(Yes, Some(12))
+  val capitalAssetsYesJson = Json.toJson(capitalAssetsYesModel)
+
+  val capitalAssetsNoModel = YesNoAmountModel(No, None)
+  val capitalAssetsNoJson = Json.toJson(capitalAssetsNoModel)
 
 }
