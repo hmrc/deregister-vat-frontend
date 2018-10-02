@@ -103,7 +103,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
           charset(result) shouldBe Some("utf-8")
         }
 
-        "display the correct page" in {
+        "display the back url" in {
           document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.DeregistrationDateController.show().url
         }
       }
