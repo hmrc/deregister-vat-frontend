@@ -18,7 +18,9 @@ package models.deregistrationRequest
 
 import java.time.LocalDate
 
-import models.DeregistrationReason
+import config.AppConfig
+import models._
+import play.api.http.Status
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -35,6 +37,95 @@ case class DeregistrationInfo(deregReason: DeregistrationReason,
                               capitalAssetsValue: Option[BigDecimal])
 
 object DeregistrationInfo {
+
+  def customApply(deregReason: Option[DeregistrationReason],
+                  ceasedTradingDate: Option[DateModel],
+                  taxableTurnover: Option[TaxableTurnoverModel],
+                  nextTaxableTurnover: Option[TaxableTurnoverModel],
+                  whyTurnoverBelow: Option[WhyTurnoverBelowModel],
+                  accountingMethod: Option[VATAccountsModel],
+                  optionTax: Option[YesNoAmountModel],
+                  stocks: Option[YesNoAmountModel],
+                  capitalAssets: Option[YesNoAmountModel],
+                  issueNewInvoices: Option[YesNo],
+                  outstandingInvoices: Option[YesNo],
+                  deregDate: Option[DeregistrationDateModel])(implicit appConfig: AppConfig): Either[ErrorModel,DeregistrationInfo] = {
+
+    deregReason match {
+      case Some(deregInfoReason) => {
+        Right(DeregistrationInfo(
+          deregInfoReason,
+          deregInfoDate(deregInfoReason,ceasedTradingDate),
+          deregLaterDate(deregDate),
+          turnoverBelowThreshold(taxableTurnover,nextTaxableTurnover,whyTurnoverBelow,appConfig.deregThreshold),
+          retrieveYesNo(optionTax),
+          retrieveYesNo(capitalAssets),
+          additionalTaxInvoices(issueNewInvoices,outstandingInvoices),
+          cashAccountingScheme(accountingMethod),
+          retrieveAmount(optionTax),
+          retrieveAmount(stocks),
+          retrieveAmount(capitalAssets)
+        ))
+      }
+      case _ => Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,"Invalid DeregistrationInfo model"))
+    }
+  }
+
+  private def deregInfoDate(deregReason: DeregistrationReason, ceasedTradingDate: Option[DateModel]): Option[LocalDate] =
+    (deregReason,ceasedTradingDate) match {
+      case (Ceased,Some(dateModel)) => dateModel.date
+      case (BelowThreshold,_) => Some(LocalDate.now)
+      case _ => None
+    }
+
+  private def deregLaterDate(deregDate: Option[DeregistrationDateModel]): Option[LocalDate] = deregDate match {
+    case Some(dateModel) => dateModel.getLocalDate
+    case _ => None
+  }
+
+  private def belowThresholdReason(taxableTurnover: Option[TaxableTurnoverModel], threshold: Int): Option[BelowThresholdReason] = taxableTurnover match {
+    case Some(reason) if reason.turnover > threshold => Some(BelowPast12Months)
+    case Some(_) => Some(BelowNext12Months)
+    case _ => None
+  }
+
+  private def nextTwelveMonthsTurnover(nextTaxableTurnover: Option[TaxableTurnoverModel]): Option[BigDecimal] = nextTaxableTurnover match {
+    case Some(amount) => Some(amount.turnover)
+    case _ => None
+  }
+
+  private def turnoverBelowThreshold(taxableTurnover: Option[TaxableTurnoverModel],
+                             nextTaxableTurnover: Option[TaxableTurnoverModel],
+                             whyTurnoverBelow: Option[WhyTurnoverBelowModel],
+                             threshold: Int): Option[TurnoverBelowThreshold] = {
+    (belowThresholdReason(taxableTurnover,threshold), nextTwelveMonthsTurnover(nextTaxableTurnover)) match {
+      case (Some(belowThresholdAnswer), Some(taxableTurnoverAnswer)) =>
+        Some(TurnoverBelowThreshold(belowThresholdAnswer,taxableTurnoverAnswer,whyTurnoverBelow))
+      case _ => None
+    }
+  }
+
+  private def retrieveYesNo: Option[YesNoAmountModel] => Boolean = {
+    case Some(model) => model.yesNo == Yes
+    case _ => false
+  }
+
+  private def additionalTaxInvoices(issueNewInvoices: Option[YesNo], outstandingInvoices: Option[YesNo]): Boolean =
+    (issueNewInvoices,outstandingInvoices) match {
+      case (Some(newInvoicesAnswer),_) if newInvoicesAnswer.value => true
+      case (_,Some(outstandingInvoicesAnswer)) if outstandingInvoicesAnswer.value => true
+      case _ => false
+    }
+
+  private def cashAccountingScheme(accountingMethod: Option[VATAccountsModel]): Boolean = accountingMethod match {
+    case Some(CashAccounting) => true
+    case _ => false
+  }
+
+  private def retrieveAmount: Option[YesNoAmountModel] => Option[BigDecimal] = {
+    case Some(model) => model.amount
+    case _ => None
+  }
 
   implicit val writes: Writes[DeregistrationInfo] = (
     (__ \ "deregReason").write[DeregistrationReason](DeregistrationReason.submissionWrites) and

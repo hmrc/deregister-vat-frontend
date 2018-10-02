@@ -19,6 +19,7 @@ package controllers
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import javax.inject.{Inject, Singleton}
+import models.VatSubscriptionSuccess
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services._
@@ -28,9 +29,9 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        val authenticate: AuthPredicate,
                                        checkAnswersService: CheckAnswersService,
+                                       deregDateAnswerService: DeregDateAnswerService,
+                                       updateDeregistrationService: UpdateDeregistrationService,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
-
-
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
     checkAnswersService.checkYourAnswersModel() map {
@@ -43,5 +44,10 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
     }
   }
 
-  val submit: Action[AnyContent] = TODO
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
+    updateDeregistrationService.updateDereg.map {
+      case Right(VatSubscriptionSuccess) => Ok("")
+      case _ => InternalServerError
+    }
+  }
 }

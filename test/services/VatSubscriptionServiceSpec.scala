@@ -17,15 +17,30 @@
 package services
 
 import assets.constants.BaseTestConstants.{vrn, _}
-import connectors.mocks.MockVatSubscriptionConnector
-import models.{DeregisterVatSuccess, VatSubscriptionSuccess}
-import utils.TestUtil
 import assets.constants.DeregistrationInfoTestConstants.deregistrationInfoMinModel
+import connectors.mocks.MockVatSubscriptionConnector
+import models.VatSubscriptionSuccess
+import services.mocks._
+import utils.TestUtil
 
 
 class VatSubscriptionServiceSpec extends TestUtil with MockVatSubscriptionConnector {
 
-  object TestVatSubscriptionService extends VatSubscriptionService(vatSubscriptionConnector = mockVatSubscriptionConnector)
+  object TestVatSubscriptionService extends UpdateDeregistrationService(
+    mockVatSubscriptionConnector,
+    MockAccountingMethodAnswerService.mockStoredAnswersService,
+    MockCapitalAssetsAnswerService.mockStoredAnswersService,
+    MockCeasedTradingDateAnswerService.mockStoredAnswersService,
+    MockDeregDateAnswerService.mockStoredAnswersService,
+    MockDeregReasonAnswerService.mockStoredAnswersService,
+    MockIssueNewInvoicesAnswerService.mockStoredAnswersService,
+    MockNextTaxableTurnoverAnswerService.mockStoredAnswersService,
+    MockOptionTaxAnswerService.mockStoredAnswersService,
+    MockOutstandingInvoicesService.mockStoredAnswersService,
+    MockStocksAnswerService.mockStoredAnswersService,
+    MockTaxableTurnoverAnswerService.mockStoredAnswersService,
+    MockWhyTurnoverBelowAnswerService.mockStoredAnswersService
+  )
 
   "The VatSubscriptionService" when {
 
@@ -35,7 +50,8 @@ class VatSubscriptionServiceSpec extends TestUtil with MockVatSubscriptionConnec
 
         "return the expected model" in {
           setupMockStoreAnswers[TestModel](vrn, deregistrationInfoMinModel)(Right(VatSubscriptionSuccess))
-          await(TestVatSubscriptionService.updateDereg(deregistrationInfoMinModel)) shouldBe Right(VatSubscriptionSuccess)
+          MockAccountingMethodAnswerService.setupMockGetAnswers(Right(VatSubscriptionSuccess))
+          await(TestVatSubscriptionService.updateDereg) shouldBe Right(VatSubscriptionSuccess)
         }
       }
 
@@ -43,7 +59,7 @@ class VatSubscriptionServiceSpec extends TestUtil with MockVatSubscriptionConnec
 
         "return the expected error model" in {
           setupMockStoreAnswers[TestModel](vrn, deregistrationInfoMinModel)(Left(errorModel))
-          await(TestVatSubscriptionService.updateDereg(deregistrationInfoMinModel)) shouldBe Left(errorModel)
+          await(TestVatSubscriptionService.updateDereg) shouldBe Left(errorModel)
         }
       }
     }
