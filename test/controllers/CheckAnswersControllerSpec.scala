@@ -17,17 +17,16 @@
 package controllers
 
 import assets.constants.CheckYourAnswersTestConstants._
-import assets.messages.CheckYourAnswersMessages
 import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.MockCheckAnswersService
+import services.mocks.{MockCheckAnswersService, MockDeregDateAnswerService}
 
 import scala.concurrent.Future
 
 class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswersService {
 
-  object TestCheckAnswersController extends CheckAnswersController(messagesApi, mockAuthPredicate, mockCheckAnswersService, mockConfig)
+  object TestCheckAnswersController extends CheckAnswersController(messagesApi, mockAuthPredicate, mockCheckAnswersService,MockDeregDateAnswerService.mockStoredAnswersService, mockConfig)
 
   "the user is authorised" when {
 
@@ -38,6 +37,8 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
         lazy val result = TestCheckAnswersController.show()(request)
 
         "return 200 (OK)" in {
+          MockDeregDateAnswerService.setupMockGetAnswers(Right(Some(DeregistrationDateModel(Yes, Some(DateModel(1,1,1))))))
+
           setupMockCheckYourAnswersModel(Right(
             CheckYourAnswersModel(
               Some(Ceased),
@@ -63,10 +64,79 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
           charset(result) shouldBe Some("utf-8")
         }
 
-        "display the correct page" in {
-          document(result).title() shouldBe CheckYourAnswersMessages.title
+        "display the back url" in {
+          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.DeregistrationDateController.show().url
+
         }
       }
+
+
+      "No deregistration date for DeregDateAnswerService is returned" should {
+
+        lazy val result = TestCheckAnswersController.show()(request)
+
+        "return 200 (OK)" in {
+          MockDeregDateAnswerService.setupMockGetAnswers(Right(None))
+
+          setupMockCheckYourAnswersModel(Right(
+            CheckYourAnswersModel(
+              Some(Ceased),
+              Some(dateModel),
+              Some(taxableTurnoverAbove),
+              Some(taxableTurnoverBelow),
+              Some(whyTurnoverBelowAll),
+              Some(StandardAccounting),
+              Some(yesNoAmountNo),
+              Some(yesNoAmountNo),
+              Some(yesNoAmountNo),
+              Some(Yes),
+              Some(Yes),
+              Some(deregistrationDate)
+            )
+          ))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "display the back url" in {
+          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.OutstandingInvoicesController.show().url
+        }
+      }
+
+
+      "Error returned by DeregDateAnswerService" should {
+
+        lazy val result = TestCheckAnswersController.show()(request)
+
+        "return 500 (INTERNAL_SERVER_ERROR)" in {
+          MockDeregDateAnswerService.setupMockGetAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR,"Error")))
+
+          setupMockCheckYourAnswersModel(Right(
+            CheckYourAnswersModel(
+              Some(Ceased),
+              Some(dateModel),
+              Some(taxableTurnoverAbove),
+              Some(taxableTurnoverBelow),
+              Some(whyTurnoverBelowAll),
+              Some(StandardAccounting),
+              Some(yesNoAmountNo),
+              Some(yesNoAmountNo),
+              Some(yesNoAmountNo),
+              Some(Yes),
+              Some(Yes),
+              Some(deregistrationDate)
+            )
+          ))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+      }
+
 
       "a Left(ErrorModel) is returned" should {
 
