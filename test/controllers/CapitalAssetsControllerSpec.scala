@@ -25,12 +25,16 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.MockCapitalAssetsAnswerService
+import services.mocks.{MockCapitalAssetsAnswerService, MockWipeRedundantDataService}
 
-class CapitalAssetsControllerSpec extends ControllerBaseSpec {
+class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService {
 
   object TestCapitalAssetsController extends CapitalAssetsController(
-    messagesApi, mockAuthPredicate, MockCapitalAssetsAnswerService.mockStoredAnswersService, mockConfig
+    messagesApi,
+    mockAuthPredicate,
+    MockCapitalAssetsAnswerService.mockStoredAnswersService,
+    mockWipeRedundantDataService,
+    mockConfig
   )
 
   val amount = 12345
@@ -82,6 +86,73 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
 
     "Calling the .submit action" when {
 
+      "a success response is returned from the Wipe Redundant Data service and" when {
+
+        "the user submits after selecting an 'Yes' option and entering an amount" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, yesChecked), (amountField, amount.toString))
+          lazy val result = TestCapitalAssetsController.submit()(request)
+
+
+          "return 303 (SEE_OTHER)" in {
+            MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(Yes, Some(amount)))(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            mockAuthResult(mockAuthorisedIndividual)
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
+          }
+        }
+
+        "the user submits after selecting the 'No' option" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, noChecked))
+          lazy val result = TestCapitalAssetsController.submit()(request)
+
+          "return 303 (SEE OTHER)" in {
+            MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            mockAuthResult(mockAuthorisedIndividual)
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
+          }
+        }
+
+        "an error is returned when storing the data" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, noChecked))
+          lazy val result = TestCapitalAssetsController.submit()(request)
+
+          "return 500 (ISE)" in {
+            MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(No, None))(Left(errorModel))
+            mockAuthResult(mockAuthorisedIndividual)
+            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+          }
+        }
+      }
+
+      "an error response is returned from Wipe Redundant Data service" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, noChecked))
+        lazy val result = TestCapitalAssetsController.submit()(request)
+
+        "return 500 (ISE)" in {
+          MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
+          setupMockWipeRedundantData(Left(errorModel))
+          mockAuthResult(mockAuthorisedIndividual)
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+      }
+
       "the user submits after selecting an 'Yes' option without entering an amount" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
@@ -92,41 +163,6 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec {
         "return 400 (BAD_REQUEST)" in {
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
-        }
-      }
-
-      "the user submits after selecting an 'Yes' option and entering an amount" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, yesChecked), (amountField, amount.toString))
-        lazy val result = TestCapitalAssetsController.submit()(request)
-
-
-        "return 303 (SEE_OTHER)" in {
-          MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(Yes, Some(amount)))(Right(DeregisterVatSuccess))
-          mockAuthResult(mockAuthorisedIndividual)
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
-        }
-      }
-
-      "the user submits after selecting the 'No' option" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, noChecked))
-        lazy val result = TestCapitalAssetsController.submit()(request)
-
-        "return 303 (SEE OTHER)" in {
-          MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
-          mockAuthResult(mockAuthorisedIndividual)
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
         }
       }
 
