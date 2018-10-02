@@ -26,7 +26,7 @@ import models._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, IssueNewInvoicesAnswerService, OutstandingInvoicesAnswerService}
+import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -35,12 +35,15 @@ import scala.concurrent.Future
 class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
                                            val issueNewInvoiceAnswerService: IssueNewInvoicesAnswerService,
-                                           val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
-                                           val deregReasonAnswerService: DeregReasonAnswerService,
-                                           val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+                                           val wipeRedundantDataService: WipeRedundantDataService,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) = views.html.issueNewInvoices(form)
+
+  private def redirect: YesNo => Result = {
+    case Yes => Redirect(controllers.routes.DeregistrationDateController.show())
+    case No => Redirect(controllers.routes.OutstandingInvoicesController.show())
+  }
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
     issueNewInvoiceAnswerService.getAnswer map {
@@ -52,17 +55,13 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.issueNewInvoices(error))),
-      data => issueNewInvoiceAnswerService.storeAnswer(data) flatMap {
-        case Right(_) =>
-          if (data == Yes) {
-            EitherT(outstandingInvoicesAnswerService.deleteAnswer).fold(
-              _ => InternalServerError,
-              _ => Redirect(controllers.routes.DeregistrationDateController.show())
-            )
-          } else {
-            Future.successful(Redirect(controllers.routes.OutstandingInvoicesController.show()))
-          }
-        case Left(_) => Future.successful(InternalServerError) //TODO: Render ISE Page
+      data => (for {
+        _ <- EitherT(issueNewInvoiceAnswerService.storeAnswer(data))
+        _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
+        result = redirect(data)
+      } yield result).value.map {
+        case Right(redirect) => redirect
+        case Left(_) => InternalServerError //TODO: Render ISE page
       }
     )
   }
