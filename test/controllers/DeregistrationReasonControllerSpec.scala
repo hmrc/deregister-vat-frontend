@@ -28,16 +28,13 @@ import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
+class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService {
 
   object TestDeregistrationReasonController extends DeregistrationReasonController(
     messagesApi,
     mockAuthPredicate,
     MockDeregReasonAnswerService.mockStoredAnswersService,
-    MockCeasedTradingDateAnswerService.mockStoredAnswersService,
-    MockTaxableTurnoverAnswerService.mockStoredAnswersService,
-    MockNextTaxableTurnoverAnswerService.mockStoredAnswersService,
-    MockWhyTurnoverBelowAnswerService.mockStoredAnswersService,
+    mockWipeRedundantDataService,
     mockConfig
   )
 
@@ -86,122 +83,106 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec {
 
     "Calling the .submit action" when {
 
-      "the user submits after selecting an 'stoppedTrading' option" should {
+      "a success response is received from the wipeRedundantData service and" when {
+
+        "the user submits after selecting an 'stoppedTrading' option" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, ceased))
+          lazy val result = TestDeregistrationReasonController.submit()(request)
+
+          "return 303 (SEE OTHER)" in {
+            MockDeregReasonAnswerService.setupMockStoreAnswers(Ceased)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          s"redirect to ${controllers.routes.CeasedTradingDateController.show().url}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.CeasedTradingDateController.show().url)
+          }
+        }
+
+        "the user submits after selecting the 'turnoverBelowThreshold' option" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, belowThreshold))
+          lazy val result = TestDeregistrationReasonController.submit()(request)
+
+
+          "return 303 (SEE OTHER)" in {
+            MockDeregReasonAnswerService.setupMockStoreAnswers(BelowThreshold)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          s"redirect to ${controllers.routes.TaxableTurnoverController.show().url}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.TaxableTurnoverController.show().url)
+          }
+        }
+
+        "the user submits after selecting the 'other' option" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, other))
+          lazy val result = TestDeregistrationReasonController.submit()(request)
+
+          "return 303 (SEE OTHER)" in {
+            MockDeregReasonAnswerService.setupMockStoreAnswers(Other)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          s"redirect to ${mockConfig.govUkCancelVatRegistration}" in {
+            redirectLocation(result) shouldBe Some(mockConfig.govUkCancelVatRegistration)
+          }
+        }
+
+        "the user submits without selecting an option" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, ""))
+          lazy val result = TestDeregistrationReasonController.submit()(request)
+
+          "return 400 (BAD REQUEST)" in {
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.BAD_REQUEST
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
+        }
+
+        "if an error is returned when storing" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, other))
+          lazy val result = TestDeregistrationReasonController.submit()(request)
+
+          "return ISE (INTERNAL SERVER ERROR)" in {
+            MockDeregReasonAnswerService.setupMockStoreAnswers(Other)(Left(errorModel))
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+          }
+        }
+      }
+
+      "an error is returned when deleting redundant data" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody((reason, ceased))
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
-        "return 303 (SEE OTHER)" in {
+        "return ISE (INTERNAL SERVER ERROR)" in {
           MockDeregReasonAnswerService.setupMockStoreAnswers(Ceased)(Right(DeregisterVatSuccess))
-          MockTaxableTurnoverAnswerService.setupMockDeleteAnswer(Right(DeregisterVatSuccess))
-          MockNextTaxableTurnoverAnswerService.setupMockDeleteAnswer(Right(DeregisterVatSuccess))
-          MockWhyTurnoverBelowAnswerService.setupMockDeleteAnswer(Right(DeregisterVatSuccess))
-
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        s"redirect to ${controllers.routes.CeasedTradingDateController.show().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CeasedTradingDateController.show().url)
-        }
-      }
-
-      "the user submits after selecting the 'turnoverBelowThreshold' option" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, belowThreshold))
-        lazy val result = TestDeregistrationReasonController.submit()(request)
-
-
-        "return 303 (SEE OTHER)" in {
-          MockDeregReasonAnswerService.setupMockStoreAnswers(BelowThreshold)(Right(DeregisterVatSuccess))
-          MockCeasedTradingDateAnswerService.setupMockDeleteAnswer(Right(DeregisterVatSuccess))
-
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        s"redirect to ${controllers.routes.TaxableTurnoverController.show().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.TaxableTurnoverController.show().url)
-        }
-      }
-
-      "the user submits after selecting the 'other' option" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, other))
-        lazy val result = TestDeregistrationReasonController.submit()(request)
-
-        "return 303 (SEE OTHER)" in {
-          MockDeregReasonAnswerService.setupMockStoreAnswers(Other)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        s"redirect to ${mockConfig.govUkCancelVatRegistration}" in {
-          redirectLocation(result) shouldBe Some(mockConfig.govUkCancelVatRegistration)
-        }
-      }
-
-      "the user submits without selecting an option" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, ""))
-        lazy val result = TestDeregistrationReasonController.submit()(request)
-
-        "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.BAD_REQUEST
-        }
-
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
-        }
-      }
-
-      "if an error is returned when storing" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, other))
-        lazy val result = TestDeregistrationReasonController.submit()(request)
-
-        "return ISE (INTERNAL SERVER ERROR)" in {
-          MockDeregReasonAnswerService.setupMockStoreAnswers(Other)(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        }
-      }
-
-      "if an error is returned when deleting redundant data from the ceased trading journey" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, ceased))
-        lazy val result = TestDeregistrationReasonController.submit()(request)
-
-        "return ISE (INTERNAL SERVER ERROR)" in {
-
-          MockDeregReasonAnswerService.setupMockStoreAnswers(Ceased)(Right(DeregisterVatSuccess))
-          MockTaxableTurnoverAnswerService.setupMockDeleteAnswer(Right(DeregisterVatSuccess))
-          MockNextTaxableTurnoverAnswerService.setupMockDeleteAnswer(Right(DeregisterVatSuccess))
-          MockWhyTurnoverBelowAnswerService.setupMockDeleteAnswer(Left(errorModel))
-
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        }
-      }
-
-      "if an error is returned when deleting redundant data from the below threshold journey" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, belowThreshold))
-        lazy val result = TestDeregistrationReasonController.submit()(request)
-
-        "return ISE (INTERNAL SERVER ERROR)" in {
-
-          MockDeregReasonAnswerService.setupMockStoreAnswers(BelowThreshold)(Right(DeregisterVatSuccess))
-          MockCeasedTradingDateAnswerService.setupMockDeleteAnswer(Left(errorModel))
+          setupMockWipeRedundantData(Left(errorModel))
 
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR

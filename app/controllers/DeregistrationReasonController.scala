@@ -35,10 +35,7 @@ import scala.concurrent.Future
 class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
                                                val authenticate: AuthPredicate,
                                                val deregReasonAnswerService: DeregReasonAnswerService,
-                                               val ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
-                                               val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
-                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
-                                               val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
+                                               val wipeRedundantDataService: WipeRedundantDataService,
                                                implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(data: Form[DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
@@ -52,39 +49,23 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-
     DeregistrationReasonForm.deregistrationReasonForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(renderView(error))),
-      data => {
-        deregReasonAnswerService.storeAnswer(data) flatMap {
-          case Right(_) => data match {
-            case Ceased => deleteAndRedirectCeased
-            case BelowThreshold => deleteAndRedirectThreshold
-            case Other => Future.successful(Redirect(appConfig.govUkCancelVatRegistration))
-          }
-          case Left(_) => Future.successful(InternalServerError) //TODO: Render ISE Page
-        }
+      data => (for {
+        _ <- EitherT(deregReasonAnswerService.storeAnswer(data))
+        _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
+        route = redirect(data)
+      } yield route).value.map {
+        case Right(result) => result
+        case Left(_) => InternalServerError
       }
     )
   }
 
-  private def deleteAndRedirectCeased(implicit user: User[_]): Future[Result] = {
-    val deleteAnswerResults = for {
-      _ <- EitherT(taxableTurnoverAnswerService.deleteAnswer)
-      _ <- EitherT(nextTaxableTurnoverAnswerService.deleteAnswer)
-      _ <- EitherT(whyTurnoverBelowAnswerService.deleteAnswer)
-    } yield None
-    deleteAnswerResults.value.map {
-      case Right(_) => Redirect(controllers.routes.CeasedTradingDateController.show())
-      case Left(_) => InternalServerError //TODO: Render ISE Page
-    }
-  }
-
-  private def deleteAndRedirectThreshold(implicit user: User[_]): Future[Result] = {
-    ceasedTradingDateAnswerService.deleteAnswer.map {
-      case Right(_) => Redirect(controllers.routes.TaxableTurnoverController.show())
-      case Left(_) => InternalServerError //TODO: Render ISE Page
-    }
+  private def redirect(deregReason: DeregistrationReason): Result = deregReason match {
+    case Ceased => Redirect(controllers.routes.CeasedTradingDateController.show())
+    case BelowThreshold => Redirect(controllers.routes.TaxableTurnoverController.show())
+    case Other => Redirect(appConfig.govUkCancelVatRegistration)
   }
 }
 
