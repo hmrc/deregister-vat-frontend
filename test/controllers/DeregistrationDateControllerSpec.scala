@@ -26,7 +26,7 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.MockDeregDateAnswerService
+import services.mocks.{MockDeregDateAnswerService, MockOutstandingInvoicesService}
 import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
@@ -34,7 +34,11 @@ import scala.concurrent.Future
 class DeregistrationDateControllerSpec extends ControllerBaseSpec {
 
   object TestDeregistrationDateController extends DeregistrationDateController(
-    messagesApi, mockAuthPredicate, MockDeregDateAnswerService.mockStoredAnswersService, mockConfig
+    messagesApi,
+    mockAuthPredicate,
+    MockDeregDateAnswerService.mockStoredAnswersService,
+    MockOutstandingInvoicesService.mockStoredAnswersService,
+    mockConfig
   )
 
   val testDay = LocalDate.now.getDayOfMonth
@@ -53,6 +57,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
 
         "return 200 (OK)" in {
           MockDeregDateAnswerService.setupMockGetAnswers(Right(None))
+          MockOutstandingInvoicesService.setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -69,6 +74,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
 
         "return 200 (OK)" in {
           MockDeregDateAnswerService.setupMockGetAnswers(Right(Some(testYesDeregModel)))
+          MockOutstandingInvoicesService.setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -162,6 +168,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationDateController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
+          MockOutstandingInvoicesService.setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
@@ -184,6 +191,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationDateController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
+          MockOutstandingInvoicesService.setupMockGetAnswers(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }

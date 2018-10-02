@@ -23,14 +23,19 @@
 @import forms.YesNoForm._
 
 
-@(form: Form[DeregistrationDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(outstanding: Option[YesNo], form: Form[DeregistrationDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = messages("deregistrationDate.title"),
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.IssueNewInvoicesController.show().url">@messages("common.back")</a>
+    @if(outstanding.isDefined){
+        <a class="link-back" href="@controllers.routes.OutstandingInvoicesController.show().url">
+    }else{
+        <a class="link-back" href="@controllers.routes.IssueNewInvoicesController.show().url">
+    } @messages("common.back")</a>
+
 
     @errorSummary("common.errorSummary.heading", form, Some("date-fieldset"))
 
