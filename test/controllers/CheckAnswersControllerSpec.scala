@@ -17,7 +17,6 @@
 package controllers
 
 import assets.constants.CheckYourAnswersTestConstants._
-import assets.messages.CheckYourAnswersMessages
 import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
@@ -65,7 +64,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
           charset(result) shouldBe Some("utf-8")
         }
 
-        "display the correct page" in {
+        "display the back url" in {
           document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.DeregistrationDateController.show().url
 
         }
@@ -105,7 +104,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
         }
 
         "display the correct page" in {
-          document(result).title() shouldBe CheckYourAnswersMessages.title
+          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.DeregistrationDateController.show().url
         }
       }
 
