@@ -19,8 +19,10 @@ package services
 import cats.data.EitherT
 import cats.instances.future._
 import com.google.inject.{Inject, Singleton}
+import config.AppConfig
 import models._
 import uk.gov.hmrc.http.HeaderCarrier
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton()
@@ -31,8 +33,9 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                          val nextTaxableTurnoverAnswer: NextTaxableTurnoverAnswerService,
                                          val invoicesAnswer: IssueNewInvoicesAnswerService,
                                          val outstandingInvoicesAnswer: OutstandingInvoicesAnswerService,
-                                         val turnoverBelowAnswer: WhyTurnoverBelowAnswerService,
-                                         val deregDateAnswer: DeregDateAnswerService) {
+                                         val whyTurnoverBelow: WhyTurnoverBelowAnswerService,
+                                         val deregDateAnswer: DeregDateAnswerService,
+                                         implicit val appConfig: AppConfig) {
 
 
   def wipeRedundantData(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] = {
@@ -41,10 +44,12 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
       capitalAssets <- EitherT(capitalAssetsAnswer.getAnswer)
       issueInvoices <- EitherT(invoicesAnswer.getAnswer)
       outstandingInvoices <- EitherT(outstandingInvoicesAnswer.getAnswer)
+      taxableTurnover <- EitherT(taxableTurnoverAnswer.getAnswer)
       _ <- EitherT(wipeRedundantDeregReasonJourneyData(deregReason))
       _ <- EitherT(wipeOutstandingInvoices(issueInvoices))
       _ <- EitherT(wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices))
-      } yield DeregisterVatSuccess).value
+      _ <- EitherT(wipeNext12MonthsBelow(taxableTurnover))
+    } yield DeregisterVatSuccess).value
   }
 
   private[services] def wipeRedundantDeregReasonJourneyData(reason: Option[DeregistrationReason])
@@ -60,7 +65,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
   private[services] def wipeBelowThresholdJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     (for {
-      _ <- EitherT(turnoverBelowAnswer.deleteAnswer)
+      _ <- EitherT(whyTurnoverBelow.deleteAnswer)
       _ <- EitherT(taxableTurnoverAnswer.deleteAnswer)
       _ <- EitherT(nextTaxableTurnoverAnswer.deleteAnswer)
     } yield DeregisterVatSuccess).value
@@ -83,6 +88,18 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     (reason, capitalAssets, issueInvoices, outstandingInvoices) match {
       case (Some(Ceased), Some(x), Some(No), Some(No)) if x.yesNo == No => deregDateAnswer.deleteAnswer
+      case _ => Future.successful(Right(DeregisterVatSuccess))
+    }
+  }
+
+  private[services] def wipeNext12MonthsBelow(taxableTurnover: Option[TaxableTurnoverModel])
+                                             (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, DeregisterVatResponse]] = {
+    taxableTurnover match {
+      case Some(data) if data.turnover <= appConfig.deregThreshold => (for {
+        _ <- EitherT(whyTurnoverBelow.deleteAnswer)
+        _ <- EitherT(nextTaxableTurnoverAnswer.deleteAnswer)
+      } yield DeregisterVatSuccess).value
       case _ => Future.successful(Right(DeregisterVatSuccess))
     }
   }
