@@ -26,10 +26,10 @@ import services.mocks.MockWhyTurnoverBelowAnswerService
 
 import scala.concurrent.Future
 
-class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec {
+class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurnoverBelowAnswerService {
 
   object TestWhyTurnoverBelowController extends WhyTurnoverBelowController(
-    messagesApi, mockAuthPredicate, MockWhyTurnoverBelowAnswerService.mockStoredAnswersService, mockConfig
+    messagesApi, mockAuthPredicate, mockWhyTurnoverBelowAnswerService, mockConfig
   )
 
   "the user is authorised" when {
@@ -41,7 +41,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec {
         lazy val result = TestWhyTurnoverBelowController.show()(request)
 
         "return 200 (OK)" in {
-          MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(None))
+          setupMockGetWhyTurnoverBelow(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -57,7 +57,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec {
         lazy val result = TestWhyTurnoverBelowController.show()(request)
 
         "return 200 (OK)" in {
-          MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(Some(WhyTurnoverBelowModel(true,true,true,true,true,true,true))))
+          setupMockGetWhyTurnoverBelow(Right(Some(WhyTurnoverBelowModel(true,true,true,true,true,true,true))))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -91,7 +91,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec {
         lazy val result = TestWhyTurnoverBelowController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockWhyTurnoverBelowAnswerService.setupMockStoreAnswers(WhyTurnoverBelowModel(true,false,false,false,false,false,false))(Right(DeregisterVatSuccess))
+          setupMockStoreWhyTurnoverBelow(WhyTurnoverBelowModel(true,false,false,false,false,false,false))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }

@@ -16,10 +16,10 @@
 
 package controllers
 
-import models.{DeregisterVatSuccess, No, Yes, YesNoAmountModel}
 import assets.constants.BaseTestConstants._
 import forms.YesNoAmountForm.{amount => amountField}
 import forms.YesNoForm.{no => noChecked, yes => yesChecked, yesNo => yesNoField}
+import models.{DeregisterVatSuccess, No, Yes, YesNoAmountModel}
 import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
@@ -27,12 +27,12 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockCapitalAssetsAnswerService, MockWipeRedundantDataService}
 
-class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService {
+class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockCapitalAssetsAnswerService {
 
   object TestCapitalAssetsController extends CapitalAssetsController(
     messagesApi,
     mockAuthPredicate,
-    MockCapitalAssetsAnswerService.mockStoredAnswersService,
+    mockCapitalAssetsAnswerService,
     mockWipeRedundantDataService,
     mockConfig
   )
@@ -48,7 +48,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
-          MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(None))
+          setupMockGetCapitalAssets(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -64,7 +64,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
-          MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(Yes,Some(amount)))))
+          setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(Yes,Some(amount)))))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -96,7 +96,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
 
           "return 303 (SEE_OTHER)" in {
-            MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(Yes, Some(amount)))(Right(DeregisterVatSuccess))
+            setupMockStoreCapitalAssets(YesNoAmountModel(Yes, Some(amount)))(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
@@ -114,7 +114,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
           lazy val result = TestCapitalAssetsController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
+            setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
@@ -132,7 +132,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
           lazy val result = TestCapitalAssetsController.submit()(request)
 
           "return 500 (ISE)" in {
-            MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(No, None))(Left(errorModel))
+            setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Left(errorModel))
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
@@ -146,7 +146,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 500 (ISE)" in {
-          MockCapitalAssetsAnswerService.setupMockStoreAnswers(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
+          setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
           setupMockWipeRedundantData(Left(errorModel))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR

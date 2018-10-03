@@ -22,21 +22,25 @@ import services.mocks._
 import utils.TestUtil
 
 
-class CheckAnswersServiceSpec extends TestUtil {
+class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
+  with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
+  with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
+  with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService with MockOptionTaxAnswerService
+  with MockAccountingMethodAnswerService {
 
   object TestCheckAnswersService extends CheckAnswersService(
-    MockAccountingMethodAnswerService.mockStoredAnswersService,
-    MockCapitalAssetsAnswerService.mockStoredAnswersService,
-    MockCeasedTradingDateAnswerService.mockStoredAnswersService,
-    MockDeregDateAnswerService.mockStoredAnswersService,
-    MockDeregReasonAnswerService.mockStoredAnswersService,
-    MockNextTaxableTurnoverAnswerService.mockStoredAnswersService,
-    MockOptionTaxAnswerService.mockStoredAnswersService,
-    MockIssueNewInvoicesAnswerService.mockStoredAnswersService,
-    MockStocksAnswerService.mockStoredAnswersService,
-    MockTaxableTurnoverAnswerService.mockStoredAnswersService,
-    MockWhyTurnoverBelowAnswerService.mockStoredAnswersService,
-    MockOutstandingInvoicesService.mockStoredAnswersService,
+    mockAccountingMethodAnswerService,
+    mockCapitalAssetsAnswerService,
+    mockCeasedTradingDateAnswerService,
+    mockDeregDateAnswerService,
+    mockDeregReasonAnswerService,
+    mockNextTaxableTurnoverAnswerService,
+    mockOptionTaxAnswerService,
+    mockIssueNewInvoicesAnswerService,
+    mockStocksAnswerService,
+    mockTaxableTurnoverAnswerService,
+    mockWhyTurnoverBelowAnswerService,
+    mockOutstandingInvoicesService,
     mockConfig
   )
 
@@ -48,18 +52,18 @@ class CheckAnswersServiceSpec extends TestUtil {
 
       "return a CheckYourAnswerModel with every answer" in {
 
-        MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
-        MockCeasedTradingDateAnswerService.setupMockGetAnswers(Right(Some(dateModel)))
-        MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(StandardAccounting)))
-        MockTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverAbove)))
-        MockNextTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverBelow)))
-        MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(Some(whyTurnoverBelowAll)))
-        MockOptionTaxAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
-        MockStocksAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
-        MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
-        MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(Some(Yes)))
-        MockOutstandingInvoicesService.setupMockGetAnswers(Right(Some(Yes)))
-        MockDeregDateAnswerService.setupMockGetAnswers(Right(Some(deregistrationDate)))
+        setupMockGetDeregReason(Right(Some(Ceased)))
+        setupMockGetCeasedTradingDate(Right(Some(dateModel)))
+        setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
+        setupMockGetTaxableTurnover(Right(Some(taxableTurnoverAbove)))
+        setupMockGetNextTaxableTurnover(Right(Some(taxableTurnoverBelow)))
+        setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
+        setupMockGetOptionTax(Right(Some(yesNoAmountYes)))
+        setupMockGetStocks(Right(Some(yesNoAmountYes)))
+        setupMockGetCapitalAssets(Right(Some(yesNoAmountYes)))
+        setupMockGetIssueNewInvoices(Right(Some(Yes)))
+        setupMockGetOutstandingInvoices(Right(Some(Yes)))
+        setupMockGetDeregDate(Right(Some(deregistrationDate)))
 
         await(TestCheckAnswersService.checkYourAnswersModel()) shouldBe Right(
           CheckYourAnswersModel(
@@ -84,7 +88,7 @@ class CheckAnswersServiceSpec extends TestUtil {
 
       "return an error model" in {
 
-        MockDeregReasonAnswerService.setupMockGetAnswers(Left(errorModel))
+        setupMockGetDeregReason(Left(errorModel))
 
         await(TestCheckAnswersService.checkYourAnswersModel()) shouldBe Left(errorModel)
       }
@@ -94,18 +98,18 @@ class CheckAnswersServiceSpec extends TestUtil {
 
       "return an error model" in {
 
-        MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
-        MockCeasedTradingDateAnswerService.setupMockGetAnswers(Right(Some(dateModel)))
-        MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(StandardAccounting)))
-        MockTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverAbove)))
-        MockNextTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverBelow)))
-        MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(Some(whyTurnoverBelowAll)))
-        MockOptionTaxAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
-        MockStocksAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
-        MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
-        MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(Some(Yes)))
-        MockOutstandingInvoicesService.setupMockGetAnswers(Right(Some(Yes)))
-        MockDeregDateAnswerService.setupMockGetAnswers(Left(errorModel))
+        setupMockGetDeregReason(Right(Some(Ceased)))
+        setupMockGetCeasedTradingDate(Right(Some(dateModel)))
+        setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
+        setupMockGetTaxableTurnover(Right(Some(taxableTurnoverAbove)))
+        setupMockGetNextTaxableTurnover(Right(Some(taxableTurnoverBelow)))
+        setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
+        setupMockGetOptionTax(Right(Some(yesNoAmountYes)))
+        setupMockGetStocks(Right(Some(yesNoAmountYes)))
+        setupMockGetCapitalAssets(Right(Some(yesNoAmountYes)))
+        setupMockGetIssueNewInvoices(Right(Some(Yes)))
+        setupMockGetOutstandingInvoices(Right(Some(Yes)))
+        setupMockGetDeregDate(Left(errorModel))
 
         await(TestCheckAnswersService.checkYourAnswersModel()) shouldBe Left(errorModel)
       }

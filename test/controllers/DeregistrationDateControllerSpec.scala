@@ -18,6 +18,7 @@ package controllers
 
 import java.time.LocalDate
 
+import assets.constants.BaseTestConstants._
 import forms.DateForm._
 import forms.YesNoForm
 import forms.YesNoForm._
@@ -27,23 +28,22 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockDeregDateAnswerService, MockOutstandingInvoicesService}
-import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class DeregistrationDateControllerSpec extends ControllerBaseSpec {
+class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDeregDateAnswerService with MockOutstandingInvoicesService {
 
   object TestDeregistrationDateController extends DeregistrationDateController(
     messagesApi,
     mockAuthPredicate,
-    MockDeregDateAnswerService.mockStoredAnswersService,
-    MockOutstandingInvoicesService.mockStoredAnswersService,
+    mockDeregDateAnswerService,
+    mockOutstandingInvoicesService,
     mockConfig
   )
 
-  val testDay = LocalDate.now.getDayOfMonth
-  val testMonth = LocalDate.now.getMonthValue
-  val testYear = LocalDate.now.getYear
+  val testDay: Int = LocalDate.now.getDayOfMonth
+  val testMonth: Int = LocalDate.now.getMonthValue
+  val testYear: Int = LocalDate.now.getYear
   val testYesDeregModel = DeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
   val testNoDeregModel = DeregistrationDateModel(No, None)
 
@@ -56,8 +56,8 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationDateController.show()(request)
 
         "return 200 (OK)" in {
-          MockDeregDateAnswerService.setupMockGetAnswers(Right(None))
-          MockOutstandingInvoicesService.setupMockGetAnswers(Right(None))
+          setupMockGetDeregDate(Right(None))
+          setupMockGetOutstandingInvoices(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -73,8 +73,8 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationDateController.show()(request)
 
         "return 200 (OK)" in {
-          MockDeregDateAnswerService.setupMockGetAnswers(Right(Some(testYesDeregModel)))
-          MockOutstandingInvoicesService.setupMockGetAnswers(Right(None))
+          setupMockGetDeregDate(Right(Some(testYesDeregModel)))
+          setupMockGetOutstandingInvoices(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -116,7 +116,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationDateController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockDeregDateAnswerService.setupMockStoreAnswers(testYesDeregModel)(Right(DeregisterVatSuccess))
+          setupMockStoreDeregDate(testYesDeregModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -133,7 +133,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationDateController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockDeregDateAnswerService.setupMockStoreAnswers(testNoDeregModel)(Right(DeregisterVatSuccess))
+          setupMockStoreDeregDate(testNoDeregModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -150,7 +150,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationDateController.submit()(request)
 
         "return 500 (ISE)" in {
-          MockDeregDateAnswerService.setupMockStoreAnswers(testNoDeregModel)(Left(errorModel))
+          setupMockStoreDeregDate(testNoDeregModel)(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
@@ -168,7 +168,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationDateController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          MockOutstandingInvoicesService.setupMockGetAnswers(Right(None))
+          setupMockGetOutstandingInvoices(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
@@ -191,7 +191,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestDeregistrationDateController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          MockOutstandingInvoicesService.setupMockGetAnswers(Right(None))
+          setupMockGetOutstandingInvoices(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }

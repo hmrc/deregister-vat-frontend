@@ -16,6 +16,7 @@
 
 package controllers
 
+import assets.constants.BaseTestConstants._
 import forms.DeregistrationReasonForm._
 import models._
 import org.jsoup.Jsoup
@@ -24,16 +25,15 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks._
-import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService {
+class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockDeregReasonAnswerService {
 
   object TestDeregistrationReasonController extends DeregistrationReasonController(
     messagesApi,
     mockAuthPredicate,
-    MockDeregReasonAnswerService.mockStoredAnswersService,
+    mockDeregReasonAnswerService,
     mockWipeRedundantDataService,
     mockConfig
   )
@@ -47,7 +47,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         lazy val result = TestDeregistrationReasonController.show(user.isAgent)(user)
 
         "return 200 (OK)" in {
-          MockDeregReasonAnswerService.setupMockGetAnswers(Right(None))
+          setupMockGetDeregReason(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -63,7 +63,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         lazy val result = TestDeregistrationReasonController.show(user.isAgent)(user)
 
         "return 200 (OK)" in {
-          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
+          setupMockGetDeregReason(Right(Some(Ceased)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -92,7 +92,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            MockDeregReasonAnswerService.setupMockStoreAnswers(Ceased)(Right(DeregisterVatSuccess))
+            setupMockStoreDeregReason(Ceased)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -112,7 +112,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
 
           "return 303 (SEE OTHER)" in {
-            MockDeregReasonAnswerService.setupMockStoreAnswers(BelowThreshold)(Right(DeregisterVatSuccess))
+            setupMockStoreDeregReason(BelowThreshold)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -131,7 +131,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            MockDeregReasonAnswerService.setupMockStoreAnswers(Other)(Right(DeregisterVatSuccess))
+            setupMockStoreDeregReason(Other)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -167,7 +167,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return ISE (INTERNAL SERVER ERROR)" in {
-            MockDeregReasonAnswerService.setupMockStoreAnswers(Other)(Left(errorModel))
+            setupMockStoreDeregReason(Other)(Left(errorModel))
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
@@ -181,7 +181,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return ISE (INTERNAL SERVER ERROR)" in {
-          MockDeregReasonAnswerService.setupMockStoreAnswers(Ceased)(Right(DeregisterVatSuccess))
+          setupMockStoreDeregReason(Ceased)(Right(DeregisterVatSuccess))
           setupMockWipeRedundantData(Left(errorModel))
 
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
