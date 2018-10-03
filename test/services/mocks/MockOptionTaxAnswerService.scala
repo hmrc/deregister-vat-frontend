@@ -25,27 +25,20 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockOptionTaxAnswerService extends TestUtil with MockFactory {
+trait MockOptionTaxAnswerService extends MockStoredAnswersService {
 
   val mockOptionTaxAnswerService: OptionTaxAnswerService = mock[OptionTaxAnswerService]
 
   def setupMockGetOptionTax(response: Either[ErrorModel, Option[YesNoAmountModel]])(implicit user: User[_]): Unit =
-    (mockOptionTaxAnswerService.getAnswer(_: User[_], _: Format[YesNoAmountModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockOptionTaxAnswerService)(response)
 
   def setupMockStoreOptionTax(data: YesNoAmountModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockOptionTaxAnswerService.storeAnswer(_: YesNoAmountModel)(_: User[_], _: Format[YesNoAmountModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockOptionTaxAnswerService)(data)(response)
 
   def setupMockDeleteOptionTax(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockOptionTaxAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockOptionTaxAnswerService)(response)
 
   def setupMockOptionTaxNotCalled()(implicit user: User[_]): Unit =
-    (mockOptionTaxAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockOptionTaxAnswerService)
+
 }

@@ -25,27 +25,22 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockIssueNewInvoicesAnswerService extends TestUtil with MockFactory {
+trait MockIssueNewInvoicesAnswerService extends MockStoredAnswersService {
 
   val mockIssueNewInvoicesAnswerService: IssueNewInvoicesAnswerService = mock[IssueNewInvoicesAnswerService]
 
   def setupMockGetIssueNewInvoices(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
-    (mockIssueNewInvoicesAnswerService.getAnswer(_: User[_], _: Format[YesNo], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockIssueNewInvoicesAnswerService)(response)
 
   def setupMockStoreIssueNewInvoices(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockIssueNewInvoicesAnswerService.storeAnswer(_: YesNo)(_: User[_], _: Format[YesNo], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockIssueNewInvoicesAnswerService)(data)(response)
+
 
   def setupMockDeleteIssueNewInvoices(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockIssueNewInvoicesAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockIssueNewInvoicesAnswerService)(response)
+
 
   def setupMockIssueNewInvoicesNotCalled()(implicit user: User[_]): Unit =
-    (mockIssueNewInvoicesAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockIssueNewInvoicesAnswerService)
+
 }

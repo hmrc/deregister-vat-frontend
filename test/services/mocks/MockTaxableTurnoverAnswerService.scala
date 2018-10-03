@@ -25,28 +25,20 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockTaxableTurnoverAnswerService extends TestUtil with MockFactory {
+trait MockTaxableTurnoverAnswerService extends MockStoredAnswersService {
 
   val mockTaxableTurnoverAnswerService: TaxableTurnoverAnswerService = mock[TaxableTurnoverAnswerService]
 
   def setupMockGetTaxableTurnover(response: Either[ErrorModel, Option[TaxableTurnoverModel]])(implicit user: User[_]): Unit =
-    (mockTaxableTurnoverAnswerService.getAnswer(_: User[_], _: Format[TaxableTurnoverModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockTaxableTurnoverAnswerService)(response)
 
   def setupMockStoreTaxableTurnover(data: TaxableTurnoverModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockTaxableTurnoverAnswerService.storeAnswer(_: TaxableTurnoverModel)(_: User[_], _: Format[TaxableTurnoverModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockTaxableTurnoverAnswerService)(data)(response)
 
   def setupMockDeleteTaxableTurnover(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockTaxableTurnoverAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockTaxableTurnoverAnswerService)(response)
 
   def setupMockDeleteTaxableTurnoverNotCalled()(implicit user: User[_]): Unit =
-    (mockTaxableTurnoverAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockTaxableTurnoverAnswerService)
 
 }

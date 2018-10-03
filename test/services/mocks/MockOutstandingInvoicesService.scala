@@ -25,27 +25,20 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockOutstandingInvoicesService extends TestUtil with MockFactory {
+trait MockOutstandingInvoicesService extends MockStoredAnswersService {
 
   val mockOutstandingInvoicesService: OutstandingInvoicesAnswerService = mock[OutstandingInvoicesAnswerService]
 
   def setupMockGetOutstandingInvoices(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
-    (mockOutstandingInvoicesService.getAnswer(_: User[_], _: Format[YesNo], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockOutstandingInvoicesService)(response)
 
   def setupMockStoreOutstandingInvoices(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockOutstandingInvoicesService.storeAnswer(_: YesNo)(_: User[_], _: Format[YesNo], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockOutstandingInvoicesService)(data)(response)
 
   def setupMockDeleteOutstandingInvoices(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockOutstandingInvoicesService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockOutstandingInvoicesService)(response)
 
   def setupMockDeleteOutstandingInvoicesNotCalled()(implicit user: User[_]): Unit =
-    (mockOutstandingInvoicesService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockOutstandingInvoicesService)
+
 }

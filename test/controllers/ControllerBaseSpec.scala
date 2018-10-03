@@ -19,7 +19,6 @@ package controllers
 import mocks.MockAuth
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
 import play.api.mvc.{Action, AnyContent, Request, Result}
 import play.api.test.FakeRequest
@@ -30,7 +29,7 @@ import utils.TestUtil
 
 import scala.concurrent.Future
 
-trait ControllerBaseSpec extends TestUtil with MockAuth with GuiceOneAppPerSuite {
+trait ControllerBaseSpec extends TestUtil with MockAuth {
 
   implicit class CSRFTokenAdder[T](req: FakeRequest[T]) {
     def addToken: FakeRequest[T] = {

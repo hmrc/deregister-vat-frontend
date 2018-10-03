@@ -16,15 +16,14 @@
 
 package views
 
+import _root_.utils.TestUtil
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import org.scalatest.Matchers
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import _root_.utils.TestUtil
 
 import scala.collection.JavaConverters._
 
-trait ViewBaseSpec extends TestUtil with GuiceOneAppPerSuite with Matchers {
+trait ViewBaseSpec extends TestUtil with Matchers {
 
   def elementText(selector: String)(implicit document: Document): String = {
     element(selector).text()

@@ -25,27 +25,19 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockCapitalAssetsAnswerService extends TestUtil with MockFactory {
+trait MockCapitalAssetsAnswerService extends MockStoredAnswersService {
 
   val mockCapitalAssetsAnswerService: CapitalAssetsAnswerService = mock[CapitalAssetsAnswerService]
 
   def setupMockGetCapitalAssets(response: Either[ErrorModel, Option[YesNoAmountModel]])(implicit user: User[_]): Unit =
-    (mockCapitalAssetsAnswerService.getAnswer(_: User[_], _: Format[YesNoAmountModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockCapitalAssetsAnswerService)(response)
 
   def setupMockStoreCapitalAssets(data: YesNoAmountModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockCapitalAssetsAnswerService.storeAnswer(_: YesNoAmountModel)(_: User[_], _: Format[YesNoAmountModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockCapitalAssetsAnswerService)(data)(response)
 
   def setupMockDeleteCapitalAssets(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockCapitalAssetsAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockCapitalAssetsAnswerService)(response)
 
   def setupMockDeleteCapitalAssetsNotCalled()(implicit user: User[_]): Unit =
-    (mockCapitalAssetsAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockCapitalAssetsAnswerService)
 }

@@ -25,27 +25,19 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockAccountingMethodAnswerService extends TestUtil with MockFactory {
+trait MockAccountingMethodAnswerService extends MockStoredAnswersService {
 
   val mockAccountingMethodAnswerService: AccountingMethodAnswerService = mock[AccountingMethodAnswerService]
 
   def setupMockGetAccountingMethod(response: Either[ErrorModel, Option[VATAccountsModel]])(implicit user: User[_]): Unit =
-    (mockAccountingMethodAnswerService.getAnswer(_: User[_], _: Format[VATAccountsModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockAccountingMethodAnswerService)(response)
 
   def setupMockStoreAccountingMethod(data: VATAccountsModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockAccountingMethodAnswerService.storeAnswer(_: VATAccountsModel)(_: User[_], _: Format[VATAccountsModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockAccountingMethodAnswerService)(data)(response)
 
   def setupMockDeleteAccountingMethod(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockAccountingMethodAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockAccountingMethodAnswerService)(response)
 
   def setupMockDeleteAccountingMethodNotCalled()(implicit user: User[_]): Unit =
-    (mockAccountingMethodAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockAccountingMethodAnswerService)
 }

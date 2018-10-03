@@ -25,28 +25,20 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockWhyTurnoverBelowAnswerService extends TestUtil with MockFactory {
+trait MockWhyTurnoverBelowAnswerService extends MockStoredAnswersService {
 
   val mockWhyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService = mock[WhyTurnoverBelowAnswerService]
 
   def setupMockGetWhyTurnoverBelow(response: Either[ErrorModel, Option[WhyTurnoverBelowModel]])(implicit user: User[_]): Unit =
-    (mockWhyTurnoverBelowAnswerService.getAnswer(_: User[_], _: Format[WhyTurnoverBelowModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockWhyTurnoverBelowAnswerService)(response)
 
   def setupMockStoreWhyTurnoverBelow(data: WhyTurnoverBelowModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockWhyTurnoverBelowAnswerService.storeAnswer(_: WhyTurnoverBelowModel)(_: User[_], _: Format[WhyTurnoverBelowModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockWhyTurnoverBelowAnswerService)(data)(response)
 
   def setupMockDeleteWhyTurnoverBelow(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockWhyTurnoverBelowAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockWhyTurnoverBelowAnswerService)(response)
 
   def setupMockWhyTurnoverBelowNotCalled()(implicit user: User[_]): Unit =
-    (mockWhyTurnoverBelowAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockWhyTurnoverBelowAnswerService)
 
 }

@@ -25,27 +25,19 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockCeasedTradingDateAnswerService extends TestUtil with MockFactory {
+trait MockCeasedTradingDateAnswerService extends MockStoredAnswersService {
 
   val mockCeasedTradingDateAnswerService: CeasedTradingDateAnswerService = mock[CeasedTradingDateAnswerService]
 
   def setupMockGetCeasedTradingDate(response: Either[ErrorModel, Option[DateModel]])(implicit user: User[_]): Unit =
-    (mockCeasedTradingDateAnswerService.getAnswer(_: User[_], _: Format[DateModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockCeasedTradingDateAnswerService)(response)
 
   def setupMockStoreCeasedTradingDate(data: DateModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockCeasedTradingDateAnswerService.storeAnswer(_: DateModel)(_: User[_], _: Format[DateModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockCeasedTradingDateAnswerService)(data)(response)
 
   def setupMockDeleteCeasedTradingDate(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockCeasedTradingDateAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockCeasedTradingDateAnswerService)(response)
 
   def setupMockDeleteCeasedTradingDateNotCalled()(implicit user: User[_]): Unit =
-    (mockCeasedTradingDateAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockCeasedTradingDateAnswerService)
 }

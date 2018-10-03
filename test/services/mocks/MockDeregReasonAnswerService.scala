@@ -25,27 +25,19 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockDeregReasonAnswerService extends TestUtil with MockFactory {
+trait MockDeregReasonAnswerService extends MockStoredAnswersService {
 
   val mockDeregReasonAnswerService: DeregReasonAnswerService = mock[DeregReasonAnswerService]
 
   def setupMockGetDeregReason(response: Either[ErrorModel, Option[DeregistrationReason]])(implicit user: User[_]): Unit =
-    (mockDeregReasonAnswerService.getAnswer(_: User[_], _: Format[DeregistrationReason], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockDeregReasonAnswerService)(response)
 
   def setupMockStoreDeregReason(data: DeregistrationReason)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockDeregReasonAnswerService.storeAnswer(_: DeregistrationReason)(_: User[_], _: Format[DeregistrationReason], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockDeregReasonAnswerService)(data)(response)
 
   def setupMockDeleteDeregReason(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockDeregReasonAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockDeregReasonAnswerService)(response)
 
   def setupMockDeleteDeregReasonNotCalled()(implicit user: User[_]): Unit =
-    (mockDeregReasonAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockDeregReasonAnswerService)
 }

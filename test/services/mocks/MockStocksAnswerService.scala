@@ -25,27 +25,20 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockStocksAnswerService extends TestUtil with MockFactory {
+trait MockStocksAnswerService extends MockStoredAnswersService {
 
   val mockStocksAnswerService: StocksAnswerService = mock[StocksAnswerService]
 
   def setupMockGetStocks(response: Either[ErrorModel, Option[YesNoAmountModel]])(implicit user: User[_]): Unit =
-    (mockStocksAnswerService.getAnswer(_: User[_], _: Format[YesNoAmountModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockStocksAnswerService)(response)
 
   def setupMockStoreStocks(data: YesNoAmountModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockStocksAnswerService.storeAnswer(_: YesNoAmountModel)(_: User[_], _: Format[YesNoAmountModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockStocksAnswerService)(data)(response)
 
   def setupMockDeleteStocks(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockStocksAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockStocksAnswerService)(response)
 
   def setupMockDeleteStocksNotCalled()(implicit user: User[_]): Unit =
-    (mockStocksAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockStocksAnswerService)
+
 }

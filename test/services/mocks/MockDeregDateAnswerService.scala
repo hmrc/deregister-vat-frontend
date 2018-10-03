@@ -25,27 +25,19 @@ import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-trait MockDeregDateAnswerService extends TestUtil with MockFactory {
+trait MockDeregDateAnswerService extends MockStoredAnswersService {
 
   val mockDeregDateAnswerService: DeregDateAnswerService = mock[DeregDateAnswerService]
 
   def setupMockGetDeregDate(response: Either[ErrorModel, Option[DeregistrationDateModel]])(implicit user: User[_]): Unit =
-    (mockDeregDateAnswerService.getAnswer(_: User[_], _: Format[DeregistrationDateModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
-      .returns(response)
+    setupMockGetAnswers(mockDeregDateAnswerService)(response)
 
   def setupMockStoreDeregDate(data: DeregistrationDateModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockDeregDateAnswerService.storeAnswer(_: DeregistrationDateModel)(_: User[_], _: Format[DeregistrationDateModel], _: HeaderCarrier, _: ExecutionContext))
-      .expects(data, user, *, *, *)
-      .returns(response)
+    setupMockStoreAnswers(mockDeregDateAnswerService)(data)(response)
 
   def setupMockDeleteDeregDate(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    (mockDeregDateAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .returns(response)
+    setupMockDeleteAnswer(mockDeregDateAnswerService)(response)
 
   def setupMockDeregDateNotCalled()(implicit user: User[_]): Unit =
-    (mockDeregDateAnswerService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *)
-      .never()
+    setupMockDeleteAnswerNotCalled(mockDeregDateAnswerService)
 }
