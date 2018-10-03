@@ -25,7 +25,7 @@ object CheckYourAnswersMessages {
   val reasonBelowThreshold = "Annual turnover is below £83,000"
   val reasonOther = "Other"
   val ceasedTrading = "The date your business ceased or will cease trading"
-  val taxableTurnover = "What is the business’s expected taxable turnover for the next 12 months?"
+  val taxableTurnover = "Was the business’s taxable turnover in the last 12 months below £83,000?"
   val nextTaxableTurnover = "What is the business’s expected taxable turnover for the next 12 months?"
   val whyBelow = "Why does the business expect its turnover to be below the threshold?"
   val vatAccounts = "How are the business’s VAT accounts prepared?"

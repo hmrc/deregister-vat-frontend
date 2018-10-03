@@ -23,8 +23,8 @@ import utils.MoneyFormatter
 
 case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReason],
                                  ceasedTradingDate: Option[DateModel],
-                                 turnover: Option[TaxableTurnoverModel],
-                                 nextTurnover: Option[TaxableTurnoverModel],
+                                 turnover: Option[YesNo],
+                                 nextTurnover: Option[NextTaxableTurnoverModel],
                                  whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                                  accounting: Option[VATAccountsModel],
                                  optionTax: Option[YesNoAmountModel],
@@ -67,7 +67,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
 
   private val turnoverAnswer = turnover.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.taxableTurnover"),
-    MoneyFormatter.formatHtmlAmount(answer.turnover),
+    Html(messages(s"common.${answer.toString}")),
     controllers.routes.TaxableTurnoverController.show().url
   ))
 

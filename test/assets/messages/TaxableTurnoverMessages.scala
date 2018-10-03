@@ -20,9 +20,8 @@ object TaxableTurnoverMessages {
 
   val formatter = java.text.NumberFormat.getIntegerInstance
 
-  val title = "What was the business’s taxable turnover in the last 12 months?"
+  val title = "Was the business’s taxable turnover in the last 12 months below £83,000?"
 
-  val mandatory = "Enter the business’s taxable turnover"
-  val nonNumeric = "Enter the turnover using numbers 0 to 9"
+  val mandatory = "Select an option"
 
 }

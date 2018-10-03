@@ -17,7 +17,7 @@
 package views
 
 import assets.messages.{CommonMessages, NextTaxableTurnoverMessages}
-import forms.TaxableTurnoverForm
+import forms.NextTaxableTurnoverForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -34,7 +34,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.nextTaxableTurnover(TaxableTurnoverForm.taxableTurnoverForm)
+    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -65,7 +65,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.nextTaxableTurnover(TaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "")))
+    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

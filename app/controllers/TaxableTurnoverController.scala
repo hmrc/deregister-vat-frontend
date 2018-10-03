@@ -18,9 +18,9 @@ package controllers
 
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.TaxableTurnoverForm
+import forms.{NextTaxableTurnoverForm, YesNoForm}
 import javax.inject.{Inject, Singleton}
-import models.{TaxableTurnoverModel, User}
+import models.{NextTaxableTurnoverModel, User, YesNo}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -35,26 +35,21 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                           val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[TaxableTurnoverModel] = TaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
+  private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) =
     views.html.taxableTurnover(form)
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
     taxableTurnoverAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(TaxableTurnoverForm.taxableTurnoverForm.fill(data)))
+      case Right(Some(data)) => Ok(renderView(YesNoForm.yesNoForm.fill(data)))
       case _ => Ok(renderView())
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    TaxableTurnoverForm.taxableTurnoverForm.bindFromRequest().fold(
+    YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.taxableTurnover(error))),
       data => taxableTurnoverAnswerService.storeAnswer(data) map {
-        case Right(_) =>
-          if (data.turnover > appConfig.deregThreshold) {
-            Redirect(controllers.routes.NextTaxableTurnoverController.show())
-          } else {
-            Redirect(controllers.routes.VATAccountsController.show())
-          }
+        case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
         case _ => InternalServerError //TODO: Render ISE Page
       }
     )

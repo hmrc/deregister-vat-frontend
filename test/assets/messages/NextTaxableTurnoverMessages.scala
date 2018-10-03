@@ -21,5 +21,6 @@ object NextTaxableTurnoverMessages {
   val title = "What is the business’s expected taxable turnover for the next 12 months?"
 
   val mandatory = "Enter the business’s taxable turnover"
+  val nonNumeric = "Enter the turnover using numbers 0 to 9"
 
 }
