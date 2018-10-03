@@ -36,10 +36,4 @@ object BelowThresholdReason {
   implicit val writes: Writes[BelowThresholdReason] = Writes {
     threshold => JsString(threshold.value)
   }
-
-  implicit val reads: Reads[BelowThresholdReason] = __.read[String].map {
-    case BelowNext12Months.value => BelowNext12Months
-    case BelowPast12Months.value => BelowPast12Months
-  }
-
 }

@@ -49,19 +49,4 @@ object DeregistrationInfo {
       (__ \ "stocksValue").writeNullable[BigDecimal] and
       (__ \ "capitalAssetsValue").writeNullable[BigDecimal]
   )(unlift(DeregistrationInfo.unapply))
-
-  implicit val reads: Reads[DeregistrationInfo] = (
-    __.read[DeregistrationReason] and
-      (__ \ "deregDate").readNullable[LocalDate] and
-      (__ \ "deregLaterDate").readNullable[LocalDate] and
-      (__ \ "turnoverBelowThreshold").readNullable[TurnoverBelowThreshold] and
-      (__ \ "optionToTax").read[Boolean] and
-      (__ \ "intendSellCapitalAssets").read[Boolean] and
-      (__ \ "additionalTaxInvoices").read[Boolean] and
-      (__ \ "cashAccountingScheme").read[Boolean] and
-      (__ \ "optionToTaxValue").readNullable[BigDecimal] and
-      (__ \ "stocksValue").readNullable[BigDecimal] and
-      (__ \ "capitalAssetsValue").readNullable[BigDecimal]
-    )(DeregistrationInfo.apply _)
-
 }
