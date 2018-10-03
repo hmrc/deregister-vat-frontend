@@ -17,6 +17,10 @@
 package controllers
 
 import assets.constants.CheckYourAnswersTestConstants._
+import assets.constants.WhyTurnoverBelowTestConstants._
+import assets.constants.TaxableTurnoverTestConstants._
+import assets.constants.YesNoAmountTestConstants._
+import assets.messages.{CheckYourAnswersMessages, DeregistrationConfirmationMessages}
 import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
@@ -123,6 +127,35 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
       }
 
       authChecks(".show", TestCheckAnswersController.show(), request)
+    }
+
+    "calling the submit action" when {
+
+      "a Right(VatSubscriptionSuccess) is returned from updateDeregistrationService" should {
+
+        lazy val result = TestCheckAnswersController.submit()(request)
+
+        "return 200 (OK)" in {
+          setupUpdateDeregistration(Right(VatSubscriptionSuccess))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the correct page" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationConfirmationController.show().url)
+        }
+      }
+
+      "a Left(ErrorModel) is returned from updateDeregistrationService" should {
+
+        lazy val result = TestCheckAnswersController.submit()(request)
+
+        "return 200 (OK)" in {
+          setupUpdateDeregistration(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,"error message")))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+      }
     }
   }
 }

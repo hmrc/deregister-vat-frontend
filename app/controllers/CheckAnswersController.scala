@@ -46,7 +46,7 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     updateDeregistrationService.updateDereg.map {
-      case Right(VatSubscriptionSuccess) => Ok("")
+      case Right(VatSubscriptionSuccess) => Redirect(controllers.routes.DeregistrationConfirmationController.show().url)
       case _ => InternalServerError
     }
   }

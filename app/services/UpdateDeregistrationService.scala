@@ -28,19 +28,19 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpdateDeregistrationService @Inject()(val vatSubscriptionConnector: VatSubscriptionConnector,
-                                            val accountingMethodAnswerService: AccountingMethodAnswerService,
-                                            val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregReasonAnswerService,
                                             val ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
-                                            val deregDateAnswerService: DeregDateAnswerService,
-                                            val deregReasonAnswerService: DeregReasonAnswerService,
-                                            val issueNewInvoicesAnswerService: IssueNewInvoicesAnswerService,
-                                            val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
-                                            val optionTaxAnswerService: OptionTaxAnswerService,
-                                            val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
-                                            val stocksAnswerService: StocksAnswerService,
                                             val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
-                                            val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService)(implicit val appConfig: AppConfig) {
+                                            val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
+                                            val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
+                                            val accountingMethodAnswerService: AccountingMethodAnswerService,
+                                            val optionTaxAnswerService: OptionTaxAnswerService,
+                                            val stocksAnswerService: StocksAnswerService,
+                                            val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+                                            val issueNewInvoicesAnswerService: IssueNewInvoicesAnswerService,
+                                            val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
+                                            val deregDateAnswerService: DeregDateAnswerService,
+                                            val vatSubscriptionConnector: VatSubscriptionConnector)(implicit val appConfig: AppConfig) {
 
 
   def updateDereg(implicit user: User[_], fmt: Format[DeregistrationInfo], hc: HeaderCarrier, ec: ExecutionContext)

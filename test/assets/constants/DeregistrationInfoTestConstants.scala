@@ -16,19 +16,13 @@
 
 package assets.constants
 
-import java.time.LocalDate
-
+import assets.constants.DateModelTestConstants._
+import assets.constants.YesNoAmountTestConstants._
 import models.deregistrationRequest.DeregistrationInfo
 import models.{BelowThreshold, Ceased}
 import play.api.libs.json.{JsObject, Json}
 
 object DeregistrationInfoTestConstants {
-
-  val deregDate: LocalDate = LocalDate.now()
-  val deregLaterDate: LocalDate = deregDate.plusDays(7)
-  val stockValue = 1000.0
-  val ottValue = 2000.0
-  val assetsValue = 3000.50
 
   val deregistrationInfoMinModel: DeregistrationInfo = DeregistrationInfo(
     deregReason = Ceased,
@@ -54,9 +48,9 @@ object DeregistrationInfoTestConstants {
 
   val deregistrationInfoMaxModel: DeregistrationInfo = DeregistrationInfo(
     deregReason = BelowThreshold,
-    deregDate = Some(deregDate),
-    deregLaterDate = Some(deregLaterDate),
-    turnoverBelowThreshold = Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxModel),
+    deregDate = Some(todayDate),
+    deregLaterDate = Some(laterDate),
+    turnoverBelowThreshold = Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxNextModel),
     optionToTax = true,
     intendSellCapitalAssets = true,
     additionalTaxInvoices = true,
@@ -68,8 +62,8 @@ object DeregistrationInfoTestConstants {
 
   val deregistrationInfoMaxJson: JsObject = Json.obj(
     "deregReason" -> BelowThreshold.value,
-    "deregDate" -> deregDate.toString,
-    "deregLaterDate" -> deregLaterDate.toString,
+    "deregDate" -> todayDate.toString,
+    "deregLaterDate" -> laterDate.toString,
     "turnoverBelowThreshold" -> TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxJson,
     "optionToTax" -> true,
     "intendSellCapitalAssets" -> true,

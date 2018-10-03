@@ -16,7 +16,7 @@
 
 package assets.constants
 
-import models.WhyTurnoverBelowModel
+import assets.constants.WhyTurnoverBelowTestConstants._
 import models.deregistrationRequest.{BelowNext12Months, BelowPast12Months, TurnoverBelowThreshold}
 import play.api.libs.json.{JsObject, Json}
 
@@ -24,7 +24,7 @@ object TurnoverBelowThresholdTestConstants {
 
   val turnoverBelowThresholdMinModel: TurnoverBelowThreshold = TurnoverBelowThreshold(
     BelowPast12Months,
-    2000.0,
+    2000,
     None
   )
 
@@ -33,32 +33,22 @@ object TurnoverBelowThresholdTestConstants {
     "nextTwelveMonthsTurnover" -> 2000
   )
 
-  val turnoverBelowThresholdMaxModel: TurnoverBelowThreshold = TurnoverBelowThreshold(
+  val turnoverBelowThresholdMaxPastModel: TurnoverBelowThreshold = TurnoverBelowThreshold(
+    BelowPast12Months,
+    2000,
+    Some(whyTurnoverBelowOne)
+  )
+
+  val turnoverBelowThresholdMaxNextModel: TurnoverBelowThreshold = TurnoverBelowThreshold(
     BelowNext12Months,
-    2000.0,
-    Some(WhyTurnoverBelowModel(
-      lostContract = false,
-      semiRetiring = false,
-      moreCompetitors = false,
-      reducedTradingHours = true,
-      seasonalBusiness = false,
-      closedPlacesOfBusiness = false,
-      turnoverLowerThanExpected = false
-    ))
+    2000,
+    Some(whyTurnoverBelowOne)
   )
 
   val turnoverBelowThresholdMaxJson: JsObject = Json.obj(
     "belowThreshold" -> "belowNext12Months",
     "nextTwelveMonthsTurnover" -> 2000,
-    "whyTurnoverBelow" -> Json.obj(
-      "lostContract" -> false,
-      "semiRetiring" -> false,
-      "moreCompetitors" -> false,
-      "reducedTradingHours" -> true,
-      "seasonalBusiness" -> false,
-      "closedPlacesOfBusiness" -> false,
-      "turnoverLowerThanExpected" -> false
-    )
+    "whyTurnoverBelow" -> whyTurnoverBelowOneJson
   )
 
 }

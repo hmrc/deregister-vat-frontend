@@ -52,7 +52,7 @@ object DeregistrationInfo {
                   deregDate: Option[DeregistrationDateModel])(implicit appConfig: AppConfig): Either[ErrorModel,DeregistrationInfo] = {
 
     deregReason match {
-      case Some(deregInfoReason) => {
+      case Some(deregInfoReason) if deregInfoReason != Other => {
         Right(DeregistrationInfo(
           deregInfoReason,
           deregInfoDate(deregInfoReason,ceasedTradingDate),
@@ -71,30 +71,32 @@ object DeregistrationInfo {
     }
   }
 
-  private def deregInfoDate(deregReason: DeregistrationReason, ceasedTradingDate: Option[DateModel]): Option[LocalDate] =
+  private[deregistrationRequest] def deregInfoDate(deregReason: DeregistrationReason, ceasedTradingDate: Option[DateModel]): Option[LocalDate] =
     (deregReason,ceasedTradingDate) match {
       case (Ceased,Some(dateModel)) => dateModel.date
       case (BelowThreshold,_) => Some(LocalDate.now)
       case _ => None
     }
 
-  private def deregLaterDate(deregDate: Option[DeregistrationDateModel]): Option[LocalDate] = deregDate match {
+  private[deregistrationRequest] def deregLaterDate(deregDate: Option[DeregistrationDateModel]): Option[LocalDate] = deregDate match {
     case Some(dateModel) => dateModel.getLocalDate
     case _ => None
   }
 
-  private def belowThresholdReason(taxableTurnover: Option[TaxableTurnoverModel], threshold: Int): Option[BelowThresholdReason] = taxableTurnover match {
-    case Some(reason) if reason.turnover > threshold => Some(BelowPast12Months)
+  private[deregistrationRequest] def belowThresholdReason(taxableTurnover: Option[TaxableTurnoverModel],
+                                                          threshold: Int): Option[BelowThresholdReason] = taxableTurnover match {
+    case Some(turnover) if turnover.turnover > threshold => Some(BelowPast12Months)
     case Some(_) => Some(BelowNext12Months)
     case _ => None
   }
 
-  private def nextTwelveMonthsTurnover(nextTaxableTurnover: Option[TaxableTurnoverModel]): Option[BigDecimal] = nextTaxableTurnover match {
-    case Some(amount) => Some(amount.turnover)
-    case _ => None
-  }
+  private[deregistrationRequest] def nextTwelveMonthsTurnover(nextTaxableTurnover: Option[TaxableTurnoverModel]): Option[BigDecimal] =
+    nextTaxableTurnover match {
+      case Some(amount) => Some(amount.turnover)
+      case _ => None
+    }
 
-  private def turnoverBelowThreshold(taxableTurnover: Option[TaxableTurnoverModel],
+  private[deregistrationRequest] def turnoverBelowThreshold(taxableTurnover: Option[TaxableTurnoverModel],
                              nextTaxableTurnover: Option[TaxableTurnoverModel],
                              whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                              threshold: Int): Option[TurnoverBelowThreshold] = {
@@ -105,24 +107,24 @@ object DeregistrationInfo {
     }
   }
 
-  private def retrieveYesNo: Option[YesNoAmountModel] => Boolean = {
+  private[deregistrationRequest] def retrieveYesNo: Option[YesNoAmountModel] => Boolean = {
     case Some(model) => model.yesNo == Yes
     case _ => false
   }
 
-  private def additionalTaxInvoices(issueNewInvoices: Option[YesNo], outstandingInvoices: Option[YesNo]): Boolean =
+  private[deregistrationRequest] def additionalTaxInvoices(issueNewInvoices: Option[YesNo], outstandingInvoices: Option[YesNo]): Boolean =
     (issueNewInvoices,outstandingInvoices) match {
-      case (Some(newInvoicesAnswer),_) if newInvoicesAnswer.value => true
-      case (_,Some(outstandingInvoicesAnswer)) if outstandingInvoicesAnswer.value => true
+      case (Some(Yes),_) => true
+      case (_,Some(Yes)) => true
       case _ => false
     }
 
-  private def cashAccountingScheme(accountingMethod: Option[VATAccountsModel]): Boolean = accountingMethod match {
+  private[deregistrationRequest] def cashAccountingScheme(accountingMethod: Option[VATAccountsModel]): Boolean = accountingMethod match {
     case Some(CashAccounting) => true
     case _ => false
   }
 
-  private def retrieveAmount: Option[YesNoAmountModel] => Option[BigDecimal] = {
+  private[deregistrationRequest] def retrieveAmount: Option[YesNoAmountModel] => Option[BigDecimal] = {
     case Some(model) => model.amount
     case _ => None
   }

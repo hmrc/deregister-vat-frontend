@@ -30,7 +30,7 @@ trait MockVatSubscriptionConnector extends TestUtil with MockFactory {
 
   val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
 
-  def setupMockStoreAnswers[T](vrn: String, data: DeregistrationInfo)(response: Either[ErrorModel, VatSubscriptionResponse]): Unit = {
+  def setupMockSubmit(vrn: String, data: DeregistrationInfo)(response: Either[ErrorModel, VatSubscriptionResponse]): Unit = {
     (mockVatSubscriptionConnector.submit(_: String, _: DeregistrationInfo)(_: Format[DeregistrationInfo], _: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, data, *, *, *)
       .returns(response)
