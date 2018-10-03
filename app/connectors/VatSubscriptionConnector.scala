@@ -21,7 +21,7 @@ import connectors.httpParsers.VatSubscriptionHttpParser
 import javax.inject.{Inject, Singleton}
 import models.deregistrationRequest.DeregistrationInfo
 import models.{ErrorModel, VatSubscriptionResponse}
-import play.api.libs.json.Format
+import play.api.libs.json.{Format, Writes}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -35,8 +35,8 @@ class VatSubscriptionConnector @Inject()(val http: HttpClient,
   def url(vrn: String): String = s"${config.vatSubscriptionUrl}/vat-subscription/$vrn/deregister"
 
   def submit(vrn: String, deregisterModel: DeregistrationInfo)
-            (implicit fmt: Format[DeregistrationInfo], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, VatSubscriptionResponse]] = {
-    http.PUT[DeregistrationInfo, Either[ErrorModel, VatSubscriptionResponse]](url(vrn), deregisterModel)(fmt, VatSubscriptionHttpParser.updateReads, hc, ec)
+            (implicit writes: Writes[DeregistrationInfo], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, VatSubscriptionResponse]] = {
+    http.PUT[DeregistrationInfo, Either[ErrorModel, VatSubscriptionResponse]](url(vrn), deregisterModel)(writes, VatSubscriptionHttpParser.updateReads, hc, ec)
   }
 
 }

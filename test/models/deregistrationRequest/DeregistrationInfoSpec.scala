@@ -34,16 +34,5 @@ class DeregistrationInfoSpec extends UnitSpec {
         Json.toJson(deregistrationInfoMaxModel) shouldBe deregistrationInfoMaxJson
       }
     }
-
-    "deserializing from JSON" should {
-
-      "for the minimum amount of data should output a valid DeregistrationInfo model'" in {
-        deregistrationInfoMinJson.as[DeregistrationInfo] shouldBe deregistrationInfoMinModel
-      }
-
-      "for the maximum amount of data should output a valid DeregistrationInfo model'" in {
-        deregistrationInfoMaxJson.as[DeregistrationInfo] shouldBe deregistrationInfoMaxModel
-      }
-    }
   }
 }

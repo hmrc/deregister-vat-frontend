@@ -17,7 +17,7 @@
 package models.deregistrationRequest
 
 import models.WhyTurnoverBelowModel
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{Json, Writes}
 
 case class TurnoverBelowThreshold(belowThreshold: BelowThresholdReason,
                                   nextTwelveMonthsTurnover: BigDecimal,
@@ -25,6 +25,6 @@ case class TurnoverBelowThreshold(belowThreshold: BelowThresholdReason,
 
 object TurnoverBelowThreshold {
 
-  implicit val format: Format[TurnoverBelowThreshold] = Json.format[TurnoverBelowThreshold]
+  implicit val writes: Writes[TurnoverBelowThreshold] = Json.writes[TurnoverBelowThreshold]
 
 }

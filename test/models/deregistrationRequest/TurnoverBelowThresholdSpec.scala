@@ -34,16 +34,5 @@ class TurnoverBelowThresholdSpec extends UnitSpec {
         Json.toJson(turnoverBelowThresholdMaxModel) shouldBe turnoverBelowThresholdMaxJson
       }
     }
-
-    "deserializing from JSON" should {
-
-      "the JSON should output the correct model for the minimum amount of data " in {
-        turnoverBelowThresholdMinJson.as[TurnoverBelowThreshold] shouldBe turnoverBelowThresholdMinModel
-      }
-
-      "the JSON should output the correct model for the maximum amount of data " in {
-        turnoverBelowThresholdMaxJson.as[TurnoverBelowThreshold] shouldBe turnoverBelowThresholdMaxModel
-      }
-    }
   }
 }
