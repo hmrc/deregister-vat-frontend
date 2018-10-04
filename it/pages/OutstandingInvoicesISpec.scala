@@ -99,6 +99,11 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
             given.user.isAuthorised
 
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+            DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+            DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+            DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+
             DeregisterVatStub.successfulPutAnswer(vrn, OutstandingInvoicesAnswerService.key)
             DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
             DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
@@ -121,6 +126,11 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
             s"redirect to ${controllers.routes.DeregistrationDateController.show().url}" in {
 
               given.user.isAuthorised
+
+              DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+              DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+              DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+              DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
               DeregisterVatStub.successfulPutAnswer(vrn, OutstandingInvoicesAnswerService.key)
               DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
@@ -145,6 +155,11 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
                 given.user.isAuthorised
 
+                DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+                DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+                DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+
                 DeregisterVatStub.successfulPutAnswer(vrn, OutstandingInvoicesAnswerService.key)
                 DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
                 DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
@@ -167,6 +182,11 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
               s"redirect to ${controllers.routes.CheckAnswersController.show().url}" in {
 
                 given.user.isAuthorised
+
+                DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+                DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+                DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
                 DeregisterVatStub.successfulPutAnswer(vrn, OutstandingInvoicesAnswerService.key)
                 DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))

@@ -19,7 +19,7 @@ package pages
 import assets.IntegrationTestConstants._
 import forms.DeregistrationReasonForm
 import helpers.IntegrationBaseSpec
-import models.{BelowThreshold, Ceased, DeregistrationReason, Other}
+import models._
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
@@ -96,7 +96,13 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
+
           DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
@@ -117,6 +123,11 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
 
@@ -135,6 +146,11 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
+
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)

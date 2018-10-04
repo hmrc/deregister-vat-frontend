@@ -19,11 +19,11 @@ package pages
 import assets.IntegrationTestConstants._
 import forms.YesNoForm
 import helpers.IntegrationBaseSpec
-import models.{No, Yes, YesNo}
+import models.{Ceased, No, Yes, YesNo}
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import services.{IssueNewInvoicesAnswerService, OutstandingInvoicesAnswerService}
+import services._
 import stubs.DeregisterVatStub
 
 
@@ -95,8 +95,18 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
+          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+
           DeregisterVatStub.successfulPutAnswer(vrn,IssueNewInvoicesAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,OutstandingInvoicesAnswerService.key)
+
+          DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
 
           val response: WSResponse = postRequest(Yes)
 
@@ -116,7 +126,17 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
+          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+
           DeregisterVatStub.successfulPutAnswer(vrn,IssueNewInvoicesAnswerService.key)
+
+          DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
 
           val response: WSResponse = postRequest(No)
 
@@ -135,6 +155,12 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
+
+          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
           DeregisterVatStub.successfulPutAnswer(vrn,IssueNewInvoicesAnswerService.key)
           DeregisterVatStub.deleteAnswerError(vrn,OutstandingInvoicesAnswerService.key)
