@@ -23,7 +23,7 @@ import connectors.VatSubscriptionConnector
 import javax.inject.Inject
 import models.deregistrationRequest.DeregistrationInfo
 import models._
-import play.api.libs.json.Format
+import play.api.libs.json.{Format, Writes}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,7 +43,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
                                             val vatSubscriptionConnector: VatSubscriptionConnector)(implicit val appConfig: AppConfig) {
 
 
-  def updateDereg(implicit user: User[_], fmt: Format[DeregistrationInfo], hc: HeaderCarrier, ec: ExecutionContext)
+  def updateDereg(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
     : Future[Either[ErrorModel, VatSubscriptionResponse]] = {
     buildDeregInfoModel.flatMap{
       case Right(deregInfo) => vatSubscriptionConnector.submit(user.vrn, deregInfo)
@@ -52,7 +52,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
   }
 
 
-  private def buildDeregInfoModel(implicit user: User[_], fmt: Format[DeregistrationInfo], hc: HeaderCarrier, ec: ExecutionContext)
+  private def buildDeregInfoModel(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
     : Future[Either[ErrorModel, DeregistrationInfo]] = {
       (for {
         deregReason <- EitherT(deregReasonAnswerService.getAnswer)

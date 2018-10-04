@@ -16,11 +16,8 @@
 
 package services.mocks
 
-import models.deregistrationRequest.DeregistrationInfo
 import models.{ErrorModel, User, VatSubscriptionResponse}
 import org.scalamock.scalatest.MockFactory
-import play.api.i18n.Messages
-import play.api.libs.json.Format
 import services.UpdateDeregistrationService
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
@@ -32,8 +29,8 @@ trait MockUpdateDeregistrationService extends TestUtil with MockFactory {
   val mockUpdateDeregistrationService: UpdateDeregistrationService = mock[UpdateDeregistrationService]
 
   def setupUpdateDeregistration(response: Either[ErrorModel, VatSubscriptionResponse])(implicit user: User[_]): Unit = {
-    (mockUpdateDeregistrationService.updateDereg(_: User[_], _: Format[DeregistrationInfo], _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
+    (mockUpdateDeregistrationService.updateDereg(_: User[_], _: HeaderCarrier, _: ExecutionContext))
+      .expects(user, *, *)
       .returns(response)
   }
 }
