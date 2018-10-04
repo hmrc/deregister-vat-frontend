@@ -73,7 +73,7 @@ class DeregistrationInfoSpec extends TestUtil {
       }
 
       "return a None when None is supplied" in {
-        deregLaterDate(deregDate = Some(deregistrationDateModel)) shouldBe Some(laterDate)
+        deregLaterDate(deregDate = None) shouldBe None
       }
     }
 
