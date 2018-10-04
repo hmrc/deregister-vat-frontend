@@ -20,39 +20,49 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.VATAccountsForm
 import javax.inject.{Inject, Singleton}
-import models.{DeregistrationReason, User, VATAccountsModel}
+import models._
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{AccountingMethodAnswerService, DeregReasonAnswerService}
+import services.{AccountingMethodAnswerService, DeregReasonAnswerService, TaxableTurnoverAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
+import cats.data.EitherT
+import cats.instances.future._
 
 @Singleton
 class VATAccountsController @Inject()(val messagesApi: MessagesApi,
                                       val authenticate: AuthPredicate,
                                       val accountingMethodAnswerService: AccountingMethodAnswerService,
                                       val deregReasonAnswerService: DeregReasonAnswerService,
+                                      val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(deregReason: DeregistrationReason, form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)
-                        (implicit user: User[_]) = views.html.vatAccounts(deregReason, form)
+  private def renderView(backLink: String, form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)
+                        (implicit user: User[_]) = views.html.vatAccounts(backLink, form)
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
     for {
+      lastTurnoverBelow <- taxableTurnoverAnswerService.getAnswer
       reasonResult <- deregReasonAnswerService.getAnswer
       accountingResult <- accountingMethodAnswerService.getAnswer
-    } yield (reasonResult,accountingResult) match {
-      case (Right(Some(deregReason)),Right(Some(accountingMethod))) =>
-        Ok(renderView(deregReason,VATAccountsForm.vatAccountsForm.fill(accountingMethod)))
-      case (Right(Some(deregReason)),Right(_)) => Ok(renderView(deregReason))
-      case (_,_) => InternalServerError //TODO: Render ISE Page
+    } yield (lastTurnoverBelow, reasonResult, accountingResult) match {
+      case (Right(optionLTB), Right(Some(deregReason)),Right(Some(accountingMethod))) =>
+        Ok(renderView(backLink(optionLTB, deregReason), VATAccountsForm.vatAccountsForm.fill(accountingMethod)))
+      case (Right(optionLTB), Right(Some(deregReason)),Right(_)) =>
+        Ok(renderView(backLink(optionLTB, deregReason)))
+      case (_,_,_) => InternalServerError //TODO: Render ISE Page
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     VATAccountsForm.vatAccountsForm.bindFromRequest().fold(
-      error => deregReasonAnswerService.getAnswer.map {
-        case Right(Some(deregReason)) => BadRequest(views.html.vatAccounts(deregReason ,error))
+      error => (for {
+        lastTurnoverBelow <- EitherT(taxableTurnoverAnswerService.getAnswer)
+        reason <- EitherT(deregReasonAnswerService.getAnswer)
+      } yield (lastTurnoverBelow, reason)).value.map {
+        case Right((optionLTB, Some(reason))) =>
+          BadRequest(views.html.vatAccounts(backLink(optionLTB, reason), error))
         case _ => InternalServerError
       },
       data => accountingMethodAnswerService.storeAnswer(data) map {
@@ -60,5 +70,16 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
         case _ => InternalServerError //TODO: Render ISE Page
       }
     )
+  }
+
+  def backLink(lastTurnoverBelowThreshold: Option[YesNo], deregReason: DeregistrationReason): String = {
+    if(deregReason.value.equals("ceased")){
+      controllers.routes.CeasedTradingDateController.show().url
+    } else {
+      lastTurnoverBelowThreshold match {
+        case Some(below) if below.value.equals(true) => controllers.routes.NextTaxableTurnoverController.show().url
+        case _ => controllers.routes.WhyTurnoverBelowController.show().url
+      }
+    }
   }
 }

@@ -50,10 +50,10 @@ class CheckAnswersServiceSpec extends TestUtil {
 
         MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
         MockCeasedTradingDateAnswerService.setupMockGetAnswers(Right(Some(dateModel)))
-        MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(StandardAccounting)))
         MockTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(Yes)))
         MockNextTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverBelow)))
         MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(Some(whyTurnoverBelowAll)))
+        MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(StandardAccounting)))
         MockOptionTaxAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
         MockStocksAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))
         MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(yesNoAmountYes)))

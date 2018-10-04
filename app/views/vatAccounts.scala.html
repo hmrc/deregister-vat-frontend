@@ -21,7 +21,7 @@
 @import models.{DeregistrationReason, MultipleLineRadioGroupModel}
 
 
-@(deregReason: DeregistrationReason, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(backLink: String, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
   title = messages("vatAccounts.title"),
@@ -29,11 +29,7 @@
   appConfig = appConfig) {
 
     <a class="link-back"
-       href=@if(deregReason == Ceased){
-         @controllers.routes.CeasedTradingDateController.show().url
-       } else {
-         @controllers.routes.WhyTurnoverBelowController.show().url
-       }
+       href=@backLink
     >@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
