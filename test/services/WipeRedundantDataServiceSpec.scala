@@ -19,10 +19,7 @@ package services
 import models._
 import org.scalamock.scalatest.MockFactory
 import services.mocks._
-import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
-
-import scala.concurrent.ExecutionContext
 
 class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDeregReasonAnswerService
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
@@ -38,8 +35,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
     mockIssueNewInvoicesAnswerService,
     mockOutstandingInvoicesService,
     mockWhyTurnoverBelowAnswerService,
-    mockDeregDateAnswerService,
-    mockConfig
+    mockDeregDateAnswerService
   )
 
   val errorModel: ErrorModel = ErrorModel(1, "")

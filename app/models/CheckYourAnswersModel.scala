@@ -19,7 +19,6 @@ package models
 import config.AppConfig
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import services.OutstandingInvoicesAnswerService
 import utils.MoneyFormatter
 
 case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReason],

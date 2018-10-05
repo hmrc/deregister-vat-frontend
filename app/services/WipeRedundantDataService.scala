@@ -19,7 +19,6 @@ package services
 import cats.data.EitherT
 import cats.instances.future._
 import com.google.inject.{Inject, Singleton}
-import config.AppConfig
 import models._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -34,8 +33,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                          val invoicesAnswer: IssueNewInvoicesAnswerService,
                                          val outstandingInvoicesAnswer: OutstandingInvoicesAnswerService,
                                          val whyTurnoverBelow: WhyTurnoverBelowAnswerService,
-                                         val deregDateAnswer: DeregDateAnswerService,
-                                         implicit val appConfig: AppConfig) {
+                                         val deregDateAnswer: DeregDateAnswerService) {
 
 
   def wipeRedundantData(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] = {
