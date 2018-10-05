@@ -24,7 +24,7 @@
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-title = messages("taxableTurnover.title"),
+title = messages("taxableTurnover.title", appConfig.deregThreshold),
 bodyClasses = None,
 appConfig = appConfig) {
 
@@ -32,7 +32,7 @@ appConfig = appConfig) {
 
     @errorSummary("common.errorSummary.heading", form)
 
-    @headings(messages("taxableTurnover.title"))
+    @headings(messages("taxableTurnover.title", appConfig.deregThreshold))
 
     @helpers.form(action = controllers.routes.TaxableTurnoverController.submit, 'novalidate -> "novalidate") {
 
@@ -42,7 +42,7 @@ appConfig = appConfig) {
                 choices = Seq(
                     (yes, Messages("common.yes")),
                     (no, Messages("common.no"))),
-                question = Messages("taxableTurnover.title"),
+                question = Messages("taxableTurnover.title", appConfig.deregThreshold),
                 inline = true
             )
         </div>

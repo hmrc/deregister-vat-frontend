@@ -43,7 +43,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
           Seq(
             deregReasonRow,
             ceasedTradingRow,
-            taxableTurnoverRow,
+            taxableTurnoverRow(mockConfig.thresholdString),
             nextTaxableTurnoverRow,
             whyBelowRowMax,
             vatAccountsRow,
@@ -79,7 +79,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             Seq(
               deregReasonRow,
               ceasedTradingRow,
-              taxableTurnoverRow,
+              taxableTurnoverRow(mockConfig.thresholdString),
               nextTaxableTurnoverRow,
               whyBelowRowMax,
               vatAccountsRow,
@@ -113,7 +113,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             Seq(
               deregReasonRow,
               ceasedTradingRow,
-              taxableTurnoverRow,
+              taxableTurnoverRow(mockConfig.thresholdString),
               nextTaxableTurnoverRow,
               whyBelowRowMin,
               vatAccountsRow,
