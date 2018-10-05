@@ -22,30 +22,24 @@ import play.api.libs.json.{JsObject, Json}
 
 object TurnoverBelowThresholdTestConstants {
 
-  val turnoverBelowThresholdMinModel: TurnoverBelowThreshold = TurnoverBelowThreshold(
+  val turnoverBelowThresholdPastModel: TurnoverBelowThreshold = TurnoverBelowThreshold(
     BelowPast12Months,
     2000,
     None
   )
 
-  val turnoverBelowThresholdMinJson: JsObject = Json.obj(
+  val turnoverBelowThresholdPastJson: JsObject = Json.obj(
     "belowThreshold" -> "belowPast12Months",
     "nextTwelveMonthsTurnover" -> 2000
   )
 
-  val turnoverBelowThresholdMaxPastModel: TurnoverBelowThreshold = TurnoverBelowThreshold(
-    BelowPast12Months,
-    2000,
-    Some(whyTurnoverBelowOne)
-  )
-
-  val turnoverBelowThresholdMaxNextModel: TurnoverBelowThreshold = TurnoverBelowThreshold(
+  val turnoverBelowThresholdNextModel: TurnoverBelowThreshold = TurnoverBelowThreshold(
     BelowNext12Months,
     2000,
     Some(whyTurnoverBelowOne)
   )
 
-  val turnoverBelowThresholdMaxJson: JsObject = Json.obj(
+  val turnoverBelowThresholdNextJson: JsObject = Json.obj(
     "belowThreshold" -> "belowNext12Months",
     "nextTwelveMonthsTurnover" -> 2000,
     "whyTurnoverBelow" -> whyTurnoverBelowOneJson

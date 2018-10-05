@@ -37,24 +37,12 @@ class DeregistrationInfoSpec extends TestUtil {
     ".customApply" should {
 
       "return a valid DeregistrationInfo Model when given maximum data" in {
-        DeregistrationInfo.customApply(
-          deregReason = BelowThreshold,
-          ceasedTradingDate = Some(todayDateModel),
-          taxableTurnover = Some(taxableTurnoverBelow),
-          nextTaxableTurnover = Some(taxableTurnoverBelow),
-          whyTurnoverBelow = Some(whyTurnoverBelowOne),
-          accountingMethod = CashAccounting,
-          optionTax = ottModel,
-          stocks = stocksModel,
-          capitalAssets = assetsModel,
-          issueNewInvoices = Yes,
-          outstandingInvoices = Some(Yes),
-          deregDate = Some(deregistrationDateModel)
-        ) shouldBe DeregistrationInfo(
+
+        val expected = DeregistrationInfo(
           deregReason = BelowThreshold,
           deregDate = todayDate,
           deregLaterDate = Some(laterDate),
-          turnoverBelowThreshold = Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxPastModel),
+          turnoverBelowThreshold = Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdPastModel),
           optionToTax = true,
           intendSellCapitalAssets = true,
           additionalTaxInvoices = true,
@@ -63,27 +51,72 @@ class DeregistrationInfoSpec extends TestUtil {
           stocksValue = Some(stockValue),
           capitalAssetsValue = Some(assetsValue)
         )
+        val actual = DeregistrationInfo.customApply(
+          deregReason = BelowThreshold,
+          ceasedTradingDate = Some(todayDateModel),
+          taxableTurnover = Some(taxableTurnoverBelow),
+          nextTaxableTurnover = Some(taxableTurnoverBelow),
+          whyTurnoverBelow = None,
+          accountingMethod = CashAccounting,
+          optionTax = ottModel,
+          stocks = stocksModel,
+          capitalAssets = assetsModel,
+          issueNewInvoices = Yes,
+          outstandingInvoices = Some(Yes),
+          deregDate = Some(deregistrationDateModel)
+        )
+
+        actual shouldBe expected
       }
 
-//      "return a valid deregistrationInfo Model when given minimum" in {
-//        defaultCustomApply(Ceased) shouldBe defaultDeregInfo(deregReason = Ceased)
-//      }
+      "return a valid DeregistrationInfo Model when given minimum data" in {
+
+        val expected = DeregistrationInfo(
+          deregReason = BelowThreshold,
+          deregDate = todayDate,
+          deregLaterDate = None,
+          turnoverBelowThreshold = None,
+          optionToTax = false,
+          intendSellCapitalAssets = false,
+          additionalTaxInvoices = true,
+          cashAccountingScheme = true,
+          optionToTaxValue = None,
+          stocksValue = None,
+          capitalAssetsValue = None
+        )
+        val actual = DeregistrationInfo.customApply(
+          deregReason = BelowThreshold,
+          ceasedTradingDate = None,
+          taxableTurnover = None,
+          nextTaxableTurnover = None,
+          whyTurnoverBelow = None,
+          accountingMethod = CashAccounting,
+          optionTax = yesNoAmountNo,
+          stocks = yesNoAmountNo,
+          capitalAssets = yesNoAmountNo,
+          issueNewInvoices = Yes,
+          outstandingInvoices = None,
+          deregDate = None
+        )
+
+        actual shouldBe expected
+      }
     }
 
     ".deregInfoDate" should {
 
-      "return Some(date) when Ceased DeregistrationReason and a date" in {
+      "return date when a CeasedTradingDate is passed to it" in {
         deregInfoDate(Some(laterDateModel)) shouldBe laterDate
       }
 
-      "return None when deregistration reason is Ceased but no date is given" in {
+      "return todays date when no CeasedTradingDate is passed to it" in {
         deregInfoDate(None) shouldBe LocalDate.now
       }
     }
 
     ".deregLaterDate" should {
 
-      "return a Some(date) when a deregistrationDate is supplied" in {
+      "return a Some(date) when a deregistrationDateModel is supplied" in {
         deregLaterDate(Some(deregistrationDateModel)) shouldBe Some(laterDate)
       }
 
@@ -120,14 +153,14 @@ class DeregistrationInfoSpec extends TestUtil {
         turnoverBelowThreshold(
           taxableTurnover = Some(taxableTurnoverBelow),
           nextTaxableTurnover = Some(taxableTurnoverBelow),
-          whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxPastModel)
+          whyTurnoverBelow = None) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdPastModel)
       }
 
       "return BelowNext12Months when turnover is above threshold" in {
         turnoverBelowThreshold(
           taxableTurnover = Some(taxableTurnoverAbove),
           nextTaxableTurnover = Some(taxableTurnoverBelow),
-          whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxNextModel)
+          whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdNextModel)
       }
 
       "return None when no turnover is supplied" in {
@@ -153,7 +186,7 @@ class DeregistrationInfoSpec extends TestUtil {
         taxInvoices(No,Option(Yes)) shouldBe true
       }
 
-      "return true when both are No" in {
+      "return false when both are No" in {
         taxInvoices(No,Option(No)) shouldBe false
       }
     }
@@ -180,58 +213,4 @@ class DeregistrationInfoSpec extends TestUtil {
       }
     }
   }
-
-  def defaultCustomApply(deregReason: DeregistrationReason = BelowThreshold,
-                         ceasedTradingDate: Option[DateModel] = Some(todayDateModel),
-                         taxableTurnover: Option[TaxableTurnoverModel] = Some(taxableTurnoverBelow),
-                         nextTaxableTurnover: Option[TaxableTurnoverModel] = Some(taxableTurnoverBelow),
-                         whyTurnoverBelow: Option[WhyTurnoverBelowModel] = Some(whyTurnoverBelowOne),
-                         accountingMethod: VATAccountsModel = CashAccounting,
-                         optionTax: YesNoAmountModel = ottModel,
-                         stocks: YesNoAmountModel = stocksModel,
-                         capitalAssets: YesNoAmountModel = assetsModel,
-                         issueNewInvoices: YesNo = Yes,
-                         outstandingInvoices: Option[YesNo] = Some(Yes),
-                         deregDate: Option[DeregistrationDateModel] = Some(deregistrationDateModel)): DeregistrationInfo = {
-    DeregistrationInfo.customApply(
-      deregReason,
-      ceasedTradingDate,
-      taxableTurnover,
-      nextTaxableTurnover,
-      whyTurnoverBelow,
-      accountingMethod,
-      optionTax,
-      stocks,
-      capitalAssets,
-      issueNewInvoices,
-      outstandingInvoices,
-      deregDate
-    )
-  }
-
-  def defaultDeregInfo(deregReason: DeregistrationReason = BelowThreshold,
-                       deregInfoDate: LocalDate = todayDate,
-                       deregLaterDate: Option[LocalDate] = Some(laterDate),
-                       turnoverBelowThreshold: Option[TurnoverBelowThreshold] = Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxNextModel),
-                       optionToTax: Boolean = true,
-                       intendSellCapitalAssets: Boolean = true,
-                       additionalTaxInvoices: Boolean = true,
-                       cashAccountingScheme: Boolean = true,
-                       optionToTaxValue: Option[BigDecimal] = Some(ottValue),
-                       stocksValue: Option[BigDecimal] = Some(stockValue),
-                       capitalAssetsValue: Option[BigDecimal] = Some(assetsValue)): DeregistrationInfo = {
-    DeregistrationInfo(deregReason,
-      deregInfoDate,
-      deregLaterDate,
-      turnoverBelowThreshold,
-      optionToTax,
-      intendSellCapitalAssets,
-      additionalTaxInvoices,
-      cashAccountingScheme,
-      optionToTaxValue,
-      stocksValue,
-      capitalAssetsValue
-    )
-  }
-
 }

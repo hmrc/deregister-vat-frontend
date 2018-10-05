@@ -27,11 +27,11 @@ class TurnoverBelowThresholdSpec extends UnitSpec {
     "serializing to JSON" should {
 
       "for the minimum amount of data should output the correct JSON'" in {
-        Json.toJson(turnoverBelowThresholdMinModel) shouldBe turnoverBelowThresholdMinJson
+        Json.toJson(turnoverBelowThresholdPastModel) shouldBe turnoverBelowThresholdPastJson
       }
 
       "for the maximum amount of data should output the correct JSON'" in {
-        Json.toJson(turnoverBelowThresholdMaxNextModel) shouldBe turnoverBelowThresholdMaxJson
+        Json.toJson(turnoverBelowThresholdNextModel) shouldBe turnoverBelowThresholdNextJson
       }
     }
   }
