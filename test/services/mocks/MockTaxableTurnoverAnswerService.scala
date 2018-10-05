@@ -17,22 +17,16 @@
 package services.mocks
 
 import models._
-import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.Format
 import services.TaxableTurnoverAnswerService
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.TestUtil
-
-import scala.concurrent.ExecutionContext
 
 trait MockTaxableTurnoverAnswerService extends MockStoredAnswersService {
 
   val mockTaxableTurnoverAnswerService: TaxableTurnoverAnswerService = mock[TaxableTurnoverAnswerService]
 
-  def setupMockGetTaxableTurnover(response: Either[ErrorModel, Option[TaxableTurnoverModel]])(implicit user: User[_]): Unit =
+  def setupMockGetTaxableTurnover(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
     setupMockGetAnswers(mockTaxableTurnoverAnswerService)(response)
 
-  def setupMockStoreTaxableTurnover(data: TaxableTurnoverModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockStoreTaxableTurnover(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockTaxableTurnoverAnswerService)(data)(response)
 
   def setupMockDeleteTaxableTurnover(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =

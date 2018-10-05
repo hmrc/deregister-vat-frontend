@@ -55,7 +55,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetDeregReason(Right(Some(Ceased)))
         setupMockGetCeasedTradingDate(Right(Some(dateModel)))
         setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
-        setupMockGetTaxableTurnover(Right(Some(taxableTurnoverAbove)))
+        setupMockGetTaxableTurnover(Right(Some(Yes)))
         setupMockGetNextTaxableTurnover(Right(Some(taxableTurnoverBelow)))
         setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
         setupMockGetOptionTax(Right(Some(yesNoAmountYes)))
@@ -69,7 +69,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
           CheckYourAnswersModel(
             Some(Ceased),
             Some(dateModel),
-            Some(taxableTurnoverAbove),
+            Some(Yes),
             Some(taxableTurnoverBelow),
             Some(whyTurnoverBelowAll),
             Some(StandardAccounting),
@@ -101,7 +101,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetDeregReason(Right(Some(Ceased)))
         setupMockGetCeasedTradingDate(Right(Some(dateModel)))
         setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
-        setupMockGetTaxableTurnover(Right(Some(taxableTurnoverAbove)))
+        setupMockGetTaxableTurnover(Right(Some(Yes)))
         setupMockGetNextTaxableTurnover(Right(Some(taxableTurnoverBelow)))
         setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
         setupMockGetOptionTax(Right(Some(yesNoAmountYes)))

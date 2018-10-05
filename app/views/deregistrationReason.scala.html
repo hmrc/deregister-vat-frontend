@@ -41,7 +41,7 @@
                 field = form("reason"),
                 choices = Seq(
                     (ceased, Messages("deregistrationReason.reason.ceased")),
-                    (belowThreshold, Messages("deregistrationReason.reason.belowThreshold")),
+                    (belowThreshold, Messages("deregistrationReason.reason.belowThreshold", appConfig.deregThreshold)),
                     (other, Messages("deregistrationReason.reason.other"))
                 ),
                 question = Messages("deregistrationReason.title")

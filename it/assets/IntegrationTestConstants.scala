@@ -16,7 +16,6 @@
 
 package assets
 
-import forms.YesNoAmountForm
 import models._
 import play.api.libs.json.Json
 
@@ -41,12 +40,6 @@ object IntegrationTestConstants {
 
   val capitalAssetsNoModel = YesNoAmountModel(No, None)
   val capitalAssetsNoJson = Json.toJson(capitalAssetsNoModel)
-
-  val taxableTurnoverBelowPast12MonthsModel = TaxableTurnoverModel(1000)
-  val taxableTurnoverBelowPast12MonthsJson = Json.toJson(taxableTurnoverBelowPast12MonthsModel)
-
-  val taxableTurnoverBelowNext12MonthsModel = TaxableTurnoverModel(10000000)
-  val taxableTurnoverBelowNext12MonthsJson = Json.toJson(taxableTurnoverBelowNext12MonthsModel)
 
   val yesNoAmountYesModel = models.YesNoAmountModel(Yes, Some(1))
   val yesNoAmountYesJson = Json.toJson(yesNoAmountYesModel)

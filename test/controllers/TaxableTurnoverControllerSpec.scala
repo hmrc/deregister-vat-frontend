@@ -17,12 +17,15 @@
 package controllers
 
 import assets.constants.BaseTestConstants._
-import models.{DeregisterVatSuccess, TaxableTurnoverModel}
+import models.{DeregisterVatSuccess, NextTaxableTurnoverModel, No}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.mocks.{MockTaxableTurnoverAnswerService, MockWipeRedundantDataService}
+import services.mocks.MockTaxableTurnoverAnswerService
+import assets.constants.BaseTestConstants._
+import forms.YesNoForm.yesNo
 
 import scala.concurrent.Future
 
@@ -35,9 +38,6 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
     mockWipeRedundantDataService,
     mockConfig
   )
-
-  val testTurnoverAmt = 500
-  val testTaxableTurnoverModel = TaxableTurnoverModel(testTurnoverAmt)
 
   "the user is authorised" when {
 
@@ -64,7 +64,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
         lazy val result = TestTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetTaxableTurnover(Right(Some(testTaxableTurnoverModel)))
+          setupMockGetTaxableTurnover(Right(Some(No)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -74,8 +74,8 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
           charset(result) shouldBe Some("utf-8")
         }
 
-        "have the correct amount prep-populated" in {
-          document(result).select("#turnover").attr("value") shouldBe testTurnoverAmt.toString
+        "have the 'No' radio option checked" in {
+          document(result).select(s"#$yesNo-no").hasAttr("checked") shouldBe true
         }
       }
 
@@ -88,14 +88,14 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
         "the user submits after inputting an amount which is equal to the threshold" should {
 
-          val testTurnoverAmt = mockConfig.deregThreshold
+
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreTaxableTurnover(TaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+            setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -103,20 +103,20 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
           }
 
           s"Redirect to the '${controllers.routes.VATAccountsController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
           }
         }
 
         "the user submits after inputting an amount which is greater than the threshold" should {
 
-          val testTurnoverAmt = mockConfig.deregThreshold + 0.01
+
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreTaxableTurnover(TaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+            setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -130,14 +130,14 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
         "the user submits after inputting an amount which is less than the threshold" should {
 
-          val testTurnoverAmt = mockConfig.deregThreshold - 0.01
+
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreTaxableTurnover(TaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+            setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -145,18 +145,18 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
           }
 
           s"Redirect to the '${controllers.routes.VATAccountsController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
           }
         }
 
         "the user submits after inputting an amount but the store fails" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 500 (ISE)" in {
-            setupMockStoreTaxableTurnover(TaxableTurnoverModel(testTurnoverAmt))(Left(errorModel))
+            setupMockStoreTaxableTurnover(No)(Left(errorModel))
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
@@ -165,7 +165,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
         "the user submits without inputting an amount" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", ""))
+            FakeRequest("POST", "/").withFormUrlEncodedBody(("yesNo", ""))
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 400 (BAD REQUEST)" in {
@@ -183,11 +183,11 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
       "an error response is returned from the Wipe Redundant Data service" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
         lazy val result = TestTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreTaxableTurnover(TaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
           setupMockWipeRedundantData(Left(errorModel))
 
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -196,7 +196,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
       }
     }
 
-    authChecks(".submit", TestTaxableTurnoverController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", "1000.01")))
+    authChecks(".submit", TestTaxableTurnoverController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes")))
   }
 
 }

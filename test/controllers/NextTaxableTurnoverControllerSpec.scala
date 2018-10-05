@@ -17,7 +17,7 @@
 package controllers
 
 import assets.constants.BaseTestConstants._
-import models.{DeregisterVatSuccess, TaxableTurnoverModel}
+import models.{DeregisterVatSuccess, NextTaxableTurnoverModel}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
@@ -33,7 +33,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNext
   )
 
   val testTurnoverAmt = 500
-  val testTurnoverModel = TaxableTurnoverModel(testTurnoverAmt)
+  val testTurnoverModel = NextTaxableTurnoverModel(testTurnoverAmt)
 
   "the user is authorised" when {
 
@@ -89,7 +89,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNext
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreNextTaxableTurnover(TaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -108,7 +108,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNext
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreNextTaxableTurnover(TaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -127,7 +127,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNext
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreNextTaxableTurnover(TaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -144,7 +144,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNext
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreNextTaxableTurnover(TaxableTurnoverModel(testTurnoverAmt))(Left(errorModel))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

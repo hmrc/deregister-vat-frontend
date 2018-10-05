@@ -38,7 +38,7 @@ trait MockWhyTurnoverBelowAnswerService extends MockStoredAnswersService {
   def setupMockDeleteWhyTurnoverBelow(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockWhyTurnoverBelowAnswerService)(response)
 
-  def setupMockWhyTurnoverBelowNotCalled()(implicit user: User[_]): Unit =
+  def setupMockDeleteWhyTurnoverBelowNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockWhyTurnoverBelowAnswerService)
 
 }

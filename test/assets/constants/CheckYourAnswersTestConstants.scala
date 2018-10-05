@@ -19,14 +19,14 @@ package assets.constants
 import assets.messages.{CheckYourAnswersMessages, CommonMessages, WhyTurnoverBelowMessages}
 import models._
 import play.twirl.api.Html
-import utils.MoneyFormatter
+import utils.{MoneyFormatter, TestUtil}
 
 
-object CheckYourAnswersTestConstants {
+object CheckYourAnswersTestConstants extends TestUtil{
 
   val dateModel = DateModel(1,1,2018)
-  val taxableTurnoverAbove = TaxableTurnoverModel(BigDecimal(90000))
-  val taxableTurnoverBelow = TaxableTurnoverModel(BigDecimal(200))
+  val taxableTurnoverAbove = NextTaxableTurnoverModel(BigDecimal(90000))
+  val taxableTurnoverBelow = NextTaxableTurnoverModel(BigDecimal(200))
   val whyTurnoverBelowAll = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
   val whyTurnoverBelowMin = WhyTurnoverBelowModel(true,false,false,false,false,false,false)
   val yesNoAmountYes = YesNoAmountModel(Yes,Some(BigDecimal(1000)))
@@ -45,9 +45,9 @@ object CheckYourAnswersTestConstants {
     controllers.routes.CeasedTradingDateController.show().url
   )
 
-  val taxableTurnoverRow = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.taxableTurnover,
-    MoneyFormatter.formatHtmlAmount(taxableTurnoverAbove.turnover),
+  val taxableTurnoverRow: String => CheckYourAnswersRowModel = threshold => CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.taxableTurnover(threshold),
+    Html(CommonMessages.yes),
     controllers.routes.TaxableTurnoverController.show().url
   )
 

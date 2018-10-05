@@ -92,14 +92,10 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
     }
   }
 
-  private[services] def wipeNext12MonthsBelow(taxableTurnover: Option[TaxableTurnoverModel])
-                                             (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  private[services] def wipeNext12MonthsBelow(belowPast12Months: Option[YesNo])(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
-    taxableTurnover match {
-      case Some(data) if data.turnover <= appConfig.deregThreshold => (for {
-        _ <- EitherT(whyTurnoverBelow.deleteAnswer)
-        _ <- EitherT(nextTaxableTurnoverAnswer.deleteAnswer)
-      } yield DeregisterVatSuccess).value
+    belowPast12Months match {
+      case Some(Yes) => whyTurnoverBelow.deleteAnswer
       case _ => Future.successful(Right(DeregisterVatSuccess))
     }
   }

@@ -16,6 +16,7 @@
 
 package models
 
+import config.AppConfig
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import services.OutstandingInvoicesAnswerService
@@ -23,8 +24,8 @@ import utils.MoneyFormatter
 
 case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReason],
                                  ceasedTradingDate: Option[DateModel],
-                                 turnover: Option[TaxableTurnoverModel],
-                                 nextTurnover: Option[TaxableTurnoverModel],
+                                 turnover: Option[YesNo],
+                                 nextTurnover: Option[NextTaxableTurnoverModel],
                                  whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                                  accounting: Option[VATAccountsModel],
                                  optionTax: Option[YesNoAmountModel],
@@ -32,7 +33,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  capitalAssets: Option[YesNoAmountModel],
                                  newInvoices: Option[YesNo],
                                  outstandingInvoices: Option[YesNo],
-                                 deregDate: Option[DeregistrationDateModel])(implicit user: User[_], messages: Messages) {
+                                 deregDate: Option[DeregistrationDateModel])(implicit user: User[_], messages: Messages, appConfig: AppConfig) {
 
 
   def seqAnswers: Seq[CheckYourAnswersRowModel] = Seq(
@@ -66,8 +67,8 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
   ))
 
   private val turnoverAnswer = turnover.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.taxableTurnover"),
-    MoneyFormatter.formatHtmlAmount(answer.turnover),
+    messages("checkYourAnswers.question.taxableTurnover", appConfig.deregThreshold),
+    Html(messages(s"common.${answer.toString}")),
     controllers.routes.TaxableTurnoverController.show().url
   ))
 

@@ -29,10 +29,10 @@ trait MockNextTaxableTurnoverAnswerService extends MockStoredAnswersService {
 
   val mockNextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService = mock[NextTaxableTurnoverAnswerService]
 
-  def setupMockGetNextTaxableTurnover(response: Either[ErrorModel, Option[TaxableTurnoverModel]])(implicit user: User[_]): Unit =
+  def setupMockGetNextTaxableTurnover(response: Either[ErrorModel, Option[NextTaxableTurnoverModel]])(implicit user: User[_]): Unit =
     setupMockGetAnswers(mockNextTaxableTurnoverAnswerService)(response)
 
-  def setupMockStoreNextTaxableTurnover(data: TaxableTurnoverModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockStoreNextTaxableTurnover(data: NextTaxableTurnoverModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockNextTaxableTurnoverAnswerService)(data)(response)
 
   def setupMockDeleteNextTaxableTurnover(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =

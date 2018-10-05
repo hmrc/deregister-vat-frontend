@@ -30,7 +30,7 @@
 
     @headings(messages("cannotDeregister.title"))
 
-    <p>@messages("cannotDeregister.text")</p>
+    <p>@messages("cannotDeregister.text", appConfig.deregThreshold)</p>
 
     <p>@messages("cannotDeregister.link.text") <a href="@appConfig.manageVatSubscriptionFrontendUrl">@messages("cannotDeregister.link")</a></p>
 

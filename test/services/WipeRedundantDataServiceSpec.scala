@@ -150,60 +150,38 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
   "Calling .wipeNext12MonthsBelow" when {
 
-    "Taxable Turnover is <= Dereg Threshold and" when {
+    "Turnover is below for the past 12 months" when {
 
-      lazy val turnover = Some(TaxableTurnoverModel(mockConfig.deregThreshold))
+      "Deletions is successful" should {
 
-      "All deletions are successful" should {
+        "Delete Why Turnover Below answers" in {
 
-        "Delete Next Taxable turnover and Why Turnover Below answers" in {
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
 
-          inSequence {
-            setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-            setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
-          }
-
-          val result = TestWipeRedundantDataService.wipeNext12MonthsBelow(turnover)
+          val result = TestWipeRedundantDataService.wipeNext12MonthsBelow(belowPast12Months = Some(Yes))
           await(result) shouldBe Right(DeregisterVatSuccess)
         }
       }
 
+      "Deletion is unsuccessful" should {
 
-      "First deletion is unsuccessful" should {
+        "Return an error model" in {
 
-        "Not delete Taxable turnover and Next taxable turnover answers" in {
+          setupMockDeleteWhyTurnoverBelow(Left(errorModel))
 
-          inSequence {
-            setupMockDeleteWhyTurnoverBelow(Left(errorModel))
-            setupMockDeleteNextTaxableTurnoverNotCalled()
-          }
-
-          val result = TestWipeRedundantDataService.wipeNext12MonthsBelow(turnover)
-          await(result) shouldBe Left(errorModel)
-        }
-      }
-
-      "Second deletion is unsuccessful" should {
-
-        "Not delete Next taxable turnover answer" in {
-
-          inSequence {
-            setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-            setupMockDeleteNextTaxableTurnover(Left(errorModel))
-          }
-
-          val result = TestWipeRedundantDataService.wipeNext12MonthsBelow(turnover)
+          val result = TestWipeRedundantDataService.wipeNext12MonthsBelow(belowPast12Months = Some(Yes))
           await(result) shouldBe Left(errorModel)
         }
       }
     }
 
-    "Taxable turnover is > threshold" should {
+    "Turnover is not below for the past 12 months" should {
 
-      lazy val turnover = Some(TaxableTurnoverModel(mockConfig.deregThreshold + 0.01))
+      "Not delete Why Turnover Below answer" in {
 
-      "Perform no deletions" in {
-        val result = TestWipeRedundantDataService.wipeNext12MonthsBelow(turnover)
+        setupMockDeleteWhyTurnoverBelowNotCalled
+
+        val result = TestWipeRedundantDataService.wipeNext12MonthsBelow(belowPast12Months = Some(No))
         await(result) shouldBe Right(DeregisterVatSuccess)
       }
     }
@@ -327,10 +305,9 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
             setupMockGetIssueNewInvoices(Right(Some(No)))
             setupMockGetOutstandingInvoices(Right(Some(No)))
-            setupMockGetTaxableTurnover(Right(Some(TaxableTurnoverModel(1))))
+            setupMockGetTaxableTurnover(Right(Some(Yes)))
             setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
             setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-            setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
@@ -347,7 +324,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
             setupMockGetIssueNewInvoices(Right(Some(No)))
             setupMockGetOutstandingInvoices(Right(Some(No)))
-            setupMockGetTaxableTurnover(Right(Some(TaxableTurnoverModel(1))))
+            setupMockGetTaxableTurnover(Right(Some(Yes)))
             setupMockDeleteCeasedTradingDate(Left(errorModel))
           }
 
