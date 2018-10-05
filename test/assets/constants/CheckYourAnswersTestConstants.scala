@@ -17,7 +17,7 @@
 package assets.constants
 
 import assets.constants.YesNoAmountTestConstants._
-import assets.constants.TaxableTurnoverTestConstants._
+import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.messages.{CheckYourAnswersMessages, CommonMessages, WhyTurnoverBelowMessages}
 import models._
 import play.twirl.api.Html
@@ -49,7 +49,7 @@ object CheckYourAnswersTestConstants extends TestUtil{
 
   val nextTaxableTurnoverRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.nextTaxableTurnover,
-    MoneyFormatter.formatHtmlAmount(taxableTurnoverBelow.turnover),
+    MoneyFormatter.formatHtmlAmount(nextTaxableTurnoverBelow.turnover),
     controllers.routes.NextTaxableTurnoverController.show().url
   )
 

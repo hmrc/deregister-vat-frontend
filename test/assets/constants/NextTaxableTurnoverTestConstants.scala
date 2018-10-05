@@ -16,11 +16,11 @@
 
 package assets.constants
 
-import models.TaxableTurnoverModel
+import models.NextTaxableTurnoverModel
 
-object TaxableTurnoverTestConstants {
+object NextTaxableTurnoverTestConstants {
 
-  val taxableTurnoverAbove = TaxableTurnoverModel(BigDecimal(90000))
-  val taxableTurnoverBelow = TaxableTurnoverModel(BigDecimal(2000))
+  val nextTaxableTurnoverAbove = NextTaxableTurnoverModel(BigDecimal(90000))
+  val nextTaxableTurnoverBelow = NextTaxableTurnoverModel(BigDecimal(2000))
 
 }

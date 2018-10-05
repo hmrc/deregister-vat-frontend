@@ -40,8 +40,8 @@ object DeregistrationInfo {
 
   def customApply(deregReason: DeregistrationReason,
                   ceasedTradingDate: Option[DateModel],
-                  taxableTurnover: Option[TaxableTurnoverModel],
-                  nextTaxableTurnover: Option[TaxableTurnoverModel],
+                  taxableTurnover: Option[YesNo],
+                  nextTaxableTurnover: Option[NextTaxableTurnoverModel],
                   whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                   accountingMethod: VATAccountsModel,
                   optionTax: YesNoAmountModel,
@@ -70,20 +70,21 @@ object DeregistrationInfo {
 
   private[deregistrationRequest] val deregLaterDate: Option[DeregistrationDateModel] => Option[LocalDate] = _.flatMap(_.getLocalDate)
 
-  private[deregistrationRequest] def belowThresholdReason(taxableTurnover: TaxableTurnoverModel)
-                                                         (implicit appConfig: AppConfig): BelowThresholdReason =
-    if (taxableTurnover.turnover > appConfig.deregThreshold) BelowNext12Months else BelowPast12Months
+  private[deregistrationRequest] def taxableTurnoverBelowReason(taxableTurnover: YesNo)(implicit appConfig: AppConfig): BelowThresholdReason =
+    if (taxableTurnover.value) BelowNext12Months else BelowPast12Months
 
-  private[deregistrationRequest] val nextTwelveMonthsTurnover: Option[TaxableTurnoverModel] => Option[BigDecimal] = _.map(_.turnover)
+  private[deregistrationRequest] val nextTwelveMonthsTurnover: Option[NextTaxableTurnoverModel] => Option[BigDecimal] = _.map(_.turnover)
 
-  private[deregistrationRequest] def turnoverBelowThreshold(taxableTurnover: Option[TaxableTurnoverModel],
-                             nextTaxableTurnover: Option[TaxableTurnoverModel],
-                             whyTurnoverBelow: Option[WhyTurnoverBelowModel])(implicit appConfig: AppConfig): Option[TurnoverBelowThreshold] =
+  private[deregistrationRequest] def turnoverBelowThreshold(taxableTurnover: Option[YesNo],
+                                                            nextTaxableTurnover: Option[NextTaxableTurnoverModel],
+                                                            whyTurnoverBelow: Option[WhyTurnoverBelowModel])
+                                                           (implicit appConfig: AppConfig): Option[TurnoverBelowThreshold] = {
     taxableTurnover.flatMap { turnover =>
       nextTwelveMonthsTurnover(nextTaxableTurnover).map { nextTaxableTurnover =>
-        TurnoverBelowThreshold(belowThresholdReason(turnover), nextTaxableTurnover, whyTurnoverBelow)
+        TurnoverBelowThreshold(taxableTurnoverBelowReason(turnover), nextTaxableTurnover, whyTurnoverBelow)
       }
     }
+  }
 
   private[deregistrationRequest] val taxInvoices: (YesNo, Option[YesNo]) => Boolean =
     (issueNewInvoices, outstandingInvoices) => issueNewInvoices.value || outstandingInvoices.fold(false)(_.value)

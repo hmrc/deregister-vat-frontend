@@ -19,7 +19,7 @@ package models.deregistrationRequest
 import java.time.LocalDate
 
 import assets.constants.DateModelTestConstants._
-import assets.constants.TaxableTurnoverTestConstants._
+import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.DeregistrationInfoTestConstants._
 import assets.constants.TurnoverBelowThresholdTestConstants
 import assets.constants.WhyTurnoverBelowTestConstants.whyTurnoverBelowOne
@@ -54,8 +54,8 @@ class DeregistrationInfoSpec extends TestUtil {
         val actual = DeregistrationInfo.customApply(
           deregReason = BelowThreshold,
           ceasedTradingDate = Some(todayDateModel),
-          taxableTurnover = Some(taxableTurnoverBelow),
-          nextTaxableTurnover = Some(taxableTurnoverBelow),
+          taxableTurnover = Some(No),
+          nextTaxableTurnover = Some(nextTaxableTurnoverBelow),
           whyTurnoverBelow = None,
           accountingMethod = CashAccounting,
           optionTax = ottModel,
@@ -127,19 +127,19 @@ class DeregistrationInfoSpec extends TestUtil {
 
     ".belowThresholdReason" should {
 
-      "return BelowPast12Months when given a taxable turnover below threshold" in {
-        belowThresholdReason(taxableTurnoverBelow) shouldBe BelowPast12Months
+      "return BelowPast12Months when given a Yes" in {
+        taxableTurnoverBelowReason(No) shouldBe BelowPast12Months
       }
 
-      "return BelowNext12Months when given a taxable turnover below threshold" in {
-        belowThresholdReason(taxableTurnoverAbove) shouldBe BelowNext12Months
+      "return BelowNext12Months when given a No" in {
+        taxableTurnoverBelowReason(Yes) shouldBe BelowNext12Months
       }
     }
 
     ".nextTwelveMonthsTurnover" should {
 
       "return Some amount when given a TaxableTurnoverModel" in {
-        nextTwelveMonthsTurnover(Some(taxableTurnoverAbove)) shouldBe Some(taxableTurnoverAbove.turnover)
+        nextTwelveMonthsTurnover(Some(nextTaxableTurnoverAbove)) shouldBe Some(nextTaxableTurnoverAbove.turnover)
       }
 
       "return None when given a None" in {
@@ -151,28 +151,28 @@ class DeregistrationInfoSpec extends TestUtil {
 
       "return a TaxableTurnoverModel containing BelowPast12Months when turnover is below threshold" in {
         turnoverBelowThreshold(
-          taxableTurnover = Some(taxableTurnoverBelow),
-          nextTaxableTurnover = Some(taxableTurnoverBelow),
+          taxableTurnover = Some(No),
+          nextTaxableTurnover = Some(nextTaxableTurnoverBelow),
           whyTurnoverBelow = None) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdPastModel)
       }
 
       "return BelowNext12Months when turnover is above threshold" in {
         turnoverBelowThreshold(
-          taxableTurnover = Some(taxableTurnoverAbove),
-          nextTaxableTurnover = Some(taxableTurnoverBelow),
+          taxableTurnover = Some(Yes),
+          nextTaxableTurnover = Some(nextTaxableTurnoverBelow),
           whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdNextModel)
       }
 
       "return None when no turnover is supplied" in {
         turnoverBelowThreshold(
           taxableTurnover = None,
-          nextTaxableTurnover = Some(taxableTurnoverBelow),
+          nextTaxableTurnover = Some(nextTaxableTurnoverBelow),
           whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe None
       }
 
       "return None when not given a TaxableTurnoverModel" in {
         turnoverBelowThreshold(
-          taxableTurnover = Some(taxableTurnoverBelow),
+          taxableTurnover = Some(Yes),
           nextTaxableTurnover = None,
           whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe None
       }

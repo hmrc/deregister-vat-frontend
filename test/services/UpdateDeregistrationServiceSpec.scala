@@ -18,7 +18,7 @@ package services
 
 import assets.constants.BaseTestConstants.vrn
 import assets.constants.DateModelTestConstants._
-import assets.constants.TaxableTurnoverTestConstants._
+import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.DeregistrationInfoTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
@@ -29,21 +29,25 @@ import services.mocks._
 import utils.TestUtil
 
 
-class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionConnector {
+class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionConnector with MockDeregReasonAnswerService
+  with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
+  with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
+  with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService with MockOptionTaxAnswerService
+  with MockAccountingMethodAnswerService {
 
   object TestUpdateDeregistrationService extends UpdateDeregistrationService(
-    MockDeregReasonAnswerService.mockStoredAnswersService,
-    MockCeasedTradingDateAnswerService.mockStoredAnswersService,
-    MockTaxableTurnoverAnswerService.mockStoredAnswersService,
-    MockNextTaxableTurnoverAnswerService.mockStoredAnswersService,
-    MockWhyTurnoverBelowAnswerService.mockStoredAnswersService,
-    MockAccountingMethodAnswerService.mockStoredAnswersService,
-    MockOptionTaxAnswerService.mockStoredAnswersService,
-    MockStocksAnswerService.mockStoredAnswersService,
-    MockCapitalAssetsAnswerService.mockStoredAnswersService,
-    MockIssueNewInvoicesAnswerService.mockStoredAnswersService,
-    MockOutstandingInvoicesService.mockStoredAnswersService,
-    MockDeregDateAnswerService.mockStoredAnswersService,
+    mockDeregReasonAnswerService,
+    mockCeasedTradingDateAnswerService,
+    mockTaxableTurnoverAnswerService,
+    mockNextTaxableTurnoverAnswerService,
+    mockWhyTurnoverBelowAnswerService,
+    mockAccountingMethodAnswerService,
+    mockOptionTaxAnswerService,
+    mockStocksAnswerService,
+    mockCapitalAssetsAnswerService,
+    mockIssueNewInvoicesAnswerService,
+    mockOutstandingInvoicesService,
+    mockDeregDateAnswerService,
     mockVatSubscriptionConnector
   )
 
@@ -55,18 +59,18 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
 
         "return the expected model" in {
 
-          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(BelowThreshold)))
-          MockCeasedTradingDateAnswerService.setupMockGetAnswers(Right(Some(todayDateModel)))
-          MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(CashAccounting)))
-          MockTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverAbove)))
-          MockNextTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverBelow)))
-          MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(Some(whyTurnoverBelowOne)))
-          MockOptionTaxAnswerService.setupMockGetAnswers(Right(Some(ottModel)))
-          MockStocksAnswerService.setupMockGetAnswers(Right(Some(stocksModel)))
-          MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(assetsModel)))
-          MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(Some(Yes)))
-          MockOutstandingInvoicesService.setupMockGetAnswers(Right(Some(Yes)))
-          MockDeregDateAnswerService.setupMockGetAnswers(Right(Some(deregistrationDateModel)))
+          setupMockGetDeregReason(Right(Some(BelowThreshold)))
+          setupMockGetCeasedTradingDate(Right(Some(todayDateModel)))
+          setupMockGetAccountingMethod(Right(Some(CashAccounting)))
+          setupMockGetTaxableTurnover(Right(Some(Yes)))
+          setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
+          setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowOne)))
+          setupMockGetOptionTax(Right(Some(ottModel)))
+          setupMockGetStocks(Right(Some(stocksModel)))
+          setupMockGetCapitalAssets(Right(Some(assetsModel)))
+          setupMockGetIssueNewInvoices(Right(Some(Yes)))
+          setupMockGetOutstandingInvoices(Right(Some(Yes)))
+          setupMockGetDeregDate(Right(Some(deregistrationDateModel)))
 
           setupMockSubmit(vrn, deregistrationInfoMaxModel)(Right(VatSubscriptionSuccess))
           await(TestUpdateDeregistrationService.updateDereg) shouldBe Right(VatSubscriptionSuccess)
@@ -75,18 +79,18 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
 
       "an error response is returned from the connector" in {
 
-        MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(BelowThreshold)))
-        MockCeasedTradingDateAnswerService.setupMockGetAnswers(Right(Some(todayDateModel)))
-        MockAccountingMethodAnswerService.setupMockGetAnswers(Right(Some(CashAccounting)))
-        MockTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverAbove)))
-        MockNextTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(taxableTurnoverBelow)))
-        MockWhyTurnoverBelowAnswerService.setupMockGetAnswers(Right(Some(whyTurnoverBelowOne)))
-        MockOptionTaxAnswerService.setupMockGetAnswers(Right(Some(ottModel)))
-        MockStocksAnswerService.setupMockGetAnswers(Right(Some(stocksModel)))
-        MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(assetsModel)))
-        MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(Some(Yes)))
-        MockOutstandingInvoicesService.setupMockGetAnswers(Right(Some(Yes)))
-        MockDeregDateAnswerService.setupMockGetAnswers(Right(Some(deregistrationDateModel)))
+        setupMockGetDeregReason(Right(Some(BelowThreshold)))
+        setupMockGetCeasedTradingDate(Right(Some(todayDateModel)))
+        setupMockGetAccountingMethod(Right(Some(CashAccounting)))
+        setupMockGetTaxableTurnover(Right(Some(Yes)))
+        setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
+        setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowOne)))
+        setupMockGetOptionTax(Right(Some(ottModel)))
+        setupMockGetStocks(Right(Some(stocksModel)))
+        setupMockGetCapitalAssets(Right(Some(assetsModel)))
+        setupMockGetIssueNewInvoices(Right(Some(Yes)))
+        setupMockGetOutstandingInvoices(Right(Some(Yes)))
+        setupMockGetDeregDate(Right(Some(deregistrationDateModel)))
 
         setupMockSubmit(vrn, deregistrationInfoMaxModel)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
         await(TestUpdateDeregistrationService.updateDereg) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
@@ -94,8 +98,7 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
 
 
       "an error is returned from one of the AnswerServices" in {
-
-        MockDeregReasonAnswerService.setupMockGetAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
+        setupMockGetDeregReason(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
         await(TestUpdateDeregistrationService.updateDereg) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
       }
     }

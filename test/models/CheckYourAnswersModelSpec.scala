@@ -16,7 +16,7 @@
 
 package models
 
-import assets.constants.TaxableTurnoverTestConstants._
+import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.CheckYourAnswersTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
@@ -33,7 +33,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
           Some(Ceased),
           Some(dateModel),
           Some(Yes),
-          Some(taxableTurnoverBelow),
+          Some(nextTaxableTurnoverBelow),
           Some(whyTurnoverBelowAll),
           Some(StandardAccounting),
           Some(ottModel),
@@ -69,7 +69,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             Some(Ceased),
             Some(dateModel),
             Some(Yes),
-            Some(taxableTurnoverBelow),
+            Some(nextTaxableTurnoverBelow),
             Some(whyTurnoverBelowAll),
             Some(StandardAccounting),
             Some(yesNoAmountNo),
@@ -103,7 +103,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             Some(Ceased),
             Some(dateModel),
             Some(Yes),
-            Some(taxableTurnoverBelow),
+            Some(nextTaxableTurnoverBelow),
             Some(whyTurnoverBelowMin),
             Some(StandardAccounting),
             Some(yesNoAmountNo),

@@ -17,7 +17,7 @@
 package controllers
 
 import assets.constants.CheckYourAnswersTestConstants._
-import assets.constants.TaxableTurnoverTestConstants._
+import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
 import models._
@@ -27,13 +27,13 @@ import services.mocks.{MockCheckAnswersService, MockDeregDateAnswerService, Mock
 
 import scala.concurrent.Future
 
-class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswersService with MockUpdateDeregistrationService {
+class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswersService with MockDeregDateAnswerService with MockUpdateDeregistrationService {
 
   object TestCheckAnswersController extends CheckAnswersController(
     messagesApi,
     mockAuthPredicate,
     mockCheckAnswersService,
-    MockDeregDateAnswerService.mockStoredAnswersService,
+    mockDeregDateAnswerService,
     mockUpdateDeregistrationService,
     mockConfig
   )
@@ -52,7 +52,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
               Some(Ceased),
               Some(dateModel),
               Some(Yes),
-              Some(taxableTurnoverBelow),
+              Some(nextTaxableTurnoverBelow),
               Some(whyTurnoverBelowAll),
               Some(StandardAccounting),
               Some(yesNoAmountNo),
@@ -89,7 +89,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
               Some(Ceased),
               Some(dateModel),
               Some(Yes),
-              Some(taxableTurnoverBelow),
+              Some(nextTaxableTurnoverBelow),
               Some(whyTurnoverBelowAll),
               Some(StandardAccounting),
               Some(yesNoAmountNo),
