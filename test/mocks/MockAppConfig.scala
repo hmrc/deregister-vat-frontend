@@ -41,6 +41,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val manageVatSubscriptionFrontendUrl: String = "http://localhost:9150/vat-through-software/account/change-business-details"
   override val deregisterVatUrl: String = "http://localhost:9164"
   override val deregThreshold: Int = 83000
+  val thresholdString: String = java.text.NumberFormat.getIntegerInstance.format(deregThreshold)
 
   override val features: Features = new Features(runModeConfiguration)
 }
