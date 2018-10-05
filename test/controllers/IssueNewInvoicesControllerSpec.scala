@@ -23,19 +23,17 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.{MockCapitalAssetsAnswerService, MockDeregReasonAnswerService, MockIssueNewInvoicesAnswerService, MockOutstandingInvoicesService}
+import services.mocks._
 
 import scala.concurrent.Future
 
-class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
+class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockIssueNewInvoicesAnswerService {
 
   object TestIssueNewInvoicesController extends IssueNewInvoicesController(
     messagesApi,
     mockAuthPredicate,
-    MockIssueNewInvoicesAnswerService.mockStoredAnswersService,
-    MockOutstandingInvoicesService.mockStoredAnswersService,
-    MockDeregReasonAnswerService.mockStoredAnswersService,
-    MockCapitalAssetsAnswerService.mockStoredAnswersService,
+    mockIssueNewInvoicesAnswerService,
+    mockWipeRedundantDataService,
     mockConfig
   )
 
@@ -48,7 +46,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
         lazy val result = TestIssueNewInvoicesController.show()(request)
 
         "return 200 (OK)" in {
-          MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(None))
+          setupMockGetIssueNewInvoices(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -64,7 +62,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
         lazy val result = TestIssueNewInvoicesController.show()(request)
 
         "return 200 (OK)" in {
-          MockIssueNewInvoicesAnswerService.setupMockGetAnswers(Right(Some(Yes)))
+          setupMockGetIssueNewInvoices(Right(Some(Yes)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -84,48 +82,55 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
 
     "Calling the .submit action" when {
 
-      "the user submits after selecting an 'Yes' option" should {
+      "a success response is returned from the Wipe Redundant Data service and" when {
 
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
-        lazy val result = TestIssueNewInvoicesController.submit()(request)
+        "the user submits after selecting an 'Yes' option" should {
 
-        "return 303 (SEE OTHER)" in {
-          MockIssueNewInvoicesAnswerService.setupMockStoreAnswers(Yes)(Right(DeregisterVatSuccess))
-          MockOutstandingInvoicesService.setupMockDeleteAnswer(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.SEE_OTHER
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
+          lazy val result = TestIssueNewInvoicesController.submit()(request)
+
+          "return 303 (SEE OTHER)" in {
+            setupMockStoreIssueNewInvoices(Yes)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          s"Redirect to the '${controllers.routes.DeregistrationDateController.show().url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+          }
         }
 
-        s"Redirect to the '${controllers.routes.DeregistrationDateController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+        "the user submits after selecting the 'No' option" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          lazy val result = TestIssueNewInvoicesController.submit()(request)
+
+          "return 303 (SEE OTHER)" in {
+            setupMockStoreIssueNewInvoices(No)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          s"Redirect to the '${controllers.routes.OutstandingInvoicesController.show().url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.OutstandingInvoicesController.show().url)
+          }
         }
       }
 
-      "the user submits after selecting the 'No' option" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-        lazy val result = TestIssueNewInvoicesController.submit()(request)
-
-        "return 303 (SEE OTHER)" in {
-          MockIssueNewInvoicesAnswerService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        s"Redirect to the '${controllers.routes.OutstandingInvoicesController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.OutstandingInvoicesController.show().url)
-        }
-      }
-
-      "the user submits a 'Yes' but an error is returned when deleting redundant questions" should {
+      "an error response is returned from the wipe redundant data service" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
-        "return 303 (SEE OTHER)" in {
-          MockIssueNewInvoicesAnswerService.setupMockStoreAnswers(Yes)(Right(DeregisterVatSuccess))
-          MockOutstandingInvoicesService.setupMockDeleteAnswer(Left(ErrorModel(INTERNAL_SERVER_ERROR,"error")))
+        "return 500 (ISE)" in {
+          setupMockStoreIssueNewInvoices(Yes)(Right(DeregisterVatSuccess))
+          setupMockWipeRedundantData(Left(errorModel))
+
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
@@ -138,7 +143,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec {
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 500 (ISE)" in {
-          MockIssueNewInvoicesAnswerService.setupMockStoreAnswers(No)(Left(errorModel))
+          setupMockStoreIssueNewInvoices(No)(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

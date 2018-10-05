@@ -37,8 +37,10 @@ class DeregisterVatConnector @Inject()(val http: HttpClient,
   def url(vrn: String): String = s"${config.deregisterVatUrl}/deregister-vat/data/$vrn"
 
   def getAnswers[T](vrn: String, key: String)(implicit fmt: Format[T], hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[Either[ErrorModel, Option[T]]] =
+  : Future[Either[ErrorModel, Option[T]]] = {
+    Logger.debug(s"[DeregisterVatConnector][getAnswers] Getting answer for key: $key and vrn: $vrn")
     http.GET(url(vrn, key))(DeregisterVatHttpParser.getReads[T], hc, ec)
+  }
 
   def putAnswers[T](vrn: String, key: String, model: T)(implicit fmt: Format[T], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {

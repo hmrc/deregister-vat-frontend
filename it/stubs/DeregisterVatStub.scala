@@ -19,7 +19,7 @@ package stubs
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
 import models.ErrorModel
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, NO_CONTENT, OK}
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, NO_CONTENT, OK, NOT_FOUND}
 import play.api.libs.json.JsValue
 
 object DeregisterVatStub extends WireMockMethods {
@@ -34,6 +34,11 @@ object DeregisterVatStub extends WireMockMethods {
   def successfulGetAnswer(vrn: String, key: String)(jsonBody: JsValue): StubMapping = {
     when(method = GET, uri = deregisterVatUri(vrn,key))
       .thenReturn(status = OK, body = jsonBody)
+  }
+
+  def successfulGetNoDataAnswer(vrn: String, key: String): StubMapping = {
+    when(method = GET, uri = deregisterVatUri(vrn,key))
+      .thenReturn(status = NOT_FOUND)
   }
 
   def successfulDeleteAnswer(vrn: String, key: String): StubMapping = {

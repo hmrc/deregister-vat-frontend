@@ -16,6 +16,8 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.instances.future._
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.YesNoForm
@@ -23,7 +25,7 @@ import javax.inject.Inject
 import models._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
-import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OutstandingInvoicesAnswerService}
+import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OutstandingInvoicesAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -33,6 +35,7 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
                                               val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                               val deregReasonAnswerService: DeregReasonAnswerService,
                                               val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+                                              val wipeRedundantDataService: WipeRedundantDataService,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
@@ -45,34 +48,36 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.outstandingInvoices(error))),
-      data => outstandingInvoicesAnswerService.storeAnswer(data) flatMap {
-        case Right(_) => submitRedirectLogic(data)
-        case Left(_) => Future.successful(InternalServerError)
+      data => (for {
+        _ <- EitherT(outstandingInvoicesAnswerService.storeAnswer(data))
+        _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
+        capitalAssets <- EitherT(capitalAssetsAnswerService.getAnswer)
+        deregReason <- EitherT(deregReasonAnswerService.getAnswer)
+        result = redirect(data, capitalAssets, deregReason)
+      } yield result).value.map {
+        case Right(redirect) => redirect
+        case Left(_) => InternalServerError
       }
     )
   }
 
-  private def submitRedirectLogic(data: YesNo)(implicit user: User[_]): Future[Result] = {
-    if (data == Yes) {
-      Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
+  private def redirect(outstandingInvoices: YesNo, capitalAssets: Option[YesNoAmountModel], deregReason: Option[DeregistrationReason])
+                      (implicit user: User[_]) = {
+    if (outstandingInvoices == Yes) {
+      Redirect(controllers.routes.DeregistrationDateController.show())
     } else {
-      deregReasonAnswerService.getAnswer flatMap {
-        case Right(Some(reason)) if reason == BelowThreshold =>
-          Future.successful(Redirect(controllers.routes.DeregistrationDateController.show()))
-        case Right(Some(_)) => ceasedTradingJourneyLogic(data)
-        case _ => Future.successful(InternalServerError)
+      deregReason match {
+        case Some(BelowThreshold) => Redirect(controllers.routes.DeregistrationDateController.show())
+        case Some(Ceased) => ceasedTradingJourneyLogic(capitalAssets)
+        case _ => InternalServerError
       }
     }
   }
 
-  private def ceasedTradingJourneyLogic(data: YesNo)(implicit user: User[_]): Future[Result] = {
-    capitalAssetsAnswerService.getAnswer map {
-      case Right(Some(assets)) =>
-        if (assets.yesNo == Yes) {
-          Redirect(controllers.routes.DeregistrationDateController.show())
-        } else {
-          Redirect(controllers.routes.CheckAnswersController.show())
-        }
+  private def ceasedTradingJourneyLogic(capitalAssets: Option[YesNoAmountModel])(implicit user: User[_]): Result = {
+    capitalAssets match {
+      case Some(assets) if assets.yesNo == Yes => Redirect(controllers.routes.DeregistrationDateController.show())
+      case Some(_) => Redirect(controllers.routes.CheckAnswersController.show())
       case _ => InternalServerError
     }
   }

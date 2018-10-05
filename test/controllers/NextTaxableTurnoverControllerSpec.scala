@@ -16,20 +16,20 @@
 
 package controllers
 
+import assets.constants.BaseTestConstants._
 import models.{DeregisterVatSuccess, NextTaxableTurnoverModel}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.mocks.MockNextTaxableTurnoverAnswerService
-import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec {
+class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNextTaxableTurnoverAnswerService {
 
   object TestNextTaxableTurnoverController extends NextTaxableTurnoverController(
-    messagesApi, mockAuthPredicate, MockNextTaxableTurnoverAnswerService.mockStoredAnswersService, mockConfig
+    messagesApi, mockAuthPredicate, mockNextTaxableTurnoverAnswerService, mockConfig
   )
 
   val testTurnoverAmt = 500
@@ -44,7 +44,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec {
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
-          MockNextTaxableTurnoverAnswerService.setupMockGetAnswers(Right(None))
+          setupMockGetNextTaxableTurnover(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -60,7 +60,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec {
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
-          MockNextTaxableTurnoverAnswerService.setupMockGetAnswers(Right(Some(testTurnoverModel)))
+          setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -89,7 +89,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec {
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockNextTaxableTurnoverAnswerService.setupMockStoreAnswers(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -108,7 +108,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec {
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockNextTaxableTurnoverAnswerService.setupMockStoreAnswers(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -127,7 +127,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec {
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockNextTaxableTurnoverAnswerService.setupMockStoreAnswers(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -144,7 +144,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec {
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
-          MockNextTaxableTurnoverAnswerService.setupMockStoreAnswers(NextTaxableTurnoverModel(testTurnoverAmt))(Left(errorModel))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

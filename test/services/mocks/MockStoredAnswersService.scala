@@ -16,82 +16,45 @@
 
 package services.mocks
 
-import models._
+import models.{DeregisterVatResponse, ErrorModel, User}
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Format
-import services._
+import services.StoredAnswersService
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
 import scala.concurrent.ExecutionContext
 
-abstract class MockStoredAnswersService[T] extends TestUtil with MockFactory {
+trait MockStoredAnswersService extends TestUtil with MockFactory {
 
-  val mockStoredAnswersService: StoredAnswersService[T]
-
-  def setupMockGetAnswers(response: Either[ErrorModel, Option[T]])(implicit user: User[_]): Unit = {
+  def setupMockGetAnswers[T](mockStoredAnswersService: StoredAnswersService[T])
+                         (response: Either[ErrorModel, Option[T]])
+                         (implicit user: User[_]): Unit = {
     (mockStoredAnswersService.getAnswer(_: User[_], _: Format[T], _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *, *)
       .returns(response)
   }
 
-  def setupMockStoreAnswers(data: T)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit = {
+  def setupMockStoreAnswers[T](mockStoredAnswersService: StoredAnswersService[T])
+                           (data: T)
+                           (response: Either[ErrorModel, DeregisterVatResponse])
+                           (implicit user: User[_]): Unit = {
     (mockStoredAnswersService.storeAnswer(_: T)(_: User[_], _: Format[T], _: HeaderCarrier, _: ExecutionContext))
       .expects(data, user, *, *, *)
       .returns(response)
   }
 
-  def setupMockDeleteAnswer(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit = {
+  def setupMockDeleteAnswer[T](mockStoredAnswersService: StoredAnswersService[T])
+                           (response: Either[ErrorModel, DeregisterVatResponse])
+                           (implicit user: User[_]): Unit = {
     (mockStoredAnswersService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *)
       .returns(response)
   }
-}
 
-object MockDeregReasonAnswerService extends MockStoredAnswersService[DeregistrationReason] {
-  override val mockStoredAnswersService: DeregReasonAnswerService = mock[DeregReasonAnswerService]
-}
-
-object MockTaxableTurnoverAnswerService extends MockStoredAnswersService[YesNo] {
-  override val mockStoredAnswersService: TaxableTurnoverAnswerService = mock[TaxableTurnoverAnswerService]
-}
-
-object MockNextTaxableTurnoverAnswerService extends MockStoredAnswersService[NextTaxableTurnoverModel] {
-  override val mockStoredAnswersService: NextTaxableTurnoverAnswerService = mock[NextTaxableTurnoverAnswerService]
-}
-
-object MockCeasedTradingDateAnswerService extends MockStoredAnswersService[DateModel] {
-  override val mockStoredAnswersService: CeasedTradingDateAnswerService = mock[CeasedTradingDateAnswerService]
-}
-
-object MockStocksAnswerService extends MockStoredAnswersService[YesNoAmountModel] {
-  override val mockStoredAnswersService: StocksAnswerService = mock[StocksAnswerService]
-}
-
-object MockAccountingMethodAnswerService extends MockStoredAnswersService[VATAccountsModel] {
-  override val mockStoredAnswersService: AccountingMethodAnswerService = mock[AccountingMethodAnswerService]
-}
-
-object MockCapitalAssetsAnswerService extends MockStoredAnswersService[YesNoAmountModel] {
-  override val mockStoredAnswersService: CapitalAssetsAnswerService = mock[CapitalAssetsAnswerService]
-}
-
-object MockWhyTurnoverBelowAnswerService extends MockStoredAnswersService[WhyTurnoverBelowModel] {
-  override val mockStoredAnswersService: WhyTurnoverBelowAnswerService = mock[WhyTurnoverBelowAnswerService]
-}
-
-object MockIssueNewInvoicesAnswerService extends MockStoredAnswersService[YesNo] {
-  override val mockStoredAnswersService: IssueNewInvoicesAnswerService = mock[IssueNewInvoicesAnswerService]
-}
-
-object MockOptionTaxAnswerService extends MockStoredAnswersService[YesNoAmountModel] {
-  override val mockStoredAnswersService: OptionTaxAnswerService = mock[OptionTaxAnswerService]
-}
-
-object MockDeregDateAnswerService extends MockStoredAnswersService[DeregistrationDateModel] {
-  override val mockStoredAnswersService: DeregDateAnswerService = mock[DeregDateAnswerService]
-}
-
-object MockOutstandingInvoicesService extends MockStoredAnswersService[YesNo] {
-  override val mockStoredAnswersService: OutstandingInvoicesAnswerService = mock[OutstandingInvoicesAnswerService]
+  def setupMockDeleteAnswerNotCalled[T](mockStoredAnswersService: StoredAnswersService[T])(implicit user: User[_]): Unit = {
+    (mockStoredAnswersService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
+      .expects(user, *, *)
+      .never()
+  }
 }

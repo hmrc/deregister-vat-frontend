@@ -16,20 +16,20 @@
 
 package controllers
 
+import assets.constants.BaseTestConstants._
 import models.{DateModel, DeregisterVatSuccess}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockCeasedTradingDateAnswerService
-import assets.constants.BaseTestConstants._
 
 import scala.concurrent.Future
 
-class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
+class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeasedTradingDateAnswerService {
 
   object TestCeasedTradingDateController extends CeasedTradingDateController(
-    messagesApi, mockAuthPredicate, MockCeasedTradingDateAnswerService.mockStoredAnswersService, mockConfig
+    messagesApi, mockAuthPredicate, mockCeasedTradingDateAnswerService, mockConfig
   )
 
   val testDay = 12
@@ -46,7 +46,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCeasedTradingDateController.show()(request)
 
         "return 200 (OK)" in {
-          MockCeasedTradingDateAnswerService.setupMockGetAnswers(Right(None))
+          setupMockGetCeasedTradingDate(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -62,7 +62,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCeasedTradingDateController.show()(request)
 
         "return 200 (OK)" in {
-          MockCeasedTradingDateAnswerService.setupMockGetAnswers(Right(Some(testDateModel)))
+          setupMockGetCeasedTradingDate(Right(Some(testDateModel)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -101,7 +101,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCeasedTradingDateController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          MockCeasedTradingDateAnswerService.setupMockStoreAnswers(testDateModel)(Right(DeregisterVatSuccess))
+          setupMockStoreCeasedTradingDate(testDateModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -122,7 +122,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCeasedTradingDateController.submit()(request)
 
         "return 500 (ISE)" in {
-          MockCeasedTradingDateAnswerService.setupMockStoreAnswers(testDateModel)(Left(errorModel))
+          setupMockStoreCeasedTradingDate(testDateModel)(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
