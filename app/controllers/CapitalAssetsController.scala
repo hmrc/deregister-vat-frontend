@@ -16,8 +16,9 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.instances.future._
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.YesNoAmountForm
@@ -25,7 +26,7 @@ import models.{User, YesNoAmountModel}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.CapitalAssetsAnswerService
+import services.{CapitalAssetsAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -34,6 +35,7 @@ import scala.concurrent.Future
 class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
                                         val authentication: AuthPredicate,
                                         val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+                                        val wipeRedundantDataService: WipeRedundantDataService,
                                         implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(data: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm)(implicit user: User[_]) =
@@ -47,14 +49,14 @@ class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
   }
 
   val submit: Action[AnyContent] = authentication.async { implicit user =>
-
     YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(renderView(error))),
-      data => {
-        capitalAssetsAnswerService.storeAnswer(data).map{
-          case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())
-          case Left(_) => InternalServerError
-        }
+      data => (for {
+        _ <- EitherT(capitalAssetsAnswerService.storeAnswer(data))
+        result <- EitherT(wipeRedundantDataService.wipeRedundantData)
+      } yield result).value.map {
+        case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())
+        case Left(_) => InternalServerError
       }
     )
   }

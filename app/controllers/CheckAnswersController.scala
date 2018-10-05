@@ -16,35 +16,30 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import models._
+import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
-
 @Singleton
 class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        val authenticate: AuthPredicate,
                                        checkAnswersService: CheckAnswersService,
-                                       deregDateAnswerService: DeregDateAnswerService,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
 
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
-    checkAnswersService.checkYourAnswersModel() flatMap {
+    checkAnswersService.checkYourAnswersModel() map {
       case Right(answers) =>
-        deregDateAnswerService.getAnswer map {
-          case Right(Some(_)) => Ok(views.html.checkYourAnswers(controllers.routes.DeregistrationDateController.show().url, answers.seqAnswers))
-          case Right(None) => Ok(views.html.checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
-          case Left(_) => InternalServerError
+        answers.deregDate match {
+          case Some(_) => Ok(views.html.checkYourAnswers(controllers.routes.DeregistrationDateController.show().url, answers.seqAnswers))
+          case None => Ok(views.html.checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
         }
-      case Left(_) => Future.successful(InternalServerError)
+      case Left(_) => InternalServerError
     }
   }
 

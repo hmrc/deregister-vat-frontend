@@ -27,14 +27,16 @@ import services.mocks._
 
 import scala.concurrent.Future
 
-class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
+class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
+  with MockWipeRedundantDataService with MockOutstandingInvoicesService with MockDeregReasonAnswerService with MockCapitalAssetsAnswerService {
 
   object TestOutstandingInvoicesController extends OutstandingInvoicesController(
     messagesApi,
     mockAuthPredicate,
-    MockOutstandingInvoicesService.mockStoredAnswersService,
-    MockDeregReasonAnswerService.mockStoredAnswersService,
-    MockCapitalAssetsAnswerService.mockStoredAnswersService,
+    mockOutstandingInvoicesService,
+    mockDeregReasonAnswerService,
+    mockCapitalAssetsAnswerService,
+    mockWipeRedundantDataService,
     mockConfig
   )
 
@@ -48,7 +50,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
 
         "return 200 (OK)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          MockOutstandingInvoicesService.setupMockGetAnswers(Right(None))
+          setupMockGetOutstandingInvoices(Right(None))
           status(result) shouldBe Status.OK
         }
 
@@ -64,7 +66,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
 
         "return 200 (OK)" in {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          MockOutstandingInvoicesService.setupMockGetAnswers(Right(Some(Yes)))
+          setupMockGetOutstandingInvoices(Right(Some(Yes)))
           status(result) shouldBe Status.OK
         }
 
@@ -84,33 +86,19 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
 
   "Calling .submit" when {
 
-    "user selects 'Yes'" should {
+    "a success response is returned from the Wipe Redundant Data service and" when {
 
-      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
-      lazy val result = TestOutstandingInvoicesController.submit()(request)
+      "user selects 'Yes'" should {
 
-      "return 303 (SEE OTHER)" in {
-        MockOutstandingInvoicesService.setupMockStoreAnswers(Yes)(Right(DeregisterVatSuccess))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        status(result) shouldBe Status.SEE_OTHER
-      }
-
-      s"redirect to ${controllers.routes.DeregistrationDateController.show()}" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
-      }
-    }
-
-    "user selects 'No'" when {
-
-      "user is on 'below threshold' journey" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
         lazy val result = TestOutstandingInvoicesController.submit()(request)
 
-        MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(BelowThreshold)))
-
         "return 303 (SEE OTHER)" in {
-          MockOutstandingInvoicesService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
+          setupMockStoreOutstandingInvoices(Yes)(Right(DeregisterVatSuccess))
+          setupMockGetCapitalAssets(Right(None))
+          setupMockGetDeregReason(Right(Some(BelowThreshold)))
+          setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -120,20 +108,19 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      "user is on 'ceased trading' journey" when {
+      "user selects 'No'" when {
 
-        "user answered 'Yes' to having capital assets" should {
+        "user is on 'below threshold' journey" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
-          val capitalAssetsAmount: Int = 1000
-
-          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
-          MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(Yes, Some(capitalAssetsAmount)))))
-
           "return 303 (SEE OTHER)" in {
-            MockOutstandingInvoicesService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
+            setupMockGetDeregReason(Right(Some(BelowThreshold)))
+            setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
+            setupMockGetCapitalAssets(Right(None))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             status(result) shouldBe Status.SEE_OTHER
           }
@@ -143,54 +130,135 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
           }
         }
 
-        "user answered 'No' to having capital assets" should {
+        "user is on 'ceased trading' journey" when {
 
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          "user answered 'Yes' to having capital assets" should {
+
+            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+            lazy val result = TestOutstandingInvoicesController.submit()(request)
+
+            val capitalAssetsAmount: Int = 1000
+
+            "return 303 (SEE OTHER)" in {
+              setupMockGetDeregReason(Right(Some(Ceased)))
+              setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(Yes, Some(capitalAssetsAmount)))))
+              setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
+              setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              status(result) shouldBe Status.SEE_OTHER
+            }
+
+            s"redirect to ${controllers.routes.DeregistrationDateController.show()}" in {
+              redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+            }
+          }
+
+          "user answered 'No' to having capital assets" should {
+
+            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+              FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+            lazy val result = TestOutstandingInvoicesController.submit()(request)
+
+            "return 303 (SEE OTHER)" in {
+              setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
+              setupMockGetDeregReason(Right(Some(Ceased)))
+              setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+              setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              status(result) shouldBe Status.SEE_OTHER
+            }
+
+            s"redirect to ${controllers.routes.CheckAnswersController.show()}" in {
+              redirectLocation(result) shouldBe Some(controllers.routes.CheckAnswersController.show().url)
+            }
+          }
+
+          "no answer is returned for capital assets" should {
+
+            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+              FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+            lazy val result = TestOutstandingInvoicesController.submit()(request)
+
+            "return 500 (ISE)" in {
+              setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
+              setupMockGetDeregReason(Right(Some(Ceased)))
+              setupMockGetCapitalAssets(Right(None))
+              setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+            }
+          }
+
+          "error is returned for capital assets" should {
+
+            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+              FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+            lazy val result = TestOutstandingInvoicesController.submit()(request)
+
+            "return 500 (ISE)" in {
+              setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
+              setupMockGetCapitalAssets(Left(errorModel))
+              setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+            }
+          }
+        }
+
+        "no answer is returned for 'deregistration reason'" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
-          MockDeregReasonAnswerService.setupMockGetAnswers(Right(Some(Ceased)))
-          MockCapitalAssetsAnswerService.setupMockGetAnswers(Right(Some(YesNoAmountModel(No, None))))
 
-          "return 303 (SEE OTHER)" in {
-            MockOutstandingInvoicesService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
+          "return 500 (ISE)" in {
+
+            setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
+            setupMockGetDeregReason(Right(None))
+            setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            status(result) shouldBe Status.SEE_OTHER
-          }
-
-          s"redirect to ${controllers.routes.CheckAnswersController.show()}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.CheckAnswersController.show().url)
+            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
-      }
 
-      "no answer is returned for 'deregistration reason'" should {
+        "an error is returned for 'deregistration reason'" should {
 
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-        lazy val result = TestOutstandingInvoicesController.submit()(request)
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          lazy val result = TestOutstandingInvoicesController.submit()(request)
 
-        MockDeregReasonAnswerService.setupMockGetAnswers(Right(None))
 
-        "return 500 (ISE)" in {
-          MockOutstandingInvoicesService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+          "return 500 (ISE)" in {
+            setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
+            setupMockGetDeregReason(Left(errorModel))
+            setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+          }
         }
       }
+    }
 
-      "an error is returned for 'deregistration reason'" should {
+    "an error response is returned from the Wipe Redundant Data service" should {
 
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
-        lazy val result = TestOutstandingInvoicesController.submit()(request)
+      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+      lazy val result = TestOutstandingInvoicesController.submit()(request)
 
-        MockDeregReasonAnswerService.setupMockGetAnswers(Left(errorModel))
+      "return 500 (ISE)" in {
+        setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
+        setupMockWipeRedundantData(Left(errorModel))
 
-        "return 500 (ISE)" in {
-          MockOutstandingInvoicesService.setupMockStoreAnswers(No)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        }
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
+
     }
 
     "an error is returned when storing the answer" should {
@@ -199,7 +267,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec {
       lazy val result = TestOutstandingInvoicesController.submit()(request)
 
       "return 500 (ISE)" in {
-        MockOutstandingInvoicesService.setupMockStoreAnswers(No)(Left(errorModel))
+        setupMockStoreOutstandingInvoices(No)(Left(errorModel))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }

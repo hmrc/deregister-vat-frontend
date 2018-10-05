@@ -20,13 +20,13 @@ import assets.constants.CheckYourAnswersTestConstants._
 import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.{MockCheckAnswersService, MockDeregDateAnswerService}
+import services.mocks.MockCheckAnswersService
 
 import scala.concurrent.Future
 
 class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswersService {
 
-  object TestCheckAnswersController extends CheckAnswersController(messagesApi, mockAuthPredicate, mockCheckAnswersService,MockDeregDateAnswerService.mockStoredAnswersService, mockConfig)
+  object TestCheckAnswersController extends CheckAnswersController(messagesApi, mockAuthPredicate, mockCheckAnswersService, mockConfig)
 
   "the user is authorised" when {
 
@@ -37,8 +37,6 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
         lazy val result = TestCheckAnswersController.show()(request)
 
         "return 200 (OK)" in {
-          MockDeregDateAnswerService.setupMockGetAnswers(Right(Some(DeregistrationDateModel(Yes, Some(DateModel(1,1,1))))))
-
           setupMockCheckYourAnswersModel(Right(
             CheckYourAnswersModel(
               Some(Ceased),
@@ -76,8 +74,6 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
         lazy val result = TestCheckAnswersController.show()(request)
 
         "return 200 (OK)" in {
-          MockDeregDateAnswerService.setupMockGetAnswers(Right(None))
-
           setupMockCheckYourAnswersModel(Right(
             CheckYourAnswersModel(
               Some(Ceased),
@@ -91,7 +87,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
               Some(yesNoAmountNo),
               Some(Yes),
               Some(Yes),
-              Some(deregistrationDate)
+              None
             )
           ))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -107,36 +103,6 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
           document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.OutstandingInvoicesController.show().url
         }
       }
-
-
-      "Error returned by DeregDateAnswerService" should {
-
-        lazy val result = TestCheckAnswersController.show()(request)
-
-        "return 500 (INTERNAL_SERVER_ERROR)" in {
-          MockDeregDateAnswerService.setupMockGetAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR,"Error")))
-
-          setupMockCheckYourAnswersModel(Right(
-            CheckYourAnswersModel(
-              Some(Ceased),
-              Some(dateModel),
-              Some(Yes),
-              Some(taxableTurnoverBelow),
-              Some(whyTurnoverBelowAll),
-              Some(StandardAccounting),
-              Some(yesNoAmountNo),
-              Some(yesNoAmountNo),
-              Some(yesNoAmountNo),
-              Some(Yes),
-              Some(Yes),
-              Some(deregistrationDate)
-            )
-          ))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        }
-      }
-
 
       "a Left(ErrorModel) is returned" should {
 

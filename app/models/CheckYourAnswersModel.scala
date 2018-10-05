@@ -19,7 +19,6 @@ package models
 import config.AppConfig
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import services.OutstandingInvoicesAnswerService
 import utils.MoneyFormatter
 
 case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReason],
@@ -56,7 +55,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
 
   private val deregReasonAnswer = deregistrationReason.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.reason"),
-    Html(messages(s"deregistrationReason.reason.${answer.value}")),
+    Html(messages(s"deregistrationReason.reason.${answer.value}", appConfig.deregThreshold)),
     controllers.routes.DeregistrationReasonController.show(user.isAgent).url
   ))
 

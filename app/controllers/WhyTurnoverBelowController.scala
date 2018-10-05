@@ -20,7 +20,6 @@ import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.WhyTurnoverBelowForm
 import javax.inject.{Inject, Singleton}
-
 import models.DeregisterVatSuccess
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._

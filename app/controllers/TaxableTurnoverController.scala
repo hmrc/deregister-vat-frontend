@@ -16,15 +16,17 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.instances.future._
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.{NextTaxableTurnoverForm, YesNoForm}
+import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
-import models.{NextTaxableTurnoverModel, User, YesNo}
+import models.{User, YesNo}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.TaxableTurnoverAnswerService
+import services.{TaxableTurnoverAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -33,6 +35,7 @@ import scala.concurrent.Future
 class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                           val authenticate: AuthPredicate,
                                           val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
+                                          val wipeRedundantDataService: WipeRedundantDataService,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) =
@@ -48,10 +51,14 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     YesNoForm.yesNoForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.taxableTurnover(error))),
-      data => taxableTurnoverAnswerService.storeAnswer(data) map {
+      data => (for {
+        _ <- EitherT(taxableTurnoverAnswerService.storeAnswer(data))
+        result <- EitherT(wipeRedundantDataService.wipeRedundantData)
+      } yield result).value.map {
         case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
-        case _ => InternalServerError //TODO: Render ISE Page
+        case Left(_) => InternalServerError //TODO: Render ISE Page
       }
     )
   }
+
 }
