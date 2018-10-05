@@ -25,7 +25,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
 case class DeregistrationInfo(deregReason: DeregistrationReason,
-                              deregDate: Option[LocalDate],
+                              deregDate: LocalDate,
                               deregLaterDate: Option[LocalDate],
                               turnoverBelowThreshold: Option[TurnoverBelowThreshold],
                               optionToTax: Boolean,
@@ -38,96 +38,52 @@ case class DeregistrationInfo(deregReason: DeregistrationReason,
 
 object DeregistrationInfo {
 
-  def customApply(deregReason: Option[DeregistrationReason],
+  def customApply(deregReason: DeregistrationReason,
                   ceasedTradingDate: Option[DateModel],
                   taxableTurnover: Option[TaxableTurnoverModel],
                   nextTaxableTurnover: Option[TaxableTurnoverModel],
                   whyTurnoverBelow: Option[WhyTurnoverBelowModel],
-                  accountingMethod: Option[VATAccountsModel],
-                  optionTax: Option[YesNoAmountModel],
-                  stocks: Option[YesNoAmountModel],
-                  capitalAssets: Option[YesNoAmountModel],
-                  issueNewInvoices: Option[YesNo],
+                  accountingMethod: VATAccountsModel,
+                  optionTax: YesNoAmountModel,
+                  stocks: YesNoAmountModel,
+                  capitalAssets: YesNoAmountModel,
+                  issueNewInvoices: YesNo,
                   outstandingInvoices: Option[YesNo],
-                  deregDate: Option[DeregistrationDateModel])(implicit appConfig: AppConfig): Either[ErrorModel,DeregistrationInfo] = {
+                  deregDate: Option[DeregistrationDateModel])(implicit appConfig: AppConfig): DeregistrationInfo = {
 
-    deregReason match {
-      case Some(deregInfoReason) if deregInfoReason != Other => {
-        Right(DeregistrationInfo(
-          deregInfoReason,
-          deregInfoDate(deregInfoReason,ceasedTradingDate),
+        DeregistrationInfo(
+          deregReason,
+          deregInfoDate(ceasedTradingDate),
           deregLaterDate(deregDate),
-          turnoverBelowThreshold(taxableTurnover,nextTaxableTurnover,whyTurnoverBelow,appConfig.deregThreshold),
-          retrieveYesNo(optionTax),
-          retrieveYesNo(capitalAssets),
-          additionalTaxInvoices(issueNewInvoices,outstandingInvoices),
-          cashAccountingScheme(accountingMethod),
-          retrieveAmount(optionTax),
-          retrieveAmount(stocks),
-          retrieveAmount(capitalAssets)
-        ))
-      }
-      case _ => Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,"Invalid DeregistrationInfo model"))
-    }
+          turnoverBelowThreshold(taxableTurnover, nextTaxableTurnover, whyTurnoverBelow),
+          optionTax.yesNo.value,
+          capitalAssets.yesNo.value,
+          issueNewInvoices.value || outstandingInvoices.fold(false)(_.value),
+          accountingMethod == CashAccounting,
+          optionTax.amount,
+          stocks.amount,
+          capitalAssets.amount
+        )
   }
 
-  private[deregistrationRequest] def deregInfoDate(deregReason: DeregistrationReason, ceasedTradingDate: Option[DateModel]): Option[LocalDate] =
-    (deregReason,ceasedTradingDate) match {
-      case (Ceased,Some(dateModel)) => dateModel.date
-      case (BelowThreshold,_) => Some(LocalDate.now)
-      case _ => None
-    }
+  private[deregistrationRequest] val deregInfoDate: Option[DateModel] => LocalDate = _.fold(LocalDate.now)(_.date.fold(LocalDate.now)(x => x))
 
-  private[deregistrationRequest] def deregLaterDate(deregDate: Option[DeregistrationDateModel]): Option[LocalDate] = deregDate match {
-    case Some(dateModel) => dateModel.getLocalDate
-    case _ => None
-  }
+  private[deregistrationRequest] val deregLaterDate: Option[DeregistrationDateModel] => Option[LocalDate] = _.flatMap(_.getLocalDate)
 
-  private[deregistrationRequest] def belowThresholdReason(taxableTurnover: Option[TaxableTurnoverModel],
-                                                          threshold: Int): Option[BelowThresholdReason] = taxableTurnover match {
-    case Some(turnover) if turnover.turnover > threshold => Some(BelowPast12Months)
-    case Some(_) => Some(BelowNext12Months)
-    case _ => None
-  }
+  private[deregistrationRequest] def belowThresholdReason(taxableTurnover: TaxableTurnoverModel)
+                                                         (implicit appConfig: AppConfig): BelowThresholdReason =
+    if (taxableTurnover.turnover > appConfig.deregThreshold) BelowNext12Months else BelowPast12Months
 
-  private[deregistrationRequest] def nextTwelveMonthsTurnover(nextTaxableTurnover: Option[TaxableTurnoverModel]): Option[BigDecimal] =
-    nextTaxableTurnover match {
-      case Some(amount) => Some(amount.turnover)
-      case _ => None
-    }
+  private[deregistrationRequest] val nextTwelveMonthsTurnover: Option[TaxableTurnoverModel] => Option[BigDecimal] = _.map(_.turnover)
 
   private[deregistrationRequest] def turnoverBelowThreshold(taxableTurnover: Option[TaxableTurnoverModel],
                              nextTaxableTurnover: Option[TaxableTurnoverModel],
-                             whyTurnoverBelow: Option[WhyTurnoverBelowModel],
-                             threshold: Int): Option[TurnoverBelowThreshold] = {
-    (belowThresholdReason(taxableTurnover,threshold), nextTwelveMonthsTurnover(nextTaxableTurnover)) match {
-      case (Some(belowThresholdAnswer), Some(taxableTurnoverAnswer)) =>
-        Some(TurnoverBelowThreshold(belowThresholdAnswer,taxableTurnoverAnswer,whyTurnoverBelow))
-      case _ => None
+                             whyTurnoverBelow: Option[WhyTurnoverBelowModel])(implicit appConfig: AppConfig): Option[TurnoverBelowThreshold] =
+    taxableTurnover.flatMap { turnover =>
+      nextTwelveMonthsTurnover(nextTaxableTurnover).map { nextTaxableTurnover =>
+        TurnoverBelowThreshold(belowThresholdReason(turnover), nextTaxableTurnover, whyTurnoverBelow)
+      }
     }
-  }
-
-  private[deregistrationRequest] def retrieveYesNo: Option[YesNoAmountModel] => Boolean = {
-    case Some(model) => model.yesNo == Yes
-    case _ => false
-  }
-
-  private[deregistrationRequest] def additionalTaxInvoices(issueNewInvoices: Option[YesNo], outstandingInvoices: Option[YesNo]): Boolean =
-    (issueNewInvoices,outstandingInvoices) match {
-      case (Some(Yes),_) => true
-      case (_,Some(Yes)) => true
-      case _ => false
-    }
-
-  private[deregistrationRequest] def cashAccountingScheme(accountingMethod: Option[VATAccountsModel]): Boolean = accountingMethod match {
-    case Some(CashAccounting) => true
-    case _ => false
-  }
-
-  private[deregistrationRequest] def retrieveAmount: Option[YesNoAmountModel] => Option[BigDecimal] = {
-    case Some(model) => model.amount
-    case _ => None
-  }
 
   implicit val writes: Writes[DeregistrationInfo] = (
     (__ \ "deregReason").write[DeregistrationReason](DeregistrationReason.submissionWrites) and
@@ -141,5 +97,5 @@ object DeregistrationInfo {
       (__ \ "optionToTaxValue").writeNullable[BigDecimal] and
       (__ \ "stocksValue").writeNullable[BigDecimal] and
       (__ \ "capitalAssetsValue").writeNullable[BigDecimal]
-  )(unlift(DeregistrationInfo.unapply))
+    )(unlift(DeregistrationInfo.unapply))
 }

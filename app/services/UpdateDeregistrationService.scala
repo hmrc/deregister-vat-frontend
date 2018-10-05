@@ -21,9 +21,9 @@ import cats.instances.future._
 import config.AppConfig
 import connectors.VatSubscriptionConnector
 import javax.inject.Inject
-import models.deregistrationRequest.DeregistrationInfo
 import models._
-import play.api.libs.json.{Format, Writes}
+import models.deregistrationRequest.DeregistrationInfo
+import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -67,20 +67,33 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
         issueNewInvoices <- EitherT(issueNewInvoicesAnswerService.getAnswer)
         outstandingInvoices <- EitherT(outstandingInvoicesAnswerService.getAnswer)
         deregDate <- EitherT(deregDateAnswerService.getAnswer)
-        model <- EitherT(Future.successful(DeregistrationInfo.customApply(
-          deregReason,
+        deregReasonValue <- EitherT(mandatoryCheck(deregReason, "deregReason"))
+        accountingMethodValue <- EitherT(mandatoryCheck(accountingMethod, "accountingMethod"))
+        optionTaxValue <- EitherT(mandatoryCheck(optionTax, "optionTax"))
+        stocksValue <- EitherT(mandatoryCheck(stocks, "stocks"))
+        capitalAssetsValue <- EitherT(mandatoryCheck(capitalAssets, "capitalAssets"))
+        issueNewInvoicesValue <- EitherT(mandatoryCheck(issueNewInvoices, "issueNewInvoices"))
+        model = DeregistrationInfo.customApply(
+          deregReasonValue,
           ceasedTradingDate,
           taxableTurnover,
           nextTaxableTurnover,
           whyTurnoverBelow,
-          accountingMethod,
-          optionTax,
-          stocks,
-          capitalAssets,
-          issueNewInvoices,
+          accountingMethodValue,
+          optionTaxValue,
+          stocksValue,
+          capitalAssetsValue,
+          issueNewInvoicesValue,
           outstandingInvoices,
           deregDate
-        )))
+        )
       } yield model).value
+  }
+
+  private def mandatoryCheck[T](field: Option[T], fieldName: String)(implicit ec: ExecutionContext)
+  : Future[Either[ErrorModel, T]] = {
+   Future.successful(field.fold[Either[ErrorModel, T]](
+     Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, s"Mandatory field of $fieldName was not retrieved from Mongo Store"))
+   )(Right(_)))
   }
 }
