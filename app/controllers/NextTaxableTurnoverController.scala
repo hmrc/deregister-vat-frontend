@@ -18,9 +18,9 @@ package controllers
 
 import config.AppConfig
 import controllers.predicates.AuthPredicate
-import forms.TaxableTurnoverForm
+import forms.NextTaxableTurnoverForm
 import javax.inject.{Inject, Singleton}
-import models.{TaxableTurnoverModel, User}
+import models.{NextTaxableTurnoverModel, User}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -35,18 +35,18 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[TaxableTurnoverModel] = TaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
+  private def renderView(form: Form[NextTaxableTurnoverModel] = NextTaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
     views.html.nextTaxableTurnover(form)
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
     nextTaxableTurnoverAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(TaxableTurnoverForm.taxableTurnoverForm.fill(data)))
+      case Right(Some(data)) => Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm.fill(data)))
       case _ => Ok(renderView())
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    TaxableTurnoverForm.taxableTurnoverForm.bindFromRequest().fold(
+    NextTaxableTurnoverForm.taxableTurnoverForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.nextTaxableTurnover(error))),
       data => nextTaxableTurnoverAnswerService.storeAnswer(data) map {
         case Right(_) =>

@@ -17,7 +17,7 @@
 package views
 
 import assets.messages.{CommonMessages, TaxableTurnoverMessages}
-import forms.TaxableTurnoverForm
+import forms.{NextTaxableTurnoverForm, YesNoForm}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -29,12 +29,12 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
 
     val button = ".button"
     val errorHeading = "#error-summary-display"
-    val error = "#turnover-error-summary"
+    val error = "#yes_no-error-summary"
   }
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.taxableTurnover(TaxableTurnoverForm.taxableTurnoverForm)(user,messages,mockConfig)
+    lazy val view = views.html.taxableTurnover(YesNoForm.yesNoForm)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -65,7 +65,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.taxableTurnover(TaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "")))(agentUser,messages,mockConfig)
+    lazy val view = views.html.taxableTurnover(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))(agentUser,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

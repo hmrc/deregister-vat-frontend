@@ -52,11 +52,11 @@ object MockDeregReasonAnswerService extends MockStoredAnswersService[Deregistrat
   override val mockStoredAnswersService: DeregReasonAnswerService = mock[DeregReasonAnswerService]
 }
 
-object MockTaxableTurnoverAnswerService extends MockStoredAnswersService[TaxableTurnoverModel] {
+object MockTaxableTurnoverAnswerService extends MockStoredAnswersService[YesNo] {
   override val mockStoredAnswersService: TaxableTurnoverAnswerService = mock[TaxableTurnoverAnswerService]
 }
 
-object MockNextTaxableTurnoverAnswerService extends MockStoredAnswersService[TaxableTurnoverModel] {
+object MockNextTaxableTurnoverAnswerService extends MockStoredAnswersService[NextTaxableTurnoverModel] {
   override val mockStoredAnswersService: NextTaxableTurnoverAnswerService = mock[NextTaxableTurnoverAnswerService]
 }
 

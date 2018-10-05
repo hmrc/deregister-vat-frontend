@@ -43,7 +43,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
             CheckYourAnswersModel(
               Some(Ceased),
               Some(dateModel),
-              Some(taxableTurnoverAbove),
+              Some(Yes),
               Some(taxableTurnoverBelow),
               Some(whyTurnoverBelowAll),
               Some(StandardAccounting),
@@ -82,7 +82,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
             CheckYourAnswersModel(
               Some(Ceased),
               Some(dateModel),
-              Some(taxableTurnoverAbove),
+              Some(Yes),
               Some(taxableTurnoverBelow),
               Some(whyTurnoverBelowAll),
               Some(StandardAccounting),
@@ -120,7 +120,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
             CheckYourAnswersModel(
               Some(Ceased),
               Some(dateModel),
-              Some(taxableTurnoverAbove),
+              Some(Yes),
               Some(taxableTurnoverBelow),
               Some(whyTurnoverBelowAll),
               Some(StandardAccounting),

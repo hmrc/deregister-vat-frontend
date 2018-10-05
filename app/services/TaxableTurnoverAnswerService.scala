@@ -18,10 +18,10 @@ package services
 
 import connectors.DeregisterVatConnector
 import javax.inject.{Inject, Singleton}
-import models.TaxableTurnoverModel
+import models.YesNo
 
 @Singleton()
-class TaxableTurnoverAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[TaxableTurnoverModel] {
+class TaxableTurnoverAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[YesNo] {
   override val answerKey: String = TaxableTurnoverAnswerService.key
 }
 

@@ -16,14 +16,15 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
+@import views.html.templates.inputs.radioHelper
 @import templates.headings
-@import views.html.templates.inputs.moneyInput
+@import forms.YesNoForm._
 
 
-@(form: Form[TaxableTurnoverModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-title = messages("taxableTurnover.title"),
+title = messages("taxableTurnover.title", appConfig.deregThreshold),
 bodyClasses = None,
 appConfig = appConfig) {
 
@@ -31,23 +32,24 @@ appConfig = appConfig) {
 
     @errorSummary("common.errorSummary.heading", form)
 
-    @headings(messages("taxableTurnover.title"))
+    @headings(messages("taxableTurnover.title", appConfig.deregThreshold))
 
     @helpers.form(action = controllers.routes.TaxableTurnoverController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="turnover">
-            @moneyInput(
-                field = form("turnover"),
-                label = messages("taxableTurnover.title"),
-                labelHidden = true,
-                decimalPlace = true
+        <div class="form-group" id="@yesNo">
+            @radioHelper(
+                field = form(yesNo),
+                choices = Seq(
+                    (yes, Messages("common.yes")),
+                    (no, Messages("common.no"))),
+                question = Messages("taxableTurnover.title", appConfig.deregThreshold),
+                inline = true
             )
         </div>
 
-        <button class="button" type ="submit" id="continue">
+        <button class="button" type="submit" id="continue">
             @messages("common.continue")
         </button>
-
     }
 
 }

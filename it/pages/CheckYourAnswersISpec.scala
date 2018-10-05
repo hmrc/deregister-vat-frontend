@@ -32,8 +32,8 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
     def getRequest(): WSResponse = get("/check-your-answers")
 
     val dateModel = DateModel(1,1,2018)
-    val taxableTurnoverAbove = TaxableTurnoverModel(BigDecimal(90000))
-    val taxableTurnoverBelow = TaxableTurnoverModel(BigDecimal(200))
+    val taxableTurnoverAbove = NextTaxableTurnoverModel(BigDecimal(90000))
+    val taxableTurnoverBelow = NextTaxableTurnoverModel(BigDecimal(200))
     val whyTurnoverBelowAll = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
     val yesNoAmountYes = YesNoAmountModel(Yes,Some(BigDecimal(1000)))
     val yesNoAmountNo = YesNoAmountModel(No,None)
@@ -45,7 +45,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
         DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
         DeregisterVatStub.successfulGetAnswer(vrn, CeasedTradingDateAnswerService.key)(Json.toJson(dateModel))
-        DeregisterVatStub.successfulGetAnswer(vrn, TaxableTurnoverAnswerService.key)(Json.toJson(taxableTurnoverAbove))
+        DeregisterVatStub.successfulGetAnswer(vrn, TaxableTurnoverAnswerService.key)(Json.toJson(Yes))
         DeregisterVatStub.successfulGetAnswer(vrn, NextTaxableTurnoverAnswerService.key)(Json.toJson(taxableTurnoverBelow))
         DeregisterVatStub.successfulGetAnswer(vrn, WhyTurnoverBelowAnswerService.key)(Json.toJson(whyTurnoverBelowAll))
         DeregisterVatStub.successfulGetAnswer(vrn, AccountingMethodAnswerService.key)(Json.toJson(StandardAccounting))
@@ -73,7 +73,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
         DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
         DeregisterVatStub.successfulGetAnswer(vrn, CeasedTradingDateAnswerService.key)(Json.toJson(dateModel))
-        DeregisterVatStub.successfulGetAnswer(vrn, TaxableTurnoverAnswerService.key)(Json.toJson(taxableTurnoverAbove))
+        DeregisterVatStub.successfulGetAnswer(vrn, TaxableTurnoverAnswerService.key)(Json.toJson(Yes))
         DeregisterVatStub.successfulGetAnswer(vrn, NextTaxableTurnoverAnswerService.key)(Json.toJson(taxableTurnoverBelow))
         DeregisterVatStub.successfulGetAnswer(vrn, WhyTurnoverBelowAnswerService.key)(Json.toJson(whyTurnoverBelowAll))
         DeregisterVatStub.successfulGetAnswer(vrn, AccountingMethodAnswerService.key)(Json.toJson(StandardAccounting))

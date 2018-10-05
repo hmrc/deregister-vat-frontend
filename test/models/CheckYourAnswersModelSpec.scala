@@ -29,7 +29,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
         CheckYourAnswersModel(
           Some(Ceased),
           Some(dateModel),
-          Some(taxableTurnoverAbove),
+          Some(Yes),
           Some(taxableTurnoverBelow),
           Some(whyTurnoverBelowAll),
           Some(StandardAccounting),
@@ -43,7 +43,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
           Seq(
             deregReasonRow,
             ceasedTradingRow,
-            taxableTurnoverRow,
+            taxableTurnoverRow(mockConfig.thresholdString),
             nextTaxableTurnoverRow,
             whyBelowRowMax,
             vatAccountsRow,
@@ -65,7 +65,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
           CheckYourAnswersModel(
             Some(Ceased),
             Some(dateModel),
-            Some(taxableTurnoverAbove),
+            Some(Yes),
             Some(taxableTurnoverBelow),
             Some(whyTurnoverBelowAll),
             Some(StandardAccounting),
@@ -79,7 +79,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             Seq(
               deregReasonRow,
               ceasedTradingRow,
-              taxableTurnoverRow,
+              taxableTurnoverRow(mockConfig.thresholdString),
               nextTaxableTurnoverRow,
               whyBelowRowMax,
               vatAccountsRow,
@@ -99,7 +99,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
           CheckYourAnswersModel(
             Some(Ceased),
             Some(dateModel),
-            Some(taxableTurnoverAbove),
+            Some(Yes),
             Some(taxableTurnoverBelow),
             Some(whyTurnoverBelowMin),
             Some(StandardAccounting),
@@ -113,7 +113,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             Seq(
               deregReasonRow,
               ceasedTradingRow,
-              taxableTurnoverRow,
+              taxableTurnoverRow(mockConfig.thresholdString),
               nextTaxableTurnoverRow,
               whyBelowRowMin,
               vatAccountsRow,
