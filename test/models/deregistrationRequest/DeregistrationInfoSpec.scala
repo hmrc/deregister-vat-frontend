@@ -36,132 +36,136 @@ class DeregistrationInfoSpec extends TestUtil {
 
     ".customApply" should {
 
-      "return a valid DeregistrationInfo Model when given BelowThreshold" in {
-        defaultCustomApply(deregReason = Some(BelowThreshold)) shouldBe Right(defaultDeregInfo(deregReason = BelowThreshold))
+      "return a valid DeregistrationInfo Model when given maximum data" in {
+        DeregistrationInfo.customApply(
+          deregReason = BelowThreshold,
+          ceasedTradingDate = Some(todayDateModel),
+          taxableTurnover = Some(taxableTurnoverBelow),
+          nextTaxableTurnover = Some(taxableTurnoverBelow),
+          whyTurnoverBelow = Some(whyTurnoverBelowOne),
+          accountingMethod = CashAccounting,
+          optionTax = ottModel,
+          stocks = stocksModel,
+          capitalAssets = assetsModel,
+          issueNewInvoices = Yes,
+          outstandingInvoices = Some(Yes),
+          deregDate = Some(deregistrationDateModel)
+        ) shouldBe DeregistrationInfo(
+          deregReason = BelowThreshold,
+          deregDate = todayDate,
+          deregLaterDate = Some(laterDate),
+          turnoverBelowThreshold = Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxPastModel),
+          optionToTax = true,
+          intendSellCapitalAssets = true,
+          additionalTaxInvoices = true,
+          cashAccountingScheme = true,
+          optionToTaxValue = Some(ottValue),
+          stocksValue = Some(stockValue),
+          capitalAssetsValue = Some(assetsValue)
+        )
       }
 
-      "return a valid deregistrationInfo Model when given Ceased" in {
-        defaultCustomApply(deregReason = Some(Ceased)) shouldBe Right(defaultDeregInfo(deregReason = Ceased))
-      }
-
-      "return an error Model when given any other Deregistration reason" in {
-        defaultCustomApply(deregReason = Some(Other)) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "Invalid DeregistrationInfo model"))
-        defaultCustomApply(deregReason = None) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "Invalid DeregistrationInfo model"))
-      }
+//      "return a valid deregistrationInfo Model when given minimum" in {
+//        defaultCustomApply(Ceased) shouldBe defaultDeregInfo(deregReason = Ceased)
+//      }
     }
 
     ".deregInfoDate" should {
 
       "return Some(date) when Ceased DeregistrationReason and a date" in {
-        deregInfoDate(deregReason = Ceased, ceasedTradingDate = Some(laterDateModel)) shouldBe Some(laterDate)
-      }
-
-      "return Some(todays date) when BelowThreshold and None is given" in {
-        deregInfoDate(deregReason = BelowThreshold, ceasedTradingDate = Some(todayDateModel)) shouldBe Some(todayDate)
-        deregInfoDate(deregReason = BelowThreshold, ceasedTradingDate = None) shouldBe Some(todayDate)
+        deregInfoDate(Some(laterDateModel)) shouldBe laterDate
       }
 
       "return None when deregistration reason is Ceased but no date is given" in {
-        deregInfoDate(deregReason = Ceased, ceasedTradingDate = None) shouldBe None
+        deregInfoDate(None) shouldBe LocalDate.now
       }
     }
 
     ".deregLaterDate" should {
 
       "return a Some(date) when a deregistrationDate is supplied" in {
-        deregLaterDate(deregDate = Some(deregistrationDateModel)) shouldBe Some(laterDate)
+        deregLaterDate(Some(deregistrationDateModel)) shouldBe Some(laterDate)
       }
 
       "return a None when None is supplied" in {
-        deregLaterDate(deregDate = None) shouldBe None
+        deregLaterDate(None) shouldBe None
+      }
+    }
+
+    ".belowThresholdReason" should {
+
+      "return BelowPast12Months when given a taxable turnover below threshold" in {
+        belowThresholdReason(taxableTurnoverBelow) shouldBe BelowPast12Months
+      }
+
+      "return BelowNext12Months when given a taxable turnover below threshold" in {
+        belowThresholdReason(taxableTurnoverAbove) shouldBe BelowNext12Months
+      }
+    }
+
+    ".nextTwelveMonthsTurnover" should {
+
+      "return Some amount when given a TaxableTurnoverModel" in {
+        nextTwelveMonthsTurnover(Some(taxableTurnoverAbove)) shouldBe Some(taxableTurnoverAbove.turnover)
+      }
+
+      "return None when given a None" in {
+        nextTwelveMonthsTurnover(None) shouldBe None
       }
     }
 
     ".turnoverBelowThreshold" should {
 
-      "return BelowPast12Months when turnover is below threshold" in {
+      "return a TaxableTurnoverModel containing BelowPast12Months when turnover is below threshold" in {
         turnoverBelowThreshold(
           taxableTurnover = Some(taxableTurnoverBelow),
           nextTaxableTurnover = Some(taxableTurnoverBelow),
-          whyTurnoverBelow = Some(whyTurnoverBelowOne),
-          threshold = 9000) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxNextModel)
+          whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxPastModel)
       }
 
       "return BelowNext12Months when turnover is above threshold" in {
         turnoverBelowThreshold(
           taxableTurnover = Some(taxableTurnoverAbove),
           nextTaxableTurnover = Some(taxableTurnoverBelow),
-          whyTurnoverBelow = Some(whyTurnoverBelowOne),
-          threshold = 9000) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxPastModel)
+          whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxNextModel)
       }
 
       "return None when no turnover is supplied" in {
         turnoverBelowThreshold(
           taxableTurnover = None,
           nextTaxableTurnover = Some(taxableTurnoverBelow),
-          whyTurnoverBelow = Some(whyTurnoverBelowOne),
-          threshold = 9000) shouldBe None
+          whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe None
       }
 
       "return None when not given a TaxableTurnoverModel" in {
         turnoverBelowThreshold(
           taxableTurnover = Some(taxableTurnoverBelow),
           nextTaxableTurnover = None,
-          whyTurnoverBelow = Some(whyTurnoverBelowOne),
-          threshold = 9000) shouldBe None
+          whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe None
       }
     }
 
-    ".retrieveYesNo" should {
+    ".taxInvoices" should {
 
-      "return true when given a Yes" in {
-        retrieveYesNo(Some(stocksModel)) shouldBe true
+      "return true when either issueNewInvoices or outstandingInvoices are Yes" in {
+        taxInvoices(Yes,Option(Yes)) shouldBe true
+        taxInvoices(Yes,Option(No)) shouldBe true
+        taxInvoices(No,Option(Yes)) shouldBe true
       }
 
-      "return false when given a No or a None" in {
-        retrieveYesNo(Some(yesNoAmountNo)) shouldBe false
-        retrieveYesNo(None) shouldBe false
+      "return true when both are No" in {
+        taxInvoices(No,Option(No)) shouldBe false
+      }
+    }
+
+    ".isCashAccount" should {
+
+      "return true when VatAccountsModel is CashAccounting" in {
+        isCashAccounting(CashAccounting) shouldBe true
       }
 
-      ".additionalTaxInvoices" should {
-
-        "return true when either issueNewInvoices or outstandingInvoices are Yes" in {
-          additionalTaxInvoices(issueNewInvoices = Some(Yes), outstandingInvoices = Some(Yes)) shouldBe true
-          additionalTaxInvoices(issueNewInvoices = Some(Yes), outstandingInvoices = None) shouldBe true
-          additionalTaxInvoices(issueNewInvoices = Some(Yes), outstandingInvoices = Some(No)) shouldBe true
-          additionalTaxInvoices(issueNewInvoices = None, outstandingInvoices = Some(Yes)) shouldBe true
-          additionalTaxInvoices(issueNewInvoices = Some(No), outstandingInvoices = Some(Yes)) shouldBe true
-        }
-
-        "return false when neither are Yes" in {
-          additionalTaxInvoices(issueNewInvoices = None, outstandingInvoices = None) shouldBe false
-          additionalTaxInvoices(issueNewInvoices = Some(No), outstandingInvoices = Some(No)) shouldBe false
-          additionalTaxInvoices(issueNewInvoices = Some(No), outstandingInvoices = None) shouldBe false
-          additionalTaxInvoices(issueNewInvoices = None, outstandingInvoices = Some(No)) shouldBe false
-        }
-      }
-
-      ".cashAccountingScheme" should {
-
-        "return true when Accounting Method is CashAccounting" in {
-          cashAccountingScheme(accountingMethod = Some(CashAccounting)) shouldBe true
-        }
-
-        "return true when Accounting Method is not CashAccounting" in {
-          cashAccountingScheme(accountingMethod = Some(StandardAccounting)) shouldBe false
-          cashAccountingScheme(accountingMethod = None) shouldBe false
-        }
-      }
-
-      ".retrieveAmount" should {
-
-        "return an amount when given a YesNoAmountModel" in {
-          retrieveAmount(Some(stocksModel)) shouldBe Some(stockValue)
-        }
-
-        "return an None when given a None" in {
-          retrieveAmount(None) shouldBe None
-        }
+      "return false when VatAccountsModel is NOT CashAccounting" in {
+        isCashAccounting(StandardAccounting) shouldBe false
       }
     }
 
@@ -177,18 +181,18 @@ class DeregistrationInfoSpec extends TestUtil {
     }
   }
 
-  def defaultCustomApply(deregReason: Option[DeregistrationReason] = Some(BelowThreshold),
+  def defaultCustomApply(deregReason: DeregistrationReason = BelowThreshold,
                          ceasedTradingDate: Option[DateModel] = Some(todayDateModel),
                          taxableTurnover: Option[TaxableTurnoverModel] = Some(taxableTurnoverBelow),
                          nextTaxableTurnover: Option[TaxableTurnoverModel] = Some(taxableTurnoverBelow),
                          whyTurnoverBelow: Option[WhyTurnoverBelowModel] = Some(whyTurnoverBelowOne),
-                         accountingMethod: Option[VATAccountsModel] = Some(CashAccounting),
-                         optionTax: Option[YesNoAmountModel] = Some(ottModel),
-                         stocks: Option[YesNoAmountModel] = Some(stocksModel),
-                         capitalAssets: Option[YesNoAmountModel] = Some(assetsModel),
-                         issueNewInvoices: Option[YesNo] = Some(Yes),
+                         accountingMethod: VATAccountsModel = CashAccounting,
+                         optionTax: YesNoAmountModel = ottModel,
+                         stocks: YesNoAmountModel = stocksModel,
+                         capitalAssets: YesNoAmountModel = assetsModel,
+                         issueNewInvoices: YesNo = Yes,
                          outstandingInvoices: Option[YesNo] = Some(Yes),
-                         deregDate: Option[DeregistrationDateModel] = Some(deregistrationDateModel)): Either[ErrorModel, DeregistrationInfo] = {
+                         deregDate: Option[DeregistrationDateModel] = Some(deregistrationDateModel)): DeregistrationInfo = {
     DeregistrationInfo.customApply(
       deregReason,
       ceasedTradingDate,
@@ -206,7 +210,7 @@ class DeregistrationInfoSpec extends TestUtil {
   }
 
   def defaultDeregInfo(deregReason: DeregistrationReason = BelowThreshold,
-                       deregInfoDate: Option[LocalDate] = Some(todayDate),
+                       deregInfoDate: LocalDate = todayDate,
                        deregLaterDate: Option[LocalDate] = Some(laterDate),
                        turnoverBelowThreshold: Option[TurnoverBelowThreshold] = Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxNextModel),
                        optionToTax: Boolean = true,

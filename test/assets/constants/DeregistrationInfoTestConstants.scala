@@ -26,7 +26,7 @@ object DeregistrationInfoTestConstants {
 
   val deregistrationInfoMinModel: DeregistrationInfo = DeregistrationInfo(
     deregReason = Ceased,
-    deregDate = None,
+    deregDate = todayDate,
     deregLaterDate = None,
     turnoverBelowThreshold = None,
     optionToTax = true,
@@ -40,6 +40,7 @@ object DeregistrationInfoTestConstants {
 
   val deregistrationInfoMinJson: JsObject = Json.obj(
     "deregReason" -> Ceased.value,
+    "deregDate" -> todayDate,
     "optionToTax" -> true,
     "intendSellCapitalAssets" -> true,
     "additionalTaxInvoices" -> true,
@@ -48,7 +49,7 @@ object DeregistrationInfoTestConstants {
 
   val deregistrationInfoMaxModel: DeregistrationInfo = DeregistrationInfo(
     deregReason = BelowThreshold,
-    deregDate = Some(todayDate),
+    deregDate = todayDate,
     deregLaterDate = Some(laterDate),
     turnoverBelowThreshold = Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdMaxNextModel),
     optionToTax = true,

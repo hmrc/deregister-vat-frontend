@@ -17,14 +17,13 @@
 package controllers
 
 import assets.constants.CheckYourAnswersTestConstants._
-import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.TaxableTurnoverTestConstants._
+import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
-import assets.messages.{CheckYourAnswersMessages, DeregistrationConfirmationMessages}
 import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.{MockDeregDateAnswerService,MockCheckAnswersService, MockUpdateDeregistrationService}
+import services.mocks.{MockCheckAnswersService, MockDeregDateAnswerService, MockUpdateDeregistrationService}
 
 import scala.concurrent.Future
 

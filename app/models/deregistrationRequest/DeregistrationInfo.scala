@@ -58,8 +58,8 @@ object DeregistrationInfo {
           turnoverBelowThreshold(taxableTurnover, nextTaxableTurnover, whyTurnoverBelow),
           optionTax.yesNo.value,
           capitalAssets.yesNo.value,
-          issueNewInvoices.value || outstandingInvoices.fold(false)(_.value),
-          accountingMethod == CashAccounting,
+          taxInvoices(issueNewInvoices, outstandingInvoices),
+          isCashAccounting(accountingMethod),
           optionTax.amount,
           stocks.amount,
           capitalAssets.amount
@@ -85,9 +85,14 @@ object DeregistrationInfo {
       }
     }
 
+  private[deregistrationRequest] val taxInvoices: (YesNo, Option[YesNo]) => Boolean =
+    (issueNewInvoices, outstandingInvoices) => issueNewInvoices.value || outstandingInvoices.fold(false)(_.value)
+
+  private[deregistrationRequest] val isCashAccounting: VATAccountsModel => Boolean = _ == CashAccounting
+
   implicit val writes: Writes[DeregistrationInfo] = (
     (__ \ "deregReason").write[DeregistrationReason](DeregistrationReason.submissionWrites) and
-      (__ \ "deregDate").writeNullable[LocalDate] and
+      (__ \ "deregDate").write[LocalDate] and
       (__ \ "deregLaterDate").writeNullable[LocalDate] and
       (__ \ "turnoverBelowThreshold").writeNullable[TurnoverBelowThreshold] and
       (__ \ "optionToTax").write[Boolean] and

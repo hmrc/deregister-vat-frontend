@@ -21,6 +21,7 @@ import assets.constants.BaseTestConstants.{vrn, _}
 import models._
 import models.deregistrationRequest.DeregistrationInfo
 import utils.TestUtil
+import assets.constants.DateModelTestConstants._
 
 
 class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
@@ -29,7 +30,7 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
 
   val deregInfoModel = DeregistrationInfo(
     deregReason = Ceased,
-    deregDate = None,
+    deregDate = todayDate,
     deregLaterDate = None,
     turnoverBelowThreshold = None,
     optionToTax = true,
