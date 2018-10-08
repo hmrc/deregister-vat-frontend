@@ -30,7 +30,7 @@ object CheckYourAnswersMessages {
   val whyBelow = "Why does the business expect its turnover to be below the threshold?"
   val vatAccounts = "How are the business’s VAT accounts prepared?"
   val optionTax = "Did the business charge VAT on land or commercial property?"
-  val optionTaxValue = "What was the total value of what the business charged or claimed?"
+  val optionTaxValue = "What was the total value of the land or commercial property?"
   val stocks = "Does the business intend to keep any stock?"
   val stocksValue = "What is the total value of the stock?"
   val capitalAssets = "Does the business intend to keep any capital assets?"
