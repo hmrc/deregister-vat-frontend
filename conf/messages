@@ -28,10 +28,10 @@ error.date.year = Enter 4 numbers
 error.date.invalid = Invalid date
 
 deregisterForVAT.title = Deregister for VAT
-deregisterForVAT.p1 = You can only deregister under certain circumstances, for example if the business:
-deregisterForVAT.bullet1 = has stopped trading
-deregisterForVAT.bullet2 = no longer makes VAT taxable supplies
-deregisterForVAT.bullet3 = turnover falls below the VAT threshold
+deregisterForVAT.p1 = To complete your deregistration, you need to know:
+deregisterForVAT.bullet1 = your accounting method: standard accounting or cash accounting
+deregisterForVAT.bullet2 = the value of any land or commercial property you own
+deregisterForVAT.bullet3 = the value of any stock or assets you have or plan to keep
 
 deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.ceased = It has stopped trading
