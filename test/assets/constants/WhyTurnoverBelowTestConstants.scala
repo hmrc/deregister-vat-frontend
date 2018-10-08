@@ -28,11 +28,12 @@ object WhyTurnoverBelowTestConstants {
     reducedTradingHours = true,
     seasonalBusiness = false,
     closedPlacesOfBusiness = false,
-    turnoverLowerThanExpected = false
+    turnoverLowerThanExpected = false,
+    alreadyBelow = false
   )
 
-  val whyTurnoverBelowAll = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
-  val whyTurnoverBelowMin = WhyTurnoverBelowModel(true,false,false,false,false,false,false)
+  val whyTurnoverBelowAll = WhyTurnoverBelowModel(true,true,true,true,true,true,true,true)
+  val whyTurnoverBelowMin = WhyTurnoverBelowModel(true,false,false,false,false,false,false,false)
 
   val whyTurnoverBelowOneJson: JsObject = Json.obj(
   "lostContract" -> false,
@@ -41,7 +42,8 @@ object WhyTurnoverBelowTestConstants {
   "reducedTradingHours" -> true,
   "seasonalBusiness" -> false,
   "closedPlacesOfBusiness" -> false,
-  "turnoverLowerThanExpected" -> false
+  "turnoverLowerThanExpected" -> false,
+  "alreadyBelow" -> false
   )
 
 }

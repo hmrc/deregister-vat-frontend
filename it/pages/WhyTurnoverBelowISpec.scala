@@ -86,8 +86,8 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
     def postRequest(data: WhyTurnoverBelowModel): WSResponse =
       post("/why-turnover-below")(toFormData(WhyTurnoverBelowForm.whyTurnoverBelowForm, data))
 
-    val validModel = WhyTurnoverBelowModel(true, true, true, true, true, true, true)
-    val invalidModel = WhyTurnoverBelowModel(false, false, false, false, false, false, false)
+    val validModel = WhyTurnoverBelowModel(true, true, true, true, true, true, true, false)
+    val invalidModel = WhyTurnoverBelowModel(false, false, false, false, false, false, false, false)
 
     "the user is authorised" when {
 

@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Json, Format}
+import play.api.libs.json.{Format, Json}
 
 case class WhyTurnoverBelowModel(lostContract: Boolean,
                                  semiRetiring: Boolean,
@@ -24,10 +24,11 @@ case class WhyTurnoverBelowModel(lostContract: Boolean,
                                  reducedTradingHours: Boolean,
                                  seasonalBusiness: Boolean,
                                  closedPlacesOfBusiness: Boolean,
-                                 turnoverLowerThanExpected: Boolean) {
+                                 turnoverLowerThanExpected: Boolean,
+                                 alreadyBelow: Boolean) {
 
   val hasAtLeastOneSelected: Boolean = lostContract || semiRetiring || moreCompetitors || reducedTradingHours ||
-    seasonalBusiness || closedPlacesOfBusiness || turnoverLowerThanExpected
+    seasonalBusiness || closedPlacesOfBusiness || turnoverLowerThanExpected || alreadyBelow
 
   val asSequence = Seq(
     lostContract -> WhyTurnoverBelowModel.lostContract,
@@ -43,8 +44,6 @@ case class WhyTurnoverBelowModel(lostContract: Boolean,
 
 object WhyTurnoverBelowModel {
 
-  implicit val format: Format[WhyTurnoverBelowModel] = Json.format[WhyTurnoverBelowModel]
-
   val lostContract: String = "lostContract"
   val semiRetiring: String = "semiRetiring"
   val moreCompetitors: String = "moreCompetitors"
@@ -52,5 +51,39 @@ object WhyTurnoverBelowModel {
   val seasonalBusiness: String = "seasonalBusiness"
   val closedPlacesOfBusiness: String = "closedPlacesOfBusiness"
   val turnoverLowerThanExpected: String = "turnoverLowerThanExpected"
+  val alreadyBelow: String = "alreadyBelow"
+
+  def formApply(lostContract: Boolean,
+                semiRetiring: Boolean,
+                moreCompetitors: Boolean,
+                reducedTradingHours: Boolean,
+                seasonalBusiness: Boolean,
+                closedPlacesOfBusiness: Boolean,
+                turnoverLowerThanExpected: Boolean): WhyTurnoverBelowModel = {
+    WhyTurnoverBelowModel(
+      lostContract,
+      semiRetiring,
+      moreCompetitors,
+      reducedTradingHours,
+      seasonalBusiness,
+      closedPlacesOfBusiness,
+      turnoverLowerThanExpected,
+      alreadyBelow = false
+    )
+  }
+
+  def formUnapply(whyTurnoverBelowModel: WhyTurnoverBelowModel): Option[(Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean)] = {
+    Some(
+      whyTurnoverBelowModel.lostContract,
+      whyTurnoverBelowModel.semiRetiring,
+      whyTurnoverBelowModel.moreCompetitors,
+      whyTurnoverBelowModel.reducedTradingHours,
+      whyTurnoverBelowModel.seasonalBusiness,
+      whyTurnoverBelowModel.closedPlacesOfBusiness,
+      whyTurnoverBelowModel.turnoverLowerThanExpected
+    )
+  }
+
+  implicit val format: Format[WhyTurnoverBelowModel] = Json.format[WhyTurnoverBelowModel]
 }
 

@@ -23,7 +23,7 @@ object IntegrationTestConstants {
 
   val vrn = "999999999"
 
-  val whyTurnoverBelowModel = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
+  val whyTurnoverBelowModel = WhyTurnoverBelowModel(true,true,true,true,true,true,true,false)
 
   val whyTurnoverBelowJson = Json.obj(
     "lostContract" -> true,
