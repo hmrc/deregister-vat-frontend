@@ -19,7 +19,7 @@ package assets.messages
 object CapitalAssetsMessages {
 
   val title = "Does the business intend to keep any capital assets?"
-  val p1 = "This includes things like buildings, land, furniture, computers and other raw material or equipment."
+  val p1 = "This includes things like furniture, computers and other raw material or equipment."
   val hint = "What is the total value?"
 
 }
