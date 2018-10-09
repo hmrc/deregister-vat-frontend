@@ -28,10 +28,10 @@ error.date.year = Enter 4 numbers
 error.date.invalid = Invalid date
 
 deregisterForVAT.title = Deregister for VAT
-deregisterForVAT.p1 = You can only deregister under certain circumstances, for example if the business:
-deregisterForVAT.bullet1 = has stopped trading
-deregisterForVAT.bullet2 = no longer makes VAT taxable supplies
-deregisterForVAT.bullet3 = turnover falls below the VAT threshold
+deregisterForVAT.p1 = To complete your deregistration, you need to know:
+deregisterForVAT.bullet1 = your accounting method: standard accounting or cash accounting
+deregisterForVAT.bullet2 = the value of any land or commercial property you own
+deregisterForVAT.bullet3 = the value of any stock or assets you have or plan to keep
 
 deregistrationReason.title = Why is the business deregistering from VAT?
 deregistrationReason.reason.ceased = It has stopped trading
@@ -64,7 +64,7 @@ ceasedTrading.error.date.invalidDate = Enter a real ceased trading date
 
 optionTax.title = Has the business charged or claimed VAT on land or commercial property?
 optionTax.text = You can choose to charge VAT on any income earned from renting or selling land or commercial property. This is known as ‘Option to Tax’.
-optionTax.hint = What was the total value of what the business charged or claimed?
+optionTax.hint = What was the total value of the land or commercial property?
 
 capitalAssets.title = Does the business intend to keep any capital assets?
 capitalAssets.text.1 = This includes things like buildings, land, furniture, computers and other raw material or equipment.
@@ -107,7 +107,7 @@ checkYourAnswers.question.nextTaxableTurnover = What is the business’s expecte
 checkYourAnswers.question.whyBelow = Why does the business expect its turnover to be below the threshold?
 checkYourAnswers.question.VatAccounts = How are the business’s VAT accounts prepared?
 checkYourAnswers.question.optionTax = Did the business charge VAT on land or commercial property?
-checkYourAnswers.question.optionTaxValue = What was the total value of what the business charged or claimed?
+checkYourAnswers.question.optionTaxValue = What was the total value of the land or commercial property?
 checkYourAnswers.question.stocks = Does the business intend to keep any stock?
 checkYourAnswers.question.stocksValue = What is the total value of the stock?
 checkYourAnswers.question.capitalAssets = Does the business intend to keep any capital assets?

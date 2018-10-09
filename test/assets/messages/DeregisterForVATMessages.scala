@@ -19,9 +19,9 @@ package assets.messages
 object DeregisterForVATMessages {
 
   val title = "Deregister for VAT"
-  val p1 = "You can only deregister under certain circumstances, for example if the business:"
-  val bullet1 = "has stopped trading"
-  val bullet2 = "no longer makes VAT taxable supplies"
-  val bullet3 = "turnover falls below the VAT threshold"
+  val p1 = "To complete your deregistration, you need to know:"
+  val bullet1 = "your accounting method: standard accounting or cash accounting"
+  val bullet2 = "the value of any land or commercial property you own"
+  val bullet3 = "the value of any stock or assets you have or plan to keep"
 
 }
