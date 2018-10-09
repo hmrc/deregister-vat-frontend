@@ -35,6 +35,9 @@ object IntegrationTestConstants {
     "turnoverLowerThanExpected" -> true
   )
 
+  val nextTaxableTurnoverModel = NextTaxableTurnoverModel(BigDecimal(2000))
+  val nextTaxableTurnoverJson = Json.toJson(nextTaxableTurnoverModel)
+
   val capitalAssetsYesModel = YesNoAmountModel(Yes, Some(12))
   val capitalAssetsYesJson = Json.toJson(capitalAssetsYesModel)
 
