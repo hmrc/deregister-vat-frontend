@@ -73,7 +73,7 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
   }
 
   def backLink(lastTurnoverBelowThreshold: Option[YesNo], deregReason: DeregistrationReason): String = {
-    if(deregReason.value.equals("ceased")){
+    if(deregReason == Ceased){
       controllers.routes.CeasedTradingDateController.show().url
     } else {
       lastTurnoverBelowThreshold match {
