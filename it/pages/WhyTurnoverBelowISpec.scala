@@ -44,7 +44,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Why does the business expect its turnover to be below the threshold?")
+          pageTitle("Why does the business expect its taxable turnover to be below £83,000?")
         )
       }
     }
@@ -118,7 +118,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(BAD_REQUEST),
-            pageTitle("Why does the business expect its turnover to be below the threshold?"),
+            pageTitle("Why does the business expect its taxable turnover to be below £83,000?"),
             elementText(".error-message")("Select at least one option")
           )
         }

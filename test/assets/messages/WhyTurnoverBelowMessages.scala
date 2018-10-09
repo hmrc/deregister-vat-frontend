@@ -18,7 +18,7 @@ package assets.messages
 
 object WhyTurnoverBelowMessages {
 
-  val title = "Why does the business expect its turnover to be below the threshold?"
+  val title = "Why does the business expect its taxable turnover to be below £83,000?"
   val text1 = "Select all that apply"
   val reason1 = "Lost a contract"
   val reason2 = "Semi-retiring"

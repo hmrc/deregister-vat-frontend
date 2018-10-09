@@ -87,7 +87,7 @@ optionOwnsStockToSell.title = Does the business intend to keep any stock?
 optionOwnsStockToSell.text.1 = For example, goods bought or manufactured for resale.
 optionOwnsStockToSell.hint = What is the total value of the stock?
 
-whyTurnoverBelow.title = Why does the business expect its turnover to be below the threshold?
+whyTurnoverBelow.title = Why does the business expect its taxable turnover to be below £{0}?
 whyTurnoverBelow.text.1 = Select all that apply
 whyTurnoverBelow.reason.lostContract = Lost a contract
 whyTurnoverBelow.reason.semiRetiring = Semi-retiring
