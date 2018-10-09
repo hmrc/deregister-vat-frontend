@@ -36,7 +36,10 @@ class VATAccountsSpec extends ViewBaseSpec {
 
   "Rendering the VAT Accounts page with no errors from the ceased journey" should {
 
-    lazy val view = views.html.vatAccounts(Ceased, VATAccountsForm.vatAccountsForm)
+    lazy val view = views.html.vatAccounts(
+      controllers.routes.CeasedTradingDateController.show().url,
+      VATAccountsForm.vatAccountsForm
+    )
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -81,7 +84,10 @@ class VATAccountsSpec extends ViewBaseSpec {
 
   "Rendering the VAT Accounts page from the BelowThreshold journey with errors" should {
 
-    lazy val view = views.html.vatAccounts(BelowThreshold, VATAccountsForm.vatAccountsForm.bind(Map("accountingMethod" -> "")))
+    lazy val view = views.html.vatAccounts(
+      controllers.routes.WhyTurnoverBelowController.show().url,
+      VATAccountsForm.vatAccountsForm.bind(Map("accountingMethod" -> ""))
+    )
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
