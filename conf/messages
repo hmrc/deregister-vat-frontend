@@ -67,7 +67,7 @@ optionTax.text = You can choose to charge VAT on any income earned from renting 
 optionTax.hint = What was the total value of the land or commercial property?
 
 capitalAssets.title = Does the business intend to keep any capital assets?
-capitalAssets.text.1 = This includes things like buildings, land, furniture, computers and other raw material or equipment.
+capitalAssets.text.1 = This includes things like furniture, computers and equipment.
 capitalAssets.totalSaleValue = What is the total value?
 
 cannotDeregister.title = The business cannot deregister from VAT
