@@ -17,19 +17,19 @@
 package controllers
 
 import assets.constants.BaseTestConstants._
-import models.{DeregisterVatSuccess, NextTaxableTurnoverModel}
+import models._
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.mocks.MockNextTaxableTurnoverAnswerService
+import services.mocks.{MockNextTaxableTurnoverAnswerService, MockTaxableTurnoverAnswerService}
 
 import scala.concurrent.Future
 
-class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNextTaxableTurnoverAnswerService {
+class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxableTurnoverAnswerService with MockNextTaxableTurnoverAnswerService {
 
   object TestNextTaxableTurnoverController extends NextTaxableTurnoverController(
-    messagesApi, mockAuthPredicate, mockNextTaxableTurnoverAnswerService, mockConfig
+    messagesApi, mockAuthPredicate, mockTaxableTurnoverAnswerService, mockNextTaxableTurnoverAnswerService, mockConfig
   )
 
   val testTurnoverAmt = 500
@@ -89,6 +89,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNext
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockGetTaxableTurnover(Right(Some(No)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
@@ -108,6 +109,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNext
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockGetTaxableTurnover(Right(Some(Yes)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
@@ -118,7 +120,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNext
         }
       }
 
-      "the user submits after inputting an amount that is less than the threshold" should {
+      "the user submits after inputting an amount that is less than the threshold and their last turnover is less than the threshold" should {
 
         val testTurnoverAmt = mockConfig.deregThreshold - 0.01
 
@@ -127,6 +129,27 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockNext
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockGetTaxableTurnover(Right(Some(Yes)))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        s"Redirect to the '${controllers.routes.WhyTurnoverBelowController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
+        }
+      }
+
+      "the user submits after inputting an amount that is less than the threshold and their last turnover is more than the threshold" should {
+
+        val testTurnoverAmt = mockConfig.deregThreshold - 0.01
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+
+        "return 303 (SEE OTHER)" in {
+          setupMockGetTaxableTurnover(Right(Some(No)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER

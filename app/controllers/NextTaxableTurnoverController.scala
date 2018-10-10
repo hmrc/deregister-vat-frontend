@@ -16,15 +16,17 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.instances.future._
 import config.AppConfig
 import controllers.predicates.AuthPredicate
 import forms.NextTaxableTurnoverForm
 import javax.inject.{Inject, Singleton}
-import models.{NextTaxableTurnoverModel, User}
+import models.{NextTaxableTurnoverModel, No, User, Yes}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.NextTaxableTurnoverAnswerService
+import services.{NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -32,6 +34,7 @@ import scala.concurrent.Future
 @Singleton
 class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                               val authenticate: AuthPredicate,
+                                              val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
@@ -48,13 +51,13 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     NextTaxableTurnoverForm.taxableTurnoverForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.nextTaxableTurnover(error))),
-      data => nextTaxableTurnoverAnswerService.storeAnswer(data) map {
-        case Right(_) =>
-          if (data.turnover > appConfig.deregThreshold) {
-            Redirect(controllers.routes.CannotDeregisterThresholdController.show())
-          } else {
-            Redirect(controllers.routes.WhyTurnoverBelowController.show())
-          }
+      data => (for {
+        _ <- EitherT(nextTaxableTurnoverAnswerService.storeAnswer(data))
+        tt <- EitherT(taxableTurnoverAnswerService.getAnswer)
+      } yield tt).value.map {
+        case Right(Some(_)) if data.turnover > appConfig.deregThreshold => Redirect(controllers.routes.CannotDeregisterThresholdController.show())
+        case Right(Some(Yes)) => Redirect(controllers.routes.VATAccountsController.show())
+        case Right(Some(No)) => Redirect(controllers.routes.WhyTurnoverBelowController.show())
         case _ => InternalServerError //TODO: Update to render ISE page
       }
     )
