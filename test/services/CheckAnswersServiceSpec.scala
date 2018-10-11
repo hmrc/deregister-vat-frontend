@@ -17,6 +17,9 @@
 package services
 
 import assets.constants.CheckYourAnswersTestConstants._
+import assets.constants.NextTaxableTurnoverTestConstants._
+import assets.constants.WhyTurnoverBelowTestConstants._
+import assets.constants.YesNoAmountTestConstants._
 import models._
 import services.mocks._
 import utils.TestUtil
@@ -56,11 +59,11 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetCeasedTradingDate(Right(Some(dateModel)))
         setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
         setupMockGetTaxableTurnover(Right(Some(Yes)))
-        setupMockGetNextTaxableTurnover(Right(Some(taxableTurnoverBelow)))
+        setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
         setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
-        setupMockGetOptionTax(Right(Some(yesNoAmountYes)))
-        setupMockGetStocks(Right(Some(yesNoAmountYes)))
-        setupMockGetCapitalAssets(Right(Some(yesNoAmountYes)))
+        setupMockGetOptionTax(Right(Some(ottModel)))
+        setupMockGetStocks(Right(Some(stocksModel)))
+        setupMockGetCapitalAssets(Right(Some(assetsModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
         setupMockGetDeregDate(Right(Some(deregistrationDate)))
@@ -70,12 +73,12 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
             Some(Ceased),
             Some(dateModel),
             Some(Yes),
-            Some(taxableTurnoverBelow),
+            Some(nextTaxableTurnoverBelow),
             Some(whyTurnoverBelowAll),
             Some(StandardAccounting),
-            Some(yesNoAmountYes),
-            Some(yesNoAmountYes),
-            Some(yesNoAmountYes),
+            Some(ottModel),
+            Some(stocksModel),
+            Some(assetsModel),
             Some(Yes),
             Some(Yes),
             Some(deregistrationDate)
@@ -102,11 +105,11 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetCeasedTradingDate(Right(Some(dateModel)))
         setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
         setupMockGetTaxableTurnover(Right(Some(Yes)))
-        setupMockGetNextTaxableTurnover(Right(Some(taxableTurnoverBelow)))
+        setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
         setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
-        setupMockGetOptionTax(Right(Some(yesNoAmountYes)))
-        setupMockGetStocks(Right(Some(yesNoAmountYes)))
-        setupMockGetCapitalAssets(Right(Some(yesNoAmountYes)))
+        setupMockGetOptionTax(Right(Some(ottModel)))
+        setupMockGetStocks(Right(Some(stocksModel)))
+        setupMockGetCapitalAssets(Right(Some(assetsModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
         setupMockGetDeregDate(Left(errorModel))

@@ -16,9 +16,15 @@
 
 package models
 
+import java.time.LocalDate
+
 import play.api.libs.json.{Format, Json}
 
-case class DeregistrationDateModel(yesNo: YesNo, date: Option[DateModel])
+case class DeregistrationDateModel(yesNo: YesNo, date: Option[DateModel]) {
+
+  val getLocalDate: Option[LocalDate] = date.fold[Option[LocalDate]](None)(dateModel => dateModel.date)
+
+}
 
 object DeregistrationDateModel {
 

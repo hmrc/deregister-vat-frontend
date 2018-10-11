@@ -16,6 +16,8 @@
 
 package assets.constants
 
+import assets.constants.YesNoAmountTestConstants._
+import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.messages.{CheckYourAnswersMessages, CommonMessages, WhyTurnoverBelowMessages}
 import models._
 import play.twirl.api.Html
@@ -25,12 +27,6 @@ import utils.{MoneyFormatter, TestUtil}
 object CheckYourAnswersTestConstants extends TestUtil{
 
   val dateModel = DateModel(1,1,2018)
-  val taxableTurnoverAbove = NextTaxableTurnoverModel(BigDecimal(90000))
-  val taxableTurnoverBelow = NextTaxableTurnoverModel(BigDecimal(200))
-  val whyTurnoverBelowAll = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
-  val whyTurnoverBelowMin = WhyTurnoverBelowModel(true,false,false,false,false,false,false)
-  val yesNoAmountYes = YesNoAmountModel(Yes,Some(BigDecimal(1000)))
-  val yesNoAmountNo = YesNoAmountModel(No,None)
   val deregistrationDate = DeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
 
   val deregReasonRow = CheckYourAnswersRowModel(
@@ -53,7 +49,7 @@ object CheckYourAnswersTestConstants extends TestUtil{
 
   val nextTaxableTurnoverRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.nextTaxableTurnover,
-    MoneyFormatter.formatHtmlAmount(taxableTurnoverBelow.turnover),
+    MoneyFormatter.formatHtmlAmount(nextTaxableTurnoverBelow.turnover),
     controllers.routes.NextTaxableTurnoverController.show().url
   )
 
@@ -96,7 +92,7 @@ object CheckYourAnswersTestConstants extends TestUtil{
 
   val optionTaxValueRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.optionTaxValue,
-    MoneyFormatter.formatHtmlAmount(yesNoAmountYes.amount.get),
+    MoneyFormatter.formatHtmlAmount(ottModel.amount.get),
     controllers.routes.OptionTaxController.show().url
   )
 
@@ -114,7 +110,7 @@ object CheckYourAnswersTestConstants extends TestUtil{
 
   val stocksValueRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.stocksValue,
-    MoneyFormatter.formatHtmlAmount(yesNoAmountYes.amount.get),
+    MoneyFormatter.formatHtmlAmount(stocksModel.amount.get),
     controllers.routes.OptionStocksToSellController.show().url
   )
 
@@ -132,7 +128,7 @@ object CheckYourAnswersTestConstants extends TestUtil{
 
   val captialAssetsValueRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.capitalAssetsValue,
-    MoneyFormatter.formatHtmlAmount(yesNoAmountYes.amount.get),
+    MoneyFormatter.formatHtmlAmount(assetsModel.amount.get),
     controllers.routes.CapitalAssetsController.show().url
   )
 
