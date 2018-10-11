@@ -22,7 +22,7 @@
 @(form: Form[WhyTurnoverBelowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("whyTurnoverBelow.title"),
+    title = messages("whyTurnoverBelow.title", appConfig.deregThreshold),
     bodyClasses = None,
     appConfig = appConfig) {
 
@@ -30,7 +30,7 @@
 
     @errorSummary("common.errorSummary.heading", form, Some("reason"))
 
-    @headings(messages("whyTurnoverBelow.title"))
+    @headings(messages("whyTurnoverBelow.title", appConfig.deregThreshold))
 
     <p>@messages("whyTurnoverBelow.text.1")</p>
 

@@ -46,7 +46,8 @@ class WhyTurnoverBelowFormSpec extends UnitSpec {
         reducedTradingHours = false,
         seasonalBusiness = true,
         closedPlacesOfBusiness = true,
-        turnoverLowerThanExpected = false
+        turnoverLowerThanExpected = false,
+        alreadyBelow = false
       ))
     }
   }
@@ -90,7 +91,8 @@ class WhyTurnoverBelowFormSpec extends UnitSpec {
         reducedTradingHours = false,
         seasonalBusiness = true,
         closedPlacesOfBusiness = true,
-        turnoverLowerThanExpected = false
+        turnoverLowerThanExpected = false,
+        alreadyBelow = false
       )
       val form = WhyTurnoverBelowForm.whyTurnoverBelowForm.fill(model)
       form.data shouldBe Map(

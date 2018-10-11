@@ -25,14 +25,14 @@ class WhyTurnoverBelowModelSpec extends TestUtil {
     "given at least one true" should {
 
       "return true" in {
-        WhyTurnoverBelowModel(false, false, false, true, false, false, false).hasAtLeastOneSelected shouldBe true
+        WhyTurnoverBelowModel(false, false, false, true, false, false, false, false).hasAtLeastOneSelected shouldBe true
       }
     }
 
     "given all false" should {
 
       "return false" in {
-        WhyTurnoverBelowModel(false, false, false, false, false, false, false).hasAtLeastOneSelected shouldBe false
+        WhyTurnoverBelowModel(false, false, false, false, false, false, false, false).hasAtLeastOneSelected shouldBe false
       }
     }
   }

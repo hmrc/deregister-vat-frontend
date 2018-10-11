@@ -23,7 +23,7 @@ object IntegrationTestConstants {
 
   val vrn = "999999999"
 
-  val whyTurnoverBelowModel = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
+  val whyTurnoverBelowModel = WhyTurnoverBelowModel(true,true,true,true,true,true,true,false)
 
   val whyTurnoverBelowJson = Json.obj(
     "lostContract" -> true,
@@ -34,6 +34,9 @@ object IntegrationTestConstants {
     "closedPlacesOfBusiness" -> true,
     "turnoverLowerThanExpected" -> true
   )
+
+  val nextTaxableTurnoverModel = NextTaxableTurnoverModel(BigDecimal(2000))
+  val nextTaxableTurnoverJson = Json.toJson(nextTaxableTurnoverModel)
 
   val capitalAssetsYesModel = YesNoAmountModel(Yes, Some(12))
   val capitalAssetsYesJson = Json.toJson(capitalAssetsYesModel)

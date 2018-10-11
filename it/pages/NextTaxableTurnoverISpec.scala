@@ -17,20 +17,21 @@
 package pages
 
 import assets.IntegrationTestConstants._
-import forms.WhyTurnoverBelowForm
+import forms.NextTaxableTurnoverForm
 import helpers.IntegrationBaseSpec
-import models.WhyTurnoverBelowModel
+import models._
 import play.api.http.Status._
+import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
+import services._
 import stubs.DeregisterVatStub
-import services.WhyTurnoverBelowAnswerService
 
 
-class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
+class NextTaxableTurnoverISpec extends IntegrationBaseSpec {
 
-  "Calling the GET Why Turnover Below endpoint" when {
+  "Calling the GET NextTaxableTurnover" when {
 
-    def getRequest(): WSResponse = get("/why-turnover-below")
+    def getRequest(): WSResponse = get("/next-taxable-turnover")
 
     "the user is authorised" should {
 
@@ -38,13 +39,13 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn,WhyTurnoverBelowAnswerService.key)(whyTurnoverBelowJson)
+        DeregisterVatStub.successfulGetAnswer(vrn,NextTaxableTurnoverAnswerService.key)(nextTaxableTurnoverJson)
 
         val response: WSResponse = getRequest()
 
         response should have(
           httpStatus(OK),
-          pageTitle("Why does the business expect its taxable turnover to be below £83,000?")
+          pageTitle("What is the business’s expected taxable turnover for the next 12 months?")
         )
       }
     }
@@ -81,13 +82,11 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
   }
 
 
-  "Calling the POST Why Turnover Below endpoint" when {
+  "Calling the POST NextTaxableTurnover" when {
 
-    def postRequest(data: WhyTurnoverBelowModel): WSResponse =
-      post("/why-turnover-below")(toFormData(WhyTurnoverBelowForm.whyTurnoverBelowForm, data))
+    def postRequest(data: NextTaxableTurnoverModel): WSResponse =
+      post("/next-taxable-turnover")(toFormData(NextTaxableTurnoverForm.taxableTurnoverForm, data))
 
-    val validModel = WhyTurnoverBelowModel(true, true, true, true, true, true, true, false)
-    val invalidModel = WhyTurnoverBelowModel(false, false, false, false, false, false, false, false)
 
     "the user is authorised" when {
 
@@ -97,9 +96,29 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
+          DeregisterVatStub.successfulPutAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn,TaxableTurnoverAnswerService.key)(Json.toJson(No))
+
+          val response: WSResponse = postRequest(nextTaxableTurnoverModel)
+
+          response should have(
+            httpStatus(SEE_OTHER),
+            redirectURI(controllers.routes.WhyTurnoverBelowController.show().url)
+          )
+        }
+      }
+
+      "the post request includes valid data and a Yes to the NextTaxableTurnover below question" should {
+
+        "return 303 SEE_OTHER" in {
+
+          given.user.isAuthorised
+
+          DeregisterVatStub.successfulPutAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn,TaxableTurnoverAnswerService.key)(Json.toJson(Yes))
           DeregisterVatStub.successfulPutAnswer(vrn,WhyTurnoverBelowAnswerService.key)
 
-          val response: WSResponse = postRequest(validModel)
+          val response: WSResponse = postRequest(nextTaxableTurnoverModel)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -108,18 +127,36 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
         }
       }
 
-      "the post request includes invalid data" should {
+      "the post returns an error" should {
 
-        "return 400 BAD_REQUEST" in {
+        "return 500 INTERNAL_SERVER_ERROR" in {
 
           given.user.isAuthorised
 
-          val response: WSResponse = postRequest(invalidModel)
+          DeregisterVatStub.putAnswerError(vrn,NextTaxableTurnoverAnswerService.key)
+
+          val response: WSResponse = postRequest(nextTaxableTurnoverModel)
 
           response should have(
-            httpStatus(BAD_REQUEST),
-            pageTitle("Why does the business expect its taxable turnover to be below £83,000?"),
-            elementText(".error-message")("Select at least one option")
+            httpStatus(INTERNAL_SERVER_ERROR)
+          )
+        }
+      }
+
+      "the NextTurnover update is successful but the whyTurnoverBelow update returns an error" should {
+
+        "return 500 INTERNAL_SERVER_ERROR" in {
+
+          given.user.isAuthorised
+
+          DeregisterVatStub.successfulPutAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn,TaxableTurnoverAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.putAnswerError(vrn,WhyTurnoverBelowAnswerService.key)
+
+          val response: WSResponse = postRequest(nextTaxableTurnoverModel)
+
+          response should have(
+            httpStatus(INTERNAL_SERVER_ERROR)
           )
         }
       }
@@ -131,7 +168,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(validModel)
+        val response: WSResponse = postRequest(nextTaxableTurnoverModel)
 
         response should have(
           httpStatus(UNAUTHORIZED),
@@ -146,7 +183,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(validModel)
+        val response: WSResponse = postRequest(nextTaxableTurnoverModel)
 
         response should have(
           httpStatus(FORBIDDEN),
@@ -154,5 +191,6 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
         )
       }
     }
+
   }
 }

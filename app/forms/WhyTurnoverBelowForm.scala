@@ -31,7 +31,7 @@ object WhyTurnoverBelowForm {
       WhyTurnoverBelowModel.seasonalBusiness -> boolean,
       WhyTurnoverBelowModel.closedPlacesOfBusiness -> boolean,
       WhyTurnoverBelowModel.turnoverLowerThanExpected -> boolean
-    )(WhyTurnoverBelowModel.apply)(WhyTurnoverBelowModel.unapply)
+    )(WhyTurnoverBelowModel.formApply)(WhyTurnoverBelowModel.formUnapply)
       .verifying("whyTurnoverBelow.error.atLeastOne", _.hasAtLeastOneSelected)
   )
 

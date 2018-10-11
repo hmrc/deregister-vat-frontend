@@ -22,14 +22,20 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.mocks.{MockNextTaxableTurnoverAnswerService, MockTaxableTurnoverAnswerService}
+import services.mocks.{MockNextTaxableTurnoverAnswerService, MockTaxableTurnoverAnswerService, MockWhyTurnoverBelowAnswerService}
 
 import scala.concurrent.Future
 
-class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxableTurnoverAnswerService with MockNextTaxableTurnoverAnswerService {
+class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxableTurnoverAnswerService
+  with MockNextTaxableTurnoverAnswerService with MockWhyTurnoverBelowAnswerService{
 
   object TestNextTaxableTurnoverController extends NextTaxableTurnoverController(
-    messagesApi, mockAuthPredicate, mockTaxableTurnoverAnswerService, mockNextTaxableTurnoverAnswerService, mockConfig
+    messagesApi,
+    mockAuthPredicate,
+    mockTaxableTurnoverAnswerService,
+    mockNextTaxableTurnoverAnswerService,
+    mockWhyTurnoverBelowAnswerService,
+    mockConfig
   )
 
   val testTurnoverAmt = 500
@@ -109,8 +115,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxa
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockGetTaxableTurnover(Right(Some(Yes)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockGetTaxableTurnover(Right(Some(No)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -129,8 +135,9 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxa
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockGetTaxableTurnover(Right(Some(Yes)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockGetTaxableTurnover(Right(Some(Yes)))
+          setupMockStoreWhyTurnoverBelow(TurnoverAlreadyBelow)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -149,14 +156,31 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxa
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockGetTaxableTurnover(Right(Some(No)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockGetTaxableTurnover(Right(Some(No)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
 
         s"Redirect to the '${controllers.routes.WhyTurnoverBelowController.show().url}'" in {
           redirectLocation(result) shouldBe Some(controllers.routes.WhyTurnoverBelowController.show().url)
+        }
+      }
+
+      "the user submits after answering Yes to the previous question and recieving an error from StoreWhyTurnoverBelow" should {
+
+        val testTurnoverAmt = mockConfig.deregThreshold
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+
+        "return 500 (ISE)" in {
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockGetTaxableTurnover(Right(Some(Yes)))
+          setupMockStoreWhyTurnoverBelow(TurnoverAlreadyBelow)(Left(errorModel))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
 
