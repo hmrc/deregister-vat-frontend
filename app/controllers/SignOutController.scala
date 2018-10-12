@@ -18,23 +18,33 @@ package controllers
 
 import com.google.inject.{Inject, Singleton}
 import config.AppConfig
+import controllers.predicates.AuthPredicate
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import services.DeleteAllStoredAnswersService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
 
 @Singleton
 class SignOutController @Inject()(val messagesApi: MessagesApi,
+                                  val authentication: AuthPredicate,
+                                  val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                   implicit val appConfig: AppConfig
                                  ) extends FrontendController with I18nSupport {
 
-  def signOut(authorised: Boolean): Action[AnyContent] = Action.async { implicit request =>
+  def signOut(authorised: Boolean): Action[AnyContent] = authentication.async { implicit user =>
     val redirectUrl: String = if(authorised) appConfig.signOutUrl else appConfig.unauthorisedSignOutUrl
-    Future.successful(Redirect(redirectUrl))
+    deleteAllStoredAnswersService.deleteAllAnswers map {
+      case Right(_) => Redirect(redirectUrl)
+      case Left(_) => InternalServerError
+    }
   }
 
-  val timeout: Action[AnyContent] = Action.async { implicit request =>
-     Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
+  val timeout: Action[AnyContent] = authentication.async { implicit user =>
+    deleteAllStoredAnswersService.deleteAllAnswers map {
+      case Right(_) => Redirect(appConfig.unauthorisedSignOutUrl)
+      case Left(_) => InternalServerError
+    }
   }
 }

@@ -16,21 +16,31 @@
 
 package controllers
 
+import models.{DeregisterVatSuccess, ErrorModel}
 import play.api.mvc.Result
 import play.api.test.Helpers._
+import services.mocks.MockDeleteAllStoredAnswersService
 
 import scala.concurrent.Future
 
-class SignOutControllerSpec extends ControllerBaseSpec {
+class SignOutControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
 
 
-  object TestSignOutController extends SignOutController(messagesApi, mockConfig)
+  object TestSignOutController extends SignOutController(
+    messagesApi,
+    mockAuthPredicate,
+    mockDeleteAllStoredAnswersService,
+    mockConfig
+  )
 
   "navigating to signout page" when {
 
     "authorised" should {
       "return 303 and navigate to the survey url" in {
         lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true)(request)
+
+        setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
 
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some(mockConfig.signOutUrl)
@@ -41,8 +51,22 @@ class SignOutControllerSpec extends ControllerBaseSpec {
       "return 303 and navigate to sign out url" in {
         lazy val result: Future[Result] = TestSignOutController.signOut(authorised = false)(request)
 
+        setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some(mockConfig.unauthorisedSignOutUrl)
+      }
+    }
+
+    "there is an error deleting the answers" should {
+      "throw an internal server error" in {
+        lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true)(request)
+
+        setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR,"bad things")))
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
       }
     }
   }
@@ -50,6 +74,9 @@ class SignOutControllerSpec extends ControllerBaseSpec {
   "signing out on timeout" should {
     "return 303 and navigate to the expected sign out url" in {
       lazy val result: Future[Result] = TestSignOutController.timeout(request)
+
+      setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+      mockAuthResult(Future.successful(mockAuthorisedIndividual))
 
       status(result) shouldBe SEE_OTHER
       redirectLocation(result) shouldBe Some(mockConfig.unauthorisedSignOutUrl)
