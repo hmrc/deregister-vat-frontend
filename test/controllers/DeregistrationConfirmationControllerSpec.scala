@@ -16,14 +16,17 @@
 
 package controllers
 
+import models.{DeregisterVatSuccess, ErrorModel}
 import play.api.http.Status
 import play.api.test.Helpers._
+import services.mocks.MockDeleteAllStoredAnswersService
 
 import scala.concurrent.Future
 
-class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec {
+class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
 
-  object TestDeregistrationConfirmationController extends DeregistrationConfirmationController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestDeregistrationConfirmationController
+    extends DeregistrationConfirmationController(messagesApi, mockAuthPredicate, mockDeleteAllStoredAnswersService, mockConfig)
 
   "the user is authorised" when {
 
@@ -32,6 +35,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec {
       lazy val result = TestDeregistrationConfirmationController.show()(request)
 
       "return 200 (OK)" in {
+        setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.OK
       }
@@ -41,6 +45,14 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec {
         charset(result) shouldBe Some("utf-8")
       }
 
+    }
+
+    lazy val result2 = TestDeregistrationConfirmationController.show()(request)
+
+    "throw an ISE if there's an error deleting the stored answers" in {
+      setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+      mockAuthResult(Future.successful(mockAuthorisedIndividual))
+      status(result2) shouldBe Status.INTERNAL_SERVER_ERROR
     }
   }
 
