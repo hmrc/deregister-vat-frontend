@@ -31,7 +31,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
   "Calling the GET IssueNewInvoices" when {
 
-    def getRequest(): WSResponse = get("/issue-new-invoices")
+    def getRequest(): WSResponse = get("/new-invoices")
 
     "the user is authorised" should {
 
@@ -85,7 +85,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
   "Calling the POST IssueNewInvoices" when {
 
     def postRequest(data: YesNo): WSResponse =
-      post("/issue-new-invoices")(toFormData(YesNoForm.yesNoForm, data))
+      post("/new-invoices")(toFormData(YesNoForm.yesNoForm, data))
 
     "the user is authorised" when {
 

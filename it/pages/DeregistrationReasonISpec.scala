@@ -31,7 +31,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
   "Calling the GET Why Turnover Below endpoint" when {
 
-    def getRequest(): WSResponse = get("/deregistration-reason?isAgent=false")
+    def getRequest(): WSResponse = get("/deregister-reason?isAgent=false")
 
     "the user is authorised" should {
 
@@ -85,7 +85,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
   "Calling the POST Why Turnover Below endpoint" when {
 
     def postRequest(data: DeregistrationReason): WSResponse =
-      post("/deregistration-reason")(toFormData(DeregistrationReasonForm.deregistrationReasonForm, data))
+      post("/deregister-reason")(toFormData(DeregistrationReasonForm.deregistrationReasonForm, data))
 
 
     "the user is authorised" when {

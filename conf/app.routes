@@ -4,51 +4,45 @@ GET        /hello-world                     controllers.HelloWorldController.hel
 
 GET        /deregister                      controllers.DeregisterForVATController.show
 
-GET        /deregistration-reason           controllers.DeregistrationReasonController.show(isAgent: Boolean)
-POST       /deregistration-reason           controllers.DeregistrationReasonController.submit
+GET        /deregister-reason               controllers.DeregistrationReasonController.show(isAgent: Boolean)
+POST       /deregister-reason               controllers.DeregistrationReasonController.submit
 
 GET        /accounting-method               controllers.VATAccountsController.show
 POST       /accounting-method               controllers.VATAccountsController.submit
 
-GET        /ceased-trading-date             controllers.CeasedTradingDateController.show
-POST       /ceased-trading-date             controllers.CeasedTradingDateController.submit
+GET        /date-ceased-trading             controllers.CeasedTradingDateController.show
+POST       /date-ceased-trading             controllers.CeasedTradingDateController.submit
 
 GET        /option-to-tax                   controllers.OptionTaxController.show
 POST       /option-to-tax                   controllers.OptionTaxController.submit
 
-GET        /deregistration-date             controllers.DeregistrationDateController.show
-POST       /deregistration-date             controllers.DeregistrationDateController.submit
+GET        /new-invoices                    controllers.IssueNewInvoicesController.show
+POST       /new-invoices                    controllers.IssueNewInvoicesController.submit
 
-GET        /option-to-tax                   controllers.OptionTaxController.show
-POST       /option-to-tax                   controllers.OptionTaxController.submit
-
-GET        /issue-new-invoices               controllers.IssueNewInvoicesController.show
-POST       /issue-new-invoices               controllers.IssueNewInvoicesController.submit
-
-GET        /option-stocks-to-sell           controllers.OptionStocksToSellController.show
-POST       /option-stocks-to-sell           controllers.OptionStocksToSellController.submit
+GET        /stock                           controllers.OptionStocksToSellController.show
+POST       /stock                           controllers.OptionStocksToSellController.submit
 
 GET        /capital-assets                  controllers.CapitalAssetsController.show
 POST       /capital-assets                  controllers.CapitalAssetsController.submit
 
-GET        /taxable-turnover                controllers.TaxableTurnoverController.show
-POST       /taxable-turnover                controllers.TaxableTurnoverController.submit
+GET        /deregister-turnover-below-threshold     controllers.TaxableTurnoverController.show
+POST       /deregister-turnover-below-threshold     controllers.TaxableTurnoverController.submit
 
-GET        /deregistration-date             controllers.DeregistrationDateController.show
-POST       /deregistration-date             controllers.DeregistrationDateController.submit
+GET        /deregister-date                 controllers.DeregistrationDateController.show
+POST       /deregister-date                 controllers.DeregistrationDateController.submit
 
-GET        /next-taxable-turnover           controllers.NextTaxableTurnoverController.show
-POST       /next-taxable-turnover           controllers.NextTaxableTurnoverController.submit
+GET        /expected-turnover               controllers.NextTaxableTurnoverController.show
+POST       /expected-turnover               controllers.NextTaxableTurnoverController.submit
 
-GET        /why-turnover-below              controllers.WhyTurnoverBelowController.show
-POST       /why-turnover-below              controllers.WhyTurnoverBelowController.submit
+GET        /reasons-for-low-turnover        controllers.WhyTurnoverBelowController.show
+POST       /reasons-for-low-turnover        controllers.WhyTurnoverBelowController.submit
 
 GET        /check-your-answers              controllers.CheckAnswersController.show
 POST       /check-your-answers              controllers.CheckAnswersController.submit
 
-GET        /deregistration-confirmation     controllers.DeregistrationConfirmationController.show
+GET        /deregister-request-received     controllers.DeregistrationConfirmationController.show
 
-GET        /cannot-deregister-threshold     controllers.CannotDeregisterThresholdController.show
+GET        /cannot-deregister               controllers.CannotDeregisterThresholdController.show
 
 GET        /assets/*file                    controllers.Assets.at(path="/public", file)
 
