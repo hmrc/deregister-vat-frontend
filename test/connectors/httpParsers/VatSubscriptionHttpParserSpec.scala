@@ -25,10 +25,10 @@ class VatSubscriptionHttpParserSpec extends TestUtil {
 
   "The VatSubscriptionHttpParser.updateReads" when {
 
-    "the http response status is NO_CONTENT" should {
+    "the http response status is OK" should {
 
       "return the expected model" in {
-        VatSubscriptionHttpParser.updateReads.read("", "", HttpResponse(Status.NO_CONTENT)) shouldBe Right(VatSubscriptionSuccess)
+        VatSubscriptionHttpParser.updateReads.read("", "", HttpResponse(Status.OK)) shouldBe Right(VatSubscriptionSuccess)
       }
     }
 

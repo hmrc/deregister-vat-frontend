@@ -79,7 +79,6 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
 
     s"have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CheckYourAnswersMessages.confirm
-      element(Selectors.button).attr("href") shouldBe controllers.routes.DeregistrationConfirmationController.show().url
     }
   }
 
