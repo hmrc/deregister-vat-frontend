@@ -29,7 +29,9 @@
             @answerModel.answer
         </dd>
         <dd class="cya-change">
-            <a href="@answerModel.url">@messages("checkYourAnswers.change")</a>
+            <a href="@answerModel.url" aria-label="@answerModel.hiddenText">
+                @messages("checkYourAnswers.change")
+            </a>
         </dd>
     </div>
 }

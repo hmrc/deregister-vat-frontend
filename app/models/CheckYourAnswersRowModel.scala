@@ -18,5 +18,5 @@ package models
 
 import play.twirl.api.Html
 
-case class CheckYourAnswersRowModel(question: String, answer: Html, url: String)
+case class CheckYourAnswersRowModel(question: String, answer: Html, url: String, hiddenText: String)
 

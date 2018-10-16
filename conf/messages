@@ -115,6 +115,21 @@ checkYourAnswers.question.capitalAssetsValue = What is the total value of capita
 checkYourAnswers.question.outstandingInvoice = Is the business expecting to receive payment for outstanding invoices after deregistering?
 checkYourAnswers.question.newInvoices = Is the business expecting to issue any new invoices after deregistering?
 checkYourAnswers.question.deregistrationDate = Deregistration date
+
+checkYourAnswers.hidden.reason = Change the reason why the business is deregistering from VAT
+checkYourAnswers.hidden.willCeaseTrading = Change the date your business stopped or will stop trading
+checkYourAnswers.hidden.ceasedTrading = Change the date the business stopped trading
+checkYourAnswers.hidden.taxableTurnover = Change whether last year's turnover was above or below the VAT threshold
+checkYourAnswers.hidden.nextTaxableTurnover = Change the business's expected turnover for the next 12 months
+checkYourAnswers.hidden.whyBelow = Change the reason why your expect the business's turnover to be below the threshold
+checkYourAnswers.hidden.VatAccounts = The accounting method the business uses to record VAT payments
+checkYourAnswers.hidden.optionTax = Change whether the business charged or claimed VAT on land or commercial property
+checkYourAnswers.hidden.stocks = Change whether the business will keep any stock
+checkYourAnswers.hidden.capitalAssets = Change whether the business will keep any capital assets
+checkYourAnswers.hidden.newInvoices = Change whether the business will issue new invoices after deregistering
+checkYourAnswers.hidden.outstandingInvoice = Change whether the business will receive payment for outstanding invoices after deregistering
+checkYourAnswers.hidden.deregistrationDate = Change whether the business wants to choose its own deregistration date
+
 checkYourAnswers.answer.noDate = Not Specified
 checkYourAnswers.answer.standard = Standard accounting
 checkYourAnswers.answer.cash = Cash accounting
