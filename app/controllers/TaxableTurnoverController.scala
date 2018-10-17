@@ -18,7 +18,7 @@ package controllers
 
 import cats.data.EitherT
 import cats.instances.future._
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
@@ -36,6 +36,7 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                           val authenticate: AuthPredicate,
                                           val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                           val wipeRedundantDataService: WipeRedundantDataService,
+                                          val serviceErrorHandler: ServiceErrorHandler,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) =
@@ -56,7 +57,7 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)
       } yield result).value.map {
         case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
-        case Left(_) => InternalServerError //TODO: Render ISE Page
+        case Left(_) => serviceErrorHandler.showInternalServerError
       }
     )
   }

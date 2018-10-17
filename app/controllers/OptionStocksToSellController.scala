@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.YesNoAmountForm
 import javax.inject.Inject
@@ -32,6 +32,7 @@ import scala.concurrent.Future
 class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
                                              val authenticate: AuthPredicate,
                                              val stocksAnswerService: StocksAnswerService,
+                                             val serviceErrorHandler: ServiceErrorHandler,
                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm)(implicit user: User[_]) =
@@ -49,7 +50,7 @@ class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
       error => Future.successful(BadRequest(views.html.optionStocksToSell(error))),
       data => stocksAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show())
-        case Left(_) => InternalServerError //TODO: Render the ISE page
+        case Left(_) => serviceErrorHandler.showInternalServerError
       }
     )
   }

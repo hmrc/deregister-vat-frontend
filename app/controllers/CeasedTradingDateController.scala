@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.DateForm
 import javax.inject.{Inject, Singleton}
@@ -33,6 +33,7 @@ import scala.concurrent.Future
 class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
                                             val authenticate: AuthPredicate,
                                             val ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
+                                            val serviceErrorHandler: ServiceErrorHandler,
                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[DateModel] = DateForm.dateForm)(implicit user: User[_]) = views.html.ceasedTradingDate(form)
@@ -49,7 +50,7 @@ class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
       error => Future.successful(BadRequest(views.html.ceasedTradingDate(error))),
       data => ceasedTradingDateAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.VATAccountsController.show())
-        case _ => InternalServerError //TODO: Render ISE Page
+        case _ => serviceErrorHandler.showInternalServerError
       }
     )
   }
