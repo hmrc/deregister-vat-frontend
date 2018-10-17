@@ -16,7 +16,6 @@
 
 package mocks
 
-import config.ServiceErrorHandler
 import controllers.predicates.{AuthPredicate, AuthoriseAsAgent}
 import org.scalamock.scalatest.MockFactory
 import services.EnrolmentsAuthService
@@ -35,7 +34,6 @@ trait MockAuth extends TestUtil with MockFactory {
   lazy val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
   lazy val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
-  lazy val serviceErrorHandler: ServiceErrorHandler = injector.instanceOf[ServiceErrorHandler]
   lazy val mockAuthoriseAsAgent: AuthoriseAsAgent = new AuthoriseAsAgent(mockEnrolmentsAuthService, serviceErrorHandler, messagesApi, mockConfig)
   lazy val mockAuthPredicate: AuthPredicate = new AuthPredicate(mockEnrolmentsAuthService, serviceErrorHandler, mockAuthoriseAsAgent, messagesApi, mockConfig)
 

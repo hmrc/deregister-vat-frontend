@@ -34,6 +34,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
     mockAuthPredicate,
     mockIssueNewInvoicesAnswerService,
     mockWipeRedundantDataService,
+    serviceErrorHandler,
     mockConfig
   )
 

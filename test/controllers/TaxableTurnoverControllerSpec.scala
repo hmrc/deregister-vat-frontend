@@ -36,6 +36,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
     mockAuthPredicate,
     mockTaxableTurnoverAnswerService,
     mockWipeRedundantDataService,
+    serviceErrorHandler,
     mockConfig
   )
 

@@ -31,7 +31,7 @@ import scala.concurrent.Future
 class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswerService {
 
   object TestOptionTaxController extends OptionTaxController(
-    messagesApi, mockAuthPredicate, mockOptionTaxAnswerService, mockConfig
+    messagesApi, mockAuthPredicate, mockOptionTaxAnswerService, serviceErrorHandler, mockConfig
   )
 
   val testAmt = 500

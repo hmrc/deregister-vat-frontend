@@ -29,7 +29,7 @@ import scala.concurrent.Future
 class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxableTurnoverAnswerService with MockNextTaxableTurnoverAnswerService {
 
   object TestNextTaxableTurnoverController extends NextTaxableTurnoverController(
-    messagesApi, mockAuthPredicate, mockTaxableTurnoverAnswerService, mockNextTaxableTurnoverAnswerService, mockConfig
+    messagesApi, mockAuthPredicate, mockTaxableTurnoverAnswerService, mockNextTaxableTurnoverAnswerService, serviceErrorHandler, mockConfig
   )
 
   val testTurnoverAmt = 500
