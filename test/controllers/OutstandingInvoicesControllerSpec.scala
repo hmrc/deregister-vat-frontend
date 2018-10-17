@@ -37,6 +37,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
     mockDeregReasonAnswerService,
     mockCapitalAssetsAnswerService,
     mockWipeRedundantDataService,
+    serviceErrorHandler,
     mockConfig
   )
 

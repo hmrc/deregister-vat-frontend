@@ -26,7 +26,7 @@ import scala.concurrent.Future
 class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
 
   object TestDeregistrationConfirmationController
-    extends DeregistrationConfirmationController(messagesApi, mockAuthPredicate, mockDeleteAllStoredAnswersService, mockConfig)
+    extends DeregistrationConfirmationController(messagesApi, mockAuthPredicate, mockDeleteAllStoredAnswersService, serviceErrorHandler, mockConfig)
 
   "the user is authorised" when {
 

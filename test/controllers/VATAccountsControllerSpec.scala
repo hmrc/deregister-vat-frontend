@@ -37,6 +37,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
     mockAccountingMethodAnswerService,
     mockDeregReasonAnswerService,
     mockTaxableTurnoverAnswerService,
+    serviceErrorHandler,
     mockConfig
   )
 

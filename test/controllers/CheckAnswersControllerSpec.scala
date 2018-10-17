@@ -35,6 +35,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
     mockCheckAnswersService,
     mockDeregDateAnswerService,
     mockUpdateDeregistrationService,
+    serviceErrorHandler,
     mockConfig
   )
 

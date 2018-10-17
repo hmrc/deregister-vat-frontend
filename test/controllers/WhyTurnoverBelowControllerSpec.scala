@@ -16,7 +16,7 @@
 
 package controllers
 
-import models.{DeregisterVatSuccess, WhyTurnoverBelowModel}
+import models.{DeregisterVatSuccess, ErrorModel, WhyTurnoverBelowModel}
 import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
@@ -29,7 +29,7 @@ import scala.concurrent.Future
 class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurnoverBelowAnswerService {
 
   object TestWhyTurnoverBelowController extends WhyTurnoverBelowController(
-    messagesApi, mockAuthPredicate, mockWhyTurnoverBelowAnswerService, mockConfig
+    messagesApi, mockAuthPredicate, mockWhyTurnoverBelowAnswerService, serviceErrorHandler, mockConfig
   )
 
   "the user is authorised" when {
@@ -84,6 +84,16 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
 
     "Calling the .submit action" when {
 
+      val model: WhyTurnoverBelowModel = WhyTurnoverBelowModel(
+        lostContract = true,
+        semiRetiring = false,
+        moreCompetitors = false,
+        reducedTradingHours = false,
+        seasonalBusiness = false,
+        closedPlacesOfBusiness = false,
+        turnoverLowerThanExpected = false
+      )
+
       "the user submits after selecting at least one checkbox" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
@@ -91,7 +101,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         lazy val result = TestWhyTurnoverBelowController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreWhyTurnoverBelow(WhyTurnoverBelowModel(true,false,false,false,false,false,false))(Right(DeregisterVatSuccess))
+          setupMockStoreWhyTurnoverBelow(model)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -115,6 +125,20 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      "storing the answer fails" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody((WhyTurnoverBelowModel.lostContract, "true"))
+        lazy val result = TestWhyTurnoverBelowController.submit()(request)
+
+        "return Internal Server Error" in {
+
+          setupMockStoreWhyTurnoverBelow(model)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "")))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe INTERNAL_SERVER_ERROR
         }
       }
     }

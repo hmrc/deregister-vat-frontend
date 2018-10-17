@@ -29,7 +29,7 @@ import scala.concurrent.Future
 class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeasedTradingDateAnswerService {
 
   object TestCeasedTradingDateController extends CeasedTradingDateController(
-    messagesApi, mockAuthPredicate, mockCeasedTradingDateAnswerService, mockConfig
+    messagesApi, mockAuthPredicate, mockCeasedTradingDateAnswerService, serviceErrorHandler, mockConfig
   )
 
   val testDay = 12
