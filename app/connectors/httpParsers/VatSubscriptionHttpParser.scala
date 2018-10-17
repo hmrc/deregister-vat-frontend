@@ -26,7 +26,7 @@ object VatSubscriptionHttpParser {
   def updateReads: HttpReads[Either[ErrorModel, VatSubscriptionResponse]] = new HttpReads[Either[ErrorModel, VatSubscriptionResponse]] {
     override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, VatSubscriptionResponse] = {
       response.status match {
-        case Status.NO_CONTENT => Right(VatSubscriptionSuccess)
+        case Status.OK => Right(VatSubscriptionSuccess)
         case status =>
           Logger.warn(s"[VatSubscriptionHttpParser][updateReads]: Unexpected Response, Status $status returned")
           Left(ErrorModel(status, s"Downstream error returned when updating Vat Subscription"))
