@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.VATAccountsForm
 import javax.inject.{Inject, Singleton}
@@ -26,7 +26,6 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{AccountingMethodAnswerService, DeregReasonAnswerService, TaxableTurnoverAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-
 import cats.data.EitherT
 import cats.instances.future._
 
@@ -36,6 +35,7 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
                                       val accountingMethodAnswerService: AccountingMethodAnswerService,
                                       val deregReasonAnswerService: DeregReasonAnswerService,
                                       val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
+                                      val serviceErrorHandler: ServiceErrorHandler,
                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(backLink: String, form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)
@@ -51,7 +51,7 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
         Ok(renderView(backLink(optionLTB, deregReason), VATAccountsForm.vatAccountsForm.fill(accountingMethod)))
       case (Right(optionLTB), Right(Some(deregReason)),Right(_)) =>
         Ok(renderView(backLink(optionLTB, deregReason)))
-      case (_,_,_) => InternalServerError //TODO: Render ISE Page
+      case (_,_,_) => serviceErrorHandler.showInternalServerError
     }
   }
 
@@ -63,11 +63,11 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
       } yield (lastTurnoverBelow, reason)).value.map {
         case Right((optionLTB, Some(reason))) =>
           BadRequest(views.html.vatAccounts(backLink(optionLTB, reason), error))
-        case _ => InternalServerError
+        case _ => serviceErrorHandler.showInternalServerError
       },
       data => accountingMethodAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.OptionTaxController.show())
-        case _ => InternalServerError //TODO: Render ISE Page
+        case _ => serviceErrorHandler.showInternalServerError
       }
     )
   }

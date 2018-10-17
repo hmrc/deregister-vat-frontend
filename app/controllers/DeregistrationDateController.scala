@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.DeregistrationDateForm
 import javax.inject.{Inject, Singleton}
@@ -32,6 +32,7 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
                                              val authenticate: AuthPredicate,
                                              val deregDateAnswerService: DeregDateAnswerService,
                                              val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
+                                             val serviceErrorHandler: ServiceErrorHandler,
                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(outstanding: Option[YesNo], form: Form[DeregistrationDateModel] = DeregistrationDateForm.deregistrationDateForm)
@@ -47,7 +48,7 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
       case (Right(outstanding), Right(None)) =>
         Ok(renderView(outstanding))
       case (_,_) =>
-        InternalServerError
+        serviceErrorHandler.showInternalServerError
     }
   }
 
@@ -55,11 +56,11 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
     DeregistrationDateForm.deregistrationDateForm.bindFromRequest().fold(
       error => outstandingInvoicesAnswerService.getAnswer map {
         case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error))
-        case _ => InternalServerError //TODO: Update to render ISE page
+        case _ => serviceErrorHandler.showInternalServerError
       },
       data => deregDateAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
-        case _ => InternalServerError //TODO: Update to render ISE page
+        case _ => serviceErrorHandler.showInternalServerError
       }
     )
   }

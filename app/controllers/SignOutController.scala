@@ -17,7 +17,7 @@
 package controllers
 
 import com.google.inject.{Inject, Singleton}
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -30,6 +30,7 @@ import scala.concurrent.Future
 class SignOutController @Inject()(val messagesApi: MessagesApi,
                                   val authentication: AuthPredicate,
                                   val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
+                                  val serviceErrorHandler: ServiceErrorHandler,
                                   implicit val appConfig: AppConfig
                                  ) extends FrontendController with I18nSupport {
 
@@ -37,14 +38,14 @@ class SignOutController @Inject()(val messagesApi: MessagesApi,
     val redirectUrl: String = if(authorised) appConfig.signOutUrl else appConfig.unauthorisedSignOutUrl
     deleteAllStoredAnswersService.deleteAllAnswers map {
       case Right(_) => Redirect(redirectUrl)
-      case Left(_) => InternalServerError
+      case Left(_) => serviceErrorHandler.showInternalServerError
     }
   }
 
   val timeout: Action[AnyContent] = authentication.async { implicit user =>
     deleteAllStoredAnswersService.deleteAllAnswers map {
       case Right(_) => Redirect(appConfig.unauthorisedSignOutUrl)
-      case Left(_) => InternalServerError
+      case Left(_) => serviceErrorHandler.showInternalServerError
     }
   }
 }

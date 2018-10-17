@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import javax.inject.{Inject, Singleton}
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.DeregistrationReasonForm
 import models._
@@ -36,6 +36,7 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
                                                val authenticate: AuthPredicate,
                                                val deregReasonAnswerService: DeregReasonAnswerService,
                                                val wipeRedundantDataService: WipeRedundantDataService,
+                                               val serviceErrorHandler: ServiceErrorHandler,
                                                implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(data: Form[DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
@@ -57,7 +58,7 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
         route = redirect(data)
       } yield route).value.map {
         case Right(result) => result
-        case Left(_) => InternalServerError
+        case Left(_) => serviceErrorHandler.showInternalServerError
       }
     )
   }

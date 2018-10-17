@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.WhyTurnoverBelowForm
 import javax.inject.{Inject, Singleton}
@@ -32,6 +32,7 @@ import scala.concurrent.Future
 class WhyTurnoverBelowController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
                                            val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
+                                           val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
@@ -47,7 +48,7 @@ class WhyTurnoverBelowController @Inject()(val messagesApi: MessagesApi,
       data => {
         whyTurnoverBelowAnswerService.storeAnswer(data).map {
           case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show())
-          case Left(_) => InternalServerError //TODO: Render ISE Page
+          case Left(_) => serviceErrorHandler.showInternalServerError
         }
       }
     )

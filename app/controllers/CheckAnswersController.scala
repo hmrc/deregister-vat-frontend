@@ -16,7 +16,7 @@
 
 package controllers
 
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import javax.inject.{Inject, Singleton}
 import models.VatSubscriptionSuccess
@@ -31,6 +31,7 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        checkAnswersService: CheckAnswersService,
                                        deregDateAnswerService: DeregDateAnswerService,
                                        updateDeregistrationService: UpdateDeregistrationService,
+                                       val serviceErrorHandler: ServiceErrorHandler,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
@@ -40,14 +41,14 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
           case Some(_) => Ok(views.html.checkYourAnswers(controllers.routes.DeregistrationDateController.show().url, answers.seqAnswers))
           case None => Ok(views.html.checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
         }
-      case Left(_) => InternalServerError
+      case Left(_) => serviceErrorHandler.showInternalServerError
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     updateDeregistrationService.updateDereg.map {
       case Right(VatSubscriptionSuccess) => Redirect(controllers.routes.DeregistrationConfirmationController.show().url)
-      case _ => InternalServerError
+      case _ => serviceErrorHandler.showInternalServerError
     }
   }
 }
