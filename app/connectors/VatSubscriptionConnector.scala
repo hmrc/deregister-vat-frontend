@@ -21,7 +21,6 @@ import connectors.httpParsers.VatSubscriptionHttpParser
 import javax.inject.{Inject, Singleton}
 import models.deregistrationRequest.DeregistrationInfo
 import models.{ErrorModel, VatSubscriptionResponse}
-import play.api.libs.json.{Format, Writes}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
