@@ -28,8 +28,8 @@ object VatSubscriptionHttpParser {
       response.status match {
         case Status.OK => Right(VatSubscriptionSuccess)
         case status =>
-          Logger.warn(s"[VatSubscriptionHttpParser][updateReads]: Unexpected Response, Status $status returned")
-          Left(ErrorModel(status, s"Downstream error returned when updating Vat Subscription"))
+          Logger.warn(s"[VatSubscriptionHttpParser][updateReads]: Unexpected Response, Status: $status. Body: ${response.body}")
+          Left(ErrorModel(status, "Downstream error returned when updating Vat Subscription"))
       }
     }
   }
