@@ -18,7 +18,7 @@ package controllers
 
 import cats.data.EitherT
 import cats.instances.future._
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.NextTaxableTurnoverForm
 import javax.inject.{Inject, Singleton}
@@ -36,6 +36,7 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                               val authenticate: AuthPredicate,
                                               val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
+                                              val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[NextTaxableTurnoverModel] = NextTaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
@@ -58,7 +59,7 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
         case Right(Some(_)) if data.turnover > appConfig.deregThreshold => Redirect(controllers.routes.CannotDeregisterThresholdController.show())
         case Right(Some(Yes)) => Redirect(controllers.routes.VATAccountsController.show())
         case Right(Some(No)) => Redirect(controllers.routes.WhyTurnoverBelowController.show())
-        case _ => InternalServerError //TODO: Update to render ISE page
+        case _ => serviceErrorHandler.showInternalServerError
       }
     )
   }

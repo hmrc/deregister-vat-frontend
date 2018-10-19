@@ -34,6 +34,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
     mockAuthPredicate,
     mockCapitalAssetsAnswerService,
     mockWipeRedundantDataService,
+    serviceErrorHandler,
     mockConfig
   )
 

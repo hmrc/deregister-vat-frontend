@@ -17,24 +17,23 @@
 package controllers
 
 import javax.inject.Inject
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.DeleteAllStoredAnswersService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
-
 class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesApi,
                                                      val authentication: AuthPredicate,
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
+                                                     val serviceErrorHandler: ServiceErrorHandler,
                                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
     deleteAllStoredAnswersService.deleteAllAnswers map {
       case Right(_) => Ok(views.html.deregistrationConfirmation())
-      case _ => InternalServerError
+      case _ => serviceErrorHandler.showInternalServerError
     }
   }
 }

@@ -24,6 +24,7 @@ import forms.YesNoForm
 import forms.YesNoForm._
 import models._
 import play.api.http.Status
+import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
@@ -38,6 +39,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
     mockAuthPredicate,
     mockDeregDateAnswerService,
     mockOutstandingInvoicesService,
+    serviceErrorHandler,
     mockConfig
   )
 
@@ -98,6 +100,22 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
         "have the correct value for the year populated" in {
           document(result).select(s"#$year").attr("value") shouldBe testYear.toString
+        }
+      }
+
+      "the retrieval of submitted data fails" should {
+
+        lazy val result = TestDeregistrationDateController.show()(request)
+
+        "return Internal Server Error" in {
+          setupMockGetDeregDate(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
+          setupMockGetOutstandingInvoices(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
         }
       }
     }
@@ -199,6 +217,28 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+      "the user submits without selecting anything and the retrieval of outstanding invoices data fails" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(
+            (yesNo, ""),
+            (day, ""),
+            (month, ""),
+            (year, "")
+          )
+        lazy val result = TestDeregistrationDateController.submit()(request)
+
+        "return Internal Server Error" in {
+          setupMockGetOutstandingInvoices(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
         }
       }
     }

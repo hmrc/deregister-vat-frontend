@@ -18,7 +18,7 @@ package controllers
 
 import cats.data.EitherT
 import cats.instances.future._
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
@@ -36,6 +36,7 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
                                            val issueNewInvoiceAnswerService: IssueNewInvoicesAnswerService,
                                            val wipeRedundantDataService: WipeRedundantDataService,
+                                           val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) = views.html.issueNewInvoices(form)
@@ -61,7 +62,7 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
         result = redirect(data)
       } yield result).value.map {
         case Right(redirect) => redirect
-        case Left(_) => InternalServerError //TODO: Render ISE page
+        case Left(_) => serviceErrorHandler.showInternalServerError
       }
     )
   }

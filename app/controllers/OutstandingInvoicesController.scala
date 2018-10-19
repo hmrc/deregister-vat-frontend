@@ -18,7 +18,7 @@ package controllers
 
 import cats.data.EitherT
 import cats.instances.future._
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.YesNoForm
 import javax.inject.Inject
@@ -36,6 +36,7 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
                                               val deregReasonAnswerService: DeregReasonAnswerService,
                                               val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                               val wipeRedundantDataService: WipeRedundantDataService,
+                                              val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authenticate.async { implicit user =>
@@ -56,7 +57,7 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
         result = redirect(data, capitalAssets, deregReason)
       } yield result).value.map {
         case Right(redirect) => redirect
-        case Left(_) => InternalServerError
+        case Left(_) => serviceErrorHandler.showInternalServerError
       }
     )
   }
@@ -69,7 +70,7 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
       deregReason match {
         case Some(BelowThreshold) => Redirect(controllers.routes.DeregistrationDateController.show())
         case Some(Ceased) => ceasedTradingJourneyLogic(capitalAssets)
-        case _ => InternalServerError
+        case _ => serviceErrorHandler.showInternalServerError
       }
     }
   }
@@ -78,7 +79,7 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
     capitalAssets match {
       case Some(assets) if assets.yesNo == Yes => Redirect(controllers.routes.DeregistrationDateController.show())
       case Some(_) => Redirect(controllers.routes.CheckAnswersController.show())
-      case _ => InternalServerError
+      case _ => serviceErrorHandler.showInternalServerError
     }
   }
 }

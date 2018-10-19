@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import javax.inject.{Inject, Singleton}
-import config.AppConfig
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import forms.YesNoAmountForm
 import models.{User, YesNoAmountModel}
@@ -36,6 +36,7 @@ class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
                                         val authentication: AuthPredicate,
                                         val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                         val wipeRedundantDataService: WipeRedundantDataService,
+                                        val serviceErrorHandler: ServiceErrorHandler,
                                         implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(data: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm)(implicit user: User[_]) =
@@ -56,7 +57,7 @@ class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)
       } yield result).value.map {
         case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())
-        case Left(_) => InternalServerError
+        case Left(_) => serviceErrorHandler.showInternalServerError
       }
     )
   }
