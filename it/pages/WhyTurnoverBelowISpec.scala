@@ -30,7 +30,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
   "Calling the GET Why Turnover Below endpoint" when {
 
-    def getRequest(): WSResponse = get("/why-turnover-below")
+    def getRequest(): WSResponse = get("/reasons-for-low-turnover")
 
     "the user is authorised" should {
 
@@ -84,7 +84,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
   "Calling the POST Why Turnover Below endpoint" when {
 
     def postRequest(data: WhyTurnoverBelowModel): WSResponse =
-      post("/why-turnover-below")(toFormData(WhyTurnoverBelowForm.whyTurnoverBelowForm, data))
+      post("/reasons-for-low-turnover")(toFormData(WhyTurnoverBelowForm.whyTurnoverBelowForm, data))
 
     val validModel = WhyTurnoverBelowModel(true, true, true, true, true, true, true)
     val invalidModel = WhyTurnoverBelowModel(false, false, false, false, false, false, false)
