@@ -37,8 +37,8 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
   "Rendering the Check your answers page" should {
 
     val checkYourAnswersModel = Seq(
-      CheckYourAnswersRowModel("test question 1", Html("test answer 1"), "test/url/1"),
-      CheckYourAnswersRowModel("test question 2", Html("test answer 2"), "test/url/2")
+      CheckYourAnswersRowModel("test question 1", Html("test answer 1"), "test/url/1", "test hidden text 1"),
+      CheckYourAnswersRowModel("test question 2", Html("test answer 2"), "test/url/2", "test hidden text 2")
     )
     lazy val view = views.html.checkYourAnswers("testUrl",checkYourAnswersModel)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -71,6 +71,11 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
       element(Selectors.changeColumn(1)).attr("href") shouldBe "test/url/1"
       elementText(Selectors.changeColumn(2)) shouldBe CheckYourAnswersMessages.change
       element(Selectors.changeColumn(2)).attr("href") shouldBe "test/url/2"
+    }
+
+    "have the correct hidden text" in {
+      element(Selectors.changeColumn(1)).attr("aria-label") shouldBe "test hidden text 1"
+      element(Selectors.changeColumn(2)).attr("aria-label") shouldBe "test hidden text 2"
     }
 
     s"have the correct confirmation text displayed" in {

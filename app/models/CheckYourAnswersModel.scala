@@ -109,7 +109,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     messages("checkYourAnswers.question.optionTaxValue"),
     MoneyFormatter.formatHtmlAmount(answer),
     controllers.routes.OptionTaxController.show().url,
-    messages("checkYourAnswers.hidden.optionTax")
+    messages("checkYourAnswers.hidden.optionTaxValue")
   )))
 
   private val stocksAnswer = stocks.map(answer => CheckYourAnswersRowModel(
@@ -123,7 +123,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     messages("checkYourAnswers.question.stocksValue"),
     MoneyFormatter.formatHtmlAmount(answer),
     controllers.routes.OptionStocksToSellController.show().url,
-    messages("checkYourAnswers.hidden.stocks")
+    messages("checkYourAnswers.hidden.stocksValue")
   )))
 
   private val capitalAssetsAnswer = capitalAssets.map(answer => CheckYourAnswersRowModel(
@@ -137,7 +137,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     messages("checkYourAnswers.question.capitalAssetsValue"),
     MoneyFormatter.formatHtmlAmount(answer),
     controllers.routes.CapitalAssetsController.show().url,
-    messages("checkYourAnswers.hidden.capitalAssets")
+    messages("checkYourAnswers.hidden.capitalAssetsValue")
   )))
 
   private val outstandingInvoicesAnswer = outstandingInvoices.map(answer => CheckYourAnswersRowModel(
