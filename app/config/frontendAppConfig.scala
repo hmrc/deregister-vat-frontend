@@ -48,6 +48,8 @@ trait AppConfig extends ServicesConfig {
   val deregisterVatUrl: String
   val deregThreshold: Int
   val features: Features
+  val feedbackUrl: String
+  val platformHost: String
 }
 
 @Singleton
@@ -62,6 +64,9 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val analyticsHost: String = getString(Keys.googleAnalyticsHost)
   override lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+
+  override lazy val feedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
+    s"&backUrl=${ContinueUrl(platformHost + controllers.routes.DeregisterForVATController.show().url).encodedUrl}"
 
   private def whitelistConfig(key: String): Seq[String] =
     Some(new String(Base64.getDecoder.decode(runModeConfiguration.getString(key)
@@ -102,4 +107,6 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val deregThreshold: Int = getInt(Keys.deregThreshold)
 
   override val features = new Features(runModeConfiguration)
+
+  override lazy val platformHost: String = getString(Keys.platformHost)
 }

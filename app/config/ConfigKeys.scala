@@ -54,4 +54,6 @@ object ConfigKeys {
 
   val deregThreshold: String = "thresholds.deregistrationThreshold"
 
+  val platformHost: String = "platform.host"
+
 }
