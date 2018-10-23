@@ -45,5 +45,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   val thresholdString: String = java.text.NumberFormat.getIntegerInstance.format(deregThreshold)
 
   override val features: Features = new Features(runModeConfiguration)
+  override val feedbackUrl: String = "/feedback"
+  override val platformHost: String = "/platform/host"
 }
 
