@@ -42,7 +42,7 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
     implicit val req: Request[A] = request
 
     //TODO: use VRN in session, redirect to vat-agent-client-lookup-frontend if not present
-    val vrn = "999999999"
+    val vrn = "968501689"
 
     Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Client VRN from Session: $vrn")
     enrolmentsAuthService

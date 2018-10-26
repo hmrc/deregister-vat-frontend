@@ -47,7 +47,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
       Set(
         Enrolment(
           "HMRC-MTD-VAT",
-          Seq(EnrolmentIdentifier("", "999999999")),
+          Seq(EnrolmentIdentifier("", "968501689")),
           "Active")
       )
     )
