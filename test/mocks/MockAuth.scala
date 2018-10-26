@@ -53,7 +53,7 @@ trait MockAuth extends TestUtil with MockFactory {
   val mockAuthorisedIndividual: AuthResponse = Future.successful(
     new ~(Some(AffinityGroup.Individual),
       Enrolments(Set(Enrolment("HMRC-MTD-VAT",
-        Seq(EnrolmentIdentifier("VRN", "999999999")),
+        Seq(EnrolmentIdentifier("VRN", "968501689")),
         "Activated"
       )))
     )

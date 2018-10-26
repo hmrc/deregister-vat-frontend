@@ -22,7 +22,7 @@ import play.api.libs.json.{Format, JsObject, Json}
 
 object BaseTestConstants {
 
-  val vrn = "999999999"
+  val vrn = "968501689"
   val arn = "TARN1234567"
 
   case class TestModel(foo: String)
