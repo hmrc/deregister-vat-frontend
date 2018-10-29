@@ -52,15 +52,15 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
     "the user is not authenticated" should {
 
-      "return 401 UNAUTHORIZED" in {
+      "return 303 SEE_OTHER" in {
 
         given.user.isNotAuthenticated
 
         val response: WSResponse = getRequest()
 
         response should have(
-          httpStatus(UNAUTHORIZED),
-          pageTitle("Your session has timed out")
+          httpStatus(SEE_OTHER),
+          redirectURI(appConfig.signInUrl)
         )
       }
     }
@@ -176,15 +176,15 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
     "the user is not authenticated" should {
 
-      "return 401 UNAUTHORIZED" in {
+      "return 303 Redirect" in {
 
         given.user.isNotAuthenticated
 
         val response: WSResponse = postRequest(Yes)
 
         response should have(
-          httpStatus(UNAUTHORIZED),
-          pageTitle("Your session has timed out")
+          httpStatus(SEE_OTHER),
+          redirectURI(appConfig.signInUrl)
         )
       }
     }

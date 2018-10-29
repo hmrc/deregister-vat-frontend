@@ -75,7 +75,7 @@ class AuthoriseAsAgentSpec extends TestUtil with MockFactory {
           )
 
           lazy val predicate = setup(authResponse)
-          lazy val result = target(predicate)(FakeRequest())
+          lazy val result = target(predicate)(requestWithVRN)
 
           "return 200" in {
             status(result) shouldBe Status.OK
@@ -87,7 +87,7 @@ class AuthoriseAsAgentSpec extends TestUtil with MockFactory {
           val authResponse = Future.failed(InsufficientEnrolments())
 
           lazy val predicate = setup(authResponse)
-          lazy val result = target(predicate)(FakeRequest())
+          lazy val result = target(predicate)(requestWithVRN)
 
           "return 401" in {
             status(result) shouldBe Status.UNAUTHORIZED
@@ -113,10 +113,10 @@ class AuthoriseAsAgentSpec extends TestUtil with MockFactory {
         )
 
         lazy val predicate = setup(authResponse)
-        lazy val result = target(predicate)(FakeRequest())
+        lazy val result = target(predicate)(requestWithVRN)
 
-        "return 403" in {
-          status(result) shouldBe Status.FORBIDDEN
+        "return 401" in {
+          status(result) shouldBe Status.UNAUTHORIZED
         }
 
         "render Unauthorised view" in {

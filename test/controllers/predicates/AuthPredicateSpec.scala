@@ -67,7 +67,7 @@ class AuthPredicateSpec extends MockAuth {
 
         "the user is enrolled to HMRC-AS-AGENT and has delegated authority for the client" should {
 
-          lazy val result = target()(FakeRequest())
+          lazy val result = target()(requestWithVRN)
 
           "return 200" in {
             mockAuthResult(mockAuthorisedAgent, isAgent = true)
@@ -77,11 +77,11 @@ class AuthPredicateSpec extends MockAuth {
 
         "the user is not enrolled to HMRC-AS-AGENT" should {
 
-          lazy val result = target()(FakeRequest())
+          lazy val result = target()(requestWithVRN)
 
-          "return Forbidden (403)" in {
+          "return Unauthorized (401)" in {
             mockAuthResult(mockUnauthorisedAgent, isAgent = true)
-            status(result) shouldBe Status.FORBIDDEN
+            status(result) shouldBe Status.UNAUTHORIZED
           }
         }
       }
@@ -90,9 +90,9 @@ class AuthPredicateSpec extends MockAuth {
 
         lazy val result = target()(FakeRequest())
 
-        "return 401" in {
+        "return 303" in {
           mockAuthResult(Future.failed(MissingBearerToken()))
-          status(result) shouldBe Status.UNAUTHORIZED
+          status(result) shouldBe Status.SEE_OTHER
         }
       }
 
