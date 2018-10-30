@@ -47,10 +47,10 @@ trait ControllerBaseSpec extends TestUtil with MockAuth {
   def authChecks(name: String, action: Action[AnyContent], request: Request[AnyContent]): Unit = {
 
     s"when the user is unauthenticated for '$name'" should {
-      "return 401 (Unauthorised)" in {
+      "return 303 (REDIRECT)" in {
         mockAuthResult(Future.failed(MissingBearerToken()))
         val result = action(request)
-        status(result) shouldBe Status.UNAUTHORIZED
+        status(result) shouldBe Status.SEE_OTHER
       }
     }
 

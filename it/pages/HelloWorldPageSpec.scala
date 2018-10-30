@@ -43,15 +43,15 @@ class HelloWorldPageSpec extends IntegrationBaseSpec {
 
     "the user is not authenticated" should {
 
-      "return 401 UNAUTHORIZED" in {
+      "return 303 SEE_OTHER" in {
 
         given.user.isNotAuthenticated
 
         val response: WSResponse = request()
 
         response should have(
-          httpStatus(UNAUTHORIZED),
-          pageTitle("Your session has timed out")
+          httpStatus(SEE_OTHER),
+          redirectURI(appConfig.signInUrl)
         )
       }
     }
