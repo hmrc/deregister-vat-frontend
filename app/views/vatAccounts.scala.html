@@ -19,12 +19,13 @@
 @import templates.inputs.multipleLineRadioGroup
 @import templates.headings
 @import models.{DeregistrationReason, MultipleLineRadioGroupModel}
+@import views.utils.TitleUtil._
 
 
 @(backLink: String, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-  title = messages("vatAccounts.title"),
+  title = title(messages("vatAccounts.title"), form),
   bodyClasses = None,
   appConfig = appConfig) {
 
@@ -51,7 +52,8 @@
                     MultipleLineRadioGroupModel("standard", Messages("vatAccounts.method.standard"), Messages("vatAccounts.description.standard")),
                     MultipleLineRadioGroupModel("cash", Messages("vatAccounts.method.cash"), Messages("vatAccounts.description.cash"))
                 ),
-                question = messages("vatAccounts.title")
+                question = messages("vatAccounts.title"),
+                legendAsHeader = false
             )
         </div>
 

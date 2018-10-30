@@ -16,20 +16,22 @@
 
 @import views.html.helper._
 @import models.MultipleLineRadioGroupModel
+@import views.html.templates.headings
+@import views.html.templates.legends
 
 @(field: Field,
   choices: Seq[MultipleLineRadioGroupModel],
   question: String,
-  additionalContent: Option[Html] = None)(implicit messages: Messages)
+  additionalContent: Option[Html] = None,
+  legendAsHeader: Boolean = true)(implicit messages: Messages)
 
 @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
 
 <div @if(elements.hasErrors){ class="form-field--error"}>
 
     <fieldset>
-        <legend class="visuallyhidden">
-            <h1>@question</h1>
-        </legend>
+
+        @legends(question, legendAsHeader)
 
         @additionalContent.map { content => @content }
 

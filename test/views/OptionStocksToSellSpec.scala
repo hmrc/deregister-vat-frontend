@@ -16,7 +16,7 @@
 
 package views
 
-import assets.messages.{CommonMessages, OptionStocksToSellMessages, OptionTaxMessages}
+import assets.messages.{CommonMessages, NextTaxableTurnoverMessages, OptionStocksToSellMessages, OptionTaxMessages}
 import forms.YesNoAmountForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -89,7 +89,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec{
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe OptionStocksToSellMessages.title
+        document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OptionStocksToSellMessages.title}"
       }
 
       "display the correct error heading" in {
@@ -110,7 +110,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec{
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe OptionStocksToSellMessages.title
+        document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OptionStocksToSellMessages.title}"
       }
 
       "display the correct error heading" in {

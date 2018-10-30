@@ -15,13 +15,16 @@
  *@
 
 @import views.html.helper._
+@import views.html.templates.headings
+@import views.html.templates.legends
 
 @(field: Field,
   choices: Seq[(String, String)],
   question: String,
   additionalContent: Option[Html] = None,
   inline: Boolean = false,
-  hiddenContent: Html
+  hiddenContent: Html,
+  legendAsHeader: Boolean = true
 )(implicit messages: Messages)
 
     @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
@@ -29,9 +32,8 @@
     <div @if(elements.hasErrors){ class="form-field--error"}>
 
         <fieldset>
-            <legend class="visuallyhidden">
-                <h1>@question</h1>
-            </legend>
+
+            @legends(question, legendAsHeader)
 
             @additionalContent.map { content => @content }
 

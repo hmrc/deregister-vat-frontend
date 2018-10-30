@@ -14,8 +14,14 @@
  * limitations under the License.
  *@
 
-@(heading: String)
+@(legend: String, asHeader: Boolean)
 
-<header>
-    <h1 id="page-heading" class="heading-large">@heading</h1>
-</header>
+@if(asHeader) {
+  <legend>
+     @headings(legend)
+  </legend>
+} else {
+  <legend class="visuallyhidden">
+     @legend
+  </legend>
+}

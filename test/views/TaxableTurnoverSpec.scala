@@ -16,7 +16,7 @@
 
 package views
 
-import assets.messages.{CommonMessages, TaxableTurnoverMessages}
+import assets.messages.{CommonMessages, DeregistrationReasonMessages, TaxableTurnoverMessages}
 import forms.{NextTaxableTurnoverForm, YesNoForm}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -69,7 +69,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe TaxableTurnoverMessages.title
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${TaxableTurnoverMessages.title}"
     }
 
     s"have the correct back text" in {

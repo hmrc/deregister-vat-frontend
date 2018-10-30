@@ -140,7 +140,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(BAD_REQUEST),
-            pageTitle("Does the business want to choose its own deregistration date?"),
+            pageTitle("Error: Does the business want to choose its own deregistration date?"),
             elementText(".error-message")("Invalid date")
           )
         }

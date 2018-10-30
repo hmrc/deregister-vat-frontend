@@ -19,20 +19,18 @@
 @import templates.headings
 @import views.html.templates.inputs.radioHelper
 @import forms.DeregistrationReasonForm._
-
+@import views.utils.TitleUtil._
 
 @(form: Form[DeregistrationReason])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("deregistrationReason.title"),
+    title = title(messages("deregistrationReason.title"), form),
     bodyClasses = None,
     appConfig = appConfig) {
 
     <a class="link-back" href="@controllers.routes.DeregisterForVATController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
-
-    @headings(messages("deregistrationReason.title"))
 
     @helpers.form(action = controllers.routes.DeregistrationReasonController.submit, 'novalidate -> "novalidate") {
 

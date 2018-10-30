@@ -118,7 +118,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(BAD_REQUEST),
-            pageTitle("Why does the business expect its turnover to be below the threshold?"),
+            pageTitle("Error: Why does the business expect its turnover to be below the threshold?"),
             elementText(".error-message")("Select at least one option")
           )
         }

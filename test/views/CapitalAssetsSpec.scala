@@ -91,7 +91,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe CapitalAssetsMessages.title
+        document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CapitalAssetsMessages.title}"
       }
 
       "display the correct error heading" in {
@@ -112,7 +112,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe CapitalAssetsMessages.title
+        document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CapitalAssetsMessages.title}"
       }
 
       "display the correct error heading" in {

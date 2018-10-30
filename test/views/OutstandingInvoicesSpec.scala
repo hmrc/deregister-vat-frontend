@@ -75,7 +75,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe OutstandingInvoicesMessages.title
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OutstandingInvoicesMessages.title}"
     }
 
     "display the correct error heading" in {

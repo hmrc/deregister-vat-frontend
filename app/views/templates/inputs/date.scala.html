@@ -22,11 +22,11 @@
 
     @defining(dateErrors.filter(_.message == "error.date.invalid").nonEmpty){ hasInvalidDate =>
 
-        <fieldset id="@fieldName-fieldset" class="form-group form-date @if(dateErrors.nonEmpty) {form-field--error}">
+        <fieldset id="@fieldName-fieldset">
 
             @if(renderQuestionAsHeading){
                 <legend>
-                    @headings(messages("ceasedTrading.title"))
+                    @headings(question)
                 </legend>
             } else {
                 <legend class="form-label">@question</legend>
@@ -38,37 +38,40 @@
                 </span>
             }
 
-            @if(dateErrors.nonEmpty) {
-                <span class="error-message" role="tooltip">
-                    @if(form.errors.length > 1) {
-                      @messages("error.date.invalid")
-                    } else {
-                      @messages(form.errors.head.message)
-                    }
-                </span>
-            }
+            <div class="form-group form-date @if(dateErrors.nonEmpty) {form-field--error}">
 
-            @dateEntryField(
-                form(fieldName + "Day"),
-                messages("common.day"),
-                "day",
-                form(fieldName + "Day").hasErrors || hasInvalidDate
-            )
+                @if(dateErrors.nonEmpty) {
+                    <span class="error-message" role="tooltip">
+                        @if(form.errors.length > 1) {
+                          @messages("error.date.invalid")
+                        } else {
+                          @messages(form.errors.head.message)
+                        }
+                    </span>
+                }
 
-            @dateEntryField(
-                form(fieldName + "Month"),
-                messages("common.month"),
-                "month",
-                form(fieldName + "Month").hasErrors || hasInvalidDate
-            )
+                @dateEntryField(
+                    form(fieldName + "Day"),
+                    messages("common.day"),
+                    "day",
+                    form(fieldName + "Day").hasErrors || hasInvalidDate
+                )
 
-            @dateEntryField(
-                form(fieldName + "Year"),
-                messages("common.year"),
-                "year",
-                form(fieldName + "Year").hasErrors || hasInvalidDate
-            )
-        }
+                @dateEntryField(
+                    form(fieldName + "Month"),
+                    messages("common.month"),
+                    "month",
+                    form(fieldName + "Month").hasErrors || hasInvalidDate
+                )
+
+                @dateEntryField(
+                    form(fieldName + "Year"),
+                    messages("common.year"),
+                    "year",
+                    form(fieldName + "Year").hasErrors || hasInvalidDate
+                )
+            </div>
+
+        </fieldset>
     }
-
-</fieldset>
+}

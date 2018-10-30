@@ -21,12 +21,13 @@
 @import views.html.templates.inputs.yesNoRevealHelper
 @import views.html.templates.inputs.date
 @import forms.YesNoForm._
+@import views.utils.TitleUtil._
 
 
 @(outstanding: Option[YesNo], form: Form[DeregistrationDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("deregistrationDate.title"),
+    title = title(messages("deregistrationDate.title"), form),
     bodyClasses = None,
     appConfig = appConfig) {
 
@@ -47,7 +48,7 @@
 
     @helpers.form(action = controllers.routes.DeregistrationDateController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="@yesNo">
+        <div id="@yesNo">
             @yesNoRevealHelper(
                 choices = Seq(
                     (yes, Messages("common.yes")),
@@ -62,7 +63,8 @@
                     fieldName = "date",
                     hint = Some(messages("ceasedTrading.hint")),
                     renderQuestionAsHeading = false
-                )
+                ),
+                legendAsHeader = false
             )
         </div>
 
