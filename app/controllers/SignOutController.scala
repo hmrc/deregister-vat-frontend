@@ -44,7 +44,7 @@ class SignOutController @Inject()(val messagesApi: MessagesApi,
 
   val timeout: Action[AnyContent] = authentication.async { implicit user =>
     deleteAllStoredAnswersService.deleteAllAnswers map {
-      case Right(_) => Redirect(appConfig.unauthorisedSignOutUrl)
+      case Right(_) => Ok(views.html.errors.sessionTimeout())
       case Left(_) => serviceErrorHandler.showInternalServerError
     }
   }

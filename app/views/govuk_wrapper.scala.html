@@ -72,6 +72,18 @@
 
 @scriptElement = {
     <script type="text/javascript" src='@routes.Assets.at("javascript/deregister.js")'></script>
+    <script>
+        @if(showSignOut) {
+            window.GOVUK.timeoutDialog({
+              timeout: @appConfig.timeoutPeriod,
+              countdown: @appConfig.timeoutCountdown,
+              keepAliveUrl: '/vat-through-software/account/deregister',
+              signOutUrl: '/vat-through-software/account/deregister/timeout'
+            });
+            var dialogOpen;
+        }
+    </script>
+    <!--@scriptElem.map(x => x)-->
 }
 
 @afterHeader = {}
