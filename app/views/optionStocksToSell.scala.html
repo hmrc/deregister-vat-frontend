@@ -21,12 +21,13 @@
 @import views.html.templates.inputs.moneyInput
 @import templates.headings
 @import forms.YesNoForm._
+@import views.utils.TitleUtil._
 
 
 @(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-title = messages("optionOwnsStockToSell.title"),
+title = title(messages("optionOwnsStockToSell.title"), form),
 bodyClasses = None,
 appConfig = appConfig) {
 
@@ -41,7 +42,7 @@ appConfig = appConfig) {
 
     @helpers.form(action = controllers.routes.OptionStocksToSellController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="@yesNo">
+        <div id="@yesNo">
                @yesNoRevealHelper(
                   field = form(yesNo),
                   choices = Seq(
@@ -54,7 +55,8 @@ appConfig = appConfig) {
                        label = messages("optionOwnsStockToSell.hint"),
                        labelHidden = false,
                        decimalPlace = true
-                   )
+                  ),
+                  legendAsHeader = false
                )
         </div>
 

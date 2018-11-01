@@ -20,19 +20,18 @@
 @import templates.headings
 @import config.AppConfig
 @import forms.YesNoForm._
+@import views.utils.TitleUtil._
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: AppConfig)
 
 @views.html.main_template(
-    title = messages("outstandingInvoice.title"),
+    title = title(messages("outstandingInvoice.title"), form),
     bodyClasses = None,
     appConfig = appConfig) {
 
     <a class="link-back" href="@controllers.routes.IssueNewInvoicesController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
-
-    @headings(messages("outstandingInvoice.title"))
 
     @helpers.form(action = controllers.routes.OutstandingInvoicesController.submit, 'novalidate -> "novalidate") {
 

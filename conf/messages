@@ -15,6 +15,7 @@ common.yes = Yes
 common.no = No
 common.finish = Finish
 common.moreInfo = More information
+common.error.titlePrefix = Error:
 common.error.mandatoryRadioOption = Select an option
 common.error.mandatoryAmount = Enter the amount using numbers 0 to 9
 common.error.negative = Enter positive numbers only (no -)

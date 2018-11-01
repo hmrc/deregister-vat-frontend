@@ -16,7 +16,7 @@
 
 package views
 
-import assets.messages.{CommonMessages, OptionTaxMessages}
+import assets.messages.{CommonMessages, OptionTaxMessages, TaxableTurnoverMessages}
 import forms.YesNoAmountForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -91,7 +91,7 @@ class OptionTaxSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe OptionTaxMessages.title
+        document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OptionTaxMessages.title}"
       }
 
       "display the correct error heading" in {
@@ -112,7 +112,7 @@ class OptionTaxSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
-        document.title shouldBe OptionTaxMessages.title
+        document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OptionTaxMessages.title}"
       }
 
       "display the correct error heading" in {

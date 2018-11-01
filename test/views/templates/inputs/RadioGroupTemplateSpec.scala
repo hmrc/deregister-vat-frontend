@@ -52,9 +52,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
         s"""
            |  <div>
            |    <fieldset>
-           |      <legend class="visuallyhidden">
-           |        <h1>$labelText</h1>
-           |      </legend>
+           |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      <div>
            |        ${generateExpectedRadioMarkup("value1", "display1")}
@@ -82,9 +80,8 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
         s"""
            |  <div>
            |     <fieldset>
-           |      <legend class="visuallyhidden">
-           |        <h1>$labelText</h1>
-           |      </legend>
+           |      ${generateExpectedLegendMarkup(labelText)}
+           |
            |      <div>
            |        ${generateExpectedRadioMarkup("value1", "display1")}
            |        ${generateExpectedRadioMarkup("value2", "display2", checked = true)}
@@ -111,9 +108,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
         s"""
            |  <div class="form-field--error">
            |    <fieldset>
-           |      <legend class="visuallyhidden">
-           |        <h1>$labelText</h1>
-           |      </legend>
+           |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      <span class="error-message">$errorMessage</span>
            |      <div>
@@ -142,9 +137,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
         s"""
            |<div>
            |    <fieldset>
-           |      <legend class="visuallyhidden">
-           |        <h1>$labelText</h1>
-           |      </legend>
+           |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      $additionalContent
            |
@@ -175,9 +168,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
         s"""
            |<div>
            |    <fieldset>
-           |      <legend class="visuallyhidden">
-           |        <h1>$labelText</h1>
-           |      </legend>
+           |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      $additionalContent
            |
@@ -195,6 +186,37 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
       )
 
       val markup = radioHelper(field, choices, labelText, Some(additionalContent), inline = true)
+      formatHtml(markup) shouldBe formatHtml(expectedMarkup)
+    }
+  }
+
+  "Calling the radio helper with legendAsHeader set to false" should {
+
+    "render the legend without a header" in {
+      val additionalContent = Html("<p>Additional text</p>")
+      val field: Field = Field(YesNoForm.yesNoForm, fieldName, Seq(), None, Seq(), None)
+      val expectedMarkup = Html(
+        s"""
+           |<div>
+           |    <fieldset>
+           |      ${generateExpectedLegendMarkup(labelText, asHeader = false)}
+           |
+           |      $additionalContent
+           |
+           |      <div class="inline">
+           |        ${generateExpectedRadioMarkup("value1", "display1")}
+           |        ${generateExpectedRadioMarkup("value2", "display2")}
+           |        ${generateExpectedRadioMarkup("value3", "display3")}
+           |        ${generateExpectedRadioMarkup("value4", "display4")}
+           |        ${generateExpectedRadioMarkup("value5", "display5")}
+           |      </div>
+           |
+           |    </fieldset>
+           |</div>
+        """.stripMargin
+      )
+
+      val markup = radioHelper(field, choices, labelText, Some(additionalContent), inline = true, legendAsHeader = false)
       formatHtml(markup) shouldBe formatHtml(expectedMarkup)
     }
   }

@@ -19,20 +19,18 @@
 @import views.html.templates.inputs.radioHelper
 @import templates.headings
 @import forms.YesNoForm._
-
+@import views.utils.TitleUtil._
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("issueNewInvoices.title"),
+    title = title(messages("issueNewInvoices.title"), form),
     bodyClasses = None,
     appConfig = appConfig) {
 
     <a class="link-back" href="@controllers.routes.CapitalAssetsController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
-
-    @headings(messages("issueNewInvoices.title"))
 
     @helpers.form(action = controllers.routes.IssueNewInvoicesController.submit, 'novalidate -> "novalidate") {
 

@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(heading: String)
+package views.utils
 
-<header>
-    <h1 id="page-heading" class="heading-large">@heading</h1>
-</header>
+import play.api.data.Form
+import play.api.i18n.Messages
+
+object TitleUtil {
+
+  def title(title: String, form: Form[_])(implicit messages: Messages): String = {
+    val prefix = if (form.hasErrors) messages("common.error.titlePrefix") + " " else ""
+    prefix + title
+  }
+
+
+}

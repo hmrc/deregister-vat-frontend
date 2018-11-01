@@ -16,7 +16,7 @@
 
 package views
 
-import assets.messages.{CommonMessages, NextTaxableTurnoverMessages}
+import assets.messages.{CommonMessages, NextTaxableTurnoverMessages, OptionTaxMessages}
 import forms.NextTaxableTurnoverForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -69,7 +69,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe NextTaxableTurnoverMessages.title
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${NextTaxableTurnoverMessages.title}"
     }
 
     s"have the correct back text" in {

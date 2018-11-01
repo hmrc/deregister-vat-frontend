@@ -70,7 +70,7 @@ class CheckboxHelperSpec extends TemplateBaseSpec {
            |  <div>
            |    <fieldset>
            |
-           |      <legend class="visuallyhidden">$question</legend>
+           |      ${generateExpectedLegendMarkup(question)}
            |
            |      <div>
            |        ${generateExpectedCheckboxMarkup("value1", "display1")}
@@ -99,7 +99,7 @@ class CheckboxHelperSpec extends TemplateBaseSpec {
            |  <div>
            |     <fieldset>
            |
-           |      <legend class="visuallyhidden">$question</legend>
+           |      ${generateExpectedLegendMarkup(question)}
            |
            |      $additionalContent
            |
@@ -142,7 +142,7 @@ class CheckboxHelperSpec extends TemplateBaseSpec {
         s"""
            |  <div class="form-field--error">
            |    <fieldset>
-           |      <legend class="visuallyhidden">$question</legend>
+           |      ${generateExpectedLegendMarkup(question)}
            |
            |      <span class="error-message">$errorMessage</span>
            |      <div>
@@ -158,6 +158,35 @@ class CheckboxHelperSpec extends TemplateBaseSpec {
       )
 
       val markup = checkboxHelper(form, choices, question, None)
+      formatHtml(markup) shouldBe formatHtml(expectedMarkup)
+    }
+  }
+
+  "Calling the radio group helper with legendAsHeader false" should {
+
+    "render the legend without a header" in {
+      val data = Map("foo" -> "bar")
+      val form = testForm.bind(data).withError(FormError("err", errorMessage))
+      val expectedMarkup = Html(
+        s"""
+           |  <div class="form-field--error">
+           |    <fieldset>
+           |      ${generateExpectedLegendMarkup(question, asHeader = false)}
+           |
+           |      <span class="error-message">$errorMessage</span>
+           |      <div>
+           |        ${generateExpectedCheckboxMarkup("value1", "display1")}
+           |        ${generateExpectedCheckboxMarkup("value2", "display2")}
+           |        ${generateExpectedCheckboxMarkup("value3", "display3")}
+           |        ${generateExpectedCheckboxMarkup("value4", "display4")}
+           |        ${generateExpectedCheckboxMarkup("value5", "display5")}
+           |      </div>
+           |    </fieldset>
+           |  </div>
+        """.stripMargin
+      )
+
+      val markup = checkboxHelper(form, choices, question, None, legendAsHeader = false)
       formatHtml(markup) shouldBe formatHtml(expectedMarkup)
     }
   }

@@ -75,7 +75,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe IssueNewInvoicesMessages.title
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${IssueNewInvoicesMessages.title}"
     }
 
     s"have the correct back text" in {

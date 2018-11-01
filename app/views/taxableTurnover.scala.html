@@ -19,20 +19,19 @@
 @import views.html.templates.inputs.radioHelper
 @import templates.headings
 @import forms.YesNoForm._
+@import views.utils.TitleUtil._
 
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-title = messages("taxableTurnover.title", appConfig.deregThreshold),
+title = title(messages("taxableTurnover.title", appConfig.deregThreshold), form),
 bodyClasses = None,
 appConfig = appConfig) {
 
     <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show(user.isAgent).url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
-
-    @headings(messages("taxableTurnover.title", appConfig.deregThreshold))
 
     @helpers.form(action = controllers.routes.TaxableTurnoverController.submit, 'novalidate -> "novalidate") {
 

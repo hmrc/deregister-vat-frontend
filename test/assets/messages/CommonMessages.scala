@@ -50,4 +50,6 @@ object CommonMessages {
   val errorDateMonth = "Enter numbers between 1 and 12"
   val errorDateYear = "Enter 4 numbers"
 
+  val errorTitlePrefix = "Error:"
+
 }

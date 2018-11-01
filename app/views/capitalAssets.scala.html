@@ -21,12 +21,12 @@
 @import views.html.templates.inputs.yesNoRevealHelper
 @import templates.headings
 @import forms.YesNoForm._
-
+@import views.utils.TitleUtil._
 
 @(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("capitalAssets.title"),
+    title = title(messages("capitalAssets.title"), form),
     bodyClasses = None,
     appConfig = appConfig) {
 
@@ -40,7 +40,7 @@
 
     @helpers.form(action = controllers.routes.CapitalAssetsController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="@yesNo">
+        <div id="@yesNo">
             @yesNoRevealHelper(
                 choices = Seq(
                     (yes, Messages("common.yes")),
@@ -54,7 +54,8 @@
                     label = messages("capitalAssets.totalSaleValue"),
                     labelHidden = false,
                     decimalPlace = true
-                )
+                ),
+                legendAsHeader = false
             )
         </div>
 

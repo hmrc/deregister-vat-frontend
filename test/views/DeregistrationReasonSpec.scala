@@ -16,7 +16,7 @@
 
 package views
 
-import assets.messages.{CommonMessages,DeregistrationReasonMessages}
+import assets.messages.{CommonMessages, DeregistrationReasonMessages, OutstandingInvoicesMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import forms.DeregistrationReasonForm
@@ -76,7 +76,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationReasonMessages.title
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationReasonMessages.title}"
     }
 
     s"have the correct back text" in {

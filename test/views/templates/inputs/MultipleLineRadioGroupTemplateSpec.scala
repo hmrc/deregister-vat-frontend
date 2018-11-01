@@ -53,9 +53,7 @@ class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
         s"""
            |  <div>
            |    <fieldset>
-           |      <legend class="visuallyhidden">
-           |        <h1>$labelText</h1>
-           |      </legend>
+           |      ${generateExpectedLegendMarkup(labelText)}
            |
            |        ${generateExpectedRadioMarkup("value1", "display1", "content1")}
            |        ${generateExpectedRadioMarkup("value2", "display2", "content2")}
@@ -78,9 +76,7 @@ class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
         s"""
            |  <div>
            |     <fieldset>
-           |      <legend class="visuallyhidden">
-           |        <h1>$labelText</h1>
-           |      </legend>
+           |      ${generateExpectedLegendMarkup(labelText)}
            |        ${generateExpectedRadioMarkup("value1", "display1", "content1")}
            |        ${generateExpectedRadioMarkup("value2", "display2", "content2", checked = true)}
            |    </fieldset>
@@ -102,9 +98,7 @@ class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
         s"""
            |  <div class="form-field--error">
            |    <fieldset>
-           |      <legend class="visuallyhidden">
-           |        <h1>$labelText</h1>
-           |      </legend>
+           |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      <span class="error-message">$errorMessage</span>
            |
@@ -129,9 +123,7 @@ class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
         s"""
            |<div>
            |    <fieldset>
-           |      <legend class="visuallyhidden">
-           |        <h1>$labelText</h1>
-           |      </legend>
+           |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      $additionalContent
            |
@@ -144,6 +136,32 @@ class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
       )
 
       val markup = multipleLineRadioGroup(field, choices, labelText, Some(additionalContent))
+      formatHtml(markup) shouldBe formatHtml(expectedMarkup)
+    }
+  }
+
+  "Calling the radio helper with display legend as header set to false" should {
+
+    "render the choices as radio buttons with a legend which is visually hidden" in {
+      val additionalContent = Html("<p>Additional text</p>")
+      val field: Field = Field(YesNoForm.yesNoForm, fieldName, Seq(), None, Seq(), None)
+      val expectedMarkup = Html(
+        s"""
+           |<div>
+           |    <fieldset>
+           |      ${generateExpectedLegendMarkup(labelText, asHeader = false)}
+           |
+           |      $additionalContent
+           |
+           |        ${generateExpectedRadioMarkup("value1", "display1", "content1")}
+           |        ${generateExpectedRadioMarkup("value2", "display2", "content2")}
+           |
+           |    </fieldset>
+           |</div>
+        """.stripMargin
+      )
+
+      val markup = multipleLineRadioGroup(field, choices, labelText, Some(additionalContent), legendAsHeader = false)
       formatHtml(markup) shouldBe formatHtml(expectedMarkup)
     }
   }

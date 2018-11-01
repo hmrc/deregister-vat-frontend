@@ -18,11 +18,12 @@
 @import views.html.templates.errors.errorSummary
 @import templates.inputs.date
 @import templates.headings
+@import views.utils.TitleUtil._
 
 @(form: Form[DateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("ceasedTrading.title"),
+    title = title(messages("ceasedTrading.title"), form),
     bodyClasses = None,
     appConfig = appConfig) {
 
@@ -30,17 +31,15 @@
 
     @errorSummary("common.errorSummary.heading", form, Some("ceasedTrading"))
 
-    @headings(messages("ceasedTrading.title"))
-
     @helpers.form(action = controllers.routes.CeasedTradingDateController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="ceasedTrading">
+        <div id="ceasedTrading">
             @date(
                 form = form,
                 question = messages("ceasedTrading.title"),
                 fieldName = "date",
                 hint = Some(messages("ceasedTrading.hint")),
-                renderQuestionAsHeading = false
+                renderQuestionAsHeading = true
             )
         </div>
 

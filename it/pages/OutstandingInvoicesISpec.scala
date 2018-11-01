@@ -218,7 +218,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(BAD_REQUEST),
-            pageTitle("Is the business expecting to receive payment for outstanding invoices after deregistering?"),
+            pageTitle("Error: Is the business expecting to receive payment for outstanding invoices after deregistering?"),
             elementText(".error-message")("Select an option")
           )
         }

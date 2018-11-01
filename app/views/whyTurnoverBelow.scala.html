@@ -18,11 +18,12 @@
 @import views.html.templates.errors.errorSummary
 @import templates.headings
 @import views.html.templates.inputs.checkboxHelper
+@import views.utils.TitleUtil._
 
 @(form: Form[WhyTurnoverBelowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
-    title = messages("whyTurnoverBelow.title"),
+    title = title(messages("whyTurnoverBelow.title"), form),
     bodyClasses = None,
     appConfig = appConfig) {
 
@@ -48,7 +49,8 @@
                     (WhyTurnoverBelowModel.closedPlacesOfBusiness, messages("whyTurnoverBelow.reason.closedPlacesOfBusiness")),
                     (WhyTurnoverBelowModel.turnoverLowerThanExpected, messages("whyTurnoverBelow.reason.turnoverLowerThanExpected"))
                 ),
-                question = messages("whyTurnoverBelow.title")
+                question = messages("whyTurnoverBelow.title"),
+                legendAsHeader = false
             )
         </div>
 
