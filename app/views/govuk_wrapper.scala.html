@@ -77,8 +77,8 @@
             window.GOVUK.timeoutDialog({
               timeout: @appConfig.timeoutPeriod,
               countdown: @appConfig.timeoutCountdown,
-              keepAliveUrl: '/vat-through-software/account/deregister',
-              signOutUrl: '/vat-through-software/account/deregister/timeout'
+              keepAliveUrl: '@controllers.routes.DeregisterForVATController.show().url',
+              signOutUrl: '@controllers.routes.SignOutController.signOut(authorised = true, timeout = true).url'
             });
             var dialogOpen;
         }
