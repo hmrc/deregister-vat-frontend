@@ -54,7 +54,7 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
             Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have an active session, redirect to GG Sign In")
             Redirect(appConfig.signInUrl)
           case _: AuthorisationException =>
-            Logger.warn(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have delegated authority for Client")
+            Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have delegated authority for Client")
             //TODO: redirect to new agent lookup service
             Unauthorized(views.html.errors.agent.unauthorised())
         }
