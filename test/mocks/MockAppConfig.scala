@@ -34,6 +34,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val govUkCancelVatRegistration: String = "https://www.gov.uk/government/publications/vat-application-to-cancel-your-vat-registration-vat7"
   override val signInUrl: String = "/gg-sign-in"
   override val signOutUrl: String = "/some-gg-signout-url"
+  override val timeOutSignOutUrl: String = "/some-timeout-signout-url"
   override val agentServicesGovUkGuidance: String = "guidance/get-an-hmrc-agent-services-account"
   override val clientServicesGovUkGuidance: String = "government/publications/vat-returns-and-ec-sales-list-commercial-software-suppliers/vat-commercial-software-suppliers"
   override val surveyUrl: String = "/some-survey-url"

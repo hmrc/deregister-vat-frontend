@@ -36,7 +36,7 @@ class SignOutControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
     mockConfig
   )
 
-  "navigating to signout page" when {
+  "Calling .signout" when {
 
     "authorised" should {
       "return 303 and navigate to the survey url" in {
@@ -66,39 +66,48 @@ class SignOutControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
       "throw an internal server error" in {
         lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true)(request)
 
-        setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR,"bad things")))
+        setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "on timeout" when {
+
+      "deleting answers is successful" should {
+
+        "return OK and navigate to the session timeout page" in {
+          lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true, timeout = true)(request)
+
+          setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+
+          status(result) shouldBe SEE_OTHER
+          redirectLocation(result) shouldBe Some(mockConfig.timeOutSignOutUrl)
+        }
+      }
+
+      "deleting answers is unsuccessful" should {
+
+        "throw an internal server error" in {
+          lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true, timeout = true)(request)
+
+          setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+
+          status(result) shouldBe INTERNAL_SERVER_ERROR
+        }
       }
     }
   }
 
-  "on timeout" when {
+  "Calling .timeout" should {
 
-    "deleting answers is successful" should {
-
-      "return OK and navigate to the session timeout page" in {
-        lazy val result: Future[Result] = TestSignOutController.timeout(request)
-
-        setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-
-        status(result) shouldBe OK
-        document(result).title shouldBe TimeoutMessages.title
-      }
-    }
-
-    "deleting answers is unsuccessful" should {
-
-      "throw an internal server error" in {
-        lazy val result: Future[Result] = TestSignOutController.timeout(request)
-
-        setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR,"bad things")))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-
-        status(result) shouldBe INTERNAL_SERVER_ERROR
-      }
+    "Render session timeout view" in {
+      lazy val result: Future[Result] = TestSignOutController.timeout(request)
+      status(result) shouldBe OK
+      document(result).title shouldBe TimeoutMessages.title
     }
   }
 }
