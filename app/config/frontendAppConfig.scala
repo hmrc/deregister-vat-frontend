@@ -38,6 +38,7 @@ trait AppConfig extends ServicesConfig {
   val shutterPage: String
   val signInUrl: String
   val signOutUrl: String
+  val timeOutSignOutUrl: String
   val surveyUrl: String
   val unauthorisedSignOutUrl: String
   val agentServicesGovUkGuidance: String
@@ -98,6 +99,10 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val surveyUrl = s"$surveyBaseUrl/?origin=$contactFormServiceIdentifier"
 
   override lazy val signOutUrl = s"$governmentGatewayHost/gg/sign-out?continue=$surveyUrl"
+
+  private lazy val timeOutRedirectUrl = platformHost + controllers.routes.SignOutController.timeout().url
+  override lazy val timeOutSignOutUrl = s"$governmentGatewayHost/gg/sign-out?continue=$timeOutRedirectUrl"
+
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
 
   override lazy val agentServicesGovUkGuidance: String = getString(Keys.govUkSetupAgentServices)
