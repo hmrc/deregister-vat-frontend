@@ -47,5 +47,7 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val features: Features = new Features(runModeConfiguration)
   override val feedbackUrl: String = "/feedback"
   override val platformHost: String = "/platform/host"
+  override val timeoutCountdown: Int = 100
+  override val timeoutPeriod: Int = 200
 }
 
