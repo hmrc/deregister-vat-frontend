@@ -27,13 +27,20 @@ import models._
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import services.mocks._
 import utils.TestUtil
+import audit.mocks.MockAuditingService
+import audit.models.DeregAuditModel
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito.verify
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.ExecutionContext
 
 
 class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionConnector with MockDeregReasonAnswerService
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
   with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService with MockOptionTaxAnswerService
-  with MockAccountingMethodAnswerService {
+  with MockAccountingMethodAnswerService with MockAuditingService {
 
   object TestUpdateDeregistrationService extends UpdateDeregistrationService(
     mockDeregReasonAnswerService,
@@ -48,6 +55,7 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
     mockIssueNewInvoicesAnswerService,
     mockOutstandingInvoicesService,
     mockDeregDateAnswerService,
+    mockAuditingService,
     mockVatSubscriptionConnector
   )
 
@@ -73,6 +81,16 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
           setupMockGetDeregDate(Right(Some(deregistrationDateModel)))
 
           setupMockSubmit(vrn, deregistrationInfoMaxModel)(Right(VatSubscriptionSuccess))
+
+          verify(mockAuditingService)
+            .extendedAudit(
+              ArgumentMatchers.eq(DeregAuditModel(user, deregistrationInfoMaxModel)),
+              ArgumentMatchers.eq[Option[String]](Some(controllers.routes.CheckAnswersController.show().url))
+            )(
+              ArgumentMatchers.any[HeaderCarrier],
+              ArgumentMatchers.any[ExecutionContext]
+            )
+
           await(TestUpdateDeregistrationService.updateDereg) shouldBe Right(VatSubscriptionSuccess)
         }
       }
