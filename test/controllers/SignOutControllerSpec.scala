@@ -16,7 +16,9 @@
 
 package controllers
 
+import assets.messages.TimeoutMessages
 import models.{DeregisterVatSuccess, ErrorModel}
+import org.jsoup.Jsoup
 import play.api.mvc.Result
 import play.api.test.Helpers._
 import services.mocks.MockDeleteAllStoredAnswersService
@@ -72,18 +74,18 @@ class SignOutControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
     }
   }
 
-  "signing out on timeout" when {
+  "on timeout" when {
 
     "deleting answers is successful" should {
 
-      "return 303 and navigate to the expected sign out url" in {
+      "return OK and navigate to the session timeout page" in {
         lazy val result: Future[Result] = TestSignOutController.timeout(request)
 
         setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
 
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(mockConfig.unauthorisedSignOutUrl)
+        status(result) shouldBe OK
+        document(result).title shouldBe TimeoutMessages.title
       }
     }
 

@@ -50,6 +50,8 @@ trait AppConfig extends ServicesConfig {
   val features: Features
   val feedbackUrl: String
   val platformHost: String
+  val timeoutPeriod: Int
+  val timeoutCountdown: Int
 }
 
 @Singleton
@@ -112,4 +114,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override val features = new Features(runModeConfiguration)
 
   override lazy val platformHost: String = getString(Keys.platformHost)
+
+  override lazy val timeoutCountdown: Int = getInt(Keys.timeoutCountdown)
+  override lazy val timeoutPeriod: Int = getInt(Keys.timeoutPeriod)
 }

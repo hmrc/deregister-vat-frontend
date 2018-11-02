@@ -56,4 +56,7 @@ object ConfigKeys {
 
   val platformHost: String = "platform.host"
 
+  val timeoutPeriod: String = "timeout.period"
+  val timeoutCountdown: String = "timeout.countdown"
+
 }
