@@ -59,7 +59,7 @@ class AuthPredicate @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
         Logger.debug("[AuthPredicate][invokeBlock] - No active session, redirect to GG Sign In")
         Redirect(appConfig.signInUrl)
       case _: AuthorisationException =>
-        Logger.warn("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
+        Logger.debug("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
         Forbidden(views.html.errors.client.unauthorised())
     }
   }
