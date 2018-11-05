@@ -17,7 +17,7 @@
 package services
 
 import audit.AuditService
-import audit.models.DeregAuditModel
+import audit.models.{AuditModel, DeregAuditModel}
 import cats.data.EitherT
 import cats.instances.future._
 import config.AppConfig
@@ -50,7 +50,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
     : Future[Either[ErrorModel, VatSubscriptionResponse]] = {
     buildDeregInfoModel.flatMap{
       case Right(deregInfo) =>
-        auditService.extendedAudit(
+        auditService.auditEvent(
           DeregAuditModel(user, deregInfo),
           Some(controllers.routes.CheckAnswersController.show().url)
         )

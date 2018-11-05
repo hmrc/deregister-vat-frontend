@@ -22,6 +22,7 @@ import mocks.MockAppConfig
 import models.User
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import play.api.Configuration
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
@@ -34,6 +35,7 @@ import scala.concurrent.ExecutionContext
 trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach with MaterializerSupport {
 
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig(app.configuration)
+  lazy val config = app.injector.instanceOf[Configuration]
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
   lazy val requestWithVRN: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession("CLIENT_VRN" -> vrn)
   lazy val injector: Injector = app.injector

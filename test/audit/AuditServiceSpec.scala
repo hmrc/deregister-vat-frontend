@@ -16,69 +16,36 @@
 
 package audit
 
-import audit.models.TestExtendedAuditModel
-import config.FrontendAppConfig
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
-import play.api.http.HeaderNames
-import play.api.test.FakeRequest
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditResult.Success
-import utils.TestUtil
+import audit.mocks.MockAuditConnector
+import audit.models.{AuditModel, TestAuditModel}
+import uk.gov.hmrc.play.audit.http.connector.AuditResult._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
-class AuditServiceSpec extends TestUtil with MockitoSugar {
+class AuditServiceSpec extends MockAuditConnector {
 
-  val mockAuditConnector: FrontendAuditConnector = mock[FrontendAuditConnector]
-  val mockConfiguration: FrontendAppConfig = mock[FrontendAppConfig]
+  object TestAuditService extends AuditService(mockAuditConnector, config)
 
-  val testAuditingService = new AuditService(mockConfiguration, mockAuditConnector)
+  lazy val testModel = TestAuditModel("foo", "bar")
+  lazy val testPath = "/test/path"
 
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockAuditConnector, mockConfiguration)
-  }
+  "AuditService" when {
 
-  "AuditService" should {
+    "given an AuditModel" should {
 
-    "when calling the referer method" should {
-
-      "extract the referer if there is one" in {
-        val testPath = "/test/path"
-        testAuditingService.referrer(HeaderCarrier().withExtraHeaders(HeaderNames.REFERER -> testPath)) shouldBe testPath
+      "return success when the Audit is successful" in {
+        setupMockSendExtendedEvent(Future.successful(Success))
+        await(TestAuditService.auditEvent(testModel, Some(testPath))) shouldBe Success
       }
 
-      "default to hyphen '-' if there is no referrer" in {
-        testAuditingService.referrer(HeaderCarrier()) shouldBe "-"
+      "return failure when the Audit is failed" in {
+        setupMockSendExtendedEvent(Future.successful(Failure("Error")))
+        await(TestAuditService.auditEvent(testModel, Some(testPath))) shouldBe Failure("Error")
       }
-    }
 
-    "given an ExtendedAuditModel" should {
-
-      "extract the data and pass it into the AuditConnector" in {
-
-        val testModel = new TestExtendedAuditModel("foo", "bar")
-        val testPath = "/test/path"
-        val expectedData = testAuditingService.toExtendedDataEvent(mockConfiguration.appName, testModel, testPath)
-
-        when(mockAuditConnector.sendExtendedEvent(
-          ArgumentMatchers.refEq(expectedData, "eventId", "generatedAt")
-        )(
-          ArgumentMatchers.any[HeaderCarrier],
-          ArgumentMatchers.any[ExecutionContext]
-        )) thenReturn Future.successful(Success)
-
-        testAuditingService.extendedAudit(testModel, Some(testPath))
-
-        verify(mockAuditConnector)
-          .sendExtendedEvent(
-            ArgumentMatchers.refEq(expectedData, "eventId", "generatedAt")
-          )(
-            ArgumentMatchers.any[HeaderCarrier],
-            ArgumentMatchers.any[ExecutionContext]
-          )
+      "return disabled when the Audit is disabled" in {
+        setupMockSendExtendedEvent(Future.successful(Disabled))
+        await(TestAuditService.auditEvent(testModel, Some(testPath))) shouldBe Disabled
       }
     }
   }

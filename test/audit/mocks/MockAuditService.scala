@@ -17,30 +17,23 @@
 package audit.mocks
 
 import audit.AuditService
-import audit.models.ExtendedAuditModel
-import org.mockito.Mockito._
-import org.mockito.{AdditionalMatchers, ArgumentMatchers}
-import org.scalatest.mockito.MockitoSugar
+import audit.models.AuditModel
+import org.scalamock.scalatest.MockFactory
+import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.TestUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAuditingService extends TestUtil with MockitoSugar {
-
-  override def beforeEach(): Unit = {
-    super.beforeEach()
-    reset(mockAuditingService)
-  }
+trait MockAuditService extends TestUtil with MockFactory {
 
   val mockAuditingService: AuditService = mock[AuditService]
 
-  def verifyExtendedAudit(model: ExtendedAuditModel, path: Option[String] = None): Unit =
-    verify(mockAuditingService).extendedAudit(
-      ArgumentMatchers.eq(model),
-      AdditionalMatchers.or(ArgumentMatchers.eq(path), ArgumentMatchers.isNull)
-    )(
-      ArgumentMatchers.any[HeaderCarrier],
-      ArgumentMatchers.any[ExecutionContext]
-    )
+  def verifyExtendedAudit(event: AuditModel, path: Option[String])(response: Future[AuditResult]): Unit = {
+    (mockAuditingService.auditEvent(_: AuditModel, _: Option[String])(_: HeaderCarrier, _: ExecutionContext))
+      .expects(event, path, *, *)
+      .returns(response)
+      .atLeastOnce()
+  }
 }

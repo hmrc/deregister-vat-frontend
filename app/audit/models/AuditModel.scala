@@ -16,15 +16,10 @@
 
 package audit.models
 
-import play.api.libs.json.{Format, JsValue, Json}
+import play.api.libs.json.JsValue
 
-case class TestExtendedAuditModel(testDataItem: String, testDataItem2: String) extends ExtendedAuditModel {
-  override val transactionName: String = "TestTransactionName"
-  override val detail: JsValue = Json.toJson(this)
-  override val auditType: String = "TestAuditType"
+trait AuditModel {
+  val transactionName: String
+  val auditType: String
+  val detail: JsValue
 }
-
-object TestExtendedAuditModel {
-  implicit val format: Format[TestExtendedAuditModel] = Json.format[TestExtendedAuditModel]
-}
-
