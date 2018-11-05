@@ -16,6 +16,8 @@
 
 package services
 
+import audit.AuditService
+import audit.models.DeregAuditModel
 import cats.data.EitherT
 import cats.instances.future._
 import config.AppConfig
@@ -40,13 +42,19 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
                                             val issueNewInvoicesAnswerService: IssueNewInvoicesAnswerService,
                                             val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                             val deregDateAnswerService: DeregDateAnswerService,
+                                            val auditService: AuditService,
                                             val vatSubscriptionConnector: VatSubscriptionConnector)(implicit val appConfig: AppConfig) {
 
 
   def updateDereg(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
     : Future[Either[ErrorModel, VatSubscriptionResponse]] = {
     buildDeregInfoModel.flatMap{
-      case Right(deregInfo) => vatSubscriptionConnector.submit(user.vrn, deregInfo)
+      case Right(deregInfo) =>
+        auditService.extendedAudit(
+          DeregAuditModel(user, deregInfo),
+          Some(controllers.routes.CheckAnswersController.show().url)
+        )
+        vatSubscriptionConnector.submit(user.vrn, deregInfo)
       case Left(errorModel) => Future.successful(Left(errorModel))
     }
   }

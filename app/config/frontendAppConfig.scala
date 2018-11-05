@@ -58,6 +58,9 @@ trait AppConfig extends ServicesConfig {
 @Singleton
 class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, environment: Environment) extends AppConfig {
 
+  lazy val appName: String = runModeConfiguration.getString("appName").getOrElse(throw new Exception("Missing configuration key: appName"))
+
+
   override val mode: Mode = environment.mode
 
   private val contactHost = getString(Keys.contactFrontendService)
