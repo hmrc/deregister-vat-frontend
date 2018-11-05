@@ -82,16 +82,9 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
 
           setupMockSubmit(vrn, deregistrationInfoMaxModel)(Right(VatSubscriptionSuccess))
 
-          verify(mockAuditingService)
-            .extendedAudit(
-              ArgumentMatchers.eq(DeregAuditModel(user, deregistrationInfoMaxModel)),
-              ArgumentMatchers.eq[Option[String]](Some(controllers.routes.CheckAnswersController.show().url))
-            )(
-              ArgumentMatchers.any[HeaderCarrier],
-              ArgumentMatchers.any[ExecutionContext]
-            )
-
           await(TestUpdateDeregistrationService.updateDereg) shouldBe Right(VatSubscriptionSuccess)
+
+          verifyExtendedAudit(DeregAuditModel(user, deregistrationInfoMaxModel), Some(controllers.routes.CheckAnswersController.show().url))
         }
       }
 
@@ -112,6 +105,8 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
 
         setupMockSubmit(vrn, deregistrationInfoMaxModel)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
         await(TestUpdateDeregistrationService.updateDereg) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
+
+        verifyExtendedAudit(DeregAuditModel(user, deregistrationInfoMaxModel), Some(controllers.routes.CheckAnswersController.show().url))
       }
 
 
