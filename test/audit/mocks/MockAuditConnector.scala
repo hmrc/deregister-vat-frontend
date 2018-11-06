@@ -33,5 +33,6 @@ trait MockAuditConnector extends TestUtil with MockFactory {
     (mockAuditConnector.sendExplicitAudit(_: String, _: T)(_: HeaderCarrier, _: ExecutionContext, _: Writes[T]))
       .expects(auditType, detail, *, *, *)
       .returns(response)
+      .atLeastOnce()
   }
 }
