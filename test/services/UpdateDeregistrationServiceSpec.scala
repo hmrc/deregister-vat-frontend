@@ -22,8 +22,8 @@ import assets.constants.DeregistrationInfoTestConstants._
 import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
-import audit.mocks.MockAuditService
-import audit.models.{AuditModel, DeregAuditModel}
+import audit.mocks.MockAuditConnector
+import audit.models.DeregAuditModel
 import connectors.mocks.MockVatSubscriptionConnector
 import models._
 import play.api.http.Status.INTERNAL_SERVER_ERROR
@@ -38,7 +38,7 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
   with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService with MockOptionTaxAnswerService
-  with MockAccountingMethodAnswerService with MockAuditService {
+  with MockAccountingMethodAnswerService with MockAuditConnector {
 
   object TestUpdateDeregistrationService extends UpdateDeregistrationService(
     mockDeregReasonAnswerService,
@@ -53,7 +53,7 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
     mockIssueNewInvoicesAnswerService,
     mockOutstandingInvoicesService,
     mockDeregDateAnswerService,
-    mockAuditingService,
+    mockAuditConnector,
     mockVatSubscriptionConnector
   )
 
@@ -79,8 +79,7 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
           setupMockGetDeregDate(Right(Some(deregistrationDateModel)))
 
           setupMockSubmit(vrn, deregistrationInfoMaxModel)(Right(VatSubscriptionSuccess))
-
-          verifyExtendedAudit(DeregAuditModel(user, deregistrationInfoMaxModel), Some(controllers.routes.CheckAnswersController.show().url))(Future.successful(Success))
+          setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))(Future.successful(Success))
 
           await(TestUpdateDeregistrationService.updateDereg) shouldBe Right(VatSubscriptionSuccess)
         }
@@ -102,7 +101,7 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
         setupMockGetDeregDate(Right(Some(deregistrationDateModel)))
 
         setupMockSubmit(vrn, deregistrationInfoMaxModel)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
-        verifyExtendedAudit(DeregAuditModel(user, deregistrationInfoMaxModel), Some(controllers.routes.CheckAnswersController.show().url))(Future.successful(Success))
+        setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))(Future.successful(Success))
 
         await(TestUpdateDeregistrationService.updateDereg) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
 
