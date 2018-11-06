@@ -48,6 +48,9 @@ object ConfigKeys {
   val manageVatSubscriptionFrontendHost: String = "manage-vat-subscription-frontend.host"
   val manageVatSubscriptionFrontendUrl: String = "manage-vat-subscription-frontend.url"
 
+  val vatAgentClientLookupFrontendHost: String = "vat-agent-client-lookup-frontend.host"
+  val vatAgentClientLookupFrontendUrl: String = "vat-agent-client-lookup-frontend.url"
+
   val vatSubscriptionService: String = "vat-subscription"
 
   val deregisterVatService: String = "deregister-vat"
