@@ -75,37 +75,16 @@ class AuthoriseAsAgentSpec extends TestUtil with MockAuth {
 
         "the Agent does not have delegated authority for the client" when {
 
-          "the VAT Agent Client Lookup Frontend Handoff is enabled" should {
+          val authResponse = Future.failed(InsufficientEnrolments())
+          lazy val result = target()(requestWithVRN)
 
-            val authResponse = Future.failed(InsufficientEnrolments())
-            lazy val result = target()(requestWithVRN)
-
-            "return 303" in {
-              mockAuth(authResponse)
-              mockConfig.features.useAgentClientLookup(true)
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            "redirect to the VAT Agent Client Lookup Unauthorised view" in {
-              redirectLocation(result) shouldBe
-                Some(mockConfig.vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url))
-            }
+          "return 303" in {
+            mockAuth(authResponse)
+            status(result) shouldBe Status.SEE_OTHER
           }
 
-          "the VAT Agent Client Lookup Frontend Handoff is disabled" should {
-
-            val authResponse = Future.failed(InsufficientEnrolments())
-            lazy val result = target()(requestWithVRN)
-
-            "return 401" in {
-              mockAuth(authResponse)
-              mockConfig.features.useAgentClientLookup(false)
-              status(result) shouldBe Status.UNAUTHORIZED
-            }
-
-            "render Unauthorised view" in {
-              Jsoup.parse(bodyOf(result)).title shouldBe "You can’t use this service yet"
-            }
+          "redirect to the VAT Agent Client Lookup Unauthorised view" in {
+            redirectLocation(result) shouldBe Some(mockConfig.agentClientUnauthorisedUrl)
           }
         }
 
@@ -125,49 +104,27 @@ class AuthoriseAsAgentSpec extends TestUtil with MockAuth {
 
       }
 
-    }
+      "the Agent is not enrolled to HMRC-AS-AGENT" should {
 
-    "the Agent is not enrolled to HMRC-AS-AGENT" should {
-
-      val authResponse = Future.successful(
-        Enrolments(
-          Set(
-            Enrolment("OTHER_ENROLMENT",
-              Seq(EnrolmentIdentifier("", "")),
-              "Activated"
+        val authResponse = Future.successful(
+          Enrolments(
+            Set(
+              Enrolment("OTHER_ENROLMENT",
+                Seq(EnrolmentIdentifier("", "")),
+                "Activated"
+              )
             )
           )
         )
-      )
-
-      "the VAT Agent Client Lookup Frontend Handoff is enabled" should {
-
         lazy val result = target()(requestWithVRN)
 
         "return 303" in {
           mockAuth(authResponse)
-          mockConfig.features.stubAgentClientLookup(true)
           status(result) shouldBe Status.SEE_OTHER
         }
 
         "redirect to the VAT Agent Client Lookup Unauthorised view" in {
-          redirectLocation(result) shouldBe
-            Some(mockConfig.vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url))
-        }
-      }
-
-      "the VAT Agent Client Lookup Frontend Handoff is disabled" should {
-
-        lazy val result = target()(requestWithVRN)
-
-        "return 401" in {
-          mockAuth(authResponse)
-          mockConfig.features.useAgentClientLookup(false)
-          status(result) shouldBe Status.UNAUTHORIZED
-        }
-
-        "render Unauthorised view" in {
-          Jsoup.parse(bodyOf(result)).title shouldBe "You can’t use this service yet"
+          redirectLocation(result) shouldBe Some(mockConfig.agentClientUnauthorisedUrl)
         }
       }
     }
