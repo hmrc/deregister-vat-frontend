@@ -22,7 +22,8 @@ import play.api.{Configuration, Mode}
 import play.api.mvc.Call
 import play.api.Mode.Mode
 
-class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mode.Test) extends AppConfig {
+class MockAppConfig(implicit val runModeConfiguration: Configuration) extends AppConfig {
+  val mode: Mode = Mode.Test
   override val analyticsToken: String = ""
   override val analyticsHost: String = ""
   override val reportAProblemPartialUrl: String = ""
@@ -46,7 +47,9 @@ class MockAppConfig(val runModeConfiguration: Configuration, val mode: Mode = Mo
   override val deregThreshold: Int = 83000
   val thresholdString: String = java.text.NumberFormat.getIntegerInstance.format(deregThreshold)
 
-  override val features: Features = new Features(runModeConfiguration)
+  override def vatAgentClientLookupHandoff(redirectUrl: String): String = s"/vaclfHandoff/$redirectUrl"
+  override def vatAgentClientLookupUnauthorised(redirectUrl: String): String = s"/vaclfUnauth/$redirectUrl"
+  override val features: Features = new Features
   override val feedbackUrl: String = "/feedback"
   override val platformHost: String = "/platform/host"
   override val timeoutCountdown: Int = 100

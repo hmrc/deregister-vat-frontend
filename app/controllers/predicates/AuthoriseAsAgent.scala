@@ -53,14 +53,23 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
           case _: NoActiveSession =>
             Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have an active session, redirect to GG Sign In")
             Redirect(appConfig.signInUrl)
-          case _: AuthorisationException =>
+          case _ =>
             Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have delegated authority for Client")
-            //TODO: redirect to new agent lookup service
-            Unauthorized(views.html.errors.agent.unauthorised())
+            if (appConfig.features.useAgentClientLookup()) {
+              Redirect(appConfig.vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url))
+            } else {
+              Unauthorized(views.html.errors.agent.unauthorised())
+            }
         }
       case _ =>
         Logger.info("[AuthoriseAsAgent][invokeBlock] - No Client VRN in session")
-        Future.successful(Redirect(appConfig.manageVatSubscriptionFrontendUrl))
+        Future.successful(
+          if (appConfig.features.useAgentClientLookup()) {
+            Redirect(appConfig.vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show().url))
+          } else {
+            Redirect(appConfig.manageVatSubscriptionFrontendUrl)
+          }
+        )
     }
   }
 

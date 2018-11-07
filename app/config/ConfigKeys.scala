@@ -38,6 +38,7 @@ object ConfigKeys {
   val governmentGatewayHost: String = "government-gateway.host"
 
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
+  val useAgentClientLookupFeature: String = "features.useAgentClientLookup"
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
 
