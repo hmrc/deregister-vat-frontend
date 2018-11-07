@@ -17,10 +17,12 @@
 package controllers.predicates
 
 import mocks.MockAuth
+import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.Results.Ok
 import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.MissingBearerToken
 
 import scala.concurrent.Future
@@ -77,11 +79,35 @@ class AuthPredicateSpec extends MockAuth {
 
         "the user is not enrolled to HMRC-AS-AGENT" should {
 
-          lazy val result = target()(requestWithVRN)
+          "the VAT Agent Client Lookup Frontend Handoff is enabled" should {
 
-          "return Unauthorized (401)" in {
-            mockAuthResult(mockUnauthorisedAgent, isAgent = true)
-            status(result) shouldBe Status.UNAUTHORIZED
+            lazy val result = target()(requestWithVRN)
+
+            "return 303" in {
+              mockAuthResult(mockUnauthorisedAgent, isAgent = true)
+              mockConfig.features.stubAgentClientLookup(true)
+              status(result) shouldBe Status.SEE_OTHER
+            }
+
+            "redirect to the VAT Agent Client Lookup Unauthorised view" in {
+              redirectLocation(result) shouldBe
+                Some(mockConfig.vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url))
+            }
+          }
+
+          "the VAT Agent Client Lookup Frontend Handoff is disabled" should {
+
+            lazy val result = target()(requestWithVRN)
+
+            "return 401" in {
+              mockAuthResult(mockUnauthorisedAgent, isAgent = true)
+              mockConfig.features.useAgentClientLookup(false)
+              status(result) shouldBe Status.UNAUTHORIZED
+            }
+
+            "render Unauthorised view" in {
+              Jsoup.parse(bodyOf(result)).title shouldBe "You can’t use this service yet"
+            }
           }
         }
       }

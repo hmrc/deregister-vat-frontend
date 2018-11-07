@@ -14,21 +14,6 @@
  * limitations under the License.
  */
 
-package testOnly.forms
+package testOnly.models
 
-import config.ConfigKeys
-import play.api.data.Form
-import play.api.data.Forms._
-import testOnly.models.FeatureSwitchModel
-
-object FeatureSwitchForm {
-
-  val form: Form[FeatureSwitchModel] = Form(
-    mapping(
-      ConfigKeys.simpleAuthFeature -> boolean,
-      ConfigKeys.useAgentClientLookupFeature -> boolean,
-      ConfigKeys.stubAgentClientLookupFeature -> boolean
-      )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
-  )
-
-}
+case class StubAgentClientLookupModel(vrn: String, redirectUrl: String)

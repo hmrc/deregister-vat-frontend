@@ -109,57 +109,60 @@ class AuthoriseAsAgentSpec extends TestUtil with MockAuth {
           }
         }
 
-        "there is no Client VRN in session" when {
+        "there is no Client VRN in session" should {
 
-          "the VAT Agent Client Lookup Frontend Handoff is enabled" should {
+          lazy val result = target()(request)
 
-            lazy val result = target()(request)
-
-            "return 303" in {
-              mockConfig.features.useAgentClientLookup(true)
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            "redirect to the VAT Agent Client Lookup Select Client view" in {
-              redirectLocation(result) shouldBe
-                Some(mockConfig.vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show().url))
-            }
+          "return 303" in {
+            mockConfig.features.stubAgentClientLookup(true)
+            status(result) shouldBe Status.SEE_OTHER
           }
 
-          "the VAT Agent Client Lookup Frontend Handoff is disabled" should {
-
-            lazy val result = target()(request)
-
-            "return 303" in {
-              mockConfig.features.useAgentClientLookup(false)
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            "redirect to the Manage VAT Subscription Service" in {
-              redirectLocation(result) shouldBe Some(mockConfig.manageVatSubscriptionFrontendUrl)
-            }
+          "redirect to the test only stubbed endpoint" in {
+            redirectLocation(result) shouldBe Some(mockConfig.agentClientLookupUrl)
           }
         }
 
       }
 
-      "the Agent is not enrolled to HMRC-AS-AGENT" should {
+    }
 
-        val authResponse = Future.successful(
-          Enrolments(
-            Set(
-              Enrolment("OTHER_ENROLMENT",
-                Seq(EnrolmentIdentifier("", "")),
-                "Activated"
-              )
+    "the Agent is not enrolled to HMRC-AS-AGENT" should {
+
+      val authResponse = Future.successful(
+        Enrolments(
+          Set(
+            Enrolment("OTHER_ENROLMENT",
+              Seq(EnrolmentIdentifier("", "")),
+              "Activated"
             )
           )
         )
+      )
+
+      "the VAT Agent Client Lookup Frontend Handoff is enabled" should {
+
+        lazy val result = target()(requestWithVRN)
+
+        "return 303" in {
+          mockAuth(authResponse)
+          mockConfig.features.stubAgentClientLookup(true)
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the VAT Agent Client Lookup Unauthorised view" in {
+          redirectLocation(result) shouldBe
+            Some(mockConfig.vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url))
+        }
+      }
+
+      "the VAT Agent Client Lookup Frontend Handoff is disabled" should {
 
         lazy val result = target()(requestWithVRN)
 
         "return 401" in {
           mockAuth(authResponse)
+          mockConfig.features.useAgentClientLookup(false)
           status(result) shouldBe Status.UNAUTHORIZED
         }
 

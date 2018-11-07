@@ -22,23 +22,25 @@
 
 @views.html.main_template(title = messages("featureSwitch.title"), bodyClasses = None, appConfig = appConfig) {
 
- @helper.form(action = testOnly.controllers.routes.FeatureSwitchController.submitFeatureSwitch) {
-  @CSRF.formField
+    @helper.form(action = testOnly.controllers.routes.FeatureSwitchController.submitFeatureSwitch) {
+        @CSRF.formField
 
-  <div class="form-group">
-   <fieldset>
+        <div class="form-group">
+            <fieldset>
+                <legend>
+                    <h1 class="heading-medium">Features</h1>
+                </legend>
+                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.simpleAuthFeature), messages(ConfigKeys.simpleAuthFeature))
+            </fieldset>
 
-    <legend>
-     <h1 class="heading-medium">Features</h1>
-    </legend>
+            <fieldset>
+                <label><h4>Agent Client Lookup Settings</h4></label>
+                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.useAgentClientLookupFeature), "Use VAT Agent Client Lookup Service?")
+                @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.stubAgentClientLookupFeature), "Stub Agent Client Lookup? (Trumps the above setting when enabled)")
+            </fieldset>
+        </div>
 
-    @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.simpleAuthFeature), messages(ConfigKeys.simpleAuthFeature))
-    @views.html.templates.inputs.singleCheckbox(form(ConfigKeys.useAgentClientLookupFeature), "Use VAT Agent Client Lookup Service?")
+        <button class="button" type="submit" id="continue-button">Submit</button>
 
-   </fieldset>
-  </div>
-
-  <button class="button" type="submit" id="continue-button">Submit</button>
-
- }
+    }
 }

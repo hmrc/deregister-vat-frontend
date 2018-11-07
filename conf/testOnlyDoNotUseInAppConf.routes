@@ -14,4 +14,8 @@
 GET        /vat-through-software/account/deregister/test-only/feature-switch   testOnly.controllers.FeatureSwitchController.featureSwitch
 POST       /vat-through-software/account/deregister/test-only/feature-switch   testOnly.controllers.FeatureSwitchController.submitFeatureSwitch
 
+GET        /vat-through-software/account/deregister/test-only/vaclf-stub       testOnly.controllers.StubAgentClientLookupController.show(redirectUrl: String)
+POST       /vat-through-software/account/deregister/test-only/vaclf-stub       testOnly.controllers.StubAgentClientLookupController.post
+
+
 ->         /                                                                   prod.Routes

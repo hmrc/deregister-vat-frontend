@@ -63,13 +63,7 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
         }
       case _ =>
         Logger.info("[AuthoriseAsAgent][invokeBlock] - No Client VRN in session")
-        Future.successful(
-          if (appConfig.features.useAgentClientLookup()) {
-            Redirect(appConfig.vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show().url))
-          } else {
-            Redirect(appConfig.manageVatSubscriptionFrontendUrl)
-          }
-        )
+        Future.successful(Redirect(appConfig.agentClientLookupUrl))
     }
   }
 

@@ -16,19 +16,17 @@
 
 package testOnly.forms
 
-import config.ConfigKeys
 import play.api.data.Form
 import play.api.data.Forms._
-import testOnly.models.FeatureSwitchModel
+import testOnly.models.StubAgentClientLookupModel
 
-object FeatureSwitchForm {
+object StubAgentClientLookupForm {
 
-  val form: Form[FeatureSwitchModel] = Form(
-    mapping(
-      ConfigKeys.simpleAuthFeature -> boolean,
-      ConfigKeys.useAgentClientLookupFeature -> boolean,
-      ConfigKeys.stubAgentClientLookupFeature -> boolean
-      )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
+  val form: Form[StubAgentClientLookupModel] = Form(
+    mapping("vrn" -> text,
+      "redirectUrl" -> text
+    )
+    (StubAgentClientLookupModel.apply)(StubAgentClientLookupModel.unapply)
   )
 
 }

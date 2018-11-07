@@ -33,6 +33,13 @@ import scala.concurrent.ExecutionContext
 
 trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach with MaterializerSupport {
 
+  override def beforeEach() {
+    super.beforeEach()
+    mockConfig.features.stubAgentClientLookup(true)
+    mockConfig.features.simpleAuth(false)
+    mockConfig.features.useAgentClientLookup(true)
+  }
+
   lazy implicit val config = app.configuration
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()

@@ -25,4 +25,5 @@ import play.api.Configuration
 class Features @Inject()(implicit config: Configuration) {
   val simpleAuth = new Feature(ConfigKeys.simpleAuthFeature)
   val useAgentClientLookup = new Feature(ConfigKeys.useAgentClientLookupFeature)
+  val stubAgentClientLookup = new Feature(ConfigKeys.stubAgentClientLookupFeature)
 }

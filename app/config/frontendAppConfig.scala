@@ -48,6 +48,7 @@ trait AppConfig extends ServicesConfig {
   def vatAgentClientLookupHandoff(redirectUrl: String): String
   val vatAgentClientLookupFrontendUrl: String
   def vatAgentClientLookupUnauthorised(redirectUrl: String): String
+  def agentClientLookupUrl: String
   val vatSubscriptionUrl: String
   val deregisterVatUrl: String
   val deregThreshold: Int
@@ -103,6 +104,17 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
 
   override def vatAgentClientLookupUnauthorised(redirectUrl: String): String =
     vatAgentClientLookupFrontendUrl + s"/unauthorised-for-client?redirectUrl=${ContinueUrl(getString(Keys.platformHost) + redirectUrl).encodedUrl}"
+
+  override def agentClientLookupUrl: String =
+    if (features.stubAgentClientLookup()) {
+      testOnly.controllers.routes.StubAgentClientLookupController.show(controllers.routes.DeregisterForVATController.show().url).url
+    } else {
+      if (features.useAgentClientLookup()) {
+        vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show().url)
+      } else {
+        manageVatSubscriptionFrontendUrl
+      }
+    }
 
   override lazy val vatSubscriptionUrl: String = baseUrl(Keys.vatSubscriptionService)
 
