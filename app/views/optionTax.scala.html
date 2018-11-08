@@ -30,7 +30,8 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.VATAccountsController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.VATAccountsController.show().url"
+       onclick="sendGAEvent('end-journey','back','option-to-tax')">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -40,7 +41,7 @@
 
     @helpers.form(action = controllers.routes.OptionTaxController.submit, 'novalidate -> "novalidate") {
 
-        <div id="@yesNo">
+        <div id="@yesNo" data-metrics="end-journey:view:option-to-tax">
             @yesNoRevealHelper(
                 field = form(yesNo),
                 choices = Seq(
@@ -59,7 +60,8 @@
             )
         </div>
 
-        <button class="button" type ="submit" id="continue">
+        <button class="button" type ="submit" id="continue"
+                onclick="sendGAEvent('end-journey','continue','option-to-tax')">
             @messages("common.continue")
         </button>
     }

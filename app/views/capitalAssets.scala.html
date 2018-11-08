@@ -30,7 +30,8 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.OptionStocksToSellController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.OptionStocksToSellController.show().url"
+       onclick="sendGAEvent('end-journey','back','capital-assets')">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -40,7 +41,7 @@
 
     @helpers.form(action = controllers.routes.CapitalAssetsController.submit, 'novalidate -> "novalidate") {
 
-        <div id="@yesNo">
+        <div id="@yesNo" data-metrics="end-journey:view:capital-assets">
             @yesNoRevealHelper(
                 choices = Seq(
                     (yes, Messages("common.yes")),
@@ -59,7 +60,8 @@
             )
         </div>
 
-        <button class="button" type ="submit" id="continue">
+        <button class="button" type ="submit" id="continue"
+                onclick="sendGAEvent('end-journey','continue','capital-assets')">
             @messages("common.continue")
         </button>
     }

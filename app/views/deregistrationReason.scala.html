@@ -28,13 +28,15 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregisterForVATController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.DeregisterForVATController.show().url"
+       @if(user.isAgent){onclick="sendGAEvent('agent_start-dereg','continue','deregister-reason')"}
+       else{onclick="sendGAEvent('start-dereg','back','deregister-reason')"}>@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
     @helpers.form(action = controllers.routes.DeregistrationReasonController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="reason">
+        <div class="form-group" id="reason" data-metrics="@if(user.isAgent){agent_}start-dereg:view:deregister-reason">
             @radioHelper(
                 field = form("reason"),
                 choices = Seq(
@@ -46,7 +48,9 @@
             )
         </div>
 
-        <button class="button" type ="submit" id="continue">
+        <button class="button" type ="submit" id="continue"
+                @if(user.isAgent){onclick="sendGAEvent('agent_start-dereg','continue','deregister-reason')"}
+                else{onclick="sendGAEvent('start-dereg','continue','deregister-reason')"}>
             @messages("common.continue")
         </button>
     }

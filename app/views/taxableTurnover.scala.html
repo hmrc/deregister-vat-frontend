@@ -29,24 +29,26 @@ title = title(messages("taxableTurnover.title", appConfig.deregThreshold), form)
 bodyClasses = None,
 appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show(user.isAgent).url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show(user.isAgent).url"
+       onclick="sendGAEvent('below-threshold','back','deregister-turnover-below-threshold')">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
     @helpers.form(action = controllers.routes.TaxableTurnoverController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="@yesNo">
+        <div class="form-group" id="@yesNo" data-metrics="below-threshold:view:deregister-turnover-below-threshold">
             @radioHelper(
                 field = form(yesNo),
                 choices = Seq(
-                    (yes, Messages("common.yes")),
-                    (no, Messages("common.no"))),
-                question = Messages("taxableTurnover.title", appConfig.deregThreshold),
+                    (yes, messages("common.yes")),
+                    (no, messages("common.no"))),
+                question = messages("taxableTurnover.title", appConfig.deregThreshold),
                 inline = true
             )
         </div>
 
-        <button class="button" type="submit" id="continue">
+        <button class="button" type="submit" id="continue"
+                onclick="sendGAEvent('below-threshold','continue','deregister-turnover-below-threshold')">
             @messages("common.continue")
         </button>
     }

@@ -28,13 +28,14 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.CapitalAssetsController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.CapitalAssetsController.show().url"
+       onclick="sendGAEvent('end-journey','back','new-invoices')">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
     @helpers.form(action = controllers.routes.IssueNewInvoicesController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="reason">
+        <div class="form-group" id="reason" data-metrics="end-journey:view:new-invoices">
             @radioHelper(
                 field = form(yesNo),
                 choices = Seq(
@@ -45,7 +46,8 @@
             )
         </div>
 
-        <button class="button" type="submit" id="continue">
+        <button class="button" type="submit" id="continue"
+                onclick="sendGAEvent('end-journey','continue','new-invoices')">
             @messages("common.continue")
         </button>
     }
