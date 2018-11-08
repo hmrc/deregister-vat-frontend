@@ -16,4 +16,6 @@
 
 package testOnly.models
 
-case class FeatureSwitchModel(simpleAuthEnabled: Boolean)
+case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
+                              useAgentClientLookupFeature: Boolean,
+                              stubAgentClientLookup: Boolean)

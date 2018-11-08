@@ -45,6 +45,10 @@ trait AppConfig extends ServicesConfig {
   val clientServicesGovUkGuidance: String
   val govUkCancelVatRegistration: String
   val manageVatSubscriptionFrontendUrl: String
+  def vatAgentClientLookupHandoff(redirectUrl: String): String
+  val vatAgentClientLookupFrontendUrl: String
+  def vatAgentClientLookupUnauthorised(redirectUrl: String): String
+  def agentClientLookupUrl: String
   val vatSubscriptionUrl: String
   val deregisterVatUrl: String
   val deregThreshold: Int
@@ -56,7 +60,7 @@ trait AppConfig extends ServicesConfig {
 }
 
 @Singleton
-class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, environment: Environment) extends AppConfig {
+class FrontendAppConfig @Inject()(environment: Environment, implicit val runModeConfiguration: Configuration) extends AppConfig {
 
   lazy val appName: String = runModeConfiguration.getString("appName").getOrElse(throw new Exception("Missing configuration key: appName"))
 
@@ -92,6 +96,26 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
   override lazy val manageVatSubscriptionFrontendUrl: String =
     getString(Keys.manageVatSubscriptionFrontendHost) + getString(Keys.manageVatSubscriptionFrontendUrl)
 
+  override lazy val vatAgentClientLookupFrontendUrl: String =
+    getString(Keys.vatAgentClientLookupFrontendHost) + getString(Keys.vatAgentClientLookupFrontendUrl)
+
+  override def vatAgentClientLookupHandoff(redirectUrl: String): String =
+    vatAgentClientLookupFrontendUrl + s"/client-vat-number?redirectUrl=${ContinueUrl(getString(Keys.platformHost) + redirectUrl).encodedUrl}"
+
+  override def vatAgentClientLookupUnauthorised(redirectUrl: String): String =
+    vatAgentClientLookupFrontendUrl + s"/unauthorised-for-client?redirectUrl=${ContinueUrl(getString(Keys.platformHost) + redirectUrl).encodedUrl}"
+
+  override def agentClientLookupUrl: String =
+    if (features.stubAgentClientLookup()) {
+      testOnly.controllers.routes.StubAgentClientLookupController.show(controllers.routes.DeregisterForVATController.show().url).url
+    } else {
+      if (features.useAgentClientLookup()) {
+        vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show().url)
+      } else {
+        manageVatSubscriptionFrontendUrl
+      }
+    }
+
   override lazy val vatSubscriptionUrl: String = baseUrl(Keys.vatSubscriptionService)
 
   override lazy val deregisterVatUrl: String = baseUrl(Keys.deregisterVatService)
@@ -116,7 +140,7 @@ class FrontendAppConfig @Inject()(val runModeConfiguration: Configuration, envir
 
   override lazy val deregThreshold: Int = getInt(Keys.deregThreshold)
 
-  override val features = new Features(runModeConfiguration)
+  override val features = new Features
 
   override lazy val platformHost: String = getString(Keys.platformHost)
 

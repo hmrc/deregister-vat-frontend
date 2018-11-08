@@ -30,7 +30,11 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
 
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
     Ok(testOnly.views.html.featureSwitch(FeatureSwitchForm.form.fill(
-      FeatureSwitchModel(simpleAuthEnabled = appConfig.features.simpleAuth())
+      FeatureSwitchModel(
+        simpleAuthEnabled = appConfig.features.simpleAuth(),
+        useAgentClientLookupFeature = appConfig.features.useAgentClientLookup(),
+        stubAgentClientLookup = appConfig.features.stubAgentClientLookup()
+      )
     )))
   }
 
@@ -43,6 +47,8 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.simpleAuth(model.simpleAuthEnabled)
+    appConfig.features.useAgentClientLookup(model.useAgentClientLookupFeature)
+    appConfig.features.stubAgentClientLookup(model.stubAgentClientLookup)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 

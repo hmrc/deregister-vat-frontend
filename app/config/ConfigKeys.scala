@@ -38,6 +38,8 @@ object ConfigKeys {
   val governmentGatewayHost: String = "government-gateway.host"
 
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
+  val useAgentClientLookupFeature: String = "features.useAgentClientLookup"
+  val stubAgentClientLookupFeature: String = "features.stubAgentClientLookup"
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
 
@@ -47,6 +49,9 @@ object ConfigKeys {
 
   val manageVatSubscriptionFrontendHost: String = "manage-vat-subscription-frontend.host"
   val manageVatSubscriptionFrontendUrl: String = "manage-vat-subscription-frontend.url"
+
+  val vatAgentClientLookupFrontendHost: String = "vat-agent-client-lookup-frontend.host"
+  val vatAgentClientLookupFrontendUrl: String = "vat-agent-client-lookup-frontend.url"
 
   val vatSubscriptionService: String = "vat-subscription"
 

@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-package config.features
+package testOnly.models
 
-import play.api.Configuration
-
-class Feature(val key: String)(implicit config: Configuration) {
-  def apply(value: Boolean): Unit = sys.props += key -> value.toString
-
-  def apply(): Boolean = sys.props.get(key).fold(config.getBoolean(key).getOrElse(false))(_.toBoolean)
-}
+case class StubAgentClientLookupModel(vrn: String, redirectUrl: String)

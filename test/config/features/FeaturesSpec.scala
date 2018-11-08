@@ -16,29 +16,24 @@
 
 package config.features
 
-import org.scalatest.BeforeAndAfterEach
-import play.api.Configuration
-import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
+import utils.TestUtil
 
-class FeaturesSpec extends PlaySpec with GuiceOneAppPerSuite with BeforeAndAfterEach {
-
-  private val features = new Features(app.injector.instanceOf[Configuration])
+class FeaturesSpec extends TestUtil {
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    features.simpleAuth(false)
+    mockConfig.features.simpleAuth(false)
   }
 
   "The Auth Feature" should {
 
     "return its current state" in {
-      features.simpleAuth() mustBe false
+      mockConfig.features.simpleAuth() shouldBe false
     }
 
     "switch to a new state" in {
-      features.simpleAuth(true)
-      features.simpleAuth() mustBe true
+      mockConfig.features.simpleAuth(true)
+      mockConfig.features.simpleAuth() shouldBe true
     }
 
   }

@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package config.features
+package testOnly.forms
 
-import play.api.Configuration
+import play.api.data.Form
+import play.api.data.Forms._
+import testOnly.models.StubAgentClientLookupModel
 
-class Feature(val key: String)(implicit config: Configuration) {
-  def apply(value: Boolean): Unit = sys.props += key -> value.toString
+object StubAgentClientLookupForm {
 
-  def apply(): Boolean = sys.props.get(key).fold(config.getBoolean(key).getOrElse(false))(_.toBoolean)
+  val form: Form[StubAgentClientLookupModel] = Form(
+    mapping("vrn" -> text,
+      "redirectUrl" -> text
+    )
+    (StubAgentClientLookupModel.apply)(StubAgentClientLookupModel.unapply)
+  )
+
 }
