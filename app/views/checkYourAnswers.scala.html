@@ -29,7 +29,8 @@
             @answerModel.answer
         </dd>
         <dd class="cya-change">
-            <a href="@answerModel.url" aria-label="@answerModel.hiddenText">
+            <a href="@answerModel.url" aria-label="@answerModel.hiddenText"
+               onclick="sendGAEvent('end-journey','change-@answerModel.gaTag','check-your-answers')">
                 @messages("checkYourAnswers.change")
             </a>
         </dd>

@@ -32,15 +32,14 @@
     appConfig = appConfig) {
 
 
+
+    <a class="link-back"
+       onclick="sendGAEvent('end-journey','back','deregister-date')"
     @if(outstanding.isDefined){
-        <a class="link-back"
-            onclick="sendGAEvent('end-journey','back','deregister-date')"
-            href="@controllers.routes.OutstandingInvoicesController.show().url">
+       href="@controllers.routes.OutstandingInvoicesController.show().url"
     }else{
-        <a class="link-back"
-           onclick="sendGAEvent('end-journey','back','deregister-date')"
-           href="@controllers.routes.IssueNewInvoicesController.show().url">
-    }@messages("common.back")</a>
+       href="@controllers.routes.IssueNewInvoicesController.show().url"
+    }>@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form, Some("date-fieldset"))
 
