@@ -49,8 +49,9 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
 
   override def vatAgentClientLookupHandoff(redirectUrl: String): String = s"/vaclfHandoff/$redirectUrl"
   override def vatAgentClientLookupUnauthorised(redirectUrl: String): String = s"/vaclfUnauth/$redirectUrl"
-
   override def agentClientLookupUrl: String = "/redirect/to/vaclf"
+  override def agentClientUnauthorisedUrl: String = "/redirect/to/vaclf-unauth"
+
   override val features: Features = new Features
   override val feedbackUrl: String = "/feedback"
   override val platformHost: String = "/platform/host"

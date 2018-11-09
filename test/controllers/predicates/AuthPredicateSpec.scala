@@ -79,35 +79,15 @@ class AuthPredicateSpec extends MockAuth {
 
         "the user is not enrolled to HMRC-AS-AGENT" should {
 
-          "the VAT Agent Client Lookup Frontend Handoff is enabled" should {
+          lazy val result = target()(requestWithVRN)
 
-            lazy val result = target()(requestWithVRN)
-
-            "return 303" in {
-              mockAuthResult(mockUnauthorisedAgent, isAgent = true)
-              mockConfig.features.stubAgentClientLookup(true)
-              status(result) shouldBe Status.SEE_OTHER
-            }
-
-            "redirect to the VAT Agent Client Lookup Unauthorised view" in {
-              redirectLocation(result) shouldBe
-                Some(mockConfig.vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url))
-            }
+          "return 303" in {
+            mockAuthResult(mockUnauthorisedAgent, isAgent = true)
+            status(result) shouldBe Status.SEE_OTHER
           }
 
-          "the VAT Agent Client Lookup Frontend Handoff is disabled" should {
-
-            lazy val result = target()(requestWithVRN)
-
-            "return 401" in {
-              mockAuthResult(mockUnauthorisedAgent, isAgent = true)
-              mockConfig.features.useAgentClientLookup(false)
-              status(result) shouldBe Status.UNAUTHORIZED
-            }
-
-            "render Unauthorised view" in {
-              Jsoup.parse(bodyOf(result)).title shouldBe "You can’t use this service yet"
-            }
+          "redirect to Agent unauthorised" in {
+            redirectLocation(result) shouldBe Some(mockConfig.agentClientUnauthorisedUrl)
           }
         }
       }

@@ -32,6 +32,10 @@ class StubAgentClientLookupController @Inject()(val messagesApi: MessagesApi,
     Ok(testOnly.views.html.stubAgentClientLookup(StubAgentClientLookupForm.form, redirectUrl))
   }
 
+  def unauth(redirectUrl: String): Action[AnyContent] = Action { implicit request =>
+    Ok(testOnly.views.html.stubAgentClientUnauth(redirectUrl))
+  }
+
   def post: Action[AnyContent] = Action { implicit request =>
     StubAgentClientLookupForm.form.bindFromRequest().fold(
       err => InternalServerError(s"Failed to bind model:\n\nError: $err"),

@@ -55,11 +55,7 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
             Redirect(appConfig.signInUrl)
           case _ =>
             Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have delegated authority for Client")
-            if (appConfig.features.useAgentClientLookup()) {
-              Redirect(appConfig.vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url))
-            } else {
-              Unauthorized(views.html.errors.agent.unauthorised())
-            }
+            Redirect(appConfig.agentClientUnauthorisedUrl)
         }
       case _ =>
         Logger.info("[AuthoriseAsAgent][invokeBlock] - No Client VRN in session")
