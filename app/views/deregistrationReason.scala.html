@@ -29,7 +29,7 @@
     appConfig = appConfig) {
 
     <a class="link-back" href="@controllers.routes.DeregisterForVATController.show().url"
-       @if(user.isAgent){onclick="sendGAEvent('agent_start-dereg','continue','deregister-reason')"}
+       @if(user.isAgent){onclick="sendGAEvent('agent_start-dereg','back','deregister-reason')"}
        else{onclick="sendGAEvent('start-dereg','back','deregister-reason')"}>@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
