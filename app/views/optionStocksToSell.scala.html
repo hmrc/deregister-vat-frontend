@@ -32,7 +32,8 @@ bodyClasses = None,
 appConfig = appConfig) {
 
     <!--TODO: Update this as part of the back linking story as the redirect is dynamic-->
-    <a class="link-back" href="@controllers.routes.OptionTaxController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.OptionTaxController.show().url"
+       onclick="sendGAEvent('end-journey','back','stock')">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -42,7 +43,7 @@ appConfig = appConfig) {
 
     @helpers.form(action = controllers.routes.OptionStocksToSellController.submit, 'novalidate -> "novalidate") {
 
-        <div id="@yesNo">
+        <div id="@yesNo" data-metrics="end-journey:view:stock">
                @yesNoRevealHelper(
                   field = form(yesNo),
                   choices = Seq(
@@ -60,7 +61,8 @@ appConfig = appConfig) {
                )
         </div>
 
-        <button class="button" type="submit" id="continue">
+        <button class="button" type="submit" id="continue"
+                onclick="sendGAEvent('end-journey','continue','stock')">
             @messages("common.continue")
         </button>
     }

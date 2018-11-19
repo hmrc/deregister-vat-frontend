@@ -31,12 +31,15 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    @if(outstanding.isDefined){
-        <a class="link-back" href="@controllers.routes.OutstandingInvoicesController.show().url">
-    }else{
-        <a class="link-back" href="@controllers.routes.IssueNewInvoicesController.show().url">
-    } @messages("common.back")</a>
 
+
+    <a class="link-back"
+       onclick="sendGAEvent('end-journey','back','deregister-date')"
+    @if(outstanding.isDefined){
+       href="@controllers.routes.OutstandingInvoicesController.show().url"
+    }else{
+       href="@controllers.routes.IssueNewInvoicesController.show().url"
+    }>@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form, Some("date-fieldset"))
 
@@ -48,13 +51,13 @@
 
     @helpers.form(action = controllers.routes.DeregistrationDateController.submit, 'novalidate -> "novalidate") {
 
-        <div id="@yesNo">
+        <div id="@yesNo" data-metrics="end-journey:view:deregister-date">
             @yesNoRevealHelper(
                 choices = Seq(
-                    (yes, Messages("common.yes")),
-                    (no, Messages("common.no"))
+                    (yes, messages("common.yes")),
+                    (no, messages("common.no"))
                 ),
-                question = Messages("deregistrationDate.title"),
+                question = messages("deregistrationDate.title"),
                 field = form(yesNo),
                 inline = true,
                 hiddenContent = date(
@@ -69,7 +72,8 @@
         </div>
 
 
-        <button class="button" type ="submit" id="continue">
+        <button class="button" type ="submit" id="continue"
+                onclick="sendGAEvent('end-journey','continue','deregister-date')">
             @messages("common.continue")
         </button>
     }

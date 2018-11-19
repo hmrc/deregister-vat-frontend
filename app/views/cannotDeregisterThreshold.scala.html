@@ -26,13 +26,22 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.NextTaxableTurnoverController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.NextTaxableTurnoverController.show().url"
+       onclick="sendGAEvent('below-threshold','back','cannot-deregister')">@messages("common.back")</a>
 
-    @headings(messages("cannotDeregister.title"))
+
+    <div class="form-group" data-metrics="below-threshold:view:cannot-deregister">
+        @headings(messages("cannotDeregister.title"))
+    </div>
 
     <p>@messages("cannotDeregister.text", appConfig.deregThreshold)</p>
 
-    <p>@messages("cannotDeregister.link.text") <a href="@appConfig.manageVatSubscriptionFrontendUrl">@messages("cannotDeregister.link")</a></p>
+    <p>@messages("cannotDeregister.link.text")
+        <a href="@appConfig.manageVatSubscriptionFrontendUrl"
+           onclick="sendGAEvent('below-threshold','update','cannot-deregister')">
+        @messages("cannotDeregister.link")
+        </a>
+    </p>
 
 
 

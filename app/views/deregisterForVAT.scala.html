@@ -26,7 +26,9 @@ appConfig = appConfig) {
 
     <a class="link-back" href="@appConfig.manageVatSubscriptionFrontendUrl">@messages("common.back")</a>
 
-    @headings(messages("deregisterForVAT.title"))
+    <div data-metrics="start-dereg:view:deregister">
+        @headings(messages("deregisterForVAT.title"))
+    </div>
 
     <p>@messages("deregisterForVAT.p1")</p>
 
@@ -36,7 +38,9 @@ appConfig = appConfig) {
         <li>@messages("deregisterForVAT.bullet3")</li>
     </ul>
 
-    <a class="button" type ="submit" href="@{controllers.routes.DeregistrationReasonController.show(user.isAgent).url}" id="continue">
+    <a class="button" type ="submit" id="continue"
+       href="@{controllers.routes.DeregistrationReasonController.show(user.isAgent).url}"
+       onclick="sendGAEvent('start-dereg','continue','deregister')">
         @messages("common.continue")
     </a>
 

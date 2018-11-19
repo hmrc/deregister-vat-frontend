@@ -31,6 +31,7 @@
 
     <a class="link-back"
        href=@backLink
+       onclick="sendGAEvent('end-journey','back','accounting-method')"
     >@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
@@ -45,7 +46,7 @@
 
     @helpers.form(action = controllers.routes.VATAccountsController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="accountingMethod">
+        <div class="form-group" id="accountingMethod" data-metrics="end-journey:view:accounting-method">
             @multipleLineRadioGroup(
                 field = form("accountingMethod"),
                 choices = Seq(
@@ -57,7 +58,8 @@
             )
         </div>
 
-        <button class="button" type="submit" id="continue">
+        <button class="button" type="submit" id="continue"
+                onclick="sendGAEvent('end-journey','continue','accounting-method')">
             @messages("common.continue")
         </button>
     }

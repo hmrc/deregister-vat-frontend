@@ -21,7 +21,7 @@ title = messages("deregistrationConfirmation.title"),
 bodyClasses = None,
 appConfig = appConfig) {
 
-<div class="govuk-box-highlight">
+<div class="govuk-box-highlight" data-metrics="end-journey:view:request-received">
     <h1 class="heading-xlarge">@messages("deregistrationConfirmation.title")</h1>
 </div>
 
@@ -30,11 +30,13 @@ appConfig = appConfig) {
 <p>@messages("deregistrationConfirmation.text")</p>
 
 <p>
-    <a href="@appConfig.manageVatSubscriptionFrontendUrl">@messages("deregistrationConfirmation.link")</a>
+    <a href="@appConfig.manageVatSubscriptionFrontendUrl"
+       onclick="sendGAEvent('end-journey','finish','request-received')">@messages("deregistrationConfirmation.link")</a>
     @messages("deregistrationConfirmation.link.text")
 </p>
 
-<a href="@appConfig.manageVatSubscriptionFrontendUrl" class="button">
+<a href="@appConfig.manageVatSubscriptionFrontendUrl" class="button"
+   onclick="sendGAEvent('end-journey','finish','request-received')">
     @messages("common.finish")
 </a>
 }

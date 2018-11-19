@@ -27,7 +27,8 @@ title = title(messages("nextTaxableTurnover.title"), form),
 bodyClasses = None,
 appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.TaxableTurnoverController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.TaxableTurnoverController.show().url"
+       onclick="sendGAEvent('below-threshold','back','expected-turnover')">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -35,7 +36,7 @@ appConfig = appConfig) {
 
     @helpers.form(action = controllers.routes.NextTaxableTurnoverController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group">
+        <div class="form-group" data-metrics="below-threshold:view:expected-turnover">
             @moneyInput(
                 field = form("turnover"),
                 label = messages("nextTaxableTurnover.title"),
@@ -44,7 +45,8 @@ appConfig = appConfig) {
             )
         </div>
 
-        <button class="button" type ="submit" id="continue">
+        <button class="button" type ="submit" id="continue"
+                onclick="sendGAEvent('below-threshold','continue','expected-turnover')">
             @messages("common.continue")
         </button>
 

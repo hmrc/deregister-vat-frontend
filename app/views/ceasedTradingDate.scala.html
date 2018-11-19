@@ -27,13 +27,14 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show(user.isAgent).url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show(user.isAgent).url"
+       onclick="sendGAEvent('ceased-trading','back','date-ceased-trading')">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form, Some("ceasedTrading"))
 
     @helpers.form(action = controllers.routes.CeasedTradingDateController.submit, 'novalidate -> "novalidate") {
 
-        <div id="ceasedTrading">
+        <div id="ceasedTrading" data-metrics="ceased-trading:view:date-ceased-trading">
             @date(
                 form = form,
                 question = messages("ceasedTrading.title"),
@@ -43,7 +44,8 @@
             )
         </div>
 
-        <button class="button" type ="submit" id="continue">
+        <button class="button" type ="submit" id="continue"
+                onclick="sendGAEvent('ceased-trading','continue','date-ceased-trading')">
             @messages("common.continue")
         </button>
     }

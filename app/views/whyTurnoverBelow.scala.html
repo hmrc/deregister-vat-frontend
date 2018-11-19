@@ -27,7 +27,8 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.NextTaxableTurnoverController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.NextTaxableTurnoverController.show().url"
+       onclick="sendGAEvent('below-threshold','back','reasons-for-low-turnover')">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form, Some("reason"))
 
@@ -37,7 +38,7 @@
 
     @helpers.form(action = controllers.routes.WhyTurnoverBelowController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="reason">
+        <div class="form-group" id="reason" data-metrics="below-threshold:view:reasons-for-low-turnover">
             @checkboxHelper(
                 form = form,
                 choices = Seq(
@@ -54,7 +55,8 @@
             )
         </div>
 
-        <button class="button" type ="submit" id="continue">
+        <button class="button" type ="submit" id="continue"
+                onclick="sendGAEvent('below-threshold','continue','reasons-for-low-turnover')">
             @messages("common.continue")
         </button>
     }

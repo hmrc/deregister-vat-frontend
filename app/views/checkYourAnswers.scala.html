@@ -29,7 +29,8 @@
             @answerModel.answer
         </dd>
         <dd class="cya-change">
-            <a href="@answerModel.url" aria-label="@answerModel.hiddenText">
+            <a href="@answerModel.url" aria-label="@answerModel.hiddenText"
+               onclick="sendGAEvent('end-journey','change-@answerModel.gaTag','check-your-answers')">
                 @messages("checkYourAnswers.change")
             </a>
         </dd>
@@ -43,13 +44,13 @@ bodyClasses = None,
 appConfig = appConfig) {
 
     <a class="link-back"
-
-        href = "@backUrl"
-        >@messages("common.back")</a>
+       onclick="sendGAEvent('end-journey','back','check-your-answers')"
+       href = "@backUrl"
+    >@messages("common.back")</a>
 
     @headings(messages("checkYourAnswers.title"))
 
-    <div class="form-group">
+    <div class="form-group" data-metrics="end-journey:view:check-your-answers">
         <dl class="govuk-check-your-answers cya-questions-long">
         @answers.map{ answer =>
             @answerRow(answer)
@@ -62,7 +63,8 @@ appConfig = appConfig) {
     </p>
 
     @helpers.form(action = controllers.routes.CheckAnswersController.submit) {
-        <button class="button" type ="submit" id="continue">
+        <button class="button" type ="submit" id="continue"
+                onclick="sendGAEvent('end-journey','confirm','check-your-answers')">
             @messages("checkYourAnswers.confirm")
         </button>
     }
