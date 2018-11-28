@@ -147,7 +147,7 @@ checkYourAnswers.confirm = Confirm and deregister
 
 deregistrationConfirmation.title = We have received the request to deregister from VAT
 deregistrationConfirmation.heading = What happens next
-deregistrationConfirmation.text = If the business can deregister from VAT, we will send a confirmation letter. This usually takes 2 working days.
+deregistrationConfirmation.text = If the business can deregister from VAT, we will send a confirmation letter. This usually takes 10 working days.
 deregistrationConfirmation.link = Check your contact details
 deregistrationConfirmation.link.text = are up to date.
 
