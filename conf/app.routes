@@ -1,7 +1,5 @@
 # microservice specific routes
 
-GET        /hello-world                     controllers.HelloWorldController.helloWorld
-
 GET        /                                controllers.DeregisterForVATController.show
 
 GET        /deregister-reason               controllers.DeregistrationReasonController.show(isAgent: Boolean)
