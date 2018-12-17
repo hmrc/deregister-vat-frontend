@@ -39,7 +39,8 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
     cashAccountingScheme = true,
     optionToTaxValue = None,
     stocksValue = None,
-    capitalAssetsValue = None
+    capitalAssetsValue = None,
+    transactorOrCapacitorEmail = None
   )
 
   "DeregisterVatConnector" when {

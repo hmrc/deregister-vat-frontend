@@ -22,6 +22,8 @@ import cats.instances.future._
 import config.AppConfig
 import connectors.VatSubscriptionConnector
 import javax.inject.Inject
+
+import common.SessionKeys
 import models._
 import models.deregistrationRequest.DeregistrationInfo
 import play.api.http.Status
@@ -90,7 +92,8 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
           capitalAssetsValue,
           issueNewInvoicesValue,
           outstandingInvoices,
-          deregDate
+          deregDate,
+          user.session.get(SessionKeys.verifiedAgentEmail)
         )
       } yield model).value
   }

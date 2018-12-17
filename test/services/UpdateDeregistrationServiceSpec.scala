@@ -27,6 +27,7 @@ import audit.models.DeregAuditModel
 import connectors.mocks.MockVatSubscriptionConnector
 import models._
 import play.api.http.Status.INTERNAL_SERVER_ERROR
+import play.api.mvc.AnyContentAsEmpty
 import services.mocks._
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.Success
 import utils.TestUtil
@@ -65,6 +66,8 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
 
         "return the expected model" in {
 
+          implicit val user: User[AnyContentAsEmpty.type] = agentUser
+
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockGetCeasedTradingDate(Right(Some(todayDateModel)))
           setupMockGetAccountingMethod(Right(Some(CashAccounting)))
@@ -86,6 +89,8 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
       }
 
       "an error response is returned from the connector" in {
+
+        implicit val user: User[AnyContentAsEmpty.type] = agentUser
 
         setupMockGetDeregReason(Right(Some(BelowThreshold)))
         setupMockGetCeasedTradingDate(Right(Some(todayDateModel)))

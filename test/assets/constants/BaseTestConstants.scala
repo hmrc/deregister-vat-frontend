@@ -24,6 +24,7 @@ object BaseTestConstants {
 
   val vrn = "968501689"
   val arn = "TARN1234567"
+  val agentEmail = "agentEmail@test.com"
 
   case class TestModel(foo: String)
 
