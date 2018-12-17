@@ -24,9 +24,9 @@ import assets.constants.DeregistrationInfoTestConstants._
 import assets.constants.TurnoverBelowThresholdTestConstants
 import assets.constants.WhyTurnoverBelowTestConstants.whyTurnoverBelowOne
 import assets.constants.YesNoAmountTestConstants._
+import assets.constants.BaseTestConstants.agentEmail
 import models._
 import models.deregistrationRequest.DeregistrationInfo._
-import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.libs.json.Json
 import utils.TestUtil
 
@@ -49,7 +49,8 @@ class DeregistrationInfoSpec extends TestUtil {
           cashAccountingScheme = true,
           optionToTaxValue = Some(ottValue),
           stocksValue = Some(stockValue),
-          capitalAssetsValue = Some(assetsValue)
+          capitalAssetsValue = Some(assetsValue),
+          transactorOrCapacitorEmail = Some(agentEmail)
         )
         val actual = DeregistrationInfo.customApply(
           deregReason = BelowThreshold,
@@ -63,7 +64,8 @@ class DeregistrationInfoSpec extends TestUtil {
           capitalAssets = assetsModel,
           issueNewInvoices = Yes,
           outstandingInvoices = Some(Yes),
-          deregDate = Some(deregistrationDateModel)
+          deregDate = Some(deregistrationDateModel),
+          transactorOrCapacitorEmail = Some(agentEmail)
         )
 
         actual shouldBe expected
@@ -82,7 +84,8 @@ class DeregistrationInfoSpec extends TestUtil {
           cashAccountingScheme = true,
           optionToTaxValue = None,
           stocksValue = None,
-          capitalAssetsValue = None
+          capitalAssetsValue = None,
+          transactorOrCapacitorEmail = None
         )
         val actual = DeregistrationInfo.customApply(
           deregReason = BelowThreshold,
@@ -96,7 +99,8 @@ class DeregistrationInfoSpec extends TestUtil {
           capitalAssets = yesNoAmountNo,
           issueNewInvoices = Yes,
           outstandingInvoices = None,
-          deregDate = None
+          deregDate = None,
+          transactorOrCapacitorEmail = None
         )
 
         actual shouldBe expected

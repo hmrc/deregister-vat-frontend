@@ -20,7 +20,6 @@ import java.time.LocalDate
 
 import config.AppConfig
 import models._
-import play.api.http.Status
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -34,7 +33,8 @@ case class DeregistrationInfo(deregReason: DeregistrationReason,
                               cashAccountingScheme: Boolean,
                               optionToTaxValue: Option[BigDecimal],
                               stocksValue: Option[BigDecimal],
-                              capitalAssetsValue: Option[BigDecimal])
+                              capitalAssetsValue: Option[BigDecimal],
+                              transactorOrCapacitorEmail: Option[String])
 
 object DeregistrationInfo {
 
@@ -49,7 +49,8 @@ object DeregistrationInfo {
                   capitalAssets: YesNoAmountModel,
                   issueNewInvoices: YesNo,
                   outstandingInvoices: Option[YesNo],
-                  deregDate: Option[DeregistrationDateModel])(implicit appConfig: AppConfig): DeregistrationInfo = {
+                  deregDate: Option[DeregistrationDateModel],
+                  transactorOrCapacitorEmail: Option[String])(implicit appConfig: AppConfig): DeregistrationInfo = {
 
         DeregistrationInfo(
           deregReason,
@@ -62,7 +63,8 @@ object DeregistrationInfo {
           isCashAccounting(accountingMethod),
           optionTax.amount,
           stocks.amount,
-          capitalAssets.amount
+          capitalAssets.amount,
+          transactorOrCapacitorEmail
         )
   }
 
@@ -102,6 +104,7 @@ object DeregistrationInfo {
       (__ \ "cashAccountingScheme").write[Boolean] and
       (__ \ "optionToTaxValue").writeNullable[BigDecimal] and
       (__ \ "stocksValue").writeNullable[BigDecimal] and
-      (__ \ "capitalAssetsValue").writeNullable[BigDecimal]
+      (__ \ "capitalAssetsValue").writeNullable[BigDecimal] and
+      (__ \ "transactorOrCapacitorEmail").writeNullable[String]
     )(unlift(DeregistrationInfo.unapply))
 }

@@ -17,6 +17,7 @@
 package utils
 
 import assets.constants.BaseTestConstants._
+import common.SessionKeys
 import config.ServiceErrorHandler
 import mocks.MockAppConfig
 import models.User
@@ -48,7 +49,8 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
   implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)
   implicit lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn,true)(request)
-  lazy val agentUser: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn,true, Some(arn))(request)
+  lazy val agentUser: User[AnyContentAsEmpty.type] =
+    User[AnyContentAsEmpty.type](vrn,true, Some(arn))(request.withSession(SessionKeys.verifiedAgentEmail -> agentEmail))
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
   implicit lazy val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
   lazy val serviceErrorHandler: ServiceErrorHandler = injector.instanceOf[ServiceErrorHandler]

@@ -16,6 +16,7 @@
 
 package assets.constants
 
+import assets.constants.BaseTestConstants.agentEmail
 import assets.constants.DateModelTestConstants._
 import assets.constants.YesNoAmountTestConstants._
 import models.deregistrationRequest.DeregistrationInfo
@@ -35,7 +36,8 @@ object DeregistrationInfoTestConstants {
     cashAccountingScheme = true,
     optionToTaxValue = None,
     stocksValue = None,
-    capitalAssetsValue = None
+    capitalAssetsValue = None,
+    transactorOrCapacitorEmail = None
   )
 
   val deregistrationInfoMinJson: JsObject = Json.obj(
@@ -58,7 +60,8 @@ object DeregistrationInfoTestConstants {
     cashAccountingScheme = true,
     optionToTaxValue = Some(ottValue),
     stocksValue = Some(stockValue),
-    capitalAssetsValue = Some(assetsValue)
+    capitalAssetsValue = Some(assetsValue),
+    transactorOrCapacitorEmail = Some(agentEmail)
   )
 
   val deregistrationInfoMaxJson: JsObject = Json.obj(
@@ -72,7 +75,8 @@ object DeregistrationInfoTestConstants {
     "cashAccountingScheme" -> true,
     "optionToTaxValue" -> ottValue,
     "stocksValue" -> stockValue,
-    "capitalAssetsValue" -> assetsValue
+    "capitalAssetsValue" -> assetsValue,
+    "transactorOrCapacitorEmail" -> agentEmail
   )
 
 }

@@ -19,5 +19,5 @@ package common
 object SessionKeys {
 
   val CLIENT_VRN: String = "CLIENT_VRN"
-
+  val verifiedAgentEmail: String = "verifiedAgentEmail"
 }
