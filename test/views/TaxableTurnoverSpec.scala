@@ -65,7 +65,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.taxableTurnover(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))(agentUser,messages,mockConfig)
+    lazy val view = views.html.taxableTurnover(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))(agentUserPrefYes,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -74,7 +74,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
 
     s"have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show(agentUser.isAgent).url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show(agentUserPrefYes.isAgent).url
     }
 
     s"have the correct page heading" in {

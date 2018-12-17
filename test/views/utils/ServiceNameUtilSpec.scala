@@ -26,7 +26,7 @@ class ServiceNameUtilSpec extends TestUtil {
     "given a User who is an Agent" should {
 
       s"return the agent service name ${CommonMessages.agentServiceName}" in {
-        ServiceNameUtil.generateHeader(agentUser, messages) shouldBe CommonMessages.agentServiceName
+        ServiceNameUtil.generateHeader(agentUserPrefYes, messages) shouldBe CommonMessages.agentServiceName
       }
     }
 

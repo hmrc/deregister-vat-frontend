@@ -20,46 +20,103 @@ import assets.messages.{CommonMessages, DeregistrationConfirmationMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-
 class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
-  "Rendering the Why is the deregistration confirmation page" when {
+  object Selectors {
+    val pageHeading = "#content > article > div > h1"
+    val subheading = "#content > article > h2"
+    val text = "#content > article > p:nth-child(3)"
+    val text2 = "#content > article > p:nth-child(4)"
+    val button = ".button"
+  }
 
-    object Selectors {
-      val pageHeading = "#content > article > div > h1"
-      val subheading = "#content > article > h2"
-      val text = "#content > article > p:nth-child(3)"
-      val link = "#content > article > p:nth-child(4) > a"
-      val linkText = "#content > article > p:nth-child(4)"
-      val button = ".button"
+  "Rendering the Why is the deregistration confirmation page for non-agent user" when {
+
+    "the user is not an agent" should {
+      lazy val view = views.html.deregistrationConfirmation()(user, messages, mockConfig)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      s"have the correct document title" in {
+        document.title shouldBe DeregistrationConfirmationMessages.title
+      }
+
+      s"have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+      }
+
+      s"have the correct page subheading" in {
+        elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+      }
+
+      "have the correct first paragraph" in {
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textNonAgent
+      }
+
+      "have the correct text for the second paragraph" in {
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2NonAgent
+      }
+
+      s"have the correct continue button text and url" in {
+        elementText(Selectors.button) shouldBe CommonMessages.finish
+      }
     }
 
-    lazy val view = views.html.deregistrationConfirmation()
-    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "the user is an agent with verifiedAgentEmail (Yes pref inferred)" should {
+      lazy val view = views.html.deregistrationConfirmation()(agentUserPrefYes, messages, mockConfig)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
-      document.title shouldBe DeregistrationConfirmationMessages.title
+      s"have the correct document title" in {
+        document.title shouldBe DeregistrationConfirmationMessages.title
+      }
+
+      s"have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+      }
+
+      s"have the correct page subheading" in {
+        elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+      }
+
+      "have the correct first paragraph" in {
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textAgentPrefYes
+      }
+
+      "have the correct text for the second paragraph" in {
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefYes
+      }
+
+      s"have the correct continue button text and url" in {
+        elementText(Selectors.button) shouldBe CommonMessages.finish
+      }
     }
 
-    s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
-    }
+    "the user is an agent without a verifiedAgentEmail (No pref inferred)" should {
+      lazy val view = views.html.deregistrationConfirmation()(agentUserPrefNo, messages, mockConfig)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct page subheading" in {
-      elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
-    }
+      s"have the correct document title" in {
+        document.title shouldBe DeregistrationConfirmationMessages.title
+      }
 
-    "have the correct first paragraph" in {
-      elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.text
-    }
+      s"have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+      }
 
-    "have the correct text and link for the second paragraph" in {
-      elementText(Selectors.linkText) shouldBe DeregistrationConfirmationMessages.link
-      element(Selectors.link).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
-    }
+      s"have the correct page subheading" in {
+        elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+      }
 
-    s"have the correct continue button text and url" in {
-      elementText(Selectors.button) shouldBe CommonMessages.finish
+      "have the correct first paragraph" in {
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textAgentPrefNo
+      }
+
+      "have the correct text for the second paragraph" in {
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefNo
+      }
+
+      s"have the correct continue button text and url" in {
+        elementText(Selectors.button) shouldBe CommonMessages.finish
+      }
     }
   }
 }

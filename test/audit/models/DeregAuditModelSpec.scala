@@ -24,7 +24,7 @@ class DeregAuditModelSpec extends TestUtil{
 
   val auditType: String = "SubmitVatDeregistrationRequest"
 
-  lazy val agentHandOff = DeregAuditModel(agentUser, deregistrationInfoMaxModel)
+  lazy val agentHandOff = DeregAuditModel(agentUserPrefYes, deregistrationInfoMaxModel)
   lazy val userHandOff = DeregAuditModel(user, deregistrationInfoMaxModel)
 
   "DeregAuditModel" should {
@@ -38,8 +38,8 @@ class DeregAuditModelSpec extends TestUtil{
       "have the correct details for the audit event" in {
         Json.toJson(agentHandOff) shouldBe Json.obj(
           "isAgent" -> true,
-          "agentReferenceNumber" -> agentUser.arn.get,
-          "vrn" -> agentUser.vrn,
+          "agentReferenceNumber" -> agentUserPrefYes.arn.get,
+          "vrn" -> agentUserPrefYes.vrn,
           "deregistrationInfo" -> deregistrationInfoMaxModel
         )
       }
