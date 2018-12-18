@@ -57,6 +57,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
 
       s"have the correct continue button text and url" in {
+        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
         elementText(Selectors.button) shouldBe CommonMessages.finish
       }
     }
@@ -86,6 +87,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
 
       s"have the correct continue button text and url" in {
+        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
         elementText(Selectors.button) shouldBe CommonMessages.finish
       }
     }
@@ -115,6 +117,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
 
       s"have the correct continue button text and url" in {
+        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
         elementText(Selectors.button) shouldBe CommonMessages.finish
       }
     }
