@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import common.SessionKeys
+
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
@@ -27,16 +29,28 @@ appConfig = appConfig) {
 
 <h2 class="heading-medium">@messages("deregistrationConfirmation.heading")</h2>
 
-<p>@messages("deregistrationConfirmation.text")</p>
+@{
+    if(user.isAgent){
+        user.session.get(SessionKeys.verifiedAgentEmail) match {
+            case Some(verifiedEmail) =>
+                <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
+                    <span class="bold">{verifiedEmail}</span>
+                    {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
+                <p>{messages("deregistrationConfirmation.text2AgentPrefYes")}</p>
+            case _ =>
+                <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
+                <p>{messages("deregistrationConfirmation.text2AgentPrefNo")}</p>
+        }
+    }else{
+        <p>{messages("deregistrationConfirmation.textNonAgent")}</p>
+        <p>{messages("deregistrationConfirmation.text2NonAgent")}</p>
+    }
+}
 
-<p>
-    <a href="@appConfig.manageVatSubscriptionFrontendUrl"
-       onclick="sendGAEvent('end-journey','finish','request-received')">@messages("deregistrationConfirmation.link")</a>
-    @messages("deregistrationConfirmation.link.text")
-</p>
 
 <a href="@appConfig.manageVatSubscriptionFrontendUrl" class="button"
    onclick="sendGAEvent('end-journey','finish','request-received')">
     @messages("common.finish")
 </a>
+
 }

@@ -66,7 +66,7 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
 
         "return the expected model" in {
 
-          implicit val user: User[AnyContentAsEmpty.type] = agentUser
+          implicit val user: User[AnyContentAsEmpty.type] = agentUserPrefYes
 
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockGetCeasedTradingDate(Right(Some(todayDateModel)))
@@ -90,7 +90,7 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
 
       "an error response is returned from the connector" in {
 
-        implicit val user: User[AnyContentAsEmpty.type] = agentUser
+        implicit val user: User[AnyContentAsEmpty.type] = agentUserPrefYes
 
         setupMockGetDeregReason(Right(Some(BelowThreshold)))
         setupMockGetCeasedTradingDate(Right(Some(todayDateModel)))
