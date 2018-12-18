@@ -36,15 +36,15 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       lazy val view = views.html.deregistrationConfirmation()(user, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct document title" in {
+      "have the correct document title" in {
         document.title shouldBe DeregistrationConfirmationMessages.title
       }
 
-      s"have the correct page heading" in {
+      "have the correct page heading" in {
         elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
       }
 
-      s"have the correct page subheading" in {
+      "have the correct page subheading" in {
         elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
       }
 
@@ -56,9 +56,12 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2NonAgent
       }
 
-      s"have the correct continue button text and url" in {
-        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+      "have the correct continue button text" in {
         elementText(Selectors.button) shouldBe CommonMessages.finish
+      }
+
+      "have the correct continue button url" in {
+        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
       }
     }
 
@@ -66,15 +69,15 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       lazy val view = views.html.deregistrationConfirmation()(agentUserPrefYes, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct document title" in {
+      "have the correct document title" in {
         document.title shouldBe DeregistrationConfirmationMessages.title
       }
 
-      s"have the correct page heading" in {
+      "have the correct page heading" in {
         elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
       }
 
-      s"have the correct page subheading" in {
+      "have the correct page subheading" in {
         elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
       }
 
@@ -86,9 +89,12 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefYes
       }
 
-      s"have the correct continue button text and url" in {
-        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+      "have the correct continue button text" in {
         elementText(Selectors.button) shouldBe CommonMessages.finish
+      }
+
+      "have the correct continue button url" in {
+        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
       }
     }
 
@@ -96,15 +102,15 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       lazy val view = views.html.deregistrationConfirmation()(agentUserPrefNo, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct document title" in {
+      "have the correct document title" in {
         document.title shouldBe DeregistrationConfirmationMessages.title
       }
 
-      s"have the correct page heading" in {
+      "have the correct page heading" in {
         elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
       }
 
-      s"have the correct page subheading" in {
+      "have the correct page subheading" in {
         elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
       }
 
@@ -116,9 +122,12 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefNo
       }
 
-      s"have the correct continue button text and url" in {
-        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+      "have the correct continue button text" in {
         elementText(Selectors.button) shouldBe CommonMessages.finish
+      }
+
+      "have the correct continue button url" in {
+        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
       }
     }
   }

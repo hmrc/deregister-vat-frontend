@@ -34,7 +34,7 @@ appConfig = appConfig) {
         user.session.get(SessionKeys.verifiedAgentEmail) match {
             case Some(verifiedEmail) =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
-                    <strong>{verifiedEmail}</strong>
+                    <span class="bold">{verifiedEmail}</span>
                     {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
                 <p>{messages("deregistrationConfirmation.text2AgentPrefYes")}</p>
             case _ =>
