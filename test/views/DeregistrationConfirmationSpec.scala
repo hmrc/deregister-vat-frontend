@@ -30,10 +30,10 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
     val button = ".button"
   }
 
-  "Rendering the Why is the deregistration confirmation page for non-agent user" when {
+  "Rendering the deregistration confirmation page for non-agent user" when {
 
     "the user is not an agent" should {
-      lazy val view = views.html.deregistrationConfirmation()(user, messages, mockConfig)
+      lazy val view = views.html.deregistrationConfirmation(None)(user, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -66,7 +66,8 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
     }
 
     "the user is an agent with verifiedAgentEmail (Yes pref inferred)" should {
-      lazy val view = views.html.deregistrationConfirmation()(agentUserPrefYes, messages, mockConfig)
+      val businessName: Option[String] = Some("Fake Business Name Limited")
+      lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -82,11 +83,12 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
 
       "have the correct first paragraph" in {
+        println("HTML: "+document)
         elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textAgentPrefYes
       }
 
-      "have the correct text for the second paragraph" in {
-        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefYes
+      "have the correct text for the second paragraph (including business name)" in {
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentWithOrgName
       }
 
       "have the correct continue button text" in {
@@ -99,7 +101,8 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
     }
 
     "the user is an agent without a verifiedAgentEmail (No pref inferred)" should {
-      lazy val view = views.html.deregistrationConfirmation()(agentUserPrefNo, messages, mockConfig)
+      lazy val noBusinessName: Option[String] = None
+      lazy val view = views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -118,8 +121,8 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textAgentPrefNo
       }
 
-      "have the correct text for the second paragraph" in {
-        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefNo
+      "have the correct text for the second paragraph (no business name when one isn't found)" in {
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2Agent
       }
 
       "have the correct continue button text" in {

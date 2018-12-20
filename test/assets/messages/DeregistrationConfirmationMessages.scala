@@ -24,14 +24,19 @@ object DeregistrationConfirmationMessages {
   val textNonAgent = "We will send you an email within 2 working days with an update, followed by a letter to your " +
     "principal place of business. You can also go to your HMRC secure messages to find out if " +
     "your request has been accepted."
+
   val text2NonAgent = "Ensure your contact details are up to date."
 
   val textAgentPrefYes = "We will send an email to agentEmail@test.com within 2 working days telling you " +
     "whether or not the request has been accepted."
-  val text2AgentPrefYes = "We will also contact your client with an update."
+
+  val text2Agent = "We will also contact your client with an update."
+
+  val text2AgentWithOrgName = "We will also contact Fake Business Name Limited with an update."
 
   val textAgentPrefNo = "We will send you a confirmation letter to your principal place of business within " +
     "12 working days telling you whether or not the request has been accepted."
+
   val text2AgentPrefNo = "We will also contact your client with an update."
 
 }

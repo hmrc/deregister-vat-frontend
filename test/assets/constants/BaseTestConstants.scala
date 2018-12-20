@@ -36,6 +36,6 @@ object BaseTestConstants {
   val testModel = TestModel("bar")
   val testValidJson: JsObject = Json.obj("foo" -> "bar")
   val testInvalidJson: JsObject = Json.obj()
-  val errorModel = ErrorModel(Status.INTERNAL_SERVER_ERROR, "Error")
+  val errorModel: ErrorModel = ErrorModel(Status.INTERNAL_SERVER_ERROR, "Error")
 
 }
