@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,18 +26,6 @@ object CustomerDetailsTestConstants {
   val firstName = "Fred"
   val lastName = "Flintstone"
 
-  val individualJson: JsObject = Json.obj(
-    "firstName" -> firstName,
-    "lastName" -> lastName,
-    "hasFlatRateScheme" -> false
-  )
-
-  val organisationJson: JsObject = Json.obj(
-    "organisationName" -> orgName,
-    "tradingName" -> tradingName,
-    "hasFlatRateScheme" -> false
-  )
-
   val customerDetailsJsonMax: JsObject = Json.obj(
     "organisationName" -> orgName,
     "firstName" -> firstName,
@@ -49,20 +37,6 @@ object CustomerDetailsTestConstants {
 
   val customerDetailsJsonMin: JsObject = Json.obj(
     "hasFlatRateScheme" -> false
-  )
-
-  val individual: CustomerDetails = CustomerDetails(
-      firstName = Some(firstName),
-      lastName = Some(lastName),
-      organisationName = None,
-      tradingName = None
-  )
-
-  val organisation: CustomerDetails = CustomerDetails(
-    firstName = None,
-    lastName = None,
-    organisationName = Some(orgName),
-    tradingName = Some(tradingName)
   )
 
   val customerDetailsMax: CustomerDetails = CustomerDetails(
@@ -78,7 +52,4 @@ object CustomerDetailsTestConstants {
     None,
     None
   )
-
-
-
 }

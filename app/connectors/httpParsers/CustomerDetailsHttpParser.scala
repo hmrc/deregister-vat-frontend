@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package connectors.httpParsers
 
-import connectors.httpParsers.ResponseHttpParser.HttpGetResult
 import models.CustomerDetails
 import models.ErrorModel
 import play.api.Logger
@@ -28,7 +27,7 @@ object CustomerDetailsHttpParser {
 
   implicit object CustomerDetailsReads extends HttpReads[Either[ErrorModel, CustomerDetails]] {
 
-    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[CustomerDetails] = {
+    override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, CustomerDetails] = {
 
       response.status match {
         case Status.OK => {

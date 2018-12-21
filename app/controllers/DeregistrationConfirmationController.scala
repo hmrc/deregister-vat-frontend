@@ -37,9 +37,12 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
       deleteAllAStoredAnswers <- deleteAllStoredAnswersService.deleteAllAnswers
       customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
     } yield (deleteAllAStoredAnswers, customerDetails) match {
-      case (Right(_), Right(_)) =>
-        Ok(views.html.deregistrationConfirmation(customerDetails.right.get.businessName))
-      case _ => serviceErrorHandler.showInternalServerError
+      case (Right(_), Right(custDetails)) =>
+        Ok(views.html.deregistrationConfirmation(custDetails.businessName))
+      case (Left(_), _) =>
+        serviceErrorHandler.showInternalServerError
+      case _ =>
+        Ok(views.html.deregistrationConfirmation(None))
     }
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,14 +43,6 @@ class CustomerDetailsHttpParserSpec extends TestUtil {
       "return an ErrorModel" in {
         CustomerDetailsReads.read("", "", HttpResponse(Status.OK, successBadJson)) shouldBe
           Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,"Invalid Json"))
-      }
-    }
-
-    "the http response status is BAD_REQUEST" should {
-
-      "return an ErrorModel" in {
-        CustomerDetailsReads.read("", "", HttpResponse(Status.BAD_REQUEST, None)) shouldBe
-          Left(ErrorModel(Status.BAD_REQUEST,"Downstream error returned when retrieving CustomerDetails"))
       }
     }
 

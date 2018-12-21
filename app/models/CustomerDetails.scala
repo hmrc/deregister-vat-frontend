@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,7 @@ import play.api.libs.json._
 case class CustomerDetails(firstName: Option[String],
                            lastName: Option[String],
                            organisationName: Option[String],
-                           tradingName: Option[String],
-                           hasFlatRateScheme: Boolean = false) {
+                           tradingName: Option[String]) {
 
   val isOrg: Boolean = organisationName.isDefined
   val isInd: Boolean = firstName.isDefined || lastName.isDefined
@@ -41,14 +40,12 @@ object CustomerDetails {
   private val lastNamePath = __ \ "lastName"
   private val organisationNamePath = __ \ "organisationName"
   private val tradingNamePath = __ \ "tradingName"
-  private val hasFrsPath = __ \ "hasFlatRateScheme"
 
   implicit val reads: Reads[CustomerDetails] = (
     firstNamePath.readNullable[String] and
       lastNamePath.readNullable[String] and
       organisationNamePath.readNullable[String] and
-      tradingNamePath.readNullable[String] and
-      hasFrsPath.read[Boolean]
+      tradingNamePath.readNullable[String]
     ) (CustomerDetails.apply _)
 
 }

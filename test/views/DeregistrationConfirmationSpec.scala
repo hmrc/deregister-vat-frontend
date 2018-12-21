@@ -28,6 +28,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
     val text = "#content > article > p:nth-child(3)"
     val text2 = "#content > article > p:nth-child(4)"
     val button = ".button"
+    val link = "#content > article > p:nth-child(4) > a"
   }
 
   "Rendering the deregistration confirmation page for non-agent user" when {
@@ -49,11 +50,15 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
 
       "have the correct first paragraph" in {
-        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textNonAgent
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textNonAgentP1
       }
 
-      "have the correct text for the second paragraph" in {
-        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2NonAgent
+      "have the correct second paragraph" in {
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.textNonAgentP2
+      }
+
+      "have a link to manage vat subscription" in {
+        element(Selectors.link).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
       }
 
       "have the correct continue button text" in {
@@ -83,7 +88,6 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
 
       "have the correct first paragraph" in {
-        println("HTML: "+document)
         elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textAgentPrefYes
       }
 
@@ -122,7 +126,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
 
       "have the correct text for the second paragraph (no business name when one isn't found)" in {
-        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2Agent
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefNo
       }
 
       "have the correct continue button text" in {
