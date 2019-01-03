@@ -28,7 +28,8 @@ class VatSubscriptionHttpParserSpec extends TestUtil {
     "the http response status is OK" should {
 
       "return the expected model" in {
-        VatSubscriptionHttpParser.updateReads.read("", "", HttpResponse(Status.OK)) shouldBe Right(VatSubscriptionSuccess)
+        VatSubscriptionHttpParser.updateReads.read("", "",
+          HttpResponse(Status.OK)) shouldBe Right(VatSubscriptionSuccess)
       }
     }
 

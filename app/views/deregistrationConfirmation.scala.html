@@ -16,7 +16,7 @@
 
 @import common.SessionKeys
 
-@()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(businessName: Option[String])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
 title = messages("deregistrationConfirmation.title"),
@@ -31,19 +31,44 @@ appConfig = appConfig) {
 
 @{
     if(user.isAgent){
-        user.session.get(SessionKeys.verifiedAgentEmail) match {
-            case Some(verifiedEmail) =>
+        (user.session.get(SessionKeys.verifiedAgentEmail), businessName) match {
+
+            case (Some(verifiedEmail), Some(businessName)) =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
-                    <span class="bold">{verifiedEmail}</span>
+                    <strong class="bold">{verifiedEmail}</strong>
                     {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
-                <p>{messages("deregistrationConfirmation.text2AgentPrefYes")}</p>
+                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                    <strong class="bold">{businessName}</strong>
+                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+
+            case (Some(verifiedEmail), None) =>
+                <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
+                    <strong class="bold">{verifiedEmail}</strong>
+                    {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
+                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                    {messages("deregistrationConfirmation.yourClient")}
+                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+
+            case (None, Some(businessName)) =>
+                <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
+                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                    <strong class="bold">{businessName}</strong>
+                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+
             case _ =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
-                <p>{messages("deregistrationConfirmation.text2AgentPrefNo")}</p>
+                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                    {messages("deregistrationConfirmation.yourClient")}
+                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
         }
     }else{
-        <p>{messages("deregistrationConfirmation.textNonAgent")}</p>
-        <p>{messages("deregistrationConfirmation.text2NonAgent")}</p>
+        <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
+        <p>
+            <a href={appConfig.manageVatSubscriptionFrontendUrl}
+               onclick="sendGAEvent('end-journey','finish','request-received')">
+                {messages("deregistrationConfirmation.nonAgentText2a")}</a>
+            {messages("deregistrationConfirmation.nonAgentText2b")}
+        </p>
     }
 }
 

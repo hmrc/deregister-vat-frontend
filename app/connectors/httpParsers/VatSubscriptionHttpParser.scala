@@ -16,7 +16,8 @@
 
 package connectors.httpParsers
 
-import models.{ErrorModel, VatSubscriptionResponse, VatSubscriptionSuccess}
+import models.{VatSubscriptionResponse, VatSubscriptionSuccess}
+import models.ErrorModel
 import play.api.Logger
 import play.api.http.Status
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}

@@ -21,19 +21,28 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.DeleteAllStoredAnswersService
+import services.{CustomerDetailsService, DeleteAllStoredAnswersService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesApi,
                                                      val authentication: AuthPredicate,
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
+                                                     val customerDetailsService: CustomerDetailsService,
                                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
-    deleteAllStoredAnswersService.deleteAllAnswers map {
-      case Right(_) => Ok(views.html.deregistrationConfirmation())
-      case _ => serviceErrorHandler.showInternalServerError
+
+    for {
+      deleteAllAStoredAnswers <- deleteAllStoredAnswersService.deleteAllAnswers
+      customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
+    } yield (deleteAllAStoredAnswers, customerDetails) match {
+      case (Right(_), Right(custDetails)) =>
+        Ok(views.html.deregistrationConfirmation(custDetails.businessName))
+      case (Left(_), _) =>
+        serviceErrorHandler.showInternalServerError
+      case _ =>
+        Ok(views.html.deregistrationConfirmation(None))
     }
   }
 }

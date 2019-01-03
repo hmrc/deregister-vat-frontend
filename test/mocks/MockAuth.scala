@@ -50,10 +50,12 @@ trait MockAuth extends TestUtil with MockFactory {
     }
   }
 
+  val vrn: String = "968501689"
+
   val mockAuthorisedIndividual: AuthResponse = Future.successful(
     new ~(Some(AffinityGroup.Individual),
       Enrolments(Set(Enrolment("HMRC-MTD-VAT",
-        Seq(EnrolmentIdentifier("VRN", "968501689")),
+        Seq(EnrolmentIdentifier("VRN", vrn)),
         "Activated"
       )))
     )

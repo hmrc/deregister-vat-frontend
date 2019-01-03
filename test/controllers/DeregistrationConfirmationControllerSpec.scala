@@ -19,14 +19,17 @@ package controllers
 import models.{DeregisterVatSuccess, ErrorModel}
 import play.api.http.Status
 import play.api.test.Helpers._
-import services.mocks.MockDeleteAllStoredAnswersService
+import services.mocks.{MockDeleteAllStoredAnswersService, MockCustomerDetailsService}
+import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
 
 import scala.concurrent.Future
 
-class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
+class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
+  with MockCustomerDetailsService {
 
   object TestDeregistrationConfirmationController
-    extends DeregistrationConfirmationController(messagesApi, mockAuthPredicate, mockDeleteAllStoredAnswersService, serviceErrorHandler, mockConfig)
+    extends DeregistrationConfirmationController(messagesApi, mockAuthPredicate, mockDeleteAllStoredAnswersService,
+      serviceErrorHandler, mockCustomerDetailsService, mockConfig)
 
   "the user is authorised" when {
 
@@ -34,10 +37,20 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
       lazy val result = TestDeregistrationConfirmationController.show()(request)
 
-      "return 200 (OK)" in {
+      "return 200 (OK) if answers are deleted successfully and a customerDetails is received" in {
         setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
         status(result) shouldBe Status.OK
+      }
+
+      lazy val result2 = TestDeregistrationConfirmationController.show()(request)
+
+      "return 200 (OK) if answers are deleted successfully and an error is received for CustomerDetails call" in {
+        setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+        status(result2) shouldBe Status.OK
       }
 
       "return HTML" in {
@@ -47,12 +60,13 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
     }
 
-    lazy val result2 = TestDeregistrationConfirmationController.show()(request)
+    lazy val result3 = TestDeregistrationConfirmationController.show()(request)
 
     "throw an ISE if there's an error deleting the stored answers" in {
       setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
       mockAuthResult(Future.successful(mockAuthorisedIndividual))
-      status(result2) shouldBe Status.INTERNAL_SERVER_ERROR
+      setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+      status(result3) shouldBe Status.INTERNAL_SERVER_ERROR
     }
   }
 

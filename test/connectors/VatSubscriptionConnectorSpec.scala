@@ -19,10 +19,13 @@ package connectors
 import _root_.mocks.MockHttp
 import assets.constants.BaseTestConstants.{vrn, _}
 import models._
-import models.deregistrationRequest.DeregistrationInfo
 import utils.TestUtil
+import assets.constants.CustomerDetailsTestConstants.customerDetailsJsonMin
+import models.CustomerDetails
+import models.deregistrationRequest.DeregistrationInfo
 import assets.constants.DateModelTestConstants._
 
+import scala.concurrent.Future
 
 class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
 
@@ -43,30 +46,49 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
     transactorOrCapacitorEmail = None
   )
 
-  "DeregisterVatConnector" when {
+  "VatSubscriptionConnector" when {
 
-    s"given vrn: $vrn only for the url" should {
-
-      "return the correct url" in {
-        TestVatSubscriptionConnector.url(vrn) shouldBe s"${mockConfig.vatSubscriptionUrl}/vat-subscription/$vrn/deregister"
-      }
-    }
-
-    s"Calling .putAnswers" when {
+    "Calling .submit" should {
 
       "A valid response is parsed" should {
 
-        "return a DeregisterVatSuccess object" in {
+        "return a DeregisterVatSuccess object if a valid response is parsed" in {
           setupMockHttpPut[DeregistrationInfo](TestVatSubscriptionConnector.url(vrn), deregInfoModel)(Right(DeregisterVatSuccess))
           await(TestVatSubscriptionConnector.submit(vrn, deregInfoModel)) shouldBe Right(DeregisterVatSuccess)
         }
-      }
 
-      "An invalid response is parsed" should {
-
-        "return an error model" in {
+        "return an error model if an invalid response is parsed" in {
           setupMockHttpPut[DeregistrationInfo](TestVatSubscriptionConnector.url(vrn), deregInfoModel)(Left(errorModel))
           await(TestVatSubscriptionConnector.submit(vrn, deregInfoModel)) shouldBe Left(errorModel)
+        }
+      }
+
+      "calling .getCustomerDetailsUrl" should {
+
+        "format the url correctly" in {
+          val testUrl = TestVatSubscriptionConnector.getCustomerDetailsUrl(vrn)
+          testUrl shouldBe s"${mockConfig.vatSubscriptionUrl}/vat-subscription/$vrn/customer-details"
+        }
+      }
+
+      "calling .getCustomerDetails" when {
+
+        def result: Future[Either[ErrorModel, CustomerDetails]] = TestVatSubscriptionConnector.getCustomerDetails(vrn)
+
+        "called for a Right with CustomerDetails" should {
+
+          "return a CustomerDetailsModel" in {
+            setupMockHttpGet(TestVatSubscriptionConnector.getCustomerDetailsUrl(vrn))(Right(customerDetailsJsonMin))
+            await(result) shouldBe Right(customerDetailsJsonMin)
+          }
+        }
+
+        "given an error should" should {
+
+          "return a Left with an ErrorModel" in {
+            setupMockHttpGet(TestVatSubscriptionConnector.getCustomerDetailsUrl(vrn))(Left(errorModel))
+            await(result) shouldBe Left(errorModel)
+          }
         }
       }
     }

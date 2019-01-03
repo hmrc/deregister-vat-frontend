@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-package assets.constants
+package services
 
+import connectors.VatSubscriptionConnector
+import javax.inject.{Inject, Singleton}
+import models.CustomerDetails
 import models.ErrorModel
-import play.api.http.Status
-import play.api.libs.json.{Format, JsObject, Json}
+import uk.gov.hmrc.http.HeaderCarrier
 
-object BaseTestConstants {
+import scala.concurrent.{ExecutionContext, Future}
 
-  val vrn = "968501689"
-  val arn = "TARN1234567"
-  val agentEmail = "agentEmail@test.com"
+@Singleton
+class CustomerDetailsService @Inject()(val subscriptionConnector: VatSubscriptionConnector) {
 
-  case class TestModel(foo: String)
-
-  object TestModel {
-    implicit val fmt: Format[TestModel] = Json.format[TestModel]
-  }
-
-  val testKey = "testKey"
-  val testModel = TestModel("bar")
-  val testValidJson: JsObject = Json.obj("foo" -> "bar")
-  val testInvalidJson: JsObject = Json.obj()
-  val errorModel: ErrorModel = ErrorModel(Status.INTERNAL_SERVER_ERROR, "Error")
+  def getCustomerDetails(vrn: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, CustomerDetails]] =
+    subscriptionConnector.getCustomerDetails(vrn)
 
 }

@@ -18,7 +18,7 @@ package connectors.mocks
 
 import connectors.VatSubscriptionConnector
 import models.deregistrationRequest.DeregistrationInfo
-import models.{ErrorModel, VatSubscriptionResponse}
+import models.{CustomerDetails, ErrorModel, VatSubscriptionResponse}
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
@@ -32,6 +32,12 @@ trait MockVatSubscriptionConnector extends TestUtil with MockFactory {
   def setupMockSubmit(vrn: String, data: DeregistrationInfo)(response: Either[ErrorModel, VatSubscriptionResponse]): Unit = {
     (mockVatSubscriptionConnector.submit(_: String, _: DeregistrationInfo)(_: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, data, *, *)
+      .returns(response)
+  }
+
+  def setupMockGetCustomerCircumstanceDetails(vrn: String)(response: Either[ErrorModel, CustomerDetails]): Unit = {
+    (mockVatSubscriptionConnector.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(vrn, *, *)
       .returns(response)
   }
 }
