@@ -30,8 +30,7 @@ object DeregistrationConfirmationMessages {
 
   val text2AgentWithOrgName = "We will also contact Fake Business Name Limited with an update."
 
-  val textAgentPrefNo = "We will send you a confirmation letter to your principal place of business within " +
-    "12 working days telling you whether or not the request has been accepted."
+  val textAgentPrefNo = "We will send a confirmation letter to the agency address within 15 working days."
 
   val text2AgentPrefNo = "We will also contact your client with an update."
 
