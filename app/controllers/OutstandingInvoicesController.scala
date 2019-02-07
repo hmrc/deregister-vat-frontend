@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.AuthPredicate
+import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.YesNoForm
 import javax.inject.Inject
 import models._
@@ -32,6 +32,7 @@ import scala.concurrent.Future
 
 class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
                                               val authenticate: AuthPredicate,
+                                              val pendingDeregCheck: PendingChangesPredicate,
                                               val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                               val deregReasonAnswerService: DeregReasonAnswerService,
                                               val capitalAssetsAnswerService: CapitalAssetsAnswerService,
@@ -39,7 +40,7 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authenticate.async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     outstandingInvoicesAnswerService.getAnswer map {
       case Right(Some(data)) => Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm.fill(data)))
       case _ => Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm))

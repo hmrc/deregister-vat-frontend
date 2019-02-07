@@ -16,8 +16,7 @@
 
 package services.mocks
 
-import models.CustomerDetails
-import models.ErrorModel
+import models.{CustomerDetails, ChangeIndicatorModel, ErrorModel}
 import org.scalamock.scalatest.MockFactory
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -33,5 +32,9 @@ trait MockCustomerDetailsService extends UnitSpec with MockFactory {
     (mockCustomerDetailsService.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, *, *)
       .returns(response)
+  }
+
+  def setupMockPendingDereg(vrn: String)(response: Either[ErrorModel, ChangeIndicatorModel])(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
+    (mockCustomerDetailsService.getDeregPending(_:String)(_: HeaderCarrier, _: ExecutionContext)).expects(vrn, *, *).returns(response)
   }
 }

@@ -18,7 +18,7 @@ package controllers
 
 import javax.inject.Inject
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.AuthPredicate
+import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{CustomerDetailsService, DeleteAllStoredAnswersService}
@@ -26,12 +26,13 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesApi,
                                                      val authentication: AuthPredicate,
+                                                     val pendingDeregCheck: PendingChangesPredicate,
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
                                                      val customerDetailsService: CustomerDetailsService,
                                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authentication.async { implicit user =>
+  val show: Action[AnyContent] = (authentication andThen pendingDeregCheck).async { implicit user =>
 
     for {
       deleteAllAStoredAnswers <- deleteAllStoredAnswersService.deleteAllAnswers

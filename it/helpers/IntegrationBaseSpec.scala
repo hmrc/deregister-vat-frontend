@@ -16,6 +16,7 @@
 
 package helpers
 
+import common.SessionKeys
 import config.AppConfig
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen, TestSuite}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
@@ -51,6 +52,9 @@ trait IntegrationBaseSpec extends UnitSpec
     def user: User = new User()
   }
 
+  def formatPendingDereg: Option[String] => Map[String, String] =
+    _.fold(Map.empty[String, String])(x => Map(SessionKeys.pendingDeregKey -> x))
+
   def given: PreconditionBuilder = new PreconditionBuilder
 
   class User()(implicit builder: PreconditionBuilder) {
@@ -72,6 +76,24 @@ trait IntegrationBaseSpec extends UnitSpec
       AuthStub.unauthorisedIndividualMissingEnrolment()
       builder
     }
+
+    def noDeregPending: PreconditionBuilder = {
+      Given("User has no deregistration request pending")
+      AuthStub.noDeregPending()
+      builder
+    }
+
+    def deregPending: PreconditionBuilder = {
+      Given("User has a deregistration request pending")
+      AuthStub.deregPending()
+      builder
+    }
+
+    def noPendingData: PreconditionBuilder = {
+      Given("User has no pending data")
+      AuthStub.noPendingData()
+      builder
+    }
   }
 
   def servicesConfig: Map[String, String] = Map(
@@ -79,7 +101,9 @@ trait IntegrationBaseSpec extends UnitSpec
     "microservice.services.auth.host" -> mockHost,
     "microservice.services.auth.port" -> mockPort,
     "microservice.services.deregister-vat.host" -> mockHost,
-    "microservice.services.deregister-vat.port" -> mockPort
+    "microservice.services.deregister-vat.port" -> mockPort,
+    "microservice.services.vat-subscription.port" -> mockPort,
+    "microservice.services.vat-subscription.host" -> mockHost
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()

@@ -25,7 +25,12 @@ import scala.concurrent.Future
 
 class CannotDeregisterThresholdControllerSpec extends ControllerBaseSpec {
 
-  object TestCannotDeregisterThresholdController extends CannotDeregisterThresholdController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestCannotDeregisterThresholdController extends CannotDeregisterThresholdController(
+    messagesApi,
+    mockAuthPredicate,
+    mockPendingDeregPredicate,
+    mockConfig
+  )
 
   "the user is authorised" when {
 

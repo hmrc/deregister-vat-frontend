@@ -30,7 +30,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
   "Calling the GET Why Turnover Below endpoint" when {
 
-    def getRequest(): WSResponse = get("/reasons-for-low-turnover")
+    def getRequest(): WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(Some("false")))
 
     "the user is authorised" should {
 
@@ -75,6 +75,68 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
         response should have(
           httpStatus(FORBIDDEN),
           pageTitle("You can’t use this service yet")
+        )
+      }
+    }
+  }
+
+  "Calling the GET Why Turnover Below endpoint" when {
+
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(pendingDereg))
+
+    "user has a pending dereg request" should {
+
+      "return an ISE" in {
+        given.user.isAuthorised
+
+        val response: WSResponse = getRequest(Some("true"))
+
+        response should have(
+          httpStatus(INTERNAL_SERVER_ERROR)
+        )
+      }
+    }
+
+    "no pending dereg data in session and vat-subscription returns 'no pending dereg'" should {
+
+      "redirect user to the start of the journey" in {
+        given.user.isAuthorised
+        given.user.noDeregPending
+
+        val response: WSResponse = getRequest(None)
+
+        response should have(
+          httpStatus(SEE_OTHER),
+          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+        )
+      }
+    }
+
+    "no pending dereg data in session and vat-subscription returns 'pending dereg'" should {
+
+      "return an ISE" in {
+        given.user.isAuthorised
+        given.user.deregPending
+
+        val response: WSResponse = getRequest(None)
+
+        response should have(
+          httpStatus(INTERNAL_SERVER_ERROR)
+        )
+      }
+    }
+
+    "no pending dereg data in session and vat-subscription returns 'None'" should {
+
+      "redirect user to the start of the journey" in {
+        given.user.isAuthorised
+        given.user.noPendingData
+
+        val response: WSResponse = getRequest(None)
+
+        response should have(
+          httpStatus(SEE_OTHER),
+          redirectURI(controllers.routes.DeregisterForVATController.show().url)
         )
       }
     }

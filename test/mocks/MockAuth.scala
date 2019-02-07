@@ -16,9 +16,12 @@
 
 package mocks
 
-import controllers.predicates.{AuthPredicate, AuthoriseAsAgent}
+import connectors.mocks.MockVatSubscriptionConnector
+import controllers.predicates.{AuthPredicate, AuthoriseAsAgent, PendingChangesPredicate}
+import models.User
 import org.scalamock.scalatest.MockFactory
-import services.EnrolmentsAuthService
+import play.api.mvc.Result
+import services.{CustomerDetailsService, EnrolmentsAuthService}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
@@ -27,10 +30,9 @@ import utils.TestUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAuth extends TestUtil with MockFactory {
+trait MockAuth extends TestUtil with MockFactory with MockVatSubscriptionConnector {
 
   type AuthResponse = Future[~[Option[AffinityGroup], Enrolments]]
-
   lazy val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
   lazy val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
@@ -112,5 +114,20 @@ trait MockAuth extends TestUtil with MockFactory {
     )
   )
 
+  val mockPendingDeregPredicate: PendingChangesPredicate = {
+
+    object MockPredicate extends PendingChangesPredicate(
+      new CustomerDetailsService(mockVatSubscriptionConnector),
+      serviceErrorHandler,
+      messagesApi,
+      mockConfig,
+      ec
+    ) {
+      override def refine[A](request: User[A]): Future[Either[Result, User[A]]] =
+        Future.successful(Right(User(vrn)(request)))
+    }
+
+    MockPredicate
+  }
 }
 

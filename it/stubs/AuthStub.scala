@@ -63,6 +63,31 @@ object AuthStub extends WireMockMethods {
       .thenReturn(status = UNAUTHORIZED, headers = Map("WWW-Authenticate" -> """MDTP detail="MissingBearerToken""""))
   }
 
+  def noDeregPending(): StubMapping = {
+    when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
+      .thenReturn(status = OK, body = Json.obj(
+        "changeIndicators" -> Json.obj(
+          "deregister" -> false
+        )
+      ))
+  }
+
+  def deregPending(): StubMapping = {
+    when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
+      .thenReturn(status = OK, body = Json.obj(
+        "changeIndicators" -> Json.obj(
+          "deregister" -> true
+        )
+      ))
+  }
+
+  def noPendingData(): StubMapping = {
+    when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
+      .thenReturn(status = OK, body = Json.obj(
+        "changeIndicators" -> Json.obj()
+      ))
+  }
+
   private def successfulAuthResponse(affinityGroup: Option[AffinityGroup], enrolments: JsObject*): JsObject = {
     affinityGroup match {
       case Some(group) => Json.obj(

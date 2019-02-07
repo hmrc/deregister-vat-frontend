@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.AuthPredicate
+import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import javax.inject.{Inject, Singleton}
 import models.VatSubscriptionSuccess
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -28,13 +28,14 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 @Singleton
 class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        val authenticate: AuthPredicate,
+                                       val pendingDeregCheck: PendingChangesPredicate,
                                        checkAnswersService: CheckAnswersService,
                                        deregDateAnswerService: DeregDateAnswerService,
                                        updateDeregistrationService: UpdateDeregistrationService,
                                        val serviceErrorHandler: ServiceErrorHandler,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authenticate.async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     checkAnswersService.checkYourAnswersModel() map {
       case Right(answers) =>
         answers.deregDate match {

@@ -32,6 +32,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
   object TestCheckAnswersController extends CheckAnswersController(
     messagesApi,
     mockAuthPredicate,
+    mockPendingDeregPredicate,
     mockCheckAnswersService,
     mockDeregDateAnswerService,
     mockUpdateDeregistrationService,

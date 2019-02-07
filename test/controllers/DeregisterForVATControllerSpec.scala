@@ -23,7 +23,12 @@ import scala.concurrent.Future
 
 class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
-  object TestDeregisterForVATController extends DeregisterForVATController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestDeregisterForVATController extends DeregisterForVATController(
+    messagesApi,
+    mockAuthPredicate,
+    mockPendingDeregPredicate,
+    mockConfig
+  )
 
   "the user is authorised" when {
 

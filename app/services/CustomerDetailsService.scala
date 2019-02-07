@@ -18,8 +18,7 @@ package services
 
 import connectors.VatSubscriptionConnector
 import javax.inject.{Inject, Singleton}
-import models.CustomerDetails
-import models.ErrorModel
+import models.{CustomerDetails, ChangeIndicatorModel, ErrorModel}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,5 +29,9 @@ class CustomerDetailsService @Inject()(val subscriptionConnector: VatSubscriptio
   def getCustomerDetails(vrn: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, CustomerDetails]] =
     subscriptionConnector.getCustomerDetails(vrn)
+
+  def getDeregPending(vrn: String)
+                     (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, ChangeIndicatorModel]] =
+    subscriptionConnector.getFullInformation(vrn)
 
 }

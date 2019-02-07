@@ -28,8 +28,14 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
   with MockCustomerDetailsService {
 
   object TestDeregistrationConfirmationController
-    extends DeregistrationConfirmationController(messagesApi, mockAuthPredicate, mockDeleteAllStoredAnswersService,
-      serviceErrorHandler, mockCustomerDetailsService, mockConfig)
+    extends DeregistrationConfirmationController(
+      messagesApi,
+      mockAuthPredicate,
+      mockPendingDeregPredicate,
+      mockDeleteAllStoredAnswersService,
+      serviceErrorHandler,
+      mockCustomerDetailsService,
+      mockConfig)
 
   "the user is authorised" when {
 

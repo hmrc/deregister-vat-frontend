@@ -17,9 +17,8 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
-import controllers.predicates.AuthPredicate
+import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -29,9 +28,10 @@ import scala.concurrent.Future
 @Singleton
 class CannotDeregisterThresholdController @Inject()(val messagesApi: MessagesApi,
                                                     val authenticate: AuthPredicate,
+                                                    val pendingDeregCheck: PendingChangesPredicate,
                                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = authenticate.async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     Future.successful(Ok(views.html.cannotDeregisterThreshold()))
   }
 }

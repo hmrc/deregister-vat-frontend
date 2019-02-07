@@ -30,7 +30,12 @@ import scala.concurrent.Future
 class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStocksAnswerService {
 
   object TestOptionStocksToSellController extends OptionStocksToSellController(
-    messagesApi, mockAuthPredicate, mockStocksAnswerService, serviceErrorHandler, mockConfig
+    messagesApi,
+    mockAuthPredicate,
+    mockPendingDeregPredicate,
+    mockStocksAnswerService,
+    serviceErrorHandler,
+    mockConfig
   )
 
   val testAmt = 500

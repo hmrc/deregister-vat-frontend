@@ -29,7 +29,12 @@ import scala.concurrent.Future
 class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurnoverBelowAnswerService {
 
   object TestWhyTurnoverBelowController extends WhyTurnoverBelowController(
-    messagesApi, mockAuthPredicate, mockWhyTurnoverBelowAnswerService, serviceErrorHandler, mockConfig
+    messagesApi,
+    mockAuthPredicate,
+    mockPendingDeregPredicate,
+    mockWhyTurnoverBelowAnswerService,
+    serviceErrorHandler,
+    mockConfig
   )
 
   "the user is authorised" when {

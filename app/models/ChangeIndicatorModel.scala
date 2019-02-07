@@ -14,11 +14,26 @@
  * limitations under the License.
  */
 
-package common
+package models
 
-object SessionKeys {
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
-  val CLIENT_VRN: String = "CLIENT_VRN"
-  val verifiedAgentEmail: String = "verifiedAgentEmail"
-  val pendingDeregKey: String = "pendingDeregistration"
+case class ChangeIndicatorModel(deregistration: Option[PendingDeregModel])
+
+object ChangeIndicatorModel {
+
+  private val deregPath = __ \ "changeIndicators"
+
+  implicit val reads: Reads[ChangeIndicatorModel] = deregPath.readNullable[PendingDeregModel].orElse(Reads.pure(None)).map(ChangeIndicatorModel.apply)
+}
+
+case class PendingDeregModel(dereg: Boolean)
+
+object PendingDeregModel {
+
+  private val path = __ \ "deregister"
+
+  implicit val reads: Reads[PendingDeregModel] = path.read[Boolean].map(PendingDeregModel.apply)
+
 }

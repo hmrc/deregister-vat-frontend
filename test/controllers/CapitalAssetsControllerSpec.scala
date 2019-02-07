@@ -32,6 +32,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
   object TestCapitalAssetsController extends CapitalAssetsController(
     messagesApi,
     mockAuthPredicate,
+    mockPendingDeregPredicate,
     mockCapitalAssetsAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,
