@@ -17,8 +17,6 @@
 package controllers
 
 import play.api.http.Status
-import play.api.mvc.AnyContentAsFormUrlEncoded
-import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 
 import scala.concurrent.Future

@@ -31,7 +31,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration reason endpoint" when {
 
-    def getRequest(): WSResponse = get("/deregister-reason?isAgent=false", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/deregister-reason?isAgent=false", formatPendingDereg(Some("false")))
 
     "the user is authorised" should {
 
@@ -41,7 +41,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         DeregisterVatStub.successfulGetAnswer(vrn,DeregReasonAnswerService.key)(Json.toJson(Ceased))
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
@@ -56,7 +56,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -71,7 +71,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(FORBIDDEN),

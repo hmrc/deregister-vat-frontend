@@ -17,15 +17,13 @@
 package controllers
 
 import assets.constants.BaseTestConstants._
-import models.{DeregisterVatSuccess, NextTaxableTurnoverModel, No}
+import forms.YesNoForm.yesNo
+import models.{DeregisterVatSuccess, No}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.mocks.{MockTaxableTurnoverAnswerService, MockWipeRedundantDataService}
-import services.mocks.MockTaxableTurnoverAnswerService
-import assets.constants.BaseTestConstants._
-import forms.YesNoForm.yesNo
 
 import scala.concurrent.Future
 

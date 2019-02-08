@@ -22,15 +22,15 @@ import helpers.IntegrationBaseSpec
 import models.WhyTurnoverBelowModel
 import play.api.http.Status._
 import play.api.libs.ws.WSResponse
-import stubs.DeregisterVatStub
 import services.WhyTurnoverBelowAnswerService
+import stubs.DeregisterVatStub
 
 
 class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
   "Calling the GET Why Turnover Below endpoint" when {
 
-    def getRequest(): WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(Some("false")))
 
     "the user is authorised" should {
 
@@ -40,7 +40,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         DeregisterVatStub.successfulGetAnswer(vrn,WhyTurnoverBelowAnswerService.key)(whyTurnoverBelowJson)
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
@@ -55,7 +55,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -70,7 +70,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(FORBIDDEN),

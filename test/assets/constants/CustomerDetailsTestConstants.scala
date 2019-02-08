@@ -16,7 +16,7 @@
 
 package assets.constants
 
-import models.CustomerDetails
+import models.{ChangeIndicatorModel, CustomerDetails, PendingDeregModel}
 import play.api.libs.json.{JsObject, Json}
 
 object CustomerDetailsTestConstants {
@@ -52,4 +52,15 @@ object CustomerDetailsTestConstants {
     None,
     None
   )
+
+  val pendingDeregFalseJson: JsObject = Json.obj(
+    "changeIndicators" -> Json.obj(
+      "deregister" -> false
+    )
+  )
+
+  val pendingDeregFalse: ChangeIndicatorModel = ChangeIndicatorModel(Some(PendingDeregModel(dereg = false)))
+
+  val noPendingDereg: ChangeIndicatorModel = ChangeIndicatorModel(None)
+
 }

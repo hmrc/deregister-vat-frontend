@@ -16,13 +16,13 @@
 
 package controllers.predicates
 
-import config.{AppConfig, ServiceErrorHandler}
 import common.SessionKeys.pendingDeregKey
+import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.Inject
-import models.{ChangeIndicatorModel, ErrorModel, PendingDeregModel, User}
+import models.{PendingDeregModel, User}
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.Results.{Ok, Redirect}
+import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -56,7 +56,7 @@ class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsS
         pending.deregistration match {
           case Some(PendingDeregModel(true)) =>
             Logger.warn("[PendingChangesPredicate][getCustomerInfoCall] - " +
-              "Deregistration pending. Rendering graceful error page.")
+              "Deregistration pending. Throwing ISE.")
             Left(serviceErrorHandler.showInternalServerError.addingToSession(pendingDeregKey -> "true"))
           case Some(PendingDeregModel(false)) =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +

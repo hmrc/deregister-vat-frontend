@@ -31,7 +31,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
   "Calling the GET VatAccounts" when {
 
-    def getRequest(): WSResponse = get("/accounting-method", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/accounting-method", formatPendingDereg(Some("false")))
 
     "the user is authorised" should {
 
@@ -42,7 +42,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
         DeregisterVatStub.successfulGetAnswer(vrn,AccountingMethodAnswerService.key)(Json.toJson(StandardAccounting))
         DeregisterVatStub.successfulGetAnswer(vrn,DeregReasonAnswerService.key)(Json.toJson(Ceased))
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
@@ -57,7 +57,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -72,7 +72,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(FORBIDDEN),

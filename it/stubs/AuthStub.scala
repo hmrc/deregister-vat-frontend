@@ -16,13 +16,12 @@
 
 package stubs
 
-import assets.IntegrationTestConstants
+import assets.IntegrationTestConstants._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import helpers.WireMockMethods
 import play.api.http.Status.{OK, UNAUTHORIZED}
 import play.api.libs.json.{JsObject, Json}
-import helpers.WireMockMethods
 import uk.gov.hmrc.auth.core.AffinityGroup
-import assets.IntegrationTestConstants._
 
 object AuthStub extends WireMockMethods {
 
@@ -61,31 +60,6 @@ object AuthStub extends WireMockMethods {
   def unauthenticated(): StubMapping = {
     when(method = POST, uri = authoriseUri)
       .thenReturn(status = UNAUTHORIZED, headers = Map("WWW-Authenticate" -> """MDTP detail="MissingBearerToken""""))
-  }
-
-  def noDeregPending(): StubMapping = {
-    when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
-      .thenReturn(status = OK, body = Json.obj(
-        "changeIndicators" -> Json.obj(
-          "deregister" -> false
-        )
-      ))
-  }
-
-  def deregPending(): StubMapping = {
-    when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
-      .thenReturn(status = OK, body = Json.obj(
-        "changeIndicators" -> Json.obj(
-          "deregister" -> true
-        )
-      ))
-  }
-
-  def noPendingData(): StubMapping = {
-    when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
-      .thenReturn(status = OK, body = Json.obj(
-        "changeIndicators" -> Json.obj()
-      ))
   }
 
   private def successfulAuthResponse(affinityGroup: Option[AffinityGroup], enrolments: JsObject*): JsObject = {

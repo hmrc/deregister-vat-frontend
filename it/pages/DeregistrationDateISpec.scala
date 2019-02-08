@@ -39,7 +39,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration Date endpoint" when {
 
-    def getRequest(): WSResponse = get("/deregister-date", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/deregister-date", formatPendingDereg(Some("false")))
 
     "the user is authorised" should {
 
@@ -50,7 +50,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
         DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(validYesModel))
         DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
@@ -65,7 +65,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -80,7 +80,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(FORBIDDEN),

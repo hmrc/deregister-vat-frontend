@@ -21,6 +21,7 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import services.mocks.{MockDeleteAllStoredAnswersService, MockCustomerDetailsService}
 import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
+import assets.constants.BaseTestConstants.vrn
 
 import scala.concurrent.Future
 

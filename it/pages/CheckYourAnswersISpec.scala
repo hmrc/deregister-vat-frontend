@@ -19,17 +19,17 @@ package pages
 import assets.IntegrationTestConstants.vrn
 import helpers.IntegrationBaseSpec
 import models._
-import services._
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import stubs.{AuthStub, DeregisterVatStub}
+import services._
+import stubs.DeregisterVatStub
 
 class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
   "Calling GET Check your answers" when {
 
-    def getRequest(): WSResponse = get("/check-your-answers", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/check-your-answers", formatPendingDereg(Some("false")))
 
     val dateModel = DateModel(1,1,2018)
     val taxableTurnoverAbove = NextTaxableTurnoverModel(BigDecimal(90000))
@@ -58,7 +58,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
@@ -87,7 +87,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(INTERNAL_SERVER_ERROR)
@@ -101,7 +101,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -116,7 +116,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(FORBIDDEN),

@@ -31,7 +31,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
     val validYesModel = Yes
 
-    def getRequest(): WSResponse = get("/outstanding-invoices", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/outstanding-invoices", formatPendingDereg(Some("false")))
 
     "the user is authorised" should {
 
@@ -41,7 +41,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
         DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(validYesModel))
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
@@ -56,7 +56,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -71,7 +71,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(FORBIDDEN),

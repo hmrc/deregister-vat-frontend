@@ -31,7 +31,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
   "Calling the GET IssueNewInvoices" when {
 
-    def getRequest(): WSResponse = get("/new-invoices", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/new-invoices", formatPendingDereg(Some("false")))
 
     "the user is authorised" should {
 
@@ -41,7 +41,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         DeregisterVatStub.successfulGetAnswer(vrn,IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
@@ -56,7 +56,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -71,7 +71,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(FORBIDDEN),
