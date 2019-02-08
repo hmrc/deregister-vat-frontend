@@ -41,7 +41,7 @@ class PendingDeregHttpParserSpec extends TestUtil {
 
     "the http response status is OK with invalid Json" should {
 
-      "return an ErrorModel" in {
+      "return a 'ChangeIndicatorModel(None)'" in {
         PendingDeregReads.read("", "", HttpResponse(Status.OK, successBadJson)) shouldBe Right(noPendingDereg)
       }
     }
