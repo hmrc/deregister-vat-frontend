@@ -16,6 +16,7 @@
 
 package mocks
 
+import assets.constants.BaseTestConstants.vrn
 import controllers.predicates.{AuthPredicate, AuthoriseAsAgent}
 import org.scalamock.scalatest.MockFactory
 import services.EnrolmentsAuthService
@@ -30,7 +31,6 @@ import scala.concurrent.{ExecutionContext, Future}
 trait MockAuth extends TestUtil with MockFactory {
 
   type AuthResponse = Future[~[Option[AffinityGroup], Enrolments]]
-
   lazy val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
   lazy val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
@@ -49,8 +49,6 @@ trait MockAuth extends TestUtil with MockFactory {
         .returns(authResponse.b)
     }
   }
-
-  val vrn: String = "968501689"
 
   val mockAuthorisedIndividual: AuthResponse = Future.successful(
     new ~(Some(AffinityGroup.Individual),
@@ -111,6 +109,5 @@ trait MockAuth extends TestUtil with MockFactory {
       )
     )
   )
-
 }
 

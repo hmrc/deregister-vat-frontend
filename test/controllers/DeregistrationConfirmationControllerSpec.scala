@@ -21,6 +21,7 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import services.mocks.{MockDeleteAllStoredAnswersService, MockCustomerDetailsService}
 import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
+import assets.constants.BaseTestConstants.vrn
 
 import scala.concurrent.Future
 
@@ -28,8 +29,13 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
   with MockCustomerDetailsService {
 
   object TestDeregistrationConfirmationController
-    extends DeregistrationConfirmationController(messagesApi, mockAuthPredicate, mockDeleteAllStoredAnswersService,
-      serviceErrorHandler, mockCustomerDetailsService, mockConfig)
+    extends DeregistrationConfirmationController(
+      messagesApi,
+      mockAuthPredicate,
+      mockDeleteAllStoredAnswersService,
+      serviceErrorHandler,
+      mockCustomerDetailsService,
+      mockConfig)
 
   "the user is authorised" when {
 

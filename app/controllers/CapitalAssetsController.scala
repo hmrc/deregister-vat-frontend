@@ -20,7 +20,7 @@ import cats.data.EitherT
 import cats.instances.future._
 import javax.inject.{Inject, Singleton}
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.AuthPredicate
+import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.YesNoAmountForm
 import models.{User, YesNoAmountModel}
 import play.api.data.Form
@@ -34,6 +34,7 @@ import scala.concurrent.Future
 @Singleton
 class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
                                         val authentication: AuthPredicate,
+                                        val pendingDeregCheck: PendingChangesPredicate,
                                         val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                         val wipeRedundantDataService: WipeRedundantDataService,
                                         val serviceErrorHandler: ServiceErrorHandler,
@@ -42,7 +43,7 @@ class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
   private def renderView(data: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm)(implicit user: User[_]) =
     views.html.capitalAssets(data)
 
-  val show: Action[AnyContent] = authentication.async { implicit user =>
+  val show: Action[AnyContent] = (authentication andThen pendingDeregCheck).async { implicit user =>
     capitalAssetsAnswerService.getAnswer.map {
       case Right(Some(data)) => Ok(renderView(YesNoAmountForm.yesNoAmountForm.fill(data)))
       case _ => Ok(renderView())

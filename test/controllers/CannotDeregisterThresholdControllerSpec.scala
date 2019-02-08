@@ -17,15 +17,18 @@
 package controllers
 
 import play.api.http.Status
-import play.api.mvc.AnyContentAsFormUrlEncoded
-import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 
 import scala.concurrent.Future
 
 class CannotDeregisterThresholdControllerSpec extends ControllerBaseSpec {
 
-  object TestCannotDeregisterThresholdController extends CannotDeregisterThresholdController(messagesApi, mockAuthPredicate, mockConfig)
+  object TestCannotDeregisterThresholdController extends CannotDeregisterThresholdController(
+    messagesApi,
+    mockAuthPredicate,
+    mockPendingDeregPredicate,
+    mockConfig
+  )
 
   "the user is authorised" when {
 

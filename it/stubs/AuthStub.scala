@@ -16,13 +16,12 @@
 
 package stubs
 
-import assets.IntegrationTestConstants
+import assets.IntegrationTestConstants._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import helpers.WireMockMethods
 import play.api.http.Status.{OK, UNAUTHORIZED}
 import play.api.libs.json.{JsObject, Json}
-import helpers.WireMockMethods
 import uk.gov.hmrc.auth.core.AffinityGroup
-import assets.IntegrationTestConstants._
 
 object AuthStub extends WireMockMethods {
 

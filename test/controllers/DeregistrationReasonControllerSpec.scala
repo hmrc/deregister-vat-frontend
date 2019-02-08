@@ -33,6 +33,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
   object TestDeregistrationReasonController extends DeregistrationReasonController(
     messagesApi,
     mockAuthPredicate,
+    mockPendingDeregPredicate,
     mockDeregReasonAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,

@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.AuthPredicate
+import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.VATAccountsForm
 import javax.inject.{Inject, Singleton}
 import models._
@@ -32,6 +32,7 @@ import cats.instances.future._
 @Singleton
 class VATAccountsController @Inject()(val messagesApi: MessagesApi,
                                       val authenticate: AuthPredicate,
+                                      val pendingDeregCheck: PendingChangesPredicate,
                                       val accountingMethodAnswerService: AccountingMethodAnswerService,
                                       val deregReasonAnswerService: DeregReasonAnswerService,
                                       val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
@@ -41,7 +42,7 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
   private def renderView(backLink: String, form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)
                         (implicit user: User[_]) = views.html.vatAccounts(backLink, form)
 
-  val show: Action[AnyContent] = authenticate.async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     for {
       lastTurnoverBelow <- taxableTurnoverAnswerService.getAnswer
       reasonResult <- deregReasonAnswerService.getAnswer

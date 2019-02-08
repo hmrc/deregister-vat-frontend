@@ -33,6 +33,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
   object TestOutstandingInvoicesController extends OutstandingInvoicesController(
     messagesApi,
     mockAuthPredicate,
+    mockPendingDeregPredicate,
     mockOutstandingInvoicesService,
     mockDeregReasonAnswerService,
     mockCapitalAssetsAnswerService,
