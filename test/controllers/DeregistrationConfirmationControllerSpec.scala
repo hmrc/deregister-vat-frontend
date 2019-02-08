@@ -32,7 +32,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     extends DeregistrationConfirmationController(
       messagesApi,
       mockAuthPredicate,
-      mockPendingDeregPredicate,
       mockDeleteAllStoredAnswersService,
       serviceErrorHandler,
       mockCustomerDetailsService,
