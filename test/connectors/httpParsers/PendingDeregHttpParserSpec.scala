@@ -17,11 +17,11 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.PendingDeregHttpParser.PendingDeregReads
-import models.ErrorModel
+import models.{ChangeIndicatorModel, ErrorModel}
 import play.api.http.Status
 import uk.gov.hmrc.http.HttpResponse
 import utils.TestUtil
-import assets.constants.CustomerDetailsTestConstants.{pendingDeregFalse, pendingDeregFalseJson, noPendingDereg}
+import assets.constants.CustomerDetailsTestConstants.{noPendingDereg, pendingDeregFalse, pendingDeregFalseJson}
 import play.api.libs.json.Json
 
 
@@ -29,6 +29,9 @@ class PendingDeregHttpParserSpec extends TestUtil {
 
   val successBadJson = Some(Json.obj("changeIndicators" -> Json.obj("deregister" -> 1)))
   val errorModel = ErrorModel(Status.BAD_REQUEST, "Error Message")
+
+  private def pendingDeregResult(response: HttpResponse): Either[ErrorModel, ChangeIndicatorModel] =
+    PendingDeregReads.read("", "", response)
 
   "The PendingDeregHttpParser.reads" when {
 
@@ -39,10 +42,19 @@ class PendingDeregHttpParserSpec extends TestUtil {
       }
     }
 
+    "the http response status is OK with no changeIndicators" should {
+
+      "return a 'ChangeIndicators(None)')" in {
+        PendingDeregReads.read("", "", HttpResponse(Status.OK, Some(Json.obj()))) shouldBe
+          Right(ChangeIndicatorModel(None))
+      }
+    }
+
     "the http response status is OK with invalid Json" should {
 
-      "return a 'ChangeIndicatorModel(None)'" in {
-        PendingDeregReads.read("", "", HttpResponse(Status.OK, successBadJson)) shouldBe Right(noPendingDereg)
+      "return an Error model with status code of 500 (INTERNAL_SERVER_ERROR)" in {
+        PendingDeregReads.read("", "", HttpResponse(Status.OK, successBadJson)) shouldBe
+          Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
       }
     }
 

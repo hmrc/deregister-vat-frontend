@@ -44,7 +44,7 @@ object PendingDeregStub extends WireMockMethods {
   def noPendingData(): StubMapping = {
     when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
       .thenReturn(status = OK, body = Json.obj(
-        "changeIndicators" -> Json.obj()
+        "somethingElse" -> Json.obj()
       ))
   }
 

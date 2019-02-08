@@ -25,7 +25,7 @@ object ChangeIndicatorModel {
 
   private val deregPath = __ \ "changeIndicators"
 
-  implicit val reads: Reads[ChangeIndicatorModel] = deregPath.readNullable[PendingDeregModel].orElse(Reads.pure(None)).map(ChangeIndicatorModel.apply)
+  implicit val reads: Reads[ChangeIndicatorModel] = deregPath.readNullable[PendingDeregModel].map(ChangeIndicatorModel.apply)
 }
 
 case class PendingDeregModel(dereg: Boolean)
