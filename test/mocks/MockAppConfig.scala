@@ -57,5 +57,7 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
   override val platformHost: String = "/platform/host"
   override val timeoutCountdown: Int = 100
   override val timeoutPeriod: Int = 200
+  override val contactPreferencesService: String = ""
+  override def contactPreferencesUrl(vrn: String): String = s"contact-preferences/vat/vrn/$vrn"
 }
 

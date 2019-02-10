@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package testOnly.forms
+package models.contactPreferences
 
-import config.ConfigKeys
-import play.api.data.Form
-import play.api.data.Forms._
-import testOnly.models.FeatureSwitchModel
+import play.api.libs.json._
 
-object FeatureSwitchForm {
+case class ContactPreference(preference: String)
 
-  val form: Form[FeatureSwitchModel] = Form(
-    mapping(
-      ConfigKeys.simpleAuthFeature -> boolean,
-      ConfigKeys.useAgentClientLookupFeature -> boolean,
-      ConfigKeys.stubAgentClientLookupFeature -> boolean,
-      ConfigKeys.stubContactPreferencesFeature -> boolean
-      )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
-  )
+object ContactPreference {
+  implicit val reads: Reads[ContactPreference] = Json.reads[ContactPreference]
 
+  val digital: String = "DIGITAL"
+  val paper: String = "PAPER"
 }
