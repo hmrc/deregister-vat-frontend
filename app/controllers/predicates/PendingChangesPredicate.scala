@@ -42,7 +42,7 @@ class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsS
     implicit val req: User[A] = request
 
     req.session.get(pendingDeregKey) match {
-      case Some("true") => Future.successful(Left(serviceErrorHandler.showInternalServerError))
+      case Some("true") => Future.successful(Left(Redirect(appConfig.manageVatSubscriptionFrontendUrl)))
       case Some("false") => Future.successful(Right(req))
       case Some(_) => Future.successful(Left(serviceErrorHandler.showInternalServerError))
       case None => getCustomerInfoCall(req.vrn)
@@ -57,7 +57,7 @@ class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsS
           case Some(PendingDeregModel(true)) =>
             Logger.warn("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "Deregistration pending. Throwing ISE.")
-            Left(serviceErrorHandler.showInternalServerError.addingToSession(pendingDeregKey -> "true"))
+            Left(Redirect(appConfig.manageVatSubscriptionFrontendUrl).addingToSession(pendingDeregKey -> "true"))
           case Some(PendingDeregModel(false)) =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "Pending deregistration is false - Setting to 'false' and redirecting to start of journey")

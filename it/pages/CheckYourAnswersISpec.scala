@@ -132,13 +132,14 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
     "user has a pending dereg request" should {
 
-      "return an ISE" in {
+      "redirect the user" in {
         given.user.isAuthorised
 
         val response: WSResponse = getRequest(Some("true"))
 
         response should have(
-          httpStatus(INTERNAL_SERVER_ERROR)
+          httpStatus(SEE_OTHER),
+          redirectURI(appConfig.manageVatSubscriptionFrontendUrl)
         )
       }
     }
@@ -160,14 +161,15 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
     "no pending dereg data in session and vat-subscription returns 'pending dereg'" should {
 
-      "return an ISE" in {
+      "redirect the user" in {
         given.user.isAuthorised
         given.user.deregPending
 
         val response: WSResponse = getRequest(None)
 
         response should have(
-          httpStatus(INTERNAL_SERVER_ERROR)
+          httpStatus(SEE_OTHER),
+          redirectURI(appConfig.manageVatSubscriptionFrontendUrl)
         )
       }
     }
