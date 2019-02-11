@@ -33,7 +33,8 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
       FeatureSwitchModel(
         simpleAuthEnabled = appConfig.features.simpleAuth(),
         useAgentClientLookupFeature = appConfig.features.useAgentClientLookup(),
-        stubAgentClientLookup = appConfig.features.stubAgentClientLookup()
+        stubAgentClientLookup = appConfig.features.stubAgentClientLookup(),
+        stubContactPreferences = appConfig.features.stubContactPreferences()
       )
     )))
   }
@@ -49,6 +50,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
     appConfig.features.simpleAuth(model.simpleAuthEnabled)
     appConfig.features.useAgentClientLookup(model.useAgentClientLookupFeature)
     appConfig.features.stubAgentClientLookup(model.stubAgentClientLookup)
+    appConfig.features.stubContactPreferences(model.stubContactPreferences)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 

@@ -40,6 +40,7 @@ object ConfigKeys {
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
   val useAgentClientLookupFeature: String = "features.useAgentClientLookup"
   val stubAgentClientLookupFeature: String = "features.stubAgentClientLookup"
+  val stubContactPreferencesFeature: String = "features.stubContactPreferences.enabled"
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
 
@@ -63,5 +64,7 @@ object ConfigKeys {
 
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountdown: String = "timeout.countdown"
+
+  val contactPreferencesService: String = "contact-preferences"
 
 }
