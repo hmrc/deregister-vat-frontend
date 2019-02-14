@@ -19,14 +19,15 @@ package controllers
 import models.{DeregisterVatSuccess, ErrorModel}
 import play.api.http.Status
 import play.api.test.Helpers._
-import services.mocks.{MockDeleteAllStoredAnswersService, MockCustomerDetailsService}
+import services.mocks.{MockContactPreferencesService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
 import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
+import assets.constants.ContactPreferencesTestConstants.contactPreferences
 import assets.constants.BaseTestConstants.vrn
 
 import scala.concurrent.Future
 
 class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
-  with MockCustomerDetailsService {
+  with MockCustomerDetailsService with MockContactPreferencesService {
 
   object TestDeregistrationConfirmationController
     extends DeregistrationConfirmationController(
@@ -35,6 +36,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       mockDeleteAllStoredAnswersService,
       serviceErrorHandler,
       mockCustomerDetailsService,
+      mockContactPreferencesService,
       mockConfig)
 
   "the user is authorised" when {
@@ -46,6 +48,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       "return 200 (OK) if answers are deleted successfully and a customerDetails is received" in {
         setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        setupMockContactPreferences(vrn)(Right(contactPreferences))
         setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
         status(result) shouldBe Status.OK
       }
