@@ -41,6 +41,7 @@ object ConfigKeys {
   val useAgentClientLookupFeature: String = "features.useAgentClientLookup"
   val stubAgentClientLookupFeature: String = "features.stubAgentClientLookup"
   val stubContactPreferencesFeature: String = "features.stubContactPreferences.enabled"
+  val useContactPreferencesFeature: String = "features.useContactPreferences.enabled"
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
 
