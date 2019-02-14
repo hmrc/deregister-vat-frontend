@@ -16,12 +16,13 @@
 
 package controllers
 
-import config.{AppConfig, ServiceErrorHandler}
+import config.{AppConfig, ConfigKeys, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{CustomerDetailsService, DeleteAllStoredAnswersService}
+import services.{ContactPreferencesServices, CustomerDetailsService, DeleteAllStoredAnswersService}
+import testOnly.views.html.featureSwitch
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesApi,
@@ -29,20 +30,28 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
                                                      val customerDetailsService: CustomerDetailsService,
+                                                     val customerContactPreference: ContactPreferencesServices,
                                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
-
     for {
       deleteAllAStoredAnswers <- deleteAllStoredAnswersService.deleteAllAnswers
       customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
-    } yield (deleteAllAStoredAnswers, customerDetails) match {
-      case (Right(_), Right(custDetails)) =>
-        Ok(views.html.deregistrationConfirmation(custDetails.businessName))
-      case (Left(_), _) =>
-        serviceErrorHandler.showInternalServerError
-      case _ =>
-        Ok(views.html.deregistrationConfirmation(None))
+      contactreference <- customerContactPreference.getCustomerContactPreferences(user.vrn)
+      if appConfig.features.useContactPreference.apply()
+
     }
+      yield (deleteAllAStoredAnswers, customerDetails, contactreference) match {
+        case (Right(_), Right(custDetails), Right(custPreference)) =>
+          Ok(views.html.deregistrationConfirmation(custDetails.businessName))
+          Ok(views.html.deregistrationConfirmation(Option(custPreference.preference)))
+
+        case (Left(_), _, _) =>
+          serviceErrorHandler.showInternalServerError
+        case _ =>
+          Ok(views.html.deregistrationConfirmation(None))
+
+      }
   }
+
 }
