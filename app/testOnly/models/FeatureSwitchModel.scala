@@ -19,4 +19,7 @@ package testOnly.models
 case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
                               useAgentClientLookupFeature: Boolean,
                               stubAgentClientLookup: Boolean,
-                              stubContactPreferences: Boolean)
+                              stubContactPreferences: Boolean,
+                              useContactPreferencesFeature:Boolean
+                             )
+
