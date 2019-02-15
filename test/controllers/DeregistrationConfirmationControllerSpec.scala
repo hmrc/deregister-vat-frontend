@@ -58,6 +58,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       "return 200 (OK) if answers are deleted successfully and an error is received for CustomerDetails call" in {
         setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        setupMockContactPreferences(vrn)(Right(contactPreferences))
         setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
         status(result2) shouldBe Status.OK
       }
@@ -74,6 +75,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     "throw an ISE if there's an error deleting the stored answers" in {
       setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
       mockAuthResult(Future.successful(mockAuthorisedIndividual))
+      setupMockContactPreferences(vrn)(Right(contactPreferences))
       setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
       status(result3) shouldBe Status.INTERNAL_SERVER_ERROR
     }
