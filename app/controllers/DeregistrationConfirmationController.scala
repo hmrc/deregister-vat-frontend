@@ -38,13 +38,12 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
       deleteAllAStoredAnswers <- deleteAllStoredAnswersService.deleteAllAnswers
       customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
       contactreference <- customerContactPreference.getCustomerContactPreferences(user.vrn)
-      if appConfig.features.useContactPreference.apply()
-
     }
       yield (deleteAllAStoredAnswers, customerDetails, contactreference) match {
         case (Right(_), Right(custDetails), Right(custPreference)) =>
-          Ok(views.html.deregistrationConfirmation(custDetails.businessName))
-          Ok(views.html.deregistrationConfirmation(Option(custPreference.preference)))
+            appConfig.features.useContactPreference.apply()
+            Ok(views.html.deregistrationConfirmation(custDetails.businessName))
+            Ok(views.html.deregistrationConfirmation(Option(custPreference.preference)))
 
         case (Left(_), _, _) =>
           serviceErrorHandler.showInternalServerError
