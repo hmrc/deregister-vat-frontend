@@ -15,8 +15,14 @@
  *@
 
 @import common.SessionKeys
+@import services.ContactPreferencesServices
+@import uk.gov.hmrc.http.HeaderCarrier
+@import scala.concurrent.{ExecutionContext, Future}
+@import models.contactPreferences.ContactPreference
 
-@(businessName: Option[String])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(businessName: Option[String])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig, customerContactPreference: ContactPreferencesServices, hc: HeaderCarrier, ec: ExecutionContext)
+@controllers.routes.DeregistrationConfirmationController.show,
+
 
 @views.html.main_template(
 title = messages("deregistrationConfirmation.title"),
@@ -62,14 +68,28 @@ appConfig = appConfig) {
                     {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
         }
     }else{
+        customerContactPreference.getCustomerContactPreferences("vrn")(hc,ec)  match{
+
+      case (digital) =>
         <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
+
+       case (paper) =>
+          <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
+
+
+      case _ =>
+         <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
+
+}
+
         <p>
             <a href={appConfig.manageVatSubscriptionFrontendUrl}
                onclick="sendGAEvent('end-journey','finish','request-received')">
                 {messages("deregistrationConfirmation.nonAgentText2a")}</a>
             {messages("deregistrationConfirmation.nonAgentText2b")}
         </p>
-    }
+
+  }
 }
 
 
