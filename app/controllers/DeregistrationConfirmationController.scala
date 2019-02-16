@@ -45,6 +45,10 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
             Ok(views.html.deregistrationConfirmation(custDetails.businessName))
             Ok(views.html.deregistrationConfirmation(Option(custPreference.preference)))
 
+        case (Right(_), Right(custDetails), Right(_)) =>
+          Ok(views.html.deregistrationConfirmation(custDetails.businessName))
+          Ok(views.html.deregistrationConfirmation(Option(" ")))
+
         case (Left(_), _, _) =>
           serviceErrorHandler.showInternalServerError
         case _ =>
