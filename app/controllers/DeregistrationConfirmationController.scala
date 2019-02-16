@@ -37,9 +37,9 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
     for {
       deleteAllAStoredAnswers <- deleteAllStoredAnswersService.deleteAllAnswers
       customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
-      contactreference <- customerContactPreference.getCustomerContactPreferences(user.vrn)
+      contactReference <- customerContactPreference.getCustomerContactPreferences(user.vrn)
     }
-      yield (deleteAllAStoredAnswers, customerDetails, contactreference) match {
+      yield (deleteAllAStoredAnswers, customerDetails, contactReference) match {
         case (Right(_), Right(custDetails), Right(custPreference)) =>
             appConfig.features.useContactPreference.apply()
             Ok(views.html.deregistrationConfirmation(custDetails.businessName))

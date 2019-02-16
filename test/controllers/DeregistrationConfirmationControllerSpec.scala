@@ -41,31 +41,67 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
   "the user is authorised" when {
 
-    "Calling the .show action" should {
+    "Calling the .show action" when {
 
-      lazy val result = TestDeregistrationConfirmationController.show()(request)
+      "answers are deleted successfully and a customerDetails is received" when {
 
-      "return 200 (OK) if answers are deleted successfully and a customerDetails is received" in {
-        setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        setupMockContactPreferences(vrn)(Right(contactPreferences))
-        setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-        status(result) shouldBe Status.OK
+        "the useContactPreferences feature is disabled" should {
+          lazy val result = TestDeregistrationConfirmationController.show()(request)
+
+          "return 200 (OK)" in {
+            mockConfig.features.useContactPreference(false)
+            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            setupMockContactPreferences(vrn)(Right(contactPreferences))
+            setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+            status(result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
+
+        }
+
+        "the useContactPreferences feature is enabled" should {
+          lazy val result = TestDeregistrationConfirmationController.show()(request)
+
+          "return 200 (OK)" in {
+            mockConfig.features.useContactPreference(true)
+            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            setupMockContactPreferences(vrn)(Right(contactPreferences))
+            setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+            status(result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
+
+        }
+
       }
 
-      lazy val result2 = TestDeregistrationConfirmationController.show()(request)
+      "answers are deleted successfully and an error is received for CustomerDetails call" should {
 
-      "return 200 (OK) if answers are deleted successfully and an error is received for CustomerDetails call" in {
-        setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        setupMockContactPreferences(vrn)(Right(contactPreferences))
-        setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-        status(result2) shouldBe Status.OK
-      }
+        lazy val result = TestDeregistrationConfirmationController.show()(request)
 
-      "return HTML" in {
-        contentType(result) shouldBe Some("text/html")
-        charset(result) shouldBe Some("utf-8")
+        "return 200 (OK)" in {
+          setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockContactPreferences(vrn)(Right(contactPreferences))
+          setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
       }
 
     }

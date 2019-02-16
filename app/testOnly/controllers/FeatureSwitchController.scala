@@ -52,6 +52,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
     appConfig.features.useAgentClientLookup(model.useAgentClientLookupFeature)
     appConfig.features.stubAgentClientLookup(model.stubAgentClientLookup)
     appConfig.features.stubContactPreferences(model.stubContactPreferences)
+    appConfig.features.useContactPreference(model.useContactPreferencesFeature)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 
