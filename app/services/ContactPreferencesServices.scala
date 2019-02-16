@@ -28,5 +28,5 @@ class ContactPreferencesServices @Inject()(val contactPreferences: ContactPrefer
 
   def getCustomerContactPreferences(vrn:String)(implicit hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, ContactPreference]] =
-    contactPreferences.getContactPreference(vrn:String)
+    contactPreferences.getContactPreference(vrn)
 }
