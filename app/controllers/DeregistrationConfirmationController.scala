@@ -30,7 +30,7 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
                                                      val customerDetailsService: CustomerDetailsService,
-                                                     val customerContactPreference: ContactPreferencesServices,
+                                                     implicit val customerContactPreference: ContactPreferencesServices,
                                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
