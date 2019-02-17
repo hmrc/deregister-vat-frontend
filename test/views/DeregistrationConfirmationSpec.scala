@@ -34,7 +34,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
   "Rendering the deregistration confirmation page for non-agent user" when {
 
     "the user is not an agent" should {
-      lazy val view = views.html.deregistrationConfirmation(None)(user, messages, mockConfig)
+      lazy val view = views.html.deregistrationConfirmation(None)(user, messages, mockConfig, mockUserContactPref,hc,ec)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -72,7 +72,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     "the user is an agent with verifiedAgentEmail (Yes pref inferred)" should {
       val businessName: Option[String] = Some("Fake Business Name Limited")
-      lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
+      lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig,mockUserContactPref,hc,ec)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -106,7 +106,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     "the user is an agent without a verifiedAgentEmail (No pref inferred)" should {
       lazy val noBusinessName: Option[String] = None
-      lazy val view = views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig)
+      lazy val view = views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig,mockUserContactPref,hc,ec)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
