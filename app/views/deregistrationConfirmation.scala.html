@@ -71,22 +71,23 @@ appConfig = appConfig) {
         customerContactPreference.getCustomerContactPreferences("vrn")(hc,ec)  match{
 
       case (digital) =>
-        <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
+        <p>
+            {messages("deregistrationConfirmation.nonAgentTextEmail1a")}
+            {messages("deregistrationConfirmation.nonAgentTextEmail1b")}
+        </p>
 
        case (paper) =>
-          <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
+          <p>{messages("deregistrationConfirmation.nonAgentTextPaper")}</p>
 
 
       case _ =>
-         <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
+         <p>{messages("deregistrationConfirmation.nonAgentTextError")}</p>
 
 }
 
         <p>
-            <a href={appConfig.manageVatSubscriptionFrontendUrl}
-               onclick="sendGAEvent('end-journey','finish','request-received')">
-                {messages("deregistrationConfirmation.nonAgentText2a")}</a>
-            {messages("deregistrationConfirmation.nonAgentText2b")}
+                {messages("deregistrationConfirmation.nonAgentText2a")}
+                {messages("deregistrationConfirmation.nonAgentText2b")}
         </p>
 
   }
