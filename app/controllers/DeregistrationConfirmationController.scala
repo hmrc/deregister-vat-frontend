@@ -41,10 +41,13 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
     }
       yield (deleteAllAStoredAnswers, customerDetails, contactReference) match {
         case (Right(_), Right(custDetails), Right(custPreference)) =>
-            appConfig.features.useContactPreference.apply()
-            Ok(views.html.deregistrationConfirmation(custDetails.businessName))
-            Ok(views.html.deregistrationConfirmation(Option(custPreference.preference)))
-
+            if(appConfig.features.useContactPreference.apply().equals(false)) {
+              Ok(views.html.deregistrationConfirmation(custDetails.businessName))
+            }
+          else{
+              Ok(views.html.deregistrationConfirmation(Option(custPreference.preference)))
+              Ok(views.html.deregistrationConfirmation(custDetails.businessName))
+            }
         case (Right(_), Right(custDetails), Right(_)) =>
           Ok(views.html.deregistrationConfirmation(custDetails.businessName))
           Ok(views.html.deregistrationConfirmation(Option(" ")))
