@@ -27,5 +27,5 @@ class Features @Inject()(implicit config: Configuration) {
   val useAgentClientLookup = new Feature(ConfigKeys.useAgentClientLookupFeature)
   val stubAgentClientLookup = new Feature(ConfigKeys.stubAgentClientLookupFeature)
   val stubContactPreferences = new Feature(ConfigKeys.stubContactPreferencesFeature)
-  val useContactPreference = new Feature(ConfigKeys.useContactPreferencesFeature)
+  val useContactPreferences = new Feature(ConfigKeys.useContactPreferencesFeature)
 }
