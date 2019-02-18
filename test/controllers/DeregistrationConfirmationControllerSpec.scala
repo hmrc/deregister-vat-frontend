@@ -21,7 +21,7 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import services.mocks.{MockContactPreferencesService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
 import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
-import assets.constants.ContactPreferencesTestConstants.contactPreferences
+import assets.constants.ContactPreferencesTestConstants.{contactPreferencesMax, contactPreferencesMin}
 import assets.constants.BaseTestConstants.vrn
 
 import scala.concurrent.Future
@@ -49,10 +49,10 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           lazy val result = TestDeregistrationConfirmationController.show()(request)
 
           "return 200 (OK)" in {
-            mockConfig.features.useContactPreference(false)
+            mockConfig.features.useContactPreferences(false)
             setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockContactPreferences(vrn)(Right(contactPreferences))
+            setupMockContactPreferences(vrn)(Right(contactPreferencesMin))
             setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
             status(result) shouldBe Status.OK
           }
@@ -68,10 +68,10 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           lazy val result = TestDeregistrationConfirmationController.show()(request)
 
           "return 200 (OK)" in {
-            mockConfig.features.useContactPreference(true)
+            mockConfig.features.useContactPreferences(true)
             setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockContactPreferences(vrn)(Right(contactPreferences))
+            setupMockContactPreferences(vrn)(Right(contactPreferencesMax))
             setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
             status(result) shouldBe Status.OK
           }
@@ -92,7 +92,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
         "return 200 (OK)" in {
           setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          setupMockContactPreferences(vrn)(Right(contactPreferences))
+          setupMockContactPreferences(vrn)(Right(contactPreferencesMax))
           setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
           status(result) shouldBe Status.OK
         }
@@ -111,7 +111,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     "throw an ISE if there's an error deleting the stored answers" in {
       setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
       mockAuthResult(Future.successful(mockAuthorisedIndividual))
-      setupMockContactPreferences(vrn)(Right(contactPreferences))
+      setupMockContactPreferences(vrn)(Right(contactPreferencesMax))
       setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
       status(result3) shouldBe Status.INTERNAL_SERVER_ERROR
     }
