@@ -37,21 +37,19 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
     for {
       deleteAllAStoredAnswers <- deleteAllStoredAnswersService.deleteAllAnswers
       customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
-      contactReference <- customerContactPreference.getCustomerContactPreferences(user.vrn)
+       contactReference <- customerContactPreference.getCustomerContactPreferences(user.vrn)
     }
-      yield (deleteAllAStoredAnswers, customerDetails, contactReference) match {
-        case (Right(_), Right(custDetails), Right(custPreference)) =>
-            if(appConfig.features.useContactPreference.apply().equals(false)) {
-              Ok(views.html.deregistrationConfirmation(custDetails.businessName))
-            }
-          else{
-              Ok(views.html.deregistrationConfirmation(Option(custPreference.preference)))
-              Ok(views.html.deregistrationConfirmation(custDetails.businessName))
-            }
-        case (Right(_), Right(custDetails), Right(_)) =>
-          Ok(views.html.deregistrationConfirmation(custDetails.businessName))
-          Ok(views.html.deregistrationConfirmation(Option(" ")))
 
+      yield (deleteAllAStoredAnswers, customerDetails, contactReference) match {
+
+
+        case (Right(_), Right(custDetails), Right(custPreference)) =>
+          if (appConfig.features.useContactPreferences.apply().equals(false)){
+            Ok(views.html.deregistrationConfirmation(custDetails.businessName,Option(custPreference.preference)))
+          }
+          else {
+            Ok(views.html.deregistrationConfirmation(custDetails.businessName, Option("")))
+          }
         case (Left(_), _, _) =>
           serviceErrorHandler.showInternalServerError
         case _ =>
