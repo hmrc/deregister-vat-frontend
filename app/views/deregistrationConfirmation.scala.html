@@ -20,7 +20,7 @@
 @import scala.concurrent.{ExecutionContext, Future}
 @import models.contactPreferences.ContactPreference
 
-@(businessName: Option[String])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig, customerContactPreference: ContactPreferencesServices, hc: HeaderCarrier, ec: ExecutionContext)
+@(businessName: Option[String]=None,preference: Option[String]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig,customerContactPreference: ContactPreferencesServices, hc: HeaderCarrier, ec: ExecutionContext)
 @controllers.routes.DeregistrationConfirmationController.show,
 
 
@@ -65,10 +65,14 @@ appConfig = appConfig) {
                 <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
                 <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
                     {messages("deregistrationConfirmation.yourClient")}
-                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}
+                </p>
         }
-    }else{
-        customerContactPreference.getCustomerContactPreferences("vrn")(hc,ec)  match{
+    } else {
+
+      if(appConfig.features.useContactPreferences()){
+
+      customerContactPreference match {
 
       case (digital) =>
         <p>
@@ -85,10 +89,13 @@ appConfig = appConfig) {
 
 }
 
+} else {
+
         <p>
                 {messages("deregistrationConfirmation.nonAgentText2a")}
                 {messages("deregistrationConfirmation.nonAgentText2b")}
         </p>
+   }
 
   }
 }
