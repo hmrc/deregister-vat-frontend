@@ -157,8 +157,9 @@ deregistrationConfirmation.nonAgentTextEmail1a = We will send you an email withi
 deregistrationConfirmation.nonAgentTextEmail1b = You can also go to your HMRC secure messages to find out if your request has been accepted
 deregistrationConfirmation.nonAgentTextPaper = We will send a letter to your principal place of business with an update within 15 working days.
 deregistrationConfirmation.nonAgentTextError = We will send you an update within 15 working days.
-deregistrationConfirmation.nonAgentText2a = Make sure your contact details
+deregistrationConfirmation.nonAgentText2a = Check your contact details
 deregistrationConfirmation.nonAgentText2b = are up to date.
+deregistrationConfirmation.nonAgentText3b = Make sure your contact details are up to date.
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
