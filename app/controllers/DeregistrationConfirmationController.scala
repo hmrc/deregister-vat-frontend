@@ -44,8 +44,9 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
 
         case (Right(_), Right(custDetails), Right(custPreference)) =>
 
-          if (appConfig.features.useContactPreferences.apply().equals(false)){
-            Ok(views.html.deregistrationConfirmation(custDetails.businessName,Option(custPreference.preference)))
+          if (appConfig.features.useContactPreferences()){
+
+            Ok(views.html.deregistrationConfirmation(custDetails.businessName,Some(custPreference.preference)))
           }
           else {
             Ok(views.html.deregistrationConfirmation(custDetails.businessName))
