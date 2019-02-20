@@ -21,7 +21,6 @@
 @import models.contactPreferences.ContactPreference
 
 @(businessName: Option[String]=None,preference: Option[String]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig,customerContactPreference: ContactPreferencesServices, hc: HeaderCarrier, ec: ExecutionContext)
-@controllers.routes.DeregistrationConfirmationController.show,
 
 
 @views.html.main_template(
@@ -72,34 +71,37 @@ appConfig = appConfig) {
 
       if(appConfig.features.useContactPreferences()){
 
-      customerContactPreference match {
+      preference match {
 
-      case (digital) =>
+      case Some("DIGITAL") =>
         <p>
             {messages("deregistrationConfirmation.nonAgentTextEmail1a")}
             {messages("deregistrationConfirmation.nonAgentTextEmail1b")}
         </p>
-
-       case (paper) =>
-          <p>{messages("deregistrationConfirmation.nonAgentTextPaper")}</p>
+        <p>{messages("deregistrationConfirmation.nonAgentText3b")}</p>
 
 
-      case _ =>
-         <p>{messages("deregistrationConfirmation.nonAgentTextError")}</p>
+        case Some("PAPER") => <p>{messages("deregistrationConfirmation.nonAgentTextPaper")}</p>
+                              <p>{messages("deregistrationConfirmation.nonAgentText3b")}</p>
+
+
+        case _ => <p>{messages("deregistrationConfirmation.nonAgentTextError")}</p>
+                  <p>{messages("deregistrationConfirmation.nonAgentText3b")}</p>
 
 }
 
 } else {
 
         <p>
-                {messages("deregistrationConfirmation.nonAgentText2a")}
+            <a href={appConfig.manageVatSubscriptionFrontendUrl}
+               onclick="sendGAEvent('end-journey','finish','request-received')">
+                {messages("deregistrationConfirmation.nonAgentText2a")}</a>
                 {messages("deregistrationConfirmation.nonAgentText2b")}
         </p>
    }
 
   }
 }
-
 
 <a href="@appConfig.manageVatSubscriptionFrontendUrl" class="button"
    onclick="sendGAEvent('end-journey','finish','request-received')">
