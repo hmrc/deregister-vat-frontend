@@ -83,6 +83,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
             setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+            setupAuditExtendedEvent
 
             status(result) shouldBe Status.OK
           }
@@ -186,8 +187,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     "throw an ISE if there's an error deleting the stored answers" in {
       setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
       mockAuthResult(Future.successful(mockAuthorisedIndividual))
-      setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
-      setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
       status(result3) shouldBe Status.INTERNAL_SERVER_ERROR
     }
   }
