@@ -21,9 +21,9 @@ object DeregistrationConfirmationMessages {
   val title = "We have received the request to deregister from VAT"
   val subheading = "What happens next"
 
-  val textNonAgentP1 = "If the business can deregister from VAT, we will send a confirmation letter. This usually takes 10 working days."
+  val textNonAgentP1 = "We will send you an update within 15 working days."
 
-  val textNonAgentP2 = "Check your contact details are up to date."
+  val textNonAgentP2 = "Make sure your contact details are up to date."
 
   val textAgentPrefYes = "We will send an email to agentEmail@test.com within 2 working days telling you " +
     "whether or not the request has been accepted."
