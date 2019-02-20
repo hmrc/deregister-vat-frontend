@@ -19,11 +19,7 @@ package services.mocks
 import models.contactPreferences.ContactPreference
 import models.ErrorModel
 import org.scalamock.scalatest.MockFactory
-<<<<<<< HEAD
-import services.{ContactPreferencesService, CustomerDetailsService}
-=======
-import services.ContactPreferencesServices
->>>>>>> Added audit event to DeregConfirmationController
+import services.ContactPreferencesService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 

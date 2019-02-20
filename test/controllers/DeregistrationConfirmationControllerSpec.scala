@@ -83,7 +83,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
             setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-            setupAuditExtendedEvent
 
             status(result) shouldBe Status.OK
           }
@@ -140,6 +139,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockContactPreferences(vrn)(Right(contactPreferencesPaper))
             setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+            setupAuditExtendedEvent
             status(result) shouldBe Status.OK
           }
 
