@@ -28,7 +28,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
     val text = "#content > article > p:nth-child(3)"
     val text2 = "#content > article > p:nth-child(4)"
     val button = ".button"
-    val link = "#content > article > p:nth-child(4) > a"
+    val link = "a[href*=\"change-business-details\"]"
   }
 
   "Rendering the deregistration confirmation page for non-agent user" when {
