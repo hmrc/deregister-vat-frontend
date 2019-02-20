@@ -15,12 +15,11 @@
  *@
 
 @import common.SessionKeys
-@import services.ContactPreferencesServices
 @import uk.gov.hmrc.http.HeaderCarrier
 @import scala.concurrent.{ExecutionContext, Future}
 @import models.contactPreferences.ContactPreference
 
-@(businessName: Option[String]=None,preference: Option[String]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig,customerContactPreference: ContactPreferencesServices, hc: HeaderCarrier, ec: ExecutionContext)
+@(businessName: Option[String]=None,preference: Option[String]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig, hc: HeaderCarrier, ec: ExecutionContext)
 
 
 @views.html.main_template(
@@ -69,39 +68,32 @@ appConfig = appConfig) {
         }
     } else {
 
-      if(appConfig.features.useContactPreferences()){
+        if(appConfig.features.useContactPreferences()){
 
-      preference match {
+            preference match {
 
-      case Some("DIGITAL") =>
-        <p>
-            {messages("deregistrationConfirmation.nonAgentTextEmail1a")}
-            {messages("deregistrationConfirmation.nonAgentTextEmail1b")}
-        </p>
-        <p>{messages("deregistrationConfirmation.nonAgentText3b")}</p>
+                case Some("DIGITAL") =>
+                    <p>{messages("deregistrationConfirmation.digitalPreference")}</p>
+                    <p>{messages("deregistrationConfirmation.contactDetails")}</p>
 
+                case Some("PAPER") => <p>{messages("deregistrationConfirmation.paperPreference")}</p>
+                                      <p>{messages("deregistrationConfirmation.contactDetails")}</p>
 
-        case Some("PAPER") => <p>{messages("deregistrationConfirmation.nonAgentTextPaper")}</p>
-                              <p>{messages("deregistrationConfirmation.nonAgentText3b")}</p>
+                case _ => <p>{messages("deregistrationConfirmation.contactPrefError")}</p>
+                          <p>{messages("deregistrationConfirmation.contactDetails")}</p>
 
+            }
 
-        case _ => <p>{messages("deregistrationConfirmation.nonAgentTextError")}</p>
-                  <p>{messages("deregistrationConfirmation.nonAgentText3b")}</p>
-
-}
-
-} else {
-
-        <p>
-            <a href={appConfig.manageVatSubscriptionFrontendUrl}
-               onclick="sendGAEvent('end-journey','finish','request-received')">
-                {messages("deregistrationConfirmation.nonAgentText2a")}</a>
-                {messages("deregistrationConfirmation.nonAgentText2b")}
-        </p>
-               <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
-   }
-
-  }
+        } else {
+            <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
+            <p>
+                <a href={appConfig.manageVatSubscriptionFrontendUrl}
+                   onclick="sendGAEvent('end-journey','finish','request-received')">
+                    {messages("deregistrationConfirmation.nonAgentText2a")}</a>
+                    {messages("deregistrationConfirmation.nonAgentText2b")}
+            </p>
+        }
+    }
 }
 
 <a href="@appConfig.manageVatSubscriptionFrontendUrl" class="button"

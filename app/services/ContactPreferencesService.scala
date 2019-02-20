@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactPreferencesServices @Inject()(val contactPreferences: ContactPreferenceConnector) {
+class ContactPreferencesService @Inject()(val contactPreferences: ContactPreferenceConnector) {
 
   def getCustomerContactPreferences(vrn:String)(implicit hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, ContactPreference]] =

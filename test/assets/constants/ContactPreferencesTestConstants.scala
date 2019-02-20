@@ -22,20 +22,20 @@ import play.api.libs.json.{JsObject, Json}
 
 object ContactPreferencesTestConstants {
 
-  val preferences: String = "DIGITAL"
-  val preferencePaper: String = ""
+  val preferenceDigital: String = "DIGITAL"
+  val preferencePaper: String = "PAPER"
 
 
 
   val contactPreferencesJsonMax: JsObject = Json.obj(
-    "contactPreferences" -> preferences
+    "contactPreferences" -> preferenceDigital
   )
 
-  val contactPreferencesMax: ContactPreference = ContactPreference(
-      preferences
+  val contactPreferencesDigital: ContactPreference = ContactPreference(
+      preferenceDigital
   )
 
-  val contactPreferencesMin: ContactPreference = ContactPreference(
+  val contactPreferencesPaper: ContactPreference = ContactPreference(
       preferencePaper
   )
 

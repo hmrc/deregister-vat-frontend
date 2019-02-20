@@ -28,7 +28,7 @@ import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
-import services.ContactPreferencesServices
+import services.ContactPreferencesService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test._
 
@@ -45,7 +45,7 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
 
   lazy implicit val config = app.configuration
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig
-  lazy implicit val mockUserContactPref: ContactPreferencesServices = injector.instanceOf[ContactPreferencesServices]
+  lazy implicit val mockUserContactPref: ContactPreferencesService = injector.instanceOf[ContactPreferencesService]
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
   lazy val requestWithVRN: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.CLIENT_VRN -> vrn)
   lazy val injector: Injector = app.injector

@@ -21,8 +21,10 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import services.mocks.{MockContactPreferencesService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
 import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
-import assets.constants.ContactPreferencesTestConstants.{contactPreferencesMax, contactPreferencesMin}
+import assets.constants.ContactPreferencesTestConstants.{contactPreferencesDigital, contactPreferencesPaper}
 import assets.constants.BaseTestConstants.vrn
+import org.jsoup.Jsoup
+import assets.messages.{DeregistrationConfirmationMessages => Messages}
 
 import scala.concurrent.Future
 
@@ -46,32 +48,15 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       "answers are deleted successfully and a customerDetails is received" when {
 
         "the useContactPreferences feature is disabled" should {
-          lazy val result = TestDeregistrationConfirmationController.show()(request)
-
-          "return 200 (OK)" in {
+          lazy val result = {
             mockConfig.features.useContactPreferences(false)
-            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockContactPreferences(vrn)(Right(contactPreferencesMin))
-            setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-            status(result) shouldBe Status.OK
+            TestDeregistrationConfirmationController.show()(request)
           }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-
-        }
-
-        "the useContactPreferences feature is enabled" should {
-          lazy val result = TestDeregistrationConfirmationController.show()(request)
+          lazy val document = Jsoup.parse(bodyOf(result))
 
           "return 200 (OK)" in {
-            mockConfig.features.useContactPreferences(true)
             setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockContactPreferences(vrn)(Right(contactPreferencesMax))
             setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
             status(result) shouldBe Status.OK
           }
@@ -81,29 +66,117 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
             charset(result) shouldBe Some("utf-8")
           }
 
+          "return the correct first paragraph" in {
+            document.getElementById("content").getElementsByTag("p").first().text() shouldBe Messages.p1contactPrefDisabled
+          }
+        }
+
+        "the useContactPreferences feature is enabled and set to 'DIGITAL'" should {
+          lazy val result = {
+            mockConfig.features.useContactPreferences(true)
+            TestDeregistrationConfirmationController.show()(request)
+          }
+          lazy val document = Jsoup.parse(bodyOf(result))
+
+          "return 200 (OK)" in {
+            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
+            setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+            status(result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
+
+          "return the correct first paragraph" in {
+            document.getElementById("content").getElementsByTag("p").first().text() shouldBe Messages.digitalPreference
+          }
         }
 
       }
 
-      "answers are deleted successfully and an error is received for CustomerDetails call" should {
+      "answers are deleted successfully and an error is received for CustomerDetails call" when {
 
-        lazy val result = TestDeregistrationConfirmationController.show()(request)
+        "'useContactPreference' is disabled" should {
 
-        "return 200 (OK)" in {
-          setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          setupMockContactPreferences(vrn)(Right(contactPreferencesMax))
-          setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-          status(result) shouldBe Status.OK
+          lazy val result = {
+            mockConfig.features.useContactPreferences(false)
+            TestDeregistrationConfirmationController.show()(request)
+          }
+          lazy val document = Jsoup.parse(bodyOf(result))
+
+          "return 200 (OK)" in {
+            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+            status(result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
+
+          "return the correct first paragraph" in {
+            document.getElementById("content").getElementsByTag("p").first().text() shouldBe Messages.p1contactPrefDisabled
+          }
         }
 
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
+        "'useContactPreference' is enabled and set to 'PAPER'" should {
+
+          lazy val result = {
+            mockConfig.features.useContactPreferences(true)
+            TestDeregistrationConfirmationController.show()(request)
+          }
+          lazy val document = Jsoup.parse(bodyOf(result))
+
+          "return 200 (OK)" in {
+            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            setupMockContactPreferences(vrn)(Right(contactPreferencesPaper))
+            setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+            status(result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
+
+          "return the correct first paragraph" in {
+            document.getElementById("content").getElementsByTag("p").first().text() shouldBe Messages.paperPreference
+          }
         }
 
+        "'useContactPreference' and returns an error" should {
+
+          lazy val result = {
+            mockConfig.features.useContactPreferences(true)
+            TestDeregistrationConfirmationController.show()(request)
+          }
+          lazy val document = Jsoup.parse(bodyOf(result))
+
+          "return 200 (OK)" in {
+            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            setupMockContactPreferences(vrn)(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "I got nothing")))
+            setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+            status(result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
+
+          "return the correct first paragraph" in {
+            document.getElementById("content").getElementsByTag("p").first().text() shouldBe Messages.contactPrefError
+          }
+        }
       }
-
     }
 
     lazy val result3 = TestDeregistrationConfirmationController.show()(request)
@@ -111,7 +184,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     "throw an ISE if there's an error deleting the stored answers" in {
       setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
       mockAuthResult(Future.successful(mockAuthorisedIndividual))
-      setupMockContactPreferences(vrn)(Right(contactPreferencesMax))
+      setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
       setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
       status(result3) shouldBe Status.INTERNAL_SERVER_ERROR
     }

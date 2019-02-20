@@ -19,7 +19,7 @@ package services.mocks
 import models.contactPreferences.ContactPreference
 import models.{ChangeIndicatorModel, CustomerDetails, ErrorModel}
 import org.scalamock.scalatest.MockFactory
-import services.{ContactPreferencesServices, CustomerDetailsService}
+import services.{ContactPreferencesService, CustomerDetailsService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test.UnitSpec
 
@@ -27,7 +27,7 @@ import scala.concurrent.ExecutionContext
 
 trait MockContactPreferencesService extends UnitSpec with MockFactory {
 
-  val mockContactPreferencesService: ContactPreferencesServices = mock[ContactPreferencesServices]
+  val mockContactPreferencesService: ContactPreferencesService = mock[ContactPreferencesService]
 
   def setupMockContactPreferences(vrn: String)(response: Either[ErrorModel, ContactPreference])(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     (mockContactPreferencesService.getCustomerContactPreferences(_: String)(_: HeaderCarrier, _: ExecutionContext))
