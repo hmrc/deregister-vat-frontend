@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package testOnly.models
+package services
 
-case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
-                              useAgentClientLookupFeature: Boolean,
-                              stubAgentClientLookup: Boolean,
-                              stubContactPreferences: Boolean,
-                              useContactPreferencesFeature:Boolean
-                             )
+import connectors.{ContactPreferenceConnector, DeregisterVatConnector}
+import javax.inject.{Inject, Singleton}
+import models.ErrorModel
+import models.contactPreferences.ContactPreference
+import uk.gov.hmrc.http.HeaderCarrier
 
+import scala.concurrent.{ExecutionContext, Future}
+
+class ContactPreferencesService @Inject()(val contactPreferences: ContactPreferenceConnector) {
+
+  def getCustomerContactPreferences(vrn:String)(implicit hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, ContactPreference]] =
+    contactPreferences.getContactPreference(vrn)
+}

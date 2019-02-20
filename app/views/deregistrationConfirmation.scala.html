@@ -15,8 +15,12 @@
  *@
 
 @import common.SessionKeys
+@import uk.gov.hmrc.http.HeaderCarrier
+@import scala.concurrent.{ExecutionContext, Future}
+@import models.contactPreferences.ContactPreference
 
-@(businessName: Option[String])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(businessName: Option[String]=None,preference: Option[String]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig, hc: HeaderCarrier, ec: ExecutionContext)
+
 
 @views.html.main_template(
 title = messages("deregistrationConfirmation.title"),
@@ -59,19 +63,38 @@ appConfig = appConfig) {
                 <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
                 <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
                     {messages("deregistrationConfirmation.yourClient")}
-                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}
+                </p>
         }
-    }else{
-        <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
-        <p>
-            <a href={appConfig.manageVatSubscriptionFrontendUrl}
-               onclick="sendGAEvent('end-journey','finish','request-received')">
-                {messages("deregistrationConfirmation.nonAgentText2a")}</a>
-            {messages("deregistrationConfirmation.nonAgentText2b")}
-        </p>
+    } else {
+
+        if(appConfig.features.useContactPreferences()){
+
+            preference match {
+
+                case Some("DIGITAL") =>
+                    <p>{messages("deregistrationConfirmation.digitalPreference")}</p>
+                    <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+
+                case Some("PAPER") => <p>{messages("deregistrationConfirmation.paperPreference")}</p>
+                                      <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+
+                case _ => <p>{messages("deregistrationConfirmation.contactPrefError")}</p>
+                          <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+
+            }
+
+        } else {
+            <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
+            <p>
+                <a href={appConfig.manageVatSubscriptionFrontendUrl}
+                   onclick="sendGAEvent('end-journey','finish','request-received')">
+                    {messages("deregistrationConfirmation.nonAgentText2a")}</a>
+                    {messages("deregistrationConfirmation.nonAgentText2b")}
+            </p>
+        }
     }
 }
-
 
 <a href="@appConfig.manageVatSubscriptionFrontendUrl" class="button"
    onclick="sendGAEvent('end-journey','finish','request-received')">

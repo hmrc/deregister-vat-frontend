@@ -14,12 +14,29 @@
  * limitations under the License.
  */
 
-package testOnly.models
+package assets.constants
 
-case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
-                              useAgentClientLookupFeature: Boolean,
-                              stubAgentClientLookup: Boolean,
-                              stubContactPreferences: Boolean,
-                              useContactPreferencesFeature:Boolean
-                             )
 
+import models.contactPreferences.ContactPreference
+import play.api.libs.json.{JsObject, Json}
+
+object ContactPreferencesTestConstants {
+
+  val preferenceDigital: String = "DIGITAL"
+  val preferencePaper: String = "PAPER"
+
+
+
+  val contactPreferencesJsonMax: JsObject = Json.obj(
+    "contactPreferences" -> preferenceDigital
+  )
+
+  val contactPreferencesDigital: ContactPreference = ContactPreference(
+      preferenceDigital
+  )
+
+  val contactPreferencesPaper: ContactPreference = ContactPreference(
+      preferencePaper
+  )
+
+}

@@ -28,16 +28,17 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
     val text = "#content > article > p:nth-child(3)"
     val text2 = "#content > article > p:nth-child(4)"
     val button = ".button"
-    val link = "#content > article > p:nth-child(4) > a"
+    val link = "a[href*=\"change-business-details\"]"
   }
 
-  "Rendering the deregistration confirmation page for non-agent user" when {
+  "Rendering the deregistration confirmation page for a non-agent user" when {
 
-    "the user is not an agent" should {
-      lazy val view = views.html.deregistrationConfirmation(None)(user, messages, mockConfig)
+    "the 'useContactPrefence' feature is disabled" should {
+      lazy val view = views.html.deregistrationConfirmation()(user, messages, mockConfig, hc, ec)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
+        mockConfig.features.useContactPreferences(false)
         document.title shouldBe DeregistrationConfirmationMessages.title
       }
 
@@ -50,29 +51,128 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
 
       "have the correct first paragraph" in {
-        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textNonAgentP1
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.p1contactPrefDisabled
       }
 
       "have the correct second paragraph" in {
-        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.textNonAgentP2
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.checkContactDetails
       }
 
       "have a link to manage vat subscription" in {
         element(Selectors.link).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
       }
 
-      "have the correct continue button text" in {
+      "have the correct continue button text and url" in {
         elementText(Selectors.button) shouldBe CommonMessages.finish
-      }
-
-      "have the correct continue button url" in {
         element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
       }
     }
 
-    "the user is an agent with verifiedAgentEmail (Yes pref inferred)" should {
+    "the 'useContactPreference' feature is enabled" when {
+
+      "contactPreferences returns 'DIGITAL'" should {
+
+        lazy val view = views.html.deregistrationConfirmation(preference = Some("DIGITAL"))(user, messages, mockConfig, hc, ec)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct document title" in {
+          mockConfig.features.useContactPreferences(true)
+          document.title shouldBe DeregistrationConfirmationMessages.title
+        }
+
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+        }
+
+        "have the correct page subheading" in {
+          elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+        }
+
+        "have the correct first paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.digitalPreference
+        }
+
+        "have the correct second paragraph" in {
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.contactDetails
+        }
+
+        "have the correct continue button text and url" in {
+          elementText(Selectors.button) shouldBe CommonMessages.finish
+          element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+        }
+      }
+
+      "contactPreferences returns 'PAPER'" should {
+
+        lazy val view = views.html.deregistrationConfirmation(preference = Some("PAPER"))(user, messages, mockConfig, hc, ec)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct document title" in {
+          mockConfig.features.useContactPreferences(true)
+          document.title shouldBe DeregistrationConfirmationMessages.title
+        }
+
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+        }
+
+        "have the correct page subheading" in {
+          elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+        }
+
+        "have the correct first paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.paperPreference
+        }
+
+        "have the correct second paragraph" in {
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.contactDetails
+        }
+
+        "have the correct continue button text and url" in {
+          elementText(Selectors.button) shouldBe CommonMessages.finish
+          element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+        }
+      }
+
+      "contactPreferences returns an error" should {
+
+        lazy val view = views.html.deregistrationConfirmation()(user, messages, mockConfig, hc, ec)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct document title" in {
+          mockConfig.features.useContactPreferences(true)
+          document.title shouldBe DeregistrationConfirmationMessages.title
+        }
+
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+        }
+
+        "have the correct page subheading" in {
+          elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+        }
+
+        "have the correct first paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.contactPrefError
+        }
+
+        "have the correct second paragraph" in {
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.contactDetails
+        }
+
+        "have the correct continue button text and url" in {
+          elementText(Selectors.button) shouldBe CommonMessages.finish
+          element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+        }
+      }
+    }
+  }
+
+  "Rendering the deregistration confirmation page for an agent" when {
+
+    "the user has verifiedAgentEmail (Yes pref inferred)" should {
       val businessName: Option[String] = Some("Fake Business Name Limited")
-      lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
+      lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig,hc,ec)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -104,9 +204,9 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
     }
 
-    "the user is an agent without a verifiedAgentEmail (No pref inferred)" should {
+    "the user is without a verifiedAgentEmail (No pref inferred)" should {
       lazy val noBusinessName: Option[String] = None
-      lazy val view = views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig)
+      lazy val view = views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig,hc,ec)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {

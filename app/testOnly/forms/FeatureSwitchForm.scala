@@ -28,7 +28,8 @@ object FeatureSwitchForm {
       ConfigKeys.simpleAuthFeature -> boolean,
       ConfigKeys.useAgentClientLookupFeature -> boolean,
       ConfigKeys.stubAgentClientLookupFeature -> boolean,
-      ConfigKeys.stubContactPreferencesFeature -> boolean
+      ConfigKeys.stubContactPreferencesFeature -> boolean,
+      ConfigKeys.useContactPreferencesFeature -> boolean
       )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 
