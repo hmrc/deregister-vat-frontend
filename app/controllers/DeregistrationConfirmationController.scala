@@ -16,13 +16,15 @@
 
 package controllers
 
-import config.{AppConfig, ConfigKeys, ServiceErrorHandler}
+import audit.models.ContactPreferenceAuditModel
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{ContactPreferencesService, CustomerDetailsService, DeleteAllStoredAnswersService}
 import testOnly.views.html.featureSwitch
+import services.{AuditService, ContactPreferencesService, CustomerDetailsService, DeleteAllStoredAnswersService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesApi,
@@ -30,6 +32,7 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
                                                      val customerDetailsService: CustomerDetailsService,
+                                                     val auditService: AuditService,
                                                      implicit val customerContactPreference: ContactPreferencesService,
                                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
@@ -47,11 +50,17 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
         case (_, Right(custDetails), Right(custPreference)) =>
             Ok(views.html.deregistrationConfirmation(custDetails.businessName,Some(custPreference.preference)))
         case (_, _, Right(pref)) =>
+
+          auditService.auditExtendedEvent(
+            ContactPreferenceAuditModel(user.vrn, pref.preference)
+          )
+
           Ok(views.html.deregistrationConfirmation(preference = Some(pref.preference)))
         case _ =>
           Ok(views.html.deregistrationConfirmation())
       }
     } else {
+
       for {
         deleteAllAStoredAnswers <- deleteAllStoredAnswersService.deleteAllAnswers
         customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
