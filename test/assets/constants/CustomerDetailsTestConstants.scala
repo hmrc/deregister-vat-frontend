@@ -60,6 +60,7 @@ object CustomerDetailsTestConstants {
   )
 
   val pendingDeregFalse: ChangeIndicatorModel = ChangeIndicatorModel(Some(PendingDeregModel(dereg = false)))
+  val pendingDeregTrue: ChangeIndicatorModel = ChangeIndicatorModel(Some(PendingDeregModel(dereg = true)))
 
   val noPendingDereg: ChangeIndicatorModel = ChangeIndicatorModel(None)
 

@@ -206,4 +206,36 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
     }
   }
 
+  "Calling .backLink" when {
+
+    "dereg reason is Ceased" should {
+
+      val result = TestVATAccountsController.backLink(None, Ceased)
+
+      s"return ${controllers.routes.CeasedTradingDateController.show().url}" in {
+        result shouldBe controllers.routes.CeasedTradingDateController.show().url
+      }
+    }
+
+    "dereg reason is not Ceased" when {
+
+      "last turnover was below threshold" should {
+
+        val result = TestVATAccountsController.backLink(Some(Yes), BelowThreshold)
+
+        s"return ${controllers.routes.NextTaxableTurnoverController.show().url}" in {
+          result shouldBe controllers.routes.NextTaxableTurnoverController.show().url
+        }
+      }
+
+      "last turnover was above threshold" should {
+
+        val result = TestVATAccountsController.backLink(Some(No), BelowThreshold)
+
+        s"return ${controllers.routes.WhyTurnoverBelowController.show().url}" in {
+          result shouldBe controllers.routes.WhyTurnoverBelowController.show().url
+        }
+      }
+    }
+  }
 }
