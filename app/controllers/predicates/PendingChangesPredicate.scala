@@ -34,7 +34,7 @@ class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsS
                                         val serviceErrorHandler: ServiceErrorHandler,
                                         implicit val messagesApi: MessagesApi,
                                         implicit val appConfig: AppConfig,
-                                        implicit val ec: ExecutionContext)extends ActionRefiner[User, User] with I18nSupport {
+                                        implicit val ec: ExecutionContext) extends ActionRefiner[User, User] with I18nSupport {
 
   override def refine[A](request: User[A]): Future[Either[Result, User[A]]] = {
 
@@ -56,7 +56,7 @@ class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsS
         pending.deregistration match {
           case Some(PendingDeregModel(true)) =>
             Logger.warn("[PendingChangesPredicate][getCustomerInfoCall] - " +
-              "Deregistration pending. Throwing ISE.")
+              "Deregistration pending. Redirecting to Manage VAT service.")
             Left(Redirect(appConfig.manageVatSubscriptionFrontendUrl).addingToSession(pendingDeregKey -> "true"))
           case Some(PendingDeregModel(false)) =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +

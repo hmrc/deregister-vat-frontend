@@ -19,17 +19,16 @@ package controllers
 import models.{DeregisterVatSuccess, ErrorModel}
 import play.api.http.Status
 import play.api.test.Helpers._
-import services.mocks.{MockContactPreferencesService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
+import services.mocks.{MockAuditService, MockContactPreferencesService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
 import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
 import assets.constants.ContactPreferencesTestConstants.{contactPreferencesDigital, contactPreferencesPaper}
 import assets.constants.BaseTestConstants.vrn
 import org.jsoup.Jsoup
 import assets.messages.{DeregistrationConfirmationMessages => Messages}
-
 import scala.concurrent.Future
 
 class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
-  with MockCustomerDetailsService with MockContactPreferencesService {
+  with MockCustomerDetailsService with MockContactPreferencesService with MockAuditService {
 
   object TestDeregistrationConfirmationController
     extends DeregistrationConfirmationController(
@@ -38,6 +37,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       mockDeleteAllStoredAnswersService,
       serviceErrorHandler,
       mockCustomerDetailsService,
+      mockAuditService,
       mockContactPreferencesService,
       mockConfig)
 
@@ -83,6 +83,8 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
             setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+            setupAuditExtendedEvent
+
             status(result) shouldBe Status.OK
           }
 
@@ -138,6 +140,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockContactPreferences(vrn)(Right(contactPreferencesPaper))
             setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+            setupAuditExtendedEvent
             status(result) shouldBe Status.OK
           }
 
@@ -184,8 +187,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     "throw an ISE if there's an error deleting the stored answers" in {
       setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
       mockAuthResult(Future.successful(mockAuthorisedIndividual))
-      setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
-      setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
       status(result3) shouldBe Status.INTERNAL_SERVER_ERROR
     }
   }

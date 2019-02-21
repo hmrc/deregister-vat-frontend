@@ -17,12 +17,12 @@
 package controllers.predicates
 
 import mocks.MockAuth
-import org.jsoup.Jsoup
 import play.api.http.Status
 import play.api.mvc.Results.Ok
 import play.api.mvc.{Action, AnyContent}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.{NoActiveSession, _}
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
@@ -125,6 +125,20 @@ class AuthoriseAsAgentSpec extends TestUtil with MockAuth {
 
         "redirect to the VAT Agent Client Lookup Unauthorised view" in {
           redirectLocation(result) shouldBe Some(mockConfig.agentClientUnauthorisedUrl)
+        }
+      }
+
+      "there is no active session" should {
+
+        lazy val result = target()(requestWithVRN)
+
+        "return 303" in {
+          mockAuth(Future.failed(MissingBearerToken()))
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        s"redirect to ${mockConfig.signInUrl}" in {
+          redirectLocation(result) shouldBe Some(mockConfig.signInUrl)
         }
       }
     }

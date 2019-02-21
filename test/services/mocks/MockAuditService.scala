@@ -16,23 +16,20 @@
 
 package services.mocks
 
-import models.contactPreferences.ContactPreference
-import models.ErrorModel
+import audit.models.ExtendedAuditModel
+import audit.services.AuditService
 import org.scalamock.scalatest.MockFactory
-import services.ContactPreferencesService
+import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext
 
-trait MockContactPreferencesService extends UnitSpec with MockFactory {
+trait MockAuditService extends MockFactory {
 
-  val mockContactPreferencesService: ContactPreferencesService = mock[ContactPreferencesService]
+  val mockAuditService: AuditService = mock[AuditService]
 
-  def setupMockContactPreferences(vrn: String)(response: Either[ErrorModel, ContactPreference])(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
-    (mockContactPreferencesService.getCustomerContactPreferences(_: String)(_: HeaderCarrier, _: ExecutionContext))
-      .expects(vrn, *, *)
-      .returns(response)
+  def setupAuditExtendedEvent[T <: ExtendedAuditModel]()(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
+    (mockAuditService.auditExtendedEvent(_: T)(_: HeaderCarrier, _: ExecutionContext, _: Writes[T]))
+      .expects(*, *, *, *)
   }
-
 }

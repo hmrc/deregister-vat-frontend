@@ -113,8 +113,12 @@ class DeregistrationInfoSpec extends TestUtil {
         deregInfoDate(Some(laterDateModel)) shouldBe laterDate
       }
 
-      "return todays date when no CeasedTradingDate is passed to it" in {
+      "return today's date when no CeasedTradingDate is passed to it" in {
         deregInfoDate(None) shouldBe LocalDate.now
+      }
+
+      "return today's date when DateModel date is invalid" in {
+        deregInfoDate(Some(DateModel(dateDay = 32, dateMonth = 1, dateYear = 2019))) shouldBe LocalDate.now
       }
     }
 

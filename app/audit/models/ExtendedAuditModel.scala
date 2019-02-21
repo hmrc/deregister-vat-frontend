@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package services
+package audit.models
 
-import connectors.ContactPreferenceConnector
-import javax.inject.Inject
-import models.ErrorModel
-import models.contactPreferences.ContactPreference
-import uk.gov.hmrc.http.HeaderCarrier
-import scala.concurrent.{ExecutionContext, Future}
+import play.api.libs.json.JsValue
 
-class ContactPreferencesService @Inject()(val contactPreferences: ContactPreferenceConnector) {
-
-  def getCustomerContactPreferences(vrn: String)
-                                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, ContactPreference]] =
-    contactPreferences.getContactPreference(vrn)
+trait ExtendedAuditModel {
+  val transactionName: String
+  val detail: JsValue
+  val auditType: String
 }

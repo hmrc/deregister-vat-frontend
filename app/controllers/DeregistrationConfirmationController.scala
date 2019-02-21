@@ -16,53 +16,64 @@
 
 package controllers
 
-import config.{AppConfig, ConfigKeys, ServiceErrorHandler}
+import audit.models.ContactPreferenceAuditModel
+import audit.services.AuditService
+import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import javax.inject.Inject
+import models.User
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{ContactPreferencesService, CustomerDetailsService, DeleteAllStoredAnswersService}
-import testOnly.views.html.featureSwitch
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
+import scala.concurrent.{ExecutionContext, Future}
 
 class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesApi,
                                                      val authentication: AuthPredicate,
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
                                                      val customerDetailsService: CustomerDetailsService,
+                                                     val auditService: AuditService,
                                                      implicit val customerContactPreference: ContactPreferencesService,
                                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
 
-    if(appConfig.features.useContactPreferences()){
+    deleteAllStoredAnswersService.deleteAllAnswers flatMap {
 
-      for {
-        deleteAllAStoredAnswers <- deleteAllStoredAnswersService.deleteAllAnswers
-        customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
-        contactPreference <- customerContactPreference.getCustomerContactPreferences(user.vrn)
-      } yield (deleteAllAStoredAnswers, customerDetails, contactPreference) match {
-        case (Left(_),_,_) =>
-          serviceErrorHandler.showInternalServerError
-        case (_, Right(custDetails), Right(custPreference)) =>
-            Ok(views.html.deregistrationConfirmation(custDetails.businessName,Some(custPreference.preference)))
-        case (_, _, Right(pref)) =>
-          Ok(views.html.deregistrationConfirmation(preference = Some(pref.preference)))
-        case _ =>
-          Ok(views.html.deregistrationConfirmation())
-      }
+      case Right(_) =>
+
+        val serviceCalls = for {
+          customerDetailsCall <- customerDetailsService.getCustomerDetails(user.vrn)
+          contactPreferenceCall <- getContactPreference
+        } yield (customerDetailsCall, contactPreferenceCall)
+
+        serviceCalls.map { result =>
+
+          val businessName: Option[String] = result._1.fold(_ => None, _.businessName)
+          val contactPreference: Option[String] = result._2.fold(_ => None, {
+            model =>
+              auditService.auditExtendedEvent(ContactPreferenceAuditModel(user.vrn, model.preference))
+              Some(model.preference)
+          })
+
+          Ok(views.html.deregistrationConfirmation(businessName, contactPreference))
+        }
+
+      case Left(_) =>
+        Logger.warn("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
+        Future.successful(serviceErrorHandler.showInternalServerError)
+    }
+  }
+
+  private def getContactPreference(implicit user: User[AnyContent], hc: HeaderCarrier, ec: ExecutionContext) = {
+    if (!user.isAgent && appConfig.features.useContactPreferences()) {
+      customerContactPreference.getCustomerContactPreferences(user.vrn)(hc, ec)
     } else {
-      for {
-        deleteAllAStoredAnswers <- deleteAllStoredAnswersService.deleteAllAnswers
-        customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
-      } yield (deleteAllAStoredAnswers, customerDetails) match {
-        case (Left(_), _) =>
-          serviceErrorHandler.showInternalServerError
-        case (_, Right(custDetails)) =>
-          Ok(views.html.deregistrationConfirmation(custDetails.businessName))
-        case _ =>
-          Ok(views.html.deregistrationConfirmation(None))
-      }
+      Future(Left(None))(ec)
     }
   }
 }
