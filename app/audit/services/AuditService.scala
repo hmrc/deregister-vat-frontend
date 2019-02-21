@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package services
+package audit.services
 
 import audit.models.ExtendedAuditModel
 import javax.inject.{Inject, Singleton}

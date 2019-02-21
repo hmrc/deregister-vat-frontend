@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package services
+package audit.services
 
 import audit.mocks.MockAuditConnector
 import audit.models.ContactPreferenceAuditModel

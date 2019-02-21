@@ -17,6 +17,7 @@
 package controllers
 
 import audit.models.ContactPreferenceAuditModel
+import audit.services.AuditService
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import javax.inject.Inject
@@ -24,9 +25,10 @@ import models.User
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{AuditService, ContactPreferencesService, CustomerDetailsService, DeleteAllStoredAnswersService}
+import services.{ContactPreferencesService, CustomerDetailsService, DeleteAllStoredAnswersService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesApi,
