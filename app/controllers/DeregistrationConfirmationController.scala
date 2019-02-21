@@ -20,13 +20,14 @@ import audit.models.ContactPreferenceAuditModel
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import javax.inject.Inject
+import models.User
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{AuditService, ContactPreferencesService, CustomerDetailsService, DeleteAllStoredAnswersService}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesApi,
                                                      val authentication: AuthPredicate,
@@ -43,25 +44,34 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
 
       case Right(_) =>
 
-        for {
-          customerDetails <- customerDetailsService.getCustomerDetails(user.vrn)
-          contactPreference <- if (!user.isAgent && appConfig.features.useContactPreferences()) {
-            customerContactPreference.getCustomerContactPreferences(user.vrn)
-          } else {
-            Future(Left(None))
-          }
-        } yield Ok(views.html.deregistrationConfirmation(
-          customerDetails.fold(_ => None, _.businessName),
-          contactPreference.fold(_ => None, {
+        val serviceCalls = for {
+          customerDetailsCall <- customerDetailsService.getCustomerDetails(user.vrn)
+          contactPreferenceCall <- getContactPreference
+        } yield (customerDetailsCall, contactPreferenceCall)
+
+        serviceCalls.map { result =>
+
+          val businessName: Option[String] = result._1.fold(_ => None, _.businessName)
+          val contactPreference: Option[String] = result._2.fold(_ => None, {
             model =>
               auditService.auditExtendedEvent(ContactPreferenceAuditModel(user.vrn, model.preference))
               Some(model.preference)
           })
-        ))
+
+          Ok(views.html.deregistrationConfirmation(businessName, contactPreference))
+        }
 
       case Left(_) =>
         Logger.warn("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
         Future.successful(serviceErrorHandler.showInternalServerError)
+    }
+  }
+
+  private def getContactPreference(implicit user: User[AnyContent], hc: HeaderCarrier, ec: ExecutionContext) = {
+    if (!user.isAgent && appConfig.features.useContactPreferences()) {
+      customerContactPreference.getCustomerContactPreferences(user.vrn)(hc, ec)
+    } else {
+      Future(Left(None))(ec)
     }
   }
 }

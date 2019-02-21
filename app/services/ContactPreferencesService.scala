@@ -16,17 +16,16 @@
 
 package services
 
-import connectors.{ContactPreferenceConnector, DeregisterVatConnector}
-import javax.inject.{Inject, Singleton}
+import connectors.ContactPreferenceConnector
+import javax.inject.Inject
 import models.ErrorModel
 import models.contactPreferences.ContactPreference
 import uk.gov.hmrc.http.HeaderCarrier
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContactPreferencesService @Inject()(val contactPreferences: ContactPreferenceConnector) {
 
-  def getCustomerContactPreferences(vrn:String)(implicit hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[Either[ErrorModel, ContactPreference]] =
+  def getCustomerContactPreferences(vrn: String)
+                                   (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, ContactPreference]] =
     contactPreferences.getContactPreference(vrn)
 }
