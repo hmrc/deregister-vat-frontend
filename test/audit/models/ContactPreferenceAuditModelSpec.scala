@@ -25,6 +25,7 @@ class ContactPreferenceAuditModelSpec extends TestUtil {
   val auditType = "ContactPreference"
   val preference = "DIGITAL"
   val vrn = "999999999"
+  val action = "DeregistrationContactPreference"
 
   "The ContactPreferenceAuditModel" should {
 
@@ -41,7 +42,8 @@ class ContactPreferenceAuditModelSpec extends TestUtil {
     "Have the correct details for the audit event" in {
       testGetContactPreferenceAuditModel.detail shouldBe Json.obj(
         "vrn" -> vrn,
-        "contactPreference" -> preference
+        "contactPreference" -> preference,
+        "action" -> action
       )
     }
   }
