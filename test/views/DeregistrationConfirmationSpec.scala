@@ -33,7 +33,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
   "Rendering the deregistration confirmation page for a non-agent user" when {
 
-    "the 'useContactPrefence' feature is disabled" should {
+    "the 'useContactPreference' feature is disabled" should {
       lazy val view = views.html.deregistrationConfirmation()(user, messages, mockConfig, hc, ec)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
