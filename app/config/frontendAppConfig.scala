@@ -45,11 +45,17 @@ trait AppConfig extends ServicesConfig {
   val clientServicesGovUkGuidance: String
   val govUkCancelVatRegistration: String
   val manageVatSubscriptionFrontendUrl: String
+
   def vatAgentClientLookupHandoff(redirectUrl: String): String
+
   val vatAgentClientLookupFrontendUrl: String
+
   def vatAgentClientLookupUnauthorised(redirectUrl: String): String
+
   def agentClientLookupUrl: String
+
   def agentClientUnauthorisedUrl: String
+
   val vatSubscriptionUrl: String
   val deregisterVatUrl: String
   val deregThreshold: Int
@@ -59,6 +65,7 @@ trait AppConfig extends ServicesConfig {
   val timeoutPeriod: Int
   val timeoutCountdown: Int
   val contactPreferencesService: String
+
   def contactPreferencesUrl(vrn: String): String
 }
 
@@ -112,26 +119,18 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
     if (features.stubAgentClientLookup()) {
       testOnly.controllers.routes.StubAgentClientLookupController.unauth(controllers.routes.DeregisterForVATController.show().url).url
     } else {
-      if (features.useAgentClientLookup()) {
-        vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url)
-      } else {
-        manageVatSubscriptionFrontendUrl
-      }
+      vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url)
     }
 
   override def agentClientLookupUrl: String =
     if (features.stubAgentClientLookup()) {
       testOnly.controllers.routes.StubAgentClientLookupController.show(controllers.routes.DeregisterForVATController.show().url).url
     } else {
-      if (features.useAgentClientLookup()) {
-        vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show().url)
-      } else {
-        manageVatSubscriptionFrontendUrl
-      }
+      vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show().url)
     }
 
   override lazy val contactPreferencesService: String = {
-    if(features.stubContactPreferences()){
+    if (features.stubContactPreferences()) {
       baseUrl("vat-subscription-dynamic-stub")
     } else {
       baseUrl(Keys.contactPreferencesService)
@@ -158,7 +157,7 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
 
   override lazy val agentServicesGovUkGuidance: String = getString(Keys.govUkSetupAgentServices)
 
-  override lazy val clientServicesGovUkGuidance:String = getString(Keys.govUkSetupClientServices)
+  override lazy val clientServicesGovUkGuidance: String = getString(Keys.govUkSetupClientServices)
 
   override lazy val govUkCancelVatRegistration: String = getString(Keys.govUkCancelVatRegistration)
 

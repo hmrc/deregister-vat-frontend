@@ -32,7 +32,6 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
     Ok(testOnly.views.html.featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         simpleAuthEnabled = appConfig.features.simpleAuth(),
-        useAgentClientLookupFeature = appConfig.features.useAgentClientLookup(),
         stubAgentClientLookup = appConfig.features.stubAgentClientLookup(),
         stubContactPreferences = appConfig.features.stubContactPreferences(),
         useContactPreferencesFeature = appConfig.features.useContactPreferences()
@@ -49,7 +48,6 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.simpleAuth(model.simpleAuthEnabled)
-    appConfig.features.useAgentClientLookup(model.useAgentClientLookupFeature)
     appConfig.features.stubAgentClientLookup(model.stubAgentClientLookup)
     appConfig.features.stubContactPreferences(model.stubContactPreferences)
     appConfig.features.useContactPreferences(model.useContactPreferencesFeature)
