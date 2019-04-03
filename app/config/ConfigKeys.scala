@@ -38,7 +38,6 @@ object ConfigKeys {
   val governmentGatewayHost: String = "government-gateway.host"
 
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
-  val useAgentClientLookupFeature: String = "features.useAgentClientLookup"
   val stubAgentClientLookupFeature: String = "features.stubAgentClientLookup"
   val stubContactPreferencesFeature: String = "features.stubContactPreferences.enabled"
   val useContactPreferencesFeature: String = "features.useContactPreferencesFeature.enabled"
