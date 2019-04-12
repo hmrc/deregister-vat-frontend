@@ -21,6 +21,7 @@ import config.features.Features
 import play.api.{Configuration, Mode}
 import play.api.mvc.Call
 import play.api.Mode.Mode
+import play.api.i18n.Lang
 
 class MockAppConfig(implicit val runModeConfiguration: Configuration) extends AppConfig {
   val mode: Mode = Mode.Test
@@ -59,5 +60,12 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
   override val timeoutPeriod: Int = 200
   override val contactPreferencesService: String = ""
   override def contactPreferencesUrl(vrn: String): String = s"contact-preferences/vat/vrn/$vrn"
+
+  override val languageFallbackUrl: String = "/vat-through-software/account/deregister/"
+  override val languageMap: Map[String, Lang] = Map(
+    "english" -> Lang("en"),
+    "cymraeg" -> Lang("cy")
+  )
+  override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchLanguage(lang)
 }
 

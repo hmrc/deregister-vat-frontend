@@ -50,3 +50,6 @@ POST       /outstanding-invoices            controllers.OutstandingInvoicesContr
 #Sign Out Routes
 GET        /sign-out                        controllers.SignOutController.signOut(authorised: Boolean, timeout: Boolean ?= false)
 GET        /timeout                         controllers.SignOutController.timeout
+
+#Language Controller
+GET        /language/:lang                  controllers.LanguageController.switchLanguage(lang: String)
