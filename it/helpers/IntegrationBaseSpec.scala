@@ -103,7 +103,11 @@ trait IntegrationBaseSpec extends UnitSpec
     "microservice.services.deregister-vat.host" -> mockHost,
     "microservice.services.deregister-vat.port" -> mockPort,
     "microservice.services.vat-subscription.port" -> mockPort,
-    "microservice.services.vat-subscription.host" -> mockHost
+    "microservice.services.vat-subscription.host" -> mockHost,
+    "microservice.services.contact-preferences.host" -> mockHost,
+    "microservice.services.contact-preferences.port" -> mockPort,
+    "microservice.services.vat-subscription-dynamic-stub.port" -> mockPort,
+    "microservice.services.vat-subscription-dynamic-stub.host" -> mockHost
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
