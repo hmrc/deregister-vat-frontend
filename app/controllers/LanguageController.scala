@@ -33,7 +33,7 @@ class LanguageController @Inject()(
 
   protected[controllers] def fallbackURL: String = appConfig.languageFallbackUrl
 
-  def languageMap: Map[String, Lang] = appConfig.languageMap
+  private def languageMap: Map[String, Lang] = appConfig.languageMap
 
   def switchLanguage(language: String): Action[AnyContent] = Action { implicit request =>
 

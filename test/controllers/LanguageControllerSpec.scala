@@ -18,7 +18,7 @@ package controllers
 
 import play.api.Play
 import play.api.http.Status.SEE_OTHER
-import play.api.mvc.{AnyContentAsEmpty, Cookie}
+import play.api.mvc.{AnyContentAsEmpty, Call, Cookie}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
@@ -65,6 +65,14 @@ class LanguageControllerSpec extends ControllerBaseSpec {
         cookies(result).get(Play.langCookieName(messagesApi)) shouldBe Some(Cookie("PLAY_LANG", "en", None, "/", None, secure = false, httpOnly = false))
         redirectLocation(result) shouldBe Some(expectedResponse)
       }
+    }
+  }
+
+  "langToCall" should {
+    "return the correct call" in {
+      lazy val result: Call = controller.langToCall("english")
+
+      result.url shouldBe "/vat-through-software/account/deregister/language/english"
     }
   }
 }
