@@ -1,0 +1,25 @@
+month.1 = Ionawr
+month.2 = Chwefror
+month.3 = Mawrth
+month.4 = Ebrill
+month.5 = Mai
+month.6 = Mehefin
+month.7 = Gorffennaf
+month.8 = Awst
+month.9 = Medi
+month.10 = Hydref
+month.11 = Tachwedd
+month.12 = Rhagfyr
+
+month.short.1 = Ion
+month.short.2 = Chwe
+month.short.3 = Maw
+month.short.4 = Ebr
+month.short.5 = Mai
+month.short.6 = Meh
+month.short.7 = Gorff
+month.short.8 = Awst
+month.short.9 = Medi
+month.short.10 = Hyd
+month.short.11 = Tach
+month.short.12 = Rhag

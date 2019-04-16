@@ -21,6 +21,7 @@ common.error.mandatoryAmount = Enter the amount using numbers 0 to 9
 common.error.negative = Enter positive numbers only (no -)
 common.error.tooManyDecimals = Enter a maximum of 2 decimal places for pence
 common.error.greaterThanMax = You have entered too many numbers
+common.dateRangeSeparator = to
 
 error.date.invalidCharacters = Enter a date using numbers 0 to 9
 error.date.day = Enter numbers between 1 and 31
