@@ -17,8 +17,8 @@
 package config
 
 import java.util.Base64
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import config.features.Features
 import play.api.mvc.Call
 import play.api.{Configuration, Environment}
@@ -26,6 +26,7 @@ import uk.gov.hmrc.play.binders.ContinueUrl
 import uk.gov.hmrc.play.config.ServicesConfig
 import config.{ConfigKeys => Keys}
 import play.api.Mode.Mode
+import play.api.i18n.Lang
 
 trait AppConfig extends ServicesConfig {
   val analyticsToken: String
@@ -67,6 +68,10 @@ trait AppConfig extends ServicesConfig {
   val contactPreferencesService: String
 
   def contactPreferencesUrl(vrn: String): String
+
+  val languageFallbackUrl: String
+  val languageMap: Map[String, Lang]
+  val routeToSwitchLanguage: String => Call
 }
 
 @Singleton
@@ -169,4 +174,11 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
 
   override lazy val timeoutCountdown: Int = getInt(Keys.timeoutCountdown)
   override lazy val timeoutPeriod: Int = getInt(Keys.timeoutPeriod)
+
+  override val languageFallbackUrl: String = "/vat-through-software/account/deregister/"
+  override val languageMap: Map[String, Lang] = Map(
+    "english" -> Lang("en"),
+    "cymraeg" -> Lang("cy")
+  )
+  override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchLanguage(lang)
 }
