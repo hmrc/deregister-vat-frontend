@@ -177,5 +177,6 @@ unauthorised.client.signUp = sign up to use software to submit your VAT Returns
 
 featureSwitch.title = Feature switches
 features.simpleAuth.enabled = Simple auth
+features.useLanguageSelectorFeature.enabled = Language selector
 
 outstandingInvoice.title = Is the business expecting to receive payment for outstanding invoices after deregistering?
