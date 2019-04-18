@@ -38,11 +38,11 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
 
   override def beforeEach() {
     super.beforeEach()
-    mockConfig.features.stubAgentClientLookup(true)
     mockConfig.features.simpleAuth(false)
     mockConfig.features.stubAgentClientLookup(true)
     mockConfig.features.stubContactPreferences(true)
     mockConfig.features.useContactPreferences(false)
+    mockConfig.features.useLanguageSelector(true)
   }
 
   lazy implicit val config = app.configuration

@@ -29,8 +29,8 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
       val serviceName = ".header__menu__proposition-name"
       val pageHeading = "#content h1"
       val instructions = "#content p"
-      val clientInstructions = "#content p"
-      val instructionsLink = "#content p > a"
+      val clientInstructions = "#content article >  p"
+      val instructionsLink = "#content article > p > a"
       val button = "#content .button"
     }
 
