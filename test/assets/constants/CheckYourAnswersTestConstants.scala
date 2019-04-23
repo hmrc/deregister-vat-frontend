@@ -116,30 +116,6 @@ object CheckYourAnswersTestConstants extends TestUtil{
     "option-to-tax-value"
   )
 
-  val stocksRowYes = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.stocks,
-    Html(CommonMessages.yes),
-    controllers.routes.OptionStocksToSellController.show().url,
-    CheckYourAnswersMessages.stocksHidden,
-    "stock"
-  )
-
-  val stocksRowNo = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.stocks,
-    Html(CommonMessages.no),
-    controllers.routes.OptionStocksToSellController.show().url,
-    CheckYourAnswersMessages.stocksHidden,
-    "stock"
-  )
-
-  val stocksValueRow = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.stocksValue,
-    MoneyFormatter.formatHtmlAmount(stocksModel.amount.get),
-    controllers.routes.OptionStocksToSellController.show().url,
-    CheckYourAnswersMessages.stocksValueHidden,
-    "stock-value"
-  )
-
   val captialAssetsRowYes = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.capitalAssets,
     Html(CommonMessages.yes),
@@ -162,6 +138,30 @@ object CheckYourAnswersTestConstants extends TestUtil{
     controllers.routes.CapitalAssetsController.show().url,
     CheckYourAnswersMessages.capitalAssetsValueHidden,
     "capital-value"
+  )
+
+  val stocksRowYes = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.stocks,
+    Html(CommonMessages.yes),
+    controllers.routes.OptionStocksToSellController.show().url,
+    CheckYourAnswersMessages.stocksHidden,
+    "stock"
+  )
+
+  val stocksRowNo = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.stocks,
+    Html(CommonMessages.no),
+    controllers.routes.OptionStocksToSellController.show().url,
+    CheckYourAnswersMessages.stocksHidden,
+    "stock"
+  )
+
+  val stocksValueRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.stocksValue,
+    MoneyFormatter.formatHtmlAmount(stocksModel.amount.get),
+    controllers.routes.OptionStocksToSellController.show().url,
+    CheckYourAnswersMessages.stocksValueHidden,
+    "stock-value"
   )
 
   val outstandingInvoicesRow = CheckYourAnswersRowModel(

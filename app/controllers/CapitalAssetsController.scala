@@ -32,7 +32,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import scala.concurrent.Future
 
 @Singleton
-class CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
+class  CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
                                         val authentication: AuthPredicate,
                                         val pendingDeregCheck: PendingChangesPredicate,
                                         val capitalAssetsAnswerService: CapitalAssetsAnswerService,
