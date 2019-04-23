@@ -32,8 +32,8 @@ object ConfigKeys {
   val signInBaseUrl: String = "signIn.url"
   val signInContinueBaseUrl: String = "signIn.continueBaseUrl"
 
-  val surveyHost: String = "feedback-survey-frontend.host"
-  val surveyUrl: String = "feedback-survey-frontend.url"
+  val surveyHost: String = "feedback-frontend.host"
+  val surveyUrl: String = "feedback-frontend.url"
 
   val governmentGatewayHost: String = "government-gateway.host"
 
