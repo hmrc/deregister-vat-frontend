@@ -58,10 +58,6 @@ appConfig = appConfig) {
         </dl>
     </div>
 
-    <p class="form-group">
-        @messages("checkYourAnswers.text")
-    </p>
-
     @helpers.form(action = controllers.routes.CheckAnswersController.submit) {
         <button class="button" type ="submit" id="continue"
                 onclick="sendGAEvent('end-journey','confirm','check-your-answers')">
