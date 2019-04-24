@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-package testOnly.models
+package stubs
 
-case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
-                              stubAgentClientLookup: Boolean,
-                              stubContactPreferences: Boolean,
-                              useContactPreferencesFeature:Boolean,
-                              useLanguagePreferencesFeature: Boolean
-                             )
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import assets.IntegrationTestConstants.vrn
+import helpers.WireMockMethods
+import play.api.libs.json.JsValue
 
+object ContactPreferencesStub extends WireMockMethods {
+
+  private val contactPrefUri: String => String = vrn => s"/contact-preferences/vat/vrn/$vrn"
+
+  def getContactPrefs(status: Int, response: JsValue): StubMapping = {
+    when(method = GET, uri = contactPrefUri(vrn))
+      .thenReturn(status = status, body = response)
+  }
+
+}

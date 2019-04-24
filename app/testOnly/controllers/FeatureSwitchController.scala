@@ -34,7 +34,8 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
         simpleAuthEnabled = appConfig.features.simpleAuth(),
         stubAgentClientLookup = appConfig.features.stubAgentClientLookup(),
         stubContactPreferences = appConfig.features.stubContactPreferences(),
-        useContactPreferencesFeature = appConfig.features.useContactPreferences()
+        useContactPreferencesFeature = appConfig.features.useContactPreferences(),
+        useLanguagePreferencesFeature = appConfig.features.useLanguageSelector()
       )
     )))
   }
@@ -51,6 +52,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
     appConfig.features.stubAgentClientLookup(model.stubAgentClientLookup)
     appConfig.features.stubContactPreferences(model.stubContactPreferences)
     appConfig.features.useContactPreferences(model.useContactPreferencesFeature)
+    appConfig.features.useLanguageSelector(model.useLanguagePreferencesFeature)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 

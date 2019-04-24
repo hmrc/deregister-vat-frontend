@@ -67,7 +67,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           }
 
           "return the correct first paragraph" in {
-            document.getElementById("content").getElementsByTag("p").first().text() shouldBe Messages.p1contactPrefDisabled
+            document.getElementById("content").getElementsByTag("article").first().getElementsByTag("p").first().text() shouldBe Messages.p1contactPrefDisabled
           }
         }
 
@@ -94,7 +94,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           }
 
           "return the correct first paragraph" in {
-            document.getElementById("content").getElementsByTag("p").first().text() shouldBe Messages.digitalPreference
+            document.getElementById("content").getElementsByTag("article").first().getElementsByTag("p").first().text() shouldBe Messages.digitalPreference
           }
         }
 
@@ -123,7 +123,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           }
 
           "return the correct first paragraph" in {
-            document.getElementById("content").getElementsByTag("p").first().text() shouldBe Messages.p1contactPrefDisabled
+            document.getElementById("content").getElementsByTag("article").first().getElementsByTag("p").first().text() shouldBe Messages.p1contactPrefDisabled
           }
         }
 
@@ -150,7 +150,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           }
 
           "return the correct first paragraph" in {
-            document.getElementById("content").getElementsByTag("p").first().text() shouldBe Messages.paperPreference
+            document.getElementById("content").getElementsByTag("article").first().getElementsByTag("p").first().text() shouldBe Messages.paperPreference
           }
         }
 
@@ -176,7 +176,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           }
 
           "return the correct first paragraph" in {
-            document.getElementById("content").getElementsByTag("p").first().text() shouldBe Messages.contactPrefError
+            document.getElementById("content").getElementsByTag("article").first().getElementsByTag("p").first().text() shouldBe Messages.contactPrefError
           }
         }
       }

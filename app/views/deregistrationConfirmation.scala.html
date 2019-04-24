@@ -73,11 +73,12 @@ appConfig = appConfig) {
             preference match {
 
                 case Some("DIGITAL") =>
-                    <p>{messages("deregistrationConfirmation.digitalPreference")}</p>
+                    <p id="preference-message">{messages("deregistrationConfirmation.digitalPreference")}</p>
                     <p>{messages("deregistrationConfirmation.contactDetails")}</p>
 
-                case Some("PAPER") => <p>{messages("deregistrationConfirmation.paperPreference")}</p>
-                                      <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+                case Some("PAPER") =>
+                    <p id="preference-message">{messages("deregistrationConfirmation.paperPreference")}</p>
+                    <p>{messages("deregistrationConfirmation.contactDetails")}</p>
 
                 case _ => <p>{messages("deregistrationConfirmation.contactPrefError")}</p>
                           <p>{messages("deregistrationConfirmation.contactDetails")}</p>

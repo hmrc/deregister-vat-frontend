@@ -26,7 +26,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     val back = ".link-back"
     val pageHeading = "#content h1"
     val button = ".button"
-    val para = "#content p"
+    val para = "#content article > p"
     val bullets: Int => String = n => s"#content > article > ul > li:nth-child($n)"
   }
 

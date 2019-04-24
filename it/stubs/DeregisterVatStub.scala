@@ -25,6 +25,7 @@ import play.api.libs.json.JsValue
 object DeregisterVatStub extends WireMockMethods {
 
   private def deregisterVatUri(vrn: String, key: String) = s"/deregister-vat/data/$vrn/$key"
+  private def deregisterVatUri(vrn: String) = s"/deregister-vat/data/$vrn"
 
   def successfulPutAnswer(vrn: String, key: String): StubMapping = {
     when(method = PUT, uri = deregisterVatUri(vrn,key))
@@ -43,6 +44,11 @@ object DeregisterVatStub extends WireMockMethods {
 
   def successfulDeleteAnswer(vrn: String, key: String): StubMapping = {
     when(method = DELETE, uri = deregisterVatUri(vrn,key))
+      .thenReturn(status = NO_CONTENT)
+  }
+
+  def successfulDeleteAllAnswers(vrn: String): StubMapping = {
+    when(method = DELETE, uri = deregisterVatUri(vrn))
       .thenReturn(status = NO_CONTENT)
   }
 
