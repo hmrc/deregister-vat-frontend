@@ -77,8 +77,8 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
         deregReasonValue <- EitherT(mandatoryCheck(deregReason, "deregReason"))
         accountingMethodValue <- EitherT(mandatoryCheck(accountingMethod, "accountingMethod"))
         optionTaxValue <- EitherT(mandatoryCheck(optionTax, "optionTax"))
-        stocksValue <- EitherT(mandatoryCheck(stocks, "stocks"))
         capitalAssetsValue <- EitherT(mandatoryCheck(capitalAssets, "capitalAssets"))
+        stocksValue <- EitherT(mandatoryCheck(stocks, "stocks"))
         issueNewInvoicesValue <- EitherT(mandatoryCheck(issueNewInvoices, "issueNewInvoices"))
         model = DeregistrationInfo.customApply(
           deregReasonValue,
