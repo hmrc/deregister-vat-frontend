@@ -58,6 +58,5 @@ object CheckYourAnswersMessages {
   val noDate = "Not Specified"
   val standard = "Standard accounting"
   val cash = "Cash accounting"
-  val text = "By confirming this change, you agree that the information you have given is complete and correct."
   val confirm = "Confirm and deregister"
 }

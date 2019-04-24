@@ -78,10 +78,6 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
       element(Selectors.changeColumn(2)).attr("aria-label") shouldBe "test hidden text 2"
     }
 
-    s"have the correct confirmation text displayed" in {
-      elementText(Selectors.text) shouldBe CheckYourAnswersMessages.text
-    }
-
     s"have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CheckYourAnswersMessages.confirm
     }
@@ -109,10 +105,6 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
       document.select(Selectors.questionColumn(2)).isEmpty shouldBe true
       document.select(Selectors.answerColumn(2)).isEmpty shouldBe true
       document.select(Selectors.changeColumn(2)).isEmpty shouldBe true
-    }
-
-    s"have the correct confirmation text displayed" in {
-      elementText(Selectors.text) shouldBe CheckYourAnswersMessages.text
     }
 
     s"have the correct continue button text and url" in {

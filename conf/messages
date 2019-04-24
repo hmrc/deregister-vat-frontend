@@ -143,7 +143,6 @@ checkYourAnswers.hidden.deregistrationDate = Change whether the business wants t
 checkYourAnswers.answer.noDate = Not Specified
 checkYourAnswers.answer.standard = Standard accounting
 checkYourAnswers.answer.cash = Cash accounting
-checkYourAnswers.text = By confirming this change, you agree that the information you have given is complete and correct.
 checkYourAnswers.confirm = Confirm and deregister
 
 deregistrationConfirmation.title = We have received the request to deregister from VAT
