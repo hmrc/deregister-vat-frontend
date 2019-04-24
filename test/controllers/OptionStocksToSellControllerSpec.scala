@@ -106,8 +106,8 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.CapitalAssetsController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show().url)
+        s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
         }
       }
 
@@ -123,8 +123,8 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.CapitalAssetsController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show().url)
+        s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
         }
       }
 

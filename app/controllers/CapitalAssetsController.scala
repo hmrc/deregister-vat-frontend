@@ -57,7 +57,7 @@ class  CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
         _ <- EitherT(capitalAssetsAnswerService.storeAnswer(data))
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)
       } yield result).value.map {
-        case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())
+        case Right(_) => Redirect(controllers.routes.OptionStocksToSellController.show())
         case Left(_) => serviceErrorHandler.showInternalServerError
       }
     )
