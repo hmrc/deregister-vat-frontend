@@ -116,30 +116,6 @@ object CheckYourAnswersTestConstants extends TestUtil{
     "option-to-tax-value"
   )
 
-  val captialAssetsRowYes = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.capitalAssets,
-    Html(CommonMessages.yes),
-    controllers.routes.CapitalAssetsController.show().url,
-    CheckYourAnswersMessages.capitalAssetsHidden,
-    "capital"
-  )
-
-  val captialAssetsRowNo = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.capitalAssets,
-    Html(CommonMessages.no),
-    controllers.routes.CapitalAssetsController.show().url,
-    CheckYourAnswersMessages.capitalAssetsHidden,
-    "capital"
-  )
-
-  val captialAssetsValueRow = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.capitalAssetsValue,
-    MoneyFormatter.formatHtmlAmount(assetsModel.amount.get),
-    controllers.routes.CapitalAssetsController.show().url,
-    CheckYourAnswersMessages.capitalAssetsValueHidden,
-    "capital-value"
-  )
-
   val stocksRowYes = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.stocks,
     Html(CommonMessages.yes),
@@ -162,6 +138,30 @@ object CheckYourAnswersTestConstants extends TestUtil{
     controllers.routes.OptionStocksToSellController.show().url,
     CheckYourAnswersMessages.stocksValueHidden,
     "stock-value"
+  )
+
+  val captialAssetsRowYes = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.capitalAssets,
+    Html(CommonMessages.yes),
+    controllers.routes.CapitalAssetsController.show().url,
+    CheckYourAnswersMessages.capitalAssetsHidden,
+    "capital"
+  )
+
+  val captialAssetsRowNo = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.capitalAssets,
+    Html(CommonMessages.no),
+    controllers.routes.CapitalAssetsController.show().url,
+    CheckYourAnswersMessages.capitalAssetsHidden,
+    "capital"
+  )
+
+  val captialAssetsValueRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.capitalAssetsValue,
+    MoneyFormatter.formatHtmlAmount(assetsModel.amount.get),
+    controllers.routes.CapitalAssetsController.show().url,
+    CheckYourAnswersMessages.capitalAssetsValueHidden,
+    "capital-value"
   )
 
   val outstandingInvoicesRow = CheckYourAnswersRowModel(

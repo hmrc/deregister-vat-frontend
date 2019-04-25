@@ -17,11 +17,11 @@ POST       /option-to-tax                   controllers.OptionTaxController.subm
 GET        /new-invoices                    controllers.IssueNewInvoicesController.show
 POST       /new-invoices                    controllers.IssueNewInvoicesController.submit
 
-GET        /capital-assets                  controllers.CapitalAssetsController.show
-POST       /capital-assets                  controllers.CapitalAssetsController.submit
-
 GET        /stock                           controllers.OptionStocksToSellController.show
 POST       /stock                           controllers.OptionStocksToSellController.submit
+
+GET        /capital-assets                  controllers.CapitalAssetsController.show
+POST       /capital-assets                  controllers.CapitalAssetsController.submit
 
 GET        /deregister-turnover-below-threshold     controllers.TaxableTurnoverController.show
 POST       /deregister-turnover-below-threshold     controllers.TaxableTurnoverController.submit
