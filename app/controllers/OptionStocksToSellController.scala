@@ -50,7 +50,7 @@ class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
     YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionStocksToSell(error))),
       data => stocksAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show())
+        case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())
         case Left(_) => serviceErrorHandler.showInternalServerError
       }
     )

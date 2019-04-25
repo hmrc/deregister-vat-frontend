@@ -62,8 +62,8 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
         setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
         setupMockGetOptionTax(Right(Some(ottModel)))
-        setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetCapitalAssets(Right(Some(assetsModel)))
+        setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
         setupMockGetDeregDate(Right(Some(deregistrationDate)))
@@ -77,8 +77,8 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
             Some(whyTurnoverBelowAll),
             Some(StandardAccounting),
             Some(ottModel),
-            Some(stocksModel),
             Some(assetsModel),
+            Some(stocksModel),
             Some(Yes),
             Some(Yes),
             Some(deregistrationDate)
@@ -108,8 +108,8 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
         setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
         setupMockGetOptionTax(Right(Some(ottModel)))
-        setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetCapitalAssets(Right(Some(assetsModel)))
+        setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
         setupMockGetDeregDate(Left(errorModel))

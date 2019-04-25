@@ -32,8 +32,8 @@ case class DeregistrationInfo(deregReason: DeregistrationReason,
                               additionalTaxInvoices: Boolean,
                               cashAccountingScheme: Boolean,
                               optionToTaxValue: Option[BigDecimal],
-                              stocksValue: Option[BigDecimal],
                               capitalAssetsValue: Option[BigDecimal],
+                              stocksValue: Option[BigDecimal],
                               transactorOrCapacitorEmail: Option[String])
 
 object DeregistrationInfo {
@@ -45,8 +45,8 @@ object DeregistrationInfo {
                   whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                   accountingMethod: VATAccountsModel,
                   optionTax: YesNoAmountModel,
-                  stocks: YesNoAmountModel,
                   capitalAssets: YesNoAmountModel,
+                  stocks: YesNoAmountModel,
                   issueNewInvoices: YesNo,
                   outstandingInvoices: Option[YesNo],
                   deregDate: Option[DeregistrationDateModel],
@@ -62,8 +62,8 @@ object DeregistrationInfo {
           taxInvoices(issueNewInvoices, outstandingInvoices),
           isCashAccounting(accountingMethod),
           optionTax.amount,
-          stocks.amount,
           capitalAssets.amount,
+          stocks.amount,
           transactorOrCapacitorEmail
         )
   }
@@ -103,8 +103,8 @@ object DeregistrationInfo {
       (__ \ "additionalTaxInvoices").write[Boolean] and
       (__ \ "cashAccountingScheme").write[Boolean] and
       (__ \ "optionToTaxValue").writeNullable[BigDecimal] and
-      (__ \ "stocksValue").writeNullable[BigDecimal] and
       (__ \ "capitalAssetsValue").writeNullable[BigDecimal] and
+      (__ \ "stocksValue").writeNullable[BigDecimal] and
       (__ \ "transactorOrCapacitorEmail").writeNullable[String]
     )(unlift(DeregistrationInfo.unapply))
 }

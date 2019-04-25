@@ -28,8 +28,8 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                                  accounting: Option[VATAccountsModel],
                                  optionTax: Option[YesNoAmountModel],
-                                 stocks: Option[YesNoAmountModel],
                                  capitalAssets: Option[YesNoAmountModel],
+                                 stocks: Option[YesNoAmountModel],
                                  newInvoices: Option[YesNo],
                                  outstandingInvoices: Option[YesNo],
                                  deregDate: Option[DeregistrationDateModel])(implicit user: User[_], messages: Messages, appConfig: AppConfig) {
@@ -44,10 +44,10 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     accountingAnswer,
     optionTaxAnswer,
     optionTaxValueAnswer,
-    stocksAnswer,
-    stocksValueAnswer,
     capitalAssetsAnswer,
     capitalAssetsValueAnswer,
+    stocksAnswer,
+    stocksValueAnswer,
     newInvoicesAnswer,
     outstandingInvoicesAnswer,
     deregDateAnswer
@@ -120,22 +120,6 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     "option-to-tax-value"
   )))
 
-  private val stocksAnswer = stocks.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.stocks"),
-    Html(messages(s"common.${answer.yesNo.toString}")),
-    controllers.routes.OptionStocksToSellController.show().url,
-    messages("checkYourAnswers.hidden.stocks"),
-    "stock"
-  ))
-
-  private val stocksValueAnswer = stocks.flatMap(_.amount.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.stocksValue"),
-    MoneyFormatter.formatHtmlAmount(answer),
-    controllers.routes.OptionStocksToSellController.show().url,
-    messages("checkYourAnswers.hidden.stocksValue"),
-    "stock-value"
-  )))
-
   private val capitalAssetsAnswer = capitalAssets.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.capitalAssets"),
     Html(messages(s"common.${answer.yesNo.toString}")),
@@ -150,6 +134,22 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     controllers.routes.CapitalAssetsController.show().url,
     messages("checkYourAnswers.hidden.capitalAssetsValue"),
     "capital-value"
+  )))
+
+  private val stocksAnswer = stocks.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.stocks"),
+    Html(messages(s"common.${answer.yesNo.toString}")),
+    controllers.routes.OptionStocksToSellController.show().url,
+    messages("checkYourAnswers.hidden.stocks"),
+    "stock"
+  ))
+
+  private val stocksValueAnswer = stocks.flatMap(_.amount.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.stocksValue"),
+    MoneyFormatter.formatHtmlAmount(answer),
+    controllers.routes.OptionStocksToSellController.show().url,
+    messages("checkYourAnswers.hidden.stocksValue"),
+    "stock-value"
   )))
 
   private val outstandingInvoicesAnswer = outstandingInvoices.map(answer => CheckYourAnswersRowModel(
