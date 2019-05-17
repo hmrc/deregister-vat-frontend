@@ -17,9 +17,9 @@
 package views.templates.formatters.dates
 
 import java.time.LocalDate
-import java.time.format.{DateTimeFormatter, ResolverStyle}
 
 import play.api.i18n.{Lang, Messages}
+import java.time.format.{DateTimeFormatter, ResolverStyle}
 
 object DisplayDateRangeHelper {
 
