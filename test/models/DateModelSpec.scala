@@ -38,4 +38,21 @@ class DateModelSpec extends TestUtil {
       }
     }
   }
+
+  "DateModel longDate function" should {
+
+    "output a long date" when {
+
+      "called on a valid DateModel " in {
+        DateModel(12,12,2019).longDate() shouldBe "12 December 2019"
+      }
+    }
+
+    "return an empty string" when {
+
+      "called on a DateModel with an incorrect date" in {
+        DateModel(13,13,2019).longDate() shouldBe ""
+      }
+    }
+  }
 }

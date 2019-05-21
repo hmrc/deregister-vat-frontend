@@ -23,6 +23,10 @@ common.error.tooManyDecimals = Enter a maximum of 2 decimal places for pence
 common.error.greaterThanMax = You have entered too many numbers
 common.dateRangeSeparator = to
 
+standardError.title = There is a problem with the service - VAT reporting through software - GOV.UK
+standardError.heading = Sorry, there is a problem with the service
+standardError.message = Try again later.
+
 error.date.invalidCharacters = Enter a date using numbers 0 to 9
 error.date.day = Enter numbers between 1 and 31
 error.date.month = Enter numbers between 1 and 12

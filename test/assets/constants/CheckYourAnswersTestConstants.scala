@@ -24,7 +24,7 @@ import play.twirl.api.Html
 import utils.{MoneyFormatter, TestUtil}
 
 
-object CheckYourAnswersTestConstants extends TestUtil{
+object CheckYourAnswersTestConstants extends TestUtil {
 
   val dateModel = DateModel(1,1,2018)
   val deregistrationDate = DeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
