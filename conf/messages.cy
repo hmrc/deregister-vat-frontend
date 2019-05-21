@@ -49,6 +49,10 @@ common.error.tooManyDecimals = Nodwch uchafswm o 2 bwynt degol ar gyfer ceinioga
 common.error.greaterThanMax = Rydych wedi nodi gormod o rifau
 common.dateRangeSeparator = i
 
+standardError.title = Mae problem gyda’r gwasanaeth – Rhoi gwybod am TAW drwy feddalwedd – GOV.UK
+standardError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
+standardError.message = Rhowch gynnig arall arni yn nes ymlaen.
+
 error.date.invalidCharacters = Nodwch ddyddiad gan ddefnyddio’r rhifau 0 i 9
 error.date.day = Nodwch rifau rhwng 1 a 31
 error.date.month = Nodwch rifau rhwng 1 a 12
