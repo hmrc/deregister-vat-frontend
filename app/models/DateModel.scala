@@ -17,8 +17,9 @@
 package models
 
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.time.format.{DateTimeFormatter, ResolverStyle}
 
+import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 
 import scala.util.{Failure, Success, Try}
@@ -33,7 +34,16 @@ case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int) {
     }
 
   private val formatter = DateTimeFormatter.ofPattern("d MMMM uuuu")
-  val longDate: String = date.fold("")(x => formatter.format(x))
+
+  def longDate()(implicit messages: Messages): String = {
+    date.fold(""){ datum => datum.format(DateTimeFormatter.ofPattern(
+        if(messages.lang.language =="cy"){
+          s"""d '${messages(s"month.${datum.getMonthValue}")}' uuuu"""
+        } else {
+          "d MMMM uuuu"
+        }
+    ).withResolverStyle(ResolverStyle.STRICT))}
+  }
 }
 
 object DateModel {

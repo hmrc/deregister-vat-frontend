@@ -17,6 +17,7 @@
 package utils
 
 import assets.constants.BaseTestConstants._
+import com.codahale.metrics.SharedMetricRegistries
 import common.SessionKeys
 import config.ServiceErrorHandler
 import connectors.ContactPreferenceConnector
@@ -43,6 +44,7 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
     mockConfig.features.stubContactPreferences(true)
     mockConfig.features.useContactPreferences(false)
     mockConfig.features.useLanguageSelector(true)
+    SharedMetricRegistries.clear()
   }
 
   lazy implicit val config = app.configuration
