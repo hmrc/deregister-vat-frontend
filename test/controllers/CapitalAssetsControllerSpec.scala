@@ -104,8 +104,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
+          s"redirect to '${controllers.routes.OptionStocksToSellController.show().url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show().url)
           }
         }
 
@@ -122,8 +122,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
+          s"redirect to '${controllers.routes.OptionStocksToSellController.show().url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show().url)
           }
         }
 

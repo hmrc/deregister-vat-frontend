@@ -51,7 +51,7 @@ class OptionTaxController @Inject()(val messagesApi: MessagesApi,
     YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionTax(error))),
       data => optionTaxAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.OptionStocksToSellController.show())
+        case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show())
         case _ => serviceErrorHandler.showInternalServerError
       }
     )

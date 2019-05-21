@@ -107,8 +107,8 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.OptionStocksToSellController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show().url)
+        s"redirect to '${controllers.routes.CapitalAssetsController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show().url)
         }
       }
 
@@ -124,8 +124,8 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.OptionStocksToSellController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show().url)
+        s"redirect to '${controllers.routes.CapitalAssetsController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show().url)
         }
       }
 

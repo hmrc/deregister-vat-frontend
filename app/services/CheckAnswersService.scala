@@ -52,8 +52,8 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
       whyBelow <- EitherT(whyTurnoverBelowAnswerService.getAnswer)
       accounting <- EitherT(accountingMethodAnswerService.getAnswer)
       optionTax <- EitherT(optionTaxAnswerService.getAnswer)
-      stocks <- EitherT(stocksAnswerService.getAnswer)
       capital <- EitherT(capitalAssetsAnswerService.getAnswer)
+      stocks <- EitherT(stocksAnswerService.getAnswer)
       issueInvoice <- EitherT(issueNewInvoicesAnswerService.getAnswer)
       outstanding <- EitherT(outstandingInvoicesAnswerService.getAnswer)
       deregDate <- EitherT(deregDateAnswerService.getAnswer)
@@ -66,8 +66,8 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
         whyBelow,
         accounting,
         optionTax,
-        stocks,
         capital,
+        stocks,
         issueInvoice,
         outstanding,
         deregDate)

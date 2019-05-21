@@ -37,8 +37,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
           Some(whyTurnoverBelowAll),
           Some(StandardAccounting),
           Some(ottModel),
-          Some(stocksModel),
           Some(assetsModel),
+          Some(stocksModel),
           Some(Yes),
           Some(Yes),
           Some(deregistrationDate)
@@ -52,10 +52,10 @@ class CheckYourAnswersModelSpec extends TestUtil {
             vatAccountsRow,
             optionTaxRowYes,
             optionTaxValueRow,
-            stocksRowYes,
-            stocksValueRow,
             captialAssetsRowYes,
             captialAssetsValueRow,
+            stocksRowYes,
+            stocksValueRow,
             newInvoicesRow,
             outstandingInvoicesRow,
             deregDateRow
@@ -87,8 +87,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
               whyBelowRowMax,
               vatAccountsRow,
               optionTaxRowNo,
-              stocksRowNo,
               captialAssetsRowNo,
+              stocksRowNo,
               newInvoicesRow,
               outstandingInvoicesRow,
               deregDateRow
@@ -121,8 +121,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
               whyBelowRowMin,
               vatAccountsRow,
               optionTaxRowNo,
-              stocksRowNo,
               captialAssetsRowNo,
+              stocksRowNo,
               newInvoicesRow,
               outstandingInvoicesRow,
               deregDateRow

@@ -39,8 +39,8 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
                                             val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
                                             val accountingMethodAnswerService: AccountingMethodAnswerService,
                                             val optionTaxAnswerService: OptionTaxAnswerService,
-                                            val stocksAnswerService: StocksAnswerService,
                                             val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+                                            val stocksAnswerService: StocksAnswerService,
                                             val issueNewInvoicesAnswerService: IssueNewInvoicesAnswerService,
                                             val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                             val deregDateAnswerService: DeregDateAnswerService,
@@ -69,16 +69,16 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
         whyTurnoverBelow <- EitherT(whyTurnoverBelowAnswerService.getAnswer)
         accountingMethod <- EitherT(accountingMethodAnswerService.getAnswer)
         optionTax <- EitherT(optionTaxAnswerService.getAnswer)
-        stocks <- EitherT(stocksAnswerService.getAnswer)
         capitalAssets <- EitherT(capitalAssetsAnswerService.getAnswer)
+        stocks <- EitherT(stocksAnswerService.getAnswer)
         issueNewInvoices <- EitherT(issueNewInvoicesAnswerService.getAnswer)
         outstandingInvoices <- EitherT(outstandingInvoicesAnswerService.getAnswer)
         deregDate <- EitherT(deregDateAnswerService.getAnswer)
         deregReasonValue <- EitherT(mandatoryCheck(deregReason, "deregReason"))
         accountingMethodValue <- EitherT(mandatoryCheck(accountingMethod, "accountingMethod"))
         optionTaxValue <- EitherT(mandatoryCheck(optionTax, "optionTax"))
-        stocksValue <- EitherT(mandatoryCheck(stocks, "stocks"))
         capitalAssetsValue <- EitherT(mandatoryCheck(capitalAssets, "capitalAssets"))
+        stocksValue <- EitherT(mandatoryCheck(stocks, "stocks"))
         issueNewInvoicesValue <- EitherT(mandatoryCheck(issueNewInvoices, "issueNewInvoices"))
         model = DeregistrationInfo.customApply(
           deregReasonValue,
@@ -88,8 +88,8 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
           whyTurnoverBelow,
           accountingMethodValue,
           optionTaxValue,
-          stocksValue,
           capitalAssetsValue,
+          stocksValue,
           issueNewInvoicesValue,
           outstandingInvoices,
           deregDate,
