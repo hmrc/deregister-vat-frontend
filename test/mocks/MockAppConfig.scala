@@ -67,5 +67,6 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
     "cymraeg" -> Lang("cy")
   )
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchLanguage(lang)
+  override val changeClientUrl: String = "/changeClient"
 }
 

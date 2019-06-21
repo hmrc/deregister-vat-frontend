@@ -42,6 +42,7 @@ object ConfigKeys {
   val stubContactPreferencesFeature: String = "features.stubContactPreferences.enabled"
   val useContactPreferencesFeature: String = "features.useContactPreferencesFeature.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelectorFeature.enabled"
+  val changeClientFeature: String = "features.changeClientFeature.enabled"
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
 
@@ -54,6 +55,7 @@ object ConfigKeys {
 
   val vatAgentClientLookupFrontendHost: String = "vat-agent-client-lookup-frontend.host"
   val vatAgentClientLookupFrontendUrl: String = "vat-agent-client-lookup-frontend.url"
+  val changeClientUrl: String = "vat-agent-client-lookup-frontend.changeClientUrl"
 
   val vatSubscriptionService: String = "vat-subscription"
 

@@ -164,6 +164,7 @@ deregistrationConfirmation.nonAgentText = If the business can deregister from VA
 deregistrationConfirmation.nonAgentText2a = Check your contact details
 deregistrationConfirmation.nonAgentText2b = are up to date.
 deregistrationConfirmation.contactDetails = Make sure your contact details are up to date.
+deregistrationConfirmation.changeClient = Change client
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to

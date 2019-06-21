@@ -20,6 +20,7 @@ case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
                               stubAgentClientLookup: Boolean,
                               stubContactPreferences: Boolean,
                               useContactPreferencesFeature:Boolean,
-                              useLanguagePreferencesFeature: Boolean
+                              useLanguagePreferencesFeature: Boolean,
+                              changeClientFeature: Boolean
                              )
 
