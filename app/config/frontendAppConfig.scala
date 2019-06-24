@@ -113,7 +113,8 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
     getString(Keys.manageVatSubscriptionFrontendHost) + getString(Keys.manageVatSubscriptionFrontendUrl)
 
   override lazy val changeClientUrl: String =
-    getString(Keys.manageVatSubscriptionFrontendHost) + getString(Keys.changeClientUrl)
+    getString(Keys.vatAgentClientLookupFrontendHost) + getString(Keys.changeClientUrl) +
+      s"?redirectUrl=/vat-through-software/account/deregister/"
 
   override lazy val vatAgentClientLookupFrontendUrl: String =
     getString(Keys.vatAgentClientLookupFrontendHost) + getString(Keys.vatAgentClientLookupFrontendUrl)
