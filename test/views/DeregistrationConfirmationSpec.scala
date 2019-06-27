@@ -29,6 +29,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
     val text2 = "#content > article > p:nth-child(4)"
     val button = ".button"
     val link = "a[href*=\"change-business-details\"]"
+    val changeClientLink = "#content > article > p:nth-child(5) > a"
   }
 
   "Rendering the deregistration confirmation page for a non-agent user" when {
@@ -172,7 +173,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     "the user has verifiedAgentEmail (Yes pref inferred)" should {
       val businessName: Option[String] = Some("Fake Business Name Limited")
-      lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig,hc,ec)
+      lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig, hc, ec)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -206,7 +207,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     "the user is without a verifiedAgentEmail (No pref inferred)" should {
       lazy val noBusinessName: Option[String] = None
-      lazy val view = views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig,hc,ec)
+      lazy val view = views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig, hc, ec)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -235,6 +236,28 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
       "have the correct continue button url" in {
         element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+      }
+    }
+
+    "the changeClient feature switch is enabled" should {
+      "display the change client link" in {
+        mockConfig.features.changeClient(true)
+        val businessName: Option[String] = Some("Fake Business Name Limited")
+        lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig, hc, ec)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        elementText(Selectors.changeClientLink) shouldBe "Change client"
+      }
+    }
+
+    "the changeClient feature switch is disabled" should {
+      "not display the change client link" in {
+        mockConfig.features.changeClient(false)
+        val businessName: Option[String] = Some("Fake Business Name Limited")
+        lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig, hc, ec)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        elementText(Selectors.changeClientLink) shouldNot be("Change client")
       }
     }
   }

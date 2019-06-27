@@ -29,7 +29,8 @@ object FeatureSwitchForm {
       ConfigKeys.stubAgentClientLookupFeature -> boolean,
       ConfigKeys.stubContactPreferencesFeature -> boolean,
       ConfigKeys.useContactPreferencesFeature -> boolean,
-      ConfigKeys.useLanguageSelectorFeature -> boolean
+      ConfigKeys.useLanguageSelectorFeature -> boolean,
+      ConfigKeys.changeClientFeature -> boolean
       )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 

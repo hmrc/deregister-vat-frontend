@@ -97,9 +97,16 @@ appConfig = appConfig) {
     }
 }
 
-<a href="@appConfig.manageVatSubscriptionFrontendUrl" class="button"
-   onclick="sendGAEvent('end-journey','finish','request-received')">
-    @messages("common.finish")
-</a>
+@if(user.isAgent && appConfig.features.changeClient()) {
+    <p>
+        <a id="change-client-link" href="@appConfig.changeClientUrl">@messages("deregistrationConfirmation.changeClient")</a>
+    </p>
+}
 
+<p>
+    <a id="finish" href="@appConfig.manageVatSubscriptionFrontendUrl" class="button"
+       onclick="sendGAEvent('end-journey','finish','request-received')">
+        @messages("common.finish")
+    </a>
+</p>
 }

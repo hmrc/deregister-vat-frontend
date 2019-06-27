@@ -46,6 +46,7 @@ trait AppConfig extends ServicesConfig {
   val clientServicesGovUkGuidance: String
   val govUkCancelVatRegistration: String
   val manageVatSubscriptionFrontendUrl: String
+  val changeClientUrl: String
 
   def vatAgentClientLookupHandoff(redirectUrl: String): String
 
@@ -110,6 +111,10 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
 
   override lazy val manageVatSubscriptionFrontendUrl: String =
     getString(Keys.manageVatSubscriptionFrontendHost) + getString(Keys.manageVatSubscriptionFrontendUrl)
+
+  override lazy val changeClientUrl: String =
+    getString(Keys.vatAgentClientLookupFrontendHost) + getString(Keys.changeClientUrl) +
+      s"?redirectUrl=${ContinueUrl(getString(ConfigKeys.platformHost) + "/vat-through-software/account/deregister/").encodedUrl}"
 
   override lazy val vatAgentClientLookupFrontendUrl: String =
     getString(Keys.vatAgentClientLookupFrontendHost) + getString(Keys.vatAgentClientLookupFrontendUrl)
