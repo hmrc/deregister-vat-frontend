@@ -35,7 +35,8 @@ object PendingDeregHttpParser {
           response.json.validate[ChangeIndicatorModel].fold(
             invalid => {
               // $COVERAGE-OFF$
-              Logger.warn(s"[PendingDeregHttpParser][read] - Invalid JSON: $invalid")
+              Logger.warn(s"[PendingDeregHttpParser][read] - Invalid JSON")
+              Logger.debug(s"[PendingDeregHttpParser][read] - Invalid JSON: $invalid")
               // $COVERAGE-ON$
               Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
             },
