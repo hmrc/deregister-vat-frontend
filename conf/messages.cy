@@ -49,9 +49,15 @@ common.error.tooManyDecimals = Nodwch uchafswm o 2 bwynt degol ar gyfer ceinioga
 common.error.greaterThanMax = Rydych wedi nodi gormod o rifau
 common.dateRangeSeparator = i
 
-standardError.title = Mae problem gyda’r gwasanaeth – Rhoi gwybod am TAW drwy feddalwedd – GOV.UK
-standardError.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
-standardError.message = Rhowch gynnig arall arni yn nes ymlaen.
+global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – Rhoi gwybod am TAW drwy feddalwedd – GOV.UK
+global.error.InternalServerError500.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
+global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
+global.error.badRequest400.title = Cais drwg – 400
+global.error.badRequest400.heading = Cais drwg
+global.error.badRequest400.message = Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
+global.error.pageNotFound404.title = Heb ddod o hyd i’r dudalen – 404
+global.error.pageNotFound404.heading = Ni ellir dod o hyd i’r dudalen hon
+global.error.pageNotFound404.message = Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
 
 error.date.invalidCharacters = Nodwch ddyddiad gan ddefnyddio’r rhifau 0 i 9
 error.date.day = Nodwch rifau rhwng 1 a 31
