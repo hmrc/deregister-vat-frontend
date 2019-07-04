@@ -27,7 +27,7 @@ title = messages("deregistrationConfirmation.title"),
 bodyClasses = None,
 appConfig = appConfig) {
 
-<div class="govuk-box-highlight" data-metrics="end-journey:view:request-received">
+<div class="govuk-box-highlight" data-metrics="end-journey:view:deregister-request-received">
     <h1 class="heading-xlarge">@messages("deregistrationConfirmation.title")</h1>
 </div>
 
@@ -89,7 +89,7 @@ appConfig = appConfig) {
             <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
             <p>
                 <a href={appConfig.manageVatSubscriptionFrontendUrl}
-                   onclick="sendGAEvent('end-journey','finish','request-received')">
+                   onclick="sendGAEvent('end-journey','finish','deregister-request-received')">
                     {messages("deregistrationConfirmation.nonAgentText2a")}</a>
                     {messages("deregistrationConfirmation.nonAgentText2b")}
             </p>
@@ -99,13 +99,16 @@ appConfig = appConfig) {
 
 @if(user.isAgent && appConfig.features.changeClient()) {
     <p>
-        <a id="change-client-link" href="@appConfig.changeClientUrl">@messages("deregistrationConfirmation.changeClient")</a>
+        <a id="change-client-link"
+            href="@appConfig.changeClientUrl"
+            onclick="sendGAEvent('end-journey','finish','deregister-request-received')">@messages("deregistrationConfirmation.changeClient")
+        </a>
     </p>
 }
 
 <p>
     <a id="finish" href="@appConfig.manageVatSubscriptionFrontendUrl" class="button"
-       onclick="sendGAEvent('end-journey','finish','request-received')">
+       onclick="sendGAEvent('end-journey','change-client','deregister-request-received')">
         @messages("common.finish")
     </a>
 </p>
