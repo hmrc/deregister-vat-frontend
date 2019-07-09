@@ -50,7 +50,7 @@ common.error.greaterThanMax = Rydych wedi nodi gormod o rifau
 common.dateRangeSeparator = i
 
 global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – Rhoi gwybod am TAW drwy feddalwedd – GOV.UK
-global.error.InternalServerError500.heading = Mae’n ddrwg gennym – mae problem gyda’r gwasanaeth
+global.error.InternalServerError500.heading = Mae’n ddrwg gennym, mae anawsterau technegol wedi codi
 global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
 global.error.badRequest400.title = Cais drwg – 400
 global.error.badRequest400.heading = Cais drwg
