@@ -129,8 +129,8 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
             status(result) shouldBe SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.DeregisterForVATController.show().url}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.DeregisterForVATController.show().url)
+          s"redirect to ${controllers.routes.DeregisterForVATController.redirect().url}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.DeregisterForVATController.redirect().url)
           }
         }
 
@@ -149,8 +149,8 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
             status(result) shouldBe SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.DeregisterForVATController.show().url}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.DeregisterForVATController.show().url)
+          s"redirect to ${controllers.routes.DeregisterForVATController.redirect().url}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.DeregisterForVATController.redirect().url)
           }
         }
       }

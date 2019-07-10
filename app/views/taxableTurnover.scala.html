@@ -29,7 +29,7 @@ title = title(messages("taxableTurnover.title", appConfig.deregThreshold), form)
 bodyClasses = None,
 appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show(user.isAgent).url"
+    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url"
        onclick="sendGAEvent('below-threshold','back','deregister-turnover-below-threshold')">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)

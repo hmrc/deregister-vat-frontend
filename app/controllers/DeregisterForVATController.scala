@@ -31,7 +31,15 @@ class DeregisterForVATController @Inject()(val messagesApi: MessagesApi,
                                            val pendingDeregCheck: PendingChangesPredicate,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val redirect: Action[AnyContent] = (authenticate andThen pendingDeregCheck) { implicit user =>
+    val userType: String = if (user.isAgent) "agent" else "non-agent"
+
+    Redirect(
+      controllers.routes.DeregisterForVATController.show(userType)
+    )
+  }
+
+  val show: String => Action[AnyContent] = _ => (authenticate andThen pendingDeregCheck).async { implicit user =>
     Future.successful(Ok(views.html.deregisterForVAT()))
   }
 

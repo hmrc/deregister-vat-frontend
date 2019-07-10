@@ -43,7 +43,7 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
   private def renderView(data: Form[DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
     views.html.deregistrationReason(data)
 
-  val show: Boolean => Action[AnyContent] = _ => (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     deregReasonAnswerService.getAnswer map {
       case Right(Some(data)) => Ok(renderView(DeregistrationReasonForm.deregistrationReasonForm.fill(data)))
       case _ => Ok(renderView())

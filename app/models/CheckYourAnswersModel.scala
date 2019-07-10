@@ -56,7 +56,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
   private val deregReasonAnswer = deregistrationReason.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.reason"),
     Html(messages(s"deregistrationReason.reason.${answer.value}", appConfig.deregThreshold)),
-    controllers.routes.DeregistrationReasonController.show(user.isAgent).url,
+    controllers.routes.DeregistrationReasonController.show().url,
     messages("checkYourAnswers.hidden.reason"),
     "reason"
   ))

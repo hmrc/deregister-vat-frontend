@@ -32,7 +32,7 @@ object CheckYourAnswersTestConstants extends TestUtil {
   val deregReasonRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.reason,
     Html(CheckYourAnswersMessages.reasonCeased),
-    controllers.routes.DeregistrationReasonController.show(false).url,
+    controllers.routes.DeregistrationReasonController.show().url,
     CheckYourAnswersMessages.reasonHidden,
     "reason"
   )

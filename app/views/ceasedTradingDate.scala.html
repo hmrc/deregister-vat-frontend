@@ -27,7 +27,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show(user.isAgent).url"
+    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url"
        onclick="sendGAEvent('ceased-trading','back','date-ceased-trading')">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form, Some("ceasedTrading"))

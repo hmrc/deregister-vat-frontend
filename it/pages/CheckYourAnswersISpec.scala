@@ -38,7 +38,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
     val yesNoAmountYes = YesNoAmountModel(Yes,Some(BigDecimal(1000)))
     val yesNoAmountNo = YesNoAmountModel(No,None)
     val deregistrationDate = DeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
-    
+
     "the user is authorised" should {
 
       "return 200 OK" in {
@@ -154,7 +154,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.redirect().url)
         )
       }
     }
@@ -184,7 +184,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.redirect().url)
         )
       }
     }
