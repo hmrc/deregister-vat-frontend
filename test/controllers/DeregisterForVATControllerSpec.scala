@@ -16,25 +16,90 @@
 
 package controllers
 
+import assets.constants.BaseTestConstants.vrn
+import common.SessionKeys
+import controllers.predicates.PendingChangesPredicate
 import play.api.http.Status
 import play.api.test.Helpers._
+import services.CustomerDetailsService
 
 import scala.concurrent.Future
 
 class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
+  val mockPendingDereg = new PendingChangesPredicate(
+    new CustomerDetailsService(mockVatSubscriptionConnector),
+    serviceErrorHandler,
+    messagesApi,
+    mockConfig,
+    ec
+  )
+
   object TestDeregisterForVATController extends DeregisterForVATController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockPendingDereg,
     mockConfig
   )
 
   "the user is authorised" when {
 
-    "Calling the .show action" should {
+    "Calling the .redirect action with an agent" should {
+      "redirect to .../agent" should {
+        lazy val result = {
+          mockAuthResult(Future.successful(mockAuthorisedAgent), isAgent = true)
+          TestDeregisterForVATController.redirect()(request.withSession(
+            SessionKeys.pendingDeregKey -> "false",
+            SessionKeys.CLIENT_VRN -> vrn
+          ))
+        }
 
-      lazy val result = TestDeregisterForVATController.show()(request)
+        "return a 303" in {
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the correct URL" in {
+          redirectLocation(result) shouldBe Some("/vat-through-software/account/deregister/agent")
+        }
+      }
+    }
+
+    "Calling the .redirect action with a user" should {
+      "redirect to .../non-agent" should {
+        lazy val result = {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          TestDeregisterForVATController.redirect()(request.withSession(SessionKeys.pendingDeregKey -> "false"))
+        }
+
+        "return a 303" in {
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        "redirect to the correct url" in {
+          redirectLocation(result) shouldBe Some("/vat-through-software/account/deregister/non-agent")
+        }
+      }
+    }
+
+    "Calling the .show action with agent" should {
+
+      lazy val result = TestDeregisterForVATController.show("agent")(request.withSession(SessionKeys.pendingDeregKey -> "false"))
+
+      "return 200 (OK)" in {
+        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        status(result) shouldBe Status.OK
+      }
+
+      "return HTML" in {
+        contentType(result) shouldBe Some("text/html")
+        charset(result) shouldBe Some("utf-8")
+      }
+
+    }
+
+    "Calling the .show action with non-agent" should {
+
+      lazy val result = TestDeregisterForVATController.show("non-agent")(request.withSession(SessionKeys.pendingDeregKey -> "false"))
 
       "return 200 (OK)" in {
         mockAuthResult(Future.successful(mockAuthorisedIndividual))

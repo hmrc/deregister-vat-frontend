@@ -1,8 +1,8 @@
 # microservice specific routes
 
-GET        /                                controllers.DeregisterForVATController.show
+GET        /                                controllers.DeregisterForVATController.redirect
 
-GET        /deregister-reason               controllers.DeregistrationReasonController.show(isAgent: Boolean)
+GET        /deregister-reason               controllers.DeregistrationReasonController.show
 POST       /deregister-reason               controllers.DeregistrationReasonController.submit
 
 GET        /accounting-method               controllers.VATAccountsController.show
@@ -53,3 +53,5 @@ GET        /timeout                         controllers.SignOutController.timeou
 
 #Language Controller
 GET        /language/:lang                  controllers.LanguageController.switchLanguage(lang: String)
+
+GET        /:userType                       controllers.DeregisterForVATController.show(userType: String)

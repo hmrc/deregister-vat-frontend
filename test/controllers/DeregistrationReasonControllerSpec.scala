@@ -46,7 +46,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestDeregistrationReasonController.show(user.isAgent)(user)
+        lazy val result = TestDeregistrationReasonController.show()(user)
 
         "return 200 (OK)" in {
           setupMockGetDeregReason(Right(None))
@@ -62,7 +62,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
       "the user does have a pre selected option" should {
 
-        lazy val result = TestDeregistrationReasonController.show(user.isAgent)(user)
+        lazy val result = TestDeregistrationReasonController.show()(user)
 
         "return 200 (OK)" in {
           setupMockGetDeregReason(Right(Some(Ceased)))
@@ -80,7 +80,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         }
       }
 
-      authChecks(".show", TestDeregistrationReasonController.show(user.isAgent), user)
+      authChecks(".show", TestDeregistrationReasonController.show(), user)
     }
 
     "Calling the .submit action" when {

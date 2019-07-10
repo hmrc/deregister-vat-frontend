@@ -39,7 +39,7 @@ appConfig = appConfig) {
     </ul>
 
     <a class="button" type ="submit" id="continue"
-       href="@{controllers.routes.DeregistrationReasonController.show(user.isAgent).url}"
+       href="@{controllers.routes.DeregistrationReasonController.show().url}"
        onclick="sendGAEvent('start-dereg','continue','deregister')">
         @messages("common.continue")
     </a>

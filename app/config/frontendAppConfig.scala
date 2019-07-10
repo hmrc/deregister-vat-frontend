@@ -92,7 +92,7 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   override lazy val feedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
-    s"&backUrl=${ContinueUrl(platformHost + controllers.routes.DeregisterForVATController.show().url).encodedUrl}"
+    s"&backUrl=${ContinueUrl(platformHost + controllers.routes.DeregisterForVATController.redirect().url).encodedUrl}"
 
   private def whitelistConfig(key: String): Seq[String] =
     Some(new String(Base64.getDecoder.decode(runModeConfiguration.getString(key)
@@ -105,7 +105,7 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
 
   private lazy val signInBaseUrl: String = getString(Keys.signInBaseUrl)
   private lazy val signInContinueBaseUrl: String = runModeConfiguration.getString(Keys.signInContinueBaseUrl).getOrElse("")
-  private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.DeregisterForVATController.show().url).encodedUrl
+  private lazy val signInContinueUrl: String = ContinueUrl(signInContinueBaseUrl + controllers.routes.DeregisterForVATController.redirect().url).encodedUrl
   private lazy val signInOrigin: String = getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
 
@@ -127,16 +127,16 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
 
   override def agentClientUnauthorisedUrl: String =
     if (features.stubAgentClientLookup()) {
-      testOnly.controllers.routes.StubAgentClientLookupController.unauth(controllers.routes.DeregisterForVATController.show().url).url
+      testOnly.controllers.routes.StubAgentClientLookupController.unauth(controllers.routes.DeregisterForVATController.redirect().url).url
     } else {
-      vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url)
+      vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.redirect().url)
     }
 
   override def agentClientLookupUrl: String =
     if (features.stubAgentClientLookup()) {
-      testOnly.controllers.routes.StubAgentClientLookupController.show(controllers.routes.DeregisterForVATController.show().url).url
+      testOnly.controllers.routes.StubAgentClientLookupController.show(controllers.routes.DeregisterForVATController.redirect().url).url
     } else {
-      vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show().url)
+      vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.redirect().url)
     }
 
   override lazy val contactPreferencesService: String = {

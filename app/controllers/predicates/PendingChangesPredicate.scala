@@ -61,11 +61,11 @@ class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsS
           case Some(PendingDeregModel(false)) =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "Pending deregistration is false - Setting to 'false' and redirecting to start of journey")
-            Left(Redirect(controllers.routes.DeregisterForVATController.show().url).addingToSession(pendingDeregKey -> "false"))
+            Left(Redirect(controllers.routes.DeregisterForVATController.redirect().url).addingToSession(pendingDeregKey -> "false"))
           case None =>
             Logger.warn("[InflightPPOBPredicate][getCustomerInfoCall] - " +
               "There is no pending deregistration data - Setting to 'false' and redirecting to start of journey")
-            Left(Redirect(controllers.routes.DeregisterForVATController.show().url)
+            Left(Redirect(controllers.routes.DeregisterForVATController.redirect().url)
               .addingToSession(pendingDeregKey -> "false"))
         }
       case Left(error) =>
