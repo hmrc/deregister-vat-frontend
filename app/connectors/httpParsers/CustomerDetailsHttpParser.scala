@@ -34,7 +34,8 @@ object CustomerDetailsHttpParser {
           Logger.debug("[CustomerDetailsHttpParser][read]: Status OK")
           response.json.validate[CustomerDetails].fold(
             invalid => {
-              Logger.warn(s"[CustomerDetailsHttpParser][read]: Invalid Json - $invalid")
+              Logger.debug(s"[CustomerDetailsHttpParser][read]: Invalid Json - $invalid")
+              Logger.warn(s"[CustomerDetailsHttpParser][read]: Invalid Json")
               Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
             },
             valid => Right(valid)

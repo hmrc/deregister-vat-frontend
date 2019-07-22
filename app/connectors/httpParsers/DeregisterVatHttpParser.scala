@@ -31,7 +31,7 @@ object DeregisterVatHttpParser {
           Logger.debug("[DeregisterVatHttpParser][getReads]: Status OK")
           response.json.validate[T].fold(
             invalid => {
-              Logger.warn(s"[DeregisterVatHttpParser][getReads]: Invalid Json $invalid")
+              Logger.debug(s"[DeregisterVatHttpParser][getReads]: Invalid Json $invalid")
               Logger.warn(s"[DeregisterVatHttpParser][getReads]: Invalid Json from deregister-vat")
               Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from deregister-vat"))
             },
