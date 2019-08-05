@@ -196,6 +196,7 @@ deregistrationConfirmation.nonAgentText = Os yw’r busnes yn gallu dadgofrestru
 deregistrationConfirmation.nonAgentText2a = Gwiriwch fod eich manylion cyswllt
 deregistrationConfirmation.nonAgentText2b = wedi’u diweddaru.
 deregistrationConfirmation.contactDetails = Sicrhewch fod eich manylion cyswllt wedi’u diweddaru.
+deregistrationConfirmation.changeClient = Newid cleient
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
