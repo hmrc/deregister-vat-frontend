@@ -23,6 +23,8 @@ import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
 import services.DeleteAllStoredAnswersService
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 import scala.concurrent.Future
@@ -31,25 +33,27 @@ import scala.concurrent.Future
 class SignOutController @Inject()(val messagesApi: MessagesApi,
                                   val authentication: AuthPredicate,
                                   val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
-                                  val serviceErrorHandler: ServiceErrorHandler,
-                                  implicit val appConfig: AppConfig
-                                 ) extends FrontendController with I18nSupport {
+                                  val serviceErrorHandler: ServiceErrorHandler)
+                                 (implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  def signOut(authorised: Boolean, timeout: Boolean = false): Action[AnyContent] = authentication.async { implicit user =>
-    val redirectUrl: String = (timeout, authorised) match {
-      case (true, _) => appConfig.timeOutSignOutUrl
-      case (_, true) => appConfig.signOutUrl
-      case (_, false) => appConfig.unauthorisedSignOutUrl
+  def signOut(authorised: Boolean): Action[AnyContent] = authentication.async { implicit user =>
+    implicit val hc: HeaderCarrier =
+      HeaderCarrierConverter.fromHeadersAndSession(user.headers, Some(user.session))
+
+    (authorised, user.isAgent) match {
+      case (true, true) => deleteDataAndRedirect(appConfig.signOutUrl("VATCA"))
+      case (true, false) => deleteDataAndRedirect(appConfig.signOutUrl("VATC"))
+      case (false, _) => deleteDataAndRedirect(appConfig.unauthorisedSignOutUrl)
     }
-    deleteDataAndRedirect(redirectUrl)
   }
 
-  private def deleteDataAndRedirect(redirectUrl: String)(implicit user: User[_]): Future[Result] =     deleteAllStoredAnswersService.deleteAllAnswers map {
-    case Right(_) => Redirect(redirectUrl)
-    case Left(_) => serviceErrorHandler.showInternalServerError
-  }
+  private def deleteDataAndRedirect(redirectUrl: String)(implicit user: User[_]): Future[Result] =
+    deleteAllStoredAnswersService.deleteAllAnswers map {
+      case Right(_) => Redirect(redirectUrl)
+      case Left(_) => serviceErrorHandler.showInternalServerError
+    }
 
   val timeout: Action[AnyContent] = Action { implicit request =>
-    Ok(views.html.errors.sessionTimeout())
+    Redirect(appConfig.unauthorisedSignOutUrl)
   }
 }

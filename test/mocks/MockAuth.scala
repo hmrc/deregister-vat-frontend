@@ -16,7 +16,7 @@
 
 package mocks
 
-import assets.constants.BaseTestConstants.vrn
+import assets.constants.BaseTestConstants.{arn, vrn}
 import controllers.predicates.{AuthPredicate, AuthoriseAsAgent}
 import org.scalamock.scalatest.MockFactory
 import services.EnrolmentsAuthService
@@ -65,7 +65,7 @@ trait MockAuth extends TestUtil with MockFactory {
         Set(
           Enrolment(
             "HMRC-AS-AGENT",
-            Seq(EnrolmentIdentifier("AgentReferenceNumber", "XAIT0000000000")),
+            Seq(EnrolmentIdentifier("AgentReferenceNumber", arn)),
             "Activated",
             Some("mtd-vat-auth")
           )

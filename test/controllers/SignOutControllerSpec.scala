@@ -16,10 +16,8 @@
 
 package controllers
 
-import assets.messages.TimeoutMessages
-import models.{DeregisterVatSuccess, ErrorModel}
-import org.jsoup.Jsoup
-import play.api.mvc.Result
+import models.{DeregisterVatSuccess, ErrorModel, User}
+import play.api.mvc.{AnyContentAsEmpty, Result}
 import play.api.test.Helpers._
 import services.mocks.MockDeleteAllStoredAnswersService
 
@@ -27,87 +25,95 @@ import scala.concurrent.Future
 
 class SignOutControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
 
-
   object TestSignOutController extends SignOutController(
     messagesApi,
     mockAuthPredicate,
     mockDeleteAllStoredAnswersService,
-    serviceErrorHandler,
-    mockConfig
+    serviceErrorHandler
   )
 
   "Calling .signout" when {
 
-    "authorised" should {
-      "return 303 and navigate to the survey url" in {
-        lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true)(request)
+    "the user is authorised" when {
 
-        setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+      "the user is an agent" should {
 
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(mockConfig.signOutUrl)
+        lazy val result: Future[Result] = {
+          implicit val user: User[AnyContentAsEmpty.type] = agentUserPrefYes
+          setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+          mockAuthResult(mockAuthorisedAgent, isAgent = true)
+          TestSignOutController.signOut(authorised = true)(requestWithVRN)
+        }
+
+        "return 303" in {
+          status(result) shouldBe SEE_OTHER
+        }
+
+        "redirect to the correct sign out URL" in {
+          redirectLocation(result) shouldBe Some(mockConfig.signOutUrl("VATCA"))
+        }
+      }
+
+      "the user is a principal entity" should {
+
+        lazy val result: Future[Result] = {
+          setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+          mockAuthResult(mockAuthorisedIndividual)
+          TestSignOutController.signOut(authorised = true)(request)
+        }
+
+        "return 303" in {
+          status(result) shouldBe SEE_OTHER
+        }
+
+        "redirect to the correct sign out URL" in {
+          redirectLocation(result) shouldBe Some(mockConfig.signOutUrl("VATC"))
+        }
       }
     }
 
-    "unauthorised" should {
-      "return 303 and navigate to sign out url" in {
-        lazy val result: Future[Result] = TestSignOutController.signOut(authorised = false)(request)
+    "the user is unauthorised" should {
 
+      lazy val result: Future[Result] = {
         setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
+        TestSignOutController.signOut(authorised = false)(request)
+      }
 
+      "return 303" in {
         status(result) shouldBe SEE_OTHER
+      }
+
+      "redirect to the unauthorised sign out URL" in {
         redirectLocation(result) shouldBe Some(mockConfig.unauthorisedSignOutUrl)
       }
     }
 
     "there is an error deleting the answers" should {
-      "throw an internal server error" in {
-        lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true)(request)
 
-        setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+      "throw an internal server error" in {
+
+        lazy val result: Future[Result] = {
+          setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+          mockAuthResult(mockAuthorisedIndividual)
+          TestSignOutController.signOut(authorised = true)(request)
+        }
 
         status(result) shouldBe INTERNAL_SERVER_ERROR
-      }
-    }
-
-    "on timeout" when {
-
-      "deleting answers is successful" should {
-
-        "return OK and navigate to the session timeout page" in {
-          lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true, timeout = true)(request)
-
-          setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-
-          status(result) shouldBe SEE_OTHER
-          redirectLocation(result) shouldBe Some(mockConfig.timeOutSignOutUrl)
-        }
-      }
-
-      "deleting answers is unsuccessful" should {
-
-        "throw an internal server error" in {
-          lazy val result: Future[Result] = TestSignOutController.signOut(authorised = true, timeout = true)(request)
-
-          setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-
-          status(result) shouldBe INTERNAL_SERVER_ERROR
-        }
       }
     }
   }
 
   "Calling .timeout" should {
 
-    "Render session timeout view" in {
-      lazy val result: Future[Result] = TestSignOutController.timeout(request)
-      status(result) shouldBe OK
-      document(result).title shouldBe TimeoutMessages.title
+    lazy val result: Future[Result] = TestSignOutController.timeout(request)
+
+    "return 303" in {
+      status(result) shouldBe SEE_OTHER
+    }
+
+    "redirect to the unauthorised sign out URL" in {
+      redirectLocation(result) shouldBe Some(mockConfig.unauthorisedSignOutUrl)
     }
   }
 }
