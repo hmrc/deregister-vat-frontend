@@ -78,7 +78,7 @@
               timeout: @appConfig.timeoutPeriod,
               countdown: @appConfig.timeoutCountdown,
               keepAliveUrl: '@controllers.routes.DeregisterForVATController.redirect().url',
-              signOutUrl: '@controllers.routes.SignOutController.signOut(authorised = true, timeout = true).url'
+              signOutUrl: '@controllers.routes.SignOutController.timeout().url'
             });
             var dialogOpen;
         }

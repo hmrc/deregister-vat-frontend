@@ -48,7 +48,7 @@ GET        /outstanding-invoices            controllers.OutstandingInvoicesContr
 POST       /outstanding-invoices            controllers.OutstandingInvoicesController.submit
 
 #Sign Out Routes
-GET        /sign-out                        controllers.SignOutController.signOut(authorised: Boolean, timeout: Boolean ?= false)
+GET        /sign-out                        controllers.SignOutController.signOut(authorised: Boolean)
 GET        /timeout                         controllers.SignOutController.timeout
 
 #Language Controller

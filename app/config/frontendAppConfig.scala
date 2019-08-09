@@ -38,9 +38,8 @@ trait AppConfig extends ServicesConfig {
   val whitelistExcludedPaths: Seq[Call]
   val shutterPage: String
   val signInUrl: String
-  val signOutUrl: String
-  val timeOutSignOutUrl: String
-  val surveyUrl: String
+  def signOutUrl(identifier: String): String
+  def surveyUrl(identifier: String): String
   val unauthorisedSignOutUrl: String
   val agentServicesGovUkGuidance: String
   val clientServicesGovUkGuidance: String
@@ -156,12 +155,10 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
   private lazy val governmentGatewayHost: String = getString(Keys.governmentGatewayHost)
 
   private lazy val surveyBaseUrl = getString(Keys.surveyHost) + getString(Keys.surveyUrl)
-  override lazy val surveyUrl = s"$surveyBaseUrl/$contactFormServiceIdentifier"
+  override def surveyUrl(identifier: String): String = s"$surveyBaseUrl/$identifier"
 
-  override lazy val signOutUrl = s"$governmentGatewayHost/gg/sign-out?continue=$surveyUrl"
-
-  private lazy val timeOutRedirectUrl = platformHost + controllers.routes.SignOutController.timeout().url
-  override lazy val timeOutSignOutUrl = s"$governmentGatewayHost/gg/sign-out?continue=$timeOutRedirectUrl"
+  override def signOutUrl(identifier: String): String =
+    s"$governmentGatewayHost/gg/sign-out?continue=${surveyUrl(identifier)}"
 
   override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
 
