@@ -52,7 +52,7 @@ class VATAccountsSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe VATAccountsMessages.title
+      elementText(Selectors.pageHeading) shouldBe VATAccountsMessages.heading
     }
 
     s"has the paragraph '${VATAccountsMessages.p1}'" in {
@@ -100,7 +100,7 @@ class VATAccountsSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe VATAccountsMessages.title
+      elementText(Selectors.pageHeading) shouldBe VATAccountsMessages.heading
     }
 
     s"have the correct a radio button form with the correct 2 options" in {

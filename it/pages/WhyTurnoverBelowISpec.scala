@@ -44,7 +44,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Why does the business expect its turnover to be below the threshold?")
+          pageTitle("Why does the business expect its turnover to be below the threshold?" + titleSuffix)
         )
       }
     }
@@ -74,7 +74,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }
@@ -182,7 +182,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(BAD_REQUEST),
-            pageTitle("Error: Why does the business expect its turnover to be below the threshold?"),
+            pageTitle("Error: Why does the business expect its turnover to be below the threshold?" + titleSuffix),
             elementText(".error-message")("Select at least one option")
           )
         }
@@ -214,7 +214,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }

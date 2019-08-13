@@ -53,7 +53,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe CheckYourAnswersMessages.title
+      elementText(Selectors.pageHeading) shouldBe CheckYourAnswersMessages.heading
     }
 
     "have the correct questions being displayed being displayed" in {
@@ -95,7 +95,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe CheckYourAnswersMessages.title
+      elementText(Selectors.pageHeading) shouldBe CheckYourAnswersMessages.heading
     }
 
     "have no answers" in {

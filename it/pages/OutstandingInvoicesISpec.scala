@@ -45,7 +45,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Is the business expecting to receive payment for outstanding invoices after deregistering?")
+          pageTitle("Is the business expecting to receive payment for outstanding invoices after deregistering?" + titleSuffix)
         )
       }
     }
@@ -75,7 +75,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }
@@ -282,7 +282,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(BAD_REQUEST),
-            pageTitle("Error: Is the business expecting to receive payment for outstanding invoices after deregistering?"),
+            pageTitle("Error: Is the business expecting to receive payment for outstanding invoices after deregistering?" + titleSuffix),
             elementText(".error-message")("Select an option")
           )
         }
@@ -314,7 +314,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }

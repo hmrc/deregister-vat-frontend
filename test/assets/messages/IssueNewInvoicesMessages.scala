@@ -16,8 +16,9 @@
 
 package assets.messages
 
-object IssueNewInvoicesMessages {
+object IssueNewInvoicesMessages extends BaseMessages {
 
-  val title = "Is the business expecting to issue any new invoices after deregistering?"
+  val title = "Is the business expecting to issue any new invoices after deregistering?" + titleSuffix
+  val heading = "Is the business expecting to issue any new invoices after deregistering?"
 
 }

@@ -48,7 +48,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe IssueNewInvoicesMessages.title
+      elementText(Selectors.pageHeading) shouldBe IssueNewInvoicesMessages.heading
     }
 
     "not display an error heading" in {
@@ -84,7 +84,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe IssueNewInvoicesMessages.title
+      elementText(Selectors.pageHeading) shouldBe IssueNewInvoicesMessages.heading
     }
 
     "display the correct error heading" in {

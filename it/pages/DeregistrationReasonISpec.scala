@@ -45,7 +45,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Why is the business deregistering from VAT?")
+          pageTitle("Why is the business deregistering from VAT?" + titleSuffix)
         )
       }
     }
@@ -75,7 +75,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }
@@ -257,7 +257,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }

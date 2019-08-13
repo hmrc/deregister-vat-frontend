@@ -47,7 +47,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe TaxableTurnoverMessages.title
+      elementText(Selectors.pageHeading) shouldBe TaxableTurnoverMessages.heading
     }
 
     "not display an error heading" in {
@@ -69,7 +69,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${TaxableTurnoverMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${TaxableTurnoverMessages.agentTitle}"
     }
 
     s"have the correct back text" in {
@@ -78,7 +78,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe TaxableTurnoverMessages.title
+      elementText(Selectors.pageHeading) shouldBe TaxableTurnoverMessages.heading
     }
 
     "display the correct error heading" in {

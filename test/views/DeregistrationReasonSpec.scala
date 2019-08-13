@@ -48,7 +48,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.title
+      elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.heading
     }
 
     "display the correct error heading" in {
@@ -85,7 +85,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.title
+      elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.heading
     }
 
     "display the correct error heading" in {

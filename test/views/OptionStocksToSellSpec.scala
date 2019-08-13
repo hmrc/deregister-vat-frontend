@@ -51,7 +51,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec{
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe OptionStocksToSellMessages.title
+      elementText(Selectors.pageHeading) shouldBe OptionStocksToSellMessages.heading
     }
 
     "not display an error heading" in {

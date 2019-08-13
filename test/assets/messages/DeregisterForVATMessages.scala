@@ -16,9 +16,10 @@
 
 package assets.messages
 
-object DeregisterForVATMessages {
+object DeregisterForVATMessages extends BaseMessages {
 
-  val title = "Deregister for VAT"
+  val title = "Deregister for VAT" + titleSuffix
+  val heading = "Deregister for VAT"
   val p1 = "To complete your deregistration, you need to know:"
   val bullet1 = "your accounting method: standard accounting or cash accounting"
   val bullet2 = "the value of any land or commercial property you own"

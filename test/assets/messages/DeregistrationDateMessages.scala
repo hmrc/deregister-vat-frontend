@@ -16,9 +16,10 @@
 
 package assets.messages
 
-object DeregistrationDateMessages {
+object DeregistrationDateMessages extends BaseMessages {
 
-  val title = "Does the business want to choose its own deregistration date?"
+  val title = "Does the business want to choose its own deregistration date?" + titleSuffix
+  val heading = "Does the business want to choose its own deregistration date?"
   val p1 = "The deregistration date can be up to a maximum of 3 months from today."
   val p2 = "We will confirm the deregistration date when your request is accepted."
   val errorInvalidDate = "Enter a real deregistration date"

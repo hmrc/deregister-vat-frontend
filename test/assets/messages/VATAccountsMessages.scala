@@ -16,9 +16,10 @@
 
 package assets.messages
 
-object VATAccountsMessages {
+object VATAccountsMessages extends BaseMessages {
 
-  val title = "How are the business’s VAT accounts prepared?"
+  val title = "How are the business’s VAT accounts prepared?" + titleSuffix
+  val heading = "How are the business’s VAT accounts prepared?"
   val accountant = "If you have an accountant, ask them what accounting method they use."
   val standard = "Standard accounting"
   val invoice = "You record VAT whenever you send or receive an invoice"

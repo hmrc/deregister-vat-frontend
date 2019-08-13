@@ -45,7 +45,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Is the business expecting to issue any new invoices after deregistering?")
+          pageTitle("Is the business expecting to issue any new invoices after deregistering?" + titleSuffix)
         )
       }
     }
@@ -75,7 +75,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }
@@ -264,7 +264,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }

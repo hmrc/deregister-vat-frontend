@@ -53,7 +53,7 @@ class OptionTaxSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe OptionTaxMessages.title
+      elementText(Selectors.pageHeading) shouldBe OptionTaxMessages.heading
     }
 
     "not display an error heading" in {

@@ -44,7 +44,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
 
       "have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
       }
 
       "have the correct page subheading" in {
@@ -82,7 +82,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
 
         "have the correct page heading" in {
-          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
         }
 
         "have the correct page subheading" in {
@@ -114,7 +114,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
 
         "have the correct page heading" in {
-          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
         }
 
         "have the correct page subheading" in {
@@ -146,7 +146,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
 
         "have the correct page heading" in {
-          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
         }
 
         "have the correct page subheading" in {
@@ -177,11 +177,11 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
-        document.title shouldBe DeregistrationConfirmationMessages.title
+        document.title shouldBe DeregistrationConfirmationMessages.agentTitle
       }
 
       "have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
       }
 
       "have the correct page subheading" in {
@@ -211,11 +211,11 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
-        document.title shouldBe DeregistrationConfirmationMessages.title
+        document.title shouldBe DeregistrationConfirmationMessages.agentTitle
       }
 
       "have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.title
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
       }
 
       "have the correct page subheading" in {
