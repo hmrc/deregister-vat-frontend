@@ -46,7 +46,7 @@ class CannotDeregisterThresholdSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe CannotDeregisterThresholdMessages.title
+      elementText(Selectors.pageHeading) shouldBe CannotDeregisterThresholdMessages.heading
     }
 
     "have the correct text displayed in the first paragraph" in {

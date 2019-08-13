@@ -62,7 +62,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Check your answers")
+          pageTitle("Check your answers" + titleSuffix)
         )
       }
     }
@@ -120,7 +120,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }

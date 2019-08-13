@@ -16,9 +16,10 @@
 
 package assets.messages
 
-object WhyTurnoverBelowMessages {
+object WhyTurnoverBelowMessages extends BaseMessages {
 
-  val title = "Why does the business expect its turnover to be below the threshold?"
+  val title = "Why does the business expect its turnover to be below the threshold?" + titleSuffix
+  val heading = "Why does the business expect its turnover to be below the threshold?"
   val text1 = "Select all that apply"
   val reason1 = "Lost a contract"
   val reason2 = "Semi-retiring"

@@ -53,7 +53,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe CapitalAssetsMessages.title
+      elementText(Selectors.pageHeading) shouldBe CapitalAssetsMessages.heading
     }
 
     "not display an error heading" in {

@@ -16,11 +16,13 @@
 
 package assets.messages
 
-object TaxableTurnoverMessages {
+object TaxableTurnoverMessages extends BaseMessages {
 
   val formatter = java.text.NumberFormat.getIntegerInstance
 
-  val title = "Was the business’s taxable turnover in the last 12 months below £83,000?"
+  val title = "Was the business’s taxable turnover in the last 12 months below £83,000?" + titleSuffix
+  val agentTitle = "Was the business’s taxable turnover in the last 12 months below £83,000?" + titleSuffixAgent
+  val heading = "Was the business’s taxable turnover in the last 12 months below £83,000?"
 
   val mandatory = "Select an option"
 

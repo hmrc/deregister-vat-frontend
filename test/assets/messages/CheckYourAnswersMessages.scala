@@ -16,9 +16,10 @@
 
 package assets.messages
 
-object CheckYourAnswersMessages {
+object CheckYourAnswersMessages extends BaseMessages {
 
-  val title = "Check your answers"
+  val title = "Check your answers" + titleSuffix
+  val heading = "Check your answers"
   val change = "Change"
   val reason = "Why the business is deregistering from VAT"
   val reasonCeased = "It has stopped trading"

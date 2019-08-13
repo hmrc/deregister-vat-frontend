@@ -74,7 +74,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregistrationDateMessages.title
+      elementText(Selectors.pageHeading) shouldBe DeregistrationDateMessages.heading
     }
 
     s"have the correct a date form but be hidden" in {

@@ -45,7 +45,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregisterForVATMessages.title
+      elementText(Selectors.pageHeading) shouldBe DeregisterForVATMessages.heading
     }
 
     s"have the correct continue button text and url" in {

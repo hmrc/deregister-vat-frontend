@@ -16,11 +16,10 @@
 
 package assets.messages
 
-object OptionTaxMessages extends BaseMessages {
+trait BaseMessages {
 
-  val title = "Has the business charged or claimed VAT on land or commercial property?" + titleSuffix
-  val heading = "Has the business charged or claimed VAT on land or commercial property?"
-  val text = "You can choose to charge VAT on any income earned from renting or selling land or commercial property. This is known as ‘Option to Tax’."
-  val hint = "What was the total value of the land or commercial property?"
+  val titleSuffix = " - Business tax account - GOV.UK"
+
+  val titleSuffixAgent = " - Update your client’s VAT details - GOV.UK"
 
 }

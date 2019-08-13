@@ -63,7 +63,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe CeasedTradingDateMessages.title
+      elementText(Selectors.pageHeading) shouldBe CeasedTradingDateMessages.heading
     }
 
     s"have the correct a radio " in {

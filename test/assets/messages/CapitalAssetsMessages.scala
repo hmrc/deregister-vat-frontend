@@ -16,9 +16,10 @@
 
 package assets.messages
 
-object CapitalAssetsMessages {
+object CapitalAssetsMessages extends BaseMessages {
 
-  val title = "Does the business intend to keep any capital assets?"
+  val title = "Does the business intend to keep any capital assets?" + titleSuffix
+  val heading = "Does the business intend to keep any capital assets?"
   val p1 = "This includes things like furniture, computers and equipment."
   val hint = "What is the total value?"
 

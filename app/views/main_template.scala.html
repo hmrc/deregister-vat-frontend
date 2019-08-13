@@ -26,6 +26,7 @@
 )(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 @import uk.gov.hmrc.play.views.html.layouts
+@import views.utils.ServiceNameUtil.generateHeader
 
 @sidebar = {
     @if(sidebarLinks.isDefined) {
@@ -36,7 +37,7 @@
 @serviceInfoContent = {}
 
 @govuk_wrapper(appConfig = appConfig,
-              title = title,
+              title = messages("common.pageTitle", title, generateHeader),
               mainClass = mainClass,
               bodyClasses = bodyClasses,
               sidebar = sidebar,

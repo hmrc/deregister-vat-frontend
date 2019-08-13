@@ -48,7 +48,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe OutstandingInvoicesMessages.title
+      elementText(Selectors.pageHeading) shouldBe OutstandingInvoicesMessages.heading
     }
 
     "not display an error heading" in {

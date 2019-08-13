@@ -51,7 +51,7 @@ class WhyTurnoverBelowSpec extends ViewBaseSpec {
       }
 
       s"have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe WhyTurnoverBelowMessages.title
+        elementText(Selectors.pageHeading) shouldBe WhyTurnoverBelowMessages.heading
       }
 
       "have the correct first paragraph" in {

@@ -16,9 +16,9 @@
 
 package assets.messages
 
-object TimeoutMessages {
+object TimeoutMessages extends BaseMessages {
 
-  val title = "Your session has timed out"
+  val title = "Your session has timed out" + titleSuffix
   val h1 = "Your session has timed out"
   val p1 = "To manage your VAT account, you'll have to sign in using your Government Gateway ID."
 

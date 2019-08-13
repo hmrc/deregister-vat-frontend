@@ -54,7 +54,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Does the business want to choose its own deregistration date?")
+          pageTitle("Does the business want to choose its own deregistration date?" + titleSuffix)
         )
       }
     }
@@ -84,7 +84,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }
@@ -203,7 +203,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(BAD_REQUEST),
-            pageTitle("Error: Does the business want to choose its own deregistration date?"),
+            pageTitle("Error: Does the business want to choose its own deregistration date?" + titleSuffix),
             elementText(".error-message")("Invalid date")
           )
         }
@@ -235,7 +235,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }

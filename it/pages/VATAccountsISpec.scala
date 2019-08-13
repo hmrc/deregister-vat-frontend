@@ -46,7 +46,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("How are the business’s VAT accounts prepared?")
+          pageTitle("How are the business’s VAT accounts prepared?" + titleSuffix)
         )
       }
     }
@@ -76,7 +76,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }
@@ -215,7 +215,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet")
+          pageTitle("You can’t use this service yet" + titleSuffix)
         )
       }
     }
