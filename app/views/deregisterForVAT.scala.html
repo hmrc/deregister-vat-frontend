@@ -38,7 +38,7 @@ appConfig = appConfig) {
         <li>@messages("deregisterForVAT.bullet3")</li>
     </ul>
 
-    <a class="button" type ="submit" id="continue"
+    <a class="button" type="submit" id="continue" role="button"
        href="@{controllers.routes.DeregistrationReasonController.show().url}"
        onclick="sendGAEvent('start-dereg','continue','deregister')">
         @messages("common.continue")
