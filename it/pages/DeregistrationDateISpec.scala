@@ -84,7 +84,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet" + titleSuffix)
+          pageTitle("You can’t use this service yet" + titleSuffixOther)
         )
       }
     }
@@ -235,7 +235,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(FORBIDDEN),
-          pageTitle("You can’t use this service yet" + titleSuffix)
+          pageTitle("You can’t use this service yet" + titleSuffixOther)
         )
       }
     }

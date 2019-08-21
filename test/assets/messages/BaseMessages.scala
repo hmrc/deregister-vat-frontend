@@ -22,4 +22,6 @@ trait BaseMessages {
 
   val titleSuffixAgent = " - Update your client’s VAT details - GOV.UK"
 
+  val titleSuffixOther = " - Making Tax Digital for VAT - GOV.UK"
+
 }
