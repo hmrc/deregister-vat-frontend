@@ -47,7 +47,7 @@ trait IntegrationBaseSpec extends UnitSpec
   implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)
 
   val titleSuffix = " - Business tax account - GOV.UK"
-  val titleSuffixOther = " - Making Tax Digital for VAT - GOV.UK"
+  val titleSuffixOther = " - VAT - GOV.UK"
 
   class PreconditionBuilder {
     implicit val builder: PreconditionBuilder = this
