@@ -37,6 +37,7 @@ common.year = Blwyddyn
 common.fullStop = .
 common.agentService = Diweddaru manylion TAW eich cleient
 common.clientService = Cyfrif Treth Busnes
+common.vat = TAW
 common.yes = Iawn
 common.no = Na
 common.finish = Gorffen
