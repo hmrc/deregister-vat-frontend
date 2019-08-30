@@ -35,7 +35,7 @@ common.day = Diwrnod
 common.month = Mis
 common.year = Blwyddyn
 common.fullStop = .
-common.agentService = Diweddaru manylion TAW eich cleient
+common.agentService = Manylion TAW eich cleient
 common.clientService = Cyfrif Treth Busnes
 common.vat = TAW
 common.yes = Iawn
@@ -50,7 +50,7 @@ common.error.tooManyDecimals = Nodwch uchafswm o 2 bwynt degol ar gyfer ceinioga
 common.error.greaterThanMax = Rydych wedi nodi gormod o rifau
 common.dateRangeSeparator = i
 
-global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – Rhoi gwybod am TAW drwy feddalwedd – GOV.UK
+global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – TAW - GOV.UK
 global.error.InternalServerError500.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
 global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
 global.error.badRequest400.title = Cais drwg – 400
