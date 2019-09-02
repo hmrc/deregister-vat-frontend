@@ -43,6 +43,7 @@ object ConfigKeys {
   val useContactPreferencesFeature: String = "features.useContactPreferencesFeature.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelectorFeature.enabled"
   val changeClientFeature: String = "features.changeClientFeature.enabled"
+  val accessibilityStatement: String = "features.accessibilityStatement.enabled"
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
 
