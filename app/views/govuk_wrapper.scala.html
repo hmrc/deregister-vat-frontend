@@ -100,9 +100,11 @@
 @footerTop = {}
 
 @footerLinks = {
-    <li>
-        <a href="@{appConfig.accessibilityStatementUrl}" target="_blank">@messages("common.accessibility")</a>
-    </li>
+    @if(appConfig.features.accessibilityStatement()) {
+        <li>
+            <a href="@{appConfig.accessibilityStatementUrl}" target="_blank">@messages("common.accessibility")</a>
+        </li>
+    }
 }
 
 @phaseBanner = {

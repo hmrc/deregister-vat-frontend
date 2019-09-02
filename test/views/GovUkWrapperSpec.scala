@@ -21,25 +21,55 @@ import org.jsoup.nodes.Document
 
 class GovUkWrapperSpec extends ViewBaseSpec {
 
-  "Gov Uk Wrapper" should {
+  "Gov Uk Wrapper" when {
 
-    lazy val view = views.html.govuk_wrapper(appConfig = mockConfig, title = "title")(request, messages)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
+    "accessibilityStatement feature switch is on" should {
 
-    "contain a link to the Accessibility statement" which {
+      mockConfig.features.accessibilityStatement(true)
 
-      val selector = ".platform-help-links > li:nth-child(5) > a"
+      lazy val view = views.html.govuk_wrapper(appConfig = mockConfig, title = "title")(request, messages)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "contains the correct text" in {
-        elementText(selector) shouldBe "Accessibility"
+      "contain a link to the Accessibility statement" which {
+
+        val selector = ".platform-help-links > li:nth-child(5) > a"
+
+        "contains the correct text" in {
+          elementText(selector) shouldBe "Accessibility"
+        }
+
+        "contains the correct URL" in {
+          element(selector).attr("href") shouldBe mockConfig.accessibilityStatementUrl
+        }
+
+        "opens in a new tab" in {
+          element(selector).attr("target") shouldBe "_blank"
+        }
       }
+    }
 
-      "contains the correct URL" in {
-        element(selector).attr("href") shouldBe mockConfig.accessibilityStatementUrl
-      }
+    "accessibilityStatement feature switch is off" should {
 
-      "opens in a new tab" in {
-        element(selector).attr("target") shouldBe "_blank"
+      mockConfig.features.accessibilityStatement(false)
+
+      lazy val view = views.html.govuk_wrapper(appConfig = mockConfig, title = "title")(request, messages)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "contain a link to the Accessibility statement" which {
+
+        val selector = ".platform-help-links > li:nth-child(5) > a"
+
+        "contains the correct text" in {
+          elementText(selector) shouldBe "Accessibility"
+        }
+
+        "contains the correct URL" in {
+          element(selector).attr("href") shouldBe mockConfig.accessibilityStatementUrl
+        }
+
+        "opens in a new tab" in {
+          element(selector).attr("target") shouldBe "_blank"
+        }
       }
     }
   }
