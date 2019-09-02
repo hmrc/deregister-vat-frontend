@@ -22,5 +22,5 @@ case class FeatureSwitchModel(simpleAuthEnabled: Boolean,
                               useContactPreferencesFeature: Boolean,
                               useLanguagePreferencesFeature: Boolean,
                               changeClientFeature: Boolean,
-                              accessibilityStatement: Boolean)
+                              accessibilityStatementEnabled: Boolean)
 

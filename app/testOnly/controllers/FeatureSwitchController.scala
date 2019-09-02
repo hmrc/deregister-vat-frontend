@@ -37,7 +37,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
         useContactPreferencesFeature = appConfig.features.useContactPreferences(),
         useLanguagePreferencesFeature = appConfig.features.useLanguageSelector(),
         changeClientFeature = appConfig.features.changeClient(),
-        accessibilityStatement = appConfig.features.accessibilityStatement()
+        accessibilityStatementEnabled = appConfig.features.accessibilityStatement()
       )
     )))
   }
@@ -56,7 +56,7 @@ class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
     appConfig.features.useContactPreferences(model.useContactPreferencesFeature)
     appConfig.features.useLanguageSelector(model.useLanguagePreferencesFeature)
     appConfig.features.changeClient(model.changeClientFeature)
-    appConfig.features.accessibilityStatement(model.accessibilityStatement)
+    appConfig.features.accessibilityStatement(model.accessibilityStatementEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 
