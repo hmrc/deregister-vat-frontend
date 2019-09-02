@@ -32,18 +32,10 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
       "contain a link to the Accessibility statement" which {
 
-        val selector = ".platform-help-links > li:nth-child(5) > a"
-
-        "contains the correct text" in {
-          elementText(selector) shouldBe "Accessibility"
-        }
+        val selector = ".platform-help-links > li:nth-child(2) > a"
 
         "contains the correct URL" in {
           element(selector).attr("href") shouldBe mockConfig.accessibilityStatementUrl
-        }
-
-        "opens in a new tab" in {
-          element(selector).attr("target") shouldBe "_blank"
         }
       }
     }
@@ -57,18 +49,10 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
       "contain a link to the Accessibility statement" which {
 
-        val selector = ".platform-help-links > li:nth-child(5) > a"
-
-        "contains the correct text" in {
-          elementText(selector) shouldBe "Accessibility"
-        }
+        val selector = ".platform-help-links > li:nth-child(2) > a"
 
         "contains the correct URL" in {
           element(selector).attr("href") shouldBe mockConfig.accessibilityStatementUrl
-        }
-
-        "opens in a new tab" in {
-          element(selector).attr("target") shouldBe "_blank"
         }
       }
     }
