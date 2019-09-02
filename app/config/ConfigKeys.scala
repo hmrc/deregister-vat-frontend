@@ -71,4 +71,7 @@ object ConfigKeys {
 
   val contactPreferencesService: String = "contact-preferences"
 
+  val accessibilityStatementHost: String = "accessibility-statement.host"
+  val accessibilityStatementUrl: String = "accessibility-statement.url"
+
 }
