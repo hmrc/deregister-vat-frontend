@@ -43,8 +43,8 @@ trait MockHttp extends TestUtil with MockFactory {
   }
 
   def setupMockHttpDelete[T](url: String)(response: Either[ErrorModel, DeregisterVatResponse]): Unit = {
-    (mockHttp.DELETE(_: String)(_: HttpReads[Either[ErrorModel, DeregisterVatResponse]], _: HeaderCarrier, _: ExecutionContext))
-      .expects(url, *, *, *)
+    (mockHttp.DELETE(_: String, _: Seq[(String, String)])(_: HttpReads[Either[ErrorModel, DeregisterVatResponse]], _: HeaderCarrier, _: ExecutionContext))
+      .expects(url, *, *, *, *)
       .returns(response)
   }
 }
