@@ -30,8 +30,9 @@ object FeatureSwitchForm {
       ConfigKeys.stubContactPreferencesFeature -> boolean,
       ConfigKeys.useContactPreferencesFeature -> boolean,
       ConfigKeys.useLanguageSelectorFeature -> boolean,
-      ConfigKeys.changeClientFeature -> boolean
-      )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
+      ConfigKeys.changeClientFeature -> boolean,
+      ConfigKeys.accessibilityStatement -> boolean
+    )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 
 }

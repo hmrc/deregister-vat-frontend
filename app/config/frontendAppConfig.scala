@@ -46,6 +46,7 @@ trait AppConfig extends ServicesConfig {
   val govUkCancelVatRegistration: String
   val manageVatSubscriptionFrontendUrl: String
   val changeClientUrl: String
+  val accessibilityStatementUrl: String
 
   def vatAgentClientLookupHandoff(redirectUrl: String): String
 
@@ -183,4 +184,7 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
     "cymraeg" -> Lang("cy")
   )
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchLanguage(lang)
+
+  private lazy val accessibilityStatementHost: String = getString(Keys.accessibilityStatementHost)
+  override lazy val accessibilityStatementUrl: String = accessibilityStatementHost + getString(Keys.accessibilityStatementUrl)
 }

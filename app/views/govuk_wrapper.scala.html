@@ -15,7 +15,9 @@
  *@
 
 @import config.AppConfig
-
+@import layouts.{govuk_template => hmrcGovUkTemplate}
+@import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import views.utils.ServiceNameUtil
 
 @(appConfig: AppConfig,
@@ -32,10 +34,6 @@
   serviceName: Option[String] = None,
   showSignOut: Boolean = true
 )(implicit request: Request[_], messages: Messages)
-
-@import layouts.{govuk_template => hmrcGovUkTemplate}
-@import uk.gov.hmrc.play.views.html.{layouts => uiLayouts}
-@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 
 @head = {
     @uiLayouts.head(
@@ -98,6 +96,7 @@
 }
 
 @footerTop = {}
+
 @footerLinks = {}
 
 @phaseBanner = {
@@ -146,4 +145,16 @@
       sidebar = sidebar)
 }
 
-@hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
+@hmrcGovUkTemplate(Some(title), bodyClasses)(
+    head,
+    bodyEnd,
+    insideHeader,
+    afterHeader,
+    footerTop,
+    Some(uiLayouts.footer_links(
+        None,
+        None,
+        if(appConfig.features.accessibilityStatement()) Some(appConfig.accessibilityStatementUrl) else None
+    )),
+    nav = true
+)(content)
