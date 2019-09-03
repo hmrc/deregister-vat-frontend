@@ -39,8 +39,9 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn,AccountingMethodAnswerService.key)(Json.toJson(StandardAccounting))
-        DeregisterVatStub.successfulGetAnswer(vrn,DeregReasonAnswerService.key)(Json.toJson(Ceased))
+        DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+        DeregisterVatStub.successfulGetAnswer(vrn, AccountingMethodAnswerService.key)(Json.toJson(StandardAccounting))
+        DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
 
         val response: WSResponse = getRequest
 
