@@ -97,13 +97,7 @@
 
 @footerTop = {}
 
-@footerLinks = {
-    @if(appConfig.features.accessibilityStatement()) {
-        <li>
-            <a href="@{appConfig.accessibilityStatementUrl}" target="_blank">@messages("common.accessibility")</a>
-        </li>
-    }
-}
+@footerLinks = {}
 
 @phaseBanner = {
 <div class="beta-banner">
@@ -157,6 +151,10 @@
     insideHeader,
     afterHeader,
     footerTop,
-    Some(uiLayouts.footer_links(None, None, if(appConfig.features.accessibilityStatement()) Some(appConfig.accessibilityStatementUrl) else None)),
-    true
+    Some(uiLayouts.footer_links(
+        None,
+        None,
+        if(appConfig.features.accessibilityStatement()) Some(appConfig.accessibilityStatementUrl) else None
+    )),
+    nav = true
 )(content)
