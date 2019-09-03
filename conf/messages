@@ -24,7 +24,6 @@ common.error.tooManyDecimals = Enter a maximum of 2 decimal places for pence
 common.error.greaterThanMax = You have entered too many numbers
 common.dateRangeSeparator = to
 common.pageTitle = {0} - {1} - GOV.UK
-common.accessibility = Accessibility
 
 global.error.InternalServerError500.title = There is a problem with the service - VAT - GOV.UK
 global.error.InternalServerError500.heading = Sorry, there is a problem with the service
