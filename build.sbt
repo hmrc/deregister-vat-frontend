@@ -54,8 +54,8 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-play-25" % "4.16.0",
-  "uk.gov.hmrc" %% "govuk-template" % "5.37.0-play-25",
+  "uk.gov.hmrc" %% "bootstrap-play-25" % "5.0.0",
+  "uk.gov.hmrc" %% "govuk-template" % "5.39.0-play-25",
   "uk.gov.hmrc" %% "play-ui" % "8.0.0-play-25",
   "uk.gov.hmrc" %% "play-partials" % "6.9.0-play-25",
   "uk.gov.hmrc" %% "play-whitelist-filter" % "3.1.0-play-25",
@@ -85,6 +85,7 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
 
 lazy val microservice: Project = Project(appName, file("."))
   .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
+  .settings(PlayKeys.playDefaultPort := 9153)
   .settings(coverageSettings: _*)
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
