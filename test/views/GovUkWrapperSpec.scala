@@ -23,37 +23,33 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
   "Gov Uk Wrapper" when {
 
+    val selector = ".platform-help-links > li:nth-child(2) > a"
+
     "accessibilityStatement feature switch is on" should {
 
-      mockConfig.features.accessibilityStatement(true)
+      lazy val view = {
+        mockConfig.features.accessibilityStatement(true)
+        views.html.govuk_wrapper(appConfig = mockConfig, title = "title")(request, messages)
+      }
 
-      lazy val view = views.html.govuk_wrapper(appConfig = mockConfig, title = "title")(request, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "contain a link to the Accessibility statement" which {
-
-        val selector = ".platform-help-links > li:nth-child(2) > a"
-
-        "contains the correct URL" in {
-          element(selector).attr("href") shouldBe mockConfig.accessibilityStatementUrl
-        }
+      "contain a link to the Accessibility statement" in {
+        element(selector).attr("href") shouldBe mockConfig.accessibilityStatementUrl
       }
     }
 
     "accessibilityStatement feature switch is off" should {
 
-      mockConfig.features.accessibilityStatement(false)
+      lazy val view = {
+        mockConfig.features.accessibilityStatement(false)
+        views.html.govuk_wrapper(appConfig = mockConfig, title = "title")(request, messages)
+      }
 
-      lazy val view = views.html.govuk_wrapper(appConfig = mockConfig, title = "title")(request, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "contain a link to the Accessibility statement" which {
-
-        val selector = ".platform-help-links > li:nth-child(2) > a"
-
-        "contains the correct URL" in {
-          element(selector).attr("href") shouldBe mockConfig.accessibilityStatementUrl
-        }
+      "not contain a link to the Accessibility statement" in {
+        element(selector).attr("href") shouldNot include(mockConfig.accessibilityStatementUrl)
       }
     }
   }

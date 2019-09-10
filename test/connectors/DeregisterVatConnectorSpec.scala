@@ -42,7 +42,7 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp {
       }
     }
 
-    s"Calling .getAnswers" when {
+    "Calling .getAnswers" when {
 
       "A valid response is parsed" should {
 
@@ -61,7 +61,7 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp {
       }
     }
 
-    s"Calling .putAnswers" when {
+    "Calling .putAnswers" when {
 
       "A valid response is parsed" should {
 
@@ -80,7 +80,7 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp {
       }
     }
 
-    s"Calling .deleteAnswer" when {
+    "Calling .deleteAnswer" when {
 
       "A valid response is parsed" should {
 
@@ -99,7 +99,7 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp {
       }
     }
 
-    s"Calling .deleteAllAnswers" when {
+    "Calling .deleteAllAnswers" when {
 
       "A valid response is parsed" should {
 

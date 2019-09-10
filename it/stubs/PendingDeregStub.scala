@@ -48,4 +48,15 @@ object PendingDeregStub extends WireMockMethods {
       ))
   }
 
+  def customerDetails(): StubMapping = {
+    when(method = GET, uri = "/vat-subscription/([0-9]+)/customer-details")
+      .thenReturn(status = OK, body = Json.obj(
+        "firstName" -> "First Name",
+        "lastName" -> "Last Name",
+        "tradingName" -> "Trading Name",
+        "organisationName" -> "Org Name",
+        "hasFlatRateScheme" -> true
+      ))
+  }
+
 }
