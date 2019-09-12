@@ -13,7 +13,7 @@ This service provides end users with a mechanism to De-register for VAT.
 This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), so needs at least a [JRE] to run.
 
 ## Running
-`sbt "run 9153 -Dapplication.router=testOnlyDoNotUseInAppConf.Routes"` 
+`sbt "run 9153 -Dapplication.router=testOnlyDoNotUseInAppConf.Routes"`
 
 ## Testing
 `sbt clean coverage test it:test coverageReport`
