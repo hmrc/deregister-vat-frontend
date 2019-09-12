@@ -35,9 +35,14 @@
   showSignOut: Boolean = true
 )(implicit request: Request[_], messages: Messages)
 
+@linksElement = {
+    <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/palette.css")'>
+    <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/focus.css")'>
+}
+
 @head = {
     @uiLayouts.head(
-      linkElem = None,
+      linkElem = Some(linksElement),
       headScripts = None)
     <meta name="format-detection" content="telephone=no" />
 }
