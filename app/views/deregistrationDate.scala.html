@@ -34,7 +34,6 @@
 
 
     <a class="link-back"
-       onclick="sendGAEvent('end-journey','back','deregister-date')"
     @if(outstanding.isDefined){
        href="@controllers.routes.OutstandingInvoicesController.show().url"
     }else{
@@ -72,8 +71,7 @@
         </div>
 
 
-        <button class="button" type ="submit" id="continue"
-                onclick="sendGAEvent('end-journey','continue','deregister-date')">
+        <button class="button" type ="submit" id="continue">
             @messages("common.continue")
         </button>
     }

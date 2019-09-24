@@ -27,8 +27,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url"
-       onclick="sendGAEvent('ceased-trading','back','date-ceased-trading')">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form, Some("ceasedTrading"))
 
@@ -44,8 +43,7 @@
             )
         </div>
 
-        <button class="button" type ="submit" id="continue"
-                onclick="sendGAEvent('ceased-trading','continue','date-ceased-trading')">
+        <button class="button" type ="submit" id="continue">
             @messages("common.continue")
         </button>
     }

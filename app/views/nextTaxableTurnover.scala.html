@@ -27,8 +27,7 @@ title = title(messages("nextTaxableTurnover.title"), form),
 bodyClasses = None,
 appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.TaxableTurnoverController.show().url"
-       onclick="sendGAEvent('below-threshold','back','expected-turnover')">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.TaxableTurnoverController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -45,8 +44,7 @@ appConfig = appConfig) {
             )
         </div>
 
-        <button class="button" type ="submit" id="continue"
-                onclick="sendGAEvent('below-threshold','continue','expected-turnover')">
+        <button class="button" type ="submit" id="continue">
             @messages("common.continue")
         </button>
 

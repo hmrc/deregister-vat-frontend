@@ -30,8 +30,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.OptionStocksToSellController.show().url"
-       onclick="sendGAEvent('end-journey','back','capital-assets')">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.OptionStocksToSellController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -60,8 +59,7 @@
             )
         </div>
 
-        <button class="button" type ="submit" id="continue"
-                onclick="sendGAEvent('end-journey','continue','capital-assets')">
+        <button class="button" type ="submit" id="continue">
             @messages("common.continue")
         </button>
     }

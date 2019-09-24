@@ -28,9 +28,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregisterForVATController.redirect().url"
-       @if(user.isAgent){onclick="sendGAEvent('agent_start-dereg','back','deregister-reason')"}
-       else{onclick="sendGAEvent('start-dereg','back','deregister-reason')"}>@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.DeregisterForVATController.redirect().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -48,9 +46,7 @@
             )
         </div>
 
-        <button class="button" type ="submit" id="continue"
-                @if(user.isAgent){onclick="sendGAEvent('agent_start-dereg','continue','deregister-reason')"}
-                else{onclick="sendGAEvent('start-dereg','continue','deregister-reason')"}>
+        <button class="button" type ="submit" id="continue">
             @messages("common.continue")
         </button>
     }

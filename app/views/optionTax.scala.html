@@ -30,8 +30,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.VATAccountsController.show().url"
-       onclick="sendGAEvent('end-journey','back','option-to-tax')">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.VATAccountsController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -60,8 +59,7 @@
             )
         </div>
 
-        <button class="button" type ="submit" id="continue"
-                onclick="sendGAEvent('end-journey','continue','option-to-tax')">
+        <button class="button" type ="submit" id="continue">
             @messages("common.continue")
         </button>
     }
