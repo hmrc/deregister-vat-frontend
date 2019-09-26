@@ -88,8 +88,7 @@ appConfig = appConfig) {
         } else {
             <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
             <p>
-                <a href={appConfig.manageVatSubscriptionFrontendUrl}
-                   onclick="sendGAEvent('end-journey','finish','deregister-request-received')">
+                <a href={appConfig.manageVatSubscriptionFrontendUrl}>
                     {messages("deregistrationConfirmation.nonAgentText2a")}</a>
                     {messages("deregistrationConfirmation.nonAgentText2b")}
             </p>
@@ -100,15 +99,13 @@ appConfig = appConfig) {
 @if(user.isAgent && appConfig.features.changeClient()) {
     <p>
         <a id="change-client-link"
-            href="@appConfig.changeClientUrl"
-            onclick="sendGAEvent('end-journey','finish','deregister-request-received')">@messages("deregistrationConfirmation.changeClient")
+            href="@appConfig.changeClientUrl">@messages("deregistrationConfirmation.changeClient")
         </a>
     </p>
 }
 
 <p>
-    <a id="finish" href="@appConfig.manageVatSubscriptionFrontendUrl" class="button" role="button"
-       onclick="sendGAEvent('end-journey','change-client','deregister-request-received')">
+    <a id="finish" href="@appConfig.manageVatSubscriptionFrontendUrl" class="button" role="button">
         @messages("common.finish")
     </a>
 </p>

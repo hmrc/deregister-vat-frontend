@@ -31,7 +31,6 @@
 
     <a class="link-back"
        href=@backLink
-       onclick="sendGAEvent('end-journey','back','accounting-method')"
     >@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
@@ -58,8 +57,7 @@
             )
         </div>
 
-        <button class="button" type="submit" id="continue"
-                onclick="sendGAEvent('end-journey','continue','accounting-method')">
+        <button class="button" type="submit" id="continue">
             @messages("common.continue")
         </button>
     }

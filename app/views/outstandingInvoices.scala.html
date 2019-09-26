@@ -29,8 +29,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.IssueNewInvoicesController.show().url"
-       onclick="sendGAEvent('end-journey','back','outstanding-invoices')">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.IssueNewInvoicesController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -49,7 +48,6 @@
             )
         </div>
 
-        <button class="button" type="submit" id="continue"
-                onclick="sendGAEvent('end-journey','continue','outstanding-invoices')">@messages("common.continue")</button>
+        <button class="button" type="submit" id="continue">@messages("common.continue")</button>
     }
 }
