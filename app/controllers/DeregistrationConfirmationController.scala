@@ -70,7 +70,7 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
   }
 
   private def getContactPreference(implicit user: User[AnyContent], hc: HeaderCarrier, ec: ExecutionContext) = {
-    if (!user.isAgent && appConfig.features.useContactPreferences()) {
+    if (!user.isAgent) {
       customerContactPreference.getCustomerContactPreferences(user.vrn)(hc, ec)
     } else {
       Future(Left(None))(ec)

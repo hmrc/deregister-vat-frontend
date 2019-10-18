@@ -40,7 +40,6 @@ object ConfigKeys {
   val simpleAuthFeature: String = "features.simpleAuth.enabled"
   val stubAgentClientLookupFeature: String = "features.stubAgentClientLookup"
   val stubContactPreferencesFeature: String = "features.stubContactPreferences.enabled"
-  val useContactPreferencesFeature: String = "features.useContactPreferencesFeature.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelectorFeature.enabled"
   val changeClientFeature: String = "features.changeClientFeature.enabled"
   val accessibilityStatement: String = "features.accessibilityStatement.enabled"
