@@ -213,7 +213,6 @@ unauthorised.client.useThisService = Mae’n rhaid i chi
 unauthorised.client.signUp = gofrestru i ddefnyddio meddalwedd er mwyn cyflwyno’ch Ffurflenni TAW
 
 featureSwitch.title = Feature switches
-features.simpleAuth.enabled = Simple auth
 features.useLanguageSelectorFeature.enabled = Language selector
 
 outstandingInvoice.title = A yw’r busnes yn disgwyl cael ei dalu am anfonebau heb eu setlo ar ôl dadgofrestru?

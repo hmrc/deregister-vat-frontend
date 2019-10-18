@@ -25,7 +25,6 @@ object FeatureSwitchForm {
 
   val form: Form[FeatureSwitchModel] = Form(
     mapping(
-      ConfigKeys.simpleAuthFeature -> boolean,
       ConfigKeys.stubAgentClientLookupFeature -> boolean,
       ConfigKeys.stubContactPreferencesFeature -> boolean,
       ConfigKeys.useContactPreferencesFeature -> boolean,
