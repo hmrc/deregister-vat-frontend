@@ -22,18 +22,18 @@ class FeaturesSpec extends TestUtil {
 
   override def beforeEach(): Unit = {
     super.beforeEach()
-    mockConfig.features.simpleAuth(false)
+    mockConfig.features.accessibilityStatement(false)
   }
 
-  "The Auth Feature" should {
+  "The accessibilityStatement Feature" should {
 
     "return its current state" in {
-      mockConfig.features.simpleAuth() shouldBe false
+      mockConfig.features.accessibilityStatement() shouldBe false
     }
 
     "switch to a new state" in {
-      mockConfig.features.simpleAuth(true)
-      mockConfig.features.simpleAuth() shouldBe true
+      mockConfig.features.accessibilityStatement(true)
+      mockConfig.features.accessibilityStatement() shouldBe true
     }
 
   }

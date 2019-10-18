@@ -42,7 +42,7 @@ class FeatureSwitchControllerSpec extends ControllerBaseSpec {
   "Calling the .submitFeatureSwitch action" should {
 
     lazy val result = target.submitFeatureSwitch(request.addToken
-      .withFormUrlEncodedBody("features.simpleAuth.enabled" -> "true"))
+      .withFormUrlEncodedBody("features.accessibilityStatement.enabled" -> "true"))
 
     "return 303" in {
       status(result) shouldBe Status.SEE_OTHER

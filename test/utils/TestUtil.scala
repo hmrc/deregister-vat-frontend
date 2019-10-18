@@ -39,7 +39,6 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
 
   override def beforeEach() {
     super.beforeEach()
-    mockConfig.features.simpleAuth(false)
     mockConfig.features.stubAgentClientLookup(true)
     mockConfig.features.stubContactPreferences(true)
     mockConfig.features.useContactPreferences(false)
