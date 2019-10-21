@@ -32,12 +32,10 @@ class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
   lazy val mockAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   override def beforeEach() {
-    mockAppConfig.features.useContactPreferences(false)
     super.beforeEach()
   }
 
   override def afterEach() {
-    mockAppConfig.features.useContactPreferences(false)
     super.afterEach()
   }
 
@@ -48,8 +46,6 @@ class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
     "the user is authorised" should {
 
       "return 200 OK" in {
-
-        mockAppConfig.features.useContactPreferences(true)
 
         given.user.isAuthorised
 

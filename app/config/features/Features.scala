@@ -25,7 +25,6 @@ import play.api.Configuration
 class Features @Inject()(implicit config: Configuration) {
   val stubAgentClientLookup = new Feature(ConfigKeys.stubAgentClientLookupFeature)
   val stubContactPreferences = new Feature(ConfigKeys.stubContactPreferencesFeature)
-  val useContactPreferences = new Feature(ConfigKeys.useContactPreferencesFeature)
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature)
   val changeClient = new Feature(ConfigKeys.changeClientFeature)
   val accessibilityStatement = new Feature(ConfigKeys.accessibilityStatement)

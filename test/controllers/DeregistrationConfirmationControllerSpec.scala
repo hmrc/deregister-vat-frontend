@@ -47,33 +47,8 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
       "answers are deleted successfully and a customerDetails is received" when {
 
-        "the useContactPreferences feature is disabled" should {
+        "Contact Preference is set to 'DIGITAL'" should {
           lazy val result = {
-            mockConfig.features.useContactPreferences(false)
-            TestDeregistrationConfirmationController.show()(request)
-          }
-          lazy val document = Jsoup.parse(bodyOf(result))
-
-          "return 200 (OK)" in {
-            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-            status(result) shouldBe Status.OK
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-
-          "return the correct first paragraph" in {
-            document.getElementById("content").getElementsByTag("article").first().getElementsByTag("p").first().text() shouldBe Messages.p1contactPrefDisabled
-          }
-        }
-
-        "the useContactPreferences feature is enabled and set to 'DIGITAL'" should {
-          lazy val result = {
-            mockConfig.features.useContactPreferences(true)
             TestDeregistrationConfirmationController.show()(request)
           }
           lazy val document = Jsoup.parse(bodyOf(result))
@@ -102,35 +77,9 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
       "answers are deleted successfully and an error is received for CustomerDetails call" when {
 
-        "'useContactPreference' is disabled" should {
+        "Contact Preference is set to 'PAPER'" should {
 
           lazy val result = {
-            mockConfig.features.useContactPreferences(false)
-            TestDeregistrationConfirmationController.show()(request)
-          }
-          lazy val document = Jsoup.parse(bodyOf(result))
-
-          "return 200 (OK)" in {
-            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-            status(result) shouldBe Status.OK
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-
-          "return the correct first paragraph" in {
-            document.getElementById("content").getElementsByTag("article").first().getElementsByTag("p").first().text() shouldBe Messages.p1contactPrefDisabled
-          }
-        }
-
-        "'useContactPreference' is enabled and set to 'PAPER'" should {
-
-          lazy val result = {
-            mockConfig.features.useContactPreferences(true)
             TestDeregistrationConfirmationController.show()(request)
           }
           lazy val document = Jsoup.parse(bodyOf(result))
@@ -154,10 +103,9 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           }
         }
 
-        "'useContactPreference' and returns an error" should {
+        "contact preferences returns an error" should {
 
           lazy val result = {
-            mockConfig.features.useContactPreferences(true)
             TestDeregistrationConfirmationController.show()(request)
           }
           lazy val document = Jsoup.parse(bodyOf(result))

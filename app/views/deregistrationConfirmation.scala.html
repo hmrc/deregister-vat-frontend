@@ -68,31 +68,21 @@ appConfig = appConfig) {
         }
     } else {
 
-        if(appConfig.features.useContactPreferences()){
+        preference match {
 
-            preference match {
+            case Some("DIGITAL") =>
+                <p id="preference-message">{messages("deregistrationConfirmation.digitalPreference")}</p>
+                <p>{messages("deregistrationConfirmation.contactDetails")}</p>
 
-                case Some("DIGITAL") =>
-                    <p id="preference-message">{messages("deregistrationConfirmation.digitalPreference")}</p>
-                    <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+            case Some("PAPER") =>
+                <p id="preference-message">{messages("deregistrationConfirmation.paperPreference")}</p>
+                <p>{messages("deregistrationConfirmation.contactDetails")}</p>
 
-                case Some("PAPER") =>
-                    <p id="preference-message">{messages("deregistrationConfirmation.paperPreference")}</p>
-                    <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+            case _ => <p>{messages("deregistrationConfirmation.contactPrefError")}</p>
+                      <p>{messages("deregistrationConfirmation.contactDetails")}</p>
 
-                case _ => <p>{messages("deregistrationConfirmation.contactPrefError")}</p>
-                          <p>{messages("deregistrationConfirmation.contactDetails")}</p>
-
-            }
-
-        } else {
-            <p>{messages("deregistrationConfirmation.nonAgentText")}</p>
-            <p>
-                <a href={appConfig.manageVatSubscriptionFrontendUrl}>
-                    {messages("deregistrationConfirmation.nonAgentText2a")}</a>
-                    {messages("deregistrationConfirmation.nonAgentText2b")}
-            </p>
         }
+
     }
 }
 
