@@ -197,5 +197,25 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
       }
     }
+
+    "isAgent is true" should {
+      "display the change client link" in {
+        val businessName: Option[String] = Some("Fake Business Name Limited")
+        lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig, hc, ec)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        elementText(Selectors.changeClientLink) shouldBe "Change client"
+      }
+    }
+
+    "isAgent is false" should {
+      "not display the change client link" in {
+        val businessName: Option[String] = Some("Fake Business Name Limited")
+        lazy val view = views.html.deregistrationConfirmation(businessName)(user, messages, mockConfig, hc, ec)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        elementText(Selectors.changeClientLink) shouldNot be("Change client")
+      }
+    }
   }
 }

@@ -86,11 +86,13 @@ appConfig = appConfig) {
     }
 }
 
-<p>
-    <a id="change-client-link"
+@if(user.isAgent) {
+    <p>
+        <a id="change-client-link"
         href="@appConfig.changeClientUrl">@messages("deregistrationConfirmation.changeClient")
-    </a>
-</p>
+        </a>
+    </p>
+}
 
 <p>
     <a id="finish" href="@appConfig.manageVatSubscriptionFrontendUrl" class="button" role="button">
