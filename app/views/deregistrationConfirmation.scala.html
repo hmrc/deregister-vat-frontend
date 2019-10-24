@@ -86,10 +86,10 @@ appConfig = appConfig) {
     }
 }
 
-@if(user.isAgent && appConfig.features.changeClient()) {
+@if(user.isAgent) {
     <p>
         <a id="change-client-link"
-            href="@appConfig.changeClientUrl">@messages("deregistrationConfirmation.changeClient")
+        href="@appConfig.changeClientUrl">@messages("deregistrationConfirmation.changeClient")
         </a>
     </p>
 }
