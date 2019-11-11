@@ -37,6 +37,11 @@ class GovUkWrapperSpec extends ViewBaseSpec {
       "contain a link to the Accessibility statement" in {
         element(selector).attr("href") shouldBe mockConfig.accessibilityStatementUrl
       }
+
+      "not contain a logo" in {
+        document.select(".organisation-logo") shouldBe empty
+      }
+
     }
 
     "accessibilityStatement feature switch is off" should {
