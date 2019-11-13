@@ -18,9 +18,9 @@ package assets.messages
 
 object DeregistrationConfirmationMessages extends BaseMessages {
 
-  val title = "We have received the request to deregister from VAT" + titleSuffix
-  val agentTitle = "We have received the request to deregister from VAT" + titleSuffixAgent
-  val heading = "We have received the request to deregister from VAT"
+  val title = "Request to cancel VAT registration received" + titleSuffix
+  val agentTitle = "Request to cancel VAT registration received" + titleSuffixAgent
+  val heading = "Request to cancel VAT registration received"
   val subheading = "What happens next"
 
   val contactPrefError = "We will send you an update within 15 working days."

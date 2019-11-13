@@ -54,7 +54,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Does the business want to choose its own deregistration date?" + titleSuffix)
+          pageTitle("Do you want to choose the cancellation date?" + titleSuffix)
         )
       }
     }
@@ -203,7 +203,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(BAD_REQUEST),
-            pageTitle("Error: Does the business want to choose its own deregistration date?" + titleSuffix),
+            pageTitle("Error: Do you want to choose the cancellation date?" + titleSuffix),
             elementText(".error-message")("Invalid date")
           )
         }

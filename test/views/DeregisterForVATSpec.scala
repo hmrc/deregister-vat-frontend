@@ -26,11 +26,11 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     val back = ".link-back"
     val pageHeading = "#content h1"
     val button = ".button"
-    val para = "#content article > p"
+    val para:  Int => String = n => s"#content article > p:nth-child($n)"
     val bullets: Int => String = n => s"#content > article > ul > li:nth-child($n)"
   }
 
-  "Rendering the Deregistration reason page" should {
+  "Rendering the cancel registration reason page" should {
 
     lazy val view = views.html.deregisterForVAT()(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -54,13 +54,16 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     }
 
     s"have the correct paragraph" in {
-      elementText(Selectors.para) shouldBe DeregisterForVATMessages.p1
+      elementText(Selectors.para(3)) shouldBe DeregisterForVATMessages.p1
     }
 
     s"have the correct bullet points" in {
       elementText(Selectors.bullets(1)) shouldBe DeregisterForVATMessages.bullet1
       elementText(Selectors.bullets(2)) shouldBe DeregisterForVATMessages.bullet2
-      elementText(Selectors.bullets(3)) shouldBe DeregisterForVATMessages.bullet3
+    }
+
+    s"have the correct second paragraph" in {
+      elementText(Selectors.para(5)) shouldBe DeregisterForVATMessages.p2
     }
 
   }
