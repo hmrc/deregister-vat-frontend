@@ -18,7 +18,7 @@ package assets.messages
 
 object OptionStocksToSellMessages extends BaseMessages {
 
-  val title = "Is the business going to keep any stock?" + titleSuffix
+  val title: String = "Is the business going to keep any stock?" + titleSuffix
   val heading = "Is the business going to keep any stock?"
   val text1 = "For example, goods bought or manufactured for resale."
   val hiddenText = "What is the total value?"

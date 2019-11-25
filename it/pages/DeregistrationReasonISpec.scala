@@ -45,7 +45,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Why are you cancelling your VAT registration?" + titleSuffix)
+          pageTitle("Why is the business cancelling its VAT registration?" + titleSuffix)
         )
       }
     }

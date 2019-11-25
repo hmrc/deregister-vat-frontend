@@ -21,7 +21,7 @@ object DeregistrationReasonMessages extends BaseMessages {
   val title = "Why is the business cancelling its VAT registration?" + titleSuffix
   val heading = "Why is the business cancelling its VAT registration?"
   val reason1 = "The business has stopped trading"
-  val reason2 = "Annual turnover will be below £83,000"
+  val reason2 = "Annual turnover is below £83,000"
   val reason3 = "Other"
 
 }

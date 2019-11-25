@@ -48,15 +48,15 @@ deregisterForVAT.bullet2 = stock or assets the business has or plans to keep
 
 deregistrationReason.title = Why is the business cancelling its VAT registration?
 deregistrationReason.reason.ceased = The business has stopped trading
-deregistrationReason.reason.belowThreshold = Annual turnover will be below £{0}
+deregistrationReason.reason.belowThreshold = Annual turnover is below £{0}
 deregistrationReason.reason.other = Other
 
 deregistrationDate.title = Do you want to choose the cancellation date?
 deregistrationDate.p1 = The date can be up to a maximum of 3 months from today.
-deregistrationDate.p2 = We'll confirm the date when we accept your request.
-deregistrationDate.error.date.invalidDate = Enter a real deregistration date
-deregistrationDate.error.date.past = The deregistration date must be in the future
-deregistrationDate.error.date.future = The deregistration date must not be more than 3 months from today
+deregistrationDate.p2 = We’ll confirm the date when we accept your request.
+deregistrationDate.error.date.invalidDate = Enter a valid cancellation date
+deregistrationDate.error.date.past = The cancellation date must be in the future
+deregistrationDate.error.date.future = The cancellation date must not be more than 3 months from today
 
 deregistrationProperty.title = Does the business have any commercial property?
 deregistrationProperty.p1 = This includes both land and buildings.
@@ -77,7 +77,7 @@ ceasedTrading.error.date.invalidDate = Enter a real ceased trading date
 
 optionTax.title = Has the business charged or claimed VAT on land or commercial property?
 optionTax.text = You can choose to charge VAT on any income earned from renting or selling land or commercial property. This is known as ‘Option to Tax’.
-optionTax.hint = What was the total value?
+optionTax.hint = What is the total value?
 
 capitalAssets.title = Is the business going to keep any capital assets?
 capitalAssets.text.1 = For example furniture, computers and equipment.
@@ -100,7 +100,7 @@ optionOwnsStockToSell.title = Is the business going to keep any stock?
 optionOwnsStockToSell.text.1 = For example, goods bought or manufactured for resale.
 optionOwnsStockToSell.hint = What is the total value?
 
-whyTurnoverBelow.title = Why does the business expect taxable turnover to be below £{0}?
+whyTurnoverBelow.title = Why do you expect the business’s taxable turnover to be below £{0}?
 whyTurnoverBelow.text.1 = Select all that apply
 whyTurnoverBelow.reason.lostContract = Lost a contract
 whyTurnoverBelow.reason.semiRetiring = Semi-retiring
@@ -118,7 +118,7 @@ checkYourAnswers.question.ceasedTrading = Date the business stopped or will stop
 checkYourAnswers.question.taxableTurnover = Taxable turnover below £{0} in last 12 months
 checkYourAnswers.question.nextTaxableTurnover = Expected taxable turnover for next 12 months
 checkYourAnswers.question.whyBelow = Why is turnover expected to be below threshold?
-checkYourAnswers.question.VatAccounts = How VAT accounts are prepared
+checkYourAnswers.question.vatAccounts = How VAT accounts are prepared
 checkYourAnswers.question.optionTax = VAT charges on land or commercial property
 checkYourAnswers.question.optionTaxValue = Value of land or commercial property
 checkYourAnswers.question.stocks = Keeping stock
@@ -131,9 +131,9 @@ checkYourAnswers.question.deregistrationDate = Choose cancellation date
 
 checkYourAnswers.hidden.reason = Change the reason why the business is cancelling its VAT registration
 checkYourAnswers.hidden.ceasedTrading = Change the date your business stopped or will stop trading
-checkYourAnswers.hidden.taxableTurnover = Change whether last year''s turnover was above or below the VAT threshold
-checkYourAnswers.hidden.nextTaxableTurnover = Change the business''s expected turnover for the next 12 months
-checkYourAnswers.hidden.whyBelow = Change the reason why your expect the business''s turnover to be below the threshold
+checkYourAnswers.hidden.taxableTurnover = Change whether last year’s turnover was above or below the VAT threshold
+checkYourAnswers.hidden.nextTaxableTurnover = Change the business’s expected turnover for the next 12 months
+checkYourAnswers.hidden.whyBelow = Change the reason why your expect the business’s turnover to be below the threshold
 checkYourAnswers.hidden.VatAccounts = The accounting method the business uses to record VAT payments
 checkYourAnswers.hidden.optionTax = Change whether the business charged or claimed VAT on land or commercial property
 checkYourAnswers.hidden.optionTaxValue = Change the value of the VAT charged or claimed on land or commercial property
@@ -148,22 +148,22 @@ checkYourAnswers.hidden.deregistrationDate = Change whether the business wants t
 checkYourAnswers.answer.noDate = Not Specified
 checkYourAnswers.answer.standard = Standard accounting
 checkYourAnswers.answer.cash = Cash accounting
+checkYourAnswers.answer.reason.ceased = Business stopped trading
+checkYourAnswers.answer.reason.belowThreshold = Annual turnover is below £{0}
+checkYourAnswers.answer.reason.other = Other
 checkYourAnswers.confirm = Confirm and cancel VAT registration
 
 deregistrationConfirmation.title = Request to cancel VAT registration received
 deregistrationConfirmation.heading = What happens next
-deregistrationConfirmation.textAgentPrefYesP1 = We will send an email to
+deregistrationConfirmation.textAgentPrefYesP1 = We’ll send an email to
 deregistrationConfirmation.textAgentPrefYesP2 =  within 2 working days telling you whether or not the request has been accepted.
-deregistrationConfirmation.text2AgentPrefYesP1 = We will also contact
+deregistrationConfirmation.text2AgentPrefYesP1 = We’ll also contact
 deregistrationConfirmation.text2AgentPrefYesP2 =  with an update.
 deregistrationConfirmation.yourClient = your client
-deregistrationConfirmation.textAgentPrefNo = We will send a confirmation letter to the agency address registered with HMRC within 15 working days.
-deregistrationConfirmation.digitalPreference = We will send you an email within 2 working days with an update, followed by a letter to your principal place of business. You can also go to your HMRC secure messages to find out if your request has been accepted.
-deregistrationConfirmation.paperPreference = We will send a letter to your principal place of business with an update within 15 working days.
-deregistrationConfirmation.contactPrefError = We will send you an update within 15 working days.
-deregistrationConfirmation.nonAgentText = If the business can deregister from VAT, we will send a confirmation letter. This usually takes 10 working days.
-deregistrationConfirmation.nonAgentText2a = Check your contact details
-deregistrationConfirmation.nonAgentText2b = are up to date.
+deregistrationConfirmation.textAgentPrefNo = We’ll send a confirmation letter to the agency address registered with HMRC within 15 working days.
+deregistrationConfirmation.digitalPreference = We’ll send you an email within 2 working days with an update, followed by a letter to your principal place of business. You can also check your HMRC secure messages for an update.
+deregistrationConfirmation.paperPreference = We’ll send a letter to your principal place of business with an update within 15 working days.
+deregistrationConfirmation.contactPrefError = We’ll send you an update within 15 working days.
 deregistrationConfirmation.contactDetails = Make sure your contact details are up to date.
 deregistrationConfirmation.changeClient = Change client
 
@@ -172,7 +172,7 @@ unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account
 
 sessionTimeout.title = Your session has timed out
-sessionTimeout.helpOne = To manage your VAT account, you''ll have to
+sessionTimeout.helpOne = To manage your VAT account, you’ll have to
 sessionTimeout.helpTwo = sign in
 sessionTimeout.helpThree = using your Government Gateway ID.
 

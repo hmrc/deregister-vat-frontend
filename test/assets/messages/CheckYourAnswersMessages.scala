@@ -18,11 +18,11 @@ package assets.messages
 
 object CheckYourAnswersMessages extends BaseMessages {
 
-  val title = "Check your answers" + titleSuffix
+  val title: String = "Check your answers" + titleSuffix
   val heading = "Check your answers"
   val change = "Change"
   val reason = "Reason for cancelling VAT registration"
-  val reasonCeased = "The business has stopped trading"
+  val reasonCeased = "Business stopped trading"
   val reasonBelowThreshold: String => String = threshold => s"Annual turnover is below £$threshold"
   val reasonOther = "Other"
   val ceasedTrading = "Date the business stopped or will stop trading"
@@ -42,9 +42,9 @@ object CheckYourAnswersMessages extends BaseMessages {
 
   val reasonHidden = "Change the reason why the business is cancelling its VAT registration"
   val ceasedTradingHidden = "Change the date your business stopped or will stop trading"
-  val taxableTurnoverHidden = "Change whether last year's turnover was above or below the VAT threshold"
-  val nextTaxableTurnoverHidden = "Change the business's expected turnover for the next 12 months"
-  val whyBelowHidden = "Change the reason why your expect the business's turnover to be below the threshold"
+  val taxableTurnoverHidden = "Change whether last year’s turnover was above or below the VAT threshold"
+  val nextTaxableTurnoverHidden = "Change the business’s expected turnover for the next 12 months"
+  val whyBelowHidden = "Change the reason why your expect the business’s turnover to be below the threshold"
   val vatAccountsHidden = "The accounting method the business uses to record VAT payments"
   val optionTaxHidden = "Change whether the business charged or claimed VAT on land or commercial property"
   val optionTaxValueHidden = "Change the value of the VAT charged or claimed on land or commercial property"

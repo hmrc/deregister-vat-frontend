@@ -55,7 +55,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
 
   private val deregReasonAnswer = deregistrationReason.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.reason"),
-    Html(messages(s"deregistrationReason.reason.${answer.value}", appConfig.deregThreshold)),
+    Html(messages(s"checkYourAnswers.answer.reason.${answer.value}", appConfig.deregThreshold)),
     controllers.routes.DeregistrationReasonController.show().url,
     messages("checkYourAnswers.hidden.reason"),
     "reason"
@@ -97,7 +97,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     ))
 
   private val accountingAnswer = accounting.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.VatAccounts"),
+    messages("checkYourAnswers.question.vatAccounts"),
     Html(messages(s"checkYourAnswers.answer.${answer.value}")),
     controllers.routes.VATAccountsController.show().url,
     messages("checkYourAnswers.hidden.VatAccounts"),

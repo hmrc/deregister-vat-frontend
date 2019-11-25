@@ -18,8 +18,8 @@ package assets.messages
 
 object WhyTurnoverBelowMessages extends BaseMessages {
 
-  val title = "Why does the business expect taxable turnover to be below £83,000?" + titleSuffix
-  val heading = "Why does the business expect taxable turnover to be below £83,000?"
+  val title: String = "Why do you expect the business’s taxable turnover to be below £83,000?" + titleSuffix
+  val heading = "Why do you expect the business’s taxable turnover to be below £83,000?"
   val text1 = "Select all that apply"
   val reason1 = "Lost a contract"
   val reason2 = "Semi-retiring"
