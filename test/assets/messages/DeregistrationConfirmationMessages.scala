@@ -18,31 +18,29 @@ package assets.messages
 
 object DeregistrationConfirmationMessages extends BaseMessages {
 
-  val title = "We have received the request to deregister from VAT" + titleSuffix
-  val agentTitle = "We have received the request to deregister from VAT" + titleSuffixAgent
-  val heading = "We have received the request to deregister from VAT"
+  val title: String = "Request to cancel VAT registration received" + titleSuffix
+  val agentTitle: String = "Request to cancel VAT registration received" + titleSuffixAgent
+  val heading = "Request to cancel VAT registration received"
   val subheading = "What happens next"
 
-  val contactPrefError = "We will send you an update within 15 working days."
+  val contactPrefError = "We’ll send you an update within 15 working days."
 
   val contactDetails = "Make sure your contact details are up to date."
 
-  val digitalPreference: String = "We will send you an email within 2 working days with an update, followed by a letter to your " +
-    "principal place of business. You can also go to your HMRC secure messages to find out if your request has been accepted."
+  val digitalPreference: String = "We’ll send you an email within 2 working days with an update, followed by a " +
+    "letter to your principal place of business. You can also check your HMRC secure messages for an update."
 
-  val paperPreference = "We will send a letter to your principal place of business with an update within 15 working days."
+  val paperPreference = "We’ll send a letter to your principal place of business with an update within 15 working days."
 
-  val textAgentPrefYes: String = "We will send an email to agentEmail@test.com within 2 working days telling you " +
+  val textAgentPrefYes: String = "We’ll send an email to agentEmail@test.com within 2 working days telling you " +
     "whether or not the request has been accepted."
 
-  val text2AgentWithOrgName = "We will also contact Fake Business Name Limited with an update."
+  val text2AgentWithOrgName = "We’ll also contact Fake Business Name Limited with an update."
 
-  val textAgentPrefNo = "We will send a confirmation letter to the agency address registered with HMRC within 15 " +
-    "working days."
+  val textAgentPrefNo: String = "We’ll send a confirmation letter to the agency address registered with HMRC " +
+    "within 15 working days."
 
-  val text2AgentPrefNo = "We will also contact your client with an update."
-
-  val p1contactPrefDisabled = "If the business can deregister from VAT, we will send a confirmation letter. This usually takes 10 working days."
+  val text2AgentPrefNo = "We’ll also contact your client with an update."
 
   val checkContactDetails = "Check your contact details are up to date."
 }

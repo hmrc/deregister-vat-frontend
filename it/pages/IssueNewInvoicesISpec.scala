@@ -45,7 +45,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Is the business expecting to issue any new invoices after deregistering?" + titleSuffix)
+          pageTitle("Is the business going to issue any new invoices after you cancel the registration?" + titleSuffix)
         )
       }
     }

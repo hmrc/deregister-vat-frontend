@@ -18,11 +18,12 @@ package assets.messages
 
 object DeregisterForVATMessages extends BaseMessages {
 
-  val title = "Deregister for VAT" + titleSuffix
-  val heading = "Deregister for VAT"
-  val p1 = "To complete your deregistration, you need to know:"
-  val bullet1 = "your accounting method: standard accounting or cash accounting"
-  val bullet2 = "the value of any land or commercial property you own"
-  val bullet3 = "the value of any stock or assets you have or plan to keep"
+  val title = "Cancel VAT registration" + titleSuffix
+  val heading = "Cancel VAT registration"
+  val p1 = "To cancel the registration, you need to know the value of any:"
+  val p2 = "You also need to know how the business’s VAT accounts are prepared (standard accounting or cash accounting)."
+  val bullet1 = "land or commercial property the business owns"
+  val bullet2 = "stock or assets the business has or plans to keep"
 
 }
+

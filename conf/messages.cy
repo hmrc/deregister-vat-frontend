@@ -24,7 +24,7 @@ month.short.10 = Hyd
 month.short.11 = Tach
 month.short.12 = Rhag
 
-service.title = Dadgofrestru rhag TAW
+service.title = Canslo cofrestriad TAW
 
 base.sign-out = Allgofnodi
 
@@ -71,23 +71,23 @@ feedback.before = Gwasanaeth newydd yw hwn – bydd eich
 feedback.link = adborth
 feedback.after = yn ein helpu i’w wella.
 
-deregisterForVAT.title = Dadgofrestru rhag TAW
-deregisterForVAT.p1 = I gwblhau eich dadgofrestriad, mae angen i chi wybod:
-deregisterForVAT.bullet1 = eich dull cyfrifyddu: cyfrifyddu safonol neu gyfrifyddu arian parod
-deregisterForVAT.bullet2 = gwerth unrhyw dir neu eiddo masnachol rydych yn berchen arnynt
-deregisterForVAT.bullet3 = gwerth unrhyw stoc neu asedion sydd gennych neu rydych yn bwriadu eu cadw
+deregisterForVAT.title = Canslo cofrestriad TAW
+deregisterForVAT.p1 = I ganslo’ch cofrestriad, mae angen i chi wybod gwerth unrhyw rai o’r canlynol:
+deregisterForVAT.p2 = Hefyd, mae angen i chi wybod sut mae cyfrifon TAW y busnes yn cael eu paratoi (cyfrifyddu safonol neu gyfrifyddu arian parod).
+deregisterForVAT.bullet1 = tir neu eiddo masnachol y mae’r busnes yn berchen arno
+deregisterForVAT.bullet2 = stoc neu asedion sydd gan y busnes neu y mae’r busnes yn bwriadu eu cadw
 
-deregistrationReason.title = Pam mae’r busnes yn dadgofrestru rhag TAW?
-deregistrationReason.reason.ceased = Mae wedi rhoi’r gorau i fasnachu
-deregistrationReason.reason.belowThreshold = Bydd y trosiant blynyddol yn is na £{0}
+deregistrationReason.title = Pam fod y busnes yn canslo’i gofrestriad TAW?
+deregistrationReason.reason.ceased = Mae’r busnes wedi rhoi’r gorau i fasnachu
+deregistrationReason.reason.belowThreshold = Mae’r trosiant blynyddol yn is nag £{0}
 deregistrationReason.reason.other = Arall
 
-deregistrationDate.title = A yw’r busnes am ddewis ei ddyddiad dadgofrestru ei hun?
-deregistrationDate.p1 = Gall y dyddiad dadgofrestru fod hyd at uchafswm o 3 mis o heddiw.
-deregistrationDate.p2 = Byddwn yn cadarnhau’r dyddiad dadgofrestru pan gaiff eich cais ei dderbyn.
-deregistrationDate.error.date.invalidDate = Nodwch ddyddiad dadgofrestru go iawn
+deregistrationDate.title = A ydych am ddewis y dyddiad canslo?
+deregistrationDate.p1 = Gall y dyddiad fod hyd at uchafswm o 3 mis o heddiw.
+deregistrationDate.p2 = Byddwn yn cadarnhau’r dyddiad pan fyddwn yn derbyn eich cais.
+deregistrationDate.error.date.invalidDate = Nodwch ddyddiad canslo dilys
 deregistrationDate.error.date.past = Rhaid i’r dyddiad dadgofrestru fod yn y dyfodol
-deregistrationDate.error.date.future = Rhaid i’r dyddiad dadgofrestru beidio â bod mwy na 3 mis o heddiw
+deregistrationDate.error.date.future = Rhaid i’r dyddiad canslo beidio â bod mwy na 3 mis o heddiw
 
 deregistrationProperty.title = A oes gan y busnes unrhyw eiddo masnachol?
 deregistrationProperty.p1 = Mae hyn yn cynnwys tir ac adeiladau.
@@ -101,37 +101,37 @@ vatAccounts.showMeAnExample.p1 = Er enghraifft, rydych yn anfonebu rhywun ym mis
 vatAccounts.showMeAnExample.bullet1 = mis Mawrth, rydych yn defnyddio cyfrifyddu safonol
 vatAccounts.showMeAnExample.bullet2 = mis Mehefin, rydych yn defnyddio cyfrifyddu arian parod
 
-ceasedTrading.title = Y dyddiad y rhoddodd eich busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
+ceasedTrading.title = Y dyddiad y rhoddodd y busnes y gorau i fasnachu, neu’r dyddiad y bydd yn rhoi’r gorau i fasnachu
 ceasedTrading.hint = Er enghraifft, 31 3 1980
 ceasedTrading.error.date.noEntry = Nodwch y dyddiad y rhoddodd eich busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
 ceasedTrading.error.date.invalidDate = Nodwch ddyddiad go iawn ar gyfer rhoi’r gorau i fasnachu
 
 optionTax.title = A yw’r busnes wedi codi neu hawlio TAW ar dir neu eiddo masnachol?
 optionTax.text = Gallwch ddewis codi TAW ar unrhyw incwm a geir wrth rentu neu werthu tir neu eiddo masnachol. Gelwir hyn yn ‘Opsiwn i Drethu’.
-optionTax.hint = Beth oedd cyfanswm gwerth y tir neu’r eiddo masnachol?
+optionTax.hint = Beth yw cyfanswm y gwerth?
 
-capitalAssets.title = A yw’r busnes yn bwriadu cadw unrhyw asedion cyfalaf?
-capitalAssets.text.1 = Mae hyn yn cynnwys pethau fel dodrefn, cyfrifiaduron a chyfarpar.
+capitalAssets.title = A yw’r busnes yn mynd i gadw unrhyw asedion cyfalaf?
+capitalAssets.text.1 = Er enghraifft dodrefn, cyfrifiaduron ac offer.
 capitalAssets.totalSaleValue = Beth yw cyfanswm y gwerth?
 
-cannotDeregister.title = Ni all y busnes ddadgofrestru rhag TAW
+cannotDeregister.title = Ni all y busnes ganslo ei gofrestriad TAW
 cannotDeregister.text = Mae hyn oherwydd bod y busnes yn disgwyl y bydd ei drosiant trethadwy ar gyfer y 12 mis nesaf yn fwy na £{0}.
 cannotDeregister.link.text = Gallwch
 cannotDeregister.link = ddiweddaru manylion TAW eraill y busnes.
 
-taxableTurnover.title = A oedd trosiant trethadwy’r busnes yn ystod y 12 mis diwethaf yn llai na £{0}?
+taxableTurnover.title = A oedd trosiant trethadwy’r busnes yn is nag £{0} yn ystod y 12 mis diwethaf?
 taxableTurnover.error.mandatory = Nodwch drosiant trethadwy’r busnes
 taxableTurnover.error.nonNumeric = Nodwch y trosiant gan ddefnyddio’r rhifau 0 i 9
 
 nextTaxableTurnover.title = Beth yw trosiant trethadwy disgwyliedig y busnes ar gyfer y 12 mis nesaf?
 
-issueNewInvoices.title = A yw’r busnes yn disgwyl anfon unrhyw anfonebau newydd ar ôl dadgofrestru?
+issueNewInvoices.title = A yw’r busnes yn mynd i anfon unrhyw anfonebau newydd ar ôl i chi ganslo’r cofrestriad?
 
-optionOwnsStockToSell.title = A yw’r busnes yn bwriadu cadw unrhyw stoc?
+optionOwnsStockToSell.title = A yw’r busnes yn mynd i gadw unrhyw stoc?
 optionOwnsStockToSell.text.1 = Er enghraifft, nwyddau a brynir neu a gynhyrchir ar gyfer eu hailwerthu.
-optionOwnsStockToSell.hint = Beth yw cyfanswm gwerth y stoc?
+optionOwnsStockToSell.hint = Beth yw cyfanswm y gwerth?
 
-whyTurnoverBelow.title = Pam mae’r busnes yn disgwyl i’w drosiant trethadwy fod islaw’r trothwy?
+whyTurnoverBelow.title = Pam ydych yn disgwyl i drosiant blynyddol y busnes fod yn is nag £{0}?
 whyTurnoverBelow.text.1 = Dewiswch bob un sy’n gymwys
 whyTurnoverBelow.reason.lostContract = Wedi colli contract
 whyTurnoverBelow.reason.semiRetiring = Yn rhannol ymddeol
@@ -144,23 +144,23 @@ whyTurnoverBelow.error.atLeastOne = Dewiswch o leiaf un opsiwn
 
 checkYourAnswers.title = Gwirio’ch atebion
 checkYourAnswers.change = Newid
-checkYourAnswers.question.reason = Pam mae’r busnes yn dadgofrestru rhag TAW
-checkYourAnswers.question.ceasedTrading = Y dyddiad y rhoddodd eich busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
-checkYourAnswers.question.taxableTurnover = A oedd trosiant trethadwy’r busnes yn ystod y 12 mis diwethaf yn llai na £{0}?
-checkYourAnswers.question.nextTaxableTurnover = Beth yw trosiant trethadwy disgwyliedig y busnes ar gyfer y 12 mis nesaf?
-checkYourAnswers.question.whyBelow = Pam mae’r busnes yn disgwyl i’w drosiant trethadwy fod islaw’r trothwy?
-checkYourAnswers.question.VatAccounts = Sut y caiff cyfrifon TAW y busnes eu paratoi?
-checkYourAnswers.question.optionTax = A gododd y busnes TAW ar dir neu eiddo masnachol?
-checkYourAnswers.question.optionTaxValue = Beth oedd cyfanswm gwerth y tir neu’r eiddo masnachol?
-checkYourAnswers.question.stocks = A yw’r busnes yn bwriadu cadw unrhyw stoc?
-checkYourAnswers.question.stocksValue = Beth yw cyfanswm gwerth y stoc?
-checkYourAnswers.question.capitalAssets = A yw’r busnes yn bwriadu cadw unrhyw asedion cyfalaf?
-checkYourAnswers.question.capitalAssetsValue = Beth yw cyfanswm gwerth yr asedion cyfalaf?
-checkYourAnswers.question.outstandingInvoice = A yw’r busnes yn disgwyl cael ei dalu am anfonebau heb eu setlo ar ôl dadgofrestru?
-checkYourAnswers.question.newInvoices = A yw’r busnes yn disgwyl anfon unrhyw anfonebau newydd ar ôl dadgofrestru?
-checkYourAnswers.question.deregistrationDate = Dyddiad dadgofrestru
+checkYourAnswers.question.reason = Rheswm dros ganslo’r cofrestriad TAW
+checkYourAnswers.question.ceasedTrading = Y dyddiad y rhoddodd y busnes y gorau i fasnachu, neu’r dyddiad y bydd yn rhoi’r gorau i fasnachu
+checkYourAnswers.question.taxableTurnover = Trosiant trethadwy is nag £{0} yn ystod y 12 mis diwethaf
+checkYourAnswers.question.nextTaxableTurnover = Trosiant trethadwy disgwyliedig ar gyfer y 12 mis nesaf
+checkYourAnswers.question.whyBelow = Pam y disgwylir i’r trosiant fod yn is na’r trothwy?
+checkYourAnswers.question.vatAccounts = Sut y caiff cyfrifon TAW eu paratoi
+checkYourAnswers.question.optionTax = Taliadau TAW ar dir neu eiddo masnachol
+checkYourAnswers.question.optionTaxValue = Gwerth tir neu eiddo masnachol
+checkYourAnswers.question.stocks = Cadw stoc
+checkYourAnswers.question.stocksValue = Gwerth stoc
+checkYourAnswers.question.capitalAssets = Cadw asedion cyfalaf
+checkYourAnswers.question.capitalAssetsValue = Gwerth asedion cyfalaf
+checkYourAnswers.question.outstandingInvoice = Taliad am anfonebau ar ôl canslo cofrestriad
+checkYourAnswers.question.newInvoices = Anfonebau newydd ar ôl canslo cofrestriad
+checkYourAnswers.question.deregistrationDate = Dewis dyddiad canslo
 
-checkYourAnswers.hidden.reason = Newid y rheswm pam mae’r busnes yn dadgofrestru rhag TAW
+checkYourAnswers.hidden.reason = Newid y rheswm pam mae’r busnes yn canslo ei gofrestriad TAW
 checkYourAnswers.hidden.ceasedTrading = Newid y dyddiad y rhoddodd eich busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
 checkYourAnswers.hidden.taxableTurnover = Newid p’un a oedd trosiant y llynedd uwchlaw neu islaw’r trothwy TAW
 checkYourAnswers.hidden.nextTaxableTurnover = Newid trosiant disgwyliedig y busnes ar gyfer y 12 mis nesaf
@@ -172,30 +172,29 @@ checkYourAnswers.hidden.stocks = Newid p’un a fydd y busnes yn cadw unrhyw sto
 checkYourAnswers.hidden.stocksValue = Newid gwerth y stoc y bydd y busnes yn ei gadw
 checkYourAnswers.hidden.capitalAssets = Newid p’un a fydd y busnes yn cadw unrhyw asedion cyfalaf
 checkYourAnswers.hidden.capitalAssetsValue = Newid gwerth yr asedion cyfalaf y bydd y busnes yn eu cadw
-checkYourAnswers.hidden.newInvoices = Newid p’un a fydd y busnes yn anfon anfonebau newydd ar ôl dadgofrestru
-checkYourAnswers.hidden.outstandingInvoice = Newid p’un a fydd y busnes yn cael ei dalu am anfonebau heb eu setlo ar ôl dadgofrestru
-checkYourAnswers.hidden.deregistrationDate = Newid p’un a yw’r busnes am ddewis ei ddyddiad dadgofrestru ei hun
+checkYourAnswers.hidden.newInvoices = Newid p’un a fydd y busnes yn anfon anfonebau newydd ar ôl canslo’r cofrestriad TAW
+checkYourAnswers.hidden.outstandingInvoice = Newid p’un a fydd y busnes yn cael ei dalu am anfonebau heb eu setlo ar ôl canslo’r cofrestriad TAW
+checkYourAnswers.hidden.deregistrationDate = Newid p’un a yw’r busnes am ddewis ei ddyddiad canslo TAW ei hun
 
 checkYourAnswers.answer.noDate = Heb fanylu
 checkYourAnswers.answer.standard = Cyfrifyddu safonol
 checkYourAnswers.answer.cash = Cyfrifyddu arian parod
-checkYourAnswers.text = Drwy gadarnhau’r newid hwn, rydych yn cytuno bod yr wybodaeth a roesoch yn gyflawn ac yn gywir.
-checkYourAnswers.confirm = Cadarnhau a dadgofrestru
+checkYourAnswers.answer.reason.ceased = Busnes wedi rhoi’r gorau i fasnachu
+checkYourAnswers.answer.reason.belowThreshold = Mae’r trosiant blynyddol yn is nag £{0}
+checkYourAnswers.answer.reason.other = Arall
+checkYourAnswers.confirm = Cadarnhau a chanslo cofrestriad TAW
 
-deregistrationConfirmation.title = Mae’r cais i ddadgofrestru rhag TAW wedi dod i law
+deregistrationConfirmation.title = Cais i ganslo cofrestriad TAW wedi dod i law
 deregistrationConfirmation.heading = Yr hyn sy’n digwydd nesaf
-deregistrationConfirmation.textAgentPrefYesP1 = Byddwn yn anfon e-bost at
+deregistrationConfirmation.textAgentPrefYesP1 = Byddwn yn anfon e-bost i
 deregistrationConfirmation.textAgentPrefYesP2 =  cyn pen 2 ddiwrnod gwaith i roi gwybod i chi a yw’r cais wedi’i dderbyn ai peidio.
-deregistrationConfirmation.text2AgentPrefYesP1 = Byddwn hefyd yn cysylltu â
+deregistrationConfirmation.text2AgentPrefYesP1 = Byddwn hefyd yn cysylltu ag
 deregistrationConfirmation.text2AgentPrefYesP2 =  i roi diweddariad.
 deregistrationConfirmation.yourClient = eich cleient
 deregistrationConfirmation.textAgentPrefNo = Byddwn yn anfon llythyr o gadarnhad i gyfeiriad yr asiantaeth sydd wedi’i gofrestru gyda CThEM cyn pen 15 diwrnod gwaith.
-deregistrationConfirmation.digitalPreference = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith i roi diweddariad, wedi’i ddilyn gan lythyr i’ch prif fan busnes. Gallwch hefyd fynd i’ch negeseuon diogel CThEM i weld a yw’ch cais wedi’i dderbyn.
+deregistrationConfirmation.digitalPreference = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith i roi diweddariad, wedi’i ddilyn gan lythyr i’ch prif fan busnes. Gallwch hefyd wirio’ch negeseuon diogel oddi wrth CThEM i gael diweddariad.
 deregistrationConfirmation.paperPreference = Byddwn yn anfon llythyr i’ch prif fan busnes i roi diweddariad cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.contactPrefError = Byddwn yn anfon diweddariad atoch cyn pen 15 diwrnod gwaith.
-deregistrationConfirmation.nonAgentText = Os yw’r busnes yn gallu dadgofrestru rhag TAW, byddwn yn anfon llythyr o gadarnhad. Mae hyn fel arfer yn cymryd 10 diwrnod gwaith.
-deregistrationConfirmation.nonAgentText2a = Gwiriwch fod eich manylion cyswllt
-deregistrationConfirmation.nonAgentText2b = wedi’u diweddaru.
 deregistrationConfirmation.contactDetails = Sicrhewch fod eich manylion cyswllt wedi’u diweddaru.
 deregistrationConfirmation.changeClient = Newid cleient
 
@@ -215,4 +214,4 @@ unauthorised.client.signUp = gofrestru i ddefnyddio meddalwedd er mwyn cyflwyno�
 featureSwitch.title = Feature switches
 features.useLanguageSelectorFeature.enabled = Language selector
 
-outstandingInvoice.title = A yw’r busnes yn disgwyl cael ei dalu am anfonebau heb eu setlo ar ôl dadgofrestru?
+outstandingInvoice.title = A fydd y busnes yn cael taliad am anfonebau heb eu setlo ar ôl i chi ganslo’r cofrestriad?

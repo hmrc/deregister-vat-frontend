@@ -66,6 +66,10 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       elementText(Selectors.pageHeading) shouldBe CeasedTradingDateMessages.heading
     }
 
+    s"have the correct date hint text" in {
+      elementText(Selectors.hint) shouldBe CeasedTradingDateMessages.dateHint
+    }
+
     s"have the correct a radio " in {
       elementText(Selectors.dayText) shouldBe CommonMessages.day
       elementText(Selectors.monthText) shouldBe CommonMessages.month

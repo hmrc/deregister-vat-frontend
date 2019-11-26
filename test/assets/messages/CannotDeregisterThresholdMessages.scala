@@ -18,8 +18,8 @@ package assets.messages
 
 object CannotDeregisterThresholdMessages extends BaseMessages {
 
-  val title = "The business cannot deregister from VAT" + titleSuffix
-  val heading = "The business cannot deregister from VAT"
+  val title = "The business cannot cancel its VAT registration" + titleSuffix
+  val heading = "The business cannot cancel its VAT registration"
   val text = "This is because the business expects its taxable turnover for the next 12 months to be above £83,000."
   val linkText = "You can update the business’s other VAT details."
 
