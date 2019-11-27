@@ -49,7 +49,7 @@ class MoneyInputTemplateSpec extends TemplateBaseSpec {
            |    <span class="input-currency"></span>
            |
            |    <input type="number"
-           |           class="input--no-spinner input--left-padding "
+           |           class="form-control input--no-spinner money-input-padding "
            |           name="${field.name}"
            |           id="${field.id}"
            |           value=""
@@ -85,7 +85,7 @@ class MoneyInputTemplateSpec extends TemplateBaseSpec {
            |    <span class="input-currency"></span>
            |
            |    <input type="number"
-           |           class="input--no-spinner input--left-padding "
+           |           class="form-control input--no-spinner money-input-padding "
            |           name="${field.name}"
            |           id="${field.id}"
            |           value="$valueText"
@@ -125,7 +125,7 @@ class MoneyInputTemplateSpec extends TemplateBaseSpec {
            |    <span class="input-currency"></span>
            |
            |    <input type="number"
-           |           class="input--no-spinner input--left-padding error-field"
+           |           class="form-control input--no-spinner money-input-padding error-field"
            |           name="${field.name}"
            |           id="${field.id}"
            |           value="$valueText"

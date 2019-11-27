@@ -89,3 +89,7 @@ textarea:focus {
     -webkit-box-shadow: inset 0 0 0 2px;
     box-shadow: inset 0 0 0 2px;
 }
+
+.money-input-padding {
+    padding-left:1em;
+}
