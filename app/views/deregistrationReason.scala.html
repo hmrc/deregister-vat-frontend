@@ -37,11 +37,21 @@
         <div class="form-group" id="reason" data-metrics="@if(user.isAgent){agent_}start-dereg:view:deregister-reason">
             @radioHelper(
                 field = form("reason"),
-                choices = Seq(
-                    (ceased, Messages("deregistrationReason.reason.ceased")),
-                    (belowThreshold, Messages("deregistrationReason.reason.belowThreshold", appConfig.deregThreshold)),
-                    (other, Messages("deregistrationReason.reason.other"))
-                ),
+                // TODO: update with feature switch
+                choices = if(true) {
+                    Seq(
+                        (ceased, Messages("deregistrationReason.reason.ceased")),
+                        (belowThreshold, Messages("deregistrationReason.reason.belowThreshold", appConfig.deregThreshold)),
+                        (zeroRated, Messages("deregistrationReason.reason.zeroRated")),
+                        (other, Messages("deregistrationReason.reason.other"))
+                    )
+                } else {
+                    Seq(
+                        (ceased, Messages("deregistrationReason.reason.ceased")),
+                        (belowThreshold, Messages("deregistrationReason.reason.belowThreshold", appConfig.deregThreshold)),
+                        (other, Messages("deregistrationReason.reason.other"))
+                    )
+                },
                 question = Messages("deregistrationReason.title")
             )
         </div>
