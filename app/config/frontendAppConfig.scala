@@ -51,6 +51,7 @@ trait AppConfig extends ServicesConfig {
   def vatAgentClientLookupHandoff(redirectUrl: String): String
 
   val vatAgentClientLookupFrontendUrl: String
+  val agentClientLookupChoicesPath: String
 
   def vatAgentClientLookupUnauthorised(redirectUrl: String): String
 
@@ -118,6 +119,9 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
 
   override lazy val vatAgentClientLookupFrontendUrl: String =
     getString(Keys.vatAgentClientLookupFrontendHost) + getString(Keys.vatAgentClientLookupFrontendUrl)
+
+  override lazy val agentClientLookupChoicesPath: String =
+    vatAgentClientLookupFrontendUrl + getString(Keys.agentClientLookupChoices)
 
   override def vatAgentClientLookupHandoff(redirectUrl: String): String =
     vatAgentClientLookupFrontendUrl + s"/client-vat-number?redirectUrl=${ContinueUrl(getString(Keys.platformHost) + redirectUrl).encodedUrl}"

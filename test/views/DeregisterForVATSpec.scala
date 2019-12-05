@@ -30,7 +30,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     val bullets: Int => String = n => s"#content > article > ul > li:nth-child($n)"
   }
 
-  "Rendering the cancel registration reason page" should {
+  "Rendering the cancel registration reason page for client" should {
 
     lazy val view = views.html.deregisterForVAT()(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -66,6 +66,16 @@ class DeregisterForVATSpec extends ViewBaseSpec {
       elementText(Selectors.para(5)) shouldBe DeregisterForVATMessages.p2
     }
 
+  }
+
+  "Rendering the cancel registration reason page for an agent" should {
+
+    lazy val view = views.html.deregisterForVAT()(agentUserPrefYes,messages,mockConfig)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "have a back link with the correct link location" in {
+      element(Selectors.back).attr("href") shouldBe mockConfig.agentClientLookupChoicesPath
+    }
   }
 
 }
