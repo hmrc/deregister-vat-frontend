@@ -47,6 +47,21 @@ GET        /assets/*file                    controllers.Assets.at(path="/public"
 GET        /outstanding-invoices            controllers.OutstandingInvoicesController.show
 POST       /outstanding-invoices            controllers.OutstandingInvoicesController.submit
 
+
+
+GET        /has-the-business-activity-changed   controllers.ZeroRated.BusinessActivityController.show
+POST       /has-the-business-activity-changed   controllers.ZeroRated.BusinessActivityController.submit
+
+GET         /what-is-the-sic-code           controllers.ZeroRated.SicCodeController.show
+POST        /what-is-the-sic-code           controllers.ZeroRated.SicCodeController.submit
+
+GET         /expected-value-zero-rated-supplies   controllers.ZeroRated.ZeroRatedSuppliesController.show
+POST        /expected-value-zero-rated-supplies   controllers.ZeroRated.ZeroRatedSuppliesController.submit
+
+GET         /expected-value-vat-purchases       controllers.ZeroRated.ExpectedVatPurchasedController.show
+POST        /expected-value-vat-purchases       controllers.ZeroRated.ExpectedVatPurchasedController.submit
+
+
 #Sign Out Routes
 GET        /sign-out                        controllers.SignOutController.signOut(authorised: Boolean)
 GET        /timeout                         controllers.SignOutController.timeout
