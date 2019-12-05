@@ -147,7 +147,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
   }
 
 
-  "Calling the POST Why Turnover Below endpoint" when {
+  "Calling the POST Deregister Reason endpoint" when {
 
     def postRequest(data: DeregistrationReason): WSResponse =
       post("/deregister-reason")(toFormData(DeregistrationReasonForm.deregistrationReasonForm, data))
