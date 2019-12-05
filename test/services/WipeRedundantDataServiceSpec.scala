@@ -247,6 +247,100 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
     }
   }
 
+  "Calling .wipeZeroRatedJourney" when {
+
+    "All deletions are successful" should {
+      "Delete Taxable Turnover and Next Taxable Turnover" in {
+
+        inSequence{
+          //TODO Right success
+          //TODO Right success
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+          //TODO Right success
+          //TODO Right success
+        }
+        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
+        await(result) shouldBe Right(DeregisterVatSuccess)
+      }
+    }
+
+    "First deletion is unsuccessful" should {
+      "Not first answer" in {
+
+        inSequence{
+          //TODO Left Error Model
+          //TODO not called
+          setupMockDeleteTaxableTurnoverNotCalled()
+          //TODO not called
+          //TODO not called
+        }
+        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+
+    "Second deletion is unsuccessful" should {
+      "Not second answer" in {
+
+        inSequence{
+          //TODO Right success
+          //TODO Left Error Model
+          setupMockDeleteTaxableTurnoverNotCalled()
+          //TODO not called
+          //TODO not called
+        }
+        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+
+    "Third deletion is unsuccessful" should {
+      "Not third answer" in {
+
+        inSequence{
+          //TODO Right success
+          //TODO Right success
+          setupMockDeleteTaxableTurnover(Left(errorModel))
+          //TODO not called
+          //TODO not called
+        }
+        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+
+    "Third deletion is unsuccessful" should {
+      "Not fourth answer" in {
+
+        inSequence{
+          //TODO Right success
+          //TODO Right success
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+          //TODO left error model
+          //TODO not called
+        }
+        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+
+    "Fourth deletion is unsuccessful" should {
+      "Not fifth answer" in {
+
+        inSequence{
+          //TODO Right success
+          //TODO Right success
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+          //TODO Right success
+          //TODO left error model
+        }
+        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+  }
+
+
   "Calling .wipeRedundantDeregReasonJourneyData" when {
 
     "Deregistration reason is Ceased" should {
@@ -278,6 +372,25 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         await(result) shouldBe Right(DeregisterVatSuccess)
       }
     }
+
+    "Deregistration reason is Zero Rated" should {
+
+      val deregReason: Option[DeregistrationReason] = Some(ZeroRated)
+
+      "Delete Ceased Trading date answer" in {
+        inSequence {
+          //TODO Right success
+          //TODO Right success
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+          //TODO Right success
+          //TODO Right success
+        }
+
+        val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
+        await(result) shouldBe Right(DeregisterVatSuccess)
+      }
+    }
+
 
     "Deregistration reason is not supplied" should {
 
