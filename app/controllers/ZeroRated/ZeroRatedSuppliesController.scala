@@ -33,11 +33,19 @@ class ZeroRatedSuppliesController @Inject()(val messagesApi: MessagesApi,
                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck) { implicit user =>
-    Ok("")
+    if (appConfig.features.zeroRatedJourney()) {
+      Ok("")
+    } else {
+      NotFound
+    }
   }
 
   val submit: Action[AnyContent] = authenticate { implicit user =>
-    Ok("")
+    if (appConfig.features.zeroRatedJourney()) {
+      Ok("")
+    } else {
+      NotFound
+    }
   }
 }
 
