@@ -37,7 +37,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                          val businessActivityAnswer: BusinessActivityAnswerService,
                                          val nextTaxableTurnoverZeroRatedAnswer: NextTaxableTurnoverZeroRatedAnswerService,
                                          val purchaseVatExceedSupplyVatAnswer: PurchaseVatExceedSupplyVatAnswerService,
-                                         val sicCodeAnswerService: SICCodeAnswerService) {
+                                         val sicCodeAnswer: SICCodeAnswerService) {
 
 
   def wipeRedundantData(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] = {
@@ -60,7 +60,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
     reason match {
       case Some(Ceased) => wipeBelowThresholdJourney
       case Some(BelowThreshold) => ceasedTradingDateAnswer.deleteAnswer
-      case Some(ZeroRated) => ???
+      case Some(ZeroRated) => wipeZeroRatedJourney
       case _ => Future.successful(Right(DeregisterVatSuccess))
     }
   }
@@ -76,7 +76,13 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
 
   private[services] def wipeZeroRatedJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
-    ???
+    (for{
+      _ <- EitherT(businessActivityAnswer.deleteAnswer)
+      _ <- EitherT(sicCodeAnswer.deleteAnswer)
+      _ <- EitherT(taxableTurnoverAnswer.deleteAnswer)
+      _ <- EitherT(nextTaxableTurnoverZeroRatedAnswer.deleteAnswer)
+      _ <- EitherT(purchaseVatExceedSupplyVatAnswer.deleteAnswer)
+    } yield DeregisterVatSuccess).value
   }
 
   private[services] def wipeOutstandingInvoices(invoicesAnswer: Option[YesNo])

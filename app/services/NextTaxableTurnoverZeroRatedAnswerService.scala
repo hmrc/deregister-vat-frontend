@@ -17,9 +17,15 @@
 package services
 
 import connectors.DeregisterVatConnector
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.NextTaxableTurnoverZeroRatedModel
 
-class NextTaxableTurnoverZeroRatedAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[NextTaxableTurnoverZeroRatedModel]{
-  val answerKey: String = ""
+@Singleton()
+class NextTaxableTurnoverZeroRatedAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector)
+  extends StoredAnswersService[NextTaxableTurnoverZeroRatedModel]{
+  override val answerKey: String = NextTaxableTurnoverZeroRatedAnswerService.key
+}
+
+object NextTaxableTurnoverZeroRatedAnswerService {
+  val key: String = "nextTaxableTurnoverZeroRated"
 }
