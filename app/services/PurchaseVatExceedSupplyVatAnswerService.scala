@@ -18,7 +18,8 @@ package services
 
 import connectors.DeregisterVatConnector
 import javax.inject.Inject
+import models.YesNoAmountModel
 
-class PurchaseVatExceedSupplyVatAnswersService @Inject()(val deregisterVatConnector: DeregisterVatConnector) {
-  val answerKey: String = ???
+class PurchaseVatExceedSupplyVatAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[YesNoAmountModel]{
+  val answerKey: String = ""
 }

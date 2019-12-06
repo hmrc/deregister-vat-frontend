@@ -19,13 +19,13 @@ package services
 import connectors.mocks.MockDeregisterVatConnector
 import utils.TestUtil
 
-class NextTaxableTurnoverZeroRatedAnswersServiceSpec extends TestUtil with MockDeregisterVatConnector{
-  object NextTaxableTurnoverZeroRatedAnswersService extends NextTaxableTurnoverZeroRatedAnswersService(mockDeregisterVatConnector)
+class BusinessActivityAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector{
+  object BusinessActivityAnswerService$ extends BusinessActivityAnswerService(mockDeregisterVatConnector)
 
-  "The BusinessActivityService" should {
+  "The BusinessActivityAnswerService" should {
 
     "have the key 'businessActivity'" in {
-      NextTaxableTurnoverZeroRatedAnswersService.answerKey shouldBe "businessActivity"
+      BusinessActivityAnswerService$.answerKey shouldBe "businessActivity"
     }
   }
 }

@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package services.mocks
+package services
 
-import models.{ErrorModel, YesNoAmountModel}
-import services.BusinessActivityAnswersService
+import connectors.mocks.MockDeregisterVatConnector
+import utils.TestUtil
 
-trait MockBusinessActivityAnswersService extends MockStoredAnswersService{
+class NextTaxableTurnoverZeroRatedAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector{
+  object NextTaxableTurnoverZeroRatedAnswerService$ extends NextTaxableTurnoverZeroRatedAnswerService(mockDeregisterVatConnector)
 
-  val mockBusinessActivityAnswersService: BusinessActivityAnswersService = mock[BusinessActivityAnswersService]
+  "The NextTaxableTurnoverZeroRatedAnswerService" should {
 
-  def setupMockGetBusinessActivity(response: Either[ErrorModel, Option[YesNoAmountModel]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockBusinessActivityAnswersService)(response)
-
+    "have the key 'nextTaxableTurnoverZeroRated'" in {
+      NextTaxableTurnoverZeroRatedAnswerService$.answerKey shouldBe "nextTaxableTurnoverZeroRated"
+    }
+  }
 }

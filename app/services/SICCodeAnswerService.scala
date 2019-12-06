@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package services.mocks
+package services
 
-trait MockSicCodeAnswersService {
+import connectors.DeregisterVatConnector
+import javax.inject.Inject
+import models.SICCodeModel
 
+class SICCodeAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[SICCodeModel] {
+  val answerKey: String = ""
 }

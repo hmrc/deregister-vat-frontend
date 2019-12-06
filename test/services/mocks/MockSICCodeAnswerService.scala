@@ -14,11 +14,19 @@
  * limitations under the License.
  */
 
-package services
+package services.mocks
 
-import connectors.DeregisterVatConnector
-import javax.inject.Inject
+import models._
+import services.SICCodeAnswerService
 
-class SicCodeAnswersService @Inject()(val deregisterVatConnector: DeregisterVatConnector) {
-  val answerKey: String = ???
+
+trait MockSICCodeAnswerService extends MockStoredAnswersService {
+
+  val mockSICCodeAnswerService: SICCodeAnswerService = mock[SICCodeAnswerService]
+
+  def setupMockDeleteSICCodeAnswerService(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockSICCodeAnswerService)(response)
+
+  def setupMockDeleteSICCodeAnswerServiceNotCalled()(implicit user: User[_]): Unit =
+    setupMockDeleteAnswerNotCalled(mockSICCodeAnswerService)
 }

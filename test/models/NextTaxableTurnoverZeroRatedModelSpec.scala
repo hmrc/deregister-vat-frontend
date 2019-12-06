@@ -14,13 +14,26 @@
  * limitations under the License.
  */
 
-package services
+package models
 
-import connectors.DeregisterVatConnector
-import javax.inject.Inject
+import play.api.libs.json.Json
+import utils.TestUtil
 
+class NextTaxableTurnoverZeroRatedModelSpec extends TestUtil{
 
-class BusinessActivityAnswersService @Inject()(val deregisterVatConnector: DeregisterVatConnector)  {
-   val answerKey: String = ""
+  val testAmount= 934891.39
+  "NextTaxableTurnoverZeroRatedModel.format" should{
+    "serialize to the correct JSON" in {
+      Json.toJson(NextTaxableTurnoverZeroRatedModel(testAmount)) shouldBe
+        Json.obj(
+          "turnover" -> 934891.39
+        )
+    }
+
+    "deserialize from JSON correctly" in {
+      Json.obj(
+        "turnover" -> 934891.39
+      ).as[NextTaxableTurnoverModel] shouldBe NextTaxableTurnoverModel(934891.39)
+    }
+  }
 }
-
