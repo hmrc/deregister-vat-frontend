@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-package services
+package services.mocks
 
-import connectors.mocks.MockDeregisterVatConnector
-import utils.TestUtil
+import models._
+import services.BusinessActivityAnswerService
 
-class BusinessActivityAnswersServiceSpec extends TestUtil with MockDeregisterVatConnector{
-  object BusinessActivityAnswersService extends BusinessActivityAnswersService(mockDeregisterVatConnector)
+trait MockBusinessActivityAnswerService extends MockStoredAnswersService{
 
-  "The BusinessActivityService" should {
+  val mockBusinessActivityAnswerService: BusinessActivityAnswerService = mock[BusinessActivityAnswerService]
 
-    "have the key 'businessActivity'" in {
-      BusinessActivityAnswersService.answerKey shouldBe "businessActivity"
-    }
-  }
+  def setupMockDeleteBusinessActivityAnswer(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockBusinessActivityAnswerService)(response)
+
 }

@@ -33,7 +33,11 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                          val invoicesAnswer: IssueNewInvoicesAnswerService,
                                          val outstandingInvoicesAnswer: OutstandingInvoicesAnswerService,
                                          val whyTurnoverBelow: WhyTurnoverBelowAnswerService,
-                                         val deregDateAnswer: DeregDateAnswerService) {
+                                         val deregDateAnswer: DeregDateAnswerService,
+                                         val businessActivityAnswer: BusinessActivityAnswerService,
+                                         val nextTaxableTurnoverZeroRatedAnswer: NextTaxableTurnoverZeroRatedAnswerService,
+                                         val purchaseVatExceedSupplyVatAnswer: PurchaseVatExceedSupplyVatAnswerService,
+                                         val sicCodeAnswerService: SICCodeAnswerService) {
 
 
   def wipeRedundantData(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] = {

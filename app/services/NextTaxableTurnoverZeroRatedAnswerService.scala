@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package services.mocks
+package services
 
-trait MockNextTaxableTurnoverZeroRatedAnswersService {
+import connectors.DeregisterVatConnector
+import javax.inject.Inject
+import models.NextTaxableTurnoverZeroRatedModel
 
+class NextTaxableTurnoverZeroRatedAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[NextTaxableTurnoverZeroRatedModel]{
+  val answerKey: String = ""
 }

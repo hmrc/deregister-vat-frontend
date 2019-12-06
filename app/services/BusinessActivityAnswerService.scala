@@ -16,16 +16,12 @@
 
 package services
 
-import connectors.mocks.MockDeregisterVatConnector
-import utils.TestUtil
+import connectors.DeregisterVatConnector
+import javax.inject.Inject
+import models.YesNoAmountModel
 
-class PurchaseVatExceedSupplyVatAnswersServiceSpec extends TestUtil with MockDeregisterVatConnector {
-  object PurchaseVatExceedSupplyVatAnswersService extends PurchaseVatExceedSupplyVatAnswersService(mockDeregisterVatConnector)
 
-  "The BusinessActivityService" should {
-
-    "have the key 'businessActivity'" in {
-      PurchaseVatExceedSupplyVatAnswersService.answerKey shouldBe "businessActivity"
-    }
-  }
+class BusinessActivityAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[YesNoAmountModel] {
+   val answerKey: String = ""
 }
+

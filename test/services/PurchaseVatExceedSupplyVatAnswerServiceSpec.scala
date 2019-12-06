@@ -16,9 +16,16 @@
 
 package services
 
-import connectors.DeregisterVatConnector
-import javax.inject.Inject
+import connectors.mocks.MockDeregisterVatConnector
+import utils.TestUtil
 
-class NextTaxableTurnoverZeroRatedAnswersService @Inject()(val deregisterVatConnector: DeregisterVatConnector) {
-  val answerKey: String = ???
+class PurchaseVatExceedSupplyVatAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector {
+  object PurchaseVatExceedSupplyVatAnswerService$ extends PurchaseVatExceedSupplyVatAnswerService(mockDeregisterVatConnector)
+
+  "The PurchaseVatExceedSupplyVatAnswerService" should {
+
+    "have the key 'vatExceedSupplyVat'" in {
+      PurchaseVatExceedSupplyVatAnswerService$.answerKey shouldBe "businessActivity"
+    }
+  }
 }
