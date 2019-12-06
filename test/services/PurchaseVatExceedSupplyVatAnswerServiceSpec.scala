@@ -25,7 +25,7 @@ class PurchaseVatExceedSupplyVatAnswerServiceSpec extends TestUtil with MockDere
   "The PurchaseVatExceedSupplyVatAnswerService" should {
 
     "have the key 'vatExceedSupplyVat'" in {
-      PurchaseVatExceedSupplyVatAnswerService$.answerKey shouldBe "businessActivity"
+      PurchaseVatExceedSupplyVatAnswerService$.answerKey shouldBe "vatExceedSupplyVat"
     }
   }
 }
