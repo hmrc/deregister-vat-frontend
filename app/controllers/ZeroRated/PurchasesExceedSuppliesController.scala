@@ -21,14 +21,12 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
-class ExpectedVatPurchasedController @Inject()(val messagesApi: MessagesApi,
+class PurchasesExceedSuppliesController @Inject()(val messagesApi: MessagesApi,
                                                val authenticate: AuthPredicate,
                                                val pendingDeregCheck: PendingChangesPredicate,
-                                               val deregReasonAnswerService: DeregReasonAnswerService,
                                                val serviceErrorHandler: ServiceErrorHandler,
                                                implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
@@ -36,7 +34,7 @@ class ExpectedVatPurchasedController @Inject()(val messagesApi: MessagesApi,
     if (appConfig.features.zeroRatedJourney()) {
       Ok("")
     } else {
-      NotFound
+      serviceErrorHandler.showBadRequestError
     }
   }
 
@@ -44,7 +42,7 @@ class ExpectedVatPurchasedController @Inject()(val messagesApi: MessagesApi,
     if (appConfig.features.zeroRatedJourney()) {
       Ok("")
     } else {
-      NotFound
+      serviceErrorHandler.showBadRequestError
     }
   }
 }

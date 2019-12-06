@@ -16,26 +16,17 @@
 
 package controllers.ZeroRated
 
-import cats.data.EitherT
-import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
-import forms.DeregistrationReasonForm
 import javax.inject.{Inject, Singleton}
-import models._
-import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-
-import scala.concurrent.Future
 
 @Singleton
 class SicCodeController @Inject()(val messagesApi: MessagesApi,
                                   val authenticate: AuthPredicate,
                                   val pendingDeregCheck: PendingChangesPredicate,
-                                  val deregReasonAnswerService: DeregReasonAnswerService,
                                   val serviceErrorHandler: ServiceErrorHandler,
                                   implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
@@ -43,7 +34,7 @@ class SicCodeController @Inject()(val messagesApi: MessagesApi,
     if (appConfig.features.zeroRatedJourney()) {
       Ok("")
     } else {
-      NotFound
+      serviceErrorHandler.showBadRequestError
     }
   }
 
@@ -51,7 +42,7 @@ class SicCodeController @Inject()(val messagesApi: MessagesApi,
     if (appConfig.features.zeroRatedJourney()) {
       Ok("")
     } else {
-      NotFound
+      serviceErrorHandler.showBadRequestError
     }
   }
 }

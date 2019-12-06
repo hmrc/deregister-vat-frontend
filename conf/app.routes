@@ -29,8 +29,8 @@ POST       /deregister-turnover-below-threshold     controllers.TaxableTurnoverC
 GET        /deregister-date                 controllers.DeregistrationDateController.show
 POST       /deregister-date                 controllers.DeregistrationDateController.submit
 
-GET        /expected-turnover               controllers.NextTaxableTurnoverController.show
-POST       /expected-turnover               controllers.NextTaxableTurnoverController.submit
+GET        /expected-taxable-turnover              controllers.NextTaxableTurnoverController.show
+POST       /expected-taxable-turnover              controllers.NextTaxableTurnoverController.submit
 
 GET        /reasons-for-low-turnover        controllers.WhyTurnoverBelowController.show
 POST       /reasons-for-low-turnover        controllers.WhyTurnoverBelowController.submit
@@ -58,8 +58,8 @@ POST        /what-is-the-sic-code           controllers.ZeroRated.SicCodeControl
 GET         /expected-value-zero-rated-supplies   controllers.ZeroRated.ZeroRatedSuppliesController.show
 POST        /expected-value-zero-rated-supplies   controllers.ZeroRated.ZeroRatedSuppliesController.submit
 
-GET         /expected-value-vat-purchases       controllers.ZeroRated.ExpectedVatPurchasedController.show
-POST        /expected-value-vat-purchases       controllers.ZeroRated.ExpectedVatPurchasedController.submit
+GET         /expected-value-vat-purchases       controllers.ZeroRated.PurchasesExceedSuppliesController.show
+POST        /expected-value-vat-purchases       controllers.ZeroRated.PurchasesExceedSuppliesController.submit
 
 
 #Sign Out Routes

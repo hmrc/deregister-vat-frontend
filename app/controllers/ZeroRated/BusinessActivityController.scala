@@ -28,7 +28,6 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
                                            val pendingDeregCheck: PendingChangesPredicate,
-                                           val deregReasonAnswerService: DeregReasonAnswerService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
@@ -36,7 +35,7 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
     if (appConfig.features.zeroRatedJourney()) {
       Ok("")
     } else {
-      NotFound
+      serviceErrorHandler.showBadRequestError
     }
   }
 
@@ -44,7 +43,7 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
     if (appConfig.features.zeroRatedJourney()) {
       Ok("")
     } else {
-      NotFound
+      serviceErrorHandler.showBadRequestError
     }
   }
 }
