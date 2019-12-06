@@ -216,3 +216,7 @@ featureSwitch.title = Feature switches
 features.useLanguageSelectorFeature.enabled = Language selector
 
 outstandingInvoice.title = A fydd y busnes yn cael taliad am anfonebau heb eu setlo ar ôl i chi ganslo’r cofrestriad?
+
+businessActivity.title = A yw’r gweithgaredd busnes wedi newid?
+businessActivity.forExample = Er enghraifft, mae’r busnes ond yn cyflenwi nwyddau sydd ar gyfradd sero ar gyfer TAW, neu’n gwneud hynny’n bennaf.
+businessActivity.moreInfo = Rhagor o wybodaeth am nwyddau a gwasanaethau ar gyfradd sero (yn agor ffenestr neu dab newydd)

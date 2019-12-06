@@ -185,3 +185,7 @@ featureSwitch.title = Feature switches
 features.useLanguageSelectorFeature.enabled = Language selector
 
 outstandingInvoice.title = Will the business receive payment for outstanding invoices after you cancel the registration?
+
+businessActivity.title = Has the business activity changed?
+businessActivity.forExample = For example the business only, or mainly, supply goods that are zero-rated for VAT.
+businessActivity.moreInfo = More information on zero-rated goods and services (opens in a new window or tab)
