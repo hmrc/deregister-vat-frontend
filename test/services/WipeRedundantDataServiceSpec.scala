@@ -474,10 +474,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Delete Data ready for Zero Rated Journey" in {
 
         inSequence{
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+
           setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
           setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
-
-          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Right(DeregisterVatSuccess)
@@ -488,10 +488,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Not first answer" in {
 
         inSequence{
-          setupMockDeleteWhyTurnoverBelow(Left(errorModel))
-          setupMockDeleteNextTaxableTurnoverNotCalled()
+          setupMockDeleteCeasedTradingDate(Left(errorModel))
 
-          setupMockDeleteCeasedTradingDateNotCalled()
+          setupMockDeleteWhyTurnoverBelowNotCalled()
+          setupMockDeleteNextTaxableTurnoverNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -502,10 +502,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Not second answer" in {
 
         inSequence{
-          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnover(Left(errorModel))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteCeasedTradingDateNotCalled()
+          setupMockDeleteWhyTurnoverBelow(Left(errorModel))
+          setupMockDeleteNextTaxableTurnoverNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -517,10 +517,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Not third answer" in {
 
         inSequence{
-          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteCeasedTradingDate(Left(errorModel))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Left(errorModel))
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -581,11 +581,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
       "Delete Ceased Trading date, Why Turnover Below and Next Taxable Turnover answers" in {
         inSequence {
-          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
-
           setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
