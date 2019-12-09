@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package services
+package models
 
-import connectors.mocks.MockDeregisterVatConnector
-import utils.TestUtil
+import play.api.libs.json.{Json, OFormat}
 
-class NextTaxableTurnoverZeroRatedAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector{
-  object NextTaxableTurnoverZeroRatedAnswerService$ extends NextTaxableTurnoverZeroRatedAnswerService(mockDeregisterVatConnector)
+case class SicCodeModel(sicCode: Int)
 
-  "The NextTaxableTurnoverZeroRatedAnswerService" should {
-
-    "have the key 'nextTaxableTurnoverZeroRated'" in {
-      NextTaxableTurnoverZeroRatedAnswerService$.answerKey shouldBe "nextTaxableTurnoverZeroRated"
-    }
-  }
+object SicCodeModel {
+  implicit val format: OFormat[SicCodeModel] = Json.format[SicCodeModel]
 }

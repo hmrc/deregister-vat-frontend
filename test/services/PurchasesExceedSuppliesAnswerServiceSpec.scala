@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
-package models
+package services
 
-import play.api.libs.json.Json
+import connectors.mocks.MockDeregisterVatConnector
 import utils.TestUtil
 
-class NextTaxableTurnoverZeroRatedModelSpec extends TestUtil{
+class PurchasesExceedSuppliesAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector {
+  object PurchaseExceedSuppliesAnswerService extends PurchasesExceedSuppliesAnswerService(mockDeregisterVatConnector)
 
-  val testAmount= 934891.39
-  "NextTaxableTurnoverZeroRatedModel.format" should{
-    "serialize to the correct JSON" in {
-      Json.toJson(NextTaxableTurnoverZeroRatedModel(testAmount)) shouldBe
-        Json.obj(
-          "turnover" -> 934891.39
-        )
-    }
+  "The PurchasesExceedSuppliesAnswerService" should {
 
-    "deserialize from JSON correctly" in {
-      Json.obj(
-        "turnover" -> 934891.39
-      ).as[NextTaxableTurnoverModel] shouldBe NextTaxableTurnoverModel(934891.39)
+    "have the key 'purchasesExceedSupplies'" in {
+      PurchaseExceedSuppliesAnswerService.answerKey shouldBe "purchasesExceedSupplies"
     }
   }
 }

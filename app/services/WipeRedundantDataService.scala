@@ -35,9 +35,9 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                          val whyTurnoverBelow: WhyTurnoverBelowAnswerService,
                                          val deregDateAnswer: DeregDateAnswerService,
                                          val businessActivityAnswer: BusinessActivityAnswerService,
-                                         val nextTaxableTurnoverZeroRatedAnswer: NextTaxableTurnoverZeroRatedAnswerService,
-                                         val purchaseVatExceedSupplyVatAnswer: PurchaseVatExceedSupplyVatAnswerService,
-                                         val sicCodeAnswer: SICCodeAnswerService) {
+                                         val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
+                                         val purchaseVatExceedSupplyVatAnswer: PurchasesExceedSuppliesAnswerService,
+                                         val sicCodeAnswer: SicCodeAnswerService) {
 
 
   def wipeRedundantData(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] = {
@@ -80,7 +80,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
       _ <- EitherT(businessActivityAnswer.deleteAnswer)
       _ <- EitherT(sicCodeAnswer.deleteAnswer)
       _ <- EitherT(taxableTurnoverAnswer.deleteAnswer)
-      _ <- EitherT(nextTaxableTurnoverZeroRatedAnswer.deleteAnswer)
+      _ <- EitherT(zeroRatedSuppliesValueService.deleteAnswer)
       _ <- EitherT(purchaseVatExceedSupplyVatAnswer.deleteAnswer)
     } yield DeregisterVatSuccess).value
   }
