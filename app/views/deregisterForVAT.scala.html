@@ -19,12 +19,16 @@
 
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
+@linkBack = @{
+if(user.isAgent) appConfig.agentClientLookupChoicesPath else appConfig.manageVatSubscriptionFrontendUrl
+}
+
 @views.html.main_template(
 title = messages("deregisterForVAT.title"),
 bodyClasses = None,
 appConfig = appConfig) {
 
-    <a class="link-back" href="@appConfig.manageVatSubscriptionFrontendUrl">@messages("common.back")</a>
+    <a class="link-back" href="@linkBack">@messages("common.back")</a>
 
     <div data-metrics="start-dereg:view:deregister">
         @headings(messages("deregisterForVAT.title"))
