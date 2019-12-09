@@ -58,14 +58,21 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                                            (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     reason match {
-      case Some(Ceased) => wipeBelowThresholdJourney
+      case Some(Ceased) =>  wipeDataReadyForBelowThresholdJourney
       case Some(BelowThreshold) => ceasedTradingDateAnswer.deleteAnswer
-      case Some(ZeroRated) => wipeZeroRatedJourney
+      case Some(ZeroRated) => wipeDataReadyForZeroRatedJourney
       case _ => Future.successful(Right(DeregisterVatSuccess))
     }
   }
 
-  private[services] def wipeBelowThresholdJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  private[services] def wipeDataReadyForCeasedTradingJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, DeregisterVatResponse]] = {
+    (for {
+      _ <- EitherT(???)
+    } yield DeregisterVatSuccess).value
+  }
+
+  private[services] def wipeDataReadyForBelowThresholdJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     (for {
       _ <- EitherT(whyTurnoverBelow.deleteAnswer)
@@ -74,7 +81,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
     } yield DeregisterVatSuccess).value
   }
 
-  private[services] def wipeZeroRatedJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  private[services] def wipeDataReadyForZeroRatedJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     (for{
       _ <- EitherT(businessActivityAnswer.deleteAnswer)
