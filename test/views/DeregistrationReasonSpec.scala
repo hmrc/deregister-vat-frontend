@@ -37,7 +37,10 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
     "zeroRated feature switch is enabled" should {
 
-      lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
+      lazy val view = {
+        mockConfig.features.zeroRatedJourney(true)
+        views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
+      }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
@@ -75,7 +78,10 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
     "zeroRated feature switch is disabled" should {
 
-      lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
+      lazy val view = {
+        mockConfig.features.zeroRatedJourney(false)
+        views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
+      }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct a radio button form with the correct 3 options" in {

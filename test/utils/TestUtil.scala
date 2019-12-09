@@ -43,6 +43,7 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
     mockConfig.features.stubContactPreferences(true)
     mockConfig.features.useLanguageSelector(true)
     mockConfig.features.accessibilityStatement(true)
+    mockConfig.features.zeroRatedJourney(true)
     SharedMetricRegistries.clear()
   }
 
