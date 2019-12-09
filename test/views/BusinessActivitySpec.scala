@@ -16,8 +16,8 @@
 
 package views
 
-import assets.messages.{CommonMessages, BusinessActivityPageMessages}
-import forms.YesNoForm
+import assets.messages.{BusinessActivityPageMessages, CommonMessages}
+import forms.BusinessActivityForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -39,7 +39,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.businessActivity(YesNoForm.yesNoForm)
+    lazy val view = views.html.businessActivity(BusinessActivityForm.businessActivityForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -84,7 +84,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.businessActivity(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
+    lazy val view = views.html.businessActivity(BusinessActivityForm.businessActivityForm.bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -101,7 +101,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
     }
 
     "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
+      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${BusinessActivityPageMessages.businessActivityError}"
     }
 
     s"have the correct example text" in {
@@ -123,7 +123,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
+      elementText(Selectors.error) shouldBe BusinessActivityPageMessages.businessActivityError
     }
   }
 

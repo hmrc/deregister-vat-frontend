@@ -22,5 +22,6 @@ object BusinessActivityPageMessages extends BaseMessages {
   val title = heading + titleSuffix
   val forExample = "For example the business only, or mainly, supply goods that are zero-rated for VAT."
   val moreInfo = "More information on zero-rated goods and services (opens in a new window or tab)"
+  val businessActivityError = "Select yes if your business activity has changed"
 
 }
