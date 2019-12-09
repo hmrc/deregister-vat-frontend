@@ -51,6 +51,21 @@ class DeregistrationReasonSpec extends TestUtil {
     }
   }
 
+  "DeregistrationReason.ZeroRated" should {
+
+    "serialize to the correct JSON" in {
+      Json.toJson(ZeroRated) shouldBe Json.obj(DeregistrationReason.id -> ZeroRated.value)
+    }
+
+    "serialize to the correct JSON when using submissionWrites" in {
+      Json.toJson(ZeroRated)(DeregistrationReason.submissionWrites) shouldBe JsString(ZeroRated.value)
+    }
+
+    "deserialize from the correct JSON" in {
+      Json.obj(DeregistrationReason.id -> ZeroRated.value).as[DeregistrationReason] shouldBe ZeroRated
+    }
+  }
+
   "DeregistrationReason.Other" should {
 
     "serialize to the correct JSON" in {

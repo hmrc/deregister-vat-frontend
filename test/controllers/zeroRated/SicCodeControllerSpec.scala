@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.ZeroRated
+package controllers.zeroRated
 
 import controllers.ControllerBaseSpec
 import play.api.http.Status

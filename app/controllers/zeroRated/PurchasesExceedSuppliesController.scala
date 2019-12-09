@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.ZeroRated
+package controllers.zeroRated
 
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
@@ -24,11 +24,11 @@ import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
-class SicCodeController @Inject()(val messagesApi: MessagesApi,
-                                  val authenticate: AuthPredicate,
-                                  val pendingDeregCheck: PendingChangesPredicate,
-                                  val serviceErrorHandler: ServiceErrorHandler,
-                                  implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class PurchasesExceedSuppliesController @Inject()(val messagesApi: MessagesApi,
+                                               val authenticate: AuthPredicate,
+                                               val pendingDeregCheck: PendingChangesPredicate,
+                                               val serviceErrorHandler: ServiceErrorHandler,
+                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck) { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {

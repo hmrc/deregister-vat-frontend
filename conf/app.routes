@@ -49,17 +49,17 @@ POST       /outstanding-invoices            controllers.OutstandingInvoicesContr
 
 
 
-GET        /has-the-business-activity-changed   controllers.ZeroRated.BusinessActivityController.show
-POST       /has-the-business-activity-changed   controllers.ZeroRated.BusinessActivityController.submit
+GET        /has-the-business-activity-changed   controllers.zeroRated.BusinessActivityController.show
+POST       /has-the-business-activity-changed   controllers.zeroRated.BusinessActivityController.submit
 
-GET         /what-is-the-sic-code           controllers.ZeroRated.SicCodeController.show
-POST        /what-is-the-sic-code           controllers.ZeroRated.SicCodeController.submit
+GET         /what-is-the-sic-code           controllers.zeroRated.SicCodeController.show
+POST        /what-is-the-sic-code           controllers.zeroRated.SicCodeController.submit
 
-GET         /expected-value-zero-rated-supplies   controllers.ZeroRated.ZeroRatedSuppliesController.show
-POST        /expected-value-zero-rated-supplies   controllers.ZeroRated.ZeroRatedSuppliesController.submit
+GET         /expected-value-zero-rated-supplies   controllers.zeroRated.ZeroRatedSuppliesController.show
+POST        /expected-value-zero-rated-supplies   controllers.zeroRated.ZeroRatedSuppliesController.submit
 
-GET         /expected-value-vat-purchases       controllers.ZeroRated.PurchasesExceedSuppliesController.show
-POST        /expected-value-vat-purchases       controllers.ZeroRated.PurchasesExceedSuppliesController.submit
+GET         /expected-value-vat-purchases       controllers.zeroRated.PurchasesExceedSuppliesController.show
+POST        /expected-value-vat-purchases       controllers.zeroRated.PurchasesExceedSuppliesController.submit
 
 
 #Sign Out Routes

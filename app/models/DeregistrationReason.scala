@@ -37,6 +37,7 @@ object DeregistrationReason {
   implicit val reads: Reads[DeregistrationReason] = (__ \ id).read[String].map {
       case Ceased.value => Ceased
       case BelowThreshold.value => BelowThreshold
+      case ZeroRated.value => ZeroRated
       case Other.value => Other
   }
 }
@@ -47,6 +48,10 @@ object Ceased extends DeregistrationReason {
 
 object BelowThreshold extends DeregistrationReason {
   override val value = "belowThreshold"
+}
+
+object ZeroRated extends DeregistrationReason {
+  override val value = "zeroRated"
 }
 
 object Other extends DeregistrationReason {

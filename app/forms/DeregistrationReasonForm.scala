@@ -26,6 +26,7 @@ object DeregistrationReasonForm {
   val reason: String = "reason"
   val ceased: String = "stoppedTrading"
   val belowThreshold: String = "turnoverBelowThreshold"
+  val zeroRated: String = "zeroRated"
   val other: String = "other"
 
   val error: String = "common.error.mandatoryRadioOption"
@@ -35,6 +36,7 @@ object DeregistrationReasonForm {
       data.get(key) match {
         case Some(`ceased`) => Right(Ceased)
         case Some(`belowThreshold`) => Right(BelowThreshold)
+        case Some(`zeroRated`) => Right(ZeroRated)
         case Some(`other`) => Right(Other)
         case _ => Left(Seq(FormError(key, error)))
       }
@@ -44,6 +46,7 @@ object DeregistrationReasonForm {
       val stringValue = value match {
         case Ceased => ceased
         case BelowThreshold => belowThreshold
+        case ZeroRated => zeroRated
         case Other => other
       }
       Map(key -> stringValue)
