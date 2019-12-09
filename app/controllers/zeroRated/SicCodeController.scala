@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 
-package controllers.ZeroRated
+package controllers.zeroRated
 
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
-class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
-                                           val authenticate: AuthPredicate,
-                                           val pendingDeregCheck: PendingChangesPredicate,
-                                           val serviceErrorHandler: ServiceErrorHandler,
-                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class SicCodeController @Inject()(val messagesApi: MessagesApi,
+                                  val authenticate: AuthPredicate,
+                                  val pendingDeregCheck: PendingChangesPredicate,
+                                  val serviceErrorHandler: ServiceErrorHandler,
+                                  implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck) { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {

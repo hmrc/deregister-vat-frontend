@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.ZeroRated
+package controllers.zeroRated
 
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}

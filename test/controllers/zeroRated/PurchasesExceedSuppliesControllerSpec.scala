@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.ZeroRated
+package controllers.zeroRated
 
 import controllers.ControllerBaseSpec
 import play.api.http.Status
@@ -22,9 +22,9 @@ import services.mocks.MockDeleteAllStoredAnswersService
 
 import scala.concurrent.Future
 
-class BusinessActivityControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
+class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
 
-  object TestController extends BusinessActivityController(
+  object TestController extends PurchasesExceedSuppliesController(
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
@@ -32,7 +32,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec with MockDeleteA
     mockConfig
   )
 
-  "The BusinessActivityController" when {
+  "The ZeroRatedSuppliesController" when {
 
     "calling .show with the zero rated journey feature switch on" should {
 

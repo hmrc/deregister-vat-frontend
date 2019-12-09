@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.ZeroRated
+package controllers.zeroRated
 
 import controllers.ControllerBaseSpec
 import play.api.http.Status
@@ -22,9 +22,9 @@ import services.mocks.MockDeleteAllStoredAnswersService
 
 import scala.concurrent.Future
 
-class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
+class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
 
-  object TestController extends PurchasesExceedSuppliesController(
+  object TestController extends ZeroRatedSuppliesController(
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
