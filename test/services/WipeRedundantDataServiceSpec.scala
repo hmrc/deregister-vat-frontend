@@ -188,19 +188,190 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
     }
   }
 
-  "Calling .wipeBelowThresholdJourney" when {
+  "Calling .wipeDataReadyForCeasedTradingJourney" when {
 
     "All deletions are successful" should {
 
-      "Delete Turnover below, Taxable turnover and Next taxable turnover answers" in {
+      "Delete Data to start Ceased Trading Journey" in {
 
-        inSequence {
-          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+        inSequence{
           setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
           setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
         }
 
-        val result = TestWipeRedundantDataService.wipeBelowThresholdJourney
+        val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
+        await(result) shouldBe Right(DeregisterVatSuccess)
+
+      }
+
+    }
+
+    "First deletion is unsuccessful" should {
+
+      "Return an error model" in {
+
+        inSequence{
+          setupMockDeleteTaxableTurnover(Left(errorModel))
+
+          setupMockDeleteWhyTurnoverBelowNotCalled()
+          setupMockDeleteNextTaxableTurnoverNotCalled()
+
+          setupMockDeleteBusinessActivityAnswerNotCalled()
+          setupMockDeleteSicCodeAnswerServiceNotCalled()
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
+        }
+
+        val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+
+    "Second deletion is unsuccessful" should {
+
+      "Return an error model" in {
+
+        inSequence{
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteWhyTurnoverBelow(Left(errorModel))
+          setupMockDeleteNextTaxableTurnoverNotCalled()
+
+          setupMockDeleteBusinessActivityAnswerNotCalled()
+          setupMockDeleteSicCodeAnswerServiceNotCalled()
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
+        }
+
+        val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+    "Third deletion is unsuccessful" should {
+
+      "Return an error model" in {
+
+        inSequence{
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Left(errorModel))
+
+          setupMockDeleteBusinessActivityAnswerNotCalled()
+          setupMockDeleteSicCodeAnswerServiceNotCalled()
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
+        }
+
+        val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+    "Fourth deletion is unsuccessful" should {
+
+      "Return an error model" in {
+
+        inSequence{
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Left(errorModel))
+          setupMockDeleteSicCodeAnswerServiceNotCalled()
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
+        }
+
+        val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+    "Fifth deletion is unsuccessful" should {
+
+      "Return an error model" in {
+
+        inSequence{
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Left(errorModel))
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
+        }
+
+        val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+    "Sixth deletion is unsuccessful" should {
+
+      "Return an error model" in {
+
+        inSequence{
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Left(errorModel))
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
+        }
+
+        val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+    "Seventh deletion is unsuccessful" should {
+
+      "Return an error model" in {
+
+        inSequence{
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Left(errorModel))
+        }
+
+        val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+  }
+
+  "Calling .wipeDataReadyForBelowThresholdJourney" when {
+
+    "All deletions are successful" should {
+
+      "Delete Data to start Below Threshold Journey" in {
+
+        inSequence {
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
+        }
+
+        val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
         await(result) shouldBe Right(DeregisterVatSuccess)
       }
     }
@@ -208,30 +379,36 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
     "First deletion is unsuccessful" should {
 
-      "Not delete Taxable turnover and Next taxable turnover answers" in {
+      "Return an error model" in {
 
         inSequence {
-          setupMockDeleteWhyTurnoverBelow(Left(errorModel))
-          setupMockDeleteTaxableTurnoverNotCalled()
-          setupMockDeleteNextTaxableTurnoverNotCalled()
+          setupMockDeleteCeasedTradingDate(Left(errorModel))
+
+          setupMockDeleteBusinessActivityAnswerNotCalled()
+          setupMockDeleteSicCodeAnswerServiceNotCalled()
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
 
-        val result = TestWipeRedundantDataService.wipeBelowThresholdJourney
+        val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
         await(result) shouldBe Left(errorModel)
       }
     }
 
     "Second deletion is unsuccessful" should {
 
-      "Not delete Next taxable turnover answer" in {
+      "Return an error model" in {
 
         inSequence {
-          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-          setupMockDeleteTaxableTurnover(Left(errorModel))
-          setupMockDeleteNextTaxableTurnoverNotCalled()
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Left(errorModel))
+          setupMockDeleteSicCodeAnswerServiceNotCalled()
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
 
-        val result = TestWipeRedundantDataService.wipeBelowThresholdJourney
+        val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
         await(result) shouldBe Left(errorModel)
       }
     }
@@ -241,30 +418,68 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnover(Left(errorModel))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Left(errorModel))
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
 
-        val result = TestWipeRedundantDataService.wipeBelowThresholdJourney
+        val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+
+    "Fourth deletion is unsuccessful" should {
+
+      "Return an error model" in {
+
+        inSequence {
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Left(errorModel))
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
+        }
+
+        val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
+        await(result) shouldBe Left(errorModel)
+      }
+    }
+
+    "Fifth deletion is unsuccessful" should {
+
+      "Return an error model" in {
+
+        inSequence {
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Left(errorModel))
+        }
+
+        val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
         await(result) shouldBe Left(errorModel)
       }
     }
   }
 
-  "Calling .wipeZeroRatedJourney" when {
+  "Calling .wipeDataReadyForZeroRatedJourney" when {
 
     "All deletions are successful" should {
-      "Delete Taxable Turnover and Next Taxable Turnover" in {
+      "Delete Data ready for Zero Rated Journey" in {
 
         inSequence{
-          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
-          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
-          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
         }
-        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
+        val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Right(DeregisterVatSuccess)
       }
     }
@@ -273,13 +488,12 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Not first answer" in {
 
         inSequence{
-          setupMockDeleteBusinessActivityAnswer(Left(errorModel))
-          setupMockDeleteSicCodeAnswerServiceNotCalled()
-          setupMockDeleteTaxableTurnoverNotCalled()
-          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
-          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
+          setupMockDeleteWhyTurnoverBelow(Left(errorModel))
+          setupMockDeleteNextTaxableTurnoverNotCalled()
+
+          setupMockDeleteCeasedTradingDateNotCalled()
         }
-        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
+        val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Left(errorModel)
       }
     }
@@ -288,61 +502,31 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Not second answer" in {
 
         inSequence{
-          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSicCodeAnswerService(Left(errorModel))
-          setupMockDeleteTaxableTurnoverNotCalled()
-          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
-          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Left(errorModel))
+
+          setupMockDeleteCeasedTradingDateNotCalled()
         }
-        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
+        val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Left(errorModel)
       }
     }
+
 
     "Third deletion is unsuccessful" should {
       "Not third answer" in {
 
         inSequence{
-          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
-          setupMockDeleteTaxableTurnover(Left(errorModel))
-          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
-          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteCeasedTradingDate(Left(errorModel))
         }
-        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
+        val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Left(errorModel)
       }
     }
 
-    "Third deletion is unsuccessful" should {
-      "Not fourth answer" in {
-
-        inSequence{
-          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
-          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Left(errorModel))
-          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
-        }
-        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
-        await(result) shouldBe Left(errorModel)
-      }
-    }
-
-    "Fourth deletion is unsuccessful" should {
-      "Not fifth answer" in {
-
-        inSequence{
-          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
-          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
-          setupMockDeletePurchasesExceedSuppliesAnswer(Left(errorModel))
-        }
-        val result = TestWipeRedundantDataService.wipeZeroRatedJourney
-        await(result) shouldBe Left(errorModel)
-      }
-    }
   }
 
 
@@ -352,12 +536,18 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
       val deregReason: Option[DeregistrationReason] = Some(Ceased)
 
-      "Call .wipeBelowThresholdJourney to remove redundant data" in {
+      "Call .wipe to remove redundant data" in {
 
         inSequence {
-          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
           setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
           setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
@@ -371,7 +561,14 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
       "Delete Ceased Trading date answer" in {
 
-        setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+        inSequence {
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
+        }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
         await(result) shouldBe Right(DeregisterVatSuccess)
@@ -382,13 +579,13 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
       val deregReason: Option[DeregistrationReason] = Some(ZeroRated)
 
-      "Delete Ceased Trading date answer" in {
+      "Delete Ceased Trading date, Why Turnover Below and Next Taxable Turnover answers" in {
         inSequence {
-          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
-          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
-          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
