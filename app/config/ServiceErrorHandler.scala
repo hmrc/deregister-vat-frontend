@@ -19,7 +19,7 @@ package config
 import javax.inject.Inject
 import play.api.i18n.MessagesApi
 import play.api.mvc.{Request, RequestHeader, Result}
-import play.api.mvc.Results.InternalServerError
+import play.api.mvc.Results.{BadRequest, InternalServerError}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
 
@@ -34,5 +34,7 @@ class ServiceErrorHandler @Inject()(val messagesApi: MessagesApi,
   }
 
   def showInternalServerError(implicit request: Request[_]): Result = InternalServerError(internalServerErrorTemplate)
+
+  def showBadRequestError(implicit request: Request[_]): Result = BadRequest(badRequestTemplate)
 
 }

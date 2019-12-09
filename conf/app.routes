@@ -29,8 +29,8 @@ POST       /deregister-turnover-below-threshold     controllers.TaxableTurnoverC
 GET        /deregister-date                 controllers.DeregistrationDateController.show
 POST       /deregister-date                 controllers.DeregistrationDateController.submit
 
-GET        /expected-turnover               controllers.NextTaxableTurnoverController.show
-POST       /expected-turnover               controllers.NextTaxableTurnoverController.submit
+GET        /expected-taxable-turnover              controllers.NextTaxableTurnoverController.show
+POST       /expected-taxable-turnover              controllers.NextTaxableTurnoverController.submit
 
 GET        /reasons-for-low-turnover        controllers.WhyTurnoverBelowController.show
 POST       /reasons-for-low-turnover        controllers.WhyTurnoverBelowController.submit
@@ -46,6 +46,21 @@ GET        /assets/*file                    controllers.Assets.at(path="/public"
 
 GET        /outstanding-invoices            controllers.OutstandingInvoicesController.show
 POST       /outstanding-invoices            controllers.OutstandingInvoicesController.submit
+
+
+
+GET        /has-the-business-activity-changed   controllers.ZeroRated.BusinessActivityController.show
+POST       /has-the-business-activity-changed   controllers.ZeroRated.BusinessActivityController.submit
+
+GET         /what-is-the-sic-code           controllers.ZeroRated.SicCodeController.show
+POST        /what-is-the-sic-code           controllers.ZeroRated.SicCodeController.submit
+
+GET         /expected-value-zero-rated-supplies   controllers.ZeroRated.ZeroRatedSuppliesController.show
+POST        /expected-value-zero-rated-supplies   controllers.ZeroRated.ZeroRatedSuppliesController.submit
+
+GET         /expected-value-vat-purchases       controllers.ZeroRated.PurchasesExceedSuppliesController.show
+POST        /expected-value-vat-purchases       controllers.ZeroRated.PurchasesExceedSuppliesController.submit
+
 
 #Sign Out Routes
 GET        /sign-out                        controllers.SignOutController.signOut(authorised: Boolean)

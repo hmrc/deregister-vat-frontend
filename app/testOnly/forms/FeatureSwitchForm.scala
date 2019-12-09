@@ -28,7 +28,8 @@ object FeatureSwitchForm {
       ConfigKeys.stubAgentClientLookupFeature -> boolean,
       ConfigKeys.stubContactPreferencesFeature -> boolean,
       ConfigKeys.useLanguageSelectorFeature -> boolean,
-      ConfigKeys.accessibilityStatement -> boolean
+      ConfigKeys.accessibilityStatement -> boolean,
+      ConfigKeys.zeroRatedJourney -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 
