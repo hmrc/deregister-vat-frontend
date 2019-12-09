@@ -16,10 +16,24 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
+import utils.TestUtil
 
-case class NextTaxableTurnoverZeroRatedModel(turnover: BigDecimal)
+class ZeroRatedSuppliesValueSpec extends TestUtil{
 
-object NextTaxableTurnoverZeroRatedModel {
-  implicit val format: OFormat[NextTaxableTurnoverZeroRatedModel] = Json.format[NextTaxableTurnoverZeroRatedModel]
+  val testAmount= 934891.39
+  "ZeroRatedSuppliesValue.format" should{
+    "serialize to the correct JSON" in {
+      Json.toJson(ZeroRatedSuppliesValue(testAmount)) shouldBe
+        Json.obj(
+          "turnover" -> 934891.39
+        )
+    }
+
+    "deserialize from JSON correctly" in {
+      Json.obj(
+        "turnover" -> 934891.39
+      ).as[NextTaxableTurnoverModel] shouldBe NextTaxableTurnoverModel(934891.39)
+    }
+  }
 }

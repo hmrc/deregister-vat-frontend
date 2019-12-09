@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package services
+package services.mocks
 
-import connectors.mocks.MockDeregisterVatConnector
-import utils.TestUtil
+import models._
+import services.SicCodeAnswerService
 
-class SICCodeAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector {
-  object SICCodeAnswerService$ extends SICCodeAnswerService(mockDeregisterVatConnector)
 
-  "The SICCodeAnswerService" should {
+trait MockSicCodeAnswerService extends MockStoredAnswersService {
 
-    "have the key 'sicCode'" in {
-      SICCodeAnswerService$.answerKey shouldBe "sicCode"
-    }
-  }
+  val mockSicCodeAnswerService: SicCodeAnswerService = mock[SicCodeAnswerService]
+
+  def setupMockDeleteSicCodeAnswerService(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockSicCodeAnswerService)(response)
+
+  def setupMockDeleteSicCodeAnswerServiceNotCalled()(implicit user: User[_]): Unit =
+    setupMockDeleteAnswerNotCalled(mockSicCodeAnswerService)
 }

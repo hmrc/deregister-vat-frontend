@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package models
+package services
 
-import play.api.libs.json.{Json, OFormat}
+import connectors.DeregisterVatConnector
+import javax.inject.{Inject, Singleton}
+import models.SicCodeModel
 
-case class SICCodeModel(sicCode: Int)
+@Singleton()
+class SicCodeAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[SicCodeModel] {
+  override val answerKey: String = SicCodeAnswerService.key
+}
 
-object SICCodeModel {
-  implicit val format: OFormat[SICCodeModel] = Json.format[SICCodeModel]
+object SicCodeAnswerService {
+  val key = "sicCode"
 }

@@ -25,7 +25,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
   with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockBusinessActivityAnswerService
-  with MockNextTaxableTurnoverZeroRatedAnswerService with MockPurchaseVatExceedSupplyVatAnswerService with MockSICCodeAnswerService {
+  with MockZeroRatedSuppliesValueService with MockPurchasesExceedSuppliesAnswerService with MockSicCodeAnswerService {
 
   object TestWipeRedundantDataService extends WipeRedundantDataService(
     mockDeregReasonAnswerService,
@@ -38,9 +38,9 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
     mockWhyTurnoverBelowAnswerService,
     mockDeregDateAnswerService,
     mockBusinessActivityAnswerService,
-    mockNextTaxableTurnoverZeroRatedAnswerService,
-    mockPurchaseVatExceedSupplyVatAnswerService,
-    mockSICCodeAnswerService
+    mockZeroRatedSuppliesValueService,
+    mockPurchasesExceedSuppliesAnswerService,
+    mockSicCodeAnswerService
   )
 
   val errorModel: ErrorModel = ErrorModel(1, "")
@@ -259,10 +259,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
         inSequence{
           setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSICCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
           setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnoverZeroRatedAnswer(Right(DeregisterVatSuccess))
-          setupMockDeletePurchaseVatExceedSupplyVatAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
         }
         val result = TestWipeRedundantDataService.wipeZeroRatedJourney
         await(result) shouldBe Right(DeregisterVatSuccess)
@@ -274,10 +274,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
         inSequence{
           setupMockDeleteBusinessActivityAnswer(Left(errorModel))
-          setupMockDeleteSICCodeAnswerServiceNotCalled()
+          setupMockDeleteSicCodeAnswerServiceNotCalled()
           setupMockDeleteTaxableTurnoverNotCalled()
-          setupMockDeleteNextTaxableTurnoverZeroRatedAnswerNotCalled()
-          setupMockDeletePurchaseVatExceedSupplyVatAnswerNotCalled()
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -289,10 +289,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
         inSequence{
           setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSICCodeAnswerService(Left(errorModel))
+          setupMockDeleteSicCodeAnswerService(Left(errorModel))
           setupMockDeleteTaxableTurnoverNotCalled()
-          setupMockDeleteNextTaxableTurnoverZeroRatedAnswerNotCalled()
-          setupMockDeletePurchaseVatExceedSupplyVatAnswerNotCalled()
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -304,10 +304,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
         inSequence{
           setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSICCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
           setupMockDeleteTaxableTurnover(Left(errorModel))
-          setupMockDeleteNextTaxableTurnoverZeroRatedAnswerNotCalled()
-          setupMockDeletePurchaseVatExceedSupplyVatAnswerNotCalled()
+          setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -319,10 +319,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
         inSequence{
           setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSICCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
           setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnoverZeroRatedAnswer(Left(errorModel))
-          setupMockDeletePurchaseVatExceedSupplyVatAnswerNotCalled()
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Left(errorModel))
+          setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -334,10 +334,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
         inSequence{
           setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSICCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
           setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnoverZeroRatedAnswer(Right(DeregisterVatSuccess))
-          setupMockDeletePurchaseVatExceedSupplyVatAnswer(Left(errorModel))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Left(errorModel))
         }
         val result = TestWipeRedundantDataService.wipeZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -385,10 +385,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Delete Ceased Trading date answer" in {
         inSequence {
           setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
-          setupMockDeleteSICCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
           setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnoverZeroRatedAnswer(Right(DeregisterVatSuccess))
-          setupMockDeletePurchaseVatExceedSupplyVatAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)

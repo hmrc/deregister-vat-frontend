@@ -16,26 +16,10 @@
 
 package models
 
-import play.api.libs.json.Json
-import utils.TestUtil
+import play.api.libs.json.{Json, OFormat}
 
-class SICCodeModelSpec extends TestUtil {
+case class ZeroRatedSuppliesValue(turnover: BigDecimal)
 
-  val testAmount = 88326
-
-  "SICCodeModel.format" should {
-    "serialize to the correct JSON" in {
-      Json.toJson(SICCodeModel(testAmount)) shouldBe
-        Json.obj(
-        "sicCode" ->88326
-        )
-    }
-
-    "deserialize from JSON correctly" in {
-      Json.obj(
-        "sicCode" -> 88326
-      ).as[SICCodeModel] shouldBe SICCodeModel(88326)
-    }
-  }
-
+object ZeroRatedSuppliesValue {
+  implicit val format: OFormat[ZeroRatedSuppliesValue] = Json.format[ZeroRatedSuppliesValue]
 }

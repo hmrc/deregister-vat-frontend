@@ -16,16 +16,16 @@
 
 package services
 
-import connectors.mocks.MockDeregisterVatConnector
-import utils.TestUtil
+import connectors.DeregisterVatConnector
+import javax.inject.{Inject, Singleton}
+import models.ZeroRatedSuppliesValue
 
-class PurchaseVatExceedSupplyVatAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector {
-  object PurchaseVatExceedSupplyVatAnswerService$ extends PurchaseVatExceedSupplyVatAnswerService(mockDeregisterVatConnector)
+@Singleton()
+class ZeroRatedSuppliesValueService @Inject()(val deregisterVatConnector: DeregisterVatConnector)
+  extends StoredAnswersService[ZeroRatedSuppliesValue]{
+  override val answerKey: String = ZeroRatedSuppliesValueService.key
+}
 
-  "The PurchaseVatExceedSupplyVatAnswerService" should {
-
-    "have the key 'vatExceedSupplyVat'" in {
-      PurchaseVatExceedSupplyVatAnswerService$.answerKey shouldBe "vatExceedSupplyVat"
-    }
-  }
+object ZeroRatedSuppliesValueService {
+  val key: String = "zeroRatedSuppliesValue"
 }

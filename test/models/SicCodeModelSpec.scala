@@ -14,18 +14,28 @@
  * limitations under the License.
  */
 
-package services
+package models
 
-import connectors.DeregisterVatConnector
-import javax.inject.{Inject, Singleton}
-import models.NextTaxableTurnoverZeroRatedModel
+import play.api.libs.json.Json
+import utils.TestUtil
 
-@Singleton()
-class NextTaxableTurnoverZeroRatedAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector)
-  extends StoredAnswersService[NextTaxableTurnoverZeroRatedModel]{
-  override val answerKey: String = NextTaxableTurnoverZeroRatedAnswerService.key
-}
+class SicCodeModelSpec extends TestUtil {
 
-object NextTaxableTurnoverZeroRatedAnswerService {
-  val key: String = "nextTaxableTurnoverZeroRated"
+  val testAmount = 88326
+
+  "SicCodeModel.format" should {
+    "serialize to the correct JSON" in {
+      Json.toJson(SicCodeModel(testAmount)) shouldBe
+        Json.obj(
+        "sicCode" ->88326
+        )
+    }
+
+    "deserialize from JSON correctly" in {
+      Json.obj(
+        "sicCode" -> 88326
+      ).as[SicCodeModel] shouldBe SicCodeModel(88326)
+    }
+  }
+
 }
