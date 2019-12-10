@@ -50,7 +50,7 @@ POST       /outstanding-invoices            controllers.OutstandingInvoicesContr
 
 
 GET        /has-the-business-activity-changed   controllers.zeroRated.BusinessActivityController.show
-POST       /has-the-business-activity-changed   controllers.zeroRated.BusinessActivityController.submit
+#POST       /has-the-business-activity-changed   controllers.zeroRated.BusinessActivityController.submit
 
 GET         /what-is-the-sic-code           controllers.zeroRated.SicCodeController.show
 POST        /what-is-the-sic-code           controllers.zeroRated.SicCodeController.submit
