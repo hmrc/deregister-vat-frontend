@@ -46,11 +46,9 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
       capitalAssets <- EitherT(capitalAssetsAnswer.getAnswer)
       issueInvoices <- EitherT(invoicesAnswer.getAnswer)
       outstandingInvoices <- EitherT(outstandingInvoicesAnswer.getAnswer)
-      taxableTurnover <- EitherT(taxableTurnoverAnswer.getAnswer)
       _ <- EitherT(wipeRedundantDeregReasonJourneyData(deregReason))
       _ <- EitherT(wipeOutstandingInvoices(issueInvoices))
       _ <- EitherT(wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices))
-      _ <- EitherT(wipeNext12MonthsBelow(taxableTurnover))
     } yield DeregisterVatSuccess).value
   }
 
@@ -121,11 +119,4 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
     }
   }
 
-  private[services] def wipeNext12MonthsBelow(belowPast12Months: Option[YesNo])(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
-  : Future[Either[ErrorModel, DeregisterVatResponse]] = {
-    belowPast12Months match {
-      case Some(Yes) => whyTurnoverBelow.deleteAnswer
-      case _ => Future.successful(Right(DeregisterVatSuccess))
-    }
-  }
 }

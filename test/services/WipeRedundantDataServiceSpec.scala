@@ -149,45 +149,6 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
     }
   }
 
-  "Calling .wipeNext12MonthsBelow" when {
-
-    "Turnover is below for the past 12 months" when {
-
-      "Deletions is successful" should {
-
-        "Delete Why Turnover Below answers" in {
-
-          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-
-          val result = TestWipeRedundantDataService.wipeNext12MonthsBelow(belowPast12Months = Some(Yes))
-          await(result) shouldBe Right(DeregisterVatSuccess)
-        }
-      }
-
-      "Deletion is unsuccessful" should {
-
-        "Return an error model" in {
-
-          setupMockDeleteWhyTurnoverBelow(Left(errorModel))
-
-          val result = TestWipeRedundantDataService.wipeNext12MonthsBelow(belowPast12Months = Some(Yes))
-          await(result) shouldBe Left(errorModel)
-        }
-      }
-    }
-
-    "Turnover is not below for the past 12 months" should {
-
-      "Not delete Why Turnover Below answer" in {
-
-        setupMockDeleteWhyTurnoverBelowNotCalled
-
-        val result = TestWipeRedundantDataService.wipeNext12MonthsBelow(belowPast12Months = Some(No))
-        await(result) shouldBe Right(DeregisterVatSuccess)
-      }
-    }
-  }
-
   "Calling .wipeDataReadyForCeasedTradingJourney" when {
 
     "All deletions are successful" should {
@@ -625,8 +586,6 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
               setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
               setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
-
-              setupMockDeleteOutstandingInvoices(Right(DeregisterVatSuccess))
               setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
             }
 
@@ -650,9 +609,6 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
               setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
               setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
-
-              setupMockDeleteOutstandingInvoices(Right(DeregisterVatSuccess))
-              setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -674,9 +630,6 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
               setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
-
-              setupMockDeleteOutstandingInvoices(Right(DeregisterVatSuccess))
-              setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -692,7 +645,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             inSequence {
               setupMockGetDeregReason(Right(Some(ZeroRated)))
               setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
-              setupMockGetIssueNewInvoices(Right(Some(No)))
+              setupMockGetIssueNewInvoices(Right(Some(Yes)))
               setupMockGetOutstandingInvoices(Right(Some(No)))
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
@@ -700,7 +653,6 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
 
               setupMockDeleteOutstandingInvoices(Left(errorModel))
-              setupMockDeleteDeregDateNotCalled()
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -712,16 +664,19 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         "return an error model" in {
 
           inSequence {
-            setupMockGetDeregReason(Right(Some(ZeroRated)))
+            setupMockGetDeregReason(Right(Some(Ceased)))
             setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
             setupMockGetIssueNewInvoices(Right(Some(No)))
             setupMockGetOutstandingInvoices(Right(Some(No)))
 
-            setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+            setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
             setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
             setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+            setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+            setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+            setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+            setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
 
-            setupMockDeleteOutstandingInvoices(Right(DeregisterVatSuccess))
             setupMockDeleteDeregDate(Left(errorModel))
           }
 
