@@ -173,6 +173,11 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
             DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
 
             DeregisterVatStub.successfulDeleteAnswer(vrn, CeasedTradingDateAnswerService.key)
+            DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
+            DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
+            DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
+            DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
+
 
             val response: WSResponse = postRequest(yes)
 
@@ -201,6 +206,10 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
               DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
 
               DeregisterVatStub.successfulDeleteAnswer(vrn, CeasedTradingDateAnswerService.key)
+              DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
+              DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
+              DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
+              DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
               val response: WSResponse = postRequest(no)
 
@@ -229,8 +238,12 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
                 DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
 
                 DeregisterVatStub.successfulDeleteAnswer(vrn, TaxableTurnoverAnswerService.key)
-                DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
                 DeregisterVatStub.successfulDeleteAnswer(vrn, WhyTurnoverBelowAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
                 val response: WSResponse = postRequest(no)
 
@@ -257,8 +270,12 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
                 DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsNoJson)
 
                 DeregisterVatStub.successfulDeleteAnswer(vrn, TaxableTurnoverAnswerService.key)
-                DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
                 DeregisterVatStub.successfulDeleteAnswer(vrn, WhyTurnoverBelowAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
                 val response: WSResponse = postRequest(no)
 
