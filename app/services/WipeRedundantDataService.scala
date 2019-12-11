@@ -91,7 +91,6 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     (for{
       _ <- EitherT(ceasedTradingDateAnswer.deleteAnswer)
-
       _ <- EitherT(whyTurnoverBelow.deleteAnswer)
       _ <- EitherT(nextTaxableTurnoverAnswer.deleteAnswer)
 

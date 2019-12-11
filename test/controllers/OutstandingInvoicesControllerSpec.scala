@@ -132,6 +132,25 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
           }
         }
 
+        "user is on 'zero rated' journey" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          lazy val result = TestOutstandingInvoicesController.submit()(request)
+
+          "return 303 (SEE OTHER)" in {
+            setupMockGetDeregReason(Right(Some(ZeroRated)))
+            setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
+            setupMockGetCapitalAssets(Right(None))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          s"redirect to ${controllers.routes.DeregistrationDateController.show()}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+          }
+        }
         "user is on 'ceased trading' journey" when {
 
           "user answered 'Yes' to having capital assets" should {
