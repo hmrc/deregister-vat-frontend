@@ -334,7 +334,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
                 response should have(
                   httpStatus(SEE_OTHER),
-                  redirectURI(controllers.routes.CheckAnswersController.show().url)
+                  redirectURI(controllers.routes.DeregistrationDateController.show().url)
                 )
               }
             }
