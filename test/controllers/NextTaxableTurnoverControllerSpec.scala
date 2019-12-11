@@ -81,7 +81,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
 
         "have the amount pre-populate in the field" in {
-          document(result).select("#turnover").attr("value") shouldBe testTurnoverAmt.toString
+          document(result).select("#amount").attr("value") shouldBe testTurnoverAmt.toString
         }
       }
 
@@ -95,7 +95,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -119,17 +119,14 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold + 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(Yes)))
-<<<<<<< HEAD
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
-=======
           setupMockStoreNextTaxableTurnover(MonetaryModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
->>>>>>> renamed the NextTaxableTurnoverModel to MonetaryModel
+
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -144,17 +141,13 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(Yes)))
-<<<<<<< HEAD
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
-=======
           setupMockStoreNextTaxableTurnover(MonetaryModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
->>>>>>> renamed the NextTaxableTurnoverModel to MonetaryModel
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -169,7 +162,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -190,13 +183,13 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockGetDeregReason(Right(Some(ZeroRated)))
           setupMockGetTaxableTurnover(Right(Some(No)))
-          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreNextTaxableTurnover(MonetaryModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -211,13 +204,13 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(None))
           setupMockGetDeregReason(Right(Some(ZeroRated)))
-          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreNextTaxableTurnover(MonetaryModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -230,7 +223,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
       "the user submits after inputting an amount and an error is returned when storing" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
@@ -243,7 +236,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
       "the user submits without inputting an amount" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", ""))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -258,7 +251,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
       }
     }
 
-    authChecks(".submit", TestNextTaxableTurnoverController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", "1000.01")))
+    authChecks(".submit", TestNextTaxableTurnoverController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", "1000.01")))
   }
 
 }

@@ -16,20 +16,20 @@
 
 package forms
 
+import common.Constants._
 import forms.utils.FormValidation
 import models.MonetaryModel
 import play.api.data.Form
 import play.api.data.Forms._
-import common.Constants._
 
-object NextTaxableTurnoverForm extends FormValidation {
+object ZeroRatedSuppliesForm extends FormValidation {
 
-  val taxableTurnoverForm: Form[MonetaryModel] = Form(
+  val zeroRatedSuppliesForm: Form[MonetaryModel] = Form(
     mapping(
       "amount" -> optional(text)
-        .verifying("taxableTurnover.error.mandatory", _.isDefined)
+        .verifying("zeroRatedSupplies.error.mandatory", _.isDefined)
         .transform[String](x => x.get, x => Some(x))
-        .verifying(isNumericConstraint("taxableTurnover.error.nonNumeric"), hasMaxTwoDecimalsConstraint("common.error.tooManyDecimals"))
+        .verifying(isNumericConstraint("zeroRatedSupplies.error.nonNumeric"), hasMaxTwoDecimalsConstraint("common.error.tooManyDecimals"))
         .transform[BigDecimal](x => BigDecimal(x), x => x.toString)
         .verifying(isPositive("common.error.negative"), doesNotExceed(maxAmount, "common.error.tooManyDigitsBeforeDecimal"))
     )(MonetaryModel.apply)(MonetaryModel.unapply)

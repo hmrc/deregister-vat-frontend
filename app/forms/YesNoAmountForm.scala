@@ -30,7 +30,7 @@ object YesNoAmountForm extends FormValidation {
 
   private def validateAmount(key: String): BigDecimal => Either[Seq[FormError], Option[BigDecimal]] = {
     case x if x < 0 => Left(Seq(FormError(key, "common.error.negative")))
-    case x if x >= Constants.maxAmount => Left(Seq(FormError(key, "common.error.greaterThanMax")))
+    case x if x >= Constants.maxAmount => Left(Seq(FormError(key, "common.error.tooManyDigitsBeforeDecimal")))
     case x if hasMoreThanTwoDecimals(x.toString) => Left(Seq(FormError(key, "common.error.tooManyDecimals")))
     case x => Right(Some(x))
   }

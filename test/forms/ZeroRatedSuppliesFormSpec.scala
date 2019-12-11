@@ -17,17 +17,17 @@
 package forms
 
 import _root_.utils.TestUtil
-import assets.messages.{CommonMessages, NextTaxableTurnoverMessages}
+import assets.messages.{CommonMessages, ZeroRatedSuppliesMessages}
 import common.Constants
 import models.MonetaryModel
 import play.api.i18n.Messages
 
-class NextTaxableTurnoverFormSpec extends TestUtil {
+class ZeroRatedSuppliesFormSpec  extends TestUtil{
 
   "Binding a form with valid data" should {
 
     val data = Map("amount" -> "1000.01")
-    val form = NextTaxableTurnoverForm.taxableTurnoverForm.bind(data)
+    val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
@@ -43,33 +43,33 @@ class NextTaxableTurnoverFormSpec extends TestUtil {
     "no amount has been input" should {
 
       val missingInput: Map[String, String] = Map.empty
-      val form = NextTaxableTurnoverForm.taxableTurnoverForm.bind(missingInput)
+      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(missingInput)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
       }
 
       "throw the mandatory data error" in {
-        Messages(form.errors.head.message) shouldBe NextTaxableTurnoverMessages.mandatory
+        Messages(form.errors.head.message) shouldBe ZeroRatedSuppliesMessages.mandatory
       }
     }
 
     "non-numeric input is supplied" should {
 
-      val form = NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("amount" -> "ABC"))
+      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("amount" -> "ABC"))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
       }
 
       "throw the non-numeric error" in {
-        Messages(form.errors.head.message) shouldBe NextTaxableTurnoverMessages.nonNumeric
+        Messages(form.errors.head.message) shouldBe ZeroRatedSuppliesMessages.nonNumeric
       }
     }
 
     "negative input is supplied" should {
 
-      val form = NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("amount" -> "-1"))
+      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("amount" -> "-1"))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -82,7 +82,7 @@ class NextTaxableTurnoverFormSpec extends TestUtil {
 
     "too many decimal places are input" should {
 
-      val form = NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("amount" -> "0.001"))
+      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("amount" -> "0.001"))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -95,7 +95,7 @@ class NextTaxableTurnoverFormSpec extends TestUtil {
 
     "exceeds the maximum" should {
 
-      val form = NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("amount" -> (Constants.maxAmount + 0.01).toString))
+      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("amount" -> (Constants.maxAmount + 0.01).toString))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -111,7 +111,7 @@ class NextTaxableTurnoverFormSpec extends TestUtil {
 
     "generate the correct mapping" in {
       val model = MonetaryModel(BigDecimal(1000.01))
-      val form = NextTaxableTurnoverForm.taxableTurnoverForm.fill(model)
+      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.fill(model)
       form.data shouldBe Map("amount" -> "1000.01")
     }
   }

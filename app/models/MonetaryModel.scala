@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class MonetaryModel(turnover: BigDecimal)
+case class MonetaryModel(amount: BigDecimal)
 
 object MonetaryModel {
   implicit val format: OFormat[MonetaryModel] = Json.format[MonetaryModel]

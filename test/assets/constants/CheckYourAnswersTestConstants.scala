@@ -55,7 +55,7 @@ object CheckYourAnswersTestConstants extends TestUtil {
 
   val nextTaxableTurnoverRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.nextTaxableTurnover,
-    MoneyFormatter.formatHtmlAmount(nextTaxableTurnoverBelow.turnover),
+    MoneyFormatter.formatHtmlAmount(nextTaxableTurnoverBelow.amount),
     controllers.routes.NextTaxableTurnoverController.show().url,
     CheckYourAnswersMessages.nextTaxableTurnoverHidden,
     "expected-turnover"

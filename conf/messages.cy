@@ -47,6 +47,7 @@ common.error.mandatoryRadioOption = Dewiswch opsiwn
 common.error.mandatoryAmount = Nodwch y swm gan ddefnyddio’r rhifau 0 i 9
 common.error.negative = Nodwch rifau positif yn unig (dim -)
 common.error.tooManyDecimals = Nodwch uchafswm o 2 bwynt degol ar gyfer ceiniogau
+common.error.tooManyDigitsBeforeDecimal = Nodwch uchafswm o 13 lle degol ar gyfer punnoedd
 common.error.greaterThanMax = Rydych wedi nodi gormod o rifau
 common.dateRangeSeparator = i
 
@@ -228,3 +229,7 @@ sicCode.find = Dod o hyd i’r cod sy’n disgrifio’r gweithgaredd busnes orau
 sicCode.error.mandatory = Nodwch y cod 5 digid sy’n disgrifio’ch gweithgaredd busnes orau
 sicCode.error.tooFew = Nid ydych wedi nodi digon o rifau
 sicCode.error.tooMany = Rydych wedi nodi gormod o rifau
+
+zeroRatedSupplies.error.mandatory = Nodwch werth y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
+zeroRatedSupplies.error.nonNumeric = Nodwch swm gan ddefnyddio’r rhifau 0 i 9
+

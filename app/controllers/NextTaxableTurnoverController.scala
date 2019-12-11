@@ -64,7 +64,7 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
       } yield (taxableTurnover, deregReason))
         .value.map {
         case Right((_ ,Some(ZeroRated))) => Redirect(controllers.zeroRated.routes.ZeroRatedSuppliesController.show())
-        case Right((Some(_), Some(_))) if data.turnover > appConfig.deregThreshold => Redirect(controllers.routes.CannotDeregisterThresholdController.show())
+        case Right((Some(_), Some(_))) if data.amount > appConfig.deregThreshold => Redirect(controllers.routes.CannotDeregisterThresholdController.show())
         case Right((Some(Yes), Some(_))) => Redirect(controllers.routes.VATAccountsController.show())
         case Right((Some(No), Some(_))) => Redirect(controllers.routes.WhyTurnoverBelowController.show())
         case _ => serviceErrorHandler.showInternalServerError

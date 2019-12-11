@@ -75,7 +75,7 @@ object DeregistrationInfo {
   private[deregistrationRequest] def taxableTurnoverBelowReason(taxableTurnover: YesNo)(implicit appConfig: AppConfig): BelowThresholdReason =
     if (taxableTurnover.value) BelowNext12Months else BelowPast12Months
 
-  private[deregistrationRequest] val nextTwelveMonthsTurnover: Option[MonetaryModel] => Option[BigDecimal] = _.map(_.turnover)
+  private[deregistrationRequest] val nextTwelveMonthsTurnover: Option[MonetaryModel] => Option[BigDecimal] = _.map(_.amount)
 
   private[deregistrationRequest] def turnoverBelowThreshold(taxableTurnover: Option[YesNo],
                                                             nextTaxableTurnover: Option[MonetaryModel],

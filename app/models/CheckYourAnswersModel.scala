@@ -79,7 +79,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
 
   private val nextTurnoverAnswer = nextTurnover.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.nextTaxableTurnover"),
-    MoneyFormatter.formatHtmlAmount(answer.turnover),
+    MoneyFormatter.formatHtmlAmount(answer.amount),
     controllers.routes.NextTaxableTurnoverController.show().url,
     messages("checkYourAnswers.hidden.nextTaxableTurnover"),
     "expected-turnover"

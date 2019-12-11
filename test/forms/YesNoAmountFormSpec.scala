@@ -175,7 +175,7 @@ class YesNoAmountFormSpec extends TestUtil {
       }
 
       "have the Mandatory Amount error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.errorMaximum
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorTooManyNumbersBeforeDecimal
       }
     }
   }
