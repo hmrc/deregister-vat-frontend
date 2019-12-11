@@ -34,6 +34,7 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
   override val whitelistExcludedPaths: Seq[Call] = Nil
   override val shutterPage: String = "https://www.tax.service.gov.uk/shutter/vat-through-software"
   override val govUkCancelVatRegistration: String = "https://www.gov.uk/government/publications/vat-application-to-cancel-your-vat-registration-vat7"
+  override val govUkVatRatesInfo: String = "govuk/vat-rates-info"
   override val signInUrl: String = "/gg-sign-in"
   override def signOutUrl(identifier: String): String = s"/some-gg-signout-url/$identifier"
   override val agentServicesGovUkGuidance: String = "guidance/get-an-hmrc-agent-services-account"
