@@ -28,7 +28,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.CapitalAssetsController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -36,11 +36,11 @@
 
     <p>@messages("businessActivity.forExample")</p>
 
-    <p><a href="@{appConfig.govUkVatRatesInfo}" target="_blank">@messages("businessActivity.moreInfo")</a></p>
+    <p><a id="rates-info" href="@{appConfig.govUkVatRatesInfo}" target="_blank">@messages("businessActivity.moreInfo")</a></p>
 
-    @helpers.form(action = controllers.routes.IssueNewInvoicesController.submit, 'novalidate -> "novalidate") {
+    @helpers.form(action = controllers.zeroRated.routes.BusinessActivityController.show(), 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="reason" data-metrics="end-journey:view:new-invoices">
+        <div class="form-group" id="reason">
         @radioHelper(
             field = form(yesNo),
             choices = Seq(

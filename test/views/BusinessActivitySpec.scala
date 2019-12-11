@@ -27,9 +27,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
     val back = ".link-back"
     val pageHeading = "#content h1"
     val forExampleNoError = "#content article > p:nth-child(3)"
-    val moreInfoNoError = "#content article > p:nth-child(4) > a"
     val forExampleWithError = "#content article > p:nth-child(4)"
-    val moreInfoWithError = "#content article > p:nth-child(5) > a"
     val yesOption = "div.multiple-choice:nth-child(1) > label:nth-child(2)"
     val noOption = "div.multiple-choice:nth-child(2) > label:nth-child(2)"
     val button = ".button"
@@ -42,16 +40,16 @@ class BusinessActivitySpec extends ViewBaseSpec {
     lazy val view = views.html.businessActivity(BusinessActivityForm.businessActivityForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe BusinessActivityPageMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.CapitalAssetsController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe BusinessActivityPageMessages.heading
     }
 
@@ -59,21 +57,21 @@ class BusinessActivitySpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct example text" in {
+    "have the correct example text" in {
       document.select(Selectors.forExampleNoError).text() shouldBe BusinessActivityPageMessages.forExample
     }
 
-    s"have the correct 'moreInfo' text and link" in {
-      document.select(Selectors.moreInfoNoError).text() shouldBe BusinessActivityPageMessages.moreInfo
-      document.select(Selectors.moreInfoNoError).attr("href") shouldBe "govuk/vat-rates-info"
+    "have the correct 'moreInfo' text and link" in {
+      document.getElementById("rates-info").text() shouldBe BusinessActivityPageMessages.moreInfo
+      document.getElementById("rates-info").attr("href") shouldBe "govuk/vat-rates-info"
     }
 
-    s"have the correct a radio button form with yes/no answers" in {
+    "have the correct a radio button form with yes/no answers" in {
       elementText(Selectors.yesOption) shouldBe CommonMessages.yes
       elementText(Selectors.noOption) shouldBe CommonMessages.no
     }
 
-    s"have the correct continue button text" in {
+    "have the correct continue button text" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -87,16 +85,16 @@ class BusinessActivitySpec extends ViewBaseSpec {
     lazy val view = views.html.businessActivity(BusinessActivityForm.businessActivityForm.bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${BusinessActivityPageMessages.title}"
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.CapitalAssetsController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe BusinessActivityPageMessages.heading
     }
 
@@ -104,21 +102,21 @@ class BusinessActivitySpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${BusinessActivityPageMessages.businessActivityError}"
     }
 
-    s"have the correct example text" in {
+    "have the correct example text" in {
       document.select(Selectors.forExampleWithError).text() shouldBe BusinessActivityPageMessages.forExample
     }
 
-    s"have the correct 'moreInfo' text and link" in {
-      document.select(Selectors.moreInfoWithError).text() shouldBe BusinessActivityPageMessages.moreInfo
-      document.select(Selectors.moreInfoWithError).attr("href") shouldBe "govuk/vat-rates-info"
+    "have the correct 'moreInfo' text and link" in {
+      document.getElementById("rates-info").text() shouldBe BusinessActivityPageMessages.moreInfo
+      document.getElementById("rates-info").attr("href") shouldBe "govuk/vat-rates-info"
     }
 
-    s"have the correct a radio button form with yes/no answers" in {
+    "have the correct a radio button form with yes/no answers" in {
       elementText(Selectors.yesOption) shouldBe CommonMessages.yes
       elementText(Selectors.noOption) shouldBe CommonMessages.no
     }
 
-    s"have the correct continue button text" in {
+    "have the correct continue button text" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 

@@ -41,9 +41,7 @@ class BusinessActivityFormSpec extends UnitSpec {
     }
   }
 
-  "Binding a form with invalid data" when {
-
-    "the no option has been selected" should {
+  "Binding a form with invalid data (no option selected)" should {
 
       val missingOption: Map[String, String] = Map.empty
       val form = BusinessActivityForm.businessActivityForm.bind(missingOption)
@@ -56,5 +54,5 @@ class BusinessActivityFormSpec extends UnitSpec {
         form.errors.size shouldBe 1
       }
     }
-  }
+
 }
