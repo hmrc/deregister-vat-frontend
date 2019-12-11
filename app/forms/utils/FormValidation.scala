@@ -30,6 +30,19 @@ trait FormValidation {
     case _ => false
   }
 
+  val isInteger: String => Boolean = amt => Try(amt.toInt) match {
+    case Success(_) => true
+    case _ => false
+  }
+
+  def isInt(errMsg: String): Constraint[String] = Constraint("isInt") {
+    amt => if(isInteger(amt)) Valid else Invalid(errMsg)
+  }
+
+  def characters(characterLimit: Int, tooLow: String, tooHigh: String): Constraint[String] = Constraint("characterLimit") {
+    string => if(string.length > characterLimit) Invalid(tooHigh) else if(string.length < characterLimit) Invalid(tooLow) else Valid
+  }
+
   val hasMoreThanTwoDecimals: String => Boolean = amtAsString =>
     amtAsString.lastIndexOf(".") >= 0  && (amtAsString.length - amtAsString.lastIndexOf(".") - 1) > 2
 

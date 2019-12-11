@@ -221,3 +221,10 @@ businessActivity.title = A yw’r gweithgaredd busnes wedi newid?
 businessActivity.forExample = Er enghraifft, mae’r busnes ond yn cyflenwi nwyddau sydd ar gyfradd sero ar gyfer TAW, neu’n gwneud hynny’n bennaf.
 businessActivity.moreInfo = Rhagor o wybodaeth am nwyddau a gwasanaethau ar gyfradd sero (yn agor ffenestr neu dab newydd)
 businessActivity.error = Dewiswch ‘Iawn’ os yw’ch gweithgaredd busnes wedi newid
+
+sicCode.heading = Beth yw Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes?
+sicCode.explanation = Dyma’r cod 5 digid sy’n disgrifio’r gweithgaredd busnes.
+sicCode.find = Dod o hyd i’r cod sy’n disgrifio’r gweithgaredd busnes orau (yn agor ffenestr neu dab newydd)
+sicCode.error.mandatory = Enter the 5 digit code which best describes your business activity
+sicCode.error.tooFew = You have entered too few numbers
+sicCode.error.tooMany = You have entered too many numbers

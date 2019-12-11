@@ -45,6 +45,7 @@ trait AppConfig extends ServicesConfig {
   val clientServicesGovUkGuidance: String
   val govUkCancelVatRegistration: String
   val govUkVatRatesInfo: String
+  val govUkFindSicCode: String
   val manageVatSubscriptionFrontendUrl: String
   val changeClientUrl: String
   val accessibilityStatementUrl: String
@@ -175,6 +176,8 @@ class FrontendAppConfig @Inject()(environment: Environment, implicit val runMode
   override lazy val govUkCancelVatRegistration: String = getString(Keys.govUkCancelVatRegistration)
 
   override lazy val govUkVatRatesInfo: String = getString(Keys.govUkVatRatesInfo)
+
+  override lazy val govUkFindSicCode: String = getString(Keys.govUkFindSicCode)
 
   override lazy val deregThreshold: Int = getInt(Keys.deregThreshold)
 
