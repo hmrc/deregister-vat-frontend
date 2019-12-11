@@ -22,17 +22,21 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.mocks.{MockNextTaxableTurnoverAnswerService, MockTaxableTurnoverAnswerService}
+import services.mocks.{MockDeregReasonAnswerService, MockNextTaxableTurnoverAnswerService, MockTaxableTurnoverAnswerService}
 
 import scala.concurrent.Future
 
-class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxableTurnoverAnswerService with MockNextTaxableTurnoverAnswerService {
+class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
+  with MockTaxableTurnoverAnswerService
+  with MockNextTaxableTurnoverAnswerService
+  with MockDeregReasonAnswerService {
 
   object TestNextTaxableTurnoverController extends NextTaxableTurnoverController(
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
     mockTaxableTurnoverAnswerService,
+    mockDeregReasonAnswerService,
     mockNextTaxableTurnoverAnswerService,
     serviceErrorHandler,
     mockConfig
@@ -96,6 +100,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxa
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(No)))
+          setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
@@ -116,6 +121,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxa
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(Yes)))
+          setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
@@ -136,6 +142,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxa
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(Yes)))
+          setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
@@ -155,6 +162,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxa
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
+          setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockGetTaxableTurnover(Right(Some(No)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -163,6 +171,48 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec with MockTaxa
 
         s"Redirect to the '${controllers.routes.WhyTurnoverBelowController.show().url}'" in {
           redirectLocation(result) shouldBe Some(controllers.routes.WhyTurnoverBelowController.show().url)
+        }
+      }
+
+      "the user submits after selecting zero rated for the deregistration reason" should {
+
+        val testTurnoverAmt = mockConfig.deregThreshold - 0.01
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+
+        "return 303 (SEE OTHER)" in {
+          setupMockGetDeregReason(Right(Some(ZeroRated)))
+          setupMockGetTaxableTurnover(Right(Some(No)))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        s"Redirect to the '${controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url)
+        }
+      }
+
+      "the user submits after selecting zero rated for the deregistration reason and taxable turnover value is missing" should {
+
+        val testTurnoverAmt = mockConfig.deregThreshold - 0.01
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("turnover", testTurnoverAmt.toString))
+        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+
+        "return 303 (SEE OTHER)" in {
+          setupMockGetTaxableTurnover(Right(None))
+          setupMockGetDeregReason(Right(Some(ZeroRated)))
+          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        s"Redirect to the '${controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url)
         }
       }
 
