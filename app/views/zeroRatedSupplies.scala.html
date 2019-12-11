@@ -20,5 +20,25 @@
 @import views.html.templates.inputs.moneyInput
 @import views.utils.TitleUtil._
 
-//TODO ADD FORM AND MODEL ZERO-RATED
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+
+@views.html.main_template(
+title = messages("zeroRatedSupplies.title"),
+bodyClasses = None,
+appConfig = appConfig) {
+
+<a class="link-back" href="@controllers.routes.NextTaxableTurnoverController.show().url">@messages("common.back")</a>
+
+@headings(messages("zeroRatedSupplies.title"))
+
+
+<div class="form-group" data-metrics="zero-rated:view:expected-zero-rated-turnover">
+
+</div>
+
+<button class="button" type ="submit" id="continue">
+ @messages("common.continue")
+</button>
+
+}
+
