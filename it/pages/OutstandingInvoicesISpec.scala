@@ -301,7 +301,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
                 DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
                 DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
-                DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
 
                 val response: WSResponse = postRequest(no)
 
@@ -328,7 +328,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
                 DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
                 DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
-                DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
 
                 val response: WSResponse = postRequest(no)
 

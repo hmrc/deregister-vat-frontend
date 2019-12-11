@@ -438,7 +438,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
           setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Right(DeregisterVatSuccess)
@@ -452,7 +452,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteCeasedTradingDate(Left(errorModel))
 
           setupMockDeleteWhyTurnoverBelowNotCalled()
-          setupMockDeleteNextTaxableTurnoverNotCalled()
+          setupMockDeleteTaxableTurnoverNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -466,7 +466,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
           setupMockDeleteWhyTurnoverBelow(Left(errorModel))
-          setupMockDeleteNextTaxableTurnoverNotCalled()
+          setupMockDeleteTaxableTurnoverNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -481,7 +481,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
           setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnover(Left(errorModel))
+          setupMockDeleteTaxableTurnover(Left(errorModel))
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         await(result) shouldBe Left(errorModel)
@@ -545,7 +545,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
           setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
@@ -629,7 +629,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-              setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+              setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -650,7 +650,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
-              setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+              setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
 
               setupMockDeleteOutstandingInvoices(Left(errorModel))
             }

@@ -227,7 +227,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
 
           val response: WSResponse = postRequest(ZeroRated)
 

@@ -92,7 +92,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
     (for{
       _ <- EitherT(ceasedTradingDateAnswer.deleteAnswer)
       _ <- EitherT(whyTurnoverBelow.deleteAnswer)
-      _ <- EitherT(nextTaxableTurnoverAnswer.deleteAnswer)
+      _ <- EitherT(taxableTurnoverAnswer.deleteAnswer)
 
     } yield DeregisterVatSuccess).value
   }
