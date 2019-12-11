@@ -43,7 +43,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
   )
 
   val testTurnoverAmt = 500
-  val testTurnoverModel = NextTaxableTurnoverModel(testTurnoverAmt)
+  val testTurnoverModel = MonetaryModel(testTurnoverAmt)
 
   "the user is authorised" when {
 
@@ -100,8 +100,11 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(No)))
+
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+
+          setupMockStoreNextTaxableTurnover(MonetaryModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -121,8 +124,12 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(Yes)))
+<<<<<<< HEAD
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+=======
+          setupMockStoreNextTaxableTurnover(MonetaryModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+>>>>>>> renamed the NextTaxableTurnoverModel to MonetaryModel
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -142,8 +149,12 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(Yes)))
+<<<<<<< HEAD
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+=======
+          setupMockStoreNextTaxableTurnover(MonetaryModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+>>>>>>> renamed the NextTaxableTurnoverModel to MonetaryModel
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -164,7 +175,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "return 303 (SEE OTHER)" in {
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockGetTaxableTurnover(Right(Some(No)))
-          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreNextTaxableTurnover(MonetaryModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -223,7 +234,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreNextTaxableTurnover(NextTaxableTurnoverModel(testTurnoverAmt))(Left(errorModel))
+          setupMockStoreNextTaxableTurnover(MonetaryModel(testTurnoverAmt))(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

@@ -32,8 +32,8 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
     def getRequest: WSResponse = get("/check-your-answers", formatPendingDereg(Some("false")))
 
     val dateModel = DateModel(1,1,2018)
-    val taxableTurnoverAbove = NextTaxableTurnoverModel(BigDecimal(90000))
-    val taxableTurnoverBelow = NextTaxableTurnoverModel(BigDecimal(200))
+    val taxableTurnoverAbove = MonetaryModel(BigDecimal(90000))
+    val taxableTurnoverBelow = MonetaryModel(BigDecimal(200))
     val whyTurnoverBelowAll = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
     val yesNoAmountYes = YesNoAmountModel(Yes,Some(BigDecimal(1000)))
     val yesNoAmountNo = YesNoAmountModel(No,None)

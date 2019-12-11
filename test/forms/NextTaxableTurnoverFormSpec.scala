@@ -19,7 +19,7 @@ package forms
 import _root_.utils.TestUtil
 import assets.messages.{CommonMessages, NextTaxableTurnoverMessages}
 import common.Constants
-import models.NextTaxableTurnoverModel
+import models.MonetaryModel
 import play.api.i18n.Messages
 
 class NextTaxableTurnoverFormSpec extends TestUtil {
@@ -34,7 +34,7 @@ class NextTaxableTurnoverFormSpec extends TestUtil {
     }
 
     "generate the correct model" in {
-      form.value shouldBe Some(NextTaxableTurnoverModel(BigDecimal(1000.01)))
+      form.value shouldBe Some(MonetaryModel(BigDecimal(1000.01)))
     }
   }
 
@@ -110,7 +110,7 @@ class NextTaxableTurnoverFormSpec extends TestUtil {
   "A form built from a valid model" should {
 
     "generate the correct mapping" in {
-      val model = NextTaxableTurnoverModel(BigDecimal(1000.01))
+      val model = MonetaryModel(BigDecimal(1000.01))
       val form = NextTaxableTurnoverForm.taxableTurnoverForm.fill(model)
       form.data shouldBe Map("turnover" -> "1000.01")
     }

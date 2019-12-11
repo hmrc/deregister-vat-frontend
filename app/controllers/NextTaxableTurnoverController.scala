@@ -22,8 +22,9 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.NextTaxableTurnoverForm
 import javax.inject.{Inject, Singleton}
-import models.{NextTaxableTurnoverModel, No, User, Yes, ZeroRated}
 import play.api.Logger
+import models.{MonetaryModel, No, User, Yes,ZeroRated}
+
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -43,7 +44,7 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[NextTaxableTurnoverModel] = NextTaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
+  private def renderView(form: Form[MonetaryModel] = NextTaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
     views.html.nextTaxableTurnover(form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>

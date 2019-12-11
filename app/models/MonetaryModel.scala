@@ -18,8 +18,8 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class NextTaxableTurnoverModel(turnover: BigDecimal)
+case class MonetaryModel(turnover: BigDecimal)
 
-object NextTaxableTurnoverModel {
-  implicit val format: OFormat[NextTaxableTurnoverModel] = Json.format[NextTaxableTurnoverModel]
+object MonetaryModel {
+  implicit val format: OFormat[MonetaryModel] = Json.format[MonetaryModel]
 }

@@ -24,7 +24,7 @@ import utils.MoneyFormatter
 case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReason],
                                  ceasedTradingDate: Option[DateModel],
                                  turnover: Option[YesNo],
-                                 nextTurnover: Option[NextTaxableTurnoverModel],
+                                 nextTurnover: Option[MonetaryModel],
                                  whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                                  accounting: Option[VATAccountsModel],
                                  optionTax: Option[YesNoAmountModel],
