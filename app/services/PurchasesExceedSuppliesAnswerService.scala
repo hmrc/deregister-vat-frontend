@@ -18,10 +18,10 @@ package services
 
 import connectors.DeregisterVatConnector
 import javax.inject.{Inject, Singleton}
-import models.YesNoAmountModel
+import models.YesNo
 
 @Singleton()
-class PurchasesExceedSuppliesAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[YesNoAmountModel]{
+class PurchasesExceedSuppliesAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[YesNo]{
   override val answerKey: String = PurchasesExceedSuppliesAnswerService.key
 }
 
