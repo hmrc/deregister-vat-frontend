@@ -86,7 +86,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${ZeroRatedSuppliesMessages.mandatory}"
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
