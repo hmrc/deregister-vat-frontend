@@ -19,15 +19,16 @@
 @import templates.headings
 @import views.html.templates.inputs.moneyInput
 @import views.utils.TitleUtil._
+@import scala.concurrent.Future
 
-@(form: Form[NumberInputModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[NumberInputModel],backLinkUrl: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
 title = title(messages("nextTaxableTurnover.title"), form),
 bodyClasses = None,
 appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.TaxableTurnoverController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@backLinkUrl">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
