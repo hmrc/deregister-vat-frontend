@@ -26,13 +26,13 @@ class ZeroRatedSuppliesValueSpec extends TestUtil{
     "serialize to the correct JSON" in {
       Json.toJson(ZeroRatedSuppliesValue(testAmount)) shouldBe
         Json.obj(
-          "turnover" -> 934891.39
+          "turnover" -> testAmount
         )
     }
 
     "deserialize from JSON correctly" in {
       Json.obj(
-        "turnover" -> 934891.39
+        "turnover" -> testAmount
       ).as[NextTaxableTurnoverModel] shouldBe NextTaxableTurnoverModel(934891.39)
     }
   }
