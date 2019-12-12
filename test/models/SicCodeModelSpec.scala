@@ -34,7 +34,7 @@ class SicCodeModelSpec extends TestUtil {
     "deserialize from JSON correctly" in {
       Json.obj(
         "sicCode" -> testAmount
-      ).as[SicCodeModel] shouldBe SicCodeModel(88326)
+      ).as[SicCodeModel] shouldBe SicCodeModel(testAmount)
     }
   }
 
