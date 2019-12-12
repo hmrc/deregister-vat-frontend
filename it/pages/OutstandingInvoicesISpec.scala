@@ -173,6 +173,11 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
             DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
 
             DeregisterVatStub.successfulDeleteAnswer(vrn, CeasedTradingDateAnswerService.key)
+            DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
+            DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
+            DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
+            DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
+
 
             val response: WSResponse = postRequest(yes)
 
@@ -192,15 +197,18 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
               given.user.isAuthorised
 
               DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+              DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
               DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
               DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
               DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
               DeregisterVatStub.successfulPutAnswer(vrn, OutstandingInvoicesAnswerService.key)
-              DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
-              DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
 
               DeregisterVatStub.successfulDeleteAnswer(vrn, CeasedTradingDateAnswerService.key)
+              DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
+              DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
+              DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
+              DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
               val response: WSResponse = postRequest(no)
 
@@ -220,17 +228,20 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
                 given.user.isAuthorised
 
                 DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
                 DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
                 DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
                 DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
                 DeregisterVatStub.successfulPutAnswer(vrn, OutstandingInvoicesAnswerService.key)
-                DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
-                DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
 
                 DeregisterVatStub.successfulDeleteAnswer(vrn, TaxableTurnoverAnswerService.key)
-                DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
                 DeregisterVatStub.successfulDeleteAnswer(vrn, WhyTurnoverBelowAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
                 val response: WSResponse = postRequest(no)
 
@@ -248,23 +259,82 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
                 given.user.isAuthorised
 
                 DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
-                DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+                DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
+                DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsNoJson)
                 DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
                 DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
                 DeregisterVatStub.successfulPutAnswer(vrn, OutstandingInvoicesAnswerService.key)
-                DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
-                DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsNoJson)
 
                 DeregisterVatStub.successfulDeleteAnswer(vrn, TaxableTurnoverAnswerService.key)
-                DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
                 DeregisterVatStub.successfulDeleteAnswer(vrn, WhyTurnoverBelowAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
                 val response: WSResponse = postRequest(no)
 
                 response should have(
                   httpStatus(SEE_OTHER),
                   redirectURI(controllers.routes.CheckAnswersController.show().url)
+                )
+              }
+            }
+          }
+          "user is on 'zero rated' journey" when {
+
+            "user answered 'Yes' to having capital assets" should {
+
+              s"redirect to ${controllers.routes.DeregistrationDateController.show().url}" in {
+
+                given.user.isAuthorised
+
+                DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(ZeroRated))
+                DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+                DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+                DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+
+                DeregisterVatStub.successfulPutAnswer(vrn, OutstandingInvoicesAnswerService.key)
+
+                DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
+
+                val response: WSResponse = postRequest(no)
+
+                response should have(
+                  httpStatus(SEE_OTHER),
+                  redirectURI(controllers.routes.DeregistrationDateController.show().url)
+                )
+              }
+            }
+
+            "user answered 'No' to having capital assets" should {
+
+              s"redirect to ${controllers.routes.CheckAnswersController.show().url}" in {
+
+                given.user.isAuthorised
+
+                DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+                DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(ZeroRated))
+                DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsNoJson)
+                DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+                DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+
+                DeregisterVatStub.successfulPutAnswer(vrn, OutstandingInvoicesAnswerService.key)
+
+                DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
+                DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
+
+                val response: WSResponse = postRequest(no)
+
+                response should have(
+                  httpStatus(SEE_OTHER),
+                  redirectURI(controllers.routes.DeregistrationDateController.show().url)
                 )
               }
             }

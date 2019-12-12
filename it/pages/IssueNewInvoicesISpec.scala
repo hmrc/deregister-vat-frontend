@@ -161,17 +161,18 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
           given.user.isAuthorised
 
           DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
-          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
           DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
           DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
           DeregisterVatStub.successfulPutAnswer(vrn,IssueNewInvoicesAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,OutstandingInvoicesAnswerService.key)
-
           DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
 
           val response: WSResponse = postRequest(Yes)
 
@@ -192,16 +193,18 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
           given.user.isAuthorised
 
           DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
-          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
           DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
           DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
           DeregisterVatStub.successfulPutAnswer(vrn,IssueNewInvoicesAnswerService.key)
-
           DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
 
           val response: WSResponse = postRequest(No)
 
@@ -228,6 +231,13 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
           DeregisterVatStub.successfulPutAnswer(vrn,IssueNewInvoicesAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
           DeregisterVatStub.deleteAnswerError(vrn,OutstandingInvoicesAnswerService.key)
 
           val response: WSResponse = postRequest(Yes)

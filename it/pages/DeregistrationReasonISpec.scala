@@ -169,8 +169,12 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
 
           DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
 
 
           val response: WSResponse = postRequest(Ceased)
@@ -195,13 +199,41 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
-
+          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
 
           val response: WSResponse = postRequest(BelowThreshold)
 
           response should have(
             httpStatus(SEE_OTHER),
             redirectURI(controllers.routes.TaxableTurnoverController.show().url)
+          )
+        }
+      }
+
+      "the post request includes valid Zero Rated journey data" should {
+
+        "return 303 SEE_OTHER" in {
+
+          given.user.isAuthorised
+
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+
+          DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
+
+          val response: WSResponse = postRequest(ZeroRated)
+
+          response should have(
+            httpStatus(SEE_OTHER),
+            redirectURI(controllers.zeroRated.routes.BusinessActivityController.show().url)
           )
         }
       }
@@ -219,8 +251,13 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
-          DeregisterVatStub.deleteAnswerError(vrn,WhyTurnoverBelowAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
+          DeregisterVatStub.deleteAnswerError(vrn,PurchasesExceedSuppliesAnswerService.key)
 
 
           val response: WSResponse = postRequest(Ceased)

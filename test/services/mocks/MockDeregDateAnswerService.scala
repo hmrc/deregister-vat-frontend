@@ -38,6 +38,6 @@ trait MockDeregDateAnswerService extends MockStoredAnswersService {
   def setupMockDeleteDeregDate(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockDeregDateAnswerService)(response)
 
-  def setupMockDeregDateNotCalled()(implicit user: User[_]): Unit =
+  def setupMockDeleteDeregDateNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockDeregDateAnswerService)
 }

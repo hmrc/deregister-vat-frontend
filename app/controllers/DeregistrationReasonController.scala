@@ -67,9 +67,7 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
   private def redirect(deregReason: DeregistrationReason): Result = deregReason match {
     case Ceased => Redirect(controllers.routes.CeasedTradingDateController.show())
     case BelowThreshold => Redirect(controllers.routes.TaxableTurnoverController.show())
-    case ZeroRated =>
-      //TODO: update with route in BTAT-7367
-      Ok
+    case ZeroRated => Redirect(controllers.zeroRated.routes.BusinessActivityController.show())
     case Other => Redirect(appConfig.govUkCancelVatRegistration)
   }
 }
