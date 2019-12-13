@@ -29,4 +29,10 @@ trait MockBusinessActivityAnswerService extends MockStoredAnswersService{
   def setupMockDeleteBusinessActivityAnswerNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockBusinessActivityAnswerService)
 
+  def setupMockGetBusinessActivityAnswer(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockBusinessActivityAnswerService)(response)
+
+  def setupMockStoreBusinessActivityAnswer(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockBusinessActivityAnswerService)(data)(response)
+
 }

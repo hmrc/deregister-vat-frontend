@@ -38,7 +38,7 @@
 
     <p><a id="rates-info" href="@{appConfig.govUkVatRatesInfo}" target="_blank">@messages("businessActivity.moreInfo")</a></p>
 
-    @helpers.form(action = controllers.zeroRated.routes.BusinessActivityController.show(), 'novalidate -> "novalidate") {
+    @helpers.form(action = controllers.zeroRated.routes.BusinessActivityController.submit, 'novalidate -> "novalidate") {
 
         <div class="form-group" id="answer">
         @radioHelper(

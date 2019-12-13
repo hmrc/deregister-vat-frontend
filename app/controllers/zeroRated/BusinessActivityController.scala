@@ -17,6 +17,7 @@
 package controllers.zeroRated
 
 import cats.data.EitherT
+import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import javax.inject.{Inject, Singleton}
@@ -27,7 +28,7 @@ import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.businessActivity
 import play.api.data.Form
-import forms.{BusinessActivityForm, YesNoForm}
+import forms.BusinessActivityForm
 
 import scala.concurrent.Future
 
@@ -35,18 +36,16 @@ import scala.concurrent.Future
 class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
                                            val pendingDeregCheck: PendingChangesPredicate,
-                                           val wipeRedundantDataService: WipeRedundantDataService,
                                            val businessActivityAnswerService: BusinessActivityAnswerService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[YesNo] = BusinessActivityForm.businessActivityForm)(implicit user: User[_]) = businessActivity(form)
 
-  private def redirect: YesNo => Result = {
-    case Yes => Redirect(controllers.zeroRated.routes.SicCodeController.show())
-    case No => Redirect(controllers.routes.TaxableTurnoverController.show())
+  private def redirect (yesNo: Option[YesNo]) : Result = yesNo match {
+    case Some(Yes) => Redirect(controllers.zeroRated.routes.SicCodeController.show())
+    case Some(No) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
   }
-
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
@@ -65,10 +64,10 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
         error => Future.successful(BadRequest(views.html.businessActivity(error))),
         data => (for {
           _ <- EitherT(businessActivityAnswerService.storeAnswer(data))
-          result = redirect(data)
+          result = redirect(Some(data))
         } yield result).value.map {
-          Case Right(redirect) => redirect
-          Case Left(_) => serviceErrorHandler.showInternalServerError
+          case Right(redirect) => redirect
+          case Left(_) => serviceErrorHandler.showInternalServerError
         }
       )
     } else {

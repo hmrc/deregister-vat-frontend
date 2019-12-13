@@ -130,17 +130,17 @@ class FormValidationSpec extends UnitSpec with FormValidation {
 
     val max = 1
 
-    "for values which are more than the max supplied" should {
+    "for values which are more than or equal to the max supplied" should {
 
       "return Invalid(errMsg, max)" in {
         doesNotExceed(max, errMsg)(max + 0.01) shouldBe Invalid(errMsg, max)
+        doesNotExceed(max, errMsg)(max) shouldBe Invalid(errMsg, max)
       }
     }
 
-    "for values greater than or equal to the max" should {
+    "for values greater than the max" should {
 
       "return Valid" in {
-        doesNotExceed(max, errMsg)(max) shouldBe Invalid(errMsg, max)
         doesNotExceed(max, errMsg)(max - 0.01) shouldBe Valid
       }
     }
