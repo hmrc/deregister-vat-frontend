@@ -33,7 +33,7 @@ class SicCodeSpec extends ViewBaseSpec {
     val error = ".error-message"
   }
 
-  "Rendering the Sic Code page with no errors" should {
+  "Rendering the SIC Code page with no errors" should {
 
     lazy val view = views.html.sicCode(SicCodeForm.sicCodeForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -73,7 +73,7 @@ class SicCodeSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the option to tax page with errors" should {
+  "Rendering the SIC Code page with errors" should {
 
     lazy val view = views.html.sicCode(SicCodeForm.sicCodeForm.bind(Map("sicCode" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -95,7 +95,7 @@ class SicCodeSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${SicCodeMessages.mandatory}"
     }
 
-    "have the correct example text" in {
+    "have the correct explanation text" in {
       document.select(Selectors.explanationWithError).text() shouldBe SicCodeMessages.explanation
     }
 

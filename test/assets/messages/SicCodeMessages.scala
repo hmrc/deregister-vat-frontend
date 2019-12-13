@@ -27,6 +27,4 @@ object SicCodeMessages extends BaseMessages {
   val mandatory = "Enter the 5 digit code which best describes your business activity"
   val tooFew = "You have entered too few numbers"
   val tooMany = "You have entered too many numbers"
-
-  val nonNumeric = "Enter the turnover using numbers 0 to 9"
 }

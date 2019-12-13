@@ -63,7 +63,7 @@ class SicCodeFormSpec extends TestUtil {
         form.hasErrors shouldBe true
       }
 
-      "throw the non-numeric error" in {
+      "throw the non-integer error" in {
         Messages(form.errors.head.message) shouldBe CommonMessages.errorMandatoryAmount
       }
     }
@@ -78,7 +78,7 @@ class SicCodeFormSpec extends TestUtil {
         formFew.hasErrors shouldBe true
       }
 
-      "throw the tooMany characters error" in {
+      "throw the wrong character length errors" in {
         Messages(formMany.errors.head.message) shouldBe SicCodeMessages.tooMany
         Messages(formFew.errors.head.message) shouldBe SicCodeMessages.tooFew
       }
@@ -92,7 +92,7 @@ class SicCodeFormSpec extends TestUtil {
         form.hasErrors shouldBe true
       }
 
-      "throw the non-numeric error" in {
+      "throw the negative error" in {
         Messages(form.errors.head.message) shouldBe CommonMessages.errorNegative
       }
     }

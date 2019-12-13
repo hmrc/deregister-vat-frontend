@@ -53,7 +53,7 @@ class FormValidationSpec extends UnitSpec with FormValidation {
       isInt(errMsg)("123") shouldBe Valid
     }
 
-    "return 'Invalid' for integer values" in {
+    "return 'Invalid' for non-integer values" in {
       isInt(errMsg)("123.4") shouldBe Invalid(errMsg)
       isInt(errMsg)("123.") shouldBe Invalid(errMsg)
       isInt(errMsg)("") shouldBe Invalid(errMsg)
