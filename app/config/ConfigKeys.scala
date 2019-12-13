@@ -51,6 +51,8 @@ object ConfigKeys {
 
   val govUkVatRatesInfo: String = "gov-uk.vatRatesInfo.url"
 
+  val govUkFindSicCode: String = "gov-uk.findSicCode.url"
+
   val manageVatSubscriptionFrontendHost: String = "manage-vat-subscription-frontend.host"
   val manageVatSubscriptionFrontendUrl: String = "manage-vat-subscription-frontend.url"
 

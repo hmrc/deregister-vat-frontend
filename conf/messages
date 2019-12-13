@@ -190,3 +190,10 @@ businessActivity.title = Has the business activity changed?
 businessActivity.forExample = For example the business only, or mainly, supply goods that are zero-rated for VAT.
 businessActivity.moreInfo = More information on zero-rated goods and services (opens in a new window or tab)
 businessActivity.error = Select yes if your business activity has changed
+
+sicCode.title = What is the business’s Standard Industrial Classification (SIC) Code?
+sicCode.explanation = This is the 5 digit code which describes the business activity.
+sicCode.find = Find the code that best describes the business activity (opens in a new window or tab)
+sicCode.error.mandatory = Enter the 5 digit code which best describes your business activity
+sicCode.error.tooFew = You have entered too few numbers
+sicCode.error.tooMany = You have entered too many numbers

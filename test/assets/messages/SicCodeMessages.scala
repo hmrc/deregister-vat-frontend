@@ -14,28 +14,17 @@
  * limitations under the License.
  */
 
-package models
+package assets.messages
 
-import play.api.libs.json.Json
-import utils.TestUtil
+object SicCodeMessages extends BaseMessages {
 
-class SicCodeModelSpec extends TestUtil {
+  val heading = "What is the business’s Standard Industrial Classification (SIC) Code?"
+  val title: String = heading + titleSuffix
 
-  val testAmount = BigDecimal(88326)
+  val explanation = "This is the 5 digit code which describes the business activity."
+  val findCode = "Find the code that best describes the business activity (opens in a new window or tab)"
 
-  "SicCodeModel.format" should {
-    "serialize to the correct JSON" in {
-      Json.toJson(SicCodeModel(testAmount)) shouldBe
-        Json.obj(
-        "sicCode" ->testAmount
-        )
-    }
-
-    "deserialize from JSON correctly" in {
-      Json.obj(
-        "sicCode" -> testAmount
-      ).as[SicCodeModel] shouldBe SicCodeModel(testAmount)
-    }
-  }
-
+  val mandatory = "Enter the 5 digit code which best describes your business activity"
+  val tooFew = "You have entered too few numbers"
+  val tooMany = "You have entered too many numbers"
 }

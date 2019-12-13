@@ -35,7 +35,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
     val error = ".error-message"
   }
 
-  "Rendering the option to tax page with no errors" should {
+  "Rendering the Business Activity page with no errors" should {
 
     lazy val view = views.html.businessActivity(BusinessActivityForm.businessActivityForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -80,7 +80,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the option to tax page with errors" should {
+  "Rendering the Business Activity page with errors" should {
 
     lazy val view = views.html.businessActivity(BusinessActivityForm.businessActivityForm.bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
