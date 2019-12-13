@@ -31,10 +31,10 @@ object SicCodeForm extends FormValidation {
       "sicCode" -> optional(text)
         .verifying("sicCode.error.mandatory", _.isDefined)
         .transform[String](x => x.get, x => Some(x))
-        .verifying(isInt("taxableTurnover.error.nonNumeric"),
+        .verifying(isInt("common.error.mandatoryAmount"), //TODO - add tailored error message
           characters(sicCodeLength, "sicCode.error.tooFew", "sicCode.error.tooMany"))
         .transform[BigDecimal](x => BigDecimal(x), x => x.toString)
-        .verifying(isPositive("common.error.negative"), doesNotExceed(maxAmount, "common.error.greaterThanMax"))
+        .verifying(isPositive("common.error.negative")) //TODO - add tailored error message
     )(SicCodeModel.apply)(SicCodeModel.unapply)
   )
 

@@ -39,8 +39,8 @@ trait FormValidation {
     amt => if(isInteger(amt)) Valid else Invalid(errMsg)
   }
 
-  def characters(characterLimit: Int, tooLow: String, tooHigh: String): Constraint[String] = Constraint("characterLimit") {
-    string => if(string.length > characterLimit) Invalid(tooHigh) else if(string.length < characterLimit) Invalid(tooLow) else Valid
+  def characters(characterLength: Int, tooLow: String, tooHigh: String): Constraint[String] = Constraint("characterLimit") {
+    string => if(string.length > characterLength) Invalid(tooHigh) else if(string.length < characterLength) Invalid(tooLow) else Valid
   }
 
   val hasMoreThanTwoDecimals: String => Boolean = amtAsString =>

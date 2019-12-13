@@ -21,7 +21,7 @@ import utils.TestUtil
 
 class SicCodeModelSpec extends TestUtil {
 
-  val testAmount = 88326
+  val testAmount = BigDecimal(88326)
 
   "SicCodeModel.format" should {
     "serialize to the correct JSON" in {

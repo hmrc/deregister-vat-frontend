@@ -18,7 +18,8 @@
   label: String,
   labelHidden: Boolean,
   decimalPlace: Boolean,
-  hint: Option[String] = None)(implicit messages: Messages)
+  hint: Option[String] = None,
+  isMonetary: Boolean = true)(implicit messages: Messages)
 
 <div class="form-group @if(field.hasErrors){form-field--error}">
 
@@ -38,10 +39,10 @@
         </span>
     }
 
-    <span class="input-currency"></span>
+    @if(isMonetary){<span class="input-currency"></span>}
 
     <input type="number"
-           class="form-control input--no-spinner money-input-padding @if(field.hasErrors) {error-field}"
+           class="form-control input--no-spinner @if(isMonetary){money-input-padding} @if(field.hasErrors) {error-field}"
            name="@field.name"
            id="@field.id"
            value="@field.value"

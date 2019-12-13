@@ -19,6 +19,7 @@
 @import views.html.templates.inputs.dateEntryField
 @import templates.headings
 @import forms.SicCodeForm
+@import views.html.templates.inputs.moneyInput
 @import views.utils.TitleUtil._
 
 @(form: Form[SicCodeModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
@@ -28,7 +29,7 @@
     bodyClasses = None,
     appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.CapitalAssetsController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.zeroRated.routes.BusinessActivityController.show().url">@messages("common.back")</a>
 
     @errorSummary("common.errorSummary.heading", form)
 
@@ -36,17 +37,18 @@
 
     <p>@messages("sicCode.explanation")</p>
 
-    <p><a href="@{appConfig.govUkFindSicCode}" target="_blank">@messages("sicCode.find")</a></p>
+    <p><a id="find-sic-code" href="@{appConfig.govUkFindSicCode}" target="_blank">@messages("sicCode.find")</a></p>
     
-    @helpers.form(action = controllers.routes.IssueNewInvoicesController.submit, 'novalidate -> "novalidate") {
+    @helpers.form(action = controllers.zeroRated.routes.SicCodeController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="reason" data-metrics="end-journey:view:new-invoices">
-        @dateEntryField(
-            form("Day"),
-            messages("common.day"),
-            "day",
-            form("Day").hasErrors
-        )
+        <div class="form-group">
+            @moneyInput(
+                field = form("sicCode"),
+                label = messages("sicCode.title"),
+                labelHidden = true,
+                decimalPlace = false,
+                isMonetary = false
+            )
         </div>
 
         <button class="button" type="submit" id="continue">

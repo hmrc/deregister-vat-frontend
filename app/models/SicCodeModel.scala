@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class SicCodeModel(code: BigDecimal)
+case class SicCodeModel(sicCode: BigDecimal)
 
 object SicCodeModel {
   implicit val format: OFormat[SicCodeModel] = Json.format[SicCodeModel]

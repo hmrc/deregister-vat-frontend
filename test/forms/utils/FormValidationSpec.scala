@@ -47,6 +47,38 @@ class FormValidationSpec extends UnitSpec with FormValidation {
     }
   }
 
+  "Calling the isInteger method" should {
+
+    "return 'Valid' for integer values" in {
+      isInt(errMsg)("123") shouldBe Valid
+    }
+
+    "return 'Invalid' for integer values" in {
+      isInt(errMsg)("123.4") shouldBe Invalid(errMsg)
+      isInt(errMsg)("123.") shouldBe Invalid(errMsg)
+      isInt(errMsg)("") shouldBe Invalid(errMsg)
+      isInt(errMsg)(".") shouldBe Invalid(errMsg)
+      isInt(errMsg)("e") shouldBe Invalid(errMsg)
+      isInt(errMsg)("&") shouldBe Invalid(errMsg)
+    }
+  }
+
+  "Calling the 'characters' method" should {
+
+    val length = 5
+    val errorFew = "tooFew"
+    val errorMany = "tooMany"
+
+    "return 'Valid' when the character length is matched" in {
+      characters(length, errorFew, errorMany)("12345") shouldBe Valid
+    }
+
+    "return 'Invalid' when the character length is not matched" in {
+      characters(length, errorFew, errorMany)("123456") shouldBe Invalid(errorMany)
+      characters(length, errorFew, errorMany)("1234") shouldBe Invalid(errorFew)
+    }
+  }
+
   "Calling the .hasMaxTwoDecimals method" should {
 
     "for values with more that two decimals" should {
