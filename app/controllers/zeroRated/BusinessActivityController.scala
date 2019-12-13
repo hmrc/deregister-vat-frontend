@@ -36,8 +36,7 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
                                            val pendingDeregCheck: PendingChangesPredicate,
                                            val wipeRedundantDataService: WipeRedundantDataService,
-                                           val issueNewInvoicesAnswerService: IssueNewInvoicesAnswerService, //TODO remove for new service
-                                           //TODO val businessActivityAnswerService : BusinessActivityAnswerService
+                                           val businessActivityAnswerService: BusinessActivityAnswerService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
@@ -49,14 +48,14 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
   }
 
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck) { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
-      //TODO servicename.getAnswer map {
-      Ok(renderView())
-      //TODO case Right(Some(data) => Ok(renderView(BusinessActivityForm.businessActivityForm.fill())))
-      //TODO case _ => Ok(renderView())
+      businessActivityAnswerService.getAnswer map {
+        case Right(Some(data)) => Ok(renderView(BusinessActivityForm.businessActivityForm.fill(data)))
+        case _ => Ok(renderView())
+      }
     } else {
-      serviceErrorHandler.showBadRequestError
+      Future(serviceErrorHandler.showBadRequestError)
     }
   }
 
@@ -65,12 +64,11 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
       BusinessActivityForm.businessActivityForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(views.html.businessActivity(error))),
         data => (for {
-          _ <- EitherT(issueNewInvoicesAnswerService.storeAnswer(data)) //TODO update service
-          _ <- EitherT(wipeRedundantDataService.wipeRedundantData) //TODO update service
+          _ <- EitherT(businessActivityAnswerService.storeAnswer(data))
           result = redirect(data)
         } yield result).value.map {
-          case Right(redirect) => redirect
-          case Left(_) => serviceErrorHandler.showInternalServerError
+          Case Right(redirect) => redirect
+          Case Left(_) => serviceErrorHandler.showInternalServerError
         }
       )
     } else {
