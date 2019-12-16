@@ -18,11 +18,11 @@ package services
 
 import connectors.DeregisterVatConnector
 import javax.inject.{Inject, Singleton}
-import models.ZeroRatedSuppliesValue
+import models.NumberInputModel
 
 @Singleton()
 class ZeroRatedSuppliesValueService @Inject()(val deregisterVatConnector: DeregisterVatConnector)
-  extends StoredAnswersService[ZeroRatedSuppliesValue]{
+  extends StoredAnswersService[NumberInputModel]{
   override val answerKey: String = ZeroRatedSuppliesValueService.key
 }
 

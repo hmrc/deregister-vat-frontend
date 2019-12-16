@@ -24,7 +24,7 @@ import utils.MoneyFormatter
 case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReason],
                                  ceasedTradingDate: Option[DateModel],
                                  turnover: Option[YesNo],
-                                 nextTurnover: Option[MonetaryModel],
+                                 nextTurnover: Option[NumberInputModel],
                                  whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                                  accounting: Option[VATAccountsModel],
                                  optionTax: Option[YesNoAmountModel],
@@ -79,7 +79,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
 
   private val nextTurnoverAnswer = nextTurnover.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.nextTaxableTurnover"),
-    MoneyFormatter.formatHtmlAmount(answer.amount),
+    MoneyFormatter.formatHtmlAmount(answer.value),
     controllers.routes.NextTaxableTurnoverController.show().url,
     messages("checkYourAnswers.hidden.nextTaxableTurnover"),
     "expected-turnover"

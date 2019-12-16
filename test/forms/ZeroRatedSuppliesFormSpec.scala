@@ -19,14 +19,14 @@ package forms
 import _root_.utils.TestUtil
 import assets.messages.{CommonMessages, ZeroRatedSuppliesMessages}
 import common.Constants
-import models.MonetaryModel
+import models.NumberInputModel
 import play.api.i18n.Messages
 
 class ZeroRatedSuppliesFormSpec  extends TestUtil{
 
   "Binding a form with valid data" should {
 
-    val data = Map("amount" -> "1000.01")
+    val data = Map("value" -> "1000.01")
     val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(data)
 
     "result in a form with no errors" in {
@@ -34,7 +34,7 @@ class ZeroRatedSuppliesFormSpec  extends TestUtil{
     }
 
     "generate the correct model" in {
-      form.value shouldBe Some(MonetaryModel(BigDecimal(1000.01)))
+      form.value shouldBe Some(NumberInputModel(BigDecimal(1000.01)))
     }
   }
 
@@ -56,7 +56,7 @@ class ZeroRatedSuppliesFormSpec  extends TestUtil{
 
     "non-numeric input is supplied" should {
 
-      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("amount" -> "ABC"))
+      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("value" -> "ABC"))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -69,7 +69,7 @@ class ZeroRatedSuppliesFormSpec  extends TestUtil{
 
     "negative input is supplied" should {
 
-      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("amount" -> "-1"))
+      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("value" -> "-1"))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -82,7 +82,7 @@ class ZeroRatedSuppliesFormSpec  extends TestUtil{
 
     "too many decimal places are input" should {
 
-      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("amount" -> "0.001"))
+      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("value" -> "0.001"))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -95,7 +95,7 @@ class ZeroRatedSuppliesFormSpec  extends TestUtil{
 
     "exceeds the maximum" should {
 
-      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("amount" -> (Constants.maxAmount + 0.01).toString))
+      val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("value" -> (Constants.maxAmount + 0.01).toString))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -110,9 +110,9 @@ class ZeroRatedSuppliesFormSpec  extends TestUtil{
   "A form built from a valid model" should {
 
     "generate the correct mapping" in {
-      val model = MonetaryModel(BigDecimal(1000.01))
+      val model = NumberInputModel(BigDecimal(1000.01))
       val form = ZeroRatedSuppliesForm.zeroRatedSuppliesForm.fill(model)
-      form.data shouldBe Map("amount" -> "1000.01")
+      form.data shouldBe Map("value" -> "1000.01")
     }
   }
 

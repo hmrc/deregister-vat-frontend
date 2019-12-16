@@ -147,7 +147,7 @@ class DeregistrationInfoSpec extends TestUtil {
     ".nextTwelveMonthsTurnover" should {
 
       "return Some amount when given a TaxableTurnoverModel" in {
-        nextTwelveMonthsTurnover(Some(nextTaxableTurnoverAbove)) shouldBe Some(nextTaxableTurnoverAbove.amount)
+        nextTwelveMonthsTurnover(Some(nextTaxableTurnoverAbove)) shouldBe Some(nextTaxableTurnoverAbove.value)
       }
 
       "return None when given a None" in {

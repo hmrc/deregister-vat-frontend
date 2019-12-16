@@ -45,10 +45,9 @@ common.moreInfo = Rhagor o wybodaeth
 common.error.titlePrefix = Gwall:
 common.error.mandatoryRadioOption = Dewiswch opsiwn
 common.error.mandatoryAmount = Nodwch y swm gan ddefnyddio’r rhifau 0 i 9
-common.error.negative = Nodwch rifau positif yn unig (dim -)
+common.error.negative = Nodwch swm positif
 common.error.tooManyDecimals = Nodwch uchafswm o 2 bwynt degol ar gyfer ceiniogau
 common.error.tooManyDigitsBeforeDecimal = Nodwch uchafswm o 13 lle degol ar gyfer punnoedd
-common.error.greaterThanMax = Rydych wedi nodi gormod o rifau
 common.dateRangeSeparator = i
 
 global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – TAW - GOV.UK

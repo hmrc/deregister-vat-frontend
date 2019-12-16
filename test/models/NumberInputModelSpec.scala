@@ -16,10 +16,26 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
+import utils.TestUtil
 
-case class ZeroRatedSuppliesValue(amount: BigDecimal)
+class NumberInputModelSpec extends TestUtil {
 
-object ZeroRatedSuppliesValue {
-  implicit val format: OFormat[ZeroRatedSuppliesValue] = Json.format[ZeroRatedSuppliesValue]
+  val testAmount = BigDecimal(88326)
+
+  "NumberInputModel.format" should {
+    "serialize to the correct JSON" in {
+      Json.toJson(NumberInputModel(testAmount)) shouldBe
+        Json.obj(
+        "value" ->testAmount
+        )
+    }
+
+    "deserialize from JSON correctly" in {
+      Json.obj(
+        "value" -> testAmount
+      ).as[NumberInputModel] shouldBe NumberInputModel(testAmount)
+    }
+  }
+
 }

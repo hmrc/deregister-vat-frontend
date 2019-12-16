@@ -22,7 +22,6 @@ common.error.mandatoryAmount = Enter the amount using numbers 0 to 9
 common.error.negative = Enter a positive amount
 common.error.tooManyDecimals = Enter a maximum of 2 decimal places for pence
 common.error.tooManyDigitsBeforeDecimal = Enter a maximum of 13 decimal places for pounds
-common.error.greaterThanMax = You have entered too many numbers
 common.dateRangeSeparator = to
 common.pageTitle = {0} - {1} - GOV.UK
 

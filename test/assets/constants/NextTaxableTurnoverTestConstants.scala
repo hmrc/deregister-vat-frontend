@@ -16,11 +16,11 @@
 
 package assets.constants
 
-import models.MonetaryModel
+import models.NumberInputModel
 
 object NextTaxableTurnoverTestConstants {
 
-  val nextTaxableTurnoverAbove = MonetaryModel(BigDecimal(90000))
-  val nextTaxableTurnoverBelow = MonetaryModel(BigDecimal(2000))
+  val nextTaxableTurnoverAbove = NumberInputModel(BigDecimal(90000))
+  val nextTaxableTurnoverBelow = NumberInputModel(BigDecimal(2000))
 
 }

@@ -29,7 +29,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
     val button = ".button"
     val errorHeading = "#error-summary-display"
-    val error = "#amount-error-summary"
+    val error = "#value-error-summary"
   }
 
   "Rendering the option to tax page with no errors" should {
@@ -65,7 +65,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("amount" -> "")))
+    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("value" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

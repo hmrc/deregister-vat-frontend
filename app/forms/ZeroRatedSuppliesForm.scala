@@ -18,21 +18,21 @@ package forms
 
 import common.Constants._
 import forms.utils.FormValidation
-import models.MonetaryModel
+import models.NumberInputModel
 import play.api.data.Form
 import play.api.data.Forms._
 
 object ZeroRatedSuppliesForm extends FormValidation {
 
-  val zeroRatedSuppliesForm: Form[MonetaryModel] = Form(
+  val zeroRatedSuppliesForm: Form[NumberInputModel] = Form(
     mapping(
-      "amount" -> optional(text)
+      "value" -> optional(text)
         .verifying("zeroRatedSupplies.error.mandatory", _.isDefined)
         .transform[String](x => x.get, x => Some(x))
         .verifying(isNumericConstraint("zeroRatedSupplies.error.nonNumeric"), hasMaxTwoDecimalsConstraint("common.error.tooManyDecimals"))
         .transform[BigDecimal](x => BigDecimal(x), x => x.toString)
         .verifying(isPositive("common.error.negative"), doesNotExceed(maxAmount, "common.error.tooManyDigitsBeforeDecimal"))
-    )(MonetaryModel.apply)(MonetaryModel.unapply)
+    )(NumberInputModel.apply)(NumberInputModel.unapply)
   )
 
 }

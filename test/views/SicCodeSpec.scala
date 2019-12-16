@@ -75,7 +75,7 @@ class SicCodeSpec extends ViewBaseSpec {
 
   "Rendering the SIC Code page with errors" should {
 
-    lazy val view = views.html.sicCode(SicCodeForm.sicCodeForm.bind(Map("sicCode" -> "")))
+    lazy val view = views.html.sicCode(SicCodeForm.sicCodeForm.bind(Map("value" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
