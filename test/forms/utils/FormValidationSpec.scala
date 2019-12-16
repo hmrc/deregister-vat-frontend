@@ -140,7 +140,7 @@ class FormValidationSpec extends UnitSpec with FormValidation {
     "for values greater than or equal to the max" should {
 
       "return Valid" in {
-        doesNotExceed(max, errMsg)(max) shouldBe Valid
+        doesNotExceed(max, errMsg)(max) shouldBe Invalid(errMsg, max)
         doesNotExceed(max, errMsg)(max - 0.01) shouldBe Valid
       }
     }

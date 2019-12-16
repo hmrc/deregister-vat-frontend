@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package assets.messages
 
-import play.api.libs.json.{Json, OFormat}
+object ZeroRatedSuppliesMessages extends BaseMessages {
 
-case class ZeroRatedSuppliesValue(turnover: BigDecimal)
+  val title = "What is the the expected value of zero-rate supplies for the next 12 months?" + titleSuffix
+  val heading = "What is the the expected value of zero-rate supplies for the next 12 months?"
 
-object ZeroRatedSuppliesValue {
-  implicit val format: OFormat[ZeroRatedSuppliesValue] = Json.format[ZeroRatedSuppliesValue]
+  val mandatory = "Enter the value of zero-rate supplies for the next 12 months"
+  val nonNumeric = "Enter an amount using numbers 0 to 9"
+
 }

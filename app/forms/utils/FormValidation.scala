@@ -44,13 +44,13 @@ trait FormValidation {
   }
 
   val hasMoreThanTwoDecimals: String => Boolean = amtAsString =>
-    amtAsString.lastIndexOf(".") >= 0  && (amtAsString.length - amtAsString.lastIndexOf(".") - 1) > 2
+    amtAsString.lastIndexOf(".") >= 0 && (amtAsString.length - amtAsString.lastIndexOf(".") - 1) > 2
 
   def isNumericConstraint(errMsg: String): Constraint[String] = Constraint("isNumeric"){
     amt => if (isNumeric(amt)) Valid else Invalid(errMsg)
   }
 
-  def hasMaxTwoDecimalsConstraint(errMsg: String): Constraint[String] = Constraint("isNumeric") {
+  def hasMaxTwoDecimalsConstraint(errMsg: String): Constraint[String] = Constraint("tooManyDecimals") {
     amt => if(hasMoreThanTwoDecimals(amt)) Invalid(errMsg) else Valid
   }
 
@@ -59,7 +59,7 @@ trait FormValidation {
   }
 
   def doesNotExceed(max: BigDecimal, errMsg: String): Constraint[BigDecimal] = Constraint[BigDecimal]("isLessThanMax") {
-    amt => if(amt <= max) Valid else Invalid(errMsg, max)
+    amt => if(amt < max) Valid else Invalid(errMsg, max)
   }
 
   def isValidDateConstraint(errMsg: String): Constraint[DateModel] = Constraint[DateModel]("isValidDate") {

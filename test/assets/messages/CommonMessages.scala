@@ -43,7 +43,8 @@ object CommonMessages {
 
   val errorMandatoryAmount = "Enter the amount using numbers 0 to 9"
   val errorTooManyDecimals = "Enter a maximum of 2 decimal places for pence"
-  val errorNegative = "Enter positive numbers only (no -)"
+  val errorTooManyNumbersBeforeDecimal = "Enter a maximum of 13 decimal places for pounds"
+  val errorNegative = "Enter a positive amount"
   val errorMaximum = "You have entered too many numbers"
 
   val errorDateInvalidCharacters = "Enter a date using numbers 0 to 9"

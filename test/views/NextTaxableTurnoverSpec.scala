@@ -29,7 +29,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
     val button = ".button"
     val errorHeading = "#error-summary-display"
-    val error = "#turnover-error-summary"
+    val error = "#value-error-summary"
   }
 
   "Rendering the option to tax page with no errors" should {
@@ -37,16 +37,16 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
     lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe NextTaxableTurnoverMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.TaxableTurnoverController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe NextTaxableTurnoverMessages.heading
     }
 
@@ -54,7 +54,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -65,19 +65,19 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "")))
+    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("value" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${NextTaxableTurnoverMessages.title}"
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.TaxableTurnoverController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe NextTaxableTurnoverMessages.heading
     }
 
@@ -85,7 +85,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${NextTaxableTurnoverMessages.mandatory}"
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 

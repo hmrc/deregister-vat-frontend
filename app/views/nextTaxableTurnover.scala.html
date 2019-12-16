@@ -20,7 +20,7 @@
 @import views.html.templates.inputs.moneyInput
 @import views.utils.TitleUtil._
 
-@(form: Form[NextTaxableTurnoverModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[NumberInputModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
 title = title(messages("nextTaxableTurnover.title"), form),
@@ -37,7 +37,7 @@ appConfig = appConfig) {
 
         <div class="form-group" data-metrics="below-threshold:view:expected-turnover">
             @moneyInput(
-                field = form("turnover"),
+                field = form("value"),
                 label = messages("nextTaxableTurnover.title"),
                 labelHidden = true,
                 decimalPlace = true

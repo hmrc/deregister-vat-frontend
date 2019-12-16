@@ -22,8 +22,9 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.NextTaxableTurnoverForm
 import javax.inject.{Inject, Singleton}
-import models.{NextTaxableTurnoverModel, No, User, Yes, ZeroRated}
 import play.api.Logger
+import models.{NumberInputModel, No, User, Yes,ZeroRated}
+
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -43,7 +44,7 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[NextTaxableTurnoverModel] = NextTaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
+  private def renderView(form: Form[NumberInputModel] = NextTaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
     views.html.nextTaxableTurnover(form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
@@ -63,7 +64,7 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
       } yield (taxableTurnover, deregReason))
         .value.map {
         case Right((_ ,Some(ZeroRated))) => Redirect(controllers.zeroRated.routes.ZeroRatedSuppliesController.show())
-        case Right((Some(_), Some(_))) if data.turnover > appConfig.deregThreshold => Redirect(controllers.routes.CannotDeregisterThresholdController.show())
+        case Right((Some(_), Some(_))) if data.value > appConfig.deregThreshold => Redirect(controllers.routes.CannotDeregisterThresholdController.show())
         case Right((Some(Yes), Some(_))) => Redirect(controllers.routes.VATAccountsController.show())
         case Right((Some(No), Some(_))) => Redirect(controllers.routes.WhyTurnoverBelowController.show())
         case _ => serviceErrorHandler.showInternalServerError

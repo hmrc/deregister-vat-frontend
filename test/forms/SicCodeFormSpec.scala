@@ -19,7 +19,7 @@ package forms
 import play.api.i18n.Messages
 import _root_.utils.TestUtil
 import assets.messages.{CommonMessages, SicCodeMessages}
-import models.SicCodeModel
+import models.NumberInputModel
 
 class SicCodeFormSpec extends TestUtil {
 
@@ -27,7 +27,7 @@ class SicCodeFormSpec extends TestUtil {
 
   "Binding a form with valid data" should {
 
-    val data = Map("sicCode" -> "54321")
+    val data = Map("value" -> "54321")
     val form = SicCodeForm.sicCodeForm.bind(data)
 
     "result in a form with no errors" in {
@@ -35,7 +35,7 @@ class SicCodeFormSpec extends TestUtil {
     }
 
     "generate the correct model" in {
-      form.value shouldBe Some(SicCodeModel(validValue))
+      form.value shouldBe Some(NumberInputModel(validValue))
     }
   }
 
@@ -57,7 +57,7 @@ class SicCodeFormSpec extends TestUtil {
 
     "non-integer input is supplied" should {
 
-      val form = SicCodeForm.sicCodeForm.bind(Map("sicCode" -> "ABC"))
+      val form = SicCodeForm.sicCodeForm.bind(Map("value" -> "ABC"))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -70,8 +70,8 @@ class SicCodeFormSpec extends TestUtil {
 
     "SicCode length is not equal to 5" should {
 
-      val formMany = SicCodeForm.sicCodeForm.bind(Map("sicCode" -> "123456"))
-      val formFew = SicCodeForm.sicCodeForm.bind(Map("sicCode" -> "1234"))
+      val formMany = SicCodeForm.sicCodeForm.bind(Map("value" -> "123456"))
+      val formFew = SicCodeForm.sicCodeForm.bind(Map("value" -> "1234"))
 
       "result in a form with errors" in {
         formMany.hasErrors shouldBe true
@@ -86,7 +86,7 @@ class SicCodeFormSpec extends TestUtil {
 
     "negative input is supplied" should {
 
-      val form = SicCodeForm.sicCodeForm.bind(Map("sicCode" -> "-1234"))
+      val form = SicCodeForm.sicCodeForm.bind(Map("value" -> "-1234"))
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -101,8 +101,8 @@ class SicCodeFormSpec extends TestUtil {
   "A form built from a valid model" should {
 
     "generate the correct mapping" in {
-      val form = SicCodeForm.sicCodeForm.fill(SicCodeModel(validValue))
-      form.data shouldBe Map("sicCode" -> "54321")
+      val form = SicCodeForm.sicCodeForm.fill(NumberInputModel(validValue))
+      form.data shouldBe Map("value" -> "54321")
     }
   }
 

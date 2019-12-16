@@ -41,7 +41,7 @@ object DeregistrationInfo {
   def customApply(deregReason: DeregistrationReason,
                   ceasedTradingDate: Option[DateModel],
                   taxableTurnover: Option[YesNo],
-                  nextTaxableTurnover: Option[NextTaxableTurnoverModel],
+                  nextTaxableTurnover: Option[NumberInputModel],
                   whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                   accountingMethod: VATAccountsModel,
                   optionTax: YesNoAmountModel,
@@ -75,10 +75,10 @@ object DeregistrationInfo {
   private[deregistrationRequest] def taxableTurnoverBelowReason(taxableTurnover: YesNo)(implicit appConfig: AppConfig): BelowThresholdReason =
     if (taxableTurnover.value) BelowNext12Months else BelowPast12Months
 
-  private[deregistrationRequest] val nextTwelveMonthsTurnover: Option[NextTaxableTurnoverModel] => Option[BigDecimal] = _.map(_.turnover)
+  private[deregistrationRequest] val nextTwelveMonthsTurnover: Option[NumberInputModel] => Option[BigDecimal] = _.map(_.value)
 
   private[deregistrationRequest] def turnoverBelowThreshold(taxableTurnover: Option[YesNo],
-                                                            nextTaxableTurnover: Option[NextTaxableTurnoverModel],
+                                                            nextTaxableTurnover: Option[NumberInputModel],
                                                             whyTurnoverBelow: Option[WhyTurnoverBelowModel])
                                                            (implicit appConfig: AppConfig): Option[TurnoverBelowThreshold] = {
     taxableTurnover.flatMap { turnover =>

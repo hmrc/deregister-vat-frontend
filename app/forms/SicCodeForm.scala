@@ -18,7 +18,7 @@ package forms
 
 import common.Constants._
 import forms.utils.FormValidation
-import models.SicCodeModel
+import models.NumberInputModel
 import play.api.data.Form
 import play.api.data.Forms._
 
@@ -26,16 +26,16 @@ object SicCodeForm extends FormValidation {
 
   val sicCodeLength = 5
 
-  val sicCodeForm: Form[SicCodeModel] = Form(
+  val sicCodeForm: Form[NumberInputModel] = Form(
     mapping(
-      "sicCode" -> optional(text)
+      "value" -> optional(text)
         .verifying("sicCode.error.mandatory", _.isDefined)
         .transform[String](x => x.get, x => Some(x))
         .verifying(isInt("common.error.mandatoryAmount"), //TODO - add tailored error message
           characters(sicCodeLength, "sicCode.error.tooFew", "sicCode.error.tooMany"))
         .transform[BigDecimal](x => BigDecimal(x), x => x.toString)
         .verifying(isPositive("common.error.negative")) //TODO - add tailored error message
-    )(SicCodeModel.apply)(SicCodeModel.unapply)
+    )(NumberInputModel.apply)(NumberInputModel.unapply)
   )
 
 }
