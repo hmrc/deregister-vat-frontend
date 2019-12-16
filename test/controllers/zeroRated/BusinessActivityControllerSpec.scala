@@ -24,19 +24,22 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.{MockBusinessActivityAnswerService, MockDeleteAllStoredAnswersService}
+import services.mocks.{MockBusinessActivityAnswerService, MockDeleteAllStoredAnswersService, MockWipeRedundantDataService}
 
 import scala.concurrent.Future
 
 class BusinessActivityControllerSpec extends ControllerBaseSpec
   with MockDeleteAllStoredAnswersService
-  with MockBusinessActivityAnswerService {
+  with MockBusinessActivityAnswerService
+  with MockWipeRedundantDataService
+  {
 
   object TestController extends BusinessActivityController(
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
     mockBusinessActivityAnswerService,
+    mockWipeRedundantDataService,
     serviceErrorHandler,
     mockConfig
   )
@@ -126,6 +129,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       "return 303 " in {
         setupMockStoreBusinessActivityAnswer(Yes)(Right(DeregisterVatSuccess))
+        setupMockWipeRedundantData(Right(DeregisterVatSuccess))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.SEE_OTHER
       }
@@ -144,6 +148,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       "return 303 " in {
         setupMockStoreBusinessActivityAnswer(No)(Right(DeregisterVatSuccess))
+        setupMockWipeRedundantData(Right(DeregisterVatSuccess))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.SEE_OTHER
       }
@@ -187,7 +192,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
         FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
       lazy val result = TestController.submit()(request)
 
-      "return 500 (ISE)" in {
+      "return a 500" in {
         setupMockStoreBusinessActivityAnswer(No)(Left(errorModel))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR

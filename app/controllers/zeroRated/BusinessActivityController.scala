@@ -37,6 +37,7 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
                                            val pendingDeregCheck: PendingChangesPredicate,
                                            val businessActivityAnswerService: BusinessActivityAnswerService,
+                                           val wipeRedundantDataService: WipeRedundantDataService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
@@ -64,6 +65,7 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
         error => Future.successful(BadRequest(views.html.businessActivity(error))),
         data => (for {
           _ <- EitherT(businessActivityAnswerService.storeAnswer(data))
+          _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
           result = redirect(Some(data))
         } yield result).value.map {
           case Right(redirect) => redirect

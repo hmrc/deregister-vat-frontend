@@ -165,6 +165,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
           DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, BusinessActivityAnswerService.key)
 
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
 
@@ -196,6 +197,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
           DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, BusinessActivityAnswerService.key)
 
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
@@ -223,6 +225,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
           DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetAnswer(vrn, BusinessActivityAnswerService.key)(Json.toJson(Yes))
 
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
@@ -248,6 +251,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
           DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, BusinessActivityAnswerService.key)
 
           DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)

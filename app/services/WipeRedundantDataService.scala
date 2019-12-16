@@ -46,9 +46,11 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
       capitalAssets <- EitherT(capitalAssetsAnswer.getAnswer)
       issueInvoices <- EitherT(invoicesAnswer.getAnswer)
       outstandingInvoices <- EitherT(outstandingInvoicesAnswer.getAnswer)
+      businessActivity <- EitherT(businessActivityAnswer.getAnswer)
       _ <- EitherT(wipeRedundantDeregReasonJourneyData(deregReason))
       _ <- EitherT(wipeOutstandingInvoices(issueInvoices))
       _ <- EitherT(wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices))
+      _ <- EitherT(wipeSicCode(businessActivity))
     } yield DeregisterVatSuccess).value
   }
 
@@ -102,6 +104,15 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     invoicesAnswer match {
       case Some(Yes) => outstandingInvoicesAnswer.deleteAnswer
+      case _ => Future.successful(Right(DeregisterVatSuccess))
+    }
+  }
+
+  private[services] def wipeSicCode(businessActivityAnswerService: Option[YesNo])
+                                               (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, DeregisterVatResponse]] = {
+    businessActivityAnswerService match {
+      case Some(No) => sicCodeAnswer.deleteAnswer
       case _ => Future.successful(Right(DeregisterVatSuccess))
     }
   }
