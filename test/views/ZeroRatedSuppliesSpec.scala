@@ -39,16 +39,16 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
     lazy val view = views.html.zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe ZeroRatedSuppliesMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.NextTaxableTurnoverController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe ZeroRatedSuppliesMessages.heading
     }
 
@@ -56,7 +56,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -70,16 +70,16 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
     lazy val view = views.html.zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ZeroRatedSuppliesMessages.title}"
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.NextTaxableTurnoverController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe ZeroRatedSuppliesMessages.heading
     }
 
