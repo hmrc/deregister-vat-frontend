@@ -17,6 +17,7 @@
 package views
 
 import assets.messages.{CommonMessages, ZeroRatedSuppliesMessages}
+import forms.ZeroRatedSuppliesForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -35,7 +36,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.zeroRatedSupplies()
+    lazy val view = views.html.zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -66,7 +67,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.zeroRatedSupplies()
+    lazy val view = views.html.zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
