@@ -18,10 +18,9 @@ package controllers.zeroRated
 
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
-import forms.{BusinessActivityForm, SicCodeForm}
+import forms.SicCodeForm
 import javax.inject.{Inject, Singleton}
 import models._
-import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -39,7 +38,7 @@ class SicCodeController @Inject()(val messagesApi: MessagesApi,
                                   val sicCodeAnswerService: SicCodeAnswerService,
                                   implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[SicCodeModel] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = views.html.sicCode(form)
+  private def renderView(form: Form[NumberInputModel] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = views.html.sicCode(form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {

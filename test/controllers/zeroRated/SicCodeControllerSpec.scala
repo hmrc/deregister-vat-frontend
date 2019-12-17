@@ -17,7 +17,7 @@
 package controllers.zeroRated
 
 import controllers.ControllerBaseSpec
-import models.{DeregisterVatSuccess, No, SicCodeModel, Yes}
+import models.{DeregisterVatSuccess, No, NumberInputModel, Yes}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
@@ -52,7 +52,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
             mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockGetBusinessActivity(Right(Some(Yes)))
-            setupMockGetSicCode(Right(Some(SicCodeModel(1))))
+            setupMockGetSicCode(Right(Some(NumberInputModel(1))))
             status(result) shouldBe Status.OK
           }
 
@@ -62,7 +62,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           }
 
           "has the value pre-populated" in {
-            document(result).select(s"#sicCode").attr("value") shouldBe "1"
+            document(result).select(s"#value").attr("value") shouldBe "1"
           }
         }
 
@@ -141,13 +141,13 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
       "the zero rated journey feature switch is on" when {
 
         "the form is filled correctly" should {
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody(("sicCode", "12345"))
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody(("value", "12345"))
           lazy val result = TestController.submit()(request)
 
           "return a 303" in {
             mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockStoreSicCode(SicCodeModel(12345))(Right(DeregisterVatSuccess))
+            setupMockStoreSicCode(NumberInputModel(12345))(Right(DeregisterVatSuccess))
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -157,7 +157,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
         }
 
         "the form contains errors" should {
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody(("sicCode", "7"))
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody(("value", "7"))
           lazy val result = TestController.submit()(request)
 
           "return a 303" in {

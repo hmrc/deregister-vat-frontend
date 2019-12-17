@@ -19,7 +19,7 @@ package pages
 import assets.IntegrationTestConstants._
 import forms.SicCodeForm
 import helpers.IntegrationBaseSpec
-import models.{SicCodeModel, Yes}
+import models.{NumberInputModel, Yes}
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
@@ -147,7 +147,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
   "Calling the POST VatAccounts" when {
 
-    def postRequest(data: SicCodeModel): WSResponse =
+    def postRequest(data: NumberInputModel): WSResponse =
       post("/what-is-the-sic-code")(toFormData(SicCodeForm.sicCodeForm, data))
 
 

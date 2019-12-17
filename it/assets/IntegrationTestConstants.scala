@@ -48,6 +48,6 @@ object IntegrationTestConstants {
   val yesNoAmountNoJson = Json.toJson(yesNoAmountYesModel)
 
   val sicCodeValue: BigDecimal = 12345
-  val sicCodeModel: SicCodeModel = SicCodeModel(sicCodeValue)
+  val sicCodeModel: NumberInputModel = NumberInputModel(sicCodeValue)
 
 }
