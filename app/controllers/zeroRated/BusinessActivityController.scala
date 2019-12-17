@@ -16,34 +16,64 @@
 
 package controllers.zeroRated
 
+import cats.data.EitherT
+import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import javax.inject.{Inject, Singleton}
+import models.{No, User, Yes, YesNo}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.businessActivity
+import play.api.data.Form
+import forms.BusinessActivityForm
+
+import scala.concurrent.Future
 
 @Singleton
 class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
                                            val pendingDeregCheck: PendingChangesPredicate,
+                                           val businessActivityAnswerService: BusinessActivityAnswerService,
+                                           val wipeRedundantDataService: WipeRedundantDataService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck) { implicit user =>
+  private def renderView(form: Form[YesNo] = BusinessActivityForm.businessActivityForm)(implicit user: User[_]) = businessActivity(form)
+
+  private def redirect (yesNo: Option[YesNo]) : Result = yesNo match {
+    case Some(Yes) => Redirect(controllers.zeroRated.routes.SicCodeController.show())
+    case Some(No) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
+  }
+
+  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
-      Ok("")
+      businessActivityAnswerService.getAnswer map {
+        case Right(Some(data)) => Ok(renderView(BusinessActivityForm.businessActivityForm.fill(data)))
+        case _ => Ok(renderView())
+      }
     } else {
-      serviceErrorHandler.showBadRequestError
+      Future(serviceErrorHandler.showBadRequestError)
     }
   }
 
-  val submit: Action[AnyContent] = authenticate { implicit user =>
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
-      Ok("")
+      BusinessActivityForm.businessActivityForm.bindFromRequest().fold(
+        error => Future.successful(BadRequest(views.html.businessActivity(error))),
+        data => (for {
+          _ <- EitherT(businessActivityAnswerService.storeAnswer(data))
+          _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
+          result = redirect(Some(data))
+        } yield result).value.map {
+          case Right(redirect) => redirect
+          case Left(_) => serviceErrorHandler.showInternalServerError
+        }
+      )
     } else {
-      serviceErrorHandler.showBadRequestError
+      Future(serviceErrorHandler.showBadRequestError)
     }
   }
 }
