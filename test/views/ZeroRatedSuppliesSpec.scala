@@ -34,7 +34,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
     val error = "#zero-rated-error-summary"
   }
 
-  "Rendering the option to tax page with no errors" should {
+  "Rendering the zero rated supplies page with no errors" should {
 
     lazy val view = views.html.zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -56,7 +56,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    "have the correct continue button text and url" in {
+    "have the correct continue button text" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -65,9 +65,9 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the option to tax page with errors" should {
+  "Rendering the zero rated supplies page with errors" should {
 
-    lazy val view = views.html.zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm)
+    lazy val view = views.html.zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("value" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -87,7 +87,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${ZeroRatedSuppliesMessages.mandatory}"
     }
 
-    "have the correct continue button text and url" in {
+    "have the correct continue button text" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
