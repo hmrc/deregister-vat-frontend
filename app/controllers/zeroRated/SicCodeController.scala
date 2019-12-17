@@ -18,31 +18,57 @@ package controllers.zeroRated
 
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import forms.{BusinessActivityForm, SicCodeForm}
 import javax.inject.{Inject, Singleton}
+import models._
+import play.api.Logger
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.{BusinessActivityAnswerService, SicCodeAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
+import scala.concurrent.Future
 
 @Singleton
 class SicCodeController @Inject()(val messagesApi: MessagesApi,
                                   val authenticate: AuthPredicate,
                                   val pendingDeregCheck: PendingChangesPredicate,
                                   val serviceErrorHandler: ServiceErrorHandler,
+                                  val businessActivityAnswerService: BusinessActivityAnswerService,
+                                  val sicCodeAnswerService: SicCodeAnswerService,
                                   implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck) { implicit user =>
+  private def renderView(form: Form[SicCodeModel] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = views.html.sicCode(form)
+
+  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
-      Ok("")
+      for {
+        ba <- businessActivityAnswerService.getAnswer
+        sc <- sicCodeAnswerService.getAnswer
+      } yield (ba, sc) match {
+        case (Right(Some(Yes)), Right(Some(sicCode))) => Ok(renderView(SicCodeForm.sicCodeForm.fill(sicCode)))
+        case (Right(Some(Yes)), Right(_)) => Ok(renderView())
+        case (Right(Some(No)), Right(_)) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
+        case (Right(None), Right(_)) => Redirect(controllers.zeroRated.routes.BusinessActivityController.show())
+        case _ => serviceErrorHandler.showInternalServerError
+      }
     } else {
-      serviceErrorHandler.showBadRequestError
+      Future.successful(serviceErrorHandler.showBadRequestError)
     }
   }
 
-  val submit: Action[AnyContent] = authenticate { implicit user =>
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
-      Ok("")
+      SicCodeForm.sicCodeForm.bindFromRequest().fold(
+        error => Future.successful(BadRequest(views.html.sicCode(error))),
+        data => sicCodeAnswerService.storeAnswer(data) map {
+          case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
+          case _ => serviceErrorHandler.showInternalServerError
+        }
+      )
     } else {
-      serviceErrorHandler.showBadRequestError
+      Future.successful(serviceErrorHandler.showBadRequestError)
     }
   }
 }

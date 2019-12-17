@@ -24,6 +24,12 @@ trait MockSicCodeAnswerService extends MockStoredAnswersService {
 
   val mockSicCodeAnswerService: SicCodeAnswerService = mock[SicCodeAnswerService]
 
+  def setupMockGetSicCode(response: Either[ErrorModel, Option[SicCodeModel]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockSicCodeAnswerService)(response)
+
+  def setupMockStoreSicCode(data: SicCodeModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockSicCodeAnswerService)(data)(response)
+
   def setupMockDeleteSicCodeAnswerService(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockSicCodeAnswerService)(response)
 

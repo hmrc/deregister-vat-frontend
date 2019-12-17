@@ -222,7 +222,7 @@ businessActivity.forExample = Er enghraifft, mae’r busnes ond yn cyflenwi nwyd
 businessActivity.moreInfo = Rhagor o wybodaeth am nwyddau a gwasanaethau ar gyfradd sero (yn agor ffenestr neu dab newydd)
 businessActivity.error = Dewiswch ‘Iawn’ os yw’ch gweithgaredd busnes wedi newid
 
-sicCode.heading = Beth yw Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes?
+sicCode.title = Beth yw Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes?
 sicCode.explanation = Dyma’r cod 5 digid sy’n disgrifio’r gweithgaredd busnes.
 sicCode.find = Dod o hyd i’r cod sy’n disgrifio’r gweithgaredd busnes orau (yn agor ffenestr neu dab newydd)
 sicCode.error.mandatory = Nodwch y cod 5 digid sy’n disgrifio’ch gweithgaredd busnes orau
