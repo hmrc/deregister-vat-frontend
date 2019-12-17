@@ -31,7 +31,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
 
     val button = ".button"
     val errorHeading = "#error-summary-display"
-    val error = "#zero-rated-error-summary"
+    val error = ".error-message"
   }
 
   "Rendering the zero rated supplies page with no errors" should {
