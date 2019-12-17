@@ -126,6 +126,8 @@ taxableTurnover.error.nonNumeric = Nodwch y trosiant gan ddefnyddio’r rhifau 0
 
 nextTaxableTurnover.title = Beth yw trosiant trethadwy disgwyliedig y busnes ar gyfer y 12 mis nesaf?
 
+zeroRatedSupplies.title = Beth yw gwerth disgwyliedig y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf?
+
 issueNewInvoices.title = A yw’r busnes yn mynd i anfon unrhyw anfonebau newydd ar ôl i chi ganslo’r cofrestriad?
 
 optionOwnsStockToSell.title = A yw’r busnes yn mynd i gadw unrhyw stoc?
