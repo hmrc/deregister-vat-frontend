@@ -26,11 +26,9 @@ import models.{BelowThreshold, NumberInputModel, No, User, Yes, YesNo, ZeroRated
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{BusinessActivityAnswerService, DeregReasonAnswerService, NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService}
+import services.{BusinessActivityAnswerService, NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import services.DeregReasonAnswerService
-
-import scala.concurrent.Future
 
 @Singleton
 class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,

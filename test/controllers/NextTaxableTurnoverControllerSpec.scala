@@ -57,7 +57,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
-          setupMockGetBusinessActivity(Right(None))
+          setupMockGetBusinessActivityAnswer(Right(None))
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
@@ -75,7 +75,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
-          setupMockGetBusinessActivity(Right(None))
+          setupMockGetBusinessActivityAnswer(Right(None))
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
@@ -87,7 +87,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
 
         "have the amount pre-populate in the field" in {
-          document(result).select("#turnover").attr("value") shouldBe testTurnoverAmt.toString
+          document(result).select("#value").attr("value") shouldBe testTurnoverAmt.toString
         }
       }
 
@@ -97,7 +97,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
-          setupMockGetBusinessActivity(Right(Some(Yes)))
+          setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
           setupMockGetDeregReason(Right(Some(ZeroRated)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
@@ -109,7 +109,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
 
         "have the amount pre-populate in the field" in {
-          document(result).select("#turnover").attr("value") shouldBe testTurnoverAmt.toString
+          document(result).select("#value").attr("value") shouldBe testTurnoverAmt.toString
         }
         s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
           document(result).select(".link-back").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
@@ -122,7 +122,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
-          setupMockGetBusinessActivity(Right(Some(No)))
+          setupMockGetBusinessActivityAnswer(Right(Some(No)))
           setupMockGetDeregReason(Right(Some(ZeroRated)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
@@ -147,7 +147,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
-          setupMockGetBusinessActivity(Right(Some(No)))
+          setupMockGetBusinessActivityAnswer(Right(Some(No)))
           setupMockGetDeregReason(Right(Some(ZeroRated)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
@@ -172,7 +172,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
-          setupMockGetBusinessActivity(Right(Some(Yes)))
+          setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
           setupMockGetDeregReason(Right(Some(ZeroRated)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
@@ -197,7 +197,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 500 (ISE)" in {
           setupMockGetNextTaxableTurnover(Left(errorModel))
-          setupMockGetBusinessActivity(Left(errorModel))
+          setupMockGetBusinessActivityAnswer(Left(errorModel))
           setupMockGetDeregReason(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
@@ -365,7 +365,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockGetBusinessActivity(Right(None))
+          setupMockGetBusinessActivityAnswer(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
@@ -385,7 +385,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetDeregReason(Right(Some(ZeroRated)))
-          setupMockGetBusinessActivity(Right(Some(No)))
+          setupMockGetBusinessActivityAnswer(Right(Some(No)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
@@ -408,7 +408,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetDeregReason(Right(Some(ZeroRated)))
-          setupMockGetBusinessActivity(Right(Some(Yes)))
+          setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
@@ -431,7 +431,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 500 (ISE)" in {
           setupMockGetDeregReason(Left(errorModel))
-          setupMockGetBusinessActivity(Left(errorModel))
+          setupMockGetBusinessActivityAnswer(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
