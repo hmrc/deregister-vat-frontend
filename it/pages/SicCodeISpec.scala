@@ -145,7 +145,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
     }
   }
 
-  "Calling the POST VatAccounts" when {
+  "Calling the POST SicCode" when {
 
     def postRequest(data: NumberInputModel): WSResponse =
       post("/what-is-the-sic-code")(toFormData(SicCodeForm.sicCodeForm, data))
