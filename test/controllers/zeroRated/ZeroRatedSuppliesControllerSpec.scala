@@ -17,24 +17,46 @@
 package controllers.zeroRated
 
 import controllers.ControllerBaseSpec
+import models.NumberInputModel
 import play.api.http.Status
-import services.mocks.MockDeleteAllStoredAnswersService
+import services.mocks.{MockDeleteAllStoredAnswersService, MockZeroRatedSuppliesValueService}
 
 import scala.concurrent.Future
 
-class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
+class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService with MockZeroRatedSuppliesValueService {
 
-  object TestController extends ZeroRatedSuppliesController(
+  object TestControllerZeroRatedSuppliesController extends ZeroRatedSuppliesController(
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
+    mockZeroRatedSuppliesValueService,
     serviceErrorHandler,
     mockConfig
   )
 
-  "The ZeroRatedSuppliesController" when {
+  val testZeroRatedAmt = 500
+  val testZeroRatedAmt = NumberInputModel(testZeroRatedAmt)
 
-    "calling .show with the zero rated journey feature switch on" should {
+  "The user is authorised" when{
+
+    "calling .show action with the zero rated journey feature switch on" should {
+
+      "the user does not have a pre selected amount" should {
+
+        lazy val result =TestControllerZeroRatedSuppliesController.show()(request)
+
+        "return 200 (OK)" in {
+          setupMock
+
+        }
+
+      }
+
+
+
+
+
+
 
       "return a 200" in {
 

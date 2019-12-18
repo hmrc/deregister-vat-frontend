@@ -21,12 +21,14 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.ZeroRatedSuppliesValueService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
 class ZeroRatedSuppliesController @Inject()(val messagesApi: MessagesApi,
                                             val authenticate: AuthPredicate,
                                             val pendingDeregCheck: PendingChangesPredicate,
+                                            val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
                                             val serviceErrorHandler: ServiceErrorHandler,
                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
