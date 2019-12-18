@@ -202,3 +202,7 @@ sicCode.error.tooMany = You have entered too many numbers
 
 zeroRatedSupplies.error.mandatory = Enter the value of zero-rate supplies for the next 12 months
 zeroRatedSupplies.error.nonNumeric = Enter an amount using numbers 0 to 9
+
+purchasesExceedSupplies.title = Do you expect the VAT on purchases to regularly exceed the VAT on supplies?
+purchasesExceedSupplies.explanation = This means the business would claim the VAT on most VAT Returns.
+purchasesExceedSupplies.error = Select yes if you expect VAT on purchases to be more than VAT on supplies

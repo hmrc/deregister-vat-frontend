@@ -234,3 +234,6 @@ sicCode.error.tooMany = Rydych wedi nodi gormod o rifau
 zeroRatedSupplies.error.mandatory = Nodwch werth y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
 zeroRatedSupplies.error.nonNumeric = Nodwch swm gan ddefnyddio’r rhifau 0 i 9
 
+purchasesExceedSupplies.title = A ydych yn disgwyl i’r TAW ar bryniadau fynd y tu hwnt i’r TAW ar gyflenwadau yn rheolaidd?
+purchasesExceedSupplies.explanation = Mae hyn yn golygu y byddai’r busnes yn hawlio TAW ar y rhan fwyaf o Ffurflenni TAW.
+purchasesExceedSupplies.error = Dewiswch ‘Iawn’ os ydych yn disgwyl i’r TAW ar bryniadau fynd y tu hwnt i’r TAW ar gyflenwadau
