@@ -18,68 +18,85 @@ package controllers.zeroRated
 
 import controllers.ControllerBaseSpec
 import play.api.http.Status
-import services.mocks.MockDeleteAllStoredAnswersService
+import play.api.test.Helpers.{charset, contentType}
+import services.mocks.{MockDeleteAllStoredAnswersService, MockPurchasesExceedSuppliesAnswerService}
+import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
-class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
+class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec
+  with MockDeleteAllStoredAnswersService
+  with MockPurchasesExceedSuppliesAnswerService {
 
   object TestController extends PurchasesExceedSuppliesController(
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
+    mockPurchasesExceedSuppliesAnswerService,
     serviceErrorHandler,
     mockConfig
   )
 
   "The ZeroRatedSuppliesController" when {
 
-    "calling .show with the zero rated journey feature switch on" should {
+    "calling .show" when {
 
-      "return a 200" in {
+      "the zero rated journey feature switch on" should {
 
-        mockConfig.features.zeroRatedJourney(true)
-        lazy val result = TestController.show()(request)
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        status(result) shouldBe Status.OK
-      }
-    }
+        "return a 200" in {
+          mockConfig.features.zeroRatedJourney(true)
+          lazy val result = TestController.show()(request)
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
 
-    "calling .show with an unauthorised user" should {
-
-      "return a 303" in {
-        lazy val result = TestController.show()(request)
-        mockAuthResult(Future.successful(mockUnauthorisedIndividual))
-        status(result) shouldBe Status.FORBIDDEN
-      }
-    }
-
-    "calling .show with the zero rated journey feature switch off" should {
-
-      "return a 400" in {
-        mockConfig.features.zeroRatedJourney(false)
-        lazy val result = TestController.show()(request)
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        status(result) shouldBe Status.BAD_REQUEST
-      }
-    }
-
-    "calling .submit with the zero rated journey feature switch on" should {
-
-      "return a 200" in {
-        mockConfig.features.zeroRatedJourney(true)
-        lazy val result = TestController.submit()(request)
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        status(result) shouldBe Status.OK
+//        "return HTML" in {
+//          lazy val result = TestController.show()(request)
+//          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+//          contentType(result) shouldBe Some("text/html")
+//          charset(result) shouldBe Some("utf-8")
+//        }
       }
 
-      "calling .submit with the zero rated journey feature switch off" should {
+      "unauthorised user" should {
+
+        "return a 303" in {
+          lazy val result = TestController.show()(request)
+          mockAuthResult(Future.successful(mockUnauthorisedIndividual))
+          status(result) shouldBe Status.FORBIDDEN
+        }
+      }
+
+      "zero rated journey feature switch is off" should {
 
         "return a 400" in {
           mockConfig.features.zeroRatedJourney(false)
-          lazy val result = TestController.submit()(request)
+          lazy val result = TestController.show()(request)
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
+        }
+      }
+    }
+
+    "calling .submit" when {
+
+      "the zero rated journey feature switch on" should {
+
+        "return a 200" in {
+          mockConfig.features.zeroRatedJourney(true)
+          lazy val result = TestController.submit()(request)
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "the zero rated journey feature switch off" should {
+
+          "return a 400" in {
+            mockConfig.features.zeroRatedJourney(false)
+            lazy val result = TestController.submit()(request)
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.BAD_REQUEST
+          }
         }
       }
     }
