@@ -16,16 +16,20 @@
 
 package controllers.zeroRated
 
+import assets.constants.BaseTestConstants.errorModel
 import controllers.ControllerBaseSpec
-import models.NumberInputModel
+import models.{DeregisterVatSuccess, NumberInputModel}
 import play.api.http.Status
+import play.api.mvc.AnyContentAsFormUrlEncoded
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
 import services.mocks.{MockDeleteAllStoredAnswersService, MockZeroRatedSuppliesValueService}
 
 import scala.concurrent.Future
 
 class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService with MockZeroRatedSuppliesValueService {
 
-  object TestControllerZeroRatedSuppliesController extends ZeroRatedSuppliesController(
+  object TestZeroRatedSuppliesController extends ZeroRatedSuppliesController(
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
@@ -34,76 +38,145 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockDelete
     mockConfig
   )
 
-  val testZeroRatedAmt = 500
-  val testZeroRatedAmt = NumberInputModel(testZeroRatedAmt)
+  val testZeroRatedSuppliesAmt = 500
+  val testZeroRatedSuppliesAmtAsString= testZeroRatedSuppliesAmt.toString()
+  val testZeroRatedSuppliesModel = NumberInputModel(testZeroRatedSuppliesAmt)
 
-  "The user is authorised" when{
+  "The zero rated journey feature switch is on" when {
 
-    "calling .show action with the zero rated journey feature switch on" should {
+      "The user is authorised" when {
 
-      "the user does not have a pre selected amount" should {
+        "calling .show action" when {
 
-        lazy val result =TestControllerZeroRatedSuppliesController.show()(request)
+          "the user does not have a pre selected amount" should {
 
-        "return 200 (OK)" in {
-          setupMock
+           lazy val result = TestZeroRatedSuppliesController.show()(request)
 
+            "return 200 (OK)" in {
+              mockConfig.features.zeroRatedJourney(true)
+              setupMockGetZeroRatedSupplies(Right(None))
+              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              status(result) shouldBe Status.OK
+            }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
         }
 
+        "the user has a pre selected amount" should {
+
+          lazy val result = TestZeroRatedSuppliesController.show()(request)
+
+          "return 200 (OK)" in {
+            mockConfig.features.zeroRatedJourney(true)
+            setupMockGetZeroRatedSupplies(Right(Some(testZeroRatedSuppliesModel)))
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
+        }
+
+        authChecks(".show", TestZeroRatedSuppliesController.show(), request)
       }
 
+      "calling the .submit action" when {
 
+          "the user submits after inputting an amount" should {
 
+            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+              FakeRequest("POST","/").withFormUrlEncodedBody(("value",testZeroRatedSuppliesAmtAsString))
+            lazy val result = TestZeroRatedSuppliesController.submit()(request)
 
+            "return 303 (SEE_OTHER)" in {
+              mockConfig.features.zeroRatedJourney(true)
+              setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Right(DeregisterVatSuccess))
+              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              status(result) shouldBe Status.SEE_OTHER
+            }
 
+            s"Redirect to the '${controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url}'" in {
+              redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url)
+            }
 
+          }
 
-      "return a 200" in {
+        "the user submits but does not input an amount" should {
 
-        mockConfig.features.zeroRatedJourney(true)
-        lazy val result = TestController.show()(request)
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        status(result) shouldBe Status.OK
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST","/").withFormUrlEncodedBody(("value",""))
+          lazy val result = TestZeroRatedSuppliesController.submit()(request)
+
+          "return a 400" in {
+            mockConfig.features.zeroRatedJourney(true)
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.BAD_REQUEST
+          }
+        }
+
+        "the user submits after inputting an amount and an error is returned when storing the answer" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST","/").withFormUrlEncodedBody(("value",testZeroRatedSuppliesAmtAsString))
+          lazy val result = TestZeroRatedSuppliesController.submit()(request)
+
+          "return a 500" in {
+            mockConfig.features.zeroRatedJourney(true)
+            setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Left(errorModel))
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+          }
+        }
       }
     }
 
-    "calling .show with an unauthorised user" should {
+    "The user is unauthorised" when {
 
-      "return a 303" in {
-        lazy val result = TestController.show()(request)
-        mockAuthResult(Future.successful(mockUnauthorisedIndividual))
-        status(result) shouldBe Status.FORBIDDEN
+      "calling .show with an unauthorised user" should {
+
+        "return a 303" in {
+          mockConfig.features.zeroRatedJourney(true)
+          lazy val result = TestZeroRatedSuppliesController.show()(request)
+          mockAuthResult(Future.successful(mockUnauthorisedIndividual))
+          status(result) shouldBe Status.FORBIDDEN
+        }
       }
     }
 
-    "calling .show with the zero rated journey feature switch off" should {
+  }
 
-      "return a 400" in {
-        mockConfig.features.zeroRatedJourney(false)
-        lazy val result = TestController.show()(request)
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        status(result) shouldBe Status.BAD_REQUEST
-      }
-    }
+  "The zero rated journey feature is switched off" when {
 
-    "calling .submit with the zero rated journey feature switch on" should {
+    "the user is authorised" when {
 
-      "return a 200" in {
-        mockConfig.features.zeroRatedJourney(true)
-        lazy val result = TestController.submit()(request)
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        status(result) shouldBe Status.OK
+      "calling the .show method" should {
+
+        "return a 400" in {
+          mockConfig.features.zeroRatedJourney(false)
+          lazy val result = TestZeroRatedSuppliesController.show()(request)
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.BAD_REQUEST
+        }
       }
 
       "calling .submit with the zero rated journey feature switch off" should {
 
         "return a 400" in {
           mockConfig.features.zeroRatedJourney(false)
-          lazy val result = TestController.submit()(request)
+          lazy val result = TestZeroRatedSuppliesController.submit()(request)
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
       }
+
     }
   }
 }
+
+
+
