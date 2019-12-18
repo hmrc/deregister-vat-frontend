@@ -17,21 +17,20 @@
 package pages
 
 import assets.IntegrationTestConstants._
-import forms.VATAccountsForm
+import forms.SicCodeForm
 import helpers.IntegrationBaseSpec
-import models._
+import models.{NumberInputModel, Yes}
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 import services._
 import stubs.DeregisterVatStub
 
+class SicCodeISpec extends IntegrationBaseSpec {
 
-class VATAccountsISpec extends IntegrationBaseSpec {
+  "Calling the SicCode page" when {
 
-  "Calling the GET VatAccounts" when {
-
-    def getRequest: WSResponse = get("/accounting-method", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/what-is-the-sic-code", formatPendingDereg(Some("false")))
 
     "the user is authorised" should {
 
@@ -39,15 +38,14 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
-        DeregisterVatStub.successfulGetAnswer(vrn, AccountingMethodAnswerService.key)(Json.toJson(StandardAccounting))
-        DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
+        DeregisterVatStub.successfulGetAnswer(vrn, BusinessActivityAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetAnswer(vrn, SicCodeAnswerService.key)(Json.toJson(sicCodeModel))
 
         val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
-          pageTitle("How are the business’s VAT accounts prepared?" + titleSuffix)
+          pageTitle("What is the business’s Standard Industrial Classification (SIC) Code?" + titleSuffix)
         )
       }
     }
@@ -83,10 +81,9 @@ class VATAccountsISpec extends IntegrationBaseSpec {
     }
   }
 
+  "Calling the GET Sic Code endpoint" when {
 
-  "Calling the GET VAT Accounts endpoint" when {
-
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/accounting-method", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/what-is-the-sic-code", formatPendingDereg(pendingDereg))
 
     "user has a pending dereg request" should {
 
@@ -148,11 +145,10 @@ class VATAccountsISpec extends IntegrationBaseSpec {
     }
   }
 
+  "Calling the POST SicCode" when {
 
-  "Calling the POST VatAccounts" when {
-
-    def postRequest(data: VATAccountsModel): WSResponse =
-      post("/accounting-method")(toFormData(VATAccountsForm.vatAccountsForm, data))
+    def postRequest(data: NumberInputModel): WSResponse =
+      post("/what-is-the-sic-code")(toFormData(SicCodeForm.sicCodeForm, data))
 
 
     "the user is authorised" when {
@@ -163,13 +159,13 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.successfulPutAnswer(vrn,AccountingMethodAnswerService.key)
+          DeregisterVatStub.successfulPutAnswer(vrn, SicCodeAnswerService.key)
 
-          val response: WSResponse = postRequest(StandardAccounting)
+          val response: WSResponse = postRequest(sicCodeModel)
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.OptionTaxController.show().url)
+            redirectURI(controllers.routes.NextTaxableTurnoverController.show().url)
           )
         }
       }
@@ -180,9 +176,9 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.putAnswerError(vrn,AccountingMethodAnswerService.key)
+          DeregisterVatStub.putAnswerError(vrn, SicCodeAnswerService.key)
 
-          val response: WSResponse = postRequest(StandardAccounting)
+          val response: WSResponse = postRequest(sicCodeModel)
 
           response should have(
             httpStatus(INTERNAL_SERVER_ERROR)
@@ -197,7 +193,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(StandardAccounting)
+        val response: WSResponse = postRequest(sicCodeModel)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -212,7 +208,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(StandardAccounting)
+        val response: WSResponse = postRequest(sicCodeModel)
 
         response should have(
           httpStatus(FORBIDDEN),
@@ -220,6 +216,6 @@ class VATAccountsISpec extends IntegrationBaseSpec {
         )
       }
     }
-
   }
+
 }

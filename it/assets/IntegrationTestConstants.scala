@@ -47,4 +47,7 @@ object IntegrationTestConstants {
   val yesNoAmountNoModel = models.YesNoAmountModel(No, None)
   val yesNoAmountNoJson = Json.toJson(yesNoAmountYesModel)
 
+  val sicCodeValue: BigDecimal = 12345
+  val sicCodeModel: NumberInputModel = NumberInputModel(sicCodeValue)
+
 }
