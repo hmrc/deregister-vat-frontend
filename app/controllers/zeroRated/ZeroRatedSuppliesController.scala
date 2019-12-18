@@ -56,12 +56,9 @@ class ZeroRatedSuppliesController @Inject()(val messagesApi: MessagesApi,
     if (appConfig.features.zeroRatedJourney()) {
       ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(views.html.zeroRatedSupplies(error))),
-        data => (for {
-          _ <- EitherT(zeroRatedSuppliesValueService.storeAnswer(data))
-          result = redirect(Some(data))
-        } yield result).value.map {
-          case Right(redirect) => redirect
-          case Left(_) => serviceErrorHandler.showInternalServerError
+        data => zeroRatedSuppliesValueService.storeAnswer(data) map {
+          case Right(_) => Redirect(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show())
+          case _ => serviceErrorHandler.showInternalServerError
         }
       )
     }  else {
