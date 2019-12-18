@@ -16,13 +16,19 @@
 
 package controllers.zeroRated
 
+import cats.data.EitherT
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import forms.ZeroRatedSuppliesForm
 import javax.inject.{Inject, Singleton}
+import models.{NumberInputModel, User}
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.ZeroRatedSuppliesValueService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
+import scala.concurrent.Future
 
 @Singleton
 class ZeroRatedSuppliesController @Inject()(val messagesApi: MessagesApi,
@@ -32,19 +38,34 @@ class ZeroRatedSuppliesController @Inject()(val messagesApi: MessagesApi,
                                             val serviceErrorHandler: ServiceErrorHandler,
                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck) { implicit user =>
+  private def renderView(form: Form[NumberInputModel] = ZeroRatedSuppliesForm.zeroRatedSuppliesForm)(implicit user: User[_]) =
+    views.html.zeroRatedSupplies(form)
+
+  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
-      Ok("")
-    } else {
-      serviceErrorHandler.showBadRequestError
+      zeroRatedSuppliesValueService.getAnswer map {
+        case Right(Some(data)) => Ok(renderView(ZeroRatedSuppliesForm.zeroRatedSuppliesForm.fill(data)))
+        case _ => Ok(renderView())
+      }
+    } else{
+      Future(serviceErrorHandler.showBadRequestError)
     }
   }
 
-  val submit: Action[AnyContent] = authenticate { implicit user =>
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
-      Ok("")
-    } else {
-      serviceErrorHandler.showBadRequestError
+      ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bindFromRequest().fold(
+        error => Future.successful(BadRequest(views.html.zeroRatedSupplies(error))),
+        data => (for {
+          _ <- EitherT(zeroRatedSuppliesValueService.storeAnswer(data))
+          result = redirect(Some(data))
+        } yield result).value.map {
+          case Right(redirect) => redirect
+          case Left(_) => serviceErrorHandler.showInternalServerError
+        }
+      )
+    }  else {
+      Future(serviceErrorHandler.showBadRequestError)
     }
   }
 }
