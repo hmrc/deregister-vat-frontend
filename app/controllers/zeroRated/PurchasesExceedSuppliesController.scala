@@ -19,30 +19,52 @@ package controllers.zeroRated
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import javax.inject.{Inject, Singleton}
+import models.{User, YesNo}
+import play.api.data.Form
+import forms.PurchasesExceedSuppliesForm
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
+import services.PurchasesExceedSuppliesAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
+import scala.concurrent.Future
 
 @Singleton
 class PurchasesExceedSuppliesController @Inject()(val messagesApi: MessagesApi,
-                                               val authenticate: AuthPredicate,
-                                               val pendingDeregCheck: PendingChangesPredicate,
-                                               val serviceErrorHandler: ServiceErrorHandler,
-                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                                  val authenticate: AuthPredicate,
+                                                  val pendingDeregCheck: PendingChangesPredicate,
+                                                  val purchasesExceedSuppliesAnswerService: PurchasesExceedSuppliesAnswerService,
+                                                  val serviceErrorHandler: ServiceErrorHandler,
+                                                  implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck) { implicit user =>
+  private def renderView(form: Form[YesNo] = PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm)
+                        (implicit user: User[_]) = views.html.purchasesExceedSupplies(form)
+
+  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
-      Ok("")
+      for {
+        pxs <- purchasesExceedSuppliesAnswerService.getAnswer
+      } yield pxs match {
+        case Right(Some(data)) => Ok(renderView(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.fill(data)))
+        case Right(None) => Ok(renderView())
+        case _ => serviceErrorHandler.showInternalServerError
+      }
     } else {
-      serviceErrorHandler.showBadRequestError
+      Future(serviceErrorHandler.showBadRequestError)
     }
   }
 
-  val submit: Action[AnyContent] = authenticate { implicit user =>
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
-      Ok("")
+      PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.bindFromRequest().fold(
+        error => Future.successful(BadRequest(views.html.purchasesExceedSupplies(error))),
+        data => purchasesExceedSuppliesAnswerService.storeAnswer(data) map {
+          case Right(_) => Redirect(controllers.routes.VATAccountsController.show().url)
+          case _ => serviceErrorHandler.showInternalServerError
+        }
+      )
     } else {
-      serviceErrorHandler.showBadRequestError
+      Future.successful(serviceErrorHandler.showBadRequestError)
     }
   }
 }
