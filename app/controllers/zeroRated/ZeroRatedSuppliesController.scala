@@ -16,7 +16,6 @@
 
 package controllers.zeroRated
 
-import cats.data.EitherT
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.ZeroRatedSuppliesForm

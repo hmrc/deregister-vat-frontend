@@ -27,7 +27,7 @@ import services.mocks.{MockDeleteAllStoredAnswersService, MockZeroRatedSuppliesV
 
 import scala.concurrent.Future
 
-class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService with MockZeroRatedSuppliesValueService {
+class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRatedSuppliesValueService {
 
   object TestZeroRatedSuppliesController extends ZeroRatedSuppliesController(
     messagesApi,
@@ -80,9 +80,11 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockDelete
             contentType(result) shouldBe Some("text/html")
             charset(result) shouldBe Some("utf-8")
           }
-        }
 
-        authChecks(".show", TestZeroRatedSuppliesController.show(), request)
+          "has the value pre-populated" in {
+            document(result).select(s"#value").attr("value") shouldBe testZeroRatedSuppliesAmtAsString
+          }
+        }
       }
 
       "calling the .submit action" when {
@@ -136,16 +138,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockDelete
     }
 
     "The user is unauthorised" when {
-
-      "calling .show with an unauthorised user" should {
-
-        "return a 303" in {
-          mockConfig.features.zeroRatedJourney(true)
-          lazy val result = TestZeroRatedSuppliesController.show()(request)
-          mockAuthResult(Future.successful(mockUnauthorisedIndividual))
-          status(result) shouldBe Status.FORBIDDEN
-        }
-      }
+      authChecks(".show", TestZeroRatedSuppliesController.show(), request)
     }
 
   }

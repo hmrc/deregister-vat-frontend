@@ -28,7 +28,7 @@ import services._
 
 class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
-  "Calling the GET BusinessActivity" when {
+  "Calling the GET ZeroRatedSupplies" when {
 
     def getRequest: WSResponse = get("/expected-value-zero-rated-supplies", formatPendingDereg(Some("false")))
 
@@ -80,7 +80,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
     }
   }
 
-  "Calling the GET BusinessActivity" when {
+  "Calling the GET ZeroRatedSupplies" when {
 
     def getRequest(pendingDereg: Option[String]): WSResponse = get("/expected-value-zero-rated-supplies", formatPendingDereg(pendingDereg))
 
