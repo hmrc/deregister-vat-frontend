@@ -23,6 +23,12 @@ trait MockZeroRatedSuppliesValueService extends MockStoredAnswersService {
 
   val mockZeroRatedSuppliesValueService: ZeroRatedSuppliesValueService = mock[ZeroRatedSuppliesValueService]
 
+  def setupMockGetZeroRatedSupplies(response: Either[ErrorModel, Option[NumberInputModel]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockZeroRatedSuppliesValueService)(response)
+
+  def setupMockStoreZeroRatedSupplies(data: NumberInputModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockZeroRatedSuppliesValueService)(data)(response)
+
   def setupMockDeleteZeroRatedSuppliesValueAnswer(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockZeroRatedSuppliesValueService)(response)
 

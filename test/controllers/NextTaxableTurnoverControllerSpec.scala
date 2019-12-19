@@ -65,7 +65,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
       }
 
-      "the user is has pre selected amount" should {
+      "the user has a pre selected amount" should {
 
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 

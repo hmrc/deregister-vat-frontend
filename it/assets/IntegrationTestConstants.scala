@@ -50,4 +50,6 @@ object IntegrationTestConstants {
   val sicCodeValue: BigDecimal = 12345
   val sicCodeModel: NumberInputModel = NumberInputModel(sicCodeValue)
 
+  val zeroRatedSuppliesValue: BigDecimal= 12345.67
+  val zeroRatedSuppliesModel: NumberInputModel = NumberInputModel(zeroRatedSuppliesValue)
 }
