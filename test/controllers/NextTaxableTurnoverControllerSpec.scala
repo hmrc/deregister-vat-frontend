@@ -38,8 +38,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
     mockPendingDeregPredicate,
     mockTaxableTurnoverAnswerService,
     mockBusinessActivityAnswerService,
-    mockDeregReasonAnswerService,
     mockNextTaxableTurnoverAnswerService,
+    mockDeregReasonAnswerService,
     serviceErrorHandler,
     mockConfig
   )
@@ -58,7 +58,6 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
           setupMockGetBusinessActivityAnswer(Right(None))
-          setupMockGetDeregReason(Right(Some(BelowThreshold)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -76,7 +75,6 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
           setupMockGetBusinessActivityAnswer(Right(None))
-          setupMockGetDeregReason(Right(Some(BelowThreshold)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -91,14 +89,13 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
       }
 
-      "the user has pre selected amount and the use also has value saved for the business activity page of yes" should {
+      "the user has pre selected amount and the use also has a value saved for the business activity page of yes" should {
 
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
           setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-          setupMockGetDeregReason(Right(Some(ZeroRated)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -116,39 +113,13 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
       }
 
-      "the user has pre selected amount and the use also has value saved for the business activity page of no" should {
-
-        lazy val result = TestNextTaxableTurnoverController.show()(request)
-
-        "return 200 (OK)" in {
-          setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
-          setupMockGetBusinessActivityAnswer(Right(Some(No)))
-          setupMockGetDeregReason(Right(Some(ZeroRated)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.OK
-        }
-
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
-        }
-
-        "have the amount pre-populate in the field" in {
-          document(result).select("#value").attr("value") shouldBe testTurnoverAmt.toString
-        }
-        s"have the correct back link of ${controllers.zeroRated.routes.BusinessActivityController.show().url}" in {
-          document(result).select(".link-back").attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
-        }
-      }
-
-      "the user has a value saved for the business activity page of no and is on the zero rated journey" should {
+      "the user has a value saved for the business activity page of no" should {
 
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
           setupMockGetBusinessActivityAnswer(Right(Some(No)))
-          setupMockGetDeregReason(Right(Some(ZeroRated)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -166,14 +137,13 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
       }
 
-      "the user has a value saved for the business activity page of yes and is on the zero rated journey" should {
+      "the user has a value saved for the business activity page of yes" should {
 
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
           setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-          setupMockGetDeregReason(Right(Some(ZeroRated)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -198,14 +168,12 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "return 500 (ISE)" in {
           setupMockGetNextTaxableTurnover(Left(errorModel))
           setupMockGetBusinessActivityAnswer(Left(errorModel))
-          setupMockGetDeregReason(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
 
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
         }
       }
 
@@ -357,34 +325,14 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
       }
 
-      "the user submits without inputting an amount and are on the below threshold journey" should {
+
+      "the user submits without inputting an amount and BusinessActivity is no" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("value", ""))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockGetBusinessActivityAnswer(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.BAD_REQUEST
-        }
-
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
-        }
-
-      }
-
-      "the user submits without inputting an amount and are on the zero rated journey and BusinessActivity is no" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", ""))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
-
-        "return 400 (BAD REQUEST)" in {
-          setupMockGetDeregReason(Right(Some(ZeroRated)))
           setupMockGetBusinessActivityAnswer(Right(Some(No)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
@@ -400,14 +348,13 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
       }
 
-      "the user submits without inputting an amount and are on the zero rated journey and BusinessActivity is yes" should {
+      "the user submits without inputting an amount and business activity is yes" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("value", ""))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          setupMockGetDeregReason(Right(Some(ZeroRated)))
           setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
@@ -430,7 +377,6 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockGetDeregReason(Left(errorModel))
           setupMockGetBusinessActivityAnswer(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR

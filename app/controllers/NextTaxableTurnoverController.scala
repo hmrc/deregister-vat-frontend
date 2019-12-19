@@ -26,9 +26,8 @@ import models.{BelowThreshold, NumberInputModel, No, User, Yes, YesNo, ZeroRated
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{BusinessActivityAnswerService, NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService}
+import services.{BusinessActivityAnswerService, NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService, DeregReasonAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import services.DeregReasonAnswerService
 
 @Singleton
 class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
@@ -36,13 +35,13 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                               val pendingDeregCheck: PendingChangesPredicate,
                                               val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                               val businessActivityAnswerService: BusinessActivityAnswerService,
-                                              val deregReasonAnswerService: DeregReasonAnswerService,
                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
+                                              val deregReasonAnswerService: DeregReasonAnswerService,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  def backLink(businessActivityAnswerService: Option[YesNo]): String = {
-    businessActivityAnswerService match {
+  def backLink(businessActivityAnswer: Option[YesNo]): String = {
+    businessActivityAnswer match {
       case Some(Yes) => controllers.zeroRated.routes.SicCodeController.show().url
       case Some(No) => controllers.zeroRated.routes.BusinessActivityController.show().url
       case _ => controllers.routes.TaxableTurnoverController.show().url
@@ -56,16 +55,11 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
     for {
       data <- nextTaxableTurnoverAnswerService.getAnswer
       businessActivity <- businessActivityAnswerService.getAnswer
-      deregReason <- deregReasonAnswerService.getAnswer
-    } yield (data, businessActivity, deregReason) match {
-      case (Right(Some(data)), Right(Some(businessActivity)), _) =>
-        Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm.fill(data), backLink(Some(businessActivity))))
-      case (Right(Some(data)), _, Right(Some(BelowThreshold))) =>
-        Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm.fill(data), controllers.routes.TaxableTurnoverController.show().url))
-      case (_, Right(Some(businessActivity)), Right(Some(ZeroRated))) =>
-        Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm, backLink(Some(businessActivity))))
-      case (_, _, Right(Some(BelowThreshold))) =>
-        Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm, controllers.routes.TaxableTurnoverController.show().url))
+    } yield (data, businessActivity) match {
+      case (Right(Some(nextTaxableTurnoverAnswer)), Right(businessActivityAnswer)) =>
+        Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm.fill(nextTaxableTurnoverAnswer), backLink(businessActivityAnswer)))
+      case (_, Right(businessActivityAnswer)) =>
+        Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm, backLink(businessActivityAnswer)))
       case _ => serviceErrorHandler.showInternalServerError
     }
   }
@@ -74,12 +68,9 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
     NextTaxableTurnoverForm.taxableTurnoverForm.bindFromRequest().fold(
       error => for {
         businessActivity <- businessActivityAnswerService.getAnswer
-        deregReason <- deregReasonAnswerService.getAnswer
-      } yield (businessActivity, deregReason) match {
-        case (Right(Some(businessActivity)), _) =>
-          BadRequest(renderView(error, backLink(Some(businessActivity))))
-        case (_, Right(Some(BelowThreshold))) =>
-          BadRequest(renderView(error, controllers.routes.TaxableTurnoverController.show().url))
+      } yield businessActivity match {
+        case Right(businessActivity) =>
+          BadRequest(renderView(error, backLink(businessActivity)))
         case _ => serviceErrorHandler.showInternalServerError
       },
       data => (for {
