@@ -195,7 +195,7 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
       "posting 'Yes' data and an error is returned when deleting redundant data" should {
 
-        "return 303 SEE_OTHER" in {
+        "return 500 INTERNAL_SERVER_ERROR" in {
 
           given.user.isAuthorised
 
