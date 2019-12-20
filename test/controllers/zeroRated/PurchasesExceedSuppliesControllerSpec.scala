@@ -24,14 +24,12 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType}
-import services.mocks.{MockDeleteAllStoredAnswersService, MockPurchasesExceedSuppliesAnswerService}
+import services.mocks.MockPurchasesExceedSuppliesAnswerService
 import play.api.test.Helpers._
 
 import scala.concurrent.Future
 
-class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec
-  with MockDeleteAllStoredAnswersService
-  with MockPurchasesExceedSuppliesAnswerService {
+class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with MockPurchasesExceedSuppliesAnswerService {
 
   object TestController extends PurchasesExceedSuppliesController(
     messagesApi,
@@ -46,36 +44,61 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec
 
     "calling .show" when {
 
-      "the zero rated journey feature switch on and the user has stored information for the page" should {
+      "the zero rated journey feature switch on" when {
 
-        lazy val result = {
-          mockConfig.features.zeroRatedJourney(true)
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          TestController.show()(request)
+        "the user has stored information for the page" should {
+
+          lazy val result = {
+            mockConfig.features.zeroRatedJourney(true)
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            TestController.show()(request)
+          }
+
+          "return a 200" in {
+            setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
+            status(result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
+
+          "have the 'Yes' radio option checked" in {
+            document(result).select(s"#$yesNo-yes").hasAttr("checked") shouldBe true
+          }
         }
 
-        "return a 200" in {
-          setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
-          status(result) shouldBe Status.OK
+        "the user has no stored information for the page" should {
+          lazy val result = {
+            mockConfig.features.zeroRatedJourney(true)
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            TestController.show()(request)
+          }
+
+          "return a 200" in {
+            setupMockGetPurchasesExceedSuppliesAnswer(Right(None))
+            status(result) shouldBe Status.OK
+          }
+
+          "return HTML" in {
+            contentType(result) shouldBe Some("text/html")
+            charset(result) shouldBe Some("utf-8")
+          }
         }
 
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
-        }
+        "the storedAnswerService returns an error" should {
 
-        "have the 'Yes' radio option checked" in {
-          document(result).select(s"#$yesNo-yes").hasAttr("checked") shouldBe true
-        }
+          lazy val result = {
+            mockConfig.features.zeroRatedJourney(true)
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            TestController.show()(request)
+          }
 
-      }
-
-      "unauthorised user" should {
-
-        "return a 303" in {
-          lazy val result = TestController.show()(request)
-          mockAuthResult(Future.successful(mockUnauthorisedIndividual))
-          status(result) shouldBe Status.FORBIDDEN
+          "return a 500" in {
+            setupMockGetPurchasesExceedSuppliesAnswer(Left(errorModel))
+            status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+          }
         }
       }
 
@@ -96,27 +119,15 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec
           charset(result) shouldBe Some("utf-8")
         }
       }
-      "the zero rated journey feature switch on but the service returns and error" should {
 
-        lazy val result = {
-          mockConfig.features.zeroRatedJourney(true)
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          TestController.show()(request)
-        }
-
-        "return a 500" in {
-          setupMockGetPurchasesExceedSuppliesAnswer(Left(errorModel))
-          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        }
-      }
-
+      authChecks(".show", TestController.show(), request)
     }
 
     "calling .submit" when {
 
-      "the zero rated journey geature switch is on " when {
+      "the zero rated journey feature switch is on " when {
 
-        "the user submit yes" should {
+        "the user submits 'yes'" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
@@ -137,7 +148,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec
           }
         }
 
-        "the user submit no" should {
+        "the user submits 'no'" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
@@ -158,7 +169,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec
           }
         }
 
-        "user submit with nothing selected" should {
+        "the user submits with nothing selected" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, ""))
@@ -209,22 +220,8 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec
           charset(result) shouldBe Some("utf-8")
         }
       }
-      "user submits and the service returns an error" should {
 
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
-
-        lazy val result = {
-          mockConfig.features.zeroRatedJourney(true)
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          setupMockStorePurchasesExceedSuppliesAnswer(Yes)(Left(errorModel))
-          TestController.submit()(request)
-        }
-
-        "return a 500" in {
-          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        }
-      }
+      authChecks(".submit", TestController.submit(), request)
     }
   }
 }

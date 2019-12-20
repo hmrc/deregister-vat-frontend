@@ -17,21 +17,20 @@
 package pages
 
 import assets.IntegrationTestConstants._
-import forms.YesNoForm
+import forms.PurchasesExceedSuppliesForm
 import helpers.IntegrationBaseSpec
-import models.{ZeroRated, No, Yes, YesNo}
+import models.{No, Yes, YesNo}
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import services._
+import services.PurchasesExceedSuppliesAnswerService
 import stubs.DeregisterVatStub
 
+class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
-class BusinessActivityISpec extends IntegrationBaseSpec {
+  "Calling the GET PurchasesExceedSupplies" when {
 
-  "Calling the GET BusinessActivity" when {
-
-    def getRequest: WSResponse = get("/has-the-business-activity-changed", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/expected-value-vat-purchases", formatPendingDereg(Some("false")))
 
     "the user is authorised" should {
 
@@ -39,13 +38,13 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn,BusinessActivityAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)(Json.toJson(Yes))
 
         val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
-          pageTitle("Has the business activity changed?" + titleSuffix)
+          pageTitle("Do you expect the VAT on purchases to regularly exceed the VAT on supplies?" + titleSuffix)
         )
       }
     }
@@ -82,9 +81,9 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
   }
 
 
-  "Calling the GET BusinessActivity" when {
+  "Calling the GET PurchasesExceedSupplies" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/has-the-business-activity-changed", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/expected-value-vat-purchases", formatPendingDereg(pendingDereg))
 
     "user has a pending dereg request" should {
 
@@ -147,10 +146,10 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
   }
 
 
-  "Calling the POST BusinessActivity" when {
+  "Calling the POST PurchasesExceedSupplies" when {
 
     def postRequest(data: YesNo): WSResponse =
-      post("/has-the-business-activity-changed")(toFormData(YesNoForm.yesNoForm, data))
+      post("/expected-value-vat-purchases")(toFormData(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm, data))
 
     "the user is authorised" when {
 
@@ -160,13 +159,13 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.successfulPutAnswer(vrn, BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulPutAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
           val response: WSResponse = postRequest(Yes)
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.zeroRated.routes.SicCodeController.show().url)
+            redirectURI(controllers.routes.VATAccountsController.show().url)
           )
         }
       }
@@ -180,13 +179,13 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.successfulPutAnswer(vrn, BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulPutAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
           val response: WSResponse = postRequest(No)
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.NextTaxableTurnoverController.show().url)
+            redirectURI(controllers.routes.VATAccountsController.show().url)
           )
         }
       }
@@ -200,7 +199,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.putAnswerError(vrn ,BusinessActivityAnswerService.key)
+          DeregisterVatStub.putAnswerError(vrn ,PurchasesExceedSuppliesAnswerService.key)
 
           val response: WSResponse = postRequest(Yes)
 
