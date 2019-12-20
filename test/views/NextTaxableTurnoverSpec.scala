@@ -32,9 +32,11 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
     val error = "#value-error-summary"
   }
 
+  val backLink = controllers.routes.TaxableTurnoverController.show().url
+
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm)
+    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,backLink)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -63,9 +65,41 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
     }
   }
 
+  "Rendering the option to tax page with no errors when the user selected no on the business activity page" should {
+
+    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,
+      controllers.zeroRated.routes.BusinessActivityController.show().url)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    s"have the correct document title" in {
+      document.title shouldBe NextTaxableTurnoverMessages.title
+    }
+
+    s"have the correct back text" in {
+      elementText(Selectors.back) shouldBe CommonMessages.back
+      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+    }
+  }
+
+  "Rendering the option to tax page with no errors when the user selected yes on the business activity page" should {
+
+    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,
+      controllers.zeroRated.routes.SicCodeController.show().url)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    s"have the correct document title" in {
+      document.title shouldBe NextTaxableTurnoverMessages.title
+    }
+
+    s"have the correct back text" in {
+      elementText(Selectors.back) shouldBe CommonMessages.back
+      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+    }
+  }
+
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("value" -> "")))
+    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "")),backLink)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

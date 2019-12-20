@@ -51,7 +51,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           "return a 200" in {
             mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockGetBusinessActivity(Right(Some(Yes)))
+            setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
             setupMockGetSicCode(Right(Some(NumberInputModel(1))))
             status(result) shouldBe Status.OK
           }
@@ -72,7 +72,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           "return a 200" in {
             mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockGetBusinessActivity(Right(Some(Yes)))
+            setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
             setupMockGetSicCode(Right(None))
             status(result) shouldBe Status.OK
           }
@@ -89,7 +89,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           "return a 303" in {
             mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockGetBusinessActivity(Right(None))
+            setupMockGetBusinessActivityAnswer(Right(None))
             setupMockGetSicCode(Right(None))
             status(result) shouldBe Status.SEE_OTHER
           }
@@ -105,7 +105,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           "return a 303" in {
             mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockGetBusinessActivity(Right(Some(No)))
+            setupMockGetBusinessActivityAnswer(Right(Some(No)))
             setupMockGetSicCode(Right(None))
             status(result) shouldBe Status.SEE_OTHER
           }

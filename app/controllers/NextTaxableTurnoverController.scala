@@ -22,41 +22,57 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.NextTaxableTurnoverForm
 import javax.inject.{Inject, Singleton}
-import play.api.Logger
-import models.{NumberInputModel, No, User, Yes,ZeroRated}
-
+import models.{BelowThreshold, NumberInputModel, No, User, Yes, YesNo, ZeroRated}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
-import services.{NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService}
+import services.{BusinessActivityAnswerService, NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService, DeregReasonAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import services.DeregReasonAnswerService
-
-import scala.concurrent.Future
 
 @Singleton
 class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                               val authenticate: AuthPredicate,
                                               val pendingDeregCheck: PendingChangesPredicate,
                                               val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
-                                              val deregReasonAnswerService: DeregReasonAnswerService,
+                                              val businessActivityAnswerService: BusinessActivityAnswerService,
                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
+                                              val deregReasonAnswerService: DeregReasonAnswerService,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[NumberInputModel] = NextTaxableTurnoverForm.taxableTurnoverForm)(implicit user: User[_]) =
-    views.html.nextTaxableTurnover(form)
+  def backLink(businessActivityAnswer: Option[YesNo]): String = {
+    businessActivityAnswer match {
+      case Some(Yes) => controllers.zeroRated.routes.SicCodeController.show().url
+      case Some(No) => controllers.zeroRated.routes.BusinessActivityController.show().url
+      case _ => controllers.routes.TaxableTurnoverController.show().url
+    }
+  }
+
+  private def renderView(form: Form[NumberInputModel] = NextTaxableTurnoverForm.taxableTurnoverForm, backLink: String)(implicit user: User[_]) =
+    views.html.nextTaxableTurnover(form, backLink)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
-    nextTaxableTurnoverAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm.fill(data)))
-      case _ => Ok(renderView())
+    for {
+      data <- nextTaxableTurnoverAnswerService.getAnswer
+      businessActivity <- businessActivityAnswerService.getAnswer
+    } yield (data, businessActivity) match {
+      case (Right(Some(nextTaxableTurnoverAnswer)), Right(businessActivityAnswer)) =>
+        Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm.fill(nextTaxableTurnoverAnswer), backLink(businessActivityAnswer)))
+      case (_, Right(businessActivityAnswer)) =>
+        Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm, backLink(businessActivityAnswer)))
+      case _ => serviceErrorHandler.showInternalServerError
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     NextTaxableTurnoverForm.taxableTurnoverForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.nextTaxableTurnover(error))),
+      error => for {
+        businessActivity <- businessActivityAnswerService.getAnswer
+      } yield businessActivity match {
+        case Right(businessActivity) =>
+          BadRequest(renderView(error, backLink(businessActivity)))
+        case _ => serviceErrorHandler.showInternalServerError
+      },
       data => (for {
         _ <- EitherT(nextTaxableTurnoverAnswerService.storeAnswer(data))
         taxableTurnover <- EitherT(taxableTurnoverAnswerService.getAnswer)
@@ -71,4 +87,5 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
       }
     )
   }
+
 }

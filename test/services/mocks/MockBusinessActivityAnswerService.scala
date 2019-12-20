@@ -23,12 +23,6 @@ trait MockBusinessActivityAnswerService extends MockStoredAnswersService{
 
   val mockBusinessActivityAnswerService: BusinessActivityAnswerService = mock[BusinessActivityAnswerService]
 
-  def setupMockGetBusinessActivity(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockBusinessActivityAnswerService)(response)
-
-  def setupMockStoreBusinessActivity(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockBusinessActivityAnswerService)(data)(response)
-
   def setupMockDeleteBusinessActivityAnswer(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockBusinessActivityAnswerService)(response)
 
@@ -40,5 +34,4 @@ trait MockBusinessActivityAnswerService extends MockStoredAnswersService{
 
   def setupMockStoreBusinessActivityAnswer(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockBusinessActivityAnswerService)(data)(response)
-
 }

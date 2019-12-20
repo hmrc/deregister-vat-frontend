@@ -22,13 +22,14 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.mocks.{MockDeregReasonAnswerService, MockNextTaxableTurnoverAnswerService, MockTaxableTurnoverAnswerService}
+import services.mocks.{MockBusinessActivityAnswerService, MockDeregReasonAnswerService, MockNextTaxableTurnoverAnswerService, MockTaxableTurnoverAnswerService}
 
 import scala.concurrent.Future
 
 class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
   with MockTaxableTurnoverAnswerService
   with MockNextTaxableTurnoverAnswerService
+  with MockBusinessActivityAnswerService
   with MockDeregReasonAnswerService {
 
   object TestNextTaxableTurnoverController extends NextTaxableTurnoverController(
@@ -36,8 +37,9 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
     mockAuthPredicate,
     mockPendingDeregPredicate,
     mockTaxableTurnoverAnswerService,
-    mockDeregReasonAnswerService,
+    mockBusinessActivityAnswerService,
     mockNextTaxableTurnoverAnswerService,
+    mockDeregReasonAnswerService,
     serviceErrorHandler,
     mockConfig
   )
@@ -55,6 +57,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
+          setupMockGetBusinessActivityAnswer(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -71,6 +74,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
+          setupMockGetBusinessActivityAnswer(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
         }
@@ -82,6 +86,94 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "have the amount pre-populate in the field" in {
           document(result).select("#value").attr("value") shouldBe testTurnoverAmt.toString
+        }
+      }
+
+      "the user has pre selected amount and the use also has a value saved for the business activity page of yes" should {
+
+        lazy val result = TestNextTaxableTurnoverController.show()(request)
+
+        "return 200 (OK)" in {
+          setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
+          setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "have the amount pre-populate in the field" in {
+          document(result).select("#value").attr("value") shouldBe testTurnoverAmt.toString
+        }
+        s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
+          document(result).select(".link-back").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+        }
+      }
+
+      "the user has a value saved for the business activity page of no" should {
+
+        lazy val result = TestNextTaxableTurnoverController.show()(request)
+
+        "return 200 (OK)" in {
+          setupMockGetNextTaxableTurnover(Right(None))
+          setupMockGetBusinessActivityAnswer(Right(Some(No)))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "not have an amount pre-populate in the field" in {
+          document(result).select("#turnover").attr("value") shouldBe ""
+        }
+        s"have the correct back link of ${controllers.zeroRated.routes.BusinessActivityController.show().url}" in {
+          document(result).select(".link-back").attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+        }
+      }
+
+      "the user has a value saved for the business activity page of yes" should {
+
+        lazy val result = TestNextTaxableTurnoverController.show()(request)
+
+        "return 200 (OK)" in {
+          setupMockGetNextTaxableTurnover(Right(None))
+          setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "not have an amount pre-populate in the field" in {
+          document(result).select("#turnover").attr("value") shouldBe ""
+        }
+        s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
+          document(result).select(".link-back").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+        }
+      }
+
+      "the call to the service returns a error model" should {
+
+        lazy val result = TestNextTaxableTurnoverController.show()(request)
+
+        "return 500 (ISE)" in {
+          setupMockGetNextTaxableTurnover(Left(errorModel))
+          setupMockGetBusinessActivityAnswer(Left(errorModel))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
         }
       }
 
@@ -233,13 +325,15 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
       }
 
-      "the user submits without inputting an amount" should {
+
+      "the user submits without inputting an amount and BusinessActivity is no" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(("value", ""))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
+          setupMockGetBusinessActivityAnswer(Right(Some(No)))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
         }
@@ -248,8 +342,94 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
         }
+
+        "display the back url" in {
+          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+        }
+      }
+
+      "the user submits without inputting an amount and business activity is yes" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", ""))
+        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+
+        "return 400 (BAD REQUEST)" in {
+          setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.BAD_REQUEST
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "display the back url" in {
+          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+        }
+      }
+
+      "the user submits without inputting an amount and an error model is returned from the database" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", ""))
+        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+
+        "return 500 (ISE)" in {
+          setupMockGetBusinessActivityAnswer(Left(errorModel))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+      }
+
+
+      "the user submits after selecting the 'No' option but an error is returned when storing" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", testTurnoverAmt.toString))
+        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+
+        "return 500 (ISE)" in {
+          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Left(errorModel))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
       }
     }
+
+    "the backLink when businessActivityAnswerService return a Some(Yes)" should {
+
+      lazy val result = TestNextTaxableTurnoverController.backLink(Some(Yes))
+
+      s"return the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
+        result shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+      }
+    }
+
+    "the backLink when businessActivityAnswerService return a Some(No)" should {
+
+      lazy val result = TestNextTaxableTurnoverController.backLink(Some(No))
+
+      s"return the correct back link of ${controllers.zeroRated.routes.BusinessActivityController.show().url}" in {
+        result shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+      }
+    }
+
+    "the backLink when businessActivityAnswerService return a None" should {
+
+      lazy val result = TestNextTaxableTurnoverController.backLink(None)
+
+      s"return the correct back link of ${controllers.routes.TaxableTurnoverController.show().url}" in {
+        result shouldBe controllers.routes.TaxableTurnoverController.show().url
+      }
+    }
+
 
     authChecks(".submit", TestNextTaxableTurnoverController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("value", "1000.01")))
   }
