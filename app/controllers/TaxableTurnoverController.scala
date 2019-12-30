@@ -23,6 +23,7 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
 import models.{User, YesNo}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -58,7 +59,9 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)
       } yield result).value.map {
         case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
-        case Left(_) => serviceErrorHandler.showInternalServerError
+        case Left(_) =>
+          Logger.warn("[TaxableTurnoverController][submit] - storedAnswerService returned an error")
+          serviceErrorHandler.showInternalServerError
       }
     )
   }

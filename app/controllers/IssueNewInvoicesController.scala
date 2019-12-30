@@ -23,6 +23,7 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
 import models._
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -63,7 +64,9 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
         result = redirect(data)
       } yield result).value.map {
         case Right(redirect) => redirect
-        case Left(_) => serviceErrorHandler.showInternalServerError
+        case Left(_) =>
+          Logger.warn("[IssueNewInvoicesController][submit] - storedAnswerService returned an error")
+          serviceErrorHandler.showInternalServerError
       }
     )
   }
