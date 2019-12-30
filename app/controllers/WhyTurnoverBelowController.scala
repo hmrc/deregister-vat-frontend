@@ -50,8 +50,8 @@ class WhyTurnoverBelowController @Inject()(val messagesApi: MessagesApi,
       data => {
         whyTurnoverBelowAnswerService.storeAnswer(data).map {
           case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show())
-          case Left(_) =>
-            Logger.warn("[WhyTurnoverBelowController][submit] - storedAnswerService returned an error storing answers")
+          case Left(error) =>
+            Logger.warn("[WhyTurnoverBelowController][submit] - storedAnswerService returned an error storing answers: " + error.message)
             serviceErrorHandler.showInternalServerError
         }
       }

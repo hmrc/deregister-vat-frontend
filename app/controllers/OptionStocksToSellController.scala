@@ -52,8 +52,8 @@ class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
       error => Future.successful(BadRequest(views.html.optionStocksToSell(error))),
       data => stocksAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())
-        case Left(_) =>
-          Logger.warn("[OptionStocksToSellController][submit] - storedAnswerService returned an error storing answer")
+        case Left(error) =>
+          Logger.warn("[OptionStocksToSellController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

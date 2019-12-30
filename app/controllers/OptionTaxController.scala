@@ -53,8 +53,8 @@ class OptionTaxController @Inject()(val messagesApi: MessagesApi,
       error => Future.successful(BadRequest(views.html.optionTax(error))),
       data => optionTaxAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show())
-        case _ =>
-          Logger.warn("[OptionTaxController][submit] - storedAnswerService returned an error storing answer")
+        case Left(error) =>
+          Logger.warn("[OptionTaxController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

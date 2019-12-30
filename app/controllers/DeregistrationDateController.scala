@@ -59,14 +59,14 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
     DeregistrationDateForm.deregistrationDateForm.bindFromRequest().fold(
       error => outstandingInvoicesAnswerService.getAnswer map {
         case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error))
-        case _ =>
-          Logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error retrieving answers")
+        case Left(err) =>
+          Logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
           serviceErrorHandler.showInternalServerError
       },
       data => deregDateAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
-        case _ =>
-          Logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error storing answers")
+        case Left(err) =>
+          Logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + err.message)
           serviceErrorHandler.showInternalServerError
       }
     )

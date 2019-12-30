@@ -29,6 +29,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.businessActivity
 import play.api.data.Form
 import forms.BusinessActivityForm
+import play.api.Logger
 
 import scala.concurrent.Future
 
@@ -69,7 +70,9 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
           result = redirect(Some(data))
         } yield result).value.map {
           case Right(redirect) => redirect
-          case Left(_) => serviceErrorHandler.showInternalServerError
+          case Left(error) =>
+            Logger.warn("[BusinessActivityController][submit] - storedAnswerService returned an error: " + error.message)
+            serviceErrorHandler.showInternalServerError
         }
       )
     } else {

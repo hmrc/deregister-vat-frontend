@@ -59,8 +59,8 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
         result = redirect(data, capitalAssets, deregReason)
       } yield result).value.map {
         case Right(redirect) => redirect
-        case Left(_) =>
-          Logger.warn("[OutstandingInvoicesController][submit] - failed to retrieve one or more answers from answer service")
+        case Left(error) =>
+          Logger.warn("[OutstandingInvoicesController][submit] - failed to retrieve one or more answers from answer service: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

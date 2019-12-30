@@ -60,8 +60,8 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
         route = redirect(data)
       } yield route).value.map {
         case Right(result) => result
-        case Left(_) =>
-          Logger.warn("[DeregistrationReasonController][submit] - storedAnswerService returned an error")
+        case Left(error) =>
+          Logger.warn("[DeregistrationReasonController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

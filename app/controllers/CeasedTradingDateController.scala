@@ -52,8 +52,8 @@ class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
       error => Future.successful(BadRequest(views.html.ceasedTradingDate(error))),
       data => ceasedTradingDateAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.VATAccountsController.show())
-        case _ =>
-          Logger.warn("[CeasedTradingDateController][submit] - storedAnswerService returned an error")
+        case Left(error) =>
+          Logger.warn("[CeasedTradingDateController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

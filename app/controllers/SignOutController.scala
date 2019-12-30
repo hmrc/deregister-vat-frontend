@@ -51,8 +51,8 @@ class SignOutController @Inject()(val messagesApi: MessagesApi,
   private def deleteDataAndRedirect(redirectUrl: String)(implicit user: User[_]): Future[Result] =
     deleteAllStoredAnswersService.deleteAllAnswers map {
       case Right(_) => Redirect(redirectUrl)
-      case Left(_) =>
-        Logger.warn("[SignOutController][deleteDataAndRedirect] - storedAnswerService returned an error deleting answers")
+      case Left(error) =>
+        Logger.warn("[SignOutController][deleteDataAndRedirect] - storedAnswerService returned an error deleting answers: " + error.message)
         serviceErrorHandler.showInternalServerError
     }
 

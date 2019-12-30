@@ -59,8 +59,8 @@ class  CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)
       } yield result).value.map {
         case Right(_) => Redirect(controllers.routes.OptionStocksToSellController.show())
-        case Left(_) =>
-          Logger.warn("[CapitalAssetsController][submit] - storedAnswerService returned an error")
+        case Left(error) =>
+          Logger.warn("[CapitalAssetsController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

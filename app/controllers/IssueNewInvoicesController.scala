@@ -64,8 +64,8 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
         result = redirect(data)
       } yield result).value.map {
         case Right(redirect) => redirect
-        case Left(_) =>
-          Logger.warn("[IssueNewInvoicesController][submit] - storedAnswerService returned an error")
+        case Left(error) =>
+          Logger.warn("[IssueNewInvoicesController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

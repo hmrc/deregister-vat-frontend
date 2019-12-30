@@ -43,8 +43,8 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
           case Some(_) => Ok(views.html.checkYourAnswers(controllers.routes.DeregistrationDateController.show().url, answers.seqAnswers))
           case None => Ok(views.html.checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
         }
-      case Left(_) =>
-        Logger.warn("[CheckAnswersController][show] - storedAnswerService returned an error retrieving answers")
+      case Left(error) =>
+        Logger.warn("[CheckAnswersController][show] - storedAnswerService returned an error retrieving answers: " + error.message)
         serviceErrorHandler.showInternalServerError
     }
   }
@@ -52,8 +52,8 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     updateDeregistrationService.updateDereg.map {
       case Right(VatSubscriptionSuccess) => Redirect(controllers.routes.DeregistrationConfirmationController.show().url)
-      case _ =>
-        Logger.warn("[CheckAnswersController][submit] - error returned from vat subscription when updating dereg")
+      case Left(error) =>
+        Logger.warn("[CheckAnswersController][submit] - error returned from vat subscription when updating dereg: " + error.message)
         serviceErrorHandler.showInternalServerError
     }
   }

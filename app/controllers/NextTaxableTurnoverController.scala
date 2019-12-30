@@ -74,8 +74,8 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
       } yield businessActivity match {
         case Right(businessActivity) =>
           BadRequest(renderView(error, backLink(businessActivity)))
-        case _ =>
-          Logger.warn("[NextTaxableTurnoverController][submit] - storedAnswerService returned an error retrieving answers")
+        case Left(err) =>
+          Logger.warn("[NextTaxableTurnoverController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
           serviceErrorHandler.showInternalServerError
       },
       data => (for {

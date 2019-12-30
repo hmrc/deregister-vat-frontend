@@ -73,8 +73,8 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
       },
       data => accountingMethodAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.OptionTaxController.show())
-        case _ =>
-          Logger.warn("[VATAccountsController][submit] - failed to store accountingMethod in answer service")
+        case Left(error) =>
+          Logger.warn("[VATAccountsController][submit] - failed to store accountingMethod in answer service: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

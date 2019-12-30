@@ -22,6 +22,7 @@ import javax.inject.{Inject, Singleton}
 import models.{User, YesNo}
 import play.api.data.Form
 import forms.PurchasesExceedSuppliesForm
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.PurchasesExceedSuppliesAnswerService
@@ -47,7 +48,10 @@ class PurchasesExceedSuppliesController @Inject()(val messagesApi: MessagesApi,
       } yield pxs match {
         case Right(Some(data)) => Ok(renderView(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.fill(data)))
         case Right(None) => Ok(renderView())
-        case _ => serviceErrorHandler.showInternalServerError
+        case Left(error) =>
+          Logger.warn("[PurchasesExceedSuppliesController][show] - storedAnswerService returned an error retrieving answer: " + error.message)
+
+          serviceErrorHandler.showInternalServerError
       }
     } else {
       Future(serviceErrorHandler.showBadRequestError)
@@ -60,7 +64,9 @@ class PurchasesExceedSuppliesController @Inject()(val messagesApi: MessagesApi,
         error => Future.successful(BadRequest(views.html.purchasesExceedSupplies(error))),
         data => purchasesExceedSuppliesAnswerService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.routes.VATAccountsController.show().url)
-          case _ => serviceErrorHandler.showInternalServerError
+          case Left(error) =>
+            Logger.warn("[PurchasesExceedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            serviceErrorHandler.showInternalServerError
         }
       )
     } else {
