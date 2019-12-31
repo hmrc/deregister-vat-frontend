@@ -21,6 +21,7 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.YesNoAmountForm
 import javax.inject.Inject
 import models.{User, YesNoAmountModel}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -51,7 +52,9 @@ class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
       error => Future.successful(BadRequest(views.html.optionStocksToSell(error))),
       data => stocksAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())
-        case Left(_) => serviceErrorHandler.showInternalServerError
+        case Left(error) =>
+          Logger.warn("[OptionStocksToSellController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+          serviceErrorHandler.showInternalServerError
       }
     )
   }

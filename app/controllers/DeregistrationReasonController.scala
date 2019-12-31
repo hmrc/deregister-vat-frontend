@@ -23,6 +23,7 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.DeregistrationReasonForm
 import models._
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -59,7 +60,9 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
         route = redirect(data)
       } yield route).value.map {
         case Right(result) => result
-        case Left(_) => serviceErrorHandler.showInternalServerError
+        case Left(error) =>
+          Logger.warn("[DeregistrationReasonController][submit] - storedAnswerService returned an error: " + error.message)
+          serviceErrorHandler.showInternalServerError
       }
     )
   }

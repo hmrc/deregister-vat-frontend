@@ -28,6 +28,7 @@ import services.{AccountingMethodAnswerService, DeregReasonAnswerService, Taxabl
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import cats.data.EitherT
 import cats.instances.future._
+import play.api.Logger
 
 @Singleton
 class VATAccountsController @Inject()(val messagesApi: MessagesApi,
@@ -52,7 +53,9 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
         Ok(renderView(backLink(optionLTB, deregReason), VATAccountsForm.vatAccountsForm.fill(accountingMethod)))
       case (Right(optionLTB), Right(Some(deregReason)),Right(_)) =>
         Ok(renderView(backLink(optionLTB, deregReason)))
-      case (_,_,_) => serviceErrorHandler.showInternalServerError
+      case (_,_,_) =>
+        Logger.warn("[VATAccountsController][show] - failed to retrieve one or more answers from answer service")
+        serviceErrorHandler.showInternalServerError
     }
   }
 
@@ -64,11 +67,15 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
       } yield (lastTurnoverBelow, reason)).value.map {
         case Right((optionLTB, Some(reason))) =>
           BadRequest(views.html.vatAccounts(backLink(optionLTB, reason), error))
-        case _ => serviceErrorHandler.showInternalServerError
+        case _ =>
+          Logger.warn("[VATAccountsController][submit] - failed to retrieve one or more answers from answer service")
+          serviceErrorHandler.showInternalServerError
       },
       data => accountingMethodAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.OptionTaxController.show())
-        case _ => serviceErrorHandler.showInternalServerError
+        case Left(error) =>
+          Logger.warn("[VATAccountsController][submit] - failed to store accountingMethod in answer service: " + error.message)
+          serviceErrorHandler.showInternalServerError
       }
     )
   }

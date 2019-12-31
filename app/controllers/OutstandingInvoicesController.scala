@@ -23,6 +23,7 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.YesNoForm
 import javax.inject.Inject
 import models._
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
 import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OutstandingInvoicesAnswerService, WipeRedundantDataService}
@@ -58,7 +59,9 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
         result = redirect(data, capitalAssets, deregReason)
       } yield result).value.map {
         case Right(redirect) => redirect
-        case Left(_) => serviceErrorHandler.showInternalServerError
+        case Left(error) =>
+          Logger.warn("[OutstandingInvoicesController][submit] - failed to retrieve one or more answers from answer service: " + error.message)
+          serviceErrorHandler.showInternalServerError
       }
     )
   }
@@ -72,7 +75,9 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
         case Some(BelowThreshold) => Redirect(controllers.routes.DeregistrationDateController.show())
         case Some(ZeroRated) => Redirect(controllers.routes.DeregistrationDateController.show())
         case Some(Ceased) => ceasedTradingJourneyLogic(capitalAssets)
-        case _ => serviceErrorHandler.showInternalServerError
+        case _ =>
+          Logger.warn("[OutstandingInvoicesController][redirect] - answer for deregReason doesn't exist or wasn't expected")
+          serviceErrorHandler.showInternalServerError
       }
     }
   }
@@ -81,7 +86,9 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
     capitalAssets match {
       case Some(assets) if assets.yesNo == Yes => Redirect(controllers.routes.DeregistrationDateController.show())
       case Some(_) => Redirect(controllers.routes.CheckAnswersController.show())
-      case _ => serviceErrorHandler.showInternalServerError
+      case _ =>
+        Logger.warn("[OutstandingInvoicesController][ceasedTradingJourneyLogic] - answer for capitalAssets doesn't exist or wasn't expected")
+        serviceErrorHandler.showInternalServerError
     }
   }
 }

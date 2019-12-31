@@ -21,6 +21,7 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.ZeroRatedSuppliesForm
 import javax.inject.{Inject, Singleton}
 import models.{NumberInputModel, User}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -57,7 +58,9 @@ class ZeroRatedSuppliesController @Inject()(val messagesApi: MessagesApi,
         error => Future.successful(BadRequest(views.html.zeroRatedSupplies(error))),
         data => zeroRatedSuppliesValueService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show())
-          case _ => serviceErrorHandler.showInternalServerError
+          case Left(error) =>
+            Logger.warn("[ZeroRatedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            serviceErrorHandler.showInternalServerError
         }
       )
     }  else {

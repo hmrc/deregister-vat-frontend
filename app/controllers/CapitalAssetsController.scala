@@ -23,6 +23,7 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.YesNoAmountForm
 import models.{User, YesNoAmountModel}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -58,7 +59,9 @@ class  CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)
       } yield result).value.map {
         case Right(_) => Redirect(controllers.routes.OptionStocksToSellController.show())
-        case Left(_) => serviceErrorHandler.showInternalServerError
+        case Left(error) =>
+          Logger.warn("[CapitalAssetsController][submit] - storedAnswerService returned an error: " + error.message)
+          serviceErrorHandler.showInternalServerError
       }
     )
   }

@@ -21,6 +21,7 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.WhyTurnoverBelowForm
 import javax.inject.{Inject, Singleton}
 import models.DeregisterVatSuccess
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import services.WhyTurnoverBelowAnswerService
@@ -49,7 +50,9 @@ class WhyTurnoverBelowController @Inject()(val messagesApi: MessagesApi,
       data => {
         whyTurnoverBelowAnswerService.storeAnswer(data).map {
           case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show())
-          case Left(_) => serviceErrorHandler.showInternalServerError
+          case Left(error) =>
+            Logger.warn("[WhyTurnoverBelowController][submit] - storedAnswerService returned an error storing answers: " + error.message)
+            serviceErrorHandler.showInternalServerError
         }
       }
     )

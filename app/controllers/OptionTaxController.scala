@@ -21,6 +21,7 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.YesNoAmountForm
 import javax.inject.{Inject, Singleton}
 import models.{User, YesNoAmountModel}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -52,7 +53,9 @@ class OptionTaxController @Inject()(val messagesApi: MessagesApi,
       error => Future.successful(BadRequest(views.html.optionTax(error))),
       data => optionTaxAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show())
-        case _ => serviceErrorHandler.showInternalServerError
+        case Left(error) =>
+          Logger.warn("[OptionTaxController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+          serviceErrorHandler.showInternalServerError
       }
     )
   }

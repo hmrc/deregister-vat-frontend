@@ -21,6 +21,7 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.SicCodeForm
 import javax.inject.{Inject, Singleton}
 import models._
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -50,7 +51,9 @@ class SicCodeController @Inject()(val messagesApi: MessagesApi,
         case (Right(Some(Yes)), Right(_)) => Ok(renderView())
         case (Right(Some(No)), Right(_)) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
         case (Right(None), Right(_)) => Redirect(controllers.zeroRated.routes.BusinessActivityController.show())
-        case _ => serviceErrorHandler.showInternalServerError
+        case _ =>
+          Logger.warn("[SicCodeController][show] - storedAnswerService returned an error retrieving answers")
+          serviceErrorHandler.showInternalServerError
       }
     } else {
       Future.successful(serviceErrorHandler.showBadRequestError)
@@ -63,7 +66,9 @@ class SicCodeController @Inject()(val messagesApi: MessagesApi,
         error => Future.successful(BadRequest(views.html.sicCode(error))),
         data => sicCodeAnswerService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
-          case _ => serviceErrorHandler.showInternalServerError
+          case Left(error) =>
+            Logger.warn("[SicCodeController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            serviceErrorHandler.showInternalServerError
         }
       )
     } else {

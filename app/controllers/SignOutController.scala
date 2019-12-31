@@ -20,6 +20,7 @@ import com.google.inject.{Inject, Singleton}
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import models.User
+import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
 import services.DeleteAllStoredAnswersService
@@ -50,7 +51,9 @@ class SignOutController @Inject()(val messagesApi: MessagesApi,
   private def deleteDataAndRedirect(redirectUrl: String)(implicit user: User[_]): Future[Result] =
     deleteAllStoredAnswersService.deleteAllAnswers map {
       case Right(_) => Redirect(redirectUrl)
-      case Left(_) => serviceErrorHandler.showInternalServerError
+      case Left(error) =>
+        Logger.warn("[SignOutController][deleteDataAndRedirect] - storedAnswerService returned an error deleting answers: " + error.message)
+        serviceErrorHandler.showInternalServerError
     }
 
   val timeout: Action[AnyContent] = Action { implicit request =>

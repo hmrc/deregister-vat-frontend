@@ -21,6 +21,7 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.DateForm
 import javax.inject.{Inject, Singleton}
 import models.{DateModel, User}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -51,7 +52,9 @@ class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
       error => Future.successful(BadRequest(views.html.ceasedTradingDate(error))),
       data => ceasedTradingDateAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.VATAccountsController.show())
-        case _ => serviceErrorHandler.showInternalServerError
+        case Left(error) =>
+          Logger.warn("[CeasedTradingDateController][submit] - storedAnswerService returned an error: " + error.message)
+          serviceErrorHandler.showInternalServerError
       }
     )
   }

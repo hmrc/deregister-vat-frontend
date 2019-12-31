@@ -21,6 +21,7 @@ import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import forms.DeregistrationDateForm
 import javax.inject.{Inject, Singleton}
 import models.{DeregistrationDateModel, User, YesNo}
+import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -49,6 +50,7 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
       case (Right(outstanding), Right(None)) =>
         Ok(renderView(outstanding))
       case (_,_) =>
+        Logger.warn("[DeregistrationDateController][show] - storedAnswerService returned an error retrieving answers")
         serviceErrorHandler.showInternalServerError
     }
   }
@@ -57,11 +59,15 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
     DeregistrationDateForm.deregistrationDateForm.bindFromRequest().fold(
       error => outstandingInvoicesAnswerService.getAnswer map {
         case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error))
-        case _ => serviceErrorHandler.showInternalServerError
+        case Left(err) =>
+          Logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
+          serviceErrorHandler.showInternalServerError
       },
       data => deregDateAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
-        case _ => serviceErrorHandler.showInternalServerError
+        case Left(err) =>
+          Logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + err.message)
+          serviceErrorHandler.showInternalServerError
       }
     )
   }
