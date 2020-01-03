@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,7 @@ trait TemplateBaseSpec extends TestUtil {
     if(asHeader) {
       s"""
          |  <legend>
-         |    <header>
          |      <h1 id="page-heading" class="heading-large">$legend</h1>
-         |    </header>
          |  </legend>
       """.stripMargin
     } else {
