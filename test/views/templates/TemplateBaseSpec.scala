@@ -28,9 +28,7 @@ trait TemplateBaseSpec extends TestUtil {
     if(asHeader) {
       s"""
          |  <legend>
-         |    <header>
          |      <h1 id="page-heading" class="heading-large">$legend</h1>
-         |    </header>
          |  </legend>
       """.stripMargin
     } else {
