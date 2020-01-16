@@ -168,11 +168,14 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     "new-invoices"
   ))
 
-  private val deregDateAnswer = deregDate.flatMap(_.date.map(answer => CheckYourAnswersRowModel(
+  private val deregDateAnswer = deregDate.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.deregistrationDate"),
-    Html(answer.longDate),
+    if(answer.yesNo.value)
+      {Html(answer.date.get.longDate())}
+    else
+      {Html(messages("checkYourAnswers.answer.no"))},
     controllers.routes.DeregistrationDateController.show().url,
     messages("checkYourAnswers.hidden.deregistrationDate"),
     "dereg-date"
-  )))
+  ))
 }

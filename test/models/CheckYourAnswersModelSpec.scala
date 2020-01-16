@@ -41,7 +41,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
           Some(stocksModel),
           Some(Yes),
           Some(Yes),
-          Some(deregistrationDate)
+          Some(deregistrationDateYes)
         ).seqAnswers shouldBe
           Seq(
             deregReasonRow,
@@ -58,7 +58,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             stocksValueRow,
             newInvoicesRow,
             outstandingInvoicesRow,
-            deregDateRow
+            deregDateRowYes
           )
       }
 
@@ -77,7 +77,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             Some(yesNoAmountNo),
             Some(Yes),
             Some(Yes),
-            Some(deregistrationDate)
+            Some(deregistrationDateYes)
           ).seqAnswers shouldBe
             Seq(
               deregReasonRow,
@@ -91,7 +91,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
               stocksRowNo,
               newInvoicesRow,
               outstandingInvoicesRow,
-              deregDateRow
+              deregDateRowYes
             )
         }
       }
@@ -111,7 +111,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             Some(yesNoAmountNo),
             Some(Yes),
             Some(Yes),
-            Some(deregistrationDate)
+            Some(deregistrationDateYes)
           ).seqAnswers shouldBe
             Seq(
               deregReasonRow,
@@ -125,7 +125,41 @@ class CheckYourAnswersModelSpec extends TestUtil {
               stocksRowNo,
               newInvoicesRow,
               outstandingInvoicesRow,
-              deregDateRow
+              deregDateRowYes
+            )
+        }
+      }
+
+      "given an answer of 'no' for deregistrationDate" should{
+
+        "return a sequence containing the deregistrationDate row with a value of 'No'" in {
+          CheckYourAnswersModel(
+            Some(Ceased),
+            Some(dateModel),
+            Some(Yes),
+            Some(nextTaxableTurnoverBelow),
+            Some(whyTurnoverBelowMin),
+            Some(StandardAccounting),
+            Some(yesNoAmountNo),
+            Some(yesNoAmountNo),
+            Some(yesNoAmountNo),
+            Some(Yes),
+            Some(Yes),
+            Some(deregistrationDateNo)
+          ).seqAnswers shouldBe
+            Seq(
+              deregReasonRow,
+              ceasedTradingRow,
+              taxableTurnoverRow(mockConfig.thresholdString),
+              nextTaxableTurnoverRow,
+              whyBelowRowMin,
+              vatAccountsRow,
+              optionTaxRowNo,
+              captialAssetsRowNo,
+              stocksRowNo,
+              newInvoicesRow,
+              outstandingInvoicesRow,
+              deregDateRowNo
             )
         }
       }

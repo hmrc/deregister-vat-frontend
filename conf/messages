@@ -154,6 +154,7 @@ checkYourAnswers.answer.cash = Cash accounting
 checkYourAnswers.answer.reason.ceased = Business stopped trading
 checkYourAnswers.answer.reason.belowThreshold = Annual turnover is below £{0}
 checkYourAnswers.answer.reason.other = Other
+checkYourAnswers.answer.no = No
 checkYourAnswers.confirm = Confirm and cancel VAT registration
 
 deregistrationConfirmation.title = Request to cancel VAT registration received

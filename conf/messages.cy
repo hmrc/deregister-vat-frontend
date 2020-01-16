@@ -185,6 +185,7 @@ checkYourAnswers.answer.cash = Cyfrifyddu arian parod
 checkYourAnswers.answer.reason.ceased = Busnes wedi rhoi’r gorau i fasnachu
 checkYourAnswers.answer.reason.belowThreshold = Mae’r trosiant blynyddol yn is nag £{0}
 checkYourAnswers.answer.reason.other = Arall
+checkYourAnswers.answer.no = Na
 checkYourAnswers.confirm = Cadarnhau a chanslo cofrestriad TAW
 
 deregistrationConfirmation.title = Cais i ganslo cofrestriad TAW wedi dod i law
