@@ -66,7 +66,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
-        setupMockGetDeregDate(Right(Some(deregistrationDate)))
+        setupMockGetDeregDate(Right(Some(deregistrationDateYes)))
 
         await(TestCheckAnswersService.checkYourAnswersModel()) shouldBe Right(
           CheckYourAnswersModel(
@@ -81,7 +81,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
             Some(stocksModel),
             Some(Yes),
             Some(Yes),
-            Some(deregistrationDate)
+            Some(deregistrationDateYes)
           )
         )
       }

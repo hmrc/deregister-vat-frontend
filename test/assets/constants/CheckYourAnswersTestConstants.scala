@@ -27,7 +27,8 @@ import utils.{MoneyFormatter, TestUtil}
 object CheckYourAnswersTestConstants extends TestUtil {
 
   val dateModel = DateModel(1,1,2018)
-  val deregistrationDate = DeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
+  val deregistrationDateYes = DeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
+  val deregistrationDateNo = DeregistrationDateModel(No,None)
 
   val deregReasonRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.reason,
@@ -180,9 +181,17 @@ object CheckYourAnswersTestConstants extends TestUtil {
     "new-invoices"
   )
 
-  val deregDateRow = CheckYourAnswersRowModel(
+  val deregDateRowYes = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.deregistrationDate,
-    Html(deregistrationDate.date.get.longDate),
+    Html(deregistrationDateYes.date.get.longDate),
+    controllers.routes.DeregistrationDateController.show().url,
+    CheckYourAnswersMessages.deregistrationDateHidden,
+    "dereg-date"
+  )
+
+  val deregDateRowNo = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.deregistrationDate,
+    Html("No"),
     controllers.routes.DeregistrationDateController.show().url,
     CheckYourAnswersMessages.deregistrationDateHidden,
     "dereg-date"
