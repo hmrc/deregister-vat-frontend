@@ -173,7 +173,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     if(answer.yesNo.value)
       {Html(answer.date.get.longDate())}
     else
-      {Html("No")},
+      {Html(messages("checkYourAnswers.answer.no"))},
     controllers.routes.DeregistrationDateController.show().url,
     messages("checkYourAnswers.hidden.deregistrationDate"),
     "dereg-date"
