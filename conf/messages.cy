@@ -228,7 +228,7 @@ businessActivity.error = Dewiswch ‘Iawn’ os yw’ch gweithgaredd busnes wedi
 sicCode.title = Beth yw Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes?
 sicCode.explanation = Dyma’r cod 5 digid sy’n disgrifio’r gweithgaredd busnes.
 sicCode.find = Dod o hyd i’r cod sy’n disgrifio’r gweithgaredd busnes orau (yn agor ffenestr neu dab newydd)
-sicCode.error.mandatory = Nodwch y cod 5 digid sy’n disgrifio’ch gweithgaredd busnes orau
+sicCode.error.invalid = Nodwch y cod 5 digid sy’n disgrifio’ch gweithgaredd busnes orau
 sicCode.error.tooFew = Nid ydych wedi nodi digon o rifau
 sicCode.error.tooMany = Rydych wedi nodi gormod o rifau
 
