@@ -39,7 +39,7 @@ class SicCodeController @Inject()(val messagesApi: MessagesApi,
                                   val sicCodeAnswerService: SicCodeAnswerService,
                                   implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[NumberInputModel] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = views.html.sicCode(form)
+  private def renderView(form: Form[String] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = views.html.sicCode(form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {

@@ -30,7 +30,7 @@ class SicCodeSpec extends ViewBaseSpec {
     val explanationWithError = "#content article > p:nth-child(4)"
     val button = ".button"
     val errorHeading = "#error-summary-display"
-    val error = ".error-message"
+    val error = ".error-summary > ul > li > a"
   }
 
   "Rendering the SIC Code page with no errors" should {
@@ -92,7 +92,7 @@ class SicCodeSpec extends ViewBaseSpec {
     }
 
     "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${SicCodeMessages.mandatory}"
+      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${SicCodeMessages.invalid}"
     }
 
     "have the correct explanation text" in {
@@ -109,7 +109,7 @@ class SicCodeSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe SicCodeMessages.mandatory
+      elementText(Selectors.error) shouldBe SicCodeMessages.invalid
     }
   }
 
