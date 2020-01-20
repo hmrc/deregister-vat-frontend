@@ -81,15 +81,11 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
   }
 
   def backLink(lastTurnoverBelowThreshold: Option[YesNo], deregReason: DeregistrationReason): String = {
-    if(deregReason == Ceased){
-      controllers.routes.CeasedTradingDateController.show().url
-    } else if(deregReason == ExemptOnly) {
-      controllers.routes.DeregistrationReasonController.show().url
-    } else {
-      lastTurnoverBelowThreshold match {
-        case Some(below) if below.value.equals(true) => controllers.routes.NextTaxableTurnoverController.show().url
-        case _ => controllers.routes.WhyTurnoverBelowController.show().url
-      }
+    (deregReason, lastTurnoverBelowThreshold) match {
+      case (Ceased, _) => controllers.routes.CeasedTradingDateController.show().url
+      case (ExemptOnly, _) => controllers.routes.DeregistrationReasonController.show().url
+      case (_, Some(below)) if below.value.equals(true) => controllers.routes.NextTaxableTurnoverController.show().url
+      case _ => controllers.routes.WhyTurnoverBelowController.show().url
     }
   }
 }

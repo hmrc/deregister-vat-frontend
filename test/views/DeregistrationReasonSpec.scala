@@ -16,9 +16,7 @@
 
 package views
 
-import assets.messages.{CommonMessages, DeregistrationReasonMessages, OutstandingInvoicesMessages}
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
+import assets.messages.{CommonMessages, DeregistrationReasonMessages}
 import forms.DeregistrationReasonForm
 
 
@@ -60,7 +58,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
         document.select(Selectors.errorHeading).isEmpty shouldBe true
       }
 
-      s"have the correct a radio button form with the correct 4 options" in {
+      s"have the correct a radio button form with the correct 5 options" in {
         elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
         elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
         elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
@@ -115,7 +113,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
     }
 
-    s"have the correct a radio button form with the correct 3 options" in {
+    s"have the correct a radio button form with the correct 5 options" in {
       elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
       elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
       elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
