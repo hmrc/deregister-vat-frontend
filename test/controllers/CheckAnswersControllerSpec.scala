@@ -62,7 +62,11 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
               Some(yesNoAmountNo),
               Some(Yes),
               Some(Yes),
-              Some(deregistrationDateYes)
+              Some(deregistrationDateYes),
+              Some(Yes),
+              Some(sicCodeValue),
+              Some(zeroRatedSuppliesValue),
+              Some(Yes)
             )
           ))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -99,7 +103,11 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
               Some(yesNoAmountNo),
               Some(Yes),
               Some(Yes),
-              None
+              None,
+              Some(Yes),
+              Some(sicCodeValue),
+              Some(zeroRatedSuppliesValue),
+              Some(Yes)
             )
           ))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))

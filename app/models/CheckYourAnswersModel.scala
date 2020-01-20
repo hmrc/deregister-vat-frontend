@@ -32,15 +32,158 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  stocks: Option[YesNoAmountModel],
                                  newInvoices: Option[YesNo],
                                  outstandingInvoices: Option[YesNo],
-                                 deregDate: Option[DeregistrationDateModel])(implicit user: User[_], messages: Messages, appConfig: AppConfig) {
+                                 deregDate: Option[DeregistrationDateModel],
+                                 businessActivityChanged: Option[YesNo],
+                                 sicCode: Option[String],
+                                 zeroRatedSupplies: Option[NumberInputModel],
+                                 purchasesExceedSupplies: Option[YesNo])
+                                (implicit user: User[_], messages: Messages, appConfig: AppConfig) {
 
+  def seqAnswers: Seq[CheckYourAnswersRowModel] = deregistrationReason match {
+    case Some(ZeroRated) => zeroRatedAnswerSequence.flatten
+    case _ => standardAnswerSequence.flatten
+  }
 
-  def seqAnswers: Seq[CheckYourAnswersRowModel] = Seq(
-    deregReasonAnswer,
-    ceasedTradingDateAnswer,
-    turnoverAnswer,
-    nextTurnoverAnswer,
-    whyTurnoverBelowAnswer,
+  private val deregReasonAnswer = deregistrationReason.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.reason"),
+    Html(messages(s"checkYourAnswers.answer.reason.${answer.value}", appConfig.deregThreshold)),
+    controllers.routes.DeregistrationReasonController.show().url,
+    messages("checkYourAnswers.hidden.reason")
+  ))
+
+  private val ceasedTradingDateAnswer = ceasedTradingDate.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.ceasedTrading"),
+    Html(answer.longDate),
+    controllers.routes.CeasedTradingDateController.show().url,
+    messages("checkYourAnswers.hidden.ceasedTrading")
+  ))
+
+  private val turnoverAnswer = turnover.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.taxableTurnover", appConfig.deregThreshold),
+    Html(messages(s"common.${answer.toString}")),
+    controllers.routes.TaxableTurnoverController.show().url,
+    messages("checkYourAnswers.hidden.taxableTurnover")
+  ))
+
+  private val nextTurnoverAnswer = nextTurnover.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.nextTaxableTurnover"),
+    MoneyFormatter.formatHtmlAmount(answer.value),
+    controllers.routes.NextTaxableTurnoverController.show().url,
+    messages("checkYourAnswers.hidden.nextTaxableTurnover")
+  ))
+
+  private val whyTurnoverBelowAnswer = whyTurnoverBelow.map(answer =>
+    CheckYourAnswersRowModel(
+      messages("checkYourAnswers.question.whyBelow"),
+      Html(answer.asSequence.collect {
+        case (true, message) => messages(s"whyTurnoverBelow.reason.$message")
+      }.mkString(", ")),
+      controllers.routes.WhyTurnoverBelowController.show().url,
+      messages("checkYourAnswers.hidden.whyBelow")
+    ))
+
+  private val accountingAnswer = accounting.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.vatAccounts"),
+    Html(messages(s"checkYourAnswers.answer.${answer.value}")),
+    controllers.routes.VATAccountsController.show().url,
+    messages("checkYourAnswers.hidden.VatAccounts")
+  ))
+
+  private val optionTaxAnswer = optionTax.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.optionTax"),
+    Html(messages(s"common.${answer.yesNo.toString}")),
+    controllers.routes.OptionTaxController.show().url,
+    messages("checkYourAnswers.hidden.optionTax")
+  ))
+
+  private val optionTaxValueAnswer = optionTax.flatMap(_.amount.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.optionTaxValue"),
+    MoneyFormatter.formatHtmlAmount(answer),
+    controllers.routes.OptionTaxController.show().url,
+    messages("checkYourAnswers.hidden.optionTaxValue")
+  )))
+
+  private val capitalAssetsAnswer = capitalAssets.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.capitalAssets"),
+    Html(messages(s"common.${answer.yesNo.toString}")),
+    controllers.routes.CapitalAssetsController.show().url,
+    messages("checkYourAnswers.hidden.capitalAssets")
+  ))
+
+  private val capitalAssetsValueAnswer = capitalAssets.flatMap(_.amount.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.capitalAssetsValue"),
+    MoneyFormatter.formatHtmlAmount(answer),
+    controllers.routes.CapitalAssetsController.show().url,
+    messages("checkYourAnswers.hidden.capitalAssetsValue")
+  )))
+
+  private val stocksAnswer = stocks.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.stocks"),
+    Html(messages(s"common.${answer.yesNo.toString}")),
+    controllers.routes.OptionStocksToSellController.show().url,
+    messages("checkYourAnswers.hidden.stocks")
+  ))
+
+  private val stocksValueAnswer = stocks.flatMap(_.amount.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.stocksValue"),
+    MoneyFormatter.formatHtmlAmount(answer),
+    controllers.routes.OptionStocksToSellController.show().url,
+    messages("checkYourAnswers.hidden.stocksValue")
+  )))
+
+  private val outstandingInvoicesAnswer = outstandingInvoices.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.outstandingInvoice"),
+    Html(messages(s"common.${answer.toString}")),
+    controllers.routes.OutstandingInvoicesController.show().url,
+    messages("checkYourAnswers.hidden.outstandingInvoice")
+  ))
+
+  private val newInvoicesAnswer = newInvoices.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.newInvoices"),
+    Html(messages(s"common.${answer.toString}")),
+    controllers.routes.IssueNewInvoicesController.show().url,
+    messages("checkYourAnswers.hidden.newInvoices")
+  ))
+
+  private val deregDateAnswer = deregDate.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.deregistrationDate"),
+    if(answer.yesNo.value)
+      {Html(answer.date.get.longDate())}
+    else
+      {Html(messages("checkYourAnswers.answer.no"))},
+    controllers.routes.DeregistrationDateController.show().url,
+    messages("checkYourAnswers.hidden.deregistrationDate")
+  ))
+
+  private val businessActivityChangedAnswer = businessActivityChanged.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.businessActivityChanged"),
+    Html(messages(s"common.${answer.toString}")),
+    controllers.zeroRated.routes.BusinessActivityController.show().url,
+    messages("checkYourAnswers.hidden.businessActivityChanged")
+  ))
+
+  private val sicCodeAnswer = sicCode.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.sicCode"),
+    Html(answer),
+    controllers.zeroRated.routes.SicCodeController.show().url,
+    messages("checkYourAnswers.hidden.sicCode")
+  ))
+
+  private val zeroRatedSuppliesAnswer = zeroRatedSupplies.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.zeroRatedSupplies"),
+    MoneyFormatter.formatHtmlAmount(answer.value),
+    controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url,
+    messages("checkYourAnswers.hidden.zeroRatedSupplies")
+  ))
+
+  private val purchasesExceedSuppliesAnswer = purchasesExceedSupplies.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.purchasesExceedSupplies"),
+    Html(messages(s"common.${answer.toString}")),
+    controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url,
+    messages("checkYourAnswers.hidden.purchasesExceedSupplies")
+  ))
+
+  private val commonAnswers: Seq[Option[CheckYourAnswersRowModel]] = Seq(
     accountingAnswer,
     optionTaxAnswer,
     optionTaxValueAnswer,
@@ -51,131 +194,22 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     newInvoicesAnswer,
     outstandingInvoicesAnswer,
     deregDateAnswer
-  ).flatten
+  )
 
-  private val deregReasonAnswer = deregistrationReason.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.reason"),
-    Html(messages(s"checkYourAnswers.answer.reason.${answer.value}", appConfig.deregThreshold)),
-    controllers.routes.DeregistrationReasonController.show().url,
-    messages("checkYourAnswers.hidden.reason"),
-    "reason"
-  ))
+  private val standardAnswerSequence: Seq[Option[CheckYourAnswersRowModel]] = Seq(
+    deregReasonAnswer,
+    ceasedTradingDateAnswer,
+    turnoverAnswer,
+    nextTurnoverAnswer,
+    whyTurnoverBelowAnswer
+  ) ++ commonAnswers
 
-  private val ceasedTradingDateAnswer = ceasedTradingDate.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.ceasedTrading"),
-    Html(answer.longDate),
-    controllers.routes.CeasedTradingDateController.show().url,
-    messages("checkYourAnswers.hidden.ceasedTrading"),
-    "ceased-trading"
-  ))
-
-  private val turnoverAnswer = turnover.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.taxableTurnover", appConfig.deregThreshold),
-    Html(messages(s"common.${answer.toString}")),
-    controllers.routes.TaxableTurnoverController.show().url,
-    messages("checkYourAnswers.hidden.taxableTurnover"),
-    "below-threshold"
-  ))
-
-  private val nextTurnoverAnswer = nextTurnover.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.nextTaxableTurnover"),
-    MoneyFormatter.formatHtmlAmount(answer.value),
-    controllers.routes.NextTaxableTurnoverController.show().url,
-    messages("checkYourAnswers.hidden.nextTaxableTurnover"),
-    "expected-turnover"
-  ))
-
-  private val whyTurnoverBelowAnswer = whyTurnoverBelow.map(answer =>
-    CheckYourAnswersRowModel(
-      messages("checkYourAnswers.question.whyBelow"),
-      Html(answer.asSequence.collect {
-        case (true, message) => messages(s"whyTurnoverBelow.reason.$message")
-      }.mkString(", ")),
-      controllers.routes.WhyTurnoverBelowController.show().url,
-      messages("checkYourAnswers.hidden.whyBelow"),
-      "why-turnover-below"
-    ))
-
-  private val accountingAnswer = accounting.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.vatAccounts"),
-    Html(messages(s"checkYourAnswers.answer.${answer.value}")),
-    controllers.routes.VATAccountsController.show().url,
-    messages("checkYourAnswers.hidden.VatAccounts"),
-    "accounting"
-  ))
-
-  private val optionTaxAnswer = optionTax.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.optionTax"),
-    Html(messages(s"common.${answer.yesNo.toString}")),
-    controllers.routes.OptionTaxController.show().url,
-    messages("checkYourAnswers.hidden.optionTax"),
-    "option-to-tax"
-  ))
-
-  private val optionTaxValueAnswer = optionTax.flatMap(_.amount.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.optionTaxValue"),
-    MoneyFormatter.formatHtmlAmount(answer),
-    controllers.routes.OptionTaxController.show().url,
-    messages("checkYourAnswers.hidden.optionTaxValue"),
-    "option-to-tax-value"
-  )))
-
-  private val capitalAssetsAnswer = capitalAssets.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.capitalAssets"),
-    Html(messages(s"common.${answer.yesNo.toString}")),
-    controllers.routes.CapitalAssetsController.show().url,
-    messages("checkYourAnswers.hidden.capitalAssets"),
-    "capital"
-  ))
-
-  private val capitalAssetsValueAnswer = capitalAssets.flatMap(_.amount.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.capitalAssetsValue"),
-    MoneyFormatter.formatHtmlAmount(answer),
-    controllers.routes.CapitalAssetsController.show().url,
-    messages("checkYourAnswers.hidden.capitalAssetsValue"),
-    "capital-value"
-  )))
-
-  private val stocksAnswer = stocks.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.stocks"),
-    Html(messages(s"common.${answer.yesNo.toString}")),
-    controllers.routes.OptionStocksToSellController.show().url,
-    messages("checkYourAnswers.hidden.stocks"),
-    "stock"
-  ))
-
-  private val stocksValueAnswer = stocks.flatMap(_.amount.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.stocksValue"),
-    MoneyFormatter.formatHtmlAmount(answer),
-    controllers.routes.OptionStocksToSellController.show().url,
-    messages("checkYourAnswers.hidden.stocksValue"),
-    "stock-value"
-  )))
-
-  private val outstandingInvoicesAnswer = outstandingInvoices.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.outstandingInvoice"),
-    Html(messages(s"common.${answer.toString}")),
-    controllers.routes.OutstandingInvoicesController.show().url,
-    messages("checkYourAnswers.hidden.outstandingInvoice"),
-    "outstanding-invoices"
-  ))
-
-  private val newInvoicesAnswer = newInvoices.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.newInvoices"),
-    Html(messages(s"common.${answer.toString}")),
-    controllers.routes.IssueNewInvoicesController.show().url,
-    messages("checkYourAnswers.hidden.newInvoices"),
-    "new-invoices"
-  ))
-
-  private val deregDateAnswer = deregDate.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.deregistrationDate"),
-    if(answer.yesNo.value)
-      {Html(answer.date.get.longDate())}
-    else
-      {Html(messages("checkYourAnswers.answer.no"))},
-    controllers.routes.DeregistrationDateController.show().url,
-    messages("checkYourAnswers.hidden.deregistrationDate"),
-    "dereg-date"
-  ))
+  private val zeroRatedAnswerSequence: Seq[Option[CheckYourAnswersRowModel]] = Seq(
+    deregReasonAnswer,
+    businessActivityChangedAnswer,
+    sicCodeAnswer,
+    nextTurnoverAnswer,
+    zeroRatedSuppliesAnswer,
+    purchasesExceedSuppliesAnswer
+  ) ++ commonAnswers
 }

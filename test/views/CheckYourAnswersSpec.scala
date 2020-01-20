@@ -37,8 +37,8 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
   "Rendering the Check your answers page" should {
 
     val checkYourAnswersModel = Seq(
-      CheckYourAnswersRowModel("test question 1", Html("test answer 1"), "test/url/1", "test hidden text 1", "ga 1"),
-      CheckYourAnswersRowModel("test question 2", Html("test answer 2"), "test/url/2", "test hidden text 2", "ga 2")
+      CheckYourAnswersRowModel("test question 1", Html("test answer 1"), "test/url/1", "test hidden text 1"),
+      CheckYourAnswersRowModel("test question 2", Html("test answer 2"), "test/url/2", "test hidden text 2")
     )
     lazy val view = views.html.checkYourAnswers("testUrl",checkYourAnswersModel)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
