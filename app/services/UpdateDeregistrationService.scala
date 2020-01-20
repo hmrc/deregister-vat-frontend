@@ -93,6 +93,10 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
           issueNewInvoicesValue,
           outstandingInvoices,
           deregDate,
+          // TODO
+          None,
+          None,
+          None,
           user.session.get(SessionKeys.verifiedAgentEmail)
         )
       } yield model).value

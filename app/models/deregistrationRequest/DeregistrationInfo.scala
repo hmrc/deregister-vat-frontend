@@ -27,6 +27,7 @@ case class DeregistrationInfo(deregReason: DeregistrationReason,
                               deregDate: LocalDate,
                               deregLaterDate: Option[LocalDate],
                               turnoverBelowThreshold: Option[TurnoverBelowThreshold],
+                              zeroRated: Option[ZeroRated],
                               optionToTax: Boolean,
                               intendSellCapitalAssets: Boolean,
                               additionalTaxInvoices: Boolean,
@@ -50,6 +51,9 @@ object DeregistrationInfo {
                   issueNewInvoices: YesNo,
                   outstandingInvoices: Option[YesNo],
                   deregDate: Option[DeregistrationDateModel],
+                  purchasesExceedSupplies: Option[YesNo],
+                  sicCode: Option[String],
+                  zeroRatedSuppliesValue: Option[NumberInputModel],
                   transactorOrCapacitorEmail: Option[String])(implicit appConfig: AppConfig): DeregistrationInfo = {
 
         DeregistrationInfo(
@@ -57,6 +61,7 @@ object DeregistrationInfo {
           deregInfoDate(ceasedTradingDate),
           deregLaterDate(deregDate),
           turnoverBelowThreshold(taxableTurnover, nextTaxableTurnover, whyTurnoverBelow),
+          zeroRated(purchasesExceedSupplies, sicCode, zeroRatedSuppliesValue, nextTaxableTurnover),
           optionTax.yesNo.value,
           capitalAssets.yesNo.value,
           taxInvoices(issueNewInvoices, outstandingInvoices),
@@ -88,6 +93,23 @@ object DeregistrationInfo {
     }
   }
 
+  private[deregistrationRequest] def zeroRated(purchasesExceedSupplies: Option[YesNo],
+                                               sicCode: Option[String],
+                                               zeroRatedSuppliesValue: Option[NumberInputModel],
+                                               nextTaxableTurnover: Option[NumberInputModel]): Option[ZeroRated] = {
+
+    (purchasesExceedSupplies, zeroRatedSuppliesValue, nextTaxableTurnover) match {
+      case (Some(purchasesExceedSuppliesAnswer), Some(zeroRatedSuppliesAnswer), Some(nextTaxableTurnoverAnswer)) =>
+        Some(ZeroRated(
+          sicCode,
+          purchasesExceedSuppliesAnswer.value,
+          zeroRatedSuppliesAnswer.value,
+          nextTaxableTurnoverAnswer.value
+        ))
+      case _ => None
+    }
+  }
+
   private[deregistrationRequest] val taxInvoices: (YesNo, Option[YesNo]) => Boolean =
     (issueNewInvoices, outstandingInvoices) => issueNewInvoices.value || outstandingInvoices.fold(false)(_.value)
 
@@ -98,6 +120,7 @@ object DeregistrationInfo {
       (__ \ "deregDate").write[LocalDate] and
       (__ \ "deregLaterDate").writeNullable[LocalDate] and
       (__ \ "turnoverBelowThreshold").writeNullable[TurnoverBelowThreshold] and
+      (__ \ "zeroRatedExmpApplication").writeNullable[ZeroRated] and
       (__ \ "optionToTax").write[Boolean] and
       (__ \ "intendSellCapitalAssets").write[Boolean] and
       (__ \ "additionalTaxInvoices").write[Boolean] and

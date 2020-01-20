@@ -36,6 +36,7 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
     deregDate = todayDate,
     deregLaterDate = None,
     turnoverBelowThreshold = None,
+    zeroRated = None,
     optionToTax = true,
     intendSellCapitalAssets = true,
     additionalTaxInvoices = true,

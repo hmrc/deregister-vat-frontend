@@ -21,7 +21,7 @@ import java.time.LocalDate
 import assets.constants.DateModelTestConstants._
 import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.DeregistrationInfoTestConstants._
-import assets.constants.TurnoverBelowThresholdTestConstants
+import assets.constants.{TurnoverBelowThresholdTestConstants, ZeroRatedTestConstants}
 import assets.constants.WhyTurnoverBelowTestConstants.whyTurnoverBelowOne
 import assets.constants.YesNoAmountTestConstants._
 import assets.constants.BaseTestConstants.agentEmail
@@ -43,6 +43,7 @@ class DeregistrationInfoSpec extends TestUtil {
           deregDate = todayDate,
           deregLaterDate = Some(laterDate),
           turnoverBelowThreshold = Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdPastModel),
+          zeroRated = Some(ZeroRatedTestConstants.zeroRatedMaxModel),
           optionToTax = true,
           intendSellCapitalAssets = true,
           additionalTaxInvoices = true,
@@ -65,6 +66,9 @@ class DeregistrationInfoSpec extends TestUtil {
           issueNewInvoices = Yes,
           outstandingInvoices = Some(Yes),
           deregDate = Some(deregistrationDateModel),
+          purchasesExceedSupplies = Some(Yes),
+          sicCode = Some("00005"),
+          zeroRatedSuppliesValue = Some(ZeroRatedTestConstants.zeroRatedSuppliesValue),
           transactorOrCapacitorEmail = Some(agentEmail)
         )
 
@@ -78,6 +82,7 @@ class DeregistrationInfoSpec extends TestUtil {
           deregDate = todayDate,
           deregLaterDate = None,
           turnoverBelowThreshold = None,
+          zeroRated = None,
           optionToTax = false,
           intendSellCapitalAssets = false,
           additionalTaxInvoices = true,
@@ -100,6 +105,9 @@ class DeregistrationInfoSpec extends TestUtil {
           issueNewInvoices = Yes,
           outstandingInvoices = None,
           deregDate = None,
+          purchasesExceedSupplies = None,
+          sicCode = None,
+          zeroRatedSuppliesValue = None,
           transactorOrCapacitorEmail = None
         )
 
@@ -207,6 +215,38 @@ class DeregistrationInfoSpec extends TestUtil {
 
       "return false when VatAccountsModel is NOT CashAccounting" in {
         isCashAccounting(StandardAccounting) shouldBe false
+      }
+    }
+
+    ".zeroRated" when {
+
+      "all mandatory fields to create model exist" should {
+
+        "return a valid model" in {
+          zeroRated(
+            purchasesExceedSupplies = Some(No),
+            sicCode = None,
+            zeroRatedSuppliesValue = Some(NumberInputModel(1)),
+            nextTaxableTurnover = Some(NumberInputModel(2))
+          ) shouldBe Some(ZeroRated(
+            None,
+            purchasesExceedSupplies = false,
+            zeroRatedSuppliesValue = 1,
+            taxableTurnover = 2
+          ))
+        }
+      }
+
+      "not all mandatory fields to create model exist" should {
+
+        "return None" in {
+          zeroRated(
+            purchasesExceedSupplies = None,
+            sicCode = None,
+            zeroRatedSuppliesValue = Some(NumberInputModel(1)),
+            nextTaxableTurnover = Some(NumberInputModel(2))
+          ) shouldBe None
+        }
       }
     }
 

@@ -16,36 +16,39 @@
 
 package assets.constants
 
+import models.NumberInputModel
 import models.deregistrationRequest.ZeroRated
 import play.api.libs.json.{JsObject, Json}
 
 object ZeroRatedTestConstants {
 
+  val zeroRatedSuppliesValue: NumberInputModel = NumberInputModel(BigDecimal(2000.99))
+
   val zeroRatedMinModel: ZeroRated = ZeroRated(
     None,
     purchasesExceedSupplies = false,
     2000.99,
-    1000.01
+    2000
   )
 
   val zeroRatedMinJson: JsObject = Json.obj(
     "repaymentSituation" -> false,
     "zeroRatedSuppliesValue" -> 2000.99,
-    "estTotalTaxTurnover" -> 1000.01
+    "estTotalTaxTurnover" -> 2000
   )
 
   val zeroRatedMaxModel: ZeroRated = ZeroRated(
     Some("00005"),
     purchasesExceedSupplies = true,
     2000.99,
-    1000.01
+    2000
   )
 
   val zeroRatedMaxJson: JsObject = Json.obj(
     "natureOfSupplies" -> "00005",
     "repaymentSituation" -> true,
     "zeroRatedSuppliesValue" -> 2000.99,
-    "estTotalTaxTurnover" -> 1000.01
+    "estTotalTaxTurnover" -> 2000
   )
 
 }
