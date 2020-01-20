@@ -24,60 +24,85 @@ import utils.TestUtil
 
 class CheckYourAnswersModelSpec extends TestUtil {
 
+  lazy val cyaModel = CheckYourAnswersModel(
+    Some(Ceased),
+    Some(dateModel),
+    Some(Yes),
+    Some(nextTaxableTurnoverBelow),
+    Some(whyTurnoverBelowAll),
+    Some(StandardAccounting),
+    Some(ottModel),
+    Some(assetsModel),
+    Some(stocksModel),
+    Some(Yes),
+    Some(Yes),
+    Some(deregistrationDateYes),
+    Some(Yes),
+    Some(sicCodeValue),
+    Some(zeroRatedSuppliesValue),
+    Some(Yes)
+  )
+
   "CheckYourAnswersModel.seqAnswers" when {
 
-    "given every possible answer" should {
+    "given every possible answer" when {
 
-      "return a sequence containing every answers" in {
-        CheckYourAnswersModel(
-          Some(Ceased),
-          Some(dateModel),
-          Some(Yes),
-          Some(nextTaxableTurnoverBelow),
-          Some(whyTurnoverBelowAll),
-          Some(StandardAccounting),
-          Some(ottModel),
-          Some(assetsModel),
-          Some(stocksModel),
-          Some(Yes),
-          Some(Yes),
-          Some(deregistrationDateYes)
-        ).seqAnswers shouldBe
-          Seq(
-            deregReasonRow,
-            ceasedTradingRow,
-            taxableTurnoverRow(mockConfig.thresholdString),
-            nextTaxableTurnoverRow,
-            whyBelowRowMax,
-            vatAccountsRow,
-            optionTaxRowYes,
-            optionTaxValueRow,
-            captialAssetsRowYes,
-            captialAssetsValueRow,
-            stocksRowYes,
-            stocksValueRow,
-            newInvoicesRow,
-            outstandingInvoicesRow,
-            deregDateRowYes
-          )
+      "the dereg reason is ZeroRated" should {
+
+        "return a sequence containing the answers relevant to the zero-rated journey" in {
+          cyaModel.copy(deregistrationReason = Some(ZeroRated)).seqAnswers shouldBe
+            Seq(
+              zeroRatedRow,
+              businessActivityRow,
+              sicCodeRow,
+              nextTaxableTurnoverRow,
+              zeroRatedSuppliesRow,
+              purchaseExceedSuppliesRow,
+              vatAccountsRow,
+              optionTaxRowYes,
+              optionTaxValueRow,
+              captialAssetsRowYes,
+              captialAssetsValueRow,
+              stocksRowYes,
+              stocksValueRow,
+              newInvoicesRow,
+              outstandingInvoicesRow,
+              deregDateRowYes
+            )
+        }
+      }
+
+      "the dereg reason is not ZeroRated" should {
+
+        "return a sequence containing every answer except those related to the zero-rated journey" in {
+          cyaModel.seqAnswers shouldBe
+            Seq(
+              deregReasonRow,
+              ceasedTradingRow,
+              taxableTurnoverRow(mockConfig.thresholdString),
+              nextTaxableTurnoverRow,
+              whyBelowRowMax,
+              vatAccountsRow,
+              optionTaxRowYes,
+              optionTaxValueRow,
+              captialAssetsRowYes,
+              captialAssetsValueRow,
+              stocksRowYes,
+              stocksValueRow,
+              newInvoicesRow,
+              outstandingInvoicesRow,
+              deregDateRowYes
+            )
+        }
       }
 
       "given one answer to every two part question" should {
 
         "return a sequence that doesn't include specific rows" in {
-          CheckYourAnswersModel(
-            Some(Ceased),
-            Some(dateModel),
-            Some(Yes),
-            Some(nextTaxableTurnoverBelow),
-            Some(whyTurnoverBelowAll),
-            Some(StandardAccounting),
-            Some(yesNoAmountNo),
-            Some(yesNoAmountNo),
-            Some(yesNoAmountNo),
-            Some(Yes),
-            Some(Yes),
-            Some(deregistrationDateYes)
+          cyaModel.copy(
+            optionTax = Some(yesNoAmountNo),
+            capitalAssets = Some(yesNoAmountNo),
+            stocks = Some(yesNoAmountNo)
           ).seqAnswers shouldBe
             Seq(
               deregReasonRow,
@@ -99,19 +124,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
       "given one answer for the whyTurnover question" should {
 
         "return a sequence with only one entry for the whyTurnover" in {
-          CheckYourAnswersModel(
-            Some(Ceased),
-            Some(dateModel),
-            Some(Yes),
-            Some(nextTaxableTurnoverBelow),
-            Some(whyTurnoverBelowMin),
-            Some(StandardAccounting),
-            Some(yesNoAmountNo),
-            Some(yesNoAmountNo),
-            Some(yesNoAmountNo),
-            Some(Yes),
-            Some(Yes),
-            Some(deregistrationDateYes)
+          cyaModel.copy(
+            whyTurnoverBelow = Some(whyTurnoverBelowMin)
           ).seqAnswers shouldBe
             Seq(
               deregReasonRow,
@@ -120,9 +134,12 @@ class CheckYourAnswersModelSpec extends TestUtil {
               nextTaxableTurnoverRow,
               whyBelowRowMin,
               vatAccountsRow,
-              optionTaxRowNo,
-              captialAssetsRowNo,
-              stocksRowNo,
+              optionTaxRowYes,
+              optionTaxValueRow,
+              captialAssetsRowYes,
+              captialAssetsValueRow,
+              stocksRowYes,
+              stocksValueRow,
               newInvoicesRow,
               outstandingInvoicesRow,
               deregDateRowYes
@@ -133,30 +150,22 @@ class CheckYourAnswersModelSpec extends TestUtil {
       "given an answer of 'no' for deregistrationDate" should{
 
         "return a sequence containing the deregistrationDate row with a value of 'No'" in {
-          CheckYourAnswersModel(
-            Some(Ceased),
-            Some(dateModel),
-            Some(Yes),
-            Some(nextTaxableTurnoverBelow),
-            Some(whyTurnoverBelowMin),
-            Some(StandardAccounting),
-            Some(yesNoAmountNo),
-            Some(yesNoAmountNo),
-            Some(yesNoAmountNo),
-            Some(Yes),
-            Some(Yes),
-            Some(deregistrationDateNo)
+          cyaModel.copy(
+            deregDate = Some(deregistrationDateNo)
           ).seqAnswers shouldBe
             Seq(
               deregReasonRow,
               ceasedTradingRow,
               taxableTurnoverRow(mockConfig.thresholdString),
               nextTaxableTurnoverRow,
-              whyBelowRowMin,
+              whyBelowRowMax,
               vatAccountsRow,
-              optionTaxRowNo,
-              captialAssetsRowNo,
-              stocksRowNo,
+              optionTaxRowYes,
+              optionTaxValueRow,
+              captialAssetsRowYes,
+              captialAssetsValueRow,
+              stocksRowYes,
+              stocksValueRow,
               newInvoicesRow,
               outstandingInvoicesRow,
               deregDateRowNo
@@ -167,8 +176,9 @@ class CheckYourAnswersModelSpec extends TestUtil {
       "given no answers" should {
 
         "return an empty sequence" in {
-          CheckYourAnswersModel(None,None,None,None,None,None,None,None,None,None,None,None).seqAnswers shouldBe
-            Seq.empty[CheckYourAnswersRowModel]
+          CheckYourAnswersModel(
+            None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None
+          ).seqAnswers shouldBe Seq.empty[CheckYourAnswersRowModel]
         }
       }
     }
