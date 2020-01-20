@@ -38,6 +38,7 @@ object DeregistrationReason {
       case Ceased.value => Ceased
       case BelowThreshold.value => BelowThreshold
       case ZeroRated.value => ZeroRated
+      case ExemptOnly.value => ExemptOnly
       case Other.value => Other
   }
 }
@@ -52,6 +53,10 @@ object BelowThreshold extends DeregistrationReason {
 
 object ZeroRated extends DeregistrationReason {
   override val value = "zeroRated"
+}
+
+object ExemptOnly extends DeregistrationReason {
+  override val value = "exemptOnly"
 }
 
 object Other extends DeregistrationReason {

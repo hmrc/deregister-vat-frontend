@@ -66,6 +66,21 @@ class DeregistrationReasonSpec extends TestUtil {
     }
   }
 
+  "DeregistrationReason.ExemptOnly" should {
+
+    "serialize to the correct JSON" in {
+      Json.toJson(ExemptOnly) shouldBe Json.obj(DeregistrationReason.id -> ExemptOnly.value)
+    }
+
+    "serialize to the correct JSON when using submissionWrites" in {
+      Json.toJson(ExemptOnly)(DeregistrationReason.submissionWrites) shouldBe JsString(ExemptOnly.value)
+    }
+
+    "deserialize from the correct JSON" in {
+      Json.obj(DeregistrationReason.id -> ExemptOnly.value).as[DeregistrationReason] shouldBe ExemptOnly
+    }
+  }
+
   "DeregistrationReason.Other" should {
 
     "serialize to the correct JSON" in {

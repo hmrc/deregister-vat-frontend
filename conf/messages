@@ -50,6 +50,7 @@ deregistrationReason.title = Why is the business cancelling its VAT registration
 deregistrationReason.reason.ceased = The business has stopped trading
 deregistrationReason.reason.belowThreshold = Annual turnover is below £{0}
 deregistrationReason.reason.zeroRated = The business supplies goods that are zero-rated for VAT
+deregistrationReason.reason.exemptOnly = Making exempt only supplies
 deregistrationReason.reason.other = Other
 
 deregistrationDate.title = Do you want to choose the cancellation date?
@@ -162,6 +163,7 @@ checkYourAnswers.answer.cash = Cash accounting
 checkYourAnswers.answer.reason.ceased = Business stopped trading
 checkYourAnswers.answer.reason.belowThreshold = Annual turnover is below £{0}
 checkYourAnswers.answer.reason.zeroRated = Zero rated
+checkYourAnswers.answer.reason.exemptOnly = Making exempt only supplies
 checkYourAnswers.answer.reason.other = Other
 checkYourAnswers.answer.no = No
 checkYourAnswers.confirm = Confirm and cancel VAT registration

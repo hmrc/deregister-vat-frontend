@@ -65,6 +65,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
         elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
         elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
         elementText(Selectors.reasonOption(4)) shouldBe DeregistrationReasonMessages.reason4
+        elementText(Selectors.reasonOption(5)) shouldBe DeregistrationReasonMessages.reason5
       }
 
       s"have the correct continue button text and url" in {
@@ -87,7 +88,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
       s"have the correct a radio button form with the correct 3 options" in {
         elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
         elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
-        elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason4
+        elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason5
       }
     }
   }
@@ -119,6 +120,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
       elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
       elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
       elementText(Selectors.reasonOption(4)) shouldBe DeregistrationReasonMessages.reason4
+      elementText(Selectors.reasonOption(5)) shouldBe DeregistrationReasonMessages.reason5
     }
 
     s"have the correct continue button text and url" in {
