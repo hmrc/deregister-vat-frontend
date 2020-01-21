@@ -17,7 +17,7 @@
 package controllers.zeroRated
 
 import controllers.ControllerBaseSpec
-import models.{DeregisterVatSuccess, No, NumberInputModel, Yes}
+import models.{DeregisterVatSuccess, No, Yes}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
@@ -52,7 +52,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
             mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-            setupMockGetSicCode(Right(Some(NumberInputModel(1))))
+            setupMockGetSicCode(Right(Some("12345")))
             status(result) shouldBe Status.OK
           }
 
@@ -62,7 +62,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           }
 
           "has the value pre-populated" in {
-            document(result).select(s"#value").attr("value") shouldBe "1"
+            document(result).select(s"#value").attr("value") shouldBe "12345"
           }
         }
 
@@ -147,7 +147,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           "return a 303" in {
             mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockStoreSicCode(NumberInputModel(12345))(Right(DeregisterVatSuccess))
+            setupMockStoreSicCode("12345")(Right(DeregisterVatSuccess))
             status(result) shouldBe Status.SEE_OTHER
           }
 

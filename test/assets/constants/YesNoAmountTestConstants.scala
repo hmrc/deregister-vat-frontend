@@ -16,13 +16,15 @@
 
 package assets.constants
 
-import models.{No, Yes, YesNoAmountModel}
+import models.{No, NumberInputModel, Yes, YesNoAmountModel}
 
 object YesNoAmountTestConstants {
 
   val stockValue = 1000.0
   val ottValue = 2000.0
   val assetsValue = 3000.50
+  val sicCodeValue = "12345"
+  val zeroRatedSuppliesValue = NumberInputModel(4000.00)
 
   val stocksModel: YesNoAmountModel = YesNoAmountModel(Yes,Some(BigDecimal(stockValue)))
   val ottModel: YesNoAmountModel = YesNoAmountModel(Yes,Some(BigDecimal(ottValue)))

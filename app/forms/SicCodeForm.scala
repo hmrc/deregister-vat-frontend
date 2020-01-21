@@ -16,26 +16,22 @@
 
 package forms
 
-import common.Constants._
-import forms.utils.FormValidation
-import models.NumberInputModel
 import play.api.data.Form
 import play.api.data.Forms._
+import uk.gov.hmrc.play.mappers.StopOnFirstFail
+import uk.gov.hmrc.play.mappers.StopOnFirstFail.constraint
 
-object SicCodeForm extends FormValidation {
+object SicCodeForm {
 
-  val sicCodeLength = 5
+  val sicCodeRegex = "[0-9]+"
 
-  val sicCodeForm: Form[NumberInputModel] = Form(
-    mapping(
-      "value" -> optional(text)
-        .verifying("sicCode.error.mandatory", _.isDefined)
-        .transform[String](x => x.get, x => Some(x))
-        .verifying(isInt("common.error.mandatoryAmount"), //TODO - add tailored error message
-          characters(sicCodeLength, "sicCode.error.tooFew", "sicCode.error.tooMany"))
-        .transform[BigDecimal](x => BigDecimal(x), x => x.toString)
-        .verifying(isPositive("common.error.negative")) //TODO - add tailored error message
-    )(NumberInputModel.apply)(NumberInputModel.unapply)
+  val sicCodeForm: Form[String] = Form(
+    "value" -> text.verifying(
+      StopOnFirstFail(
+        constraint[String]("sicCode.error.invalid", _.matches(sicCodeRegex)),
+        constraint[String]("sicCode.error.tooFew", _.length > 4),
+        constraint[String]("sicCode.error.tooMany", _.length < 6)
+      )
+    )
   )
-
 }
