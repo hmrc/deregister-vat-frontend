@@ -26,6 +26,7 @@ import assets.constants.WhyTurnoverBelowTestConstants.whyTurnoverBelowOne
 import assets.constants.YesNoAmountTestConstants._
 import assets.constants.BaseTestConstants.agentEmail
 import models._
+import models.{ZeroRated => ZeroRatedDeregReason}
 import models.deregistrationRequest.DeregistrationInfo._
 import play.api.libs.json.Json
 import utils.TestUtil
@@ -43,7 +44,7 @@ class DeregistrationInfoSpec extends TestUtil {
           deregDate = todayDate,
           deregLaterDate = Some(laterDate),
           turnoverBelowThreshold = Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdPastModel),
-          zeroRated = Some(ZeroRatedTestConstants.zeroRatedMaxModel),
+          zeroRated = None,
           optionToTax = true,
           intendSellCapitalAssets = true,
           additionalTaxInvoices = true,
@@ -167,6 +168,7 @@ class DeregistrationInfoSpec extends TestUtil {
 
       "return a TaxableTurnoverModel containing BelowPast12Months when turnover is below threshold" in {
         turnoverBelowThreshold(
+          deregistrationReason = BelowThreshold,
           taxableTurnover = Some(No),
           nextTaxableTurnover = Some(nextTaxableTurnoverBelow),
           whyTurnoverBelow = None) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdPastModel)
@@ -174,6 +176,7 @@ class DeregistrationInfoSpec extends TestUtil {
 
       "return BelowNext12Months when turnover is above threshold" in {
         turnoverBelowThreshold(
+          deregistrationReason = BelowThreshold,
           taxableTurnover = Some(Yes),
           nextTaxableTurnover = Some(nextTaxableTurnoverBelow),
           whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe Some(TurnoverBelowThresholdTestConstants.turnoverBelowThresholdNextModel)
@@ -181,6 +184,7 @@ class DeregistrationInfoSpec extends TestUtil {
 
       "return None when no turnover is supplied" in {
         turnoverBelowThreshold(
+          deregistrationReason = BelowThreshold,
           taxableTurnover = None,
           nextTaxableTurnover = Some(nextTaxableTurnoverBelow),
           whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe None
@@ -188,6 +192,15 @@ class DeregistrationInfoSpec extends TestUtil {
 
       "return None when not given a TaxableTurnoverModel" in {
         turnoverBelowThreshold(
+          deregistrationReason = BelowThreshold,
+          taxableTurnover = Some(Yes),
+          nextTaxableTurnover = None,
+          whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe None
+      }
+
+      "return None when dereg reason is not BelowThreshold" in {
+        turnoverBelowThreshold(
+          deregistrationReason = ZeroRatedDeregReason,
           taxableTurnover = Some(Yes),
           nextTaxableTurnover = None,
           whyTurnoverBelow = Some(whyTurnoverBelowOne)) shouldBe None
@@ -224,6 +237,7 @@ class DeregistrationInfoSpec extends TestUtil {
 
         "return a valid model" in {
           zeroRated(
+            deregistrationReason = ZeroRatedDeregReason,
             purchasesExceedSupplies = Some(No),
             sicCode = None,
             zeroRatedSuppliesValue = Some(NumberInputModel(1)),
@@ -236,6 +250,20 @@ class DeregistrationInfoSpec extends TestUtil {
 
         "return None" in {
           zeroRated(
+            deregistrationReason = ZeroRatedDeregReason,
+            purchasesExceedSupplies = None,
+            sicCode = None,
+            zeroRatedSuppliesValue = Some(NumberInputModel(1)),
+            nextTaxableTurnover = Some(NumberInputModel(2))
+          ) shouldBe None
+        }
+      }
+
+      "deregistration reason is not ZeroRated" should {
+
+        "return None" in {
+          zeroRated(
+            deregistrationReason = BelowThreshold,
             purchasesExceedSupplies = None,
             sicCode = None,
             zeroRatedSuppliesValue = Some(NumberInputModel(1)),

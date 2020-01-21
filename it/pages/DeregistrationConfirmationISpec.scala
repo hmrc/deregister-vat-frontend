@@ -23,7 +23,7 @@ import assets.IntegrationTestConstants.vrn
 import config.FrontendAppConfig
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import stubs.{ContactPreferencesStub, DeregisterVatStub, PendingDeregStub}
+import stubs.{ContactPreferencesStub, DeregisterVatStub, VatSubscriptionStub}
 import play.api.test.Helpers.OK
 
 class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
@@ -50,7 +50,7 @@ class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
         given.user.isAuthorised
 
         DeregisterVatStub.successfulDeleteAllAnswers(vrn)
-        PendingDeregStub.customerDetails()
+        VatSubscriptionStub.customerDetails()
         ContactPreferencesStub.getContactPrefs(OK, Json.obj("preference" -> "DiGiTaL"))
 
         val res: WSResponse = deregConfirmationRequest()

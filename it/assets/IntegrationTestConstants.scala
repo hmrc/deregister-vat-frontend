@@ -51,4 +51,23 @@ object IntegrationTestConstants {
 
   val zeroRatedSuppliesValue: BigDecimal= 12345.67
   val zeroRatedSuppliesModel: NumberInputModel = NumberInputModel(zeroRatedSuppliesValue)
+
+  val zeroRatedFullPayloadJson: JsObject = Json.obj(
+      "deregReason" -> "zeroRated",
+      "deregDate" -> "2018-01-01",
+      "deregLaterDate" -> "2018-01-01",
+      "zeroRatedExmpApplication" -> Json.obj(
+        "repaymentSituation" -> true,
+        "natureOfSupplies" -> "00005",
+        "zeroRatedSuppliesValue" -> 1000,
+        "estTotalTaxTurnover" -> 200
+      ),
+      "optionToTax" -> true,
+      "intendSellCapitalAssets" -> true,
+      "additionalTaxInvoices" -> true,
+      "cashAccountingScheme" -> true,
+      "optionToTaxValue" -> 1000,
+      "capitalAssetsValue" -> 1000,
+      "stocksValue" -> 1000
+  )
 }
