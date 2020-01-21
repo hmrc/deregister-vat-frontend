@@ -24,7 +24,7 @@ object SicCodeMessages extends BaseMessages {
   val explanation = "This is the 5 digit code which describes the business activity."
   val findCode = "Find the code that best describes the business activity (opens in a new window or tab)"
 
-  val invalid = "Enter the 5 digit code which best describes your business activity"
+  val mandatory = "Enter the 5 digit code which best describes your business activity"
   val tooFew = "You have entered too few numbers"
   val tooMany = "You have entered too many numbers"
 }

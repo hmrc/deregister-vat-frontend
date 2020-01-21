@@ -17,7 +17,7 @@
 package assets
 
 import models._
-import play.api.libs.json.{JsObject, JsValue, Json}
+import play.api.libs.json.Json
 
 object IntegrationTestConstants {
 
@@ -25,7 +25,7 @@ object IntegrationTestConstants {
 
   val whyTurnoverBelowModel = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
 
-  val whyTurnoverBelowJson: JsObject = Json.obj(
+  val whyTurnoverBelowJson = Json.obj(
     "lostContract" -> true,
     "semiRetiring" -> true,
     "moreCompetitors" -> true,
@@ -35,19 +35,20 @@ object IntegrationTestConstants {
     "turnoverLowerThanExpected" -> true
   )
 
-  val capitalAssetsYesModel: YesNoAmountModel = YesNoAmountModel(Yes, Some(12))
-  val capitalAssetsYesJson: JsValue = Json.toJson(capitalAssetsYesModel)
+  val capitalAssetsYesModel = YesNoAmountModel(Yes, Some(12))
+  val capitalAssetsYesJson = Json.toJson(capitalAssetsYesModel)
 
-  val capitalAssetsNoModel: YesNoAmountModel = YesNoAmountModel(No, None)
-  val capitalAssetsNoJson: JsValue = Json.toJson(capitalAssetsNoModel)
+  val capitalAssetsNoModel = YesNoAmountModel(No, None)
+  val capitalAssetsNoJson = Json.toJson(capitalAssetsNoModel)
 
-  val yesNoAmountYesModel: YesNoAmountModel = models.YesNoAmountModel(Yes, Some(1))
-  val yesNoAmountYesJson: JsValue = Json.toJson(yesNoAmountYesModel)
+  val yesNoAmountYesModel = models.YesNoAmountModel(Yes, Some(1))
+  val yesNoAmountYesJson = Json.toJson(yesNoAmountYesModel)
 
-  val yesNoAmountNoModel: YesNoAmountModel = models.YesNoAmountModel(No, None)
-  val yesNoAmountNoJson: JsValue = Json.toJson(yesNoAmountYesModel)
+  val yesNoAmountNoModel = models.YesNoAmountModel(No, None)
+  val yesNoAmountNoJson = Json.toJson(yesNoAmountYesModel)
 
-  val sicCodeValue: String = "12345"
+  val sicCodeValue: BigDecimal = 12345
+  val sicCodeModel: NumberInputModel = NumberInputModel(sicCodeValue)
 
   val zeroRatedSuppliesValue: BigDecimal= 12345.67
   val zeroRatedSuppliesModel: NumberInputModel = NumberInputModel(zeroRatedSuppliesValue)

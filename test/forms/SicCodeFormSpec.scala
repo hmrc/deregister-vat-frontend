@@ -23,7 +23,7 @@ import models.NumberInputModel
 
 class SicCodeFormSpec extends TestUtil {
 
-  val validValue: String = "54321"
+  val validValue: BigDecimal = 54321
 
   "Binding a form with valid data" should {
 
@@ -35,7 +35,7 @@ class SicCodeFormSpec extends TestUtil {
     }
 
     "generate the correct model" in {
-      form.value shouldBe Some(validValue)
+      form.value shouldBe Some(NumberInputModel(validValue))
     }
   }
 
@@ -43,14 +43,15 @@ class SicCodeFormSpec extends TestUtil {
 
     "no amount has been input" should {
 
-      val form = SicCodeForm.sicCodeForm.bind(Map("value" -> ""))
+      val missingInput: Map[String, String] = Map.empty
+      val form = SicCodeForm.sicCodeForm.bind(missingInput)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
       }
 
-      "throw the invalid data error" in {
-        Messages(form.errors.head.message) shouldBe SicCodeMessages.invalid
+      "throw the mandatory data error" in {
+        Messages(form.errors.head.message) shouldBe SicCodeMessages.mandatory
       }
     }
 
@@ -62,35 +63,47 @@ class SicCodeFormSpec extends TestUtil {
         form.hasErrors shouldBe true
       }
 
-      "throw the invalid data error" in {
-        Messages(form.errors.head.message) shouldBe SicCodeMessages.invalid
+      "throw the non-integer error" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorMandatoryAmount
       }
     }
 
-    "length is less than 5" should {
+    "SicCode length is not equal to 5" should {
 
+      val formMany = SicCodeForm.sicCodeForm.bind(Map("value" -> "123456"))
       val formFew = SicCodeForm.sicCodeForm.bind(Map("value" -> "1234"))
 
       "result in a form with errors" in {
+        formMany.hasErrors shouldBe true
         formFew.hasErrors shouldBe true
       }
 
-      "throw the too few characters error" in {
+      "throw the wrong character length errors" in {
+        Messages(formMany.errors.head.message) shouldBe SicCodeMessages.tooMany
         Messages(formFew.errors.head.message) shouldBe SicCodeMessages.tooFew
       }
     }
 
-    "length is greater than 5" should {
+    "negative input is supplied" should {
 
-      val formMany = SicCodeForm.sicCodeForm.bind(Map("value" -> "123456"))
+      val form = SicCodeForm.sicCodeForm.bind(Map("value" -> "-1234"))
 
       "result in a form with errors" in {
-        formMany.hasErrors shouldBe true
+        form.hasErrors shouldBe true
       }
 
-      "throw the too many characters error" in {
-        Messages(formMany.errors.head.message) shouldBe SicCodeMessages.tooMany
+      "throw the negative error" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorNegative
       }
     }
   }
+
+  "A form built from a valid model" should {
+
+    "generate the correct mapping" in {
+      val form = SicCodeForm.sicCodeForm.fill(NumberInputModel(validValue))
+      form.data shouldBe Map("value" -> "54321")
+    }
+  }
+
 }

@@ -16,11 +16,13 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
+@import views.html.templates.inputs.dateEntryField
 @import templates.headings
-@import templates.inputs.text
+@import forms.SicCodeForm
+@import views.html.templates.inputs.moneyInput
 @import views.utils.TitleUtil._
 
-@(form: Form[String])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[NumberInputModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @views.html.main_template(
     title = title(messages("sicCode.title"), form),
@@ -40,14 +42,17 @@
     @helpers.form(action = controllers.zeroRated.routes.SicCodeController.submit, 'novalidate -> "novalidate") {
 
         <div class="form-group">
-            @text(
+            @moneyInput(
                 field = form("value"),
-                label = messages("sicCode.title")
+                label = messages("sicCode.title"),
+                labelHidden = true,
+                decimalPlace = false,
+                isMonetary = false
             )
         </div>
 
         <button class="button" type="submit" id="continue">
-          @messages("common.continue")
+        @messages("common.continue")
         </button>
     }
 }

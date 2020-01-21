@@ -24,12 +24,12 @@ import models._
 import services.mocks._
 import utils.TestUtil
 
+
 class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
-  with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService
-  with MockOptionTaxAnswerService with MockAccountingMethodAnswerService with MockBusinessActivityAnswerService
-  with MockSicCodeAnswerService with MockZeroRatedSuppliesValueService with MockPurchasesExceedSuppliesAnswerService {
+  with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService with MockOptionTaxAnswerService
+  with MockAccountingMethodAnswerService {
 
   object TestCheckAnswersService extends CheckAnswersService(
     mockAccountingMethodAnswerService,
@@ -44,10 +44,6 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
     mockTaxableTurnoverAnswerService,
     mockWhyTurnoverBelowAnswerService,
     mockOutstandingInvoicesService,
-    mockBusinessActivityAnswerService,
-    mockSicCodeAnswerService,
-    mockZeroRatedSuppliesValueService,
-    mockPurchasesExceedSuppliesAnswerService,
     mockConfig
   )
 
@@ -71,10 +67,6 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
         setupMockGetDeregDate(Right(Some(deregistrationDateYes)))
-        setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-        setupMockGetSicCode(Right(Some(sicCodeValue)))
-        setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
-        setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
 
         await(TestCheckAnswersService.checkYourAnswersModel()) shouldBe Right(
           CheckYourAnswersModel(
@@ -89,11 +81,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
             Some(stocksModel),
             Some(Yes),
             Some(Yes),
-            Some(deregistrationDateYes),
-            Some(Yes),
-            Some(sicCodeValue),
-            Some(zeroRatedSuppliesValue),
-            Some(Yes)
+            Some(deregistrationDateYes)
           )
         )
       }
@@ -124,11 +112,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
-        setupMockGetDeregDate(Right(Some(deregistrationDateYes)))
-        setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-        setupMockGetSicCode(Right(Some(sicCodeValue)))
-        setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
-        setupMockGetPurchasesExceedSuppliesAnswer(Left(errorModel))
+        setupMockGetDeregDate(Left(errorModel))
 
         await(TestCheckAnswersService.checkYourAnswersModel()) shouldBe Left(errorModel)
       }
