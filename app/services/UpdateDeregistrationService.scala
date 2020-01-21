@@ -44,6 +44,9 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
                                             val issueNewInvoicesAnswerService: IssueNewInvoicesAnswerService,
                                             val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                             val deregDateAnswerService: DeregDateAnswerService,
+                                            val purchasesExceedSuppliesAnswerService: PurchasesExceedSuppliesAnswerService,
+                                            val sicCodeAnswerService: SicCodeAnswerService,
+                                            val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
                                             val auditConnector: AuditConnector,
                                             val vatSubscriptionConnector: VatSubscriptionConnector)(implicit val appConfig: AppConfig) {
 
@@ -80,6 +83,9 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
         capitalAssetsValue <- EitherT(mandatoryCheck(capitalAssets, "capitalAssets"))
         stocksValue <- EitherT(mandatoryCheck(stocks, "stocks"))
         issueNewInvoicesValue <- EitherT(mandatoryCheck(issueNewInvoices, "issueNewInvoices"))
+        purchasesExceedSupplies <- EitherT(purchasesExceedSuppliesAnswerService.getAnswer)
+        sicCode <- EitherT(sicCodeAnswerService.getAnswer)
+        zeroRatedSuppliesValue <- EitherT(zeroRatedSuppliesValueService.getAnswer)
         model = DeregistrationInfo.customApply(
           deregReasonValue,
           ceasedTradingDate,
@@ -93,10 +99,11 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
           issueNewInvoicesValue,
           outstandingInvoices,
           deregDate,
-          // TODO
-          None,
-          None,
-          None,
+          purchasesExceedSupplies,
+          // TODO: update to use proper sic code
+          //sicCode,
+          Some("00005"),
+          zeroRatedSuppliesValue,
           user.session.get(SessionKeys.verifiedAgentEmail)
         )
       } yield model).value

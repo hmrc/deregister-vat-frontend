@@ -22,33 +22,26 @@ import play.api.libs.json.{JsObject, Json}
 
 object ZeroRatedTestConstants {
 
-  val zeroRatedSuppliesValue: NumberInputModel = NumberInputModel(BigDecimal(2000.99))
+  private val zeroRatedSupplies: Double = 2000.99
+  private val totalTaxTurnover: Int = 2000
 
-  val zeroRatedMinModel: ZeroRated = ZeroRated(
-    None,
-    purchasesExceedSupplies = false,
-    2000.99,
-    2000
-  )
+  val zeroRatedSuppliesValue: NumberInputModel = NumberInputModel(BigDecimal(zeroRatedSupplies))
+
+  val zeroRatedMinModel: ZeroRated = ZeroRated(purchasesExceedSupplies = false, None, zeroRatedSupplies, totalTaxTurnover)
 
   val zeroRatedMinJson: JsObject = Json.obj(
     "repaymentSituation" -> false,
-    "zeroRatedSuppliesValue" -> 2000.99,
-    "estTotalTaxTurnover" -> 2000
+    "zeroRatedSuppliesValue" -> zeroRatedSupplies,
+    "estTotalTaxTurnover" -> totalTaxTurnover
   )
 
-  val zeroRatedMaxModel: ZeroRated = ZeroRated(
-    Some("00005"),
-    purchasesExceedSupplies = true,
-    2000.99,
-    2000
-  )
+  val zeroRatedMaxModel: ZeroRated = ZeroRated(purchasesExceedSupplies = true, Some("00005"), zeroRatedSupplies, totalTaxTurnover)
 
   val zeroRatedMaxJson: JsObject = Json.obj(
-    "natureOfSupplies" -> "00005",
     "repaymentSituation" -> true,
-    "zeroRatedSuppliesValue" -> 2000.99,
-    "estTotalTaxTurnover" -> 2000
+    "natureOfSupplies" -> "00005",
+    "zeroRatedSuppliesValue" -> zeroRatedSupplies,
+    "estTotalTaxTurnover" -> totalTaxTurnover
   )
 
 }

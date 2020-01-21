@@ -20,16 +20,16 @@ import play.api.libs.json.Writes
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class ZeroRated(sicCode: Option[String],
-                     purchasesExceedSupplies: Boolean,
+case class ZeroRated(purchasesExceedSupplies: Boolean,
+                     sicCode: Option[String],
                      zeroRatedSuppliesValue: BigDecimal,
                      taxableTurnover: BigDecimal)
 
 object ZeroRated {
 
   implicit val writes: Writes[ZeroRated] = (
-    (__ \ "natureOfSupplies").writeNullable[String] and
     (__ \ "repaymentSituation").write[Boolean] and
+    (__ \ "natureOfSupplies").writeNullable[String] and
     (__ \ "zeroRatedSuppliesValue").write[BigDecimal] and
     (__ \ "estTotalTaxTurnover").write[BigDecimal]
   )(unlift(ZeroRated.unapply))

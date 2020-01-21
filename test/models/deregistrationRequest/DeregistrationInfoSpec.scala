@@ -228,12 +228,7 @@ class DeregistrationInfoSpec extends TestUtil {
             sicCode = None,
             zeroRatedSuppliesValue = Some(NumberInputModel(1)),
             nextTaxableTurnover = Some(NumberInputModel(2))
-          ) shouldBe Some(ZeroRated(
-            None,
-            purchasesExceedSupplies = false,
-            zeroRatedSuppliesValue = 1,
-            taxableTurnover = 2
-          ))
+          ) shouldBe Some(ZeroRated(purchasesExceedSupplies = false, None, zeroRatedSuppliesValue = 1, taxableTurnover = 2))
         }
       }
 

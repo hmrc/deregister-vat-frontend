@@ -22,6 +22,7 @@ import assets.constants.DeregistrationInfoTestConstants._
 import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
+import assets.constants.ZeroRatedTestConstants._
 import audit.mocks.MockAuditConnector
 import audit.models.DeregAuditModel
 import connectors.mocks.MockVatSubscriptionConnector
@@ -34,12 +35,16 @@ import utils.TestUtil
 
 import scala.concurrent.Future
 
-
-class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionConnector with MockDeregReasonAnswerService
-  with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
-  with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
-  with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService with MockOptionTaxAnswerService
-  with MockAccountingMethodAnswerService with MockAuditConnector {
+class UpdateDeregistrationServiceSpec     extends TestUtil
+  with MockVatSubscriptionConnector       with MockDeregReasonAnswerService
+  with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService
+  with MockTaxableTurnoverAnswerService   with MockIssueNewInvoicesAnswerService
+  with MockOutstandingInvoicesService     with MockWhyTurnoverBelowAnswerService
+  with MockDeregDateAnswerService         with MockNextTaxableTurnoverAnswerService
+  with MockStocksAnswerService            with MockOptionTaxAnswerService
+  with MockAccountingMethodAnswerService  with MockPurchasesExceedSuppliesAnswerService
+  with MockSicCodeAnswerService           with MockZeroRatedSuppliesValueService
+  with MockAuditConnector {
 
   object TestUpdateDeregistrationService extends UpdateDeregistrationService(
     mockDeregReasonAnswerService,
@@ -54,6 +59,9 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
     mockIssueNewInvoicesAnswerService,
     mockOutstandingInvoicesService,
     mockDeregDateAnswerService,
+    mockPurchasesExceedSuppliesAnswerService,
+    mockSicCodeAnswerService,
+    mockZeroRatedSuppliesValueService,
     mockAuditConnector,
     mockVatSubscriptionConnector
   )
@@ -80,6 +88,10 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
           setupMockGetIssueNewInvoices(Right(Some(Yes)))
           setupMockGetOutstandingInvoices(Right(Some(Yes)))
           setupMockGetDeregDate(Right(Some(deregistrationDateModel)))
+          setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
+          // TODO: update to use string
+          setupMockGetSicCode(Right(Some(NumberInputModel(BigDecimal(1000)))))
+          setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
           setupMockSubmit(vrn, deregistrationInfoMaxModel)(Right(VatSubscriptionSuccess))
           setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))(Future.successful(Success))
@@ -104,6 +116,10 @@ class UpdateDeregistrationServiceSpec extends TestUtil with MockVatSubscriptionC
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
         setupMockGetDeregDate(Right(Some(deregistrationDateModel)))
+        setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
+        // TODO: update to use string
+        setupMockGetSicCode(Right(Some(NumberInputModel(BigDecimal(1000)))))
+        setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
         setupMockSubmit(vrn, deregistrationInfoMaxModel)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
         setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))(Future.successful(Success))

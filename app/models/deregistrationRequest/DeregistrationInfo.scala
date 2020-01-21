@@ -100,12 +100,7 @@ object DeregistrationInfo {
 
     (purchasesExceedSupplies, zeroRatedSuppliesValue, nextTaxableTurnover) match {
       case (Some(purchasesExceedSuppliesAnswer), Some(zeroRatedSuppliesAnswer), Some(nextTaxableTurnoverAnswer)) =>
-        Some(ZeroRated(
-          sicCode,
-          purchasesExceedSuppliesAnswer.value,
-          zeroRatedSuppliesAnswer.value,
-          nextTaxableTurnoverAnswer.value
-        ))
+        Some(ZeroRated(purchasesExceedSuppliesAnswer.value, sicCode, zeroRatedSuppliesAnswer.value, nextTaxableTurnoverAnswer.value))
       case _ => None
     }
   }
