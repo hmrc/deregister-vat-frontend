@@ -19,7 +19,7 @@ package stubs
 import com.github.tomakehurst.wiremock.client.WireMock.{equalToJson, urlEqualTo, verify, putRequestedFor}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
-import play.api.http.Status.OK
+import play.api.http.Status._
 import play.api.libs.json.{JsValue, Json}
 
 object VatSubscriptionStub extends WireMockMethods {
@@ -60,11 +60,16 @@ object VatSubscriptionStub extends WireMockMethods {
       ))
   }
 
-  def deregisterForVat(): StubMapping = {
+  def deregisterForVatSuccess(): StubMapping = {
     when(method = PUT, uri = "/vat-subscription/([0-9]+)/deregister")
       .thenReturn(status = OK, body = Json.obj(
         "formBundleIdentifier" -> "12345"
       ))
+  }
+
+  def deregisterForVatFailure(): StubMapping = {
+    when(method = PUT, uri = "/vat-subscription/([0-9]+)/deregister")
+      .thenReturn(status = SERVICE_UNAVAILABLE, body = Json.obj())
   }
 
   def verifyDeregistration(body: JsValue): Unit =

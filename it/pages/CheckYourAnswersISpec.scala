@@ -193,9 +193,9 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
   "Calling POST Check your answers" when {
 
-    "user is authorised" when {
+    def postRequest: WSResponse = post("/check-your-answers")(Map.empty)
 
-      def postRequest: WSResponse = post("/check-your-answers")(Map.empty)
+    "user is authorised" when {
 
       "deregistration is successful" when {
 
@@ -217,7 +217,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
             DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(deregistrationDate))
 
-            VatSubscriptionStub.deregisterForVat()
+            VatSubscriptionStub.deregisterForVatSuccess()
 
             given.user.isAuthorised
 
@@ -231,10 +231,108 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
             )
           }
         }
+
+        "all possible Below Threshold deregistration reason answers are completed" should {
+
+          "redirect user to confirmation page" in {
+
+            DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
+            DeregisterVatStub.successfulGetAnswer(vrn, TaxableTurnoverAnswerService.key)(Json.toJson(Yes))
+            DeregisterVatStub.successfulGetAnswer(vrn, NextTaxableTurnoverAnswerService.key)(Json.toJson(taxableTurnoverBelow))
+            DeregisterVatStub.successfulGetAnswer(vrn, WhyTurnoverBelowAnswerService.key)(Json.toJson(whyTurnoverBelowAll))
+            DeregisterVatStub.successfulGetAnswer(vrn, AccountingMethodAnswerService.key)(Json.toJson(CashAccounting))
+            DeregisterVatStub.successfulGetAnswer(vrn, StocksAnswerService.key)(Json.toJson(yesNoAmountYes))
+            DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
+            DeregisterVatStub.successfulGetAnswer(vrn, OptionTaxAnswerService.key)(Json.toJson(yesNoAmountYes))
+            DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
+            DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+            DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(deregistrationDate))
+
+            VatSubscriptionStub.deregisterForVatSuccess()
+
+            given.user.isAuthorised
+
+            val response: WSResponse = postRequest
+
+            VatSubscriptionStub.verifyDeregistration(belowThresholdFullPayloadJson)
+
+            response should have(
+              httpStatus(SEE_OTHER),
+              redirectURI("/vat-through-software/account/deregister/deregister-request-received")
+            )
+          }
+        }
+
+        "all possible Ceased Trading deregistration reason answers are completed" should {
+
+          "redirect user to confirmation page" in {
+
+            DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
+            DeregisterVatStub.successfulGetAnswer(vrn, AccountingMethodAnswerService.key)(Json.toJson(CashAccounting))
+            DeregisterVatStub.successfulGetAnswer(vrn, StocksAnswerService.key)(Json.toJson(yesNoAmountYes))
+            DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
+            DeregisterVatStub.successfulGetAnswer(vrn, OptionTaxAnswerService.key)(Json.toJson(yesNoAmountYes))
+            DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
+            DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+            DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(deregistrationDate))
+
+            VatSubscriptionStub.deregisterForVatSuccess()
+
+            given.user.isAuthorised
+
+            val response: WSResponse = postRequest
+
+            VatSubscriptionStub.verifyDeregistration(belowThresholdFullPayloadJson)
+
+            response should have(
+              httpStatus(SEE_OTHER),
+              redirectURI("/vat-through-software/account/deregister/deregister-request-received")
+            )
+          }
+        }
       }
 
       "deregistration is unsuccessful" should {
 
+        "return ISE" in {
+
+          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
+          DeregisterVatStub.successfulGetAnswer(vrn, TaxableTurnoverAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetAnswer(vrn, NextTaxableTurnoverAnswerService.key)(Json.toJson(taxableTurnoverBelow))
+          DeregisterVatStub.successfulGetAnswer(vrn, WhyTurnoverBelowAnswerService.key)(Json.toJson(whyTurnoverBelowAll))
+          DeregisterVatStub.successfulGetAnswer(vrn, AccountingMethodAnswerService.key)(Json.toJson(CashAccounting))
+          DeregisterVatStub.successfulGetAnswer(vrn, StocksAnswerService.key)(Json.toJson(yesNoAmountYes))
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
+          DeregisterVatStub.successfulGetAnswer(vrn, OptionTaxAnswerService.key)(Json.toJson(yesNoAmountYes))
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(deregistrationDate))
+
+          VatSubscriptionStub.deregisterForVatFailure()
+
+          given.user.isAuthorised
+
+          val response: WSResponse = postRequest
+
+          response should have(
+            httpStatus(INTERNAL_SERVER_ERROR)
+          )
+        }
+      }
+    }
+
+    "user is unauthorised" should {
+
+      "return 303 SEE_OTHER" in {
+
+        given.user.isNotAuthenticated
+
+        val response: WSResponse = postRequest
+
+        response should have(
+          httpStatus(SEE_OTHER),
+          redirectURI(appConfig.signInUrl)
+        )
       }
     }
   }

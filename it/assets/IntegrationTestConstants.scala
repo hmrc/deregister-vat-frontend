@@ -70,4 +70,43 @@ object IntegrationTestConstants {
       "capitalAssetsValue" -> 1000,
       "stocksValue" -> 1000
   )
+
+  val belowThresholdFullPayloadJson: JsObject = Json.obj(
+    "deregReason" -> "belowThreshold",
+    "deregDate" -> "2018-01-01",
+    "deregLaterDate" -> "2018-01-01",
+    "turnoverBelowThreshold" -> Json.obj(
+      "belowThreshold" -> "belowNext12Months",
+      "nextTwelveMonthsTurnover" -> 200,
+      "whyTurnoverBelow" -> Json.obj(
+        "lostContract" -> true,
+        "semiRetiring" -> true,
+        "moreCompetitors" -> true,
+        "reducedTradingHours" -> true,
+        "seasonalBusiness" -> true,
+        "closedPlacesOfBusiness" -> true,
+        "turnoverLowerThanExpected" -> true
+      )
+    ),
+    "optionToTax" -> true,
+    "intendSellCapitalAssets" -> true,
+    "additionalTaxInvoices" -> true,
+    "cashAccountingScheme" -> true,
+    "optionToTaxValue" -> 1000,
+    "capitalAssetsValue" -> 1000,
+    "stocksValue" -> 1000
+  )
+
+  val ceasedTradingFullPayloadJson: JsObject = Json.obj(
+    "deregReason" -> "ceased",
+    "deregDate" -> "2018-01-01",
+    "deregLaterDate" -> "2018-01-01",
+    "optionToTax" -> true,
+    "intendSellCapitalAssets" -> true,
+    "additionalTaxInvoices" -> true,
+    "cashAccountingScheme" -> true,
+    "optionToTaxValue" -> 1000,
+    "capitalAssetsValue" -> 1000,
+    "stocksValue" -> 1000
+  )
 }
