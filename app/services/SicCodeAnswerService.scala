@@ -18,10 +18,9 @@ package services
 
 import connectors.DeregisterVatConnector
 import javax.inject.{Inject, Singleton}
-import models.NumberInputModel
 
 @Singleton()
-class SicCodeAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[NumberInputModel] {
+class SicCodeAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[String] {
   override val answerKey: String = SicCodeAnswerService.key
 }
 

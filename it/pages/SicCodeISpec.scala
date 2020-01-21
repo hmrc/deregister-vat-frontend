@@ -19,7 +19,7 @@ package pages
 import assets.IntegrationTestConstants._
 import forms.SicCodeForm
 import helpers.IntegrationBaseSpec
-import models.{NumberInputModel, Yes}
+import models.Yes
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
@@ -39,7 +39,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
         given.user.isAuthorised
 
         DeregisterVatStub.successfulGetAnswer(vrn, BusinessActivityAnswerService.key)(Json.toJson(Yes))
-        DeregisterVatStub.successfulGetAnswer(vrn, SicCodeAnswerService.key)(Json.toJson(sicCodeModel))
+        DeregisterVatStub.successfulGetAnswer(vrn, SicCodeAnswerService.key)(Json.toJson(sicCodeValue))
 
         val response: WSResponse = getRequest
 
@@ -147,7 +147,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
   "Calling the POST SicCode" when {
 
-    def postRequest(data: NumberInputModel): WSResponse =
+    def postRequest(data: String): WSResponse =
       post("/what-is-the-sic-code")(toFormData(SicCodeForm.sicCodeForm, data))
 
 
@@ -161,7 +161,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn, SicCodeAnswerService.key)
 
-          val response: WSResponse = postRequest(sicCodeModel)
+          val response: WSResponse = postRequest(sicCodeValue)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -178,7 +178,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.putAnswerError(vrn, SicCodeAnswerService.key)
 
-          val response: WSResponse = postRequest(sicCodeModel)
+          val response: WSResponse = postRequest(sicCodeValue)
 
           response should have(
             httpStatus(INTERNAL_SERVER_ERROR)
@@ -193,7 +193,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(sicCodeModel)
+        val response: WSResponse = postRequest(sicCodeValue)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -208,7 +208,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(sicCodeModel)
+        val response: WSResponse = postRequest(sicCodeValue)
 
         response should have(
           httpStatus(FORBIDDEN),

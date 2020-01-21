@@ -34,32 +34,35 @@ object CheckYourAnswersTestConstants extends TestUtil {
     CheckYourAnswersMessages.reason,
     Html(CheckYourAnswersMessages.reasonCeased),
     controllers.routes.DeregistrationReasonController.show().url,
-    CheckYourAnswersMessages.reasonHidden,
-    "reason"
+    CheckYourAnswersMessages.reasonHidden
   )
 
   val ceasedTradingRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.ceasedTrading,
     Html(dateModel.longDate),
     controllers.routes.CeasedTradingDateController.show().url,
-    CheckYourAnswersMessages.ceasedTradingHidden,
-    "ceased-trading"
+    CheckYourAnswersMessages.ceasedTradingHidden
+  )
+
+  val zeroRatedRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.reason,
+    Html(CheckYourAnswersMessages.reasonZeroRated),
+    controllers.routes.DeregistrationReasonController.show().url,
+    CheckYourAnswersMessages.reasonHidden
   )
 
   val taxableTurnoverRow: String => CheckYourAnswersRowModel = threshold => CheckYourAnswersRowModel(
     CheckYourAnswersMessages.taxableTurnover(threshold),
     Html(CommonMessages.yes),
     controllers.routes.TaxableTurnoverController.show().url,
-    CheckYourAnswersMessages.taxableTurnoverHidden,
-    "below-threshold"
+    CheckYourAnswersMessages.taxableTurnoverHidden
   )
 
   val nextTaxableTurnoverRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.nextTaxableTurnover,
     MoneyFormatter.formatHtmlAmount(nextTaxableTurnoverBelow.value),
     controllers.routes.NextTaxableTurnoverController.show().url,
-    CheckYourAnswersMessages.nextTaxableTurnoverHidden,
-    "expected-turnover"
+    CheckYourAnswersMessages.nextTaxableTurnoverHidden
   )
 
   val whyBelowRowMax = CheckYourAnswersRowModel(
@@ -73,127 +76,139 @@ object CheckYourAnswersTestConstants extends TestUtil {
          s"${WhyTurnoverBelowMessages.reason7}"
     ),
     controllers.routes.WhyTurnoverBelowController.show().url,
-    CheckYourAnswersMessages.whyBelowHidden,
-    "why-turnover-below"
+    CheckYourAnswersMessages.whyBelowHidden
   )
 
   val whyBelowRowMin = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.whyBelow,
     Html(WhyTurnoverBelowMessages.reason1),
     controllers.routes.WhyTurnoverBelowController.show().url,
-    CheckYourAnswersMessages.whyBelowHidden,
-    "why-turnover-below"
+    CheckYourAnswersMessages.whyBelowHidden
   )
 
   val vatAccountsRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.vatAccounts,
     Html(CheckYourAnswersMessages.standard),
     controllers.routes.VATAccountsController.show().url,
-    CheckYourAnswersMessages.vatAccountsHidden,
-    "accounting"
+    CheckYourAnswersMessages.vatAccountsHidden
   )
 
   val optionTaxRowYes = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.optionTax,
     Html(CommonMessages.yes),
     controllers.routes.OptionTaxController.show().url,
-    CheckYourAnswersMessages.optionTaxHidden,
-    "option-to-tax"
+    CheckYourAnswersMessages.optionTaxHidden
   )
 
   val optionTaxRowNo = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.optionTax,
     Html(CommonMessages.no),
     controllers.routes.OptionTaxController.show().url,
-    CheckYourAnswersMessages.optionTaxHidden,
-    "option-to-tax"
+    CheckYourAnswersMessages.optionTaxHidden
   )
 
   val optionTaxValueRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.optionTaxValue,
     MoneyFormatter.formatHtmlAmount(ottModel.amount.get),
     controllers.routes.OptionTaxController.show().url,
-    CheckYourAnswersMessages.optionTaxValueHidden,
-    "option-to-tax-value"
+    CheckYourAnswersMessages.optionTaxValueHidden
   )
 
   val stocksRowYes = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.stocks,
     Html(CommonMessages.yes),
     controllers.routes.OptionStocksToSellController.show().url,
-    CheckYourAnswersMessages.stocksHidden,
-    "stock"
+    CheckYourAnswersMessages.stocksHidden
   )
 
   val stocksRowNo = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.stocks,
     Html(CommonMessages.no),
     controllers.routes.OptionStocksToSellController.show().url,
-    CheckYourAnswersMessages.stocksHidden,
-    "stock"
+    CheckYourAnswersMessages.stocksHidden
   )
 
   val stocksValueRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.stocksValue,
     MoneyFormatter.formatHtmlAmount(stocksModel.amount.get),
     controllers.routes.OptionStocksToSellController.show().url,
-    CheckYourAnswersMessages.stocksValueHidden,
-    "stock-value"
+    CheckYourAnswersMessages.stocksValueHidden
   )
 
   val captialAssetsRowYes = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.capitalAssets,
     Html(CommonMessages.yes),
     controllers.routes.CapitalAssetsController.show().url,
-    CheckYourAnswersMessages.capitalAssetsHidden,
-    "capital"
+    CheckYourAnswersMessages.capitalAssetsHidden
   )
 
   val captialAssetsRowNo = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.capitalAssets,
     Html(CommonMessages.no),
     controllers.routes.CapitalAssetsController.show().url,
-    CheckYourAnswersMessages.capitalAssetsHidden,
-    "capital"
+    CheckYourAnswersMessages.capitalAssetsHidden
   )
 
   val captialAssetsValueRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.capitalAssetsValue,
     MoneyFormatter.formatHtmlAmount(assetsModel.amount.get),
     controllers.routes.CapitalAssetsController.show().url,
-    CheckYourAnswersMessages.capitalAssetsValueHidden,
-    "capital-value"
+    CheckYourAnswersMessages.capitalAssetsValueHidden
   )
 
   val outstandingInvoicesRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.outstandingInvoices,
     Html(CommonMessages.yes),
     controllers.routes.OutstandingInvoicesController.show().url,
-    CheckYourAnswersMessages.outstandingInvoiceHidden,
-    "outstanding-invoices"
+    CheckYourAnswersMessages.outstandingInvoiceHidden
   )
 
   val newInvoicesRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.newInvoices,
     Html(CommonMessages.yes),
     controllers.routes.IssueNewInvoicesController.show().url,
-    CheckYourAnswersMessages.newInvoicesHidden,
-    "new-invoices"
+    CheckYourAnswersMessages.newInvoicesHidden
   )
 
   val deregDateRowYes = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.deregistrationDate,
     Html(deregistrationDateYes.date.get.longDate),
     controllers.routes.DeregistrationDateController.show().url,
-    CheckYourAnswersMessages.deregistrationDateHidden,
-    "dereg-date"
+    CheckYourAnswersMessages.deregistrationDateHidden
   )
 
   val deregDateRowNo = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.deregistrationDate,
     Html("No"),
     controllers.routes.DeregistrationDateController.show().url,
-    CheckYourAnswersMessages.deregistrationDateHidden,
-    "dereg-date"
+    CheckYourAnswersMessages.deregistrationDateHidden
+  )
+
+  val businessActivityRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.businessActivity,
+    Html(CommonMessages.yes),
+    controllers.zeroRated.routes.BusinessActivityController.show().url,
+    CheckYourAnswersMessages.businessActivityHidden
+  )
+
+  val sicCodeRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.sicCodeValue,
+    Html(sicCodeValue),
+    controllers.zeroRated.routes.SicCodeController.show().url,
+    CheckYourAnswersMessages.sicCodeHidden
+  )
+
+  val zeroRatedSuppliesRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.zeroRatedSuppliesValue,
+    MoneyFormatter.formatHtmlAmount(zeroRatedSuppliesValue.value),
+    controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url,
+    CheckYourAnswersMessages.zeroRatedSuppliesHidden
+  )
+
+  val purchaseExceedSuppliesRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.purchasesExceedSupplies,
+    Html(CommonMessages.yes),
+    controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url,
+    CheckYourAnswersMessages.purchasesExceedSuppliesHidden
   )
 }

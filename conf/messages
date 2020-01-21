@@ -131,6 +131,10 @@ checkYourAnswers.question.capitalAssetsValue = Value of capital assets
 checkYourAnswers.question.outstandingInvoice = Payment for invoices after cancelling registration
 checkYourAnswers.question.newInvoices = New invoices after cancelling registration
 checkYourAnswers.question.deregistrationDate = Choose cancellation date
+checkYourAnswers.question.businessActivityChanged = Has the business activity changed?
+checkYourAnswers.question.sicCode = Standard Industrial Classification (SIC) Code
+checkYourAnswers.question.zeroRatedSupplies = Value of zero-rated supplies for next 12 months
+checkYourAnswers.question.purchasesExceedSupplies = Will VAT on purchases exceed VAT on supplies?
 
 checkYourAnswers.hidden.reason = Change the reason why the business is cancelling its VAT registration
 checkYourAnswers.hidden.ceasedTrading = Change the date your business stopped or will stop trading
@@ -147,12 +151,17 @@ checkYourAnswers.hidden.capitalAssetsValue = Change the value of the capital ass
 checkYourAnswers.hidden.newInvoices = Change whether the business will issue new invoices after cancelling VAT registration
 checkYourAnswers.hidden.outstandingInvoice = Change whether the business will receive payment for outstanding invoices after cancelling VAT registration
 checkYourAnswers.hidden.deregistrationDate = Change whether the business wants to choose its own VAT cancellation date
+checkYourAnswers.hidden.businessActivityChanged = Change whether the business activity has changed
+checkYourAnswers.hidden.sicCode = Change the business’s Standard Industrial Classification (SIC) Code
+checkYourAnswers.hidden.zeroRatedSupplies = Change the value of zero-rated supplies for the next 12 months
+checkYourAnswers.hidden.purchasesExceedSupplies = Change whether the VAT on purchases will exceed the VAT on supplies
 
 checkYourAnswers.answer.noDate = Not Specified
 checkYourAnswers.answer.standard = Standard accounting
 checkYourAnswers.answer.cash = Cash accounting
 checkYourAnswers.answer.reason.ceased = Business stopped trading
 checkYourAnswers.answer.reason.belowThreshold = Annual turnover is below £{0}
+checkYourAnswers.answer.reason.zeroRated = Zero rated
 checkYourAnswers.answer.reason.other = Other
 checkYourAnswers.answer.no = No
 checkYourAnswers.confirm = Confirm and cancel VAT registration
@@ -197,7 +206,7 @@ businessActivity.error = Select yes if your business activity has changed
 sicCode.title = What is the business’s Standard Industrial Classification (SIC) Code?
 sicCode.explanation = This is the 5 digit code which describes the business activity.
 sicCode.find = Find the code that best describes the business activity (opens in a new window or tab)
-sicCode.error.mandatory = Enter the 5 digit code which best describes your business activity
+sicCode.error.invalid = Enter the 5 digit code which best describes your business activity
 sicCode.error.tooFew = You have entered too few numbers
 sicCode.error.tooMany = You have entered too many numbers
 
