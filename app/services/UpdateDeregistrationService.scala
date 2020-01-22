@@ -100,9 +100,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
           outstandingInvoices,
           deregDate,
           purchasesExceedSupplies,
-          // TODO: update to use proper sic code when model refactored to String
-          //sicCode,
-          Some("00005"),
+          sicCode,
           zeroRatedSuppliesValue,
           user.session.get(SessionKeys.verifiedAgentEmail)
         )

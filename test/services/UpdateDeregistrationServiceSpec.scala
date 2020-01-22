@@ -22,7 +22,7 @@ import assets.constants.DeregistrationInfoTestConstants._
 import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
-import assets.constants.ZeroRatedTestConstants._
+import assets.constants.ZeroRatedTestConstants.zeroRatedSuppliesValue
 import audit.mocks.MockAuditConnector
 import audit.models.DeregAuditModel
 import connectors.mocks.MockVatSubscriptionConnector
@@ -89,8 +89,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
           setupMockGetOutstandingInvoices(Right(Some(Yes)))
           setupMockGetDeregDate(Right(Some(deregistrationDateModel)))
           setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
-          // TODO: update to use string
-          setupMockGetSicCode(Right(Some(NumberInputModel(BigDecimal(1000)))))
+          setupMockGetSicCode(Right(Some(sicCodeValue)))
           setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
           setupMockSubmit(vrn, deregistrationInfoMaxModel)(Right(VatSubscriptionSuccess))
@@ -117,8 +116,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
         setupMockGetDeregDate(Right(Some(deregistrationDateModel)))
         setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
-        // TODO: update to use string
-        setupMockGetSicCode(Right(Some(NumberInputModel(BigDecimal(1000)))))
+        setupMockGetSicCode(Right(Some(sicCodeValue)))
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
         setupMockSubmit(vrn, deregistrationInfoMaxModel)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))

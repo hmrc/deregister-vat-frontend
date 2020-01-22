@@ -23,7 +23,15 @@ object IntegrationTestConstants {
 
   val vrn = "968501689"
 
-  val whyTurnoverBelowModel = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
+  val whyTurnoverBelowModel = WhyTurnoverBelowModel(
+    lostContract = true,
+    semiRetiring = true,
+    moreCompetitors = true,
+    reducedTradingHours = true,
+    seasonalBusiness = true,
+    closedPlacesOfBusiness = true,
+    turnoverLowerThanExpected = true
+  )
 
   val whyTurnoverBelowJson: JsObject = Json.obj(
     "lostContract" -> true,
@@ -58,7 +66,7 @@ object IntegrationTestConstants {
       "deregLaterDate" -> "2018-01-01",
       "zeroRatedExmpApplication" -> Json.obj(
         "repaymentSituation" -> true,
-        "natureOfSupplies" -> "00005",
+        "natureOfSupplies" -> "12345",
         "zeroRatedSuppliesValue" -> 1000,
         "estTotalTaxTurnover" -> 200
       ),
