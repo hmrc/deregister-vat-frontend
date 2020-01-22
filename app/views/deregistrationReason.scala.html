@@ -16,7 +16,6 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
-@import templates.headings
 @import views.html.templates.inputs.radioHelper
 @import forms.DeregistrationReasonForm._
 @import views.utils.TitleUtil._
@@ -42,6 +41,7 @@
                         (ceased, Messages("deregistrationReason.reason.ceased")),
                         (belowThreshold, Messages("deregistrationReason.reason.belowThreshold", appConfig.deregThreshold)),
                         (zeroRated, Messages("deregistrationReason.reason.zeroRated")),
+                        (exemptOnly, Messages("deregistrationReason.reason.exemptOnly")),
                         (other, Messages("deregistrationReason.reason.other"))
                     )
                 } else {

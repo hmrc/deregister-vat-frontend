@@ -74,6 +74,7 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
       deregReason match {
         case Some(BelowThreshold) => Redirect(controllers.routes.DeregistrationDateController.show())
         case Some(ZeroRated) => Redirect(controllers.routes.DeregistrationDateController.show())
+        case Some(ExemptOnly) => Redirect(controllers.routes.DeregistrationDateController.show())
         case Some(Ceased) => ceasedTradingJourneyLogic(capitalAssets)
         case _ =>
           Logger.warn("[OutstandingInvoicesController][redirect] - answer for deregReason doesn't exist or wasn't expected")

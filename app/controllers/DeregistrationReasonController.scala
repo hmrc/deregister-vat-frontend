@@ -71,6 +71,7 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
     case Ceased => Redirect(controllers.routes.CeasedTradingDateController.show())
     case BelowThreshold => Redirect(controllers.routes.TaxableTurnoverController.show())
     case ZeroRated => Redirect(controllers.zeroRated.routes.BusinessActivityController.show())
+    case ExemptOnly => Redirect(controllers.routes.VATAccountsController.show())
     case Other => Redirect(appConfig.govUkCancelVatRegistration)
   }
 }

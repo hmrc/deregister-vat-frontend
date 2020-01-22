@@ -81,6 +81,7 @@ deregistrationReason.title = Pam fod y busnes yn canslo’i gofrestriad TAW?
 deregistrationReason.reason.ceased = Mae’r busnes wedi rhoi’r gorau i fasnachu
 deregistrationReason.reason.belowThreshold = Mae’r trosiant blynyddol yn is nag £{0}
 deregistrationReason.reason.zeroRated = Mae’r busnes yn cyflenwi nwyddau sydd ar y gyfradd sero ar gyfer TAW
+deregistrationReason.reason.exemptOnly = Gwneud cyflenwadau sydd wedi’u heithrio yn unig
 deregistrationReason.reason.other = Arall
 
 deregistrationDate.title = A ydych am ddewis y dyddiad canslo?
@@ -193,6 +194,7 @@ checkYourAnswers.answer.cash = Cyfrifyddu arian parod
 checkYourAnswers.answer.reason.ceased = Busnes wedi rhoi’r gorau i fasnachu
 checkYourAnswers.answer.reason.belowThreshold = Mae’r trosiant blynyddol yn is nag £{0}
 checkYourAnswers.answer.reason.zeroRated = Y gyfradd sero
+checkYourAnswers.answer.reason.exemptOnly = Gwneud cyflenwadau sydd wedi’u heithrio yn unig
 checkYourAnswers.answer.reason.other = Arall
 checkYourAnswers.answer.no = Na
 checkYourAnswers.confirm = Cadarnhau a chanslo cofrestriad TAW

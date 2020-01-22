@@ -61,6 +61,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
       case Some(Ceased) =>  wipeDataReadyForCeasedTradingJourney
       case Some(BelowThreshold) => wipeDataReadyForBelowThresholdJourney
       case Some(ZeroRated) => wipeDataReadyForZeroRatedJourney
+      case Some(ExemptOnly) => wipeDataReadyForExemptOnlyJourney
       case _ => Future.successful(Right(DeregisterVatSuccess))
     }
   }
@@ -96,6 +97,20 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
       _ <- EitherT(whyTurnoverBelow.deleteAnswer)
       _ <- EitherT(taxableTurnoverAnswer.deleteAnswer)
 
+    } yield DeregisterVatSuccess).value
+  }
+
+  private[services] def wipeDataReadyForExemptOnlyJourney(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, DeregisterVatResponse]] = {
+    (for {
+      _ <- EitherT(taxableTurnoverAnswer.deleteAnswer)
+      _ <- EitherT(ceasedTradingDateAnswer.deleteAnswer)
+      _ <- EitherT(whyTurnoverBelow.deleteAnswer)
+      _ <- EitherT(nextTaxableTurnoverAnswer.deleteAnswer)
+      _ <- EitherT(businessActivityAnswer.deleteAnswer)
+      _ <- EitherT(sicCodeAnswer.deleteAnswer)
+      _ <- EitherT(zeroRatedSuppliesValueService.deleteAnswer)
+      _ <- EitherT(purchaseVatExceedSupplyVatAnswer.deleteAnswer)
     } yield DeregisterVatSuccess).value
   }
 

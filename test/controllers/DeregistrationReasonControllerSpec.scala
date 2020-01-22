@@ -126,6 +126,26 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
           }
         }
 
+        "the user submits after selecting the 'exemptOnly' option" should {
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, exemptOnly))
+          lazy val result = TestDeregistrationReasonController.submit()(request)
+
+
+          "return 303 (SEE OTHER)" in {
+            setupMockStoreDeregReason(ExemptOnly)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+
+            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            status(result) shouldBe Status.SEE_OTHER
+          }
+
+          s"redirect to ${controllers.routes.VATAccountsController.show().url}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
+          }
+        }
+
         "the user submits after selecting the 'other' option" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
