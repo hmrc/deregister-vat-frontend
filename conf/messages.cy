@@ -183,10 +183,10 @@ checkYourAnswers.hidden.capitalAssetsValue = Newid gwerth yr asedion cyfalaf y b
 checkYourAnswers.hidden.newInvoices = Newid p’un a fydd y busnes yn anfon anfonebau newydd ar ôl canslo’r cofrestriad TAW
 checkYourAnswers.hidden.outstandingInvoice = Newid p’un a fydd y busnes yn cael ei dalu am anfonebau heb eu setlo ar ôl canslo’r cofrestriad TAW
 checkYourAnswers.hidden.deregistrationDate = Newid p’un a yw’r busnes am ddewis ei ddyddiad canslo TAW ei hun
-checkYourAnswers.hidden.businessActivityChanged =
-checkYourAnswers.hidden.sicCode =
-checkYourAnswers.hidden.zeroRatedSupplies =
-checkYourAnswers.hidden.purchasesExceedSupplies =
+checkYourAnswers.hidden.businessActivityChanged = Newid p’un a yw’r gweithgaredd busnes wedi newid
+checkYourAnswers.hidden.sicCode = Newid Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes
+checkYourAnswers.hidden.zeroRatedSupplies = Newid gwerth y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
+checkYourAnswers.hidden.purchasesExceedSupplies = Newid p’un a fydd y TAW ar bryniannau yn mynd y tu hwnt i’r TAW ar gyflenwadau
 
 checkYourAnswers.answer.noDate = Heb fanylu
 checkYourAnswers.answer.standard = Cyfrifyddu safonol
