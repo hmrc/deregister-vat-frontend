@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import config.AppConfig
 import models._
+import models.{ZeroRated => ZeroRatedDeregReason}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -27,6 +28,7 @@ case class DeregistrationInfo(deregReason: DeregistrationReason,
                               deregDate: LocalDate,
                               deregLaterDate: Option[LocalDate],
                               turnoverBelowThreshold: Option[TurnoverBelowThreshold],
+                              zeroRated: Option[ZeroRated],
                               optionToTax: Boolean,
                               intendSellCapitalAssets: Boolean,
                               additionalTaxInvoices: Boolean,
@@ -50,13 +52,17 @@ object DeregistrationInfo {
                   issueNewInvoices: YesNo,
                   outstandingInvoices: Option[YesNo],
                   deregDate: Option[DeregistrationDateModel],
+                  purchasesExceedSupplies: Option[YesNo],
+                  sicCode: Option[String],
+                  zeroRatedSuppliesValue: Option[NumberInputModel],
                   transactorOrCapacitorEmail: Option[String])(implicit appConfig: AppConfig): DeregistrationInfo = {
 
         DeregistrationInfo(
           deregReason,
           deregInfoDate(ceasedTradingDate),
           deregLaterDate(deregDate),
-          turnoverBelowThreshold(taxableTurnover, nextTaxableTurnover, whyTurnoverBelow),
+          turnoverBelowThreshold(deregReason, taxableTurnover, nextTaxableTurnover, whyTurnoverBelow),
+          zeroRated(deregReason, purchasesExceedSupplies, sicCode, zeroRatedSuppliesValue, nextTaxableTurnover),
           optionTax.yesNo.value,
           capitalAssets.yesNo.value,
           taxInvoices(issueNewInvoices, outstandingInvoices),
@@ -77,14 +83,36 @@ object DeregistrationInfo {
 
   private[deregistrationRequest] val nextTwelveMonthsTurnover: Option[NumberInputModel] => Option[BigDecimal] = _.map(_.value)
 
-  private[deregistrationRequest] def turnoverBelowThreshold(taxableTurnover: Option[YesNo],
+  private[deregistrationRequest] def turnoverBelowThreshold(deregistrationReason: DeregistrationReason,
+                                                            taxableTurnover: Option[YesNo],
                                                             nextTaxableTurnover: Option[NumberInputModel],
                                                             whyTurnoverBelow: Option[WhyTurnoverBelowModel])
                                                            (implicit appConfig: AppConfig): Option[TurnoverBelowThreshold] = {
-    taxableTurnover.flatMap { turnover =>
-      nextTwelveMonthsTurnover(nextTaxableTurnover).map { nextTaxableTurnover =>
-        TurnoverBelowThreshold(taxableTurnoverBelowReason(turnover), nextTaxableTurnover, whyTurnoverBelow)
+    if(deregistrationReason equals BelowThreshold) {
+      taxableTurnover.flatMap { turnover =>
+        nextTwelveMonthsTurnover(nextTaxableTurnover).map { nextTaxableTurnover =>
+          TurnoverBelowThreshold(taxableTurnoverBelowReason(turnover), nextTaxableTurnover, whyTurnoverBelow)
+        }
       }
+    } else {
+      None
+    }
+  }
+
+  private[deregistrationRequest] def zeroRated(deregistrationReason: DeregistrationReason,
+                                               purchasesExceedSupplies: Option[YesNo],
+                                               sicCode: Option[String],
+                                               zeroRatedSuppliesValue: Option[NumberInputModel],
+                                               nextTaxableTurnover: Option[NumberInputModel]): Option[ZeroRated] = {
+
+    if(deregistrationReason equals ZeroRatedDeregReason) {
+      (purchasesExceedSupplies, zeroRatedSuppliesValue, nextTaxableTurnover) match {
+        case (Some(purchasesExceedSuppliesAnswer), Some(zeroRatedSuppliesAnswer), Some(nextTaxableTurnoverAnswer)) =>
+          Some(ZeroRated(purchasesExceedSuppliesAnswer.value, sicCode, zeroRatedSuppliesAnswer.value, nextTaxableTurnoverAnswer.value))
+        case _ => None
+      }
+    } else {
+      None
     }
   }
 
@@ -98,6 +126,7 @@ object DeregistrationInfo {
       (__ \ "deregDate").write[LocalDate] and
       (__ \ "deregLaterDate").writeNullable[LocalDate] and
       (__ \ "turnoverBelowThreshold").writeNullable[TurnoverBelowThreshold] and
+      (__ \ "zeroRatedExmpApplication").writeNullable[ZeroRated] and
       (__ \ "optionToTax").write[Boolean] and
       (__ \ "intendSellCapitalAssets").write[Boolean] and
       (__ \ "additionalTaxInvoices").write[Boolean] and

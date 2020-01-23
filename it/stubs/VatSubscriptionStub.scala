@@ -16,12 +16,13 @@
 
 package stubs
 
+import com.github.tomakehurst.wiremock.client.WireMock.{equalToJson, urlEqualTo, verify, putRequestedFor}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
-import play.api.http.Status.OK
-import play.api.libs.json.Json
+import play.api.http.Status._
+import play.api.libs.json.{JsValue, Json}
 
-object PendingDeregStub extends WireMockMethods {
+object VatSubscriptionStub extends WireMockMethods {
 
   def noDeregPending(): StubMapping = {
     when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
@@ -59,4 +60,20 @@ object PendingDeregStub extends WireMockMethods {
       ))
   }
 
+  def deregisterForVatSuccess(): StubMapping = {
+    when(method = PUT, uri = "/vat-subscription/([0-9]+)/deregister")
+      .thenReturn(status = OK, body = Json.obj(
+        "formBundleIdentifier" -> "12345"
+      ))
+  }
+
+  def deregisterForVatFailure(): StubMapping = {
+    when(method = PUT, uri = "/vat-subscription/([0-9]+)/deregister")
+      .thenReturn(status = SERVICE_UNAVAILABLE, body = Json.obj())
+  }
+
+  def verifyDeregistration(body: JsValue): Unit =
+    verify(putRequestedFor(urlEqualTo("/vat-subscription/968501689/deregister"))
+      .withRequestBody(equalToJson(body.toString()))
+    )
 }

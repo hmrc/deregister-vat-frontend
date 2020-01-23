@@ -26,7 +26,7 @@ import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.{Application, Environment, Mode}
-import stubs.{AuthStub, DeregisterVatStub, PendingDeregStub}
+import stubs.{AuthStub, DeregisterVatStub, VatSubscriptionStub}
 import uk.gov.hmrc.play.test.UnitSpec
 
 trait IntegrationBaseSpec extends UnitSpec
@@ -82,19 +82,19 @@ trait IntegrationBaseSpec extends UnitSpec
 
     def noDeregPending: PreconditionBuilder = {
       Given("User has no deregistration request pending")
-      PendingDeregStub.noDeregPending()
+      VatSubscriptionStub.noDeregPending()
       builder
     }
 
     def deregPending: PreconditionBuilder = {
       Given("User has a deregistration request pending")
-      PendingDeregStub.deregPending()
+      VatSubscriptionStub.deregPending()
       builder
     }
 
     def noPendingData: PreconditionBuilder = {
       Given("User has no pending data")
-      PendingDeregStub.noPendingData()
+      VatSubscriptionStub.noPendingData()
       builder
     }
   }

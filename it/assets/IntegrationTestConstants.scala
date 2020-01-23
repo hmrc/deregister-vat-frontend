@@ -23,7 +23,15 @@ object IntegrationTestConstants {
 
   val vrn = "968501689"
 
-  val whyTurnoverBelowModel = WhyTurnoverBelowModel(true,true,true,true,true,true,true)
+  val whyTurnoverBelowModel = WhyTurnoverBelowModel(
+    lostContract = true,
+    semiRetiring = true,
+    moreCompetitors = true,
+    reducedTradingHours = true,
+    seasonalBusiness = true,
+    closedPlacesOfBusiness = true,
+    turnoverLowerThanExpected = true
+  )
 
   val whyTurnoverBelowJson: JsObject = Json.obj(
     "lostContract" -> true,
@@ -51,4 +59,62 @@ object IntegrationTestConstants {
 
   val zeroRatedSuppliesValue: BigDecimal= 12345.67
   val zeroRatedSuppliesModel: NumberInputModel = NumberInputModel(zeroRatedSuppliesValue)
+
+  val zeroRatedFullPayloadJson: JsObject = Json.obj(
+      "deregReason" -> "zeroRated",
+      "deregDate" -> "2018-01-01",
+      "deregLaterDate" -> "2018-01-01",
+      "zeroRatedExmpApplication" -> Json.obj(
+        "repaymentSituation" -> true,
+        "natureOfSupplies" -> "12345",
+        "zeroRatedSuppliesValue" -> 1000,
+        "estTotalTaxTurnover" -> 200
+      ),
+      "optionToTax" -> true,
+      "intendSellCapitalAssets" -> true,
+      "additionalTaxInvoices" -> true,
+      "cashAccountingScheme" -> true,
+      "optionToTaxValue" -> 1000,
+      "capitalAssetsValue" -> 1000,
+      "stocksValue" -> 1000
+  )
+
+  val belowThresholdFullPayloadJson: JsObject = Json.obj(
+    "deregReason" -> "belowThreshold",
+    "deregDate" -> "2018-01-01",
+    "deregLaterDate" -> "2018-01-01",
+    "turnoverBelowThreshold" -> Json.obj(
+      "belowThreshold" -> "belowNext12Months",
+      "nextTwelveMonthsTurnover" -> 200,
+      "whyTurnoverBelow" -> Json.obj(
+        "lostContract" -> true,
+        "semiRetiring" -> true,
+        "moreCompetitors" -> true,
+        "reducedTradingHours" -> true,
+        "seasonalBusiness" -> true,
+        "closedPlacesOfBusiness" -> true,
+        "turnoverLowerThanExpected" -> true
+      )
+    ),
+    "optionToTax" -> true,
+    "intendSellCapitalAssets" -> true,
+    "additionalTaxInvoices" -> true,
+    "cashAccountingScheme" -> true,
+    "optionToTaxValue" -> 1000,
+    "capitalAssetsValue" -> 1000,
+    "stocksValue" -> 1000
+  )
+
+  val ceasedTradingFullPayloadJson: JsObject = Json.obj(
+    "deregReason" -> "ceased",
+    "deregDate" -> "2018-01-01",
+    "deregLaterDate" -> "2018-01-01",
+    "optionToTax" -> true,
+    "intendSellCapitalAssets" -> true,
+    "additionalTaxInvoices" -> true,
+    "cashAccountingScheme" -> true,
+    "optionToTaxValue" -> 1000,
+    "capitalAssetsValue" -> 1000,
+    "stocksValue" -> 1000
+  )
 }
