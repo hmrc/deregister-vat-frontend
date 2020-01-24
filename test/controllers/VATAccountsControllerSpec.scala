@@ -217,6 +217,24 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
       }
     }
 
+    "dereg reason is ZeroRated" should {
+
+      val result = TestVATAccountsController.backLink(None, ZeroRated)
+
+      s"return ${controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url}" in {
+        result shouldBe controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url
+      }
+    }
+
+    "dereg reason is ExemptOnly" should {
+
+      val result = TestVATAccountsController.backLink(None, ExemptOnly)
+
+      s"return ${controllers.routes.DeregistrationReasonController.show().url}" in {
+        result shouldBe controllers.routes.DeregistrationReasonController.show().url
+      }
+    }
+
     "dereg reason is not Ceased" when {
 
       "last turnover was below threshold" should {

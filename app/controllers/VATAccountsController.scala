@@ -84,6 +84,7 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
     (deregReason, lastTurnoverBelowThreshold) match {
       case (Ceased, _) => controllers.routes.CeasedTradingDateController.show().url
       case (ExemptOnly, _) => controllers.routes.DeregistrationReasonController.show().url
+      case (ZeroRated, _) => controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url
       case (_, Some(below)) if below.value.equals(true) => controllers.routes.NextTaxableTurnoverController.show().url
       case _ => controllers.routes.WhyTurnoverBelowController.show().url
     }
