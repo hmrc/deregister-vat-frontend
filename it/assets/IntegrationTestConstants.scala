@@ -16,6 +16,8 @@
 
 package assets
 
+import java.time.LocalDate
+
 import models._
 import play.api.libs.json.{JsObject, JsValue, Json}
 
@@ -62,7 +64,7 @@ object IntegrationTestConstants {
 
   val zeroRatedFullPayloadJson: JsObject = Json.obj(
       "deregReason" -> "zeroRated",
-      "deregDate" -> "2018-01-01",
+      "deregDate" -> LocalDate.now(),
       "deregLaterDate" -> "2018-01-01",
       "zeroRatedExmpApplication" -> Json.obj(
         "repaymentSituation" -> true,
@@ -81,7 +83,7 @@ object IntegrationTestConstants {
 
   val belowThresholdFullPayloadJson: JsObject = Json.obj(
     "deregReason" -> "belowThreshold",
-    "deregDate" -> "2018-01-01",
+    "deregDate" -> LocalDate.now(),
     "deregLaterDate" -> "2018-01-01",
     "turnoverBelowThreshold" -> Json.obj(
       "belowThreshold" -> "belowNext12Months",
@@ -107,7 +109,20 @@ object IntegrationTestConstants {
 
   val ceasedTradingFullPayloadJson: JsObject = Json.obj(
     "deregReason" -> "ceased",
-    "deregDate" -> "2018-01-01",
+    "deregDate" -> LocalDate.now(),
+    "deregLaterDate" -> "2018-01-01",
+    "optionToTax" -> true,
+    "intendSellCapitalAssets" -> true,
+    "additionalTaxInvoices" -> true,
+    "cashAccountingScheme" -> true,
+    "optionToTaxValue" -> 1000,
+    "capitalAssetsValue" -> 1000,
+    "stocksValue" -> 1000
+  )
+
+  val exemptOnlyFullPayloadJson: JsObject = Json.obj(
+    "deregReason" -> "exemptOnly",
+    "deregDate" -> LocalDate.now(),
     "deregLaterDate" -> "2018-01-01",
     "optionToTax" -> true,
     "intendSellCapitalAssets" -> true,

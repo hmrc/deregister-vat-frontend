@@ -46,4 +46,6 @@ trait WireMockHelper {
   }
 
   def stopWireMock(): Unit = wmServer.stop()
+
+  def resetWireMock(): Unit = wmServer.resetAll()
 }
