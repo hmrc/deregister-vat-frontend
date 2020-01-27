@@ -35,6 +35,11 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
   val deregistrationDate = DeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
   val zeroRatedSuppliesValue = NumberInputModel(1000)
 
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    resetWireMock()
+  }
+
   "Calling GET Check your answers" when {
 
     def getRequest: WSResponse = get("/check-your-answers", formatPendingDereg(Some("false")))
@@ -280,7 +285,35 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
             val response: WSResponse = postRequest
 
-            VatSubscriptionStub.verifyDeregistration(belowThresholdFullPayloadJson)
+            VatSubscriptionStub.verifyDeregistration(ceasedTradingFullPayloadJson)
+
+            response should have(
+              httpStatus(SEE_OTHER),
+              redirectURI("/vat-through-software/account/deregister/deregister-request-received")
+            )
+          }
+        }
+
+        "all possible Exempt Only Supplies deregistration reason answers are completed" should {
+
+          "redirect user to confirmation page" in {
+
+            DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(ExemptOnly))
+            DeregisterVatStub.successfulGetAnswer(vrn, AccountingMethodAnswerService.key)(Json.toJson(CashAccounting))
+            DeregisterVatStub.successfulGetAnswer(vrn, StocksAnswerService.key)(Json.toJson(yesNoAmountYes))
+            DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
+            DeregisterVatStub.successfulGetAnswer(vrn, OptionTaxAnswerService.key)(Json.toJson(yesNoAmountYes))
+            DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
+            DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+            DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(deregistrationDate))
+
+            VatSubscriptionStub.deregisterForVatSuccess()
+
+            given.user.isAuthorised
+
+            val response: WSResponse = postRequest
+
+            VatSubscriptionStub.verifyDeregistration(exemptOnlyFullPayloadJson)
 
             response should have(
               httpStatus(SEE_OTHER),
