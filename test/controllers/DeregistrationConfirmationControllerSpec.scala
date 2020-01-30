@@ -25,6 +25,8 @@ import assets.constants.ContactPreferencesTestConstants.{contactPreferencesDigit
 import assets.constants.BaseTestConstants.vrn
 import org.jsoup.Jsoup
 import assets.messages.{DeregistrationConfirmationMessages => Messages}
+import common.SessionKeys
+
 import scala.concurrent.Future
 
 class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
@@ -41,102 +43,121 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       mockContactPreferencesService,
       mockConfig)
 
+ lazy val requestWithSession = request.withSession(SessionKeys.deregSuccessful -> "true")
+
   "the user is authorised" when {
 
     "Calling the .show action" when {
 
-      "answers are deleted successfully and a customerDetails is received" when {
+      "User has successful dereg session key" when {
 
-        "Contact Preference is set to 'DIGITAL'" should {
-          lazy val result = {
-            TestDeregistrationConfirmationController.show()(request)
+        "answers are deleted successfully and a customerDetails is received" when {
+
+          "Contact Preference is set to 'DIGITAL'" should {
+            lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
+
+            lazy val document = Jsoup.parse(bodyOf(result))
+
+            "return 200 (OK)" in {
+              setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
+              setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+              setupAuditExtendedEvent
+
+              status(result) shouldBe Status.OK
+            }
+
+            "return HTML" in {
+              contentType(result) shouldBe Some("text/html")
+              charset(result) shouldBe Some("utf-8")
+            }
+
+            "return the correct first paragraph" in {
+              document.getElementById("content").getElementsByTag("article").first()
+                .getElementsByTag("p").first().text() shouldBe Messages.digitalPreference
+            }
           }
-          lazy val document = Jsoup.parse(bodyOf(result))
 
-          "return 200 (OK)" in {
-            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
-            setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-            setupAuditExtendedEvent
+        }
 
-            status(result) shouldBe Status.OK
+        "answers are deleted successfully and an error is received for CustomerDetails call" when {
+
+          "Contact Preference is set to 'PAPER'" should {
+
+            lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
+
+            lazy val document = Jsoup.parse(bodyOf(result))
+
+            "return 200 (OK)" in {
+              setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              setupMockContactPreferences(vrn)(Right(contactPreferencesPaper))
+              setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+              setupAuditExtendedEvent
+              status(result) shouldBe Status.OK
+            }
+
+            "return HTML" in {
+              contentType(result) shouldBe Some("text/html")
+              charset(result) shouldBe Some("utf-8")
+            }
+
+            "return the correct first paragraph" in {
+              document.getElementById("content").getElementsByTag("article").first()
+                .getElementsByTag("p").first().text() shouldBe Messages.paperPreference
+            }
           }
 
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
+          "contact preferences returns an error" should {
 
-          "return the correct first paragraph" in {
-            document.getElementById("content").getElementsByTag("article").first().getElementsByTag("p").first().text() shouldBe Messages.digitalPreference
+            lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
+
+            lazy val document = Jsoup.parse(bodyOf(result))
+
+            "return 200 (OK)" in {
+              setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              setupMockContactPreferences(vrn)(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "I got nothing")))
+              setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+              status(result) shouldBe Status.OK
+            }
+
+            "return HTML" in {
+              contentType(result) shouldBe Some("text/html")
+              charset(result) shouldBe Some("utf-8")
+            }
+
+            "return the correct first paragraph" in {
+              document.getElementById("content").getElementsByTag("article").first()
+                .getElementsByTag("p").first().text() shouldBe Messages.contactPrefError
+            }
           }
         }
 
+        "answers are not deleted successfully should return internal server error" in {
+          lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
+          setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
       }
 
-      "answers are deleted successfully and an error is received for CustomerDetails call" when {
-
-        "Contact Preference is set to 'PAPER'" should {
-
-          lazy val result = {
-            TestDeregistrationConfirmationController.show()(request)
-          }
-          lazy val document = Jsoup.parse(bodyOf(result))
-
-          "return 200 (OK)" in {
-            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockContactPreferences(vrn)(Right(contactPreferencesPaper))
-            setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-            setupAuditExtendedEvent
-            status(result) shouldBe Status.OK
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-
-          "return the correct first paragraph" in {
-            document.getElementById("content").getElementsByTag("article").first().getElementsByTag("p").first().text() shouldBe Messages.paperPreference
-          }
+      "user does not have session key" should {
+        lazy val result = {
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          TestDeregistrationConfirmationController.show()(request)
         }
 
-        "contact preferences returns an error" should {
+        "return 303" in {
+          status(result) shouldBe Status.SEE_OTHER
+        }
 
-          lazy val result = {
-            TestDeregistrationConfirmationController.show()(request)
-          }
-          lazy val document = Jsoup.parse(bodyOf(result))
-
-          "return 200 (OK)" in {
-            setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockContactPreferences(vrn)(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "I got nothing")))
-            setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-            status(result) shouldBe Status.OK
-          }
-
-          "return HTML" in {
-            contentType(result) shouldBe Some("text/html")
-            charset(result) shouldBe Some("utf-8")
-          }
-
-          "return the correct first paragraph" in {
-            document.getElementById("content").getElementsByTag("article").first().getElementsByTag("p").first().text() shouldBe Messages.contactPrefError
-          }
+        "redirect to Deregister for VAT controller" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.DeregisterForVATController.redirect().url)
         }
       }
-    }
-
-    lazy val result3 = TestDeregistrationConfirmationController.show()(request)
-
-    "throw an ISE if there's an error deleting the stored answers" in {
-      setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-      mockAuthResult(Future.successful(mockAuthorisedIndividual))
-      status(result3) shouldBe Status.INTERNAL_SERVER_ERROR
     }
   }
-
 }
+

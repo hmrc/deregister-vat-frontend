@@ -21,4 +21,5 @@ object SessionKeys {
   val CLIENT_VRN: String = "CLIENT_VRN"
   val verifiedAgentEmail: String = "verifiedAgentEmail"
   val pendingDeregKey: String = "pendingDeregistration"
+  val deregSuccessful: String = "successfulDeregistration"
 }

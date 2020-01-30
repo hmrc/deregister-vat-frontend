@@ -16,6 +16,7 @@
 
 package controllers
 
+import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
 import javax.inject.{Inject, Singleton}
@@ -52,6 +53,8 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     updateDeregistrationService.updateDereg.map {
       case Right(VatSubscriptionSuccess) => Redirect(controllers.routes.DeregistrationConfirmationController.show().url)
+          .addingToSession(SessionKeys.deregSuccessful -> "true", SessionKeys.pendingDeregKey -> "true")
+
       case Left(error) =>
         Logger.warn("[CheckAnswersController][submit] - error returned from vat subscription when updating dereg: " + error.message)
         serviceErrorHandler.showInternalServerError

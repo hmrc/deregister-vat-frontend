@@ -28,7 +28,7 @@ import play.api.test.Helpers.OK
 
 class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
 
-  val session: Map[String, String] = Map(SessionKeys.CLIENT_VRN -> vrn)
+  val session: Map[String, String] = Map(SessionKeys.CLIENT_VRN -> vrn, SessionKeys.deregSuccessful -> "true")
   lazy val mockAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   override def beforeEach() {

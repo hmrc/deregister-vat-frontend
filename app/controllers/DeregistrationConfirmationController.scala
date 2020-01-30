@@ -18,6 +18,7 @@ package controllers
 
 import audit.models.ContactPreferenceAuditModel
 import audit.services.AuditService
+import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import javax.inject.Inject
@@ -42,30 +43,35 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
 
-    deleteAllStoredAnswersService.deleteAllAnswers flatMap {
+    user.session.get(SessionKeys.deregSuccessful) match {
+      case Some("true") =>
 
-      case Right(_) =>
+        deleteAllStoredAnswersService.deleteAllAnswers flatMap {
 
-        val serviceCalls = for {
-          customerDetailsCall <- customerDetailsService.getCustomerDetails(user.vrn)
-          contactPreferenceCall <- getContactPreference
-        } yield (customerDetailsCall, contactPreferenceCall)
+          case Right(_) =>
 
-        serviceCalls.map { result =>
+            val serviceCalls = for {
+              customerDetailsCall <- customerDetailsService.getCustomerDetails(user.vrn)
+              contactPreferenceCall <- getContactPreference
+            } yield (customerDetailsCall, contactPreferenceCall)
 
-          val businessName: Option[String] = result._1.fold(_ => None, _.businessName)
-          val contactPreference: Option[String] = result._2.fold(_ => None, {
-            model =>
-              auditService.auditExtendedEvent(ContactPreferenceAuditModel(user.vrn, model.preference))
-              Some(model.preference)
-          })
+            serviceCalls.map { result =>
 
-          Ok(views.html.deregistrationConfirmation(businessName, contactPreference))
+              val businessName: Option[String] = result._1.fold(_ => None, _.businessName)
+              val contactPreference: Option[String] = result._2.fold(_ => None, {
+                model =>
+                  auditService.auditExtendedEvent(ContactPreferenceAuditModel(user.vrn, model.preference))
+                  Some(model.preference)
+              })
+
+              Ok(views.html.deregistrationConfirmation(businessName, contactPreference))
+            }
+
+          case Left(_) =>
+            Logger.warn("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
+            Future.successful(serviceErrorHandler.showInternalServerError)
         }
-
-      case Left(_) =>
-        Logger.warn("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
-        Future.successful(serviceErrorHandler.showInternalServerError)
+      case _ => Future.successful(Redirect(controllers.routes.DeregisterForVATController.redirect()))
     }
   }
 

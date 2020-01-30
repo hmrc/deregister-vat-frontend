@@ -20,6 +20,7 @@ import assets.constants.CheckYourAnswersTestConstants._
 import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
+import common.SessionKeys
 import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
@@ -84,7 +85,6 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
         }
       }
 
-
       "No deregistration date for DeregDateAnswerService is returned" should {
 
         lazy val result = TestCheckAnswersController.show()(request)
@@ -144,7 +144,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
 
         lazy val result = TestCheckAnswersController.submit()(request)
 
-        "return 200 (OK)" in {
+        "return 303 (see other)" in {
           setupUpdateDeregistration(Right(VatSubscriptionSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
@@ -152,6 +152,13 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
 
         "redirect to the correct page" in {
           redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationConfirmationController.show().url)
+        }
+        "add the pending dereg value to the session" in {
+        session(result).get(SessionKeys.pendingDeregKey) shouldBe Some("true")
+        }
+
+        "add the successful dereg value to the session" in {
+          session(result).get(SessionKeys.deregSuccessful) shouldBe Some("true")
         }
       }
 
