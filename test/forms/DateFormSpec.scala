@@ -136,7 +136,7 @@ class DateFormSpec extends TestUtil {
 
       "have three error" in {
         form.errors.size shouldBe 1
-        Messages(form.errors.head.message) shouldBe CeasedTradingDateMessages.errorInvalidDate
+        Messages(form.errors.head.message) shouldBe CeasedTradingDateMessages.errorNoEntry
       }
     }
   }

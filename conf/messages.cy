@@ -63,7 +63,6 @@ error.date.invalidCharacters = Nodwch ddyddiad gan ddefnyddio’r rhifau 0 i 9
 error.date.day = Nodwch rifau rhwng 1 a 31
 error.date.month = Nodwch rifau rhwng 1 a 12
 error.date.year = Nodwch 4 rhif
-error.date.invalid = Nodwch y dyddiad y rhoddodd y busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
 
 #Feedback
 feedback.before = Gwasanaeth newydd yw hwn – bydd eich
@@ -87,7 +86,7 @@ deregistrationReason.reason.mandatoryRadioOption = Dewiswch reswm dros ganslo TA
 deregistrationDate.title = A ydych am ddewis y dyddiad canslo?
 deregistrationDate.p1 = Gall y dyddiad fod hyd at uchafswm o 3 mis o heddiw.
 deregistrationDate.p2 = Byddwn yn cadarnhau’r dyddiad pan fyddwn yn derbyn eich cais.
-deregistrationDate.error.date.invalidDate = Nodwch ddyddiad canslo dilys
+deregistrationDate.error.date.noEntry = Nodwch ddyddiad canslo dilys
 deregistrationDate.error.date.past = Rhaid i’r dyddiad dadgofrestru fod yn y dyfodol
 deregistrationDate.error.date.future = Rhaid i’r dyddiad canslo beidio â bod mwy na 3 mis o heddiw
 deregistrationDate.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes eisiau dewis y dyddiad canslo
@@ -107,8 +106,7 @@ vatAccounts.showMeAnExample.mandatorySelection = Dewiswch sut y caiff cyfrifon T
 
 ceasedTrading.title = Y dyddiad y rhoddodd y busnes y gorau i fasnachu, neu’r dyddiad y bydd yn rhoi’r gorau i fasnachu
 ceasedTrading.hint = Er enghraifft, 31 3 1980
-ceasedTrading.error.date.noEntry = Nodwch y dyddiad y rhoddodd eich busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
-ceasedTrading.error.date.invalidDate = Nodwch ddyddiad go iawn ar gyfer rhoi’r gorau i fasnachu
+ceasedTrading.error.date.noEntry = Nodwch y dyddiad y rhoddodd y busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
 
 optionTax.title = A yw’r busnes wedi codi neu hawlio TAW ar dir neu eiddo masnachol?
 optionTax.text = Gallwch ddewis codi TAW ar unrhyw incwm a geir wrth rentu neu werthu tir neu eiddo masnachol. Gelwir hyn yn ‘Opsiwn i Drethu’.

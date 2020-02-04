@@ -21,6 +21,5 @@ object CeasedTradingDateMessages extends BaseMessages {
   val title = "Date the business stopped or will stop trading" + titleSuffix
   val heading = "Date the business stopped or will stop trading"
   val dateHint = "For example, 31 3 1980"
-  val errorNoEntry = "Enter the date your business ceased or will cease trading"
-  val errorInvalidDate = "Enter a real ceased trading date"
+  val errorNoEntry = "Enter the date the business stopped or will stop trading"
 }

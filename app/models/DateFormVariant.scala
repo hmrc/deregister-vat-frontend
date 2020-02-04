@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(field: play.api.data.Field, label: String, formClass: String, hasErrors: Boolean)(implicit messages: Messages)
+package models
 
-<label for="@field.name" class="form-group form-group-@formClass">
+sealed trait DateFormVariant
 
-    <span>@label</span>
-
-    <input class="form-control input--xsmall input--no-spinner @if(hasErrors){error-field}" name="@field.name" id="@field.name" value="@field.value"/>
-
-</label>
+case object CeasedTradingDate extends DateFormVariant
+case object DeregistrationDate extends DateFormVariant

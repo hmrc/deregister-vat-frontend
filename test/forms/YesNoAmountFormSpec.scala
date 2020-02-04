@@ -90,7 +90,7 @@ class YesNoAmountFormSpec extends TestUtil {
       }
 
       "have the Select and Option error" in {
-        Messages(form.errors.head.message) shouldBe OptionTaxMessages.yesNoError
+        form.errors.head.message shouldBe "yesNoError"
       }
     }
 
@@ -106,8 +106,8 @@ class YesNoAmountFormSpec extends TestUtil {
         form.hasErrors shouldBe true
       }
 
-      "have the Mandatory Amount error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.errorMandatoryAmount
+      "have the empty amount error" in {
+        form.errors.head.message shouldBe "emptyAmount"
       }
     }
 

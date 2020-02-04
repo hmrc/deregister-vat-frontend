@@ -18,6 +18,8 @@
 @import views.html.templates.errors.errorSummary
 @import templates.inputs.date
 @import views.utils.TitleUtil.title
+@import templates.headings
+@import models.CeasedTradingDate
 
 @(form: Form[DateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
@@ -34,6 +36,7 @@
         form = form,
         question = messages("ceasedTrading.title"),
         fieldName = "date",
+        formVariant = CeasedTradingDate,
         hint = Some(messages("ceasedTrading.hint"))
       )
     </div>

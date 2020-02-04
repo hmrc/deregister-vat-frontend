@@ -57,8 +57,8 @@ object DeregistrationDateForm {
 
   val checkValidDateIfYesConstraint: Constraint[DeregistrationDateModel] = Constraint[DeregistrationDateModel]("checkValidDateIfYes") {
     deregDate => deregDate.yesNo match {
-      case Yes => deregDate.date.fold[ValidationResult](Invalid("deregistrationDate.error.date.invalidDate")) {
-        date => date.date.fold[ValidationResult](Invalid("deregistrationDate.error.date.invalidDate")) {
+      case Yes => deregDate.date.fold[ValidationResult](Invalid("deregistrationDate.error.date.noEntry")) {
+        date => date.date.fold[ValidationResult](Invalid("deregistrationDate.error.date.noEntry")) {
           validDate => isDateRangeValid(validDate)
         }
       }

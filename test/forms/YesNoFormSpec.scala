@@ -37,7 +37,7 @@ class YesNoFormSpec extends UnitSpec {
 
     "fail when nothing has been entered" in {
       val res = yesNoForm("empty").bind(Map.empty[String, String])
-      res.errors should contain(FormError(yesNo, "empty"))
+      res.errors should contain(FormError(yesNo, "empty", List(None)))
     }
   }
 

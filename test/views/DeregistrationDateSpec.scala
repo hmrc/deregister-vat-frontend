@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import assets.messages.{CommonMessages, DeregistrationDateMessages}
 import forms.{DateForm, DeregistrationDateForm, YesNoForm}
-import models.{No, Yes}
+import models.{Yes}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -271,7 +271,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorHiddenField) shouldBe CommonMessages.invalidDate
+      elementText(Selectors.errorHiddenField) shouldBe DeregistrationDateMessages.errorInvalidDate
     }
   }
 
@@ -327,7 +327,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorHiddenField) shouldBe CommonMessages.invalidDate
+      elementText(Selectors.errorHiddenField) shouldBe DeregistrationDateMessages.errorInvalidDate
     }
   }
 
@@ -411,7 +411,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorHiddenField) shouldBe CommonMessages.invalidDate
+      elementText(Selectors.errorHiddenField) shouldBe DeregistrationDateMessages.errorInvalidDate
     }
   }
 
