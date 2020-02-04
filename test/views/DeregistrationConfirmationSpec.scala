@@ -59,9 +59,9 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.contactDetails
       }
 
-      "have the correct continue button text and url" in {
+      "have the correct finish button text and url" in {
         elementText(Selectors.button) shouldBe CommonMessages.finish
-        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+        element(Selectors.button).attr("href") shouldBe mockConfig.vatSummaryFrontendUrl
       }
     }
 
@@ -90,9 +90,9 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.contactDetails
       }
 
-      "have the correct continue button text and url" in {
+      "have the correct finish button text and url" in {
         elementText(Selectors.button) shouldBe CommonMessages.finish
-        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+        element(Selectors.button).attr("href") shouldBe mockConfig.vatSummaryFrontendUrl
       }
     }
 
@@ -121,9 +121,9 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.contactDetails
       }
 
-      "have the correct continue button text and url" in {
+      "have the correct finish button text and url" in {
         elementText(Selectors.button) shouldBe CommonMessages.finish
-        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+        element(Selectors.button).attr("href") shouldBe mockConfig.vatSummaryFrontendUrl
       }
     }
   }
@@ -155,12 +155,12 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentWithOrgName
       }
 
-      "have the correct continue button text" in {
+      "have the correct finish button text" in {
         elementText(Selectors.button) shouldBe CommonMessages.finish
       }
 
-      "have the correct continue button url" in {
-        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+      "have the correct finish button url" in {
+        element(Selectors.button).attr("href") shouldBe mockConfig.agentClientLookupAgentHubPath
       }
     }
 
@@ -189,12 +189,12 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefNo
       }
 
-      "have the correct continue button text" in {
+      "have the correct finish button text" in {
         elementText(Selectors.button) shouldBe CommonMessages.finish
       }
 
-      "have the correct continue button url" in {
-        element(Selectors.button).attr("href") shouldBe mockConfig.manageVatSubscriptionFrontendUrl
+      "have the correct finish button url" in {
+        element(Selectors.button).attr("href") shouldBe mockConfig.agentClientLookupAgentHubPath
       }
     }
 

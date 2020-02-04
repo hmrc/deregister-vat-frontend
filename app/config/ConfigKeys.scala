@@ -56,10 +56,13 @@ object ConfigKeys {
   val manageVatSubscriptionFrontendHost: String = "manage-vat-subscription-frontend.host"
   val manageVatSubscriptionFrontendUrl: String = "manage-vat-subscription-frontend.url"
 
+  val vatSummaryFrontendHost: String = "vat-summary-frontend.host"
+  val vatSummaryFrontendUrl: String = "vat-summary-frontend.url"
+
   val vatAgentClientLookupFrontendHost: String = "vat-agent-client-lookup-frontend.host"
   val vatAgentClientLookupFrontendUrl: String = "vat-agent-client-lookup-frontend.url"
   val changeClientUrl: String = "vat-agent-client-lookup-frontend.changeClientUrl"
-  val agentClientLookupChoices: String = "vat-agent-client-lookup-frontend.choicesPath"
+  val agentClientLookupAgentHub: String = "vat-agent-client-lookup-frontend.agentHub"
 
   val vatSubscriptionService: String = "vat-subscription"
 

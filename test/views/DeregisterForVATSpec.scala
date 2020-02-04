@@ -74,7 +74,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have a back link with the correct link location" in {
-      element(Selectors.back).attr("href") shouldBe mockConfig.agentClientLookupChoicesPath
+      element(Selectors.back).attr("href") shouldBe mockConfig.agentClientLookupAgentHubPath
     }
   }
 
