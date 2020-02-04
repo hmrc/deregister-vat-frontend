@@ -14,25 +14,28 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers
+@(field: Field,
+  label: String,
+  labelHidden: Boolean = true,
+  additionalContent: Option[Html] = None,
+  isMonetaryField: Boolean = false)(implicit messages: Messages)
 
-@(field: Field, label: String, hint: Option[String] = None)(implicit messages: Messages)
+<div class="form-field@if(field.hasErrors){--error}">
 
-<div class="form-field">
-    @if(hint.isDefined) {
-        @helpers.input(
-            field,
-            '_label -> messages(label),
-            '_labelTextClass -> "form-label visuallyhidden",
-            '_inputHint -> messages(hint.get),
-            '_inputClass -> "form-control input--no-spinner"
-        )
-    } else {
-        @helpers.input(
-            field,
-            '_label -> messages(label),
-            '_labelTextClass -> "form-label visuallyhidden",
-            '_inputClass -> "form-control input--no-spinner"
-        )
-    }
+  @additionalContent.map { content => @content }
+
+  <label for="@field.id" class="form-label @if(labelHidden){visuallyhidden}">@label</label>
+
+  @field.errors.headOption.map { error =>
+    <span class="error-message" role="tooltip">
+      @messages(error.message, error.args: _*)
+    </span>
+  }
+
+  @if(isMonetaryField){<span class="input-currency"></span>}
+
+  <input class="form-control input--no-spinner @if(isMonetaryField){money-input-padding}"
+         name="@field.name"
+         id="@field.name"
+         value="@field.value.getOrElse("")"/>
 </div>

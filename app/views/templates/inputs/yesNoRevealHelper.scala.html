@@ -39,7 +39,7 @@
 
             @elements.errors.map { error => <span class="error-message">@messages(error)</span> }
 
-            <div @if(inline){ class="inline form-group"}>
+            <div @if(inline){class="inline"}>
                  <div class="multiple-choice" data-target="hiddenContent">
                      <input type="radio"
                             id="@{elements.field.name}-yes"
@@ -58,7 +58,7 @@
                  </div>
             </div>
 
-            <div class="form-group panel panel-border-narrow @if(field.value != Some("yes")){js-hidden}" id="hiddenContent">
+            <div class="panel panel-border-narrow yes-no-hidden @if(!field.value.contains("yes")){js-hidden}" id="hiddenContent">
                 @hiddenContent
             </div>
 

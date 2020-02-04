@@ -17,37 +17,32 @@
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
 @import views.html.templates.inputs.radioHelper
-@import templates.headings
 @import config.AppConfig
 @import forms.YesNoForm._
-@import views.utils.TitleUtil._
+@import views.utils.TitleUtil.title
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: AppConfig)
 
-@views.html.main_template(
-    title = title(messages("outstandingInvoice.title"), form),
-    bodyClasses = None,
-    appConfig = appConfig) {
+@views.html.main_template(title = title(messages("outstandingInvoice.title"), form), appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.IssueNewInvoicesController.show().url">@messages("common.back")</a>
+  <a class="link-back" href="@controllers.routes.IssueNewInvoicesController.show().url">@messages("common.back")</a>
 
-    @errorSummary("common.errorSummary.heading", form)
+  @errorSummary("common.errorSummary.heading", form)
 
-    @helpers.form(action = controllers.routes.OutstandingInvoicesController.submit, 'novalidate -> "novalidate") {
+  @helpers.form(action = controllers.routes.OutstandingInvoicesController.submit, 'novalidate -> "novalidate") {
 
-        <div id="@yesNo" class="form-group" data-metrics="end-journey:view:outstanding-invoices">
-            @radioHelper(
-                field = form(yesNo),
-                choices = Seq(
-                    (yes, Messages("common.yes")),
-                    (no, Messages("common.no"))
-                ),
-                question = Messages("outstandingInvoice.title"),
-                inline = true,
-                additionalContent = None
-            )
-        </div>
+    <div id="@yesNo" class="form-group">
+      @radioHelper(
+        field = form(yesNo),
+        choices = Seq(
+          yes -> messages("common.yes"),
+          no -> messages("common.no")
+        ),
+        question = messages("outstandingInvoice.title"),
+        inline = true
+      )
+    </div>
 
-        <button class="button" type="submit" id="continue">@messages("common.continue")</button>
-    }
+    <button class="button" type="submit" id="continue">@messages("common.continue")</button>
+  }
 }

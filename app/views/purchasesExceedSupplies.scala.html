@@ -14,45 +14,45 @@
  * limitations under the License.
  *@
 
+@import forms.PurchasesExceedSuppliesForm._
+@import templates.headings
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
 @import views.html.templates.inputs.radioHelper
-@import templates.headings
-@import forms.PurchasesExceedSuppliesForm
-@import forms.PurchasesExceedSuppliesForm._
-@import views.utils.TitleUtil._
+@import views.utils.TitleUtil.title
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(
-    title = title(messages("purchasesExceedSupplies.title"), form),
-    bodyClasses = None,
-    appConfig = appConfig) {
+@questionContent = {
+  @headings(messages("purchasesExceedSupplies.title"))
 
-    <a class="link-back" href="@controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url">@messages("common.back")</a>
+  <p>@messages("purchasesExceedSupplies.explanation")</p>
+}
 
-    @errorSummary("common.errorSummary.heading", form)
+@views.html.main_template(title = title(messages("purchasesExceedSupplies.title"), form), appConfig = appConfig) {
 
-    @headings(messages("purchasesExceedSupplies.title"))
+  <a class="link-back" href="@controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url">@messages("common.back")</a>
 
-    <p>@messages("purchasesExceedSupplies.explanation")</p>
+  @errorSummary("common.errorSummary.heading", form)
 
-    @helpers.form(action = controllers.zeroRated.routes.PurchasesExceedSuppliesController.submit, 'novalidate -> "novalidate") {
+  @helpers.form(action = controllers.zeroRated.routes.PurchasesExceedSuppliesController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="answer">
-        @radioHelper(
-            field = form(yesNo),
-            choices = Seq(
-                (yes, Messages("common.yes")),
-                (no, Messages("common.no"))),
-            question = Messages("purchasesExceedSupplies.title"),
-            inline = true,
-            legendAsHeader = false
-        )
-        </div>
+    <div class="form-group" id="answer">
+      @radioHelper(
+        field = form(yesNo),
+        choices = Seq(
+          (yes, messages("common.yes")),
+          (no, messages("common.no"))
+        ),
+        question = messages("purchasesExceedSupplies.title"),
+        additionalContent = Some(questionContent),
+        inline = true,
+        legendAsHeader = false
+      )
+    </div>
 
-        <button class="button" type="submit" id="continue">
-        @messages("common.continue")
-        </button>
-    }
+    <button class="button" type="submit" id="continue">
+      @messages("common.continue")
+    </button>
+  }
 }

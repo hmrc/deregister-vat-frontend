@@ -26,8 +26,8 @@ class SicCodeSpec extends ViewBaseSpec {
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val explanationNoError = "#content article > p:nth-child(3)"
-    val explanationWithError = "#content article > p:nth-child(4)"
+    val explanation = ".form-group > div:nth-child(1) > p:nth-child(2)"
+    val sicCodeLink = "#find-sic-code"
     val button = ".button"
     val errorHeading = "#error-summary-display"
     val error = ".error-summary > ul > li > a"
@@ -56,12 +56,12 @@ class SicCodeSpec extends ViewBaseSpec {
     }
 
     "have the correct explanation text" in {
-      document.select(Selectors.explanationNoError).text() shouldBe SicCodeMessages.explanation
+      elementText(Selectors.explanation) shouldBe SicCodeMessages.explanation
     }
 
     "have the correct 'find SIC code' text and link" in {
-      document.getElementById("find-sic-code").text() shouldBe SicCodeMessages.findCode
-      document.getElementById("find-sic-code").attr("href") shouldBe "findSicCode.gov.uk"
+      elementText(Selectors.sicCodeLink) shouldBe SicCodeMessages.findCode
+      element(Selectors.sicCodeLink).attr("href") shouldBe mockConfig.govUkFindSicCode
     }
 
     "have the correct continue button text" in {
@@ -96,12 +96,12 @@ class SicCodeSpec extends ViewBaseSpec {
     }
 
     "have the correct explanation text" in {
-      document.select(Selectors.explanationWithError).text() shouldBe SicCodeMessages.explanation
+      elementText(Selectors.explanation) shouldBe SicCodeMessages.explanation
     }
 
     "have the correct 'find SIC code' text and link" in {
-      document.getElementById("find-sic-code").text() shouldBe SicCodeMessages.findCode
-      document.getElementById("find-sic-code").attr("href") shouldBe "findSicCode.gov.uk"
+      elementText(Selectors.sicCodeLink) shouldBe SicCodeMessages.findCode
+      element(Selectors.sicCodeLink).attr("href") shouldBe mockConfig.govUkFindSicCode
     }
 
     "have the correct continue button text" in {
@@ -112,5 +112,4 @@ class SicCodeSpec extends ViewBaseSpec {
       elementText(Selectors.error) shouldBe SicCodeMessages.invalid
     }
   }
-
 }

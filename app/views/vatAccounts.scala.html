@@ -18,48 +18,44 @@
 @import views.html.templates.errors.errorSummary
 @import templates.inputs.multipleLineRadioGroup
 @import templates.headings
-@import models.{DeregistrationReason, MultipleLineRadioGroupModel}
-@import views.utils.TitleUtil._
-
+@import models.MultipleLineRadioGroupModel
+@import views.utils.TitleUtil.title
 
 @(backLink: String, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(
-  title = title(messages("vatAccounts.title"), form),
-  bodyClasses = None,
-  appConfig = appConfig) {
+@questionContent = {
+  @headings(messages("vatAccounts.title"))
 
-    <a class="link-back"
-       href=@backLink
-    >@messages("common.back")</a>
+  <p>@messages("vatAccounts.showMeAnExample.p1")</p>
+  <ul class="list bullets bullet list-bullet">
+    <li>@messages("vatAccounts.showMeAnExample.bullet1")</li>
+    <li>@messages("vatAccounts.showMeAnExample.bullet2")</li>
+  </ul>
+}
 
-    @errorSummary("common.errorSummary.heading", form)
+@views.html.main_template(title = title(messages("vatAccounts.title"), form), appConfig = appConfig) {
 
-    @headings(messages("vatAccounts.title"))
+  <a class="link-back" href=@backLink>@messages("common.back")</a>
 
-    <p>@messages("vatAccounts.showMeAnExample.p1")</p>
-    <ul class="list bullets bullet list-bullet">
-        <li>@messages("vatAccounts.showMeAnExample.bullet1")</li>
-        <li>@messages("vatAccounts.showMeAnExample.bullet2")</li>
-    </ul>
+  @errorSummary("common.errorSummary.heading", form)
 
-    @helpers.form(action = controllers.routes.VATAccountsController.submit, 'novalidate -> "novalidate") {
+  @helpers.form(action = controllers.routes.VATAccountsController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="accountingMethod" data-metrics="end-journey:view:accounting-method">
-            @multipleLineRadioGroup(
-                field = form("accountingMethod"),
-                choices = Seq(
-                    MultipleLineRadioGroupModel("standard", Messages("vatAccounts.method.standard"), Messages("vatAccounts.description.standard")),
-                    MultipleLineRadioGroupModel("cash", Messages("vatAccounts.method.cash"), Messages("vatAccounts.description.cash"))
-                ),
-                question = messages("vatAccounts.title"),
-                legendAsHeader = false
-            )
-        </div>
+    <div class="form-group" id="accountingMethod" data-metrics="end-journey:view:accounting-method">
+      @multipleLineRadioGroup(
+        field = form("accountingMethod"),
+        choices = Seq(
+          MultipleLineRadioGroupModel("standard", messages("vatAccounts.method.standard"), messages("vatAccounts.description.standard")),
+          MultipleLineRadioGroupModel("cash", messages("vatAccounts.method.cash"), messages("vatAccounts.description.cash"))
+        ),
+        question = messages("vatAccounts.title"),
+        additionalContent = Some(questionContent),
+        legendAsHeader = false
+      )
+    </div>
 
-        <button class="button" type="submit" id="continue">
-            @messages("common.continue")
-        </button>
-    }
-
+    <button class="button" type="submit" id="continue">
+      @messages("common.continue")
+    </button>
+  }
 }

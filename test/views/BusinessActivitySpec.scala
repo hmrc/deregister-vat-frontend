@@ -26,8 +26,8 @@ class BusinessActivitySpec extends ViewBaseSpec {
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val forExampleNoError = "#content article > p:nth-child(3)"
-    val forExampleWithError = "#content article > p:nth-child(4)"
+    val forExample = "#answer > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
+    val moreInfoLink = "#rates-info"
     val yesOption = "div.multiple-choice:nth-child(1) > label:nth-child(2)"
     val noOption = "div.multiple-choice:nth-child(2) > label:nth-child(2)"
     val button = ".button"
@@ -58,12 +58,12 @@ class BusinessActivitySpec extends ViewBaseSpec {
     }
 
     "have the correct example text" in {
-      document.select(Selectors.forExampleNoError).text() shouldBe BusinessActivityPageMessages.forExample
+      elementText(Selectors.forExample) shouldBe BusinessActivityPageMessages.forExample
     }
 
     "have the correct 'moreInfo' text and link" in {
-      document.getElementById("rates-info").text() shouldBe BusinessActivityPageMessages.moreInfo
-      document.getElementById("rates-info").attr("href") shouldBe "govuk/vat-rates-info"
+      elementText(Selectors.moreInfoLink) shouldBe BusinessActivityPageMessages.moreInfo
+      element(Selectors.moreInfoLink).attr("href") shouldBe mockConfig.govUkVatRatesInfo
     }
 
     "have the correct a radio button form with yes/no answers" in {
@@ -103,12 +103,12 @@ class BusinessActivitySpec extends ViewBaseSpec {
     }
 
     "have the correct example text" in {
-      document.select(Selectors.forExampleWithError).text() shouldBe BusinessActivityPageMessages.forExample
+      elementText(Selectors.forExample) shouldBe BusinessActivityPageMessages.forExample
     }
 
     "have the correct 'moreInfo' text and link" in {
-      document.getElementById("rates-info").text() shouldBe BusinessActivityPageMessages.moreInfo
-      document.getElementById("rates-info").attr("href") shouldBe "govuk/vat-rates-info"
+      elementText(Selectors.moreInfoLink) shouldBe BusinessActivityPageMessages.moreInfo
+      element(Selectors.moreInfoLink).attr("href") shouldBe mockConfig.govUkVatRatesInfo
     }
 
     "have the correct a radio button form with yes/no answers" in {
@@ -124,5 +124,4 @@ class BusinessActivitySpec extends ViewBaseSpec {
       elementText(Selectors.error) shouldBe BusinessActivityPageMessages.businessActivityError
     }
   }
-
 }

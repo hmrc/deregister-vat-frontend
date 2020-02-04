@@ -16,19 +16,17 @@
 
 package views
 
-import assets.messages.{CommonMessages, OptionTaxMessages, TaxableTurnoverMessages}
+import assets.messages.{CommonMessages, OptionTaxMessages}
 import forms.YesNoAmountForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-
 class OptionTaxSpec extends ViewBaseSpec {
-
 
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val text = (number: Int) => s"#content > article > p:nth-child($number)"
+    val text = "#yes_no > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
     val noOption = "fieldset > div > div:nth-of-type(2) > label"
     val hiddenField = "#hiddenContent"
@@ -61,7 +59,7 @@ class OptionTaxSpec extends ViewBaseSpec {
     }
 
     s"have the correct content displayed" in {
-      elementText(Selectors.text(3)) shouldBe OptionTaxMessages.text
+      elementText(Selectors.text) shouldBe OptionTaxMessages.text
     }
 
     s"have the correct a radio button form with yes/no answers" in {

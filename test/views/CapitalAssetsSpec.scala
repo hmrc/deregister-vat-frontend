@@ -21,14 +21,12 @@ import forms.YesNoAmountForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-
 class CapitalAssetsSpec extends ViewBaseSpec {
-
 
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val text = (number: Int) => s"#content > article > p:nth-child($number)"
+    val text = "#yes_no > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
     val noOption = "fieldset > div > div:nth-of-type(2) > label"
     val hiddenField = "#hiddenContent"
@@ -61,7 +59,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
     }
 
     s"have the correct content displayed" in {
-      elementText(Selectors.text(3)) shouldBe CapitalAssetsMessages.p1
+      elementText(Selectors.text) shouldBe CapitalAssetsMessages.p1
     }
 
     s"have the correct a radio button form with yes/no answers" in {

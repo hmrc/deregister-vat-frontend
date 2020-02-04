@@ -29,8 +29,8 @@ class WhyTurnoverBelowSpec extends ViewBaseSpec {
     object Selectors {
       val back = ".link-back"
       val pageHeading = "#content h1"
-      val text1 = "article > p"
-      val checkboxOption = (number: Int) => s"fieldset > div > div:nth-of-type($number) > label"
+      val text1 = "#reason > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
+      val checkboxOption: Int => String = (number: Int) => s"fieldset > div > div:nth-of-type($number) > label"
       val button = ".button"
       val errorHeading = "#error-summary-display"
       val error = ".error-message"

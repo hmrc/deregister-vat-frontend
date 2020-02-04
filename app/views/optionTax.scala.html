@@ -17,50 +17,49 @@
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
 @import views.html.templates.inputs.yesNoRevealHelper
-@import views.html.templates.inputs.moneyInput
+@import views.html.templates.inputs.text
 @import templates.headings
 @import forms.YesNoForm._
-@import views.utils.TitleUtil._
-
+@import views.utils.TitleUtil.title
 
 @(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(
-    title = title(messages("optionTax.title"), form),
-    bodyClasses = None,
-    appConfig = appConfig) {
+@questionContent = {
+  @headings(messages("optionTax.title"))
 
-    <a class="link-back" href="@controllers.routes.VATAccountsController.show().url">@messages("common.back")</a>
+  <p>@messages("optionTax.text")</p>
+}
 
-    @errorSummary("common.errorSummary.heading", form)
+@views.html.main_template(title = title(messages("optionTax.title"), form), appConfig = appConfig) {
 
-    @headings(messages("optionTax.title"))
+  <a class="link-back" href="@controllers.routes.VATAccountsController.show().url">@messages("common.back")</a>
 
-    <p>@messages("optionTax.text")</p>
+  @errorSummary("common.errorSummary.heading", form)
 
-    @helpers.form(action = controllers.routes.OptionTaxController.submit, 'novalidate -> "novalidate") {
+  @helpers.form(action = controllers.routes.OptionTaxController.submit, 'novalidate -> "novalidate") {
 
-        <div id="@yesNo" data-metrics="end-journey:view:option-to-tax">
-            @yesNoRevealHelper(
-                field = form(yesNo),
-                choices = Seq(
-                    (yes, Messages("common.yes")),
-                    (no, Messages("common.no"))
-                ),
-                question = Messages("optionTax.title"),
-                inline = true,
-                hiddenContent = moneyInput(
-                    field = form("amount"),
-                    label = messages("optionTax.hint"),
-                    labelHidden = false,
-                    decimalPlace = true
-                ),
-                legendAsHeader = false
-            )
-        </div>
+    <div id="@yesNo" class="form-group">
+      @yesNoRevealHelper(
+        field = form(yesNo),
+        choices = Seq(
+          yes -> messages("common.yes"),
+          no -> messages("common.no")
+        ),
+        question = messages("optionTax.title"),
+        additionalContent = Some(questionContent),
+        inline = true,
+        hiddenContent = text(
+          field = form("amount"),
+          label = messages("optionTax.hint"),
+          labelHidden = false,
+          isMonetaryField = true
+        ),
+        legendAsHeader = false
+      )
+    </div>
 
-        <button class="button" type ="submit" id="continue">
-            @messages("common.continue")
-        </button>
-    }
+    <button class="button" type="submit" id="continue">
+      @messages("common.continue")
+    </button>
+  }
 }

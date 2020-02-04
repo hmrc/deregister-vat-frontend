@@ -17,34 +17,29 @@
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
 @import templates.inputs.date
-@import templates.headings
-@import views.utils.TitleUtil._
+@import views.utils.TitleUtil.title
 
 @(form: Form[DateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(
-    title = title(messages("ceasedTrading.title"), form),
-    bodyClasses = None,
-    appConfig = appConfig) {
+@views.html.main_template(title = title(messages("ceasedTrading.title"), form), appConfig = appConfig) {
 
-    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url">@messages("common.back")</a>
+  <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url">@messages("common.back")</a>
 
-    @errorSummary("common.errorSummary.heading", form, Some("ceasedTrading"))
+  @errorSummary("common.errorSummary.heading", form, Some("ceasedTrading"))
 
-    @helpers.form(action = controllers.routes.CeasedTradingDateController.submit, 'novalidate -> "novalidate") {
+  @helpers.form(action = controllers.routes.CeasedTradingDateController.submit, 'novalidate -> "novalidate") {
 
-        <div id="ceasedTrading" data-metrics="ceased-trading:view:date-ceased-trading">
-            @date(
-                form = form,
-                question = messages("ceasedTrading.title"),
-                fieldName = "date",
-                hint = Some(messages("ceasedTrading.hint")),
-                renderQuestionAsHeading = true
-            )
-        </div>
+    <div id="ceasedTrading" class="form-group">
+      @date(
+        form = form,
+        question = messages("ceasedTrading.title"),
+        fieldName = "date",
+        hint = Some(messages("ceasedTrading.hint"))
+      )
+    </div>
 
-        <button class="button" type ="submit" id="continue">
-            @messages("common.continue")
-        </button>
-    }
+    <button class="button" type ="submit" id="continue">
+      @messages("common.continue")
+    </button>
+  }
 }

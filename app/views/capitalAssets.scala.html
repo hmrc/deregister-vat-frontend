@@ -16,52 +16,51 @@
 
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
-@import views.html.templates.inputs.radioHelper
-@import views.html.templates.inputs.moneyInput
+@import views.html.templates.inputs.text
 @import views.html.templates.inputs.yesNoRevealHelper
 @import templates.headings
 @import forms.YesNoForm._
-@import views.utils.TitleUtil._
+@import views.utils.TitleUtil.title
 
 @(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(
-    title = title(messages("capitalAssets.title"), form),
-    bodyClasses = None,
-    appConfig = appConfig) {
+@questionContent = {
+  @headings(messages("capitalAssets.title"))
 
-    <a class="link-back" href="@controllers.routes.OptionTaxController.show().url">@messages("common.back")</a>
+  <p>@messages("capitalAssets.text.1")</p>
+}
 
-    @errorSummary("common.errorSummary.heading", form)
+@views.html.main_template(title = title(messages("capitalAssets.title"), form), appConfig = appConfig) {
 
-    @headings(messages("capitalAssets.title"))
+  <a class="link-back" href="@controllers.routes.OptionTaxController.show().url">@messages("common.back")</a>
 
-    <p>@messages("capitalAssets.text.1")</p>
+  @errorSummary("common.errorSummary.heading", form)
 
-    @helpers.form(action = controllers.routes.CapitalAssetsController.submit, 'novalidate -> "novalidate") {
+  @helpers.form(action = controllers.routes.CapitalAssetsController.submit, 'novalidate -> "novalidate") {
 
-        <div id="@yesNo" data-metrics="end-journey:view:capital-assets">
-            @yesNoRevealHelper(
-                choices = Seq(
-                    (yes, Messages("common.yes")),
-                    (no, Messages("common.no"))
-                ),
-                question = Messages("capitalAssets.title"),
-                field = form(yesNo),
-                inline = true,
-                hiddenContent = moneyInput(
-                    field = form("amount"),
-                    label = messages("capitalAssets.totalSaleValue"),
-                    labelHidden = false,
-                    decimalPlace = true
-                ),
-                legendAsHeader = false
-            )
-        </div>
+    <div id="@yesNo" class="form-group">
+      @yesNoRevealHelper(
+        field = form(yesNo),
+        choices = Seq(
+          yes -> messages("common.yes"),
+          no -> messages("common.no")
+        ),
+        question = messages("capitalAssets.title"),
+        additionalContent = Some(questionContent),
+        inline = true,
+        hiddenContent = text(
+          field = form("amount"),
+          label = messages("capitalAssets.totalSaleValue"),
+          labelHidden = false,
+          isMonetaryField = true
+        ),
+        legendAsHeader = false
+      )
+    </div>
 
-        <button class="button" type ="submit" id="continue">
-            @messages("common.continue")
-        </button>
-    }
+    <button class="button" type ="submit" id="continue">
+      @messages("common.continue")
+    </button>
+  }
 
 }
