@@ -22,5 +22,7 @@ object CapitalAssetsMessages extends BaseMessages {
   val heading = "Is the business going to keep any capital assets?"
   val p1 = "For example furniture, computers and equipment."
   val hint = "What is the total value?"
+  val yesNoError = "Select yes if the business is going to keep and capital assets"
+  val emptyAmount = "Enter the total value of capital assets"
 
 }

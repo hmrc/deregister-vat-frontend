@@ -41,15 +41,17 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+  val form = YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption")
+
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     outstandingInvoicesAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm.fill(data)))
-      case _ => Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm))
+      case Right(Some(data)) => Ok(views.html.outstandingInvoices(form.fill(data)))
+      case _ => Ok(views.html.outstandingInvoices(form))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    YesNoForm.yesNoForm.bindFromRequest().fold(
+    form.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.outstandingInvoices(error))),
       data => (for {
         _ <- EitherT(outstandingInvoicesAnswerService.storeAnswer(data))

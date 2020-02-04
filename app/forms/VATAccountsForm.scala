@@ -29,7 +29,7 @@ object VATAccountsForm {
       data.get(key) match {
         case Some(StandardAccounting.value) => Right(StandardAccounting)
         case Some(CashAccounting.value) => Right(CashAccounting)
-        case _ => Left(Seq(FormError(key, "common.error.mandatoryRadioOption")))
+        case _ => Left(Seq(FormError(key, "vatAccounts.showMeAnExample.mandatorySelection")))
       }
     }
 

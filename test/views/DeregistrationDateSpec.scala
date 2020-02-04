@@ -27,6 +27,8 @@ import org.jsoup.nodes.Document
 
 class DeregistrationDateSpec extends ViewBaseSpec {
 
+  val optionError = "Select yes if the business wants to choose the cancellation date"
+
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
@@ -57,7 +59,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with a No for outstanding invoices" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm)
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -95,7 +97,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with a Yes for outstanding invoices" should {
 
-    lazy val view = views.html.deregistrationDate(outstanding = Some(Yes) ,DeregistrationDateForm.deregistrationDateForm)
+    lazy val view = views.html.deregistrationDate(outstanding = Some(Yes) ,DeregistrationDateForm.deregistrationDateForm(optionError))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -110,7 +112,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with no already selected" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError)
       .bind(Map("yes_no" -> "no"))
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -134,7 +136,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with no already selected and a date entered" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError)
       .bind(Map(
         YesNoForm.yesNo -> YesNoForm.no,
         DateForm.day -> LocalDate.now.getDayOfMonth.toString,
@@ -163,7 +165,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with yes already selected and a valid date" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError)
       .bind(Map(
         YesNoForm.yesNo -> YesNoForm.yes,
         DateForm.day -> LocalDate.now.getDayOfMonth.toString,
@@ -192,7 +194,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with missing first field" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map.empty[String,String]))
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map.empty[String,String]))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -203,19 +205,19 @@ class DeregistrationDateSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading}"
     }
     "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorYesNo) shouldBe CommonMessages.errorMandatoryRadioOption
+      elementText(Selectors.errorYesNo) shouldBe DeregistrationDateMessages.yesNoError
       element(Selectors.errorYesNo).attr("href") shouldBe Selectors.yesNoRadio
     }
 
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CommonMessages.errorMandatoryRadioOption
+      elementText(Selectors.errorField) shouldBe DeregistrationDateMessages.yesNoError
     }
   }
 
   "Rendering the deregistration date page with a yes and one missing date field" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> "",
       DateForm.month -> LocalDate.now.getMonthValue.toString,
@@ -243,7 +245,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and no date entered" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> "",
       DateForm.month -> "",
@@ -275,7 +277,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and one invalid date field entered" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> LocalDate.now.getDayOfMonth.toString,
       DateForm.month -> "0",
@@ -303,7 +305,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and all date fields entered invalid" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> "0",
       DateForm.month -> "0",
@@ -332,7 +334,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a no and all date fields entered invalid" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.no,
       DateForm.day -> "0",
       DateForm.month -> "0",
@@ -355,7 +357,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and incorrect characters in one field" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> LocalDate.now.getDayOfMonth.toString,
       DateForm.month -> LocalDate.now.getMonthValue.toString,
@@ -383,7 +385,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and all date fields entered with invalid characters" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> "a",
       DateForm.month -> "b",
@@ -415,7 +417,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a no and all date fields entered invalid characters" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError)
       .bind(Map(
         YesNoForm.yesNo -> YesNoForm.no,
         DateForm.day -> "a",
@@ -440,7 +442,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and an impossible date" should {
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> "31",
       DateForm.month -> "2",
@@ -470,7 +472,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
     val testDate = LocalDate.now().minusDays(1)
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> testDate.getDayOfMonth.toString,
       DateForm.month -> testDate.getMonthValue.toString,
@@ -500,7 +502,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
     val testDate = LocalDate.now().plusMonths(3)
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> testDate.getDayOfMonth.toString,
       DateForm.month -> testDate.getMonthValue.toString,
@@ -525,7 +527,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
     val testDate = LocalDate.now().plusMonths(3).plusDays(1)
 
-    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm.bind(Map(
+    lazy val view = views.html.deregistrationDate(None ,DeregistrationDateForm.deregistrationDateForm(optionError).bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> testDate.getDayOfMonth.toString,
       DateForm.month -> testDate.getMonthValue.toString,

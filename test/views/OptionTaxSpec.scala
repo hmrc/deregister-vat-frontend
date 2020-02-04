@@ -23,6 +23,9 @@ import org.jsoup.nodes.Document
 
 class OptionTaxSpec extends ViewBaseSpec {
 
+  val optionError = "Select yes if the business charged or claimed VAT on land or commercial property"
+  val emptyError = "Enter the total value of the land or commercial property"
+
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
@@ -38,7 +41,7 @@ class OptionTaxSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm)
+    lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(optionError,emptyError))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -85,7 +88,7 @@ class OptionTaxSpec extends ViewBaseSpec {
 
     "nothing was entered" should {
 
-      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm.bind(Map("yes_no" -> "")))
+      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(optionError,emptyError).bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
@@ -93,17 +96,17 @@ class OptionTaxSpec extends ViewBaseSpec {
       }
 
       "display the correct error heading" in {
-        elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
+        elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${OptionTaxMessages.yesNoError}"
       }
 
       "display the correct error messages" in {
-        elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
+        elementText(Selectors.error) shouldBe OptionTaxMessages.yesNoError
       }
     }
 
     "Yes was entered but no amount" should {
 
-      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm.bind(Map(
+      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(optionError,emptyError).bind(Map(
         "yes_no" -> "yes",
         "amount" -> ""
       )))
@@ -114,7 +117,7 @@ class OptionTaxSpec extends ViewBaseSpec {
       }
 
       "display the correct error heading" in {
-        elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryAmount}"
+        elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${OptionTaxMessages.emptyAmount}"
       }
     }
   }

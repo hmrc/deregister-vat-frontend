@@ -37,18 +37,20 @@ class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
                                              val serviceErrorHandler: ServiceErrorHandler,
                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm)(implicit user: User[_]) =
+  val form = YesNoAmountForm.yesNoAmountForm("optionOwnsStockToSell.error.mandatoryRadioOption","optionOwnsStockToSell.error.amount.noEntry")
+
+  private def renderView(form: Form[YesNoAmountModel])(implicit user: User[_]) =
     views.html.optionStocksToSell(form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     stocksAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(YesNoAmountForm.yesNoAmountForm.fill(data)))
-      case _ => Ok(renderView())
+      case Right(Some(data)) => Ok(renderView(form.fill(data)))
+      case _ => Ok(renderView(form))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
+    form.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.optionStocksToSell(error))),
       data => stocksAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())

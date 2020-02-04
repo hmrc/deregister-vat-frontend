@@ -22,5 +22,7 @@ object OptionTaxMessages extends BaseMessages {
   val heading = "Has the business charged or claimed VAT on land or commercial property?"
   val text = "You can choose to charge VAT on any income earned from renting or selling land or commercial property. This is known as ‘Option to Tax’."
   val hint = "What is the total value?"
+  val yesNoError = "Select yes if the business charged or claimed VAT on land or commercial property"
+  val emptyAmount = "Enter the total value of the land or commercial property"
 
 }

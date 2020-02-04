@@ -30,7 +30,7 @@ object DeregistrationReasonForm {
   val exemptOnly: String = "exemptOnly"
   val other: String = "other"
 
-  val error: String = "common.error.mandatoryRadioOption"
+  val error: String = "deregistrationReason.reason.mandatoryRadioOption"
 
   private val formatter: Formatter[DeregistrationReason] = new Formatter[DeregistrationReason] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], DeregistrationReason] = {

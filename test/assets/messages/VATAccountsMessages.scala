@@ -28,5 +28,6 @@ object VATAccountsMessages extends BaseMessages {
   val p1 = "For example, you invoice someone in March but do not receive the money until June. If you record the VAT on this payment in:"
   val bullet1 = "March, then you use standard accounting"
   val bullet2 = "June, then you use cash accounting"
+  val yesNoError = "Select how the business’s VAT accounts are prepared"
 
 }

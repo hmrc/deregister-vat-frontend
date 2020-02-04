@@ -28,7 +28,7 @@ import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.businessActivity
 import play.api.data.Form
-import forms.BusinessActivityForm
+import forms.{YesNoForm}
 import play.api.Logger
 
 import scala.concurrent.Future
@@ -42,7 +42,9 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[YesNo] = BusinessActivityForm.businessActivityForm)(implicit user: User[_]) = businessActivity(form)
+  val form = YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption")
+
+  private def renderView(form: Form[YesNo])(implicit user: User[_]) = businessActivity(form)
 
   private def redirect (yesNo: Option[YesNo]) : Result = yesNo match {
     case Some(Yes) => Redirect(controllers.zeroRated.routes.SicCodeController.show())
@@ -52,8 +54,8 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
       businessActivityAnswerService.getAnswer map {
-        case Right(Some(data)) => Ok(renderView(BusinessActivityForm.businessActivityForm.fill(data)))
-        case _ => Ok(renderView())
+        case Right(Some(data)) => Ok(renderView(form.fill(data)))
+        case _ => Ok(renderView(form))
       }
     } else {
       Future(serviceErrorHandler.showBadRequestError)
@@ -62,7 +64,7 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
-      BusinessActivityForm.businessActivityForm.bindFromRequest().fold(
+      form.bindFromRequest().fold(
         error => Future.successful(BadRequest(views.html.businessActivity(error))),
         data => (for {
           _ <- EitherT(businessActivityAnswerService.storeAnswer(data))

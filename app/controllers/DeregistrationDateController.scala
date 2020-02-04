@@ -37,7 +37,9 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
                                              val serviceErrorHandler: ServiceErrorHandler,
                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(outstanding: Option[YesNo], form: Form[DeregistrationDateModel] = DeregistrationDateForm.deregistrationDateForm)
+  val form = DeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption")
+
+  private def renderView(outstanding: Option[YesNo], form: Form[DeregistrationDateModel])
                         (implicit user: User[_]) = views.html.deregistrationDate(outstanding,form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
@@ -46,9 +48,9 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
       outstandingInvoicesResult <- outstandingInvoicesAnswerService.getAnswer
     } yield (outstandingInvoicesResult, deregDateResult) match {
       case (Right(outstandingInvoices), Right(Some(deregDate))) =>
-        Ok(renderView(outstandingInvoices,DeregistrationDateForm.deregistrationDateForm.fill(deregDate)))
+        Ok(renderView(outstandingInvoices,form.fill(deregDate)))
       case (Right(outstanding), Right(None)) =>
-        Ok(renderView(outstanding))
+        Ok(renderView(outstanding,form))
       case (_,_) =>
         Logger.warn("[DeregistrationDateController][show] - storedAnswerService returned an error retrieving answers")
         serviceErrorHandler.showInternalServerError
@@ -56,7 +58,7 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    DeregistrationDateForm.deregistrationDateForm.bindFromRequest().fold(
+    form.bindFromRequest().fold(
       error => outstandingInvoicesAnswerService.getAnswer map {
         case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error))
         case Left(err) =>

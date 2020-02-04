@@ -35,11 +35,11 @@ object YesNoAmountForm extends FormValidation {
     case x => Right(Some(x))
   }
 
-  private val formatter: Formatter[Option[BigDecimal]] = new Formatter[Option[BigDecimal]] {
+   def formatter(emptyAmount: String): Formatter[Option[BigDecimal]] = new Formatter[Option[BigDecimal]] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Option[BigDecimal]] = {
       (data.get(yesNo), data.get(key)) match {
-        case (Some(a), _) if a == no => Right(None)
-        case (Some(a), Some(x)) if a == yes && (x.trim == "" || !isNumeric(x)) => Left(Seq(FormError(key, "common.error.mandatoryAmount")))
+        case (Some(a), Some(x)) if a == yes && (x.trim == "") => Left(Seq(FormError(key, emptyAmount)))
+        case (Some(a), Some(x)) if a == yes && (!isNumeric(x)) => Left(Seq(FormError(key, "common.error.mandatoryAmount")))
         case (Some(a), Some(x)) if a == yes => validateAmount(key)(BigDecimal(x))
         case _ => Right(None)
       }
@@ -54,10 +54,10 @@ object YesNoAmountForm extends FormValidation {
     }
   }
 
-  val yesNoAmountForm: Form[YesNoAmountModel] = Form(
+  def yesNoAmountForm(yesNoError: String, emptyAmount: String): Form[YesNoAmountModel] = Form(
     mapping(
-      yesNo -> of(YesNoForm.formatter),
-      amount -> of(formatter)
+      yesNo -> of(YesNoForm.formatter(yesNoError)),
+      amount -> of(formatter(emptyAmount))
     )(YesNoAmountModel.apply)(YesNoAmountModel.unapply)
   )
 }

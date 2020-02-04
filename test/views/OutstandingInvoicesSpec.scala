@@ -23,6 +23,8 @@ import org.jsoup.nodes.Document
 
 class OutstandingInvoicesSpec extends ViewBaseSpec {
 
+  val optionError = "Select yes if the turnover was more than £83,000 last year"
+
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
@@ -35,7 +37,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm)
+    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm(optionError))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -71,7 +73,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
+    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm(optionError).bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -79,11 +81,11 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
     }
 
     "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
+      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${OutstandingInvoicesMessages.yesNoError}"
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
+      elementText(Selectors.error) shouldBe OutstandingInvoicesMessages.yesNoError
     }
   }
 }

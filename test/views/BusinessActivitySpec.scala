@@ -17,7 +17,7 @@
 package views
 
 import assets.messages.{BusinessActivityPageMessages, CommonMessages}
-import forms.BusinessActivityForm
+import forms.YesNoForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -37,7 +37,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
 
   "Rendering the Business Activity page with no errors" should {
 
-    lazy val view = views.html.businessActivity(BusinessActivityForm.businessActivityForm)
+    lazy val view = views.html.businessActivity(YesNoForm.yesNoForm("Select yes if your business activity has changed"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -82,7 +82,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
 
   "Rendering the Business Activity page with errors" should {
 
-    lazy val view = views.html.businessActivity(BusinessActivityForm.businessActivityForm.bind(Map("yes_no" -> "")))
+    lazy val view = views.html.businessActivity(YesNoForm.yesNoForm("Select yes if your business activity has changed").bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

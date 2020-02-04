@@ -76,9 +76,9 @@ object DeregistrationDateForm {
     }
   }
 
-  val deregistrationDateForm: Form[DeregistrationDateModel] = Form(
+  def deregistrationDateForm(yesNoError: String): Form[DeregistrationDateModel] = Form(
     mapping(
-      yesNo -> of(YesNoForm.formatter),
+      yesNo -> of(YesNoForm.formatter(yesNoError)),
       day -> of(formatter),
       month -> of(formatter),
       year -> of(formatter)

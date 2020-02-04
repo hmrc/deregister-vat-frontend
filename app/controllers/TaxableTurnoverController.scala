@@ -41,18 +41,20 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                           val serviceErrorHandler: ServiceErrorHandler,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) =
+  val form = YesNoForm.yesNoForm("taxableTurnover.error.mandatoryRadioOption", Some(appConfig.deregThreshold.toString))
+
+  private def renderView(form: Form[YesNo])(implicit user: User[_]) =
     views.html.taxableTurnover(form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     taxableTurnoverAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(YesNoForm.yesNoForm.fill(data)))
-      case _ => Ok(renderView())
+      case Right(Some(data)) => Ok(renderView(form.fill(data)))
+      case _ => Ok(renderView(form))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    YesNoForm.yesNoForm.bindFromRequest().fold(
+    form.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.taxableTurnover(error))),
       data => (for {
         _ <- EitherT(taxableTurnoverAnswerService.storeAnswer(data))

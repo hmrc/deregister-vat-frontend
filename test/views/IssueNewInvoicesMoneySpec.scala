@@ -23,6 +23,8 @@ import org.jsoup.nodes.Document
 
 class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
 
+  val optionError = "Select yes if the business is expecting to issue any new invoices after you cancel the registration"
+
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
@@ -35,7 +37,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm)
+    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm(optionError))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -71,7 +73,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
+    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm(optionError).bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -88,7 +90,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
     }
 
     "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
+      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${IssueNewInvoicesMessages.yesNoError}"
     }
 
     s"have the correct a radio button form with yes/no answers" in {
@@ -101,7 +103,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
+      elementText(Selectors.error) shouldBe IssueNewInvoicesMessages.yesNoError
     }
   }
 

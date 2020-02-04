@@ -23,5 +23,7 @@ object OptionStocksToSellMessages extends BaseMessages {
   val text1 = "For example, goods bought or manufactured for resale."
   val hiddenText = "What is the total value?"
   val backText = "Back"
+  val yesNoError = "Select yes if the business is going to keep any stock"
+  val emptyAmount = "Enter the total value of stock"
 
 }

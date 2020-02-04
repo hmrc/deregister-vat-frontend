@@ -41,18 +41,20 @@ class  CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
                                         val serviceErrorHandler: ServiceErrorHandler,
                                         implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(data: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm)(implicit user: User[_]) =
+  val form = YesNoAmountForm.yesNoAmountForm("capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry")
+
+  private def renderView(data: Form[YesNoAmountModel])(implicit user: User[_]) =
     views.html.capitalAssets(data)
 
   val show: Action[AnyContent] = (authentication andThen pendingDeregCheck).async { implicit user =>
     capitalAssetsAnswerService.getAnswer.map {
-      case Right(Some(data)) => Ok(renderView(YesNoAmountForm.yesNoAmountForm.fill(data)))
-      case _ => Ok(renderView())
+      case Right(Some(data)) => Ok(renderView(form.fill(data)))
+      case _ => Ok(renderView(form))
     }
   }
 
   val submit: Action[AnyContent] = authentication.async { implicit user =>
-    YesNoAmountForm.yesNoAmountForm.bindFromRequest().fold(
+    form.bindFromRequest().fold(
       error => Future.successful(BadRequest(renderView(error))),
       data => (for {
         _ <- EitherT(capitalAssetsAnswerService.storeAnswer(data))

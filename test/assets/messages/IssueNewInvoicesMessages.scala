@@ -20,5 +20,6 @@ object IssueNewInvoicesMessages extends BaseMessages {
 
   val title = "Is the business going to issue any new invoices after you cancel the registration?" + titleSuffix
   val heading = "Is the business going to issue any new invoices after you cancel the registration?"
+  val yesNoError = "Select yes if the business is expecting to issue any new invoices after you cancel the registration"
 
 }

@@ -25,5 +25,5 @@ object DeregistrationDateMessages extends BaseMessages {
   val errorInvalidDate = "Enter a valid cancellation date"
   val errorPast = "The cancellation date must be in the future"
   val errorFuture = "The cancellation date must not be more than 3 months from today"
-
+  val yesNoError = "Select yes if the business wants to choose the cancellation date"
 }
