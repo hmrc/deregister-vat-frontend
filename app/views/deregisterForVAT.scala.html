@@ -20,7 +20,7 @@
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @linkBack = @{
-if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.manageVatSubscriptionFrontendUrl
+if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
 }
 
 @views.html.main_template(
