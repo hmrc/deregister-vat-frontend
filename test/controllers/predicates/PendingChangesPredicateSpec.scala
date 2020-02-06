@@ -54,8 +54,8 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
           status(result) shouldBe SEE_OTHER
         }
 
-        s"redirect to ${mockConfig.manageVatSubscriptionFrontendUrl}" in {
-          redirectLocation(result) shouldBe Some(mockConfig.manageVatSubscriptionFrontendUrl)
+        s"redirect to ${mockConfig.vatSummaryFrontendUrl}" in {
+          redirectLocation(result) shouldBe Some(mockConfig.vatSummaryFrontendUrl)
         }
       }
 
