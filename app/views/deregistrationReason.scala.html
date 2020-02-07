@@ -33,7 +33,7 @@
 
     @helpers.form(action = controllers.routes.DeregistrationReasonController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="reason" data-metrics="@if(user.isAgent){agent_}start-dereg:view:deregister-reason">
+        <div class="form-group" id="reason">
             @radioHelper(
                 field = form("reason"),
                 choices = if(appConfig.features.zeroRatedJourney()) {

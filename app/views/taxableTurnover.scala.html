@@ -35,7 +35,7 @@ appConfig = appConfig) {
 
     @helpers.form(action = controllers.routes.TaxableTurnoverController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="@yesNo" data-metrics="below-threshold:view:deregister-turnover-below-threshold">
+        <div class="form-group" id="@yesNo">
             @radioHelper(
                 field = form(yesNo),
                 choices = Seq(

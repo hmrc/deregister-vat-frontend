@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers
 @import templates.headings
 
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
@@ -30,7 +29,7 @@ appConfig = appConfig) {
 
     <a class="link-back" href="@linkBack">@messages("common.back")</a>
 
-    <div data-metrics="start-dereg:view:deregister">
+    <div>
         @headings(messages("deregisterForVAT.title"))
     </div>
 

@@ -41,7 +41,7 @@
 
   @helpers.form(action = controllers.routes.VATAccountsController.submit, 'novalidate -> "novalidate") {
 
-    <div class="form-group" id="accountingMethod" data-metrics="end-journey:view:accounting-method">
+    <div class="form-group" id="accountingMethod">
       @multipleLineRadioGroup(
         field = form("accountingMethod"),
         choices = Seq(
