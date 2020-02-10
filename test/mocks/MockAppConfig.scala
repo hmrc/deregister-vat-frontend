@@ -44,8 +44,9 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
   override def surveyUrl(identifier: String): String = s"/some-survey-url/$identifier"
   override val unauthorisedSignOutUrl: String = ""
   override val manageVatSubscriptionFrontendUrl: String = "http://localhost:9150/vat-through-software/account/change-business-details"
-  override val agentClientLookupChoicesPath: String = "/representative/agent-action"
+  override val agentClientLookupAgentHubPath: String = "/representative/client-vat-account"
   override val vatAgentClientLookupFrontendUrl: String = "http://localhost:9149/vat-through-software/agent-lookup/client-vat-number"
+  override val vatSummaryFrontendUrl: String = "/vat-through-software/vat-overview"
   override val vatSubscriptionUrl: String = "http://localhost:9567/vat-subscription"
   override val deregisterVatUrl: String = "http://localhost:9164"
   override val deregThreshold: Int = 83000
