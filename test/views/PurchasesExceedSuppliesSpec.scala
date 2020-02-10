@@ -26,8 +26,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val forExampleNoError = "#content article > p:nth-child(3)"
-    val forExampleWithError = "#content article > p:nth-child(4)"
+    val forExample = "#answer > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
     val yesOption = "div.multiple-choice:nth-child(1) > label:nth-child(2)"
     val noOption = "div.multiple-choice:nth-child(2) > label:nth-child(2)"
     val button = ".button"
@@ -58,7 +57,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
     }
 
     "have the correct explanation text" in {
-      document.select(Selectors.forExampleNoError).text() shouldBe PurchasesExceedSuppliesMessages.explanation
+      elementText(Selectors.forExample) shouldBe PurchasesExceedSuppliesMessages.explanation
     }
 
     "have the correct a radio button form with yes/no answers" in {
@@ -98,7 +97,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
     }
 
     "have the correct explanation text" in {
-      document.select(Selectors.forExampleWithError).text() shouldBe PurchasesExceedSuppliesMessages.explanation
+      elementText(Selectors.forExample) shouldBe PurchasesExceedSuppliesMessages.explanation
     }
 
     "have the correct a radio button form with yes/no answers" in {
@@ -114,5 +113,4 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
       elementText(Selectors.error) shouldBe PurchasesExceedSuppliesMessages.purchasesExceedSuppliesError
     }
   }
-
 }

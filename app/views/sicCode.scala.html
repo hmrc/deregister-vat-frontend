@@ -22,32 +22,32 @@
 
 @(form: Form[String])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(
-    title = title(messages("sicCode.title"), form),
-    bodyClasses = None,
-    appConfig = appConfig) {
+@questionContent = {
+  @headings(messages("sicCode.title"))
 
-    <a class="link-back" href="@controllers.zeroRated.routes.BusinessActivityController.show().url">@messages("common.back")</a>
+  <p>@messages("sicCode.explanation")</p>
 
-    @errorSummary("common.errorSummary.heading", form)
+  <p><a id="find-sic-code" href="@{appConfig.govUkFindSicCode}" target="_blank">@messages("sicCode.find")</a></p>
+}
 
-    @headings(messages("sicCode.title"))
+@views.html.main_template(title = title(messages("sicCode.title"), form), appConfig = appConfig) {
 
-    <p>@messages("sicCode.explanation")</p>
+  <a class="link-back" href="@controllers.zeroRated.routes.BusinessActivityController.show().url">@messages("common.back")</a>
 
-    <p><a id="find-sic-code" href="@{appConfig.govUkFindSicCode}" target="_blank">@messages("sicCode.find")</a></p>
-    
-    @helpers.form(action = controllers.zeroRated.routes.SicCodeController.submit, 'novalidate -> "novalidate") {
+  @errorSummary("common.errorSummary.heading", form)
 
-        <div class="form-group">
-            @text(
-                field = form("value"),
-                label = messages("sicCode.title")
-            )
-        </div>
+  @helpers.form(action = controllers.zeroRated.routes.SicCodeController.submit, 'novalidate -> "novalidate") {
 
-        <button class="button" type="submit" id="continue">
-          @messages("common.continue")
-        </button>
-    }
+    <div class="form-group">
+      @text(
+        field = form("value"),
+        label = messages("sicCode.title"),
+        additionalContent = Some(questionContent)
+      )
+    </div>
+
+    <button class="button" type="submit" id="continue">
+      @messages("common.continue")
+    </button>
+  }
 }

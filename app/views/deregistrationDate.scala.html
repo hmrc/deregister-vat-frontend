@@ -17,62 +17,57 @@
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
 @import templates.headings
-@import views.html.templates.inputs.radioHelper
 @import views.html.templates.inputs.yesNoRevealHelper
 @import views.html.templates.inputs.date
 @import forms.YesNoForm._
-@import views.utils.TitleUtil._
-
+@import views.utils.TitleUtil.title
 
 @(outstanding: Option[YesNo], form: Form[DeregistrationDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(
-    title = title(messages("deregistrationDate.title"), form),
-    bodyClasses = None,
-    appConfig = appConfig) {
+@questionContent = {
+  @headings(messages("deregistrationDate.title"))
 
+  <p>@messages("deregistrationDate.p1")</p>
 
+  <p>@messages("deregistrationDate.p2")</p>
+}
 
-    <a class="link-back"
-    @if(outstanding.isDefined){
-       href="@controllers.routes.OutstandingInvoicesController.show().url"
-    }else{
-       href="@controllers.routes.IssueNewInvoicesController.show().url"
-    }>@messages("common.back")</a>
+@views.html.main_template(title = title(messages("deregistrationDate.title"), form), appConfig = appConfig) {
 
-    @errorSummary("common.errorSummary.heading", form, Some("date-fieldset"))
+  <a class="link-back"
+  @if(outstanding.isDefined){
+     href="@controllers.routes.OutstandingInvoicesController.show().url"
+  }else{
+     href="@controllers.routes.IssueNewInvoicesController.show().url"
+  }>@messages("common.back")</a>
 
-    @headings(messages("deregistrationDate.title"))
+  @errorSummary("common.errorSummary.heading", form, Some("date-fieldset"))
 
-    <p>@messages("deregistrationDate.p1")</p>
+  @helpers.form(action = controllers.routes.DeregistrationDateController.submit, 'novalidate -> "novalidate") {
 
-    <p>@messages("deregistrationDate.p2")</p>
+    <div id="@yesNo" class="form-group">
+      @yesNoRevealHelper(
+        field = form(yesNo),
+        choices = Seq(
+          yes -> messages("common.yes"),
+          no -> messages("common.no")
+        ),
+        question = messages("deregistrationDate.title"),
+        additionalContent = Some(questionContent),
+        inline = true,
+        hiddenContent = date(
+          form = form,
+          question = "",
+          fieldName = "date",
+          hint = Some(messages("ceasedTrading.hint")),
+          renderQuestionAsHeading = false
+        ),
+        legendAsHeader = false
+      )
+    </div>
 
-    @helpers.form(action = controllers.routes.DeregistrationDateController.submit, 'novalidate -> "novalidate") {
-
-        <div id="@yesNo" data-metrics="end-journey:view:deregister-date">
-            @yesNoRevealHelper(
-                choices = Seq(
-                    (yes, messages("common.yes")),
-                    (no, messages("common.no"))
-                ),
-                question = messages("deregistrationDate.title"),
-                field = form(yesNo),
-                inline = true,
-                hiddenContent = date(
-                    form = form,
-                    question = "",
-                    fieldName = "date",
-                    hint = Some(messages("ceasedTrading.hint")),
-                    renderQuestionAsHeading = false
-                ),
-                legendAsHeader = false
-            )
-        </div>
-
-
-        <button class="button" type ="submit" id="continue">
-            @messages("common.continue")
-        </button>
-    }
+    <button class="button" type ="submit" id="continue">
+      @messages("common.continue")
+    </button>
+  }
 }

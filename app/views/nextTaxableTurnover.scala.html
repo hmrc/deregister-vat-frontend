@@ -17,37 +17,30 @@
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
 @import templates.headings
-@import views.html.templates.inputs.moneyInput
-@import views.utils.TitleUtil._
-@import scala.concurrent.Future
+@import views.html.templates.inputs.text
+@import views.utils.TitleUtil.title
 
 @(form: Form[NumberInputModel],backLinkUrl: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@views.html.main_template(
-title = title(messages("nextTaxableTurnover.title"), form),
-bodyClasses = None,
-appConfig = appConfig) {
+@views.html.main_template(title = title(messages("nextTaxableTurnover.title"), form), appConfig = appConfig) {
 
-    <a class="link-back" href="@backLinkUrl">@messages("common.back")</a>
+  <a class="link-back" href="@backLinkUrl">@messages("common.back")</a>
 
-    @errorSummary("common.errorSummary.heading", form)
+  @errorSummary("common.errorSummary.heading", form)
 
-    @headings(messages("nextTaxableTurnover.title"))
+  @helpers.form(action = controllers.routes.NextTaxableTurnoverController.submit, 'novalidate -> "novalidate") {
 
-    @helpers.form(action = controllers.routes.NextTaxableTurnoverController.submit, 'novalidate -> "novalidate") {
+    <div class="form-group">
+      @text(
+        field = form("value"),
+        label = messages("nextTaxableTurnover.title"),
+        additionalContent = Some(headings(messages("nextTaxableTurnover.title"))),
+        isMonetaryField = true
+      )
+    </div>
 
-        <div class="form-group" data-metrics="below-threshold:view:expected-turnover">
-            @moneyInput(
-                field = form("value"),
-                label = messages("nextTaxableTurnover.title"),
-                labelHidden = true,
-                decimalPlace = true
-            )
-        </div>
-
-        <button class="button" type ="submit" id="continue">
-            @messages("common.continue")
-        </button>
-
-    }
+    <button class="button" type ="submit" id="continue">
+      @messages("common.continue")
+    </button>
+  }
 }
