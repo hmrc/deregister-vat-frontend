@@ -17,15 +17,13 @@
 package pages
 
 import assets.IntegrationTestConstants._
-import forms.YesNoForm
 import helpers.IntegrationBaseSpec
-import models.{ZeroRated, No, Yes, YesNo}
+import models.Yes
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 import services._
 import stubs.DeregisterVatStub
-
 
 class BusinessActivityISpec extends IntegrationBaseSpec {
 
@@ -149,8 +147,12 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
   "Calling the POST BusinessActivity" when {
 
-    def postRequest(data: YesNo): WSResponse =
-      post("/has-the-business-activity-changed")(toFormData(YesNoForm.yesNoForm, data))
+    def postRequest(data: Map[String, Seq[String]]): WSResponse =
+      post("/has-the-business-activity-changed")(data)
+
+    val Yes = Map("yes_no" -> Seq("yes"))
+    val No = Map("yes_no" -> Seq("no"))
+    val invalidModel = Map("yes_no" -> Seq(""))
 
     "the user is authorised" when {
 
@@ -237,6 +239,22 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
         response should have(
           httpStatus(FORBIDDEN),
           pageTitle("You can’t use this service yet" + titleSuffixOther)
+        )
+      }
+    }
+
+    "the post request includes invalid data" should {
+
+      "return 400 BAD_REQUEST" in {
+
+        given.user.isAuthorised
+
+        val response: WSResponse = postRequest(invalidModel)
+
+        response should have(
+          httpStatus(BAD_REQUEST),
+          pageTitle("Error: Has the business activity changed?" + titleSuffix),
+          elementText(".error-message")("Select yes if your business activity has changed")
         )
       }
     }

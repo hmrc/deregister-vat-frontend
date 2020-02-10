@@ -35,10 +35,6 @@ class YesNoFormSpec extends UnitSpec {
       res.value should contain(No)
     }
 
-    "fail when nothing has been entered" in {
-      val res = yesNoForm("empty").bind(Map.empty[String, String])
-      res.errors should contain(FormError(yesNo, "empty", List(None)))
-    }
   }
 
   "Binding a form with invalid data" when {
@@ -52,8 +48,8 @@ class YesNoFormSpec extends UnitSpec {
         form.hasErrors shouldBe true
       }
 
-      "throw one error" in {
-        form.errors.size shouldBe 1
+      "have the Select and Option error" in {
+        form.errors.head.message shouldBe "empty"
       }
     }
   }

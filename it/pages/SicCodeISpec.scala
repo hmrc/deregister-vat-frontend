@@ -17,7 +17,6 @@
 package pages
 
 import assets.IntegrationTestConstants._
-import forms.SicCodeForm
 import helpers.IntegrationBaseSpec
 import models.Yes
 import play.api.http.Status._
@@ -147,9 +146,8 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
   "Calling the POST SicCode" when {
 
-    def postRequest(data: String): WSResponse =
-      post("/what-is-the-sic-code")(toFormData(SicCodeForm.sicCodeForm, data))
-
+    def postRequest(data: Map[String, Seq[String]]): WSResponse =
+      post("/what-is-the-sic-code")(data)
 
     "the user is authorised" when {
 
@@ -161,7 +159,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn, SicCodeAnswerService.key)
 
-          val response: WSResponse = postRequest(sicCodeValue)
+          val response: WSResponse = postRequest(Map("value" -> Seq("12345")))
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -178,7 +176,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.putAnswerError(vrn, SicCodeAnswerService.key)
 
-          val response: WSResponse = postRequest(sicCodeValue)
+          val response: WSResponse = postRequest(Map("value" -> Seq("12345")))
 
           response should have(
             httpStatus(INTERNAL_SERVER_ERROR)
@@ -193,7 +191,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(sicCodeValue)
+        val response: WSResponse = postRequest(Map("value" -> Seq("12345")))
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -208,7 +206,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(sicCodeValue)
+        val response: WSResponse = postRequest(Map("value" -> Seq("12345")))
 
         response should have(
           httpStatus(FORBIDDEN),
@@ -216,6 +214,22 @@ class SicCodeISpec extends IntegrationBaseSpec {
         )
       }
     }
-  }
 
+
+    "the post request includes invalid data" should {
+
+      "return 400 BAD_REQUEST" in {
+
+        given.user.isAuthorised
+
+        val response: WSResponse = postRequest(Map("value" -> Seq("")))
+
+        response should have(
+          httpStatus(BAD_REQUEST),
+          pageTitle("Error: What is the business’s Standard Industrial Classification (SIC) Code?" + titleSuffix),
+          elementText(".error-message")("Enter the 5 digit code which best describes your business activity")
+        )
+      }
+    }
+  }
 }

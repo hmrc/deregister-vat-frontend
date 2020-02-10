@@ -133,6 +133,8 @@ taxableTurnover.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os oedd y trosi
 nextTaxableTurnover.title = Beth yw trosiant trethadwy disgwyliedig y busnes ar gyfer y 12 mis nesaf?
 
 zeroRatedSupplies.title = Beth yw gwerth disgwyliedig y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf?
+zeroRatedSupplies.error.mandatory = Nodwch werth y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
+zeroRatedSupplies.error.nonNumeric = Nodwch swm gan ddefnyddio’r rhifau 0 i 9
 
 issueNewInvoices.title = A yw’r busnes yn mynd i anfon unrhyw anfonebau newydd ar ôl i chi ganslo’r cofrestriad?
 issueNewInvoices.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes yn disgwyl anfon unrhyw anfonebau newydd ar ôl i chi ganslo’r cofrestriad
@@ -251,9 +253,6 @@ sicCode.find = Dod o hyd i’r cod sy’n disgrifio’r gweithgaredd busnes orau
 sicCode.error.invalid = Nodwch y cod 5 digid sy’n disgrifio’ch gweithgaredd busnes orau
 sicCode.error.tooFew = Nid ydych wedi nodi digon o rifau
 sicCode.error.tooMany = Rydych wedi nodi gormod o rifau
-
-zeroRatedSupplies.error.mandatory = Nodwch werth y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
-zeroRatedSupplies.error.nonNumeric = Nodwch swm gan ddefnyddio’r rhifau 0 i 9
 
 purchasesExceedSupplies.title = A ydych yn disgwyl i’r TAW ar bryniadau fynd y tu hwnt i’r TAW ar gyflenwadau yn rheolaidd?
 purchasesExceedSupplies.explanation = Mae hyn yn golygu y byddai’r busnes yn hawlio TAW ar y rhan fwyaf o Ffurflenni TAW.

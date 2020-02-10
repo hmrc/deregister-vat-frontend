@@ -102,6 +102,8 @@ taxableTurnover.error.mandatoryRadioOption = Select yes if the turnover was more
 nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
 
 zeroRatedSupplies.title = What is the expected value of zero-rate supplies for the next 12 months?
+zeroRatedSupplies.error.mandatory = Enter the value of zero-rate supplies for the next 12 months
+zeroRatedSupplies.error.nonNumeric = Enter an amount using numbers 0 to 9
 
 issueNewInvoices.title = Is the business going to issue any new invoices after you cancel the registration?
 issueNewInvoices.error.mandatoryRadioOption = Select yes if the business is expecting to issue any new invoices after you cancel the registration
@@ -220,9 +222,6 @@ sicCode.find = Find the code that best describes the business activity (opens in
 sicCode.error.invalid = Enter the 5 digit code which best describes your business activity
 sicCode.error.tooFew = You have entered too few numbers
 sicCode.error.tooMany = You have entered too many numbers
-
-zeroRatedSupplies.error.mandatory = Enter the value of zero-rate supplies for the next 12 months
-zeroRatedSupplies.error.nonNumeric = Enter an amount using numbers 0 to 9
 
 purchasesExceedSupplies.title = Do you expect the VAT on purchases to regularly exceed the VAT on supplies?
 purchasesExceedSupplies.explanation = This means the business would claim the VAT on most VAT Returns.

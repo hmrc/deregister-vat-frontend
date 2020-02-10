@@ -29,7 +29,7 @@ object YesNoForm {
 
   val no: String = "no"
 
-  def formatter(yesNoError: String, configValue: Option[String] = None): Formatter[YesNo] = new Formatter[YesNo] {
+  def formatter(yesNoError: String, configValue: String = ""): Formatter[YesNo] = new Formatter[YesNo] {
 
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], YesNo] = {
       data.get(key) match {
@@ -49,7 +49,7 @@ object YesNoForm {
     }
   }
 
-  def yesNoForm(yesNoError: String, configValue: Option[String] = None): Form[YesNo] = Form(
+  def yesNoForm(yesNoError: String, configValue: String = ""): Form[YesNo] = Form(
     single(
       yesNo -> of(formatter(yesNoError,configValue))
     )
