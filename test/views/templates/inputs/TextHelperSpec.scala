@@ -56,7 +56,7 @@ class TextHelperSpec extends TemplateBaseSpec {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-field--error">
+             |<div class="form-field--error panel-border-narrow">
              |  <label for="$fieldName" class="form-label visuallyhidden">$label</label>
              |  <span class="error-message" role="tooltip">
              |    ERROR

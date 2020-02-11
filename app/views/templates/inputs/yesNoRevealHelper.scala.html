@@ -24,7 +24,8 @@
   additionalContent: Option[Html] = None,
   inline: Boolean = false,
   hiddenContent: Html,
-  legendAsHeader: Boolean = true
+  legendAsHeader: Boolean = true,
+  hiddenContentError: Boolean = false
 )(implicit messages: Messages)
 
     @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
@@ -48,6 +49,11 @@
                             @field.value.filter( _ == "yes").map{_ => checked="checked"}/>
                      <label for="@{elements.field.name}-yes">@Messages("common.yes")</label>
                  </div>
+
+                <div class="panel panel-border-narrow yes-no-hidden @if(!field.value.contains("yes")){js-hidden} @if(hiddenContentError){hidden-error-panel}" id="hiddenContent">
+                @hiddenContent
+                </div>
+
                  <div class="multiple-choice">
                      <input type="radio"
                             id="@{elements.field.name}-no"
@@ -58,9 +64,7 @@
                  </div>
             </div>
 
-            <div class="panel panel-border-narrow yes-no-hidden @if(!field.value.contains("yes")){js-hidden}" id="hiddenContent">
-                @hiddenContent
-            </div>
+
 
         </fieldset>
     </div>

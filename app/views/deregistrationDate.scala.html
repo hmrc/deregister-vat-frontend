@@ -54,7 +54,6 @@
         ),
         question = messages("deregistrationDate.title"),
         additionalContent = Some(questionContent),
-        inline = true,
         hiddenContent = date(
           form = form,
           question = "",
@@ -62,7 +61,8 @@
           hint = Some(messages("ceasedTrading.hint")),
           renderQuestionAsHeading = false
         ),
-        legendAsHeader = false
+        legendAsHeader = false,
+        hiddenContentError = form.hasErrors
       )
     </div>
 
