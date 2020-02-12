@@ -95,7 +95,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(appConfig.manageVatSubscriptionFrontendUrl)
+          redirectURI(appConfig.vatSummaryFrontendUrl)
         )
       }
     }

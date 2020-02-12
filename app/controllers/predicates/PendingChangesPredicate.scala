@@ -42,7 +42,7 @@ class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsS
     implicit val req: User[A] = request
 
     req.session.get(pendingDeregKey) match {
-      case Some("true") => Future.successful(Left(Redirect(appConfig.manageVatSubscriptionFrontendUrl)))
+      case Some("true") => Future.successful(Left(Redirect(if(request.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl)))
       case Some("false") => Future.successful(Right(req))
       case Some(_) => Future.successful(Left(serviceErrorHandler.showInternalServerError))
       case None => getCustomerInfoCall(req.vrn)
