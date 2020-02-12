@@ -47,14 +47,14 @@
         ),
         question = messages("optionTax.title"),
         additionalContent = Some(questionContent),
-        inline = true,
         hiddenContent = text(
           field = form("amount"),
           label = messages("optionTax.hint"),
           labelHidden = false,
           isMonetaryField = true
         ),
-        legendAsHeader = false
+        legendAsHeader = false,
+        hiddenContentError = form("amount").hasErrors
       )
     </div>
 

@@ -28,7 +28,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
     val pageHeading = "#content h1"
     val text = "#yes_no > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
-    val noOption = "fieldset > div > div:nth-of-type(2) > label"
+    val noOption = "fieldset > div > div:nth-of-type(3) > label"
     val hiddenField = "#hiddenContent"
     val hint = "#hiddenContent > div > label"
     val button = ".button"

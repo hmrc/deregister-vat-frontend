@@ -20,7 +20,7 @@
   additionalContent: Option[Html] = None,
   isMonetaryField: Boolean = false)(implicit messages: Messages)
 
-<div class="form-field@if(field.hasErrors){--error}">
+<div class="form-field@if(field.hasErrors){--error panel-border-narrow}">
 
   @additionalContent.map { content => @content }
 

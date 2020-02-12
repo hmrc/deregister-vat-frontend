@@ -1,3 +1,8 @@
 .yes-no-hidden {
-    margin-top: 15px !important;
+    margin-top: 0.25em !important;
+}
+
+.hidden-error-panel {
+    border-left: none;
+    padding: 0em;
 }
