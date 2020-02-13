@@ -42,7 +42,7 @@ class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsS
     implicit val req: User[A] = request
 
     req.session.get(pendingDeregKey) match {
-      case Some("true") => Future.successful(Left(Redirect(if(request.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl)))
+      case Some("true") => Future.successful(Left(Redirect(redirectPage)))
       case Some("false") => Future.successful(Right(req))
       case Some(_) => Future.successful(Left(serviceErrorHandler.showInternalServerError))
       case None => getCustomerInfoCall(req.vrn)
@@ -56,8 +56,8 @@ class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsS
         pending.deregistration match {
           case Some(PendingDeregModel(true)) =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
-              "Deregistration pending. Redirecting to Manage VAT service.")
-            Left(Redirect(appConfig.manageVatSubscriptionFrontendUrl).addingToSession(pendingDeregKey -> "true"))
+              "Deregistration pending. Redirecting to user hub/overview page.")
+            Left(Redirect(redirectPage).addingToSession(pendingDeregKey -> "true"))
           case Some(PendingDeregModel(false)) =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "Pending deregistration is false - Setting to 'false' and redirecting to start of journey")
@@ -73,4 +73,7 @@ class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsS
           s"The call to the GetCustomerInfo API failed. Error: ${error.message}")
         Left(serviceErrorHandler.showInternalServerError)
     }
+
+  private def redirectPage[A](implicit request: User[A]) =
+    if(request.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
 }
