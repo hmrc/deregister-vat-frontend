@@ -109,8 +109,28 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
             status(result) shouldBe SEE_OTHER
           }
 
-          s"redirect to ${mockConfig.manageVatSubscriptionFrontendUrl}" in {
-            redirectLocation(result) shouldBe Some(mockConfig.manageVatSubscriptionFrontendUrl)
+          s"redirect to ${mockConfig.vatSummaryFrontendUrl}" in {
+            redirectLocation(result) shouldBe Some(mockConfig.vatSummaryFrontendUrl)
+          }
+        }
+
+        "user is an agent and has a pending dereg change" should {
+
+          lazy val result = {
+            setupMockPendingDereg(vrn)(Right(pendingDeregTrue))
+            await(mockPendingChangesPredicate.refine(User(vrn, arn = Some("arn"))(request))).left.get
+          }
+
+          "add 'pendingDeregKey' = true to session" in {
+            session(result).get(SessionKeys.pendingDeregKey) shouldBe Some("true")
+          }
+
+          "return SEE_OTHER" in {
+            status(result) shouldBe SEE_OTHER
+          }
+
+          s"redirect to ${mockConfig.agentClientLookupAgentHubPath}" in {
+            redirectLocation(result) shouldBe Some(mockConfig.agentClientLookupAgentHubPath)
           }
         }
 
