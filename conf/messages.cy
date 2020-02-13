@@ -128,7 +128,7 @@ cannotDeregister.link = ddiweddaru manylion TAW eraill y busnes.
 taxableTurnover.title = A oedd trosiant trethadwy’r busnes yn is nag £{0} yn ystod y 12 mis diwethaf?
 taxableTurnover.error.mandatory = Nodwch drosiant trethadwy’r busnes
 taxableTurnover.error.nonNumeric = Nodwch y trosiant gan ddefnyddio’r rhifau 0 i 9
-taxableTurnover.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os oedd y trosiant dros £{0} y llynedd
+taxableTurnover.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os oedd y trosiant yn llai nag £{0} yn ystod y 12 mis diwethaf
 
 nextTaxableTurnover.title = Beth yw trosiant trethadwy disgwyliedig y busnes ar gyfer y 12 mis nesaf?
 
