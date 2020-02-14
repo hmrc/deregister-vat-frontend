@@ -41,7 +41,7 @@ class  CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
                                         val serviceErrorHandler: ServiceErrorHandler,
                                         implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val form = YesNoAmountForm.yesNoAmountForm("capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry")
+  val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm("capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry")
 
   private def renderView(data: Form[YesNoAmountModel])(implicit user: User[_]) =
     views.html.capitalAssets(data)

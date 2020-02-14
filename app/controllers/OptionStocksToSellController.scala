@@ -37,7 +37,8 @@ class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
                                              val serviceErrorHandler: ServiceErrorHandler,
                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val form = YesNoAmountForm.yesNoAmountForm("optionOwnsStockToSell.error.mandatoryRadioOption","optionOwnsStockToSell.error.amount.noEntry")
+  val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm(
+    "optionOwnsStockToSell.error.mandatoryRadioOption","optionOwnsStockToSell.error.amount.noEntry")
 
   private def renderView(form: Form[YesNoAmountModel])(implicit user: User[_]) =
     views.html.optionStocksToSell(form)

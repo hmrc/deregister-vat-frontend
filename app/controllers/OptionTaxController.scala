@@ -38,7 +38,7 @@ class OptionTaxController @Inject()(val messagesApi: MessagesApi,
                                     val serviceErrorHandler: ServiceErrorHandler,
                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val form = YesNoAmountForm.yesNoAmountForm("optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry")
+  val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm("optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry")
 
   private def renderView(form: Form[YesNoAmountModel])(implicit user: User[_]) =
     views.html.optionTax(form)

@@ -23,9 +23,6 @@ import org.jsoup.nodes.Document
 
 class OptionTaxSpec extends ViewBaseSpec {
 
-  val optionError = "Select yes if the business charged or claimed VAT on land or commercial property"
-  val emptyError = "Enter the total value of the land or commercial property"
-
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
@@ -41,7 +38,8 @@ class OptionTaxSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(optionError,emptyError))
+    lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(
+      "optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -88,7 +86,8 @@ class OptionTaxSpec extends ViewBaseSpec {
 
     "nothing was entered" should {
 
-      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(optionError,emptyError).bind(Map("yes_no" -> "")))
+      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(
+        "optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry").bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
@@ -106,7 +105,8 @@ class OptionTaxSpec extends ViewBaseSpec {
 
     "Yes was entered but no amount" should {
 
-      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(optionError,emptyError).bind(Map(
+      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(
+        "optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry").bind(Map(
         "yes_no" -> "yes",
         "amount" -> ""
       )))

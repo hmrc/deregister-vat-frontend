@@ -36,6 +36,8 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
     "value5" -> "display5"
   )
 
+  val yesNoError = "select.reason.error"
+
   def generateExpectedRadioMarkup(value: String, display: String, checked: Boolean = false): String =
     s"""
        |  <div class="multiple-choice">
@@ -47,7 +49,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
   "Calling the radio helper with no choice pre-selected" should {
 
     "render the choices as radio buttons" in {
-      val field: Field = Field(YesNoForm.yesNoForm("Select a VAT cancellation reason"), fieldName, Seq(), None, Seq(), None)
+      val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
            |  <div>
@@ -75,7 +77,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
   "Calling the radio group helper with a choice pre-selected" should {
 
     "render a list of radio options with one pre-checked" in {
-      val field: Field = Field(YesNoForm.yesNoForm("Select a VAT cancellation reason"), fieldName, Seq(), None, Seq(), Some("value2"))
+      val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), Some("value2"))
       val expectedMarkup = Html(
         s"""
            |  <div>
@@ -103,7 +105,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
 
     "render an error" in {
       val errorMessage = "Error message"
-      val field: Field = Field(YesNoForm.yesNoForm("Select a VAT cancellation reason"), fieldName, Seq(), None, Seq(FormError("text", errorMessage)), None)
+      val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(FormError("text", errorMessage)), None)
       val expectedMarkup = Html(
         s"""
            |  <div class="form-field--error">
@@ -132,7 +134,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
 
     "render the choices as radio buttons with additional content" in {
       val additionalContent = Html("<p>Additional text</p>")
-      val field: Field = Field(YesNoForm.yesNoForm("Select a VAT cancellation reason"), fieldName, Seq(), None, Seq(), None)
+      val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
            |<div>
@@ -163,7 +165,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
 
     "render the choices as radio buttons with an inline class attribute" in {
       val additionalContent = Html("<p>Additional text</p>")
-      val field: Field = Field(YesNoForm.yesNoForm("Select a VAT cancellation reason"), fieldName, Seq(), None, Seq(), None)
+      val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
            |<div>
@@ -194,7 +196,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
 
     "render the legend without a header" in {
       val additionalContent = Html("<p>Additional text</p>")
-      val field: Field = Field(YesNoForm.yesNoForm("Select a VAT cancellation reason"), fieldName, Seq(), None, Seq(), None)
+      val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
            |<div>

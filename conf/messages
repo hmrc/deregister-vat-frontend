@@ -86,7 +86,7 @@ optionTax.error.amount.noEntry = Enter the total value of the land or commercial
 capitalAssets.title = Is the business going to keep any capital assets?
 capitalAssets.text.1 = For example furniture, computers and equipment.
 capitalAssets.totalSaleValue = What is the total value?
-capitalAssets.error.mandatoryRadioOption = Select yes if the business is going to keep and capital assets
+capitalAssets.error.mandatoryRadioOption = Select yes if the business is going to keep any capital assets
 capitalAssets.error.amount.noEntry = Enter the total value of capital assets
 
 cannotDeregister.title = The business cannot cancel its VAT registration

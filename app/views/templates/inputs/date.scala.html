@@ -15,8 +15,6 @@
  *@
 
 @import templates.headings
-@import models.DateModel
-@import models.DeregistrationDateModel
 @import models.DateFormVariant
 
 @(form: Form[_], question: String, fieldName: String, formVariant: DateFormVariant, hint: Option[String] = None, renderQuestionAsHeading: Boolean = true)(implicit messages: Messages)

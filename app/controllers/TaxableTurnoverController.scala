@@ -42,7 +42,7 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                           val serviceErrorHandler: ServiceErrorHandler,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val form = YesNoForm.yesNoForm("taxableTurnover.error.mandatoryRadioOption", MoneyFormatter.formatStringAmount(appConfig.deregThreshold))
+  val form: Form[YesNo] = YesNoForm.yesNoForm("taxableTurnover.error.mandatoryRadioOption", MoneyFormatter.formatStringAmount(appConfig.deregThreshold))
 
   private def renderView(form: Form[YesNo])(implicit user: User[_]) =
     views.html.taxableTurnover(form)

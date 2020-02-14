@@ -41,7 +41,7 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val form = YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption")
+  val form: Form[YesNo] = YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption")
 
   private def renderView(form: Form[YesNo])(implicit user: User[_]) = views.html.issueNewInvoices(form)
 

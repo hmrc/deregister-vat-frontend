@@ -23,9 +23,6 @@ import org.jsoup.nodes.Document
 
 class CapitalAssetsSpec extends ViewBaseSpec {
 
-  val optionError = "Select yes if the business is going to keep and capital assets"
-  val emptyError = "Enter the total value of capital assets"
-
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
@@ -41,7 +38,8 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm(optionError,emptyError))
+    lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm(
+      "capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -88,7 +86,8 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
     "nothing was entered" should {
 
-      lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm(optionError,emptyError).bind(Map("yes_no" -> "")))
+      lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm(
+        "capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry").bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
@@ -106,7 +105,8 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
     "Yes was entered but no amount" should {
 
-      lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm(optionError,emptyError).bind(Map(
+      lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm(
+        "capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry").bind(Map(
         "yes_no" -> "yes",
         "amount" -> ""
       )))

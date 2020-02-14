@@ -23,8 +23,6 @@ import org.jsoup.nodes.Document
 
 class OutstandingInvoicesSpec extends ViewBaseSpec {
 
-  val optionError = "Select yes if the turnover was more than £83,000 last year"
-
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
@@ -37,7 +35,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm(optionError))
+    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -73,7 +71,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm(optionError).bind(Map("yes_no" -> "")))
+    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

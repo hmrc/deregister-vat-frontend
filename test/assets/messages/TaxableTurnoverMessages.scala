@@ -23,6 +23,6 @@ object TaxableTurnoverMessages extends BaseMessages {
   val title = "Was the business’s taxable turnover below £83,000 in the last 12 months?" + titleSuffix
   val agentTitle = "Was the business’s taxable turnover below £83,000 in the last 12 months?" + titleSuffixAgent
   val heading = "Was the business’s taxable turnover below £83,000 in the last 12 months?"
-  val mandatory = "Select yes if the turnover was more than £83,000 last year"
+  val mandatory = "Select yes if the turnover was less than £83,000 in the last 12 months"
 
 }

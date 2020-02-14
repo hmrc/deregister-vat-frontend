@@ -23,8 +23,6 @@ import org.jsoup.nodes.Document
 
 class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
 
-  val optionError = "Select yes if the business is expecting to issue any new invoices after you cancel the registration"
-
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
@@ -37,7 +35,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm(optionError))
+    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -73,7 +71,7 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm(optionError).bind(Map("yes_no" -> "")))
+    lazy val view = views.html.issueNewInvoices(YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
