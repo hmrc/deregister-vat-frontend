@@ -26,19 +26,15 @@ class YesNoFormSpec extends UnitSpec {
   "YesNoForm" should {
 
     "successfully parse a Yes" in {
-      val res = yesNoForm.bind(Map(yesNo -> YesNoForm.yes))
+      val res = yesNoForm("empty").bind(Map(yesNo -> YesNoForm.yes))
       res.value should contain(Yes)
     }
 
     "successfully parse a No" in {
-      val res = yesNoForm.bind(Map(yesNo -> YesNoForm.no))
+      val res = yesNoForm("empty").bind(Map(yesNo -> YesNoForm.no))
       res.value should contain(No)
     }
 
-    "fail when nothing has been entered" in {
-      val res = yesNoForm.bind(Map.empty[String, String])
-      res.errors should contain(FormError(yesNo, yesNoError))
-    }
   }
 
   "Binding a form with invalid data" when {
@@ -46,14 +42,14 @@ class YesNoFormSpec extends UnitSpec {
     "the no option has been selected" should {
 
       val missingOption: Map[String, String] = Map.empty
-      val form = YesNoForm.yesNoForm.bind(missingOption)
+      val form = YesNoForm.yesNoForm("empty").bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
       }
 
-      "throw one error" in {
-        form.errors.size shouldBe 1
+      "have the Select and Option error" in {
+        form.errors.head.message shouldBe "empty"
       }
     }
   }

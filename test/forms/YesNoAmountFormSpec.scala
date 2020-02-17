@@ -17,7 +17,7 @@
 package forms
 
 import _root_.utils.TestUtil
-import assets.messages.CommonMessages
+import assets.messages.{CommonMessages, OptionTaxMessages}
 import common.Constants
 import models._
 import play.api.i18n.Messages
@@ -30,7 +30,7 @@ class YesNoAmountFormSpec extends TestUtil {
       "yes_no" -> "yes",
       "amount" -> "1000.01"
     )
-    val form = YesNoAmountForm.yesNoAmountForm.bind(data)
+    val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
@@ -49,7 +49,7 @@ class YesNoAmountFormSpec extends TestUtil {
         "yes_no" -> "no",
         "amount" -> ""
       )
-      val form = YesNoAmountForm.yesNoAmountForm.bind(data)
+      val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").bind(data)
 
       "result in a form with no errors" in {
         form.hasErrors shouldBe false
@@ -66,7 +66,7 @@ class YesNoAmountFormSpec extends TestUtil {
         "yes_no" -> "no",
         "amount" -> "1000.01"
       )
-      val form = YesNoAmountForm.yesNoAmountForm.bind(data)
+      val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").bind(data)
 
       "result in a form with no errors" in {
         form.hasErrors shouldBe false
@@ -83,14 +83,14 @@ class YesNoAmountFormSpec extends TestUtil {
     "no data has been entered" should {
 
       val missingOption: Map[String, String] = Map.empty
-      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+      val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
       }
 
       "have the Select and Option error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.errorMandatoryRadioOption
+        form.errors.head.message shouldBe "yesNoError"
       }
     }
 
@@ -100,14 +100,14 @@ class YesNoAmountFormSpec extends TestUtil {
         "yes_no" -> "yes",
         "amount" -> ""
       )
-      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+      val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
       }
 
-      "have the Mandatory Amount error" in {
-        Messages(form.errors.head.message) shouldBe CommonMessages.errorMandatoryAmount
+      "have the empty amount error" in {
+        form.errors.head.message shouldBe "emptyAmount"
       }
     }
 
@@ -117,7 +117,7 @@ class YesNoAmountFormSpec extends TestUtil {
         "yes_no" -> "yes",
         "amount" -> "ABC"
       )
-      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+      val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -134,7 +134,7 @@ class YesNoAmountFormSpec extends TestUtil {
         "yes_no" -> "yes",
         "amount" -> "-1"
       )
-      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+      val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -151,7 +151,7 @@ class YesNoAmountFormSpec extends TestUtil {
         "yes_no" -> "yes",
         "amount" -> "0.001"
       )
-      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+      val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -168,7 +168,7 @@ class YesNoAmountFormSpec extends TestUtil {
         "yes_no" -> "yes",
         "amount" -> (Constants.maxAmount + 0.01).toString
       )
-      val form = YesNoAmountForm.yesNoAmountForm.bind(missingOption)
+      val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -184,7 +184,7 @@ class YesNoAmountFormSpec extends TestUtil {
 
     "generate the correct mapping" in {
       val model = YesNoAmountModel(Yes,Some(BigDecimal(1000.01)))
-      val form = YesNoAmountForm.yesNoAmountForm.fill(model)
+      val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").fill(model)
       form.data shouldBe Map(
         "yes_no" -> "yes",
         "amount" -> "1000.01"

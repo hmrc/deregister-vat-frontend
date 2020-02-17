@@ -108,7 +108,7 @@ class VATAccountsSpec extends ViewBaseSpec {
     }
 
     "display the correct error message" in {
-      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
+      elementText(Selectors.error) shouldBe VATAccountsMessages.yesNoError
     }
   }
 }

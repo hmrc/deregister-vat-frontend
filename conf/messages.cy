@@ -43,7 +43,6 @@ common.no = Na
 common.finish = Gorffen
 common.moreInfo = Rhagor o wybodaeth
 common.error.titlePrefix = Gwall:
-common.error.mandatoryRadioOption = Dewiswch opsiwn
 common.error.mandatoryAmount = Nodwch y swm gan ddefnyddio’r rhifau 0 i 9
 common.error.negative = Nodwch swm positif
 common.error.tooManyDecimals = Nodwch uchafswm o 2 bwynt degol ar gyfer ceiniogau
@@ -64,7 +63,6 @@ error.date.invalidCharacters = Nodwch ddyddiad gan ddefnyddio’r rhifau 0 i 9
 error.date.day = Nodwch rifau rhwng 1 a 31
 error.date.month = Nodwch rifau rhwng 1 a 12
 error.date.year = Nodwch 4 rhif
-error.date.invalid = Dyddiad annilys
 
 #Feedback
 feedback.before = Gwasanaeth newydd yw hwn – bydd eich
@@ -83,13 +81,15 @@ deregistrationReason.reason.belowThreshold = Mae’r trosiant blynyddol yn is na
 deregistrationReason.reason.zeroRated = Mae’r busnes yn cyflenwi nwyddau sydd ar y gyfradd sero ar gyfer TAW
 deregistrationReason.reason.exemptOnly = Gwneud cyflenwadau sydd wedi’u heithrio yn unig
 deregistrationReason.reason.other = Arall
+deregistrationReason.reason.mandatoryRadioOption = Dewiswch reswm dros ganslo TAW
 
 deregistrationDate.title = A ydych am ddewis y dyddiad canslo?
 deregistrationDate.p1 = Gall y dyddiad fod hyd at uchafswm o 3 mis o heddiw.
 deregistrationDate.p2 = Byddwn yn cadarnhau’r dyddiad pan fyddwn yn derbyn eich cais.
-deregistrationDate.error.date.invalidDate = Nodwch ddyddiad canslo dilys
+deregistrationDate.error.date.noEntry = Nodwch ddyddiad canslo dilys
 deregistrationDate.error.date.past = Rhaid i’r dyddiad dadgofrestru fod yn y dyfodol
 deregistrationDate.error.date.future = Rhaid i’r dyddiad canslo beidio â bod mwy na 3 mis o heddiw
+deregistrationDate.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes eisiau dewis y dyddiad canslo
 
 deregistrationProperty.title = A oes gan y busnes unrhyw eiddo masnachol?
 deregistrationProperty.p1 = Mae hyn yn cynnwys tir ac adeiladau.
@@ -102,19 +102,23 @@ vatAccounts.description.cash = Rydych yn cofnodi TAW pryd bynnag yr ydych yn gwn
 vatAccounts.showMeAnExample.p1 = Er enghraifft, rydych yn anfonebu rhywun ym mis Mawrth ond nid ydych yn cael yr arian hyd nes mis Mehefin. Os ydych yn cofnodi’r TAW ar y taliad hwn ym:
 vatAccounts.showMeAnExample.bullet1 = mis Mawrth, rydych yn defnyddio cyfrifyddu safonol
 vatAccounts.showMeAnExample.bullet2 = mis Mehefin, rydych yn defnyddio cyfrifyddu arian parod
+vatAccounts.showMeAnExample.mandatorySelection = Dewiswch sut y caiff cyfrifon TAW y busnes eu paratoi
 
 ceasedTrading.title = Y dyddiad y rhoddodd y busnes y gorau i fasnachu, neu’r dyddiad y bydd yn rhoi’r gorau i fasnachu
 ceasedTrading.hint = Er enghraifft, 31 3 1980
-ceasedTrading.error.date.noEntry = Nodwch y dyddiad y rhoddodd eich busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
-ceasedTrading.error.date.invalidDate = Nodwch ddyddiad go iawn ar gyfer rhoi’r gorau i fasnachu
+ceasedTrading.error.date.noEntry = Nodwch y dyddiad y rhoddodd y busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
 
 optionTax.title = A yw’r busnes wedi codi neu hawlio TAW ar dir neu eiddo masnachol?
 optionTax.text = Gallwch ddewis codi TAW ar unrhyw incwm a geir wrth rentu neu werthu tir neu eiddo masnachol. Gelwir hyn yn ‘Opsiwn i Drethu’.
 optionTax.hint = Beth yw cyfanswm y gwerth?
+optionTax.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes wedi codi neu hawlio TAW ar dir neu eiddo masnachol
+optionTax.error.amount.noEntry = Nodwch gyfanswm gwerth y tir neu’r eiddo masnachol
 
 capitalAssets.title = A yw’r busnes yn mynd i gadw unrhyw asedion cyfalaf?
 capitalAssets.text.1 = Er enghraifft dodrefn, cyfrifiaduron ac offer.
 capitalAssets.totalSaleValue = Beth yw cyfanswm y gwerth?
+capitalAssets.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes yn mynd i gadw unrhyw asedion cyfalaf
+capitalAssets.error.amount.noEntry = Nodwch gyfanswm gwerth yr asedion cyfalaf
 
 cannotDeregister.title = Ni all y busnes ganslo ei gofrestriad TAW
 cannotDeregister.text = Mae hyn oherwydd bod y busnes yn disgwyl y bydd ei drosiant trethadwy ar gyfer y 12 mis nesaf yn fwy na £{0}.
@@ -124,16 +128,22 @@ cannotDeregister.link = ddiweddaru manylion TAW eraill y busnes.
 taxableTurnover.title = A oedd trosiant trethadwy’r busnes yn is nag £{0} yn ystod y 12 mis diwethaf?
 taxableTurnover.error.mandatory = Nodwch drosiant trethadwy’r busnes
 taxableTurnover.error.nonNumeric = Nodwch y trosiant gan ddefnyddio’r rhifau 0 i 9
+taxableTurnover.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os oedd y trosiant yn llai nag £{0} yn ystod y 12 mis diwethaf
 
 nextTaxableTurnover.title = Beth yw trosiant trethadwy disgwyliedig y busnes ar gyfer y 12 mis nesaf?
 
 zeroRatedSupplies.title = Beth yw gwerth disgwyliedig y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf?
+zeroRatedSupplies.error.mandatory = Nodwch werth y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
+zeroRatedSupplies.error.nonNumeric = Nodwch swm gan ddefnyddio’r rhifau 0 i 9
 
 issueNewInvoices.title = A yw’r busnes yn mynd i anfon unrhyw anfonebau newydd ar ôl i chi ganslo’r cofrestriad?
+issueNewInvoices.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes yn disgwyl anfon unrhyw anfonebau newydd ar ôl i chi ganslo’r cofrestriad
 
 optionOwnsStockToSell.title = A yw’r busnes yn mynd i gadw unrhyw stoc?
 optionOwnsStockToSell.text.1 = Er enghraifft, nwyddau a brynir neu a gynhyrchir ar gyfer eu hailwerthu.
 optionOwnsStockToSell.hint = Beth yw cyfanswm y gwerth?
+optionOwnsStockToSell.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes yn mynd i gadw unrhyw stoc
+optionOwnsStockToSell.error.amount.noEntry = Nodwch gyfanswm gwerth y stoc
 
 whyTurnoverBelow.title = Pam ydych yn disgwyl i drosiant blynyddol y busnes fod yn is nag £{0}?
 whyTurnoverBelow.text.1 = Dewiswch bob un sy’n gymwys
@@ -144,7 +154,7 @@ whyTurnoverBelow.reason.reducedTradingHours = Wedi cwtogi ar yr oriau masnachu
 whyTurnoverBelow.reason.seasonalBusiness = Busnes tymhorol
 whyTurnoverBelow.reason.closedPlacesOfBusiness = Wedi cau rhai mannau busnes
 whyTurnoverBelow.reason.turnoverLowerThanExpected = Trosiant yn is na’r disgwyl
-whyTurnoverBelow.error.atLeastOne = Dewiswch o leiaf un opsiwn
+whyTurnoverBelow.error.atLeastOne = Dewiswch reswm dros ganslo’r cofrestriad TAW
 
 checkYourAnswers.title = Gwirio’ch atebion
 checkYourAnswers.change = Newid
@@ -230,11 +240,12 @@ featureSwitch.title = Feature switches
 features.useLanguageSelectorFeature.enabled = Language selector
 
 outstandingInvoice.title = A fydd y busnes yn cael taliad am anfonebau heb eu setlo ar ôl i chi ganslo’r cofrestriad?
+outstandingInvoice.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes yn disgwyl cael taliad am anfonebau heb eu setlo ar ôl i chi ganslo’r cofrestriad
 
 businessActivity.title = A yw’r gweithgaredd busnes wedi newid?
 businessActivity.forExample = Er enghraifft, mae’r busnes ond yn cyflenwi nwyddau sydd ar gyfradd sero ar gyfer TAW, neu’n gwneud hynny’n bennaf.
 businessActivity.moreInfo = Rhagor o wybodaeth am nwyddau a gwasanaethau ar gyfradd sero (yn agor ffenestr neu dab newydd)
-businessActivity.error = Dewiswch ‘Iawn’ os yw’ch gweithgaredd busnes wedi newid
+businessActivity.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’ch gweithgaredd busnes wedi newid
 
 sicCode.title = Beth yw Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes?
 sicCode.explanation = Dyma’r cod 5 digid sy’n disgrifio’r gweithgaredd busnes.
@@ -242,9 +253,6 @@ sicCode.find = Dod o hyd i’r cod sy’n disgrifio’r gweithgaredd busnes orau
 sicCode.error.invalid = Nodwch y cod 5 digid sy’n disgrifio’ch gweithgaredd busnes orau
 sicCode.error.tooFew = Nid ydych wedi nodi digon o rifau
 sicCode.error.tooMany = Rydych wedi nodi gormod o rifau
-
-zeroRatedSupplies.error.mandatory = Nodwch werth y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
-zeroRatedSupplies.error.nonNumeric = Nodwch swm gan ddefnyddio’r rhifau 0 i 9
 
 purchasesExceedSupplies.title = A ydych yn disgwyl i’r TAW ar bryniadau fynd y tu hwnt i’r TAW ar gyflenwadau yn rheolaidd?
 purchasesExceedSupplies.explanation = Mae hyn yn golygu y byddai’r busnes yn hawlio TAW ar y rhan fwyaf o Ffurflenni TAW.

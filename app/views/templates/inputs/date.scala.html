@@ -15,12 +15,13 @@
  *@
 
 @import templates.headings
+@import models.DateFormVariant
 
-@(form: Form[_], question: String, fieldName: String, hint: Option[String] = None, renderQuestionAsHeading: Boolean = true)(implicit messages: Messages)
+@(form: Form[_], question: String, fieldName: String, formVariant: DateFormVariant, hint: Option[String] = None, renderQuestionAsHeading: Boolean = true)(implicit messages: Messages)
 
 @defining(form.errors.filter(_.message.contains("error.date."))){ dateErrors =>
 
-  @defining(dateErrors.filter(_.message == "error.date.invalid").nonEmpty){ hasInvalidDate =>
+    @defining(dateErrors.filter(_.message.contains("noEntry")).nonEmpty){ hasEmptyField =>
 
     <div @if(dateErrors.nonEmpty){class="form-field--error"}>
 
@@ -42,37 +43,37 @@
 
         <div class="form-date">
 
-          @if(dateErrors.nonEmpty) {
-            <span class="error-message" role="tooltip">
-              @if(form.errors.length > 1) {
-                @messages("error.date.invalid")
-              } else {
-                @messages(form.errors.head.message)
-              }
-            </span>
-          }
+                @if(dateErrors.nonEmpty) {
+                    <span class="error-message" role="tooltip">
+                        @(formVariant, form.errors.length > 1) match {
+                            case (_,false) => {@messages(form.errors.head.message)}
+                            case (DeregistrationDate,true) => {@messages("deregistrationDate.error.date.noEntry")}
+                            case (CeasedTradingDate,true) => {@messages("ceasedTrading.error.date.noEntry")}
+                            }
+                    </span>
+                }
 
-          @dateEntryField(
-            form(fieldName + "Day"),
-            messages("common.day"),
-            "day",
-            form(fieldName + "Day").hasErrors || hasInvalidDate
-          )
+                @dateEntryField(
+                    form(fieldName + "Day"),
+                    messages("common.day"),
+                    "day",
+                    form(fieldName + "Day").hasErrors || hasEmptyField
+                )
 
-          @dateEntryField(
-            form(fieldName + "Month"),
-            messages("common.month"),
-            "month",
-            form(fieldName + "Month").hasErrors || hasInvalidDate
-          )
+                @dateEntryField(
+                    form(fieldName + "Month"),
+                    messages("common.month"),
+                    "month",
+                    form(fieldName + "Month").hasErrors || hasEmptyField
+                )
 
-          @dateEntryField(
-            form(fieldName + "Year"),
-            messages("common.year"),
-            "year",
-            form(fieldName + "Year").hasErrors || hasInvalidDate
-          )
-        </div>
+                @dateEntryField(
+                    form(fieldName + "Year"),
+                    messages("common.year"),
+                    "year",
+                    form(fieldName + "Year").hasErrors || hasEmptyField
+                )
+            </div>
 
       </fieldset>
     </div>

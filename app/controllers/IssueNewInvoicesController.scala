@@ -41,7 +41,9 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) = views.html.issueNewInvoices(form)
+  val form: Form[YesNo] = YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption")
+
+  private def renderView(form: Form[YesNo])(implicit user: User[_]) = views.html.issueNewInvoices(form)
 
   private def redirect: YesNo => Result = {
     case Yes => Redirect(controllers.routes.DeregistrationDateController.show())
@@ -50,13 +52,13 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     issueNewInvoiceAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(YesNoForm.yesNoForm.fill(data)))
-      case _ => Ok(renderView())
+      case Right(Some(data)) => Ok(renderView(form.fill(data)))
+      case _ => Ok(renderView(form))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    YesNoForm.yesNoForm.bindFromRequest().fold(
+    form.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.issueNewInvoices(error))),
       data => (for {
         _ <- EitherT(issueNewInvoiceAnswerService.storeAnswer(data))

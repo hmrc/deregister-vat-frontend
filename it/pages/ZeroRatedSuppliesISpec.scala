@@ -17,9 +17,7 @@
 package pages
 
 import assets.IntegrationTestConstants._
-import forms.ZeroRatedSuppliesForm
 import helpers.IntegrationBaseSpec
-import models.{No, NumberInputModel, Yes, ZeroRated}
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
@@ -148,8 +146,8 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
   "Calling the POST ZeroRatedSupplies" when {
 
-    def postRequest(data: NumberInputModel): WSResponse =
-      post("/expected-value-zero-rated-supplies")(toFormData(ZeroRatedSuppliesForm.zeroRatedSuppliesForm, data))
+    def postRequest(data:  Map[String, Seq[String]]): WSResponse =
+      post("/expected-value-zero-rated-supplies")(data)
 
     "the user is authorised" when {
 
@@ -161,7 +159,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn, ZeroRatedSuppliesValueService.key)
 
-          val response: WSResponse = postRequest(zeroRatedSuppliesModel)
+          val response: WSResponse = postRequest(Map("value" -> Seq("12345.67")))
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -177,7 +175,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(zeroRatedSuppliesModel)
+        val response: WSResponse = postRequest(Map("value" -> Seq("12345.67")))
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -192,11 +190,27 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(zeroRatedSuppliesModel)
+        val response: WSResponse = postRequest(Map("value" -> Seq("12345.67")))
 
         response should have(
           httpStatus(FORBIDDEN),
           pageTitle("You can’t use this service yet" + titleSuffixOther)
+        )
+      }
+    }
+
+    "the post request includes invalid data" should {
+
+      "return 400 BAD_REQUEST" in {
+
+        given.user.isAuthorised
+
+        val response: WSResponse = postRequest(Map("value" -> Seq("")))
+
+        response should have(
+          httpStatus(BAD_REQUEST),
+          pageTitle("Error: What is the expected value of zero-rate supplies for the next 12 months?" + titleSuffix),
+          elementText(".error-message")("Enter the value of zero-rate supplies for the next 12 months")
         )
       }
     }

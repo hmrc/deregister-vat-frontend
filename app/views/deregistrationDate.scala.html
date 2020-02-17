@@ -21,6 +21,7 @@
 @import views.html.templates.inputs.date
 @import forms.YesNoForm._
 @import views.utils.TitleUtil.title
+@import models.DeregistrationDate
 
 @(outstanding: Option[YesNo], form: Form[DeregistrationDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
@@ -58,6 +59,7 @@
           form = form,
           question = "",
           fieldName = "date",
+          formVariant = DeregistrationDate,
           hint = Some(messages("ceasedTrading.hint")),
           renderQuestionAsHeading = false
         ),

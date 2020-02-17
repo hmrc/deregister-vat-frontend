@@ -112,7 +112,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
+      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${DeregistrationReasonMessages.yesNoError}"
     }
 
     s"have the correct a radio button form with the correct 5 options" in {
@@ -128,7 +128,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
+      elementText(Selectors.error) shouldBe DeregistrationReasonMessages.yesNoError
     }
   }
 }

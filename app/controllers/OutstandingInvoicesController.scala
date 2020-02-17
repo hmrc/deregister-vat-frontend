@@ -24,6 +24,7 @@ import forms.YesNoForm
 import javax.inject.Inject
 import models._
 import play.api.Logger
+import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, Result}
 import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OutstandingInvoicesAnswerService, WipeRedundantDataService}
@@ -41,15 +42,17 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
+  val form: Form[YesNo] = YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption")
+
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     outstandingInvoicesAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm.fill(data)))
-      case _ => Ok(views.html.outstandingInvoices(YesNoForm.yesNoForm))
+      case Right(Some(data)) => Ok(views.html.outstandingInvoices(form.fill(data)))
+      case _ => Ok(views.html.outstandingInvoices(form))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    YesNoForm.yesNoForm.bindFromRequest().fold(
+    form.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.outstandingInvoices(error))),
       data => (for {
         _ <- EitherT(outstandingInvoicesAnswerService.storeAnswer(data))

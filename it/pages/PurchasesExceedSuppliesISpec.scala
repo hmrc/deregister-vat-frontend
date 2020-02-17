@@ -17,9 +17,8 @@
 package pages
 
 import assets.IntegrationTestConstants._
-import forms.PurchasesExceedSuppliesForm
 import helpers.IntegrationBaseSpec
-import models.{No, Yes, YesNo}
+import models.Yes
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
@@ -148,8 +147,12 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
   "Calling the POST PurchasesExceedSupplies" when {
 
-    def postRequest(data: YesNo): WSResponse =
-      post("/expected-value-vat-purchases")(toFormData(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm, data))
+    def postRequest(data: Map[String, Seq[String]]): WSResponse =
+      post("/expected-value-vat-purchases")(data)
+
+    val yes = Map("yes_no" -> Seq("yes"))
+    val no = Map("yes_no" -> Seq("no"))
+    val invalidModel = Map("yes_no" -> Seq(""))
 
     "the user is authorised" when {
 
@@ -161,7 +164,7 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
-          val response: WSResponse = postRequest(Yes)
+          val response: WSResponse = postRequest(yes)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -181,7 +184,7 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
-          val response: WSResponse = postRequest(No)
+          val response: WSResponse = postRequest(no)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -201,7 +204,7 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.putAnswerError(vrn ,PurchasesExceedSuppliesAnswerService.key)
 
-          val response: WSResponse = postRequest(Yes)
+          val response: WSResponse = postRequest(yes)
 
           response should have(
             httpStatus(INTERNAL_SERVER_ERROR)
@@ -216,7 +219,7 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(Yes)
+        val response: WSResponse = postRequest(yes)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -231,11 +234,27 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(No)
+        val response: WSResponse = postRequest(no)
 
         response should have(
           httpStatus(FORBIDDEN),
           pageTitle("You can’t use this service yet" + titleSuffixOther)
+        )
+      }
+    }
+
+    "the post request includes invalid data" should {
+
+      "return 400 BAD_REQUEST" in {
+
+        given.user.isAuthorised
+
+        val response: WSResponse = postRequest(invalidModel)
+
+        response should have(
+          httpStatus(BAD_REQUEST),
+          pageTitle("Error: Do you expect the VAT on purchases to regularly exceed the VAT on supplies?" + titleSuffix),
+          elementText(".error-message")("Select yes if you expect VAT on purchases to be more than VAT on supplies")
         )
       }
     }

@@ -17,15 +17,13 @@
 package pages
 
 import assets.IntegrationTestConstants._
-import forms.YesNoForm
 import helpers.IntegrationBaseSpec
-import models.{Ceased, No, Yes, YesNo}
+import models.{Ceased,Yes, No}
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 import services._
 import stubs.DeregisterVatStub
-
 
 class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
@@ -149,8 +147,11 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
   "Calling the POST IssueNewInvoices" when {
 
-    def postRequest(data: YesNo): WSResponse =
-      post("/new-invoices")(toFormData(YesNoForm.yesNoForm, data))
+    def postRequest(data: Map[String, Seq[String]]): WSResponse = post("/new-invoices")(data)
+
+    val yes = Map("yes_no" -> Seq("yes"))
+    val no = Map("yes_no" -> Seq("no"))
+    val invalidModel = Map("yes_no" -> Seq(""))
 
     "the user is authorised" when {
 
@@ -175,7 +176,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
 
-          val response: WSResponse = postRequest(Yes)
+          val response: WSResponse = postRequest(yes)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -208,7 +209,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
 
-          val response: WSResponse = postRequest(No)
+          val response: WSResponse = postRequest(no)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -243,7 +244,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
           DeregisterVatStub.deleteAnswerError(vrn,OutstandingInvoicesAnswerService.key)
 
-          val response: WSResponse = postRequest(Yes)
+          val response: WSResponse = postRequest(yes)
 
           response should have(
             httpStatus(INTERNAL_SERVER_ERROR)
@@ -258,7 +259,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(Yes)
+        val response: WSResponse = postRequest(yes)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -273,11 +274,27 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(No)
+        val response: WSResponse = postRequest(no)
 
         response should have(
           httpStatus(FORBIDDEN),
           pageTitle("You can’t use this service yet" + titleSuffixOther)
+        )
+      }
+    }
+
+    "the post request includes invalid data" should {
+
+      "return 400 BAD_REQUEST" in {
+
+        given.user.isAuthorised
+
+        val response: WSResponse = postRequest(invalidModel)
+
+        response should have(
+          httpStatus(BAD_REQUEST),
+          pageTitle("Error: Is the business going to issue any new invoices after you cancel the registration?" + titleSuffix),
+          elementText(".error-message")("Select yes if the business is expecting to issue any new invoices after you cancel the registration")
         )
       }
     }

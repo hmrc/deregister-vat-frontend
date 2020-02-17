@@ -25,5 +25,6 @@ object MoneyFormatter {
   private val formatter = new DecimalFormat("#,##0.00")
   private val removeZeroDecimals: String => String = _.replace(".00","")
   val formatHtmlAmount: BigDecimal => Html = x => Html(s"&pound;${removeZeroDecimals(formatter.format(x))}")
+  val formatStringAmount: Int => String = x => s"${removeZeroDecimals(formatter.format(x))}"
 
 }

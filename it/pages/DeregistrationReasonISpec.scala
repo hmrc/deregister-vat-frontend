@@ -17,7 +17,6 @@
 package pages
 
 import assets.IntegrationTestConstants._
-import forms.DeregistrationReasonForm
 import helpers.IntegrationBaseSpec
 import models._
 import play.api.http.Status._
@@ -149,9 +148,13 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
   "Calling the POST Deregister Reason endpoint" when {
 
-    def postRequest(data: DeregistrationReason): WSResponse =
-      post("/deregister-reason")(toFormData(DeregistrationReasonForm.deregistrationReasonForm, data))
+    def postRequest(data: Map[String, Seq[String]]): WSResponse =
+      post("/deregister-reason")(data)
 
+    val ceased = Map("reason" -> Seq("stoppedTrading"))
+    val belowThreshold = Map("reason" -> Seq("turnoverBelowThreshold"))
+    val zeroRated = Map("reason" -> Seq("zeroRated"))
+    val invalidModel = Map("reason" -> Seq(""))
 
     "the user is authorised" when {
 
@@ -178,7 +181,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
 
 
-          val response: WSResponse = postRequest(Ceased)
+          val response: WSResponse = postRequest(ceased)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -206,7 +209,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
 
-          val response: WSResponse = postRequest(BelowThreshold)
+          val response: WSResponse = postRequest(belowThreshold)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -232,7 +235,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
 
-          val response: WSResponse = postRequest(ZeroRated)
+          val response: WSResponse = postRequest(zeroRated)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -264,7 +267,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
           DeregisterVatStub.deleteAnswerError(vrn,PurchasesExceedSuppliesAnswerService.key)
 
 
-          val response: WSResponse = postRequest(Ceased)
+          val response: WSResponse = postRequest(ceased)
 
           response should have(
             httpStatus(INTERNAL_SERVER_ERROR)
@@ -279,7 +282,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(Ceased)
+        val response: WSResponse = postRequest(ceased)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -294,11 +297,27 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(Ceased)
+        val response: WSResponse = postRequest(ceased)
 
         response should have(
           httpStatus(FORBIDDEN),
           pageTitle("You can’t use this service yet" + titleSuffixOther)
+        )
+      }
+    }
+
+    "the post request includes invalid data" should {
+
+      "return 400 BAD_REQUEST" in {
+
+        given.user.isAuthorised
+
+        val response: WSResponse = postRequest(invalidModel)
+
+        response should have(
+          httpStatus(BAD_REQUEST),
+          pageTitle("Error: Why is the business cancelling its VAT registration?" + titleSuffix),
+          elementText(".error-message")("Select a VAT cancellation reason")
         )
       }
     }

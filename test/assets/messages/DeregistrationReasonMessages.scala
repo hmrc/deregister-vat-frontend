@@ -25,5 +25,6 @@ object DeregistrationReasonMessages extends BaseMessages {
   val reason3 = "The business supplies goods that are zero-rated for VAT"
   val reason4 = "Making exempt only supplies"
   val reason5 = "Other"
+  val yesNoError = "Select a VAT cancellation reason"
 
 }

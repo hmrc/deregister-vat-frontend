@@ -18,43 +18,43 @@
 @import templates.inputs.radioHelper
 @import views.html.templates.errors.errorSummary
 @import templates.headings
-@import forms.BusinessActivityForm.{yesNo, yes, no}
+@import forms.YesNoForm._
 @import views.utils.TitleUtil.title
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @questionContent = {
-  @headings(messages("businessActivity.title"))
+    @headings(messages("businessActivity.title"))
 
-  <p>@messages("businessActivity.forExample")</p>
+    <p>@messages("businessActivity.forExample")</p>
 
-  <p><a id="rates-info" href="@{appConfig.govUkVatRatesInfo}" target="_blank">@messages("businessActivity.moreInfo")</a></p>
+    <p><a id="rates-info" href="@{appConfig.govUkVatRatesInfo}" target="_blank">@messages("businessActivity.moreInfo")</a></p>
 }
 
 @views.html.main_template(title = title(messages("businessActivity.title"), form), appConfig = appConfig) {
 
-  <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url">@messages("common.back")</a>
+    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url">@messages("common.back")</a>
 
-  @errorSummary("common.errorSummary.heading", form)
+    @errorSummary("common.errorSummary.heading", form)
 
-  @helpers.form(action = controllers.zeroRated.routes.BusinessActivityController.submit, 'novalidate -> "novalidate") {
+    @helpers.form(action = controllers.zeroRated.routes.BusinessActivityController.submit, 'novalidate -> "novalidate") {
 
     <div class="form-group" id="answer">
-      @radioHelper(
-        field = form(yesNo),
-        choices = Seq(
-          yes -> messages("common.yes"),
-          no -> messages("common.no")
-        ),
-        question = messages("businessActivity.title"),
-        additionalContent = Some(questionContent),
-        inline = true,
-        legendAsHeader = false
-      )
+        @radioHelper(
+            field = form(yesNo),
+            choices = Seq(
+                yes -> messages("common.yes"),
+                no -> messages("common.no")
+            ),
+            question = messages("businessActivity.title"),
+            additionalContent = Some(questionContent),
+            inline = true,
+            legendAsHeader = false
+        )
     </div>
 
-    <button class="button" type="submit" id="continue">
-      @messages("common.continue")
-    </button>
-  }
+        <button class="button" type="submit" id="continue">
+            @messages("common.continue")
+        </button>
+    }
 }

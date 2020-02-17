@@ -157,7 +157,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
   "Calling the POST Deregistration Date endpoint" when {
 
     def postRequest(data: DeregistrationDateModel): WSResponse =
-      post("/deregister-date")(toFormData(DeregistrationDateForm.deregistrationDateForm, data))
+      post("/deregister-date")(toFormData(DeregistrationDateForm.deregistrationDateForm("yesNoError"), data))
 
     "the user is authorised" when {
 
@@ -204,7 +204,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
           response should have(
             httpStatus(BAD_REQUEST),
             pageTitle("Error: Do you want to choose the cancellation date?" + titleSuffix),
-            elementText(".error-message")("Invalid date")
+            elementText(".error-message")("Enter a valid cancellation date")
           )
         }
       }

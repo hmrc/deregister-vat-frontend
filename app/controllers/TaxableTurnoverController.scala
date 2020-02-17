@@ -29,6 +29,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import services.{TaxableTurnoverAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import utils.MoneyFormatter
 
 import scala.concurrent.Future
 
@@ -41,18 +42,20 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                           val serviceErrorHandler: ServiceErrorHandler,
                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  private def renderView(form: Form[YesNo] = YesNoForm.yesNoForm)(implicit user: User[_]) =
+  val form: Form[YesNo] = YesNoForm.yesNoForm("taxableTurnover.error.mandatoryRadioOption", MoneyFormatter.formatStringAmount(appConfig.deregThreshold))
+
+  private def renderView(form: Form[YesNo])(implicit user: User[_]) =
     views.html.taxableTurnover(form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     taxableTurnoverAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(YesNoForm.yesNoForm.fill(data)))
-      case _ => Ok(renderView())
+      case Right(Some(data)) => Ok(renderView(form.fill(data)))
+      case _ => Ok(renderView(form))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    YesNoForm.yesNoForm.bindFromRequest().fold(
+    form.bindFromRequest().fold(
       error => Future.successful(BadRequest(views.html.taxableTurnover(error))),
       data => (for {
         _ <- EitherT(taxableTurnoverAnswerService.storeAnswer(data))

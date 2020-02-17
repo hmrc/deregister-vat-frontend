@@ -17,7 +17,6 @@ common.no = No
 common.finish = Finish
 common.moreInfo = More information
 common.error.titlePrefix = Error:
-common.error.mandatoryRadioOption = Select an option
 common.error.mandatoryAmount = Enter the amount using numbers 0 to 9
 common.error.negative = Enter a positive amount
 common.error.tooManyDecimals = Enter a maximum of 2 decimal places for pence
@@ -33,7 +32,6 @@ error.date.invalidCharacters = Enter a date using numbers 0 to 9
 error.date.day = Enter numbers between 1 and 31
 error.date.month = Enter numbers between 1 and 12
 error.date.year = Enter 4 numbers
-error.date.invalid = Invalid date
 
 #Feedback
 feedback.before = This is a new service – your
@@ -52,13 +50,15 @@ deregistrationReason.reason.belowThreshold = Annual turnover is below £{0}
 deregistrationReason.reason.zeroRated = The business supplies goods that are zero-rated for VAT
 deregistrationReason.reason.exemptOnly = Making exempt only supplies
 deregistrationReason.reason.other = Other
+deregistrationReason.reason.mandatoryRadioOption = Select a VAT cancellation reason
 
 deregistrationDate.title = Do you want to choose the cancellation date?
 deregistrationDate.p1 = The date can be up to a maximum of 3 months from today.
 deregistrationDate.p2 = We’ll confirm the date when we accept your request.
-deregistrationDate.error.date.invalidDate = Enter a valid cancellation date
+deregistrationDate.error.date.noEntry = Enter a valid cancellation date
 deregistrationDate.error.date.past = The cancellation date must be in the future
 deregistrationDate.error.date.future = The cancellation date must not be more than 3 months from today
+deregistrationDate.error.mandatoryRadioOption = Select yes if the business wants to choose the cancellation date
 
 deregistrationProperty.title = Does the business have any commercial property?
 deregistrationProperty.p1 = This includes both land and buildings.
@@ -71,19 +71,23 @@ vatAccounts.description.cash = You record VAT whenever you make or receive a pay
 vatAccounts.showMeAnExample.p1 = For example, you invoice someone in March but do not receive the money until June. If you record the VAT on this payment in:
 vatAccounts.showMeAnExample.bullet1 = March, then you use standard accounting
 vatAccounts.showMeAnExample.bullet2 = June, then you use cash accounting
+vatAccounts.showMeAnExample.mandatorySelection = Select how the business’s VAT accounts are prepared
 
 ceasedTrading.title = Date the business stopped or will stop trading
 ceasedTrading.hint = For example, 31 3 1980
-ceasedTrading.error.date.noEntry = Enter the date your business ceased or will cease trading
-ceasedTrading.error.date.invalidDate = Enter a real ceased trading date
+ceasedTrading.error.date.noEntry = Enter the date the business stopped or will stop trading
 
 optionTax.title = Has the business charged or claimed VAT on land or commercial property?
 optionTax.text = You can choose to charge VAT on any income earned from renting or selling land or commercial property. This is known as ‘Option to Tax’.
 optionTax.hint = What is the total value?
+optionTax.error.mandatoryRadioOption = Select yes if the business charged or claimed VAT on land or commercial property
+optionTax.error.amount.noEntry = Enter the total value of the land or commercial property
 
 capitalAssets.title = Is the business going to keep any capital assets?
 capitalAssets.text.1 = For example furniture, computers and equipment.
 capitalAssets.totalSaleValue = What is the total value?
+capitalAssets.error.mandatoryRadioOption = Select yes if the business is going to keep any capital assets
+capitalAssets.error.amount.noEntry = Enter the total value of capital assets
 
 cannotDeregister.title = The business cannot cancel its VAT registration
 cannotDeregister.text = This is because the business expects its taxable turnover for the next 12 months to be above £{0}.
@@ -93,16 +97,22 @@ cannotDeregister.link = update the business’s other VAT details.
 taxableTurnover.title = Was the business’s taxable turnover below £{0} in the last 12 months?
 taxableTurnover.error.mandatory = Enter the business’s taxable turnover
 taxableTurnover.error.nonNumeric = Enter the turnover using numbers 0 to 9
+taxableTurnover.error.mandatoryRadioOption = Select yes if the turnover was less than £{0} in the last 12 months
 
 nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
 
 zeroRatedSupplies.title = What is the expected value of zero-rate supplies for the next 12 months?
+zeroRatedSupplies.error.mandatory = Enter the value of zero-rate supplies for the next 12 months
+zeroRatedSupplies.error.nonNumeric = Enter an amount using numbers 0 to 9
 
 issueNewInvoices.title = Is the business going to issue any new invoices after you cancel the registration?
+issueNewInvoices.error.mandatoryRadioOption = Select yes if the business is expecting to issue any new invoices after you cancel the registration
 
 optionOwnsStockToSell.title = Is the business going to keep any stock?
 optionOwnsStockToSell.text.1 = For example, goods bought or manufactured for resale.
 optionOwnsStockToSell.hint = What is the total value?
+optionOwnsStockToSell.error.mandatoryRadioOption = Select yes if the business is going to keep any stock
+optionOwnsStockToSell.error.amount.noEntry = Enter the total value of stock
 
 whyTurnoverBelow.title = Why do you expect the business’s taxable turnover to be below £{0}?
 whyTurnoverBelow.text.1 = Select all that apply
@@ -113,7 +123,7 @@ whyTurnoverBelow.reason.reducedTradingHours = Reduced trading hours
 whyTurnoverBelow.reason.seasonalBusiness = Seasonal business
 whyTurnoverBelow.reason.closedPlacesOfBusiness = Closed some places of business
 whyTurnoverBelow.reason.turnoverLowerThanExpected = Turnover lower than expected
-whyTurnoverBelow.error.atLeastOne = Select at least one option
+whyTurnoverBelow.error.atLeastOne = Select a reason for cancelling the VAT registration
 
 checkYourAnswers.title = Check your answers
 checkYourAnswers.change = Change
@@ -199,11 +209,12 @@ featureSwitch.title = Feature switches
 features.useLanguageSelectorFeature.enabled = Language selector
 
 outstandingInvoice.title = Will the business receive payment for outstanding invoices after you cancel the registration?
+outstandingInvoice.error.mandatoryRadioOption = Select yes if the business is expecting to receive payment for outstanding invoices after you cancel the registration
 
 businessActivity.title = Has the business activity changed?
 businessActivity.forExample = For example the business only, or mainly, supply goods that are zero-rated for VAT.
 businessActivity.moreInfo = More information on zero-rated goods and services (opens in a new window or tab)
-businessActivity.error = Select yes if your business activity has changed
+businessActivity.error.mandatoryRadioOption = Select yes if your business activity has changed
 
 sicCode.title = What is the business’s Standard Industrial Classification (SIC) Code?
 sicCode.explanation = This is the 5 digit code which describes the business activity.
@@ -211,9 +222,6 @@ sicCode.find = Find the code that best describes the business activity (opens in
 sicCode.error.invalid = Enter the 5 digit code which best describes your business activity
 sicCode.error.tooFew = You have entered too few numbers
 sicCode.error.tooMany = You have entered too many numbers
-
-zeroRatedSupplies.error.mandatory = Enter the value of zero-rate supplies for the next 12 months
-zeroRatedSupplies.error.nonNumeric = Enter an amount using numbers 0 to 9
 
 purchasesExceedSupplies.title = Do you expect the VAT on purchases to regularly exceed the VAT on supplies?
 purchasesExceedSupplies.explanation = This means the business would claim the VAT on most VAT Returns.

@@ -135,7 +135,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CommonMessages.invalidDate
+      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorNoEntry
     }
   }
 
@@ -166,7 +166,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CommonMessages.invalidDate
+      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorNoEntry
     }
   }
 
@@ -251,7 +251,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CommonMessages.invalidDate
+      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorNoEntry
     }
   }
 
@@ -309,7 +309,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CommonMessages.invalidDate
+      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorNoEntry
     }
   }
 
@@ -331,12 +331,12 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error for the incorrect field linking to the correct field" in {
-      elementText(Selectors.errorCeasedTrading) shouldBe CeasedTradingDateMessages.errorInvalidDate
+      elementText(Selectors.errorCeasedTrading) shouldBe CeasedTradingDateMessages.errorNoEntry
       element(Selectors.errorCeasedTrading).attr("href") shouldBe Selectors.ceasedTradingField
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorInvalidDate
+      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorNoEntry
     }
   }
 }

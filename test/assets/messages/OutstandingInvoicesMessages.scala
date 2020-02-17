@@ -20,5 +20,6 @@ object OutstandingInvoicesMessages extends BaseMessages {
 
   val title = "Will the business receive payment for outstanding invoices after you cancel the registration?" + titleSuffix
   val heading = "Will the business receive payment for outstanding invoices after you cancel the registration?"
+  val yesNoError = "Select yes if the business is expecting to receive payment for outstanding invoices after you cancel the registration"
 
 }

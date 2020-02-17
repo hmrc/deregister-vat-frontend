@@ -68,6 +68,6 @@ object DateForm extends FormValidation {
       month -> of(formatter),
       year -> of(formatter)
     )(DateModel.apply)(DateModel.unapply)
-      .verifying(isValidDateConstraint("ceasedTrading.error.date.invalidDate"))
+      .verifying(isValidDateConstraint("ceasedTrading.error.date.noEntry"))
   )
 }

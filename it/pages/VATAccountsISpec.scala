@@ -17,7 +17,6 @@
 package pages
 
 import assets.IntegrationTestConstants._
-import forms.VATAccountsForm
 import helpers.IntegrationBaseSpec
 import models._
 import play.api.http.Status._
@@ -151,8 +150,11 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
   "Calling the POST VatAccounts" when {
 
-    def postRequest(data: VATAccountsModel): WSResponse =
-      post("/accounting-method")(toFormData(VATAccountsForm.vatAccountsForm, data))
+    def postRequest(data: Map[String, Seq[String]]): WSResponse =
+      post("/accounting-method")(data)
+
+    val standard = Map("accountingMethod" -> Seq("standard"))
+    val invalidModel = Map("accountingMethod" -> Seq(""))
 
 
     "the user is authorised" when {
@@ -165,7 +167,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn,AccountingMethodAnswerService.key)
 
-          val response: WSResponse = postRequest(StandardAccounting)
+          val response: WSResponse = postRequest(standard)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -182,7 +184,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.putAnswerError(vrn,AccountingMethodAnswerService.key)
 
-          val response: WSResponse = postRequest(StandardAccounting)
+          val response: WSResponse = postRequest(standard)
 
           response should have(
             httpStatus(INTERNAL_SERVER_ERROR)
@@ -197,7 +199,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(StandardAccounting)
+        val response: WSResponse = postRequest(standard)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -212,11 +214,27 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(StandardAccounting)
+        val response: WSResponse = postRequest(standard)
 
         response should have(
           httpStatus(FORBIDDEN),
           pageTitle("You can’t use this service yet" + titleSuffixOther)
+        )
+      }
+    }
+
+    "the post request includes invalid data" should {
+
+      "return 400 BAD_REQUEST" in {
+
+        given.user.isAuthorised
+
+        val response: WSResponse = postRequest(invalidModel)
+
+        response should have(
+          httpStatus(BAD_REQUEST),
+          pageTitle("Error: How are the business’s VAT accounts prepared?" + titleSuffix),
+          elementText(".error-message")("Select how the business’s VAT accounts are prepared")
         )
       }
     }

@@ -35,7 +35,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm)
+    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -71,7 +71,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm.bind(Map("yes_no" -> "")))
+    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -79,11 +79,11 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
     }
 
     "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${CommonMessages.errorMandatoryRadioOption}"
+      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${OutstandingInvoicesMessages.yesNoError}"
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe CommonMessages.errorMandatoryRadioOption
+      elementText(Selectors.error) shouldBe OutstandingInvoicesMessages.yesNoError
     }
   }
 }
