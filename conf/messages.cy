@@ -79,9 +79,9 @@ deregisterForVAT.bullet2 = stoc neu asedion sydd gan y busnes neu y mae’r busn
 
 deregistrationReason.title = Pam fod y busnes yn canslo’i gofrestriad TAW?
 deregistrationReason.reason.ceased = Mae’r busnes wedi rhoi’r gorau i fasnachu
-deregistrationReason.reason.belowThreshold = Mae’r trosiant blynyddol yn is nag £{0}
-deregistrationReason.reason.zeroRated = Mae’r busnes yn cyflenwi nwyddau sydd ar y gyfradd sero ar gyfer TAW
-deregistrationReason.reason.exemptOnly = Gwneud cyflenwadau sydd wedi’u heithrio yn unig
+deregistrationReason.reason.belowThreshold = Bydd trosiant blynyddol yn is nag £{0}
+deregistrationReason.reason.zeroRated = Gwneud cais am eithriad gan fod cyflenwadau y busnes ond, neu’n bennaf, ar gyfradd sero ar gyfer TAW
+deregistrationReason.reason.exemptOnly = Dal i fasnachu ond yn gwneud cyflenwadau sydd wedi’u heithrio rhag TAW yn unig
 deregistrationReason.reason.other = Arall
 
 deregistrationDate.title = A ydych am ddewis y dyddiad canslo?
