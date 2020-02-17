@@ -46,9 +46,9 @@ deregisterForVAT.bullet2 = stock or assets the business has or plans to keep
 
 deregistrationReason.title = Why is the business cancelling its VAT registration?
 deregistrationReason.reason.ceased = The business has stopped trading
-deregistrationReason.reason.belowThreshold = Annual turnover is below £{0}
-deregistrationReason.reason.zeroRated = The business supplies goods that are zero-rated for VAT
-deregistrationReason.reason.exemptOnly = Making exempt only supplies
+deregistrationReason.reason.belowThreshold = Annual turnover will be below £{0}
+deregistrationReason.reason.zeroRated = Applying for exemption as the business’s supplies are mainly or only zero-rated for VAT
+deregistrationReason.reason.exemptOnly = Still trading but making only VAT exempt supplies
 deregistrationReason.reason.other = Other
 deregistrationReason.reason.mandatoryRadioOption = Select a VAT cancellation reason
 
