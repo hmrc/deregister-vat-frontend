@@ -254,6 +254,6 @@ sicCode.error.invalid = Nodwch y cod 5 digid sy’n disgrifio’ch gweithgaredd 
 sicCode.error.tooFew = Nid ydych wedi nodi digon o rifau
 sicCode.error.tooMany = Rydych wedi nodi gormod o rifau
 
-purchasesExceedSupplies.title = A ydych yn disgwyl i’r TAW ar bryniadau fynd y tu hwnt i’r TAW ar gyflenwadau yn rheolaidd?
+purchasesExceedSupplies.title = A ydych yn disgwyl i’r TAW ar bryniannau fynd y tu hwnt i’r TAW ar gyflenwadau yn rheolaidd?
 purchasesExceedSupplies.explanation = Mae hyn yn golygu y byddai’r busnes yn hawlio TAW ar y rhan fwyaf o Ffurflenni TAW.
-purchasesExceedSupplies.error = Dewiswch ‘Iawn’ os ydych yn disgwyl i’r TAW ar bryniadau fynd y tu hwnt i’r TAW ar gyflenwadau
+purchasesExceedSupplies.error = Dewiswch ‘Iawn’ os ydych yn disgwyl i’r TAW ar bryniannau fod yn fwy na’r TAW ar gyflenwadau
