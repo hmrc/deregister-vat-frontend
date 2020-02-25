@@ -16,23 +16,23 @@
 
 package connectors.httpParsers
 
-import models.{ChangeIndicatorModel, ErrorModel}
+import models.{IndicatorModel, ErrorModel}
 import play.api.Logger
 import play.api.http.Status
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object PendingDeregHttpParser {
 
-  type GetDeregPendingResponse = Either[ErrorModel, ChangeIndicatorModel]
+  type GetDeregPendingResponse = Either[ErrorModel, IndicatorModel]
 
-  implicit object PendingDeregReads extends HttpReads[Either[ErrorModel, ChangeIndicatorModel]] {
+  implicit object PendingDeregReads extends HttpReads[Either[ErrorModel, IndicatorModel]] {
 
-    override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, ChangeIndicatorModel] = {
+    override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, IndicatorModel] = {
 
       response.status match {
         case Status.OK => {
           Logger.debug("[PendingDeregHttpParser][read]: Status OK")
-          response.json.validate[ChangeIndicatorModel].fold(
+          response.json.validate[IndicatorModel].fold(
             invalid => {
               // $COVERAGE-OFF$
               Logger.warn(s"[PendingDeregHttpParser][read] - Invalid JSON")

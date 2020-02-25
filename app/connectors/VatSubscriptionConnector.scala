@@ -21,7 +21,7 @@ import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads
 import connectors.httpParsers.PendingDeregHttpParser.PendingDeregReads
 import connectors.httpParsers.VatSubscriptionHttpParser
 import javax.inject.{Inject, Singleton}
-import models.{CustomerDetails, ChangeIndicatorModel, ErrorModel, VatSubscriptionResponse}
+import models.{CustomerDetails, IndicatorModel, ErrorModel, VatSubscriptionResponse}
 import models.deregistrationRequest.DeregistrationInfo
 import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
@@ -53,7 +53,7 @@ class VatSubscriptionConnector @Inject()(val http: HttpClient,
     http.GET(url)(CustomerDetailsReads, headerCarrier, ec)
   }
 
-  def getFullInformation(id: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext) : Future[Either[ErrorModel, ChangeIndicatorModel]] = {
+  def getFullInformation(id: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext) : Future[Either[ErrorModel, IndicatorModel]] = {
     val url = getFullDetailsUrl(id)
     Logger.debug(s"[VatSubscriptionConnector][getFullInformation]: Calling getFullInfo with URL - $url")
     http.GET(url)(PendingDeregReads, headerCarrier, ec)

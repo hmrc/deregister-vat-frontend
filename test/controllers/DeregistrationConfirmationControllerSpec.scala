@@ -20,12 +20,12 @@ import models.{DeregisterVatSuccess, ErrorModel}
 import play.api.http.Status
 import play.api.test.Helpers._
 import services.mocks.{MockAuditService, MockContactPreferencesService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
-import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
+import assets.constants.CustomerDetailsTestConstants.{customerDetailsMax, pendingDeregFalse}
 import assets.constants.ContactPreferencesTestConstants.{contactPreferencesDigital, contactPreferencesPaper}
 import assets.constants.BaseTestConstants.vrn
-import org.jsoup.Jsoup
 import assets.messages.{DeregistrationConfirmationMessages => Messages}
 import common.SessionKeys
+import org.jsoup.Jsoup
 
 import scala.concurrent.Future
 
@@ -63,6 +63,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
               mockAuthResult(Future.successful(mockAuthorisedIndividual))
               setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
               setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+              setupMockPendingDereg(vrn)(Right(pendingDeregFalse))
               setupAuditExtendedEvent
 
               status(result) shouldBe Status.OK
@@ -94,6 +95,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
               mockAuthResult(Future.successful(mockAuthorisedIndividual))
               setupMockContactPreferences(vrn)(Right(contactPreferencesPaper))
               setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+              setupMockPendingDereg(vrn)(Right(pendingDeregFalse))
               setupAuditExtendedEvent
               status(result) shouldBe Status.OK
             }
@@ -120,6 +122,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
               mockAuthResult(Future.successful(mockAuthorisedIndividual))
               setupMockContactPreferences(vrn)(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "I got nothing")))
               setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+              setupMockPendingDereg(vrn)(Right(pendingDeregFalse))
               status(result) shouldBe Status.OK
             }
 

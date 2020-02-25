@@ -17,7 +17,7 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.PendingDeregHttpParser.PendingDeregReads
-import models.{ChangeIndicatorModel, ErrorModel}
+import models.{IndicatorModel, ErrorModel}
 import play.api.http.Status
 import uk.gov.hmrc.http.HttpResponse
 import utils.TestUtil
@@ -30,7 +30,7 @@ class PendingDeregHttpParserSpec extends TestUtil {
   val successBadJson = Some(Json.obj("changeIndicators" -> Json.obj("deregister" -> 1)))
   val errorModel = ErrorModel(Status.BAD_REQUEST, "Error Message")
 
-  private def pendingDeregResult(response: HttpResponse): Either[ErrorModel, ChangeIndicatorModel] =
+  private def pendingDeregResult(response: HttpResponse): Either[ErrorModel, IndicatorModel] =
     PendingDeregReads.read("", "", response)
 
   "The PendingDeregHttpParser.reads" when {
@@ -46,7 +46,7 @@ class PendingDeregHttpParserSpec extends TestUtil {
 
       "return a 'ChangeIndicators(None)')" in {
         PendingDeregReads.read("", "", HttpResponse(Status.OK, Some(Json.obj()))) shouldBe
-          Right(ChangeIndicatorModel(None))
+          Right(IndicatorModel(None, None))
       }
     }
 

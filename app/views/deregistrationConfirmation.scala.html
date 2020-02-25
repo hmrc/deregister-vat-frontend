@@ -19,7 +19,7 @@
 @import scala.concurrent.{ExecutionContext, Future}
 @import models.contactPreferences.ContactPreference
 
-@(businessName: Option[String]=None,preference: Option[String]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig, hc: HeaderCarrier, ec: ExecutionContext)
+@(businessName: Option[String]=None,preference: Option[String]=None,verifiedEmail: Option[Boolean]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig, hc: HeaderCarrier, ec: ExecutionContext)
 
 @finishLink = @{
     if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
