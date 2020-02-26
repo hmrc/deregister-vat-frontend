@@ -186,6 +186,7 @@ deregistrationConfirmation.text2AgentPrefYesP1 = We’ll also contact
 deregistrationConfirmation.text2AgentPrefYesP2 =  with an update.
 deregistrationConfirmation.yourClient = your client
 deregistrationConfirmation.textAgentPrefNo = We’ll send a confirmation letter to the agency address registered with HMRC within 15 working days.
+deregistrationConfirmation.emailPreference = We’ll send you an email within 2 working days with an update or you can check your HMRC secure messages.
 deregistrationConfirmation.digitalPreference = We’ll send you an email within 2 working days with an update, followed by a letter to your principal place of business. You can also check your HMRC secure messages for an update.
 deregistrationConfirmation.paperPreference = We’ll send a letter to your principal place of business with an update within 15 working days.
 deregistrationConfirmation.contactPrefError = We’ll send you an update within 15 working days.

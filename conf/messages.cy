@@ -217,6 +217,7 @@ deregistrationConfirmation.text2AgentPrefYesP1 = Byddwn hefyd yn cysylltu ag
 deregistrationConfirmation.text2AgentPrefYesP2 =  i roi diweddariad.
 deregistrationConfirmation.yourClient = eich cleient
 deregistrationConfirmation.textAgentPrefNo = Byddwn yn anfon llythyr o gadarnhad i gyfeiriad yr asiantaeth sydd wedi’i gofrestru gyda CThEM cyn pen 15 diwrnod gwaith.
+deregistrationConfirmation.emailPreference = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith gyda diweddariad, neu gallwch wirio’ch negeseuon diogel oddi wrth CThEM.
 deregistrationConfirmation.digitalPreference = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith i roi diweddariad, wedi’i ddilyn gan lythyr i’ch prif fan busnes. Gallwch hefyd wirio’ch negeseuon diogel oddi wrth CThEM i gael diweddariad.
 deregistrationConfirmation.paperPreference = Byddwn yn anfon llythyr i’ch prif fan busnes i roi diweddariad cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.contactPrefError = Byddwn yn anfon diweddariad atoch cyn pen 15 diwrnod gwaith.

@@ -63,6 +63,9 @@ object CustomerDetailsTestConstants {
   val pendingDeregFalse: IndicatorModel = IndicatorModel(Some(PendingDeregModel(dereg = false)), Some(true))
   val pendingDeregTrue: IndicatorModel = IndicatorModel(Some(PendingDeregModel(dereg = true)), Some(true))
 
-  val noPendingDereg: IndicatorModel = IndicatorModel(None, Some(true))
+  val noPendingDereg: IndicatorModel = IndicatorModel(None, None)
+
+  val verifiedEmail: IndicatorModel = IndicatorModel(None, Some(true))
+  val unverifiedEmail: IndicatorModel = IndicatorModel(None, Some(false))
 
 }
