@@ -22,7 +22,8 @@ import play.api.libs.json._
 case class CustomerDetails(firstName: Option[String],
                            lastName: Option[String],
                            organisationName: Option[String],
-                           tradingName: Option[String]) {
+                           tradingName: Option[String],
+                           emailVerified: Option[Boolean]) {
 
   val isOrg: Boolean = organisationName.isDefined
   val isInd: Boolean = firstName.isDefined || lastName.isDefined
@@ -40,12 +41,14 @@ object CustomerDetails {
   private val lastNamePath = __ \ "lastName"
   private val organisationNamePath = __ \ "organisationName"
   private val tradingNamePath = __ \ "tradingName"
+  private val emailPath = __ \\ "emailVerified"
 
   implicit val reads: Reads[CustomerDetails] = (
     firstNamePath.readNullable[String] and
       lastNamePath.readNullable[String] and
       organisationNamePath.readNullable[String] and
-      tradingNamePath.readNullable[String]
+      tradingNamePath.readNullable[String] and
+    emailPath.readNullable[Boolean]
     ) (CustomerDetails.apply _)
 
 }

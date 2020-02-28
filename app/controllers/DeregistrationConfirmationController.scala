@@ -64,7 +64,9 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
                   Some(model.preference)
               })
 
-              Ok(views.html.deregistrationConfirmation(businessName, contactPreference))
+              val verifiedEmail = if (appConfig.features.emailVerifiedFeature()) {result._1.fold(_ => None, _.emailVerified)} else Some(false)
+
+              Ok(views.html.deregistrationConfirmation(businessName, contactPreference, verifiedEmail))
             }
 
           case Left(_) =>

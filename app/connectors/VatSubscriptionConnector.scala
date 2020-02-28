@@ -21,7 +21,7 @@ import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads
 import connectors.httpParsers.PendingDeregHttpParser.PendingDeregReads
 import connectors.httpParsers.VatSubscriptionHttpParser
 import javax.inject.{Inject, Singleton}
-import models.{CustomerDetails, ChangeIndicatorModel, ErrorModel, VatSubscriptionResponse}
+import models.{CustomerDetails, IndicatorModel, ErrorModel, VatSubscriptionResponse}
 import models.deregistrationRequest.DeregistrationInfo
 import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
@@ -36,8 +36,6 @@ class VatSubscriptionConnector @Inject()(val http: HttpClient,
 
   def url(vrn: String): String = s"${config.vatSubscriptionUrl}/vat-subscription/$vrn/deregister"
 
-  private[connectors] def getCustomerDetailsUrl(vrn: String) = s"${config.vatSubscriptionUrl}/vat-subscription/$vrn/customer-details"
-
   private[connectors] def getFullDetailsUrl(vrn: String) = s"${config.vatSubscriptionUrl}/vat-subscription/$vrn/full-information"
 
   def submit(vrn: String, deregistrationInfoModel: DeregistrationInfo)
@@ -48,12 +46,12 @@ class VatSubscriptionConnector @Inject()(val http: HttpClient,
 
   def getCustomerDetails(id: String)(implicit headerCarrier: HeaderCarrier,
                                      ec: ExecutionContext): Future[Either[ErrorModel, CustomerDetails]] = {
-    val url = getCustomerDetailsUrl(id)
+    val url = getFullDetailsUrl(id)
     Logger.debug(s"[VatSubscriptionConnector][getCustomerInfo]: Calling getCustomerInfo with URL - $url")
     http.GET(url)(CustomerDetailsReads, headerCarrier, ec)
   }
 
-  def getFullInformation(id: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext) : Future[Either[ErrorModel, ChangeIndicatorModel]] = {
+  def getFullInformation(id: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext) : Future[Either[ErrorModel, IndicatorModel]] = {
     val url = getFullDetailsUrl(id)
     Logger.debug(s"[VatSubscriptionConnector][getFullInformation]: Calling getFullInfo with URL - $url")
     http.GET(url)(PendingDeregReads, headerCarrier, ec)

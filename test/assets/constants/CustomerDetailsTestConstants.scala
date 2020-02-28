@@ -16,7 +16,7 @@
 
 package assets.constants
 
-import models.{ChangeIndicatorModel, CustomerDetails, PendingDeregModel}
+import models.{IndicatorModel, CustomerDetails, PendingDeregModel}
 import play.api.libs.json.{JsObject, Json}
 
 object CustomerDetailsTestConstants {
@@ -31,7 +31,8 @@ object CustomerDetailsTestConstants {
     "firstName" -> firstName,
     "lastName" -> lastName,
     "tradingName" -> tradingName,
-    "hasFlatRateScheme" -> false
+    "hasFlatRateScheme" -> false,
+    "ppob" -> Json.obj("contactDetails" -> Some(Json.obj("emailVerified" -> Some(true))))
   )
 
 
@@ -43,14 +44,24 @@ object CustomerDetailsTestConstants {
     Some(firstName),
     Some(lastName),
     Some(orgName),
-    Some(tradingName)
+    Some(tradingName),
+    Some(true)
   )
 
   val customerDetailsMin: CustomerDetails = CustomerDetails(
     None,
     None,
     None,
+    None,
     None
+  )
+
+  val customerDetailsUnverifiedEmail: CustomerDetails = CustomerDetails(
+    Some(firstName),
+    Some(lastName),
+    Some(orgName),
+    Some(tradingName),
+    Some(false)
   )
 
   val pendingDeregFalseJson: JsObject = Json.obj(
@@ -59,9 +70,8 @@ object CustomerDetailsTestConstants {
     )
   )
 
-  val pendingDeregFalse: ChangeIndicatorModel = ChangeIndicatorModel(Some(PendingDeregModel(dereg = false)))
-  val pendingDeregTrue: ChangeIndicatorModel = ChangeIndicatorModel(Some(PendingDeregModel(dereg = true)))
+  val pendingDeregFalse: IndicatorModel = IndicatorModel(Some(PendingDeregModel(dereg = false)))
+  val pendingDeregTrue: IndicatorModel = IndicatorModel(Some(PendingDeregModel(dereg = true)))
 
-  val noPendingDereg: ChangeIndicatorModel = ChangeIndicatorModel(None)
-
+  val noPendingDereg: IndicatorModel = IndicatorModel(None)
 }

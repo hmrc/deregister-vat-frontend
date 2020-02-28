@@ -34,9 +34,11 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
   "Rendering the deregistration confirmation page for a non-agent user" when {
 
-    "contactPreferences returns 'DIGITAL'" should {
+    "contactPreferences returns 'DIGITAL'" when {
 
-      lazy val view = views.html.deregistrationConfirmation(preference = Some("DIGITAL"))(user, messages, mockConfig, hc, ec)
+      "verifiedEmail is true" should {
+
+      lazy val view = views.html.deregistrationConfirmation(preference = Some("DIGITAL"), verifiedEmail = Some(true))(user, messages, mockConfig, hc, ec)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -52,7 +54,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
 
       "have the correct first paragraph" in {
-        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.digitalPreference
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.emailPreference
       }
 
       "have the correct second paragraph" in {
@@ -63,6 +65,41 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         elementText(Selectors.button) shouldBe CommonMessages.finish
         element(Selectors.button).attr("href") shouldBe mockConfig.vatSummaryFrontendUrl
       }
+
+    }
+
+      "verifiedEmail is false" should {
+
+        lazy val view = views.html.deregistrationConfirmation(preference = Some("DIGITAL"), verifiedEmail = Some(false))(user, messages, mockConfig, hc, ec)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct document title" in {
+          document.title shouldBe DeregistrationConfirmationMessages.title
+        }
+
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
+        }
+
+        "have the correct page subheading" in {
+          elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+        }
+
+        "have the correct first paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.digitalPreference
+        }
+
+        "have the correct second paragraph" in {
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.contactDetails
+        }
+
+        "have the correct finish button text and url" in {
+          elementText(Selectors.button) shouldBe CommonMessages.finish
+          element(Selectors.button).attr("href") shouldBe mockConfig.vatSummaryFrontendUrl
+        }
+
+      }
+
     }
 
     "contactPreferences returns 'PAPER'" should {

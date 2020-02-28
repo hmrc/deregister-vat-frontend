@@ -19,13 +19,13 @@ package models
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
-case class ChangeIndicatorModel(deregistration: Option[PendingDeregModel])
+case class IndicatorModel(deregistration: Option[PendingDeregModel])
 
-object ChangeIndicatorModel {
+object IndicatorModel {
 
   private val deregPath = __ \ "changeIndicators"
 
-  implicit val reads: Reads[ChangeIndicatorModel] = deregPath.readNullable[PendingDeregModel].map(ChangeIndicatorModel.apply)
+  implicit val reads: Reads[IndicatorModel] = deregPath.readNullable[PendingDeregModel].map(IndicatorModel.apply _)
 }
 
 case class PendingDeregModel(dereg: Boolean)
