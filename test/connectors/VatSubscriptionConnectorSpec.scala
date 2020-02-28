@@ -64,14 +64,6 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
         }
       }
 
-      "calling .getCustomerDetailsUrl" should {
-
-        "format the url correctly" in {
-          val testUrl = TestVatSubscriptionConnector.getCustomerDetailsUrl(vrn)
-          testUrl shouldBe s"${mockConfig.vatSubscriptionUrl}/vat-subscription/$vrn/customer-details"
-        }
-      }
-
       "calling .getCustomerDetails" when {
 
         def result: Future[Either[ErrorModel, CustomerDetails]] = TestVatSubscriptionConnector.getCustomerDetails(vrn)
@@ -79,7 +71,7 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
         "called for a Right with CustomerDetails" should {
 
           "return a CustomerDetailsModel" in {
-            setupMockHttpGet(TestVatSubscriptionConnector.getCustomerDetailsUrl(vrn))(Right(customerDetailsJsonMin))
+            setupMockHttpGet(TestVatSubscriptionConnector.getFullDetailsUrl(vrn))(Right(customerDetailsJsonMin))
             await(result) shouldBe Right(customerDetailsJsonMin)
           }
         }
@@ -87,7 +79,7 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
         "given an error should" should {
 
           "return a Left with an ErrorModel" in {
-            setupMockHttpGet(TestVatSubscriptionConnector.getCustomerDetailsUrl(vrn))(Left(errorModel))
+            setupMockHttpGet(TestVatSubscriptionConnector.getFullDetailsUrl(vrn))(Left(errorModel))
             await(result) shouldBe Left(errorModel)
           }
         }

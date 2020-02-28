@@ -53,8 +53,7 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
             val serviceCalls = for {
               customerDetailsCall <- customerDetailsService.getCustomerDetails(user.vrn)
               contactPreferenceCall <- getContactPreference
-              emailVerifiedCall <- customerDetailsService.getDeregPending(user.vrn)
-            } yield (customerDetailsCall, contactPreferenceCall, emailVerifiedCall)
+            } yield (customerDetailsCall, contactPreferenceCall)
 
             serviceCalls.map { result =>
 
@@ -65,7 +64,7 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
                   Some(model.preference)
               })
 
-              val verifiedEmail = if (appConfig.features.emailVerifiedFeature()) {result._3.fold(_ => None, _.emailVerified)} else Some(false)
+              val verifiedEmail = if (appConfig.features.emailVerifiedFeature()) {result._1.fold(_ => None, _.emailVerified)} else Some(false)
 
               Ok(views.html.deregistrationConfirmation(businessName, contactPreference, verifiedEmail))
             }
@@ -81,14 +80,6 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
   private def getContactPreference(implicit user: User[AnyContent], hc: HeaderCarrier, ec: ExecutionContext) = {
     if (!user.isAgent) {
       customerContactPreference.getCustomerContactPreferences(user.vrn)(hc, ec)
-    } else {
-      Future(Left(None))(ec)
-    }
-  }
-
-  private def checkEmailVerified(implicit user: User[AnyContent], hc: HeaderCarrier, ec: ExecutionContext) = {
-    if (!user.isAgent) {
-      customerDetailsService.getDeregPending(user.vrn)(hc, ec)
     } else {
       Future(Left(None))(ec)
     }

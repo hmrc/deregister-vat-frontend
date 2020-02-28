@@ -46,7 +46,7 @@ class PendingDeregHttpParserSpec extends TestUtil {
 
       "return a 'ChangeIndicators(None)')" in {
         PendingDeregReads.read("", "", HttpResponse(Status.OK, Some(Json.obj()))) shouldBe
-          Right(IndicatorModel(None, None))
+          Right(IndicatorModel(None))
       }
     }
 

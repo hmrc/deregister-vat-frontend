@@ -31,7 +31,8 @@ object CustomerDetailsTestConstants {
     "firstName" -> firstName,
     "lastName" -> lastName,
     "tradingName" -> tradingName,
-    "hasFlatRateScheme" -> false
+    "hasFlatRateScheme" -> false,
+    "ppob" -> Json.obj("contactDetails" -> Some(Json.obj("emailVerified" -> Some(true))))
   )
 
 
@@ -43,29 +44,34 @@ object CustomerDetailsTestConstants {
     Some(firstName),
     Some(lastName),
     Some(orgName),
-    Some(tradingName)
+    Some(tradingName),
+    Some(true)
   )
 
   val customerDetailsMin: CustomerDetails = CustomerDetails(
     None,
     None,
     None,
+    None,
     None
+  )
+
+  val customerDetailsUnverifiedEmail: CustomerDetails = CustomerDetails(
+    Some(firstName),
+    Some(lastName),
+    Some(orgName),
+    Some(tradingName),
+    Some(false)
   )
 
   val pendingDeregFalseJson: JsObject = Json.obj(
     "changeIndicators" -> Json.obj(
       "deregister" -> false
-    ),
-    "emailVerified" -> true
+    )
   )
 
-  val pendingDeregFalse: IndicatorModel = IndicatorModel(Some(PendingDeregModel(dereg = false)), Some(true))
-  val pendingDeregTrue: IndicatorModel = IndicatorModel(Some(PendingDeregModel(dereg = true)), Some(true))
+  val pendingDeregFalse: IndicatorModel = IndicatorModel(Some(PendingDeregModel(dereg = false)))
+  val pendingDeregTrue: IndicatorModel = IndicatorModel(Some(PendingDeregModel(dereg = true)))
 
-  val noPendingDereg: IndicatorModel = IndicatorModel(None, None)
-
-  val verifiedEmail: IndicatorModel = IndicatorModel(None, Some(true))
-  val unverifiedEmail: IndicatorModel = IndicatorModel(None, Some(false))
-
+  val noPendingDereg: IndicatorModel = IndicatorModel(None)
 }

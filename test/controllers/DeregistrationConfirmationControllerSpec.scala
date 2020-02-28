@@ -20,7 +20,7 @@ import models.{DeregisterVatSuccess, ErrorModel}
 import play.api.http.Status
 import play.api.test.Helpers._
 import services.mocks.{MockAuditService, MockContactPreferencesService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
-import assets.constants.CustomerDetailsTestConstants.{customerDetailsMax, verifiedEmail, unverifiedEmail, noPendingDereg}
+import assets.constants.CustomerDetailsTestConstants.{customerDetailsMax, customerDetailsUnverifiedEmail}
 import assets.constants.ContactPreferencesTestConstants.{contactPreferencesDigital, contactPreferencesPaper}
 import assets.constants.BaseTestConstants.vrn
 import assets.messages.{DeregistrationConfirmationMessages => Messages}
@@ -68,7 +68,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                   mockAuthResult(Future.successful(mockAuthorisedIndividual))
                   setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
                   setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-                  setupMockPendingDereg(vrn)(Right(verifiedEmail))
                   setupAuditExtendedEvent
 
                   status(result) shouldBe Status.OK
@@ -96,8 +95,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                   setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
                   mockAuthResult(Future.successful(mockAuthorisedIndividual))
                   setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
-                  setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-                  setupMockPendingDereg(vrn)(Right(unverifiedEmail))
+                  setupMockCustomerDetails(vrn)(Right(customerDetailsUnverifiedEmail))
                   setupAuditExtendedEvent
 
                   status(result) shouldBe Status.OK
@@ -134,7 +132,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                 mockAuthResult(Future.successful(mockAuthorisedIndividual))
                 setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
                 setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-                setupMockPendingDereg(vrn)(Right(noPendingDereg))
                 setupAuditExtendedEvent
 
                 status(result) shouldBe Status.OK
@@ -169,7 +166,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
               mockAuthResult(Future.successful(mockAuthorisedIndividual))
               setupMockContactPreferences(vrn)(Right(contactPreferencesPaper))
               setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-              setupMockPendingDereg(vrn)(Right(noPendingDereg))
               setupAuditExtendedEvent
               status(result) shouldBe Status.OK
             }
@@ -196,7 +192,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
               mockAuthResult(Future.successful(mockAuthorisedIndividual))
               setupMockContactPreferences(vrn)(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "I got nothing")))
               setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-              setupMockPendingDereg(vrn)(Right(noPendingDereg))
               status(result) shouldBe Status.OK
             }
 

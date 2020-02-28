@@ -70,7 +70,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
       "verifiedEmail is false" should {
 
-        lazy val view = views.html.deregistrationConfirmation(preference = Some("DIGITAL"))(user, messages, mockConfig, hc, ec)
+        lazy val view = views.html.deregistrationConfirmation(preference = Some("DIGITAL"), verifiedEmail = Some(false))(user, messages, mockConfig, hc, ec)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct document title" in {
