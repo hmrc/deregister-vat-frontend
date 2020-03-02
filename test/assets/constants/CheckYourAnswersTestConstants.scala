@@ -30,9 +30,30 @@ object CheckYourAnswersTestConstants extends TestUtil {
   val deregistrationDateYes = DeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
   val deregistrationDateNo = DeregistrationDateModel(No,None)
 
-  val deregReasonRow = CheckYourAnswersRowModel(
+  val deregReasonCeasedTradingRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.reason,
     Html(CheckYourAnswersMessages.reasonCeased),
+    controllers.routes.DeregistrationReasonController.show().url,
+    CheckYourAnswersMessages.reasonHidden
+  )
+
+  val deregReasonTurnoverBelowRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.reason,
+    Html(CheckYourAnswersMessages.reasonBelowThreshold("83,000")),
+    controllers.routes.DeregistrationReasonController.show().url,
+    CheckYourAnswersMessages.reasonHidden
+  )
+
+  val deregReasonZeroRatedRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.reason,
+    Html(CheckYourAnswersMessages.reasonZeroRated),
+    controllers.routes.DeregistrationReasonController.show().url,
+    CheckYourAnswersMessages.reasonHidden
+  )
+
+  val deregReasonExemptOnlyRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.reason,
+    Html(CheckYourAnswersMessages.reasonExemptOnly),
     controllers.routes.DeregistrationReasonController.show().url,
     CheckYourAnswersMessages.reasonHidden
   )
@@ -42,13 +63,6 @@ object CheckYourAnswersTestConstants extends TestUtil {
     Html(dateModel.longDate),
     controllers.routes.CeasedTradingDateController.show().url,
     CheckYourAnswersMessages.ceasedTradingHidden
-  )
-
-  val zeroRatedRow = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.reason,
-    Html(CheckYourAnswersMessages.reasonZeroRated),
-    controllers.routes.DeregistrationReasonController.show().url,
-    CheckYourAnswersMessages.reasonHidden
   )
 
   val taxableTurnoverRow: String => CheckYourAnswersRowModel = threshold => CheckYourAnswersRowModel(
