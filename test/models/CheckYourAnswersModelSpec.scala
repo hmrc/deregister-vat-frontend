@@ -27,9 +27,9 @@ class CheckYourAnswersModelSpec extends TestUtil {
   lazy val cyaModel = CheckYourAnswersModel(
     Some(Ceased),
     Some(dateModel),
-    Some(Yes),
-    Some(nextTaxableTurnoverBelow),
-    Some(whyTurnoverBelowAll),
+    None,
+    None,
+    None,
     Some(StandardAccounting),
     Some(ottModel),
     Some(assetsModel),
@@ -45,141 +45,186 @@ class CheckYourAnswersModelSpec extends TestUtil {
 
   "CheckYourAnswersModel.seqAnswers" when {
 
-    "given every possible answer" when {
+    "the dereg reason is Ceased" should {
 
-      "the dereg reason is ZeroRated" should {
-
-        "return a sequence containing the answers relevant to the zero-rated journey" in {
-          cyaModel.copy(deregistrationReason = Some(ZeroRated)).seqAnswers shouldBe
-            Seq(
-              zeroRatedRow,
-              businessActivityRow,
-              sicCodeRow,
-              nextTaxableTurnoverRow,
-              zeroRatedSuppliesRow,
-              purchaseExceedSuppliesRow,
-              vatAccountsRow,
-              optionTaxRowYes,
-              optionTaxValueRow,
-              captialAssetsRowYes,
-              captialAssetsValueRow,
-              stocksRowYes,
-              stocksValueRow,
-              newInvoicesRow,
-              outstandingInvoicesRow,
-              deregDateRowYes
-            )
-        }
+      "return a sequence containing the answers relevant to the ceased trading journey" in {
+        cyaModel.seqAnswers shouldBe
+          Seq(
+            deregReasonCeasedTradingRow,
+            ceasedTradingRow,
+            vatAccountsRow,
+            optionTaxRowYes,
+            optionTaxValueRow,
+            captialAssetsRowYes,
+            captialAssetsValueRow,
+            stocksRowYes,
+            stocksValueRow,
+            newInvoicesRow,
+            outstandingInvoicesRow,
+            deregDateRowYes
+          )
       }
+    }
 
-      "the dereg reason is not ZeroRated" should {
+    "the dereg reason is BelowThreshold" should {
 
-        "return a sequence containing every answer except those related to the zero-rated journey" in {
-          cyaModel.seqAnswers shouldBe
-            Seq(
-              deregReasonRow,
-              ceasedTradingRow,
-              taxableTurnoverRow(mockConfig.thresholdString),
-              nextTaxableTurnoverRow,
-              whyBelowRowMax,
-              vatAccountsRow,
-              optionTaxRowYes,
-              optionTaxValueRow,
-              captialAssetsRowYes,
-              captialAssetsValueRow,
-              stocksRowYes,
-              stocksValueRow,
-              newInvoicesRow,
-              outstandingInvoicesRow,
-              deregDateRowYes
-            )
-        }
+      "return a sequence containing the answers relevant to the turnover below threshold journey" in {
+        cyaModel.copy(
+          deregistrationReason = Some(BelowThreshold),
+          ceasedTradingDate = None,
+          turnover = Some(Yes),
+          nextTurnover = Some(nextTaxableTurnoverBelow),
+          whyTurnoverBelow = Some(whyTurnoverBelowAll)
+        ).seqAnswers shouldBe
+          Seq(
+            deregReasonTurnoverBelowRow,
+            taxableTurnoverRow(mockConfig.thresholdString),
+            nextTaxableTurnoverRow,
+            whyBelowRowMax,
+            vatAccountsRow,
+            optionTaxRowYes,
+            optionTaxValueRow,
+            captialAssetsRowYes,
+            captialAssetsValueRow,
+            stocksRowYes,
+            stocksValueRow,
+            newInvoicesRow,
+            outstandingInvoicesRow,
+            deregDateRowYes
+          )
       }
+    }
 
-      "given one answer to every two part question" should {
+    "the dereg reason is ZeroRated" should {
 
-        "return a sequence that doesn't include specific rows" in {
-          cyaModel.copy(
-            optionTax = Some(yesNoAmountNo),
-            capitalAssets = Some(yesNoAmountNo),
-            stocks = Some(yesNoAmountNo)
-          ).seqAnswers shouldBe
-            Seq(
-              deregReasonRow,
-              ceasedTradingRow,
-              taxableTurnoverRow(mockConfig.thresholdString),
-              nextTaxableTurnoverRow,
-              whyBelowRowMax,
-              vatAccountsRow,
-              optionTaxRowNo,
-              captialAssetsRowNo,
-              stocksRowNo,
-              newInvoicesRow,
-              outstandingInvoicesRow,
-              deregDateRowYes
-            )
-        }
+      "return a sequence containing the answers relevant to the zero-rated journey" in {
+        cyaModel.copy(
+          deregistrationReason = Some(ZeroRated),
+          nextTurnover = Some(nextTaxableTurnoverBelow)
+        ).seqAnswers shouldBe
+          Seq(
+            deregReasonZeroRatedRow,
+            businessActivityRow,
+            sicCodeRow,
+            nextTaxableTurnoverRow,
+            zeroRatedSuppliesRow,
+            purchaseExceedSuppliesRow,
+            vatAccountsRow,
+            optionTaxRowYes,
+            optionTaxValueRow,
+            captialAssetsRowYes,
+            captialAssetsValueRow,
+            stocksRowYes,
+            stocksValueRow,
+            newInvoicesRow,
+            outstandingInvoicesRow,
+            deregDateRowYes
+          )
       }
+    }
 
-      "given one answer for the whyTurnover question" should {
+    "the dereg reason is ExemptOnly" should {
 
-        "return a sequence with only one entry for the whyTurnover" in {
-          cyaModel.copy(
-            whyTurnoverBelow = Some(whyTurnoverBelowMin)
-          ).seqAnswers shouldBe
-            Seq(
-              deregReasonRow,
-              ceasedTradingRow,
-              taxableTurnoverRow(mockConfig.thresholdString),
-              nextTaxableTurnoverRow,
-              whyBelowRowMin,
-              vatAccountsRow,
-              optionTaxRowYes,
-              optionTaxValueRow,
-              captialAssetsRowYes,
-              captialAssetsValueRow,
-              stocksRowYes,
-              stocksValueRow,
-              newInvoicesRow,
-              outstandingInvoicesRow,
-              deregDateRowYes
-            )
-        }
+      "return a sequence containing the answers relevant to the exempt only journey" in {
+        cyaModel.copy(
+          deregistrationReason = Some(ExemptOnly),
+          ceasedTradingDate = None
+        ).seqAnswers shouldBe
+          Seq(
+            deregReasonExemptOnlyRow,
+            vatAccountsRow,
+            optionTaxRowYes,
+            optionTaxValueRow,
+            captialAssetsRowYes,
+            captialAssetsValueRow,
+            stocksRowYes,
+            stocksValueRow,
+            newInvoicesRow,
+            outstandingInvoicesRow,
+            deregDateRowYes
+          )
       }
+    }
 
-      "given an answer of 'no' for deregistrationDate" should{
+    "there is only one answer to every two part question" should {
 
-        "return a sequence containing the deregistrationDate row with a value of 'No'" in {
-          cyaModel.copy(
-            deregDate = Some(deregistrationDateNo)
-          ).seqAnswers shouldBe
-            Seq(
-              deregReasonRow,
-              ceasedTradingRow,
-              taxableTurnoverRow(mockConfig.thresholdString),
-              nextTaxableTurnoverRow,
-              whyBelowRowMax,
-              vatAccountsRow,
-              optionTaxRowYes,
-              optionTaxValueRow,
-              captialAssetsRowYes,
-              captialAssetsValueRow,
-              stocksRowYes,
-              stocksValueRow,
-              newInvoicesRow,
-              outstandingInvoicesRow,
-              deregDateRowNo
-            )
-        }
+      "return a sequence that doesn't include specific rows" in {
+        cyaModel.copy(
+          optionTax = Some(yesNoAmountNo),
+          capitalAssets = Some(yesNoAmountNo),
+          stocks = Some(yesNoAmountNo)
+        ).seqAnswers shouldBe
+          Seq(
+            deregReasonCeasedTradingRow,
+            ceasedTradingRow,
+            vatAccountsRow,
+            optionTaxRowNo,
+            captialAssetsRowNo,
+            stocksRowNo,
+            newInvoicesRow,
+            outstandingInvoicesRow,
+            deregDateRowYes
+          )
       }
+    }
 
-      "given no answers" should {
+    "there is only one answer for the whyTurnover question" should {
 
-        "return an empty sequence" in {
-          CheckYourAnswersModel(
-            None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None
-          ).seqAnswers shouldBe Seq.empty[CheckYourAnswersRowModel]
-        }
+      "return a sequence with only one entry for the whyTurnover question" in {
+        cyaModel.copy(
+          turnover = Some(Yes),
+          nextTurnover = Some(nextTaxableTurnoverBelow),
+          whyTurnoverBelow = Some(whyTurnoverBelowMin)
+        ).seqAnswers shouldBe
+          Seq(
+            deregReasonCeasedTradingRow,
+            ceasedTradingRow,
+            taxableTurnoverRow(mockConfig.thresholdString),
+            nextTaxableTurnoverRow,
+            whyBelowRowMin,
+            vatAccountsRow,
+            optionTaxRowYes,
+            optionTaxValueRow,
+            captialAssetsRowYes,
+            captialAssetsValueRow,
+            stocksRowYes,
+            stocksValueRow,
+            newInvoicesRow,
+            outstandingInvoicesRow,
+            deregDateRowYes
+          )
+      }
+    }
+
+    "the answer to the deregistrationDate question is 'No'" should{
+
+      "return a sequence containing the deregistrationDate row with a value of 'No'" in {
+        cyaModel.copy(
+          deregDate = Some(deregistrationDateNo)
+        ).seqAnswers shouldBe
+          Seq(
+            deregReasonCeasedTradingRow,
+            ceasedTradingRow,
+            vatAccountsRow,
+            optionTaxRowYes,
+            optionTaxValueRow,
+            captialAssetsRowYes,
+            captialAssetsValueRow,
+            stocksRowYes,
+            stocksValueRow,
+            newInvoicesRow,
+            outstandingInvoicesRow,
+            deregDateRowNo
+          )
+      }
+    }
+
+    "there are no answers" should {
+
+      "return an empty sequence" in {
+        CheckYourAnswersModel(
+          None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None
+        ).seqAnswers shouldBe Seq.empty[CheckYourAnswersRowModel]
       }
     }
   }
