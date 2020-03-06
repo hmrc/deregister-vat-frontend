@@ -30,7 +30,7 @@
 
   @helpers.form(action = controllers.routes.IssueNewInvoicesController.submit, 'novalidate -> "novalidate") {
 
-    <div class="form-group" id="reason">
+    <div class="form-group" id="@yesNo">
       @radioHelper(
         field = form(yesNo),
         choices = Seq(
