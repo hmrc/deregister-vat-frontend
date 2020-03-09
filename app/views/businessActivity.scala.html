@@ -39,7 +39,7 @@
 
     @helpers.form(action = controllers.zeroRated.routes.BusinessActivityController.submit, 'novalidate -> "novalidate") {
 
-    <div class="form-group" id="answer">
+    <div class="form-group" id="@yesNo">
         @radioHelper(
             field = form(yesNo),
             choices = Seq(

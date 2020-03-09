@@ -42,7 +42,7 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val form = YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption")
+  val form: Form[YesNo] = YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption")
 
   private def renderView(form: Form[YesNo])(implicit user: User[_]) = businessActivity(form)
 
