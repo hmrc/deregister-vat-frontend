@@ -105,8 +105,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to ${controllers.routes.DeregistrationDateController.show()}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+        s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show()}" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
         }
       }
 
@@ -127,8 +127,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.DeregistrationDateController.show()}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+          s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show()}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
           }
         }
 
@@ -147,8 +147,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.DeregistrationDateController.show()}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+          s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show()}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
           }
         }
 
@@ -167,8 +167,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.DeregistrationDateController.show()}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+          s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show()}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
           }
         }
 
@@ -191,8 +191,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
               status(result) shouldBe Status.SEE_OTHER
             }
 
-            s"redirect to ${controllers.routes.DeregistrationDateController.show()}" in {
-              redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+            s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show()}" in {
+              redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
             }
           }
 

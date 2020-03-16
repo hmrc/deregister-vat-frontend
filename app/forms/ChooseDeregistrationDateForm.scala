@@ -28,7 +28,7 @@ import play.api.data.validation.{Constraint, Invalid, Valid, ValidationResult}
 
 import scala.util.{Failure, Success, Try}
 
-object DeregistrationDateForm {
+object ChooseDeregistrationDateForm {
 
   val monthsAllowed = 3
 
@@ -55,7 +55,7 @@ object DeregistrationDateForm {
     }
   }
 
-  val checkValidDateIfYesConstraint: Constraint[DeregistrationDateModel] = Constraint[DeregistrationDateModel]("checkValidDateIfYes") {
+  val checkValidDateIfYesConstraint: Constraint[ChooseDeregistrationDateModel] = Constraint[ChooseDeregistrationDateModel]("checkValidDateIfYes") {
     deregDate => deregDate.yesNo match {
       case Yes => deregDate.date.fold[ValidationResult](Invalid("deregistrationDate.error.date.noEntry")) {
         date => date.date.fold[ValidationResult](Invalid("deregistrationDate.error.date.noEntry")) {
@@ -76,13 +76,13 @@ object DeregistrationDateForm {
     }
   }
 
-  def deregistrationDateForm(yesNoError: String): Form[DeregistrationDateModel] = Form(
+  def deregistrationDateForm(yesNoError: String): Form[ChooseDeregistrationDateModel] = Form(
     mapping(
       yesNo -> of(YesNoForm.formatter(yesNoError)),
       day -> of(formatter),
       month -> of(formatter),
       year -> of(formatter)
-    )(DeregistrationDateModel.customApply)(DeregistrationDateModel.customUnapply)
+    )(ChooseDeregistrationDateModel.customApply)(ChooseDeregistrationDateModel.customUnapply)
       .verifying(checkValidDateIfYesConstraint)
   )
 }

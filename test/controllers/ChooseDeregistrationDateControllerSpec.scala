@@ -32,9 +32,9 @@ import services.mocks.{MockDeregDateAnswerService, MockOutstandingInvoicesServic
 
 import scala.concurrent.Future
 
-class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDeregDateAnswerService with MockOutstandingInvoicesService {
+class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with MockDeregDateAnswerService with MockOutstandingInvoicesService {
 
-  object TestDeregistrationDateController extends DeregistrationDateController(
+  object TestChooseDeregistrationDateController$ extends ChooseDeregistrationDateController(
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
@@ -47,8 +47,8 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
   val testDay: Int = LocalDate.now.getDayOfMonth
   val testMonth: Int = LocalDate.now.getMonthValue
   val testYear: Int = LocalDate.now.getYear
-  val testYesDeregModel = DeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
-  val testNoDeregModel = DeregistrationDateModel(No, None)
+  val testYesDeregModel = ChooseDeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
+  val testNoDeregModel = ChooseDeregistrationDateModel(No, None)
 
   "the user is authorised" when {
 
@@ -56,7 +56,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestDeregistrationDateController.show()(request)
+        lazy val result = TestChooseDeregistrationDateController$.show()(request)
 
         "return 200 (OK)" in {
           setupMockGetDeregDate(Right(None))
@@ -73,7 +73,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
       "the has a pre selected option" should {
 
-        lazy val result = TestDeregistrationDateController.show()(request)
+        lazy val result = TestChooseDeregistrationDateController$.show()(request)
 
         "return 200 (OK)" in {
           setupMockGetDeregDate(Right(Some(testYesDeregModel)))
@@ -106,7 +106,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
       "the retrieval of submitted data fails" should {
 
-        lazy val result = TestDeregistrationDateController.show()(request)
+        lazy val result = TestChooseDeregistrationDateController$.show()(request)
 
         "return Internal Server Error" in {
           setupMockGetDeregDate(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
@@ -132,7 +132,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
             (month, testMonth.toString),
             (year, testYear.toString)
           )
-        lazy val result = TestDeregistrationDateController.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreDeregDate(testYesDeregModel)(Right(DeregisterVatSuccess))
@@ -149,7 +149,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, YesNoForm.no))
-        lazy val result = TestDeregistrationDateController.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreDeregDate(testNoDeregModel)(Right(DeregisterVatSuccess))
@@ -166,7 +166,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, YesNoForm.no))
-        lazy val result = TestDeregistrationDateController.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 500 (ISE)" in {
           setupMockStoreDeregDate(testNoDeregModel)(Left(errorModel))
@@ -184,7 +184,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
             (month, ""),
             (year, "")
           )
-        lazy val result = TestDeregistrationDateController.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetOutstandingInvoices(Right(None))
@@ -207,7 +207,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
             (month, ""),
             (year, "")
           )
-        lazy val result = TestDeregistrationDateController.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetOutstandingInvoices(Right(None))
@@ -230,7 +230,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
             (month, ""),
             (year, "")
           )
-        lazy val result = TestDeregistrationDateController.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return Internal Server Error" in {
           setupMockGetOutstandingInvoices(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))

@@ -72,12 +72,12 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
   private def redirect(outstandingInvoices: YesNo, capitalAssets: Option[YesNoAmountModel], deregReason: Option[DeregistrationReason])
                       (implicit user: User[_]) = {
     if (outstandingInvoices == Yes) {
-      Redirect(controllers.routes.DeregistrationDateController.show())
+      Redirect(controllers.routes.ChooseDeregistrationDateController.show())
     } else {
       deregReason match {
-        case Some(BelowThreshold) => Redirect(controllers.routes.DeregistrationDateController.show())
-        case Some(ZeroRated) => Redirect(controllers.routes.DeregistrationDateController.show())
-        case Some(ExemptOnly) => Redirect(controllers.routes.DeregistrationDateController.show())
+        case Some(BelowThreshold) => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
+        case Some(ZeroRated) => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
+        case Some(ExemptOnly) => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
         case Some(Ceased) => ceasedTradingJourneyLogic(capitalAssets)
         case _ =>
           Logger.warn("[OutstandingInvoicesController][redirect] - answer for deregReason doesn't exist or wasn't expected")
@@ -88,7 +88,7 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
 
   private def ceasedTradingJourneyLogic(capitalAssets: Option[YesNoAmountModel])(implicit user: User[_]): Result = {
     capitalAssets match {
-      case Some(assets) if assets.yesNo == Yes => Redirect(controllers.routes.DeregistrationDateController.show())
+      case Some(assets) if assets.yesNo == Yes => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
       case Some(_) => Redirect(controllers.routes.CheckAnswersController.show())
       case _ =>
         Logger.warn("[OutstandingInvoicesController][ceasedTradingJourneyLogic] - answer for capitalAssets doesn't exist or wasn't expected")

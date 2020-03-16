@@ -18,9 +18,9 @@ package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
-import forms.DeregistrationDateForm
+import forms.ChooseDeregistrationDateForm
 import javax.inject.{Inject, Singleton}
-import models.{DeregistrationDateModel, User, YesNo}
+import models.{ChooseDeregistrationDateModel, User, YesNo}
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -29,17 +29,17 @@ import services.{DeregDateAnswerService, OutstandingInvoicesAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
-class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
-                                             val authenticate: AuthPredicate,
-                                             val pendingDeregCheck: PendingChangesPredicate,
-                                             val deregDateAnswerService: DeregDateAnswerService,
-                                             val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
-                                             val serviceErrorHandler: ServiceErrorHandler,
-                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
+                                                   val authenticate: AuthPredicate,
+                                                   val pendingDeregCheck: PendingChangesPredicate,
+                                                   val deregDateAnswerService: DeregDateAnswerService,
+                                                   val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
+                                                   val serviceErrorHandler: ServiceErrorHandler,
+                                                   implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val form: Form[DeregistrationDateModel] = DeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption")
+  val form: Form[ChooseDeregistrationDateModel] = ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption")
 
-  private def renderView(outstanding: Option[YesNo], form: Form[DeregistrationDateModel])
+  private def renderView(outstanding: Option[YesNo], form: Form[ChooseDeregistrationDateModel])
                         (implicit user: User[_]) = views.html.chooseDeregistrationDate(outstanding,form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
@@ -52,7 +52,7 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
       case (Right(outstanding), Right(None)) =>
         Ok(renderView(outstanding,form))
       case (_,_) =>
-        Logger.warn("[DeregistrationDateController][show] - storedAnswerService returned an error retrieving answers")
+        Logger.warn("[ChooseDeregistrationDateController][show] - storedAnswerService returned an error retrieving answers")
         serviceErrorHandler.showInternalServerError
     }
   }
@@ -62,13 +62,13 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
       error => outstandingInvoicesAnswerService.getAnswer map {
         case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error))
         case Left(err) =>
-          Logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
+          Logger.warn("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
           serviceErrorHandler.showInternalServerError
       },
       data => deregDateAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
         case Left(err) =>
-          Logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + err.message)
+          Logger.warn("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + err.message)
           serviceErrorHandler.showInternalServerError
       }
     )

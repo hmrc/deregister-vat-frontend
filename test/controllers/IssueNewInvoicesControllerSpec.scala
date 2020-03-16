@@ -100,8 +100,8 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"Redirect to the '${controllers.routes.DeregistrationDateController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+          s"Redirect to the '${controllers.routes.ChooseDeregistrationDateController.show().url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
           }
         }
 

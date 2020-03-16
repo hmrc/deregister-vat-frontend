@@ -160,7 +160,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
         "user selects 'Yes'" should {
 
-          s"redirect to ${controllers.routes.DeregistrationDateController.show().url}" in {
+          s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show().url}" in {
 
             given.user.isAuthorised
 
@@ -185,7 +185,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
             response should have(
               httpStatus(SEE_OTHER),
-              redirectURI(controllers.routes.DeregistrationDateController.show().url)
+              redirectURI(controllers.routes.ChooseDeregistrationDateController.show().url)
             )
           }
         }
@@ -194,7 +194,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
           "user is on 'below threshold' journey" should {
 
-            s"redirect to ${controllers.routes.DeregistrationDateController.show().url}" in {
+            s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show().url}" in {
 
               given.user.isAuthorised
 
@@ -216,7 +216,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
               response should have(
                 httpStatus(SEE_OTHER),
-                redirectURI(controllers.routes.DeregistrationDateController.show().url)
+                redirectURI(controllers.routes.ChooseDeregistrationDateController.show().url)
               )
             }
           }
@@ -225,7 +225,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
             "user answered 'Yes' to having capital assets" should {
 
-              s"redirect to ${controllers.routes.DeregistrationDateController.show().url}" in {
+              s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show().url}" in {
 
                 given.user.isAuthorised
 
@@ -249,7 +249,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
                 response should have(
                   httpStatus(SEE_OTHER),
-                  redirectURI(controllers.routes.DeregistrationDateController.show().url)
+                  redirectURI(controllers.routes.ChooseDeregistrationDateController.show().url)
                 )
               }
             }
@@ -289,7 +289,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
             "user answered 'Yes' to having capital assets" should {
 
-              s"redirect to ${controllers.routes.DeregistrationDateController.show().url}" in {
+              s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show().url}" in {
 
                 given.user.isAuthorised
 
@@ -309,7 +309,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
                 response should have(
                   httpStatus(SEE_OTHER),
-                  redirectURI(controllers.routes.DeregistrationDateController.show().url)
+                  redirectURI(controllers.routes.ChooseDeregistrationDateController.show().url)
                 )
               }
             }
@@ -336,7 +336,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
                 response should have(
                   httpStatus(SEE_OTHER),
-                  redirectURI(controllers.routes.DeregistrationDateController.show().url)
+                  redirectURI(controllers.routes.ChooseDeregistrationDateController.show().url)
                 )
               }
             }

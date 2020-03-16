@@ -46,7 +46,7 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
   private def renderView(form: Form[YesNo])(implicit user: User[_]) = views.html.issueNewInvoices(form)
 
   private def redirect: YesNo => Result = {
-    case Yes => Redirect(controllers.routes.DeregistrationDateController.show())
+    case Yes => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
     case No => Redirect(controllers.routes.OutstandingInvoicesController.show())
   }
 

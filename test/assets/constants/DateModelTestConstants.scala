@@ -18,7 +18,7 @@ package assets.constants
 
 import java.time.LocalDate
 
-import models.{DateModel, DeregistrationDateModel, Yes}
+import models.{DateModel, ChooseDeregistrationDateModel, Yes}
 
 object DateModelTestConstants {
 
@@ -27,6 +27,6 @@ object DateModelTestConstants {
 
   val todayDateModel = DateModel(todayDate.getDayOfMonth,todayDate.getMonthValue,todayDate.getYear)
   val laterDateModel = DateModel(laterDate.getDayOfMonth,laterDate.getMonthValue,laterDate.getYear)
-  val deregistrationDateModel = DeregistrationDateModel(Yes,Some(laterDateModel))
+  val deregistrationDateModel = ChooseDeregistrationDateModel(Yes,Some(laterDateModel))
 
 }
