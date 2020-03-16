@@ -37,7 +37,7 @@ class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
                                                    val serviceErrorHandler: ServiceErrorHandler,
                                                    implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val form: Form[ChooseDeregistrationDateModel] = ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption")
+  val form: Form[ChooseDeregistrationDateModel] = ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption")
 
   private def renderView(outstanding: Option[YesNo], form: Form[ChooseDeregistrationDateModel])
                         (implicit user: User[_]) = views.html.chooseDeregistrationDate(outstanding,form)

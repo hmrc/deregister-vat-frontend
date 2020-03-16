@@ -18,12 +18,11 @@ package views
 
 import java.time.LocalDate
 
-import assets.messages.{CommonMessages, DeregistrationDateMessages}
+import assets.messages.{CommonMessages, ChooseDeregistrationDateMessages}
 import forms.{DateForm, ChooseDeregistrationDateForm, YesNoForm}
 import models.Yes
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-
 
 class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
@@ -57,11 +56,11 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with a No for outstanding invoices" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption"))
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationDateMessages.title
+      document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
     s"have a back link to the Issue New Invoices page" in {
@@ -74,7 +73,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     s"have the correct page heading" in {
-      elementText(Selectors.pageHeading) shouldBe DeregistrationDateMessages.heading
+      elementText(Selectors.pageHeading) shouldBe ChooseDeregistrationDateMessages.heading
     }
 
     s"have the correct a date form but be hidden" in {
@@ -95,11 +94,11 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with a Yes for outstanding invoices" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(outstanding = Some(Yes) ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption"))
+    lazy val view = views.html.chooseDeregistrationDate(outstanding = Some(Yes) ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationDateMessages.title
+      document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
     s"have a back link to the Outstanding Invoices page" in {
@@ -110,13 +109,13 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with no already selected" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption")
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption")
       .bind(Map("yes_no" -> "no"))
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationDateMessages.title
+      document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
     "have no error heading message being displayed" in {
@@ -134,7 +133,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with no already selected and a date entered" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption")
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption")
       .bind(Map(
         YesNoForm.yesNo -> YesNoForm.no,
         DateForm.day -> LocalDate.now.getDayOfMonth.toString,
@@ -145,7 +144,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationDateMessages.title
+      document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
     "have no error heading message being displayed" in {
@@ -163,7 +162,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with yes already selected and a valid date" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption")
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption")
       .bind(Map(
         YesNoForm.yesNo -> YesNoForm.yes,
         DateForm.day -> LocalDate.now.getDayOfMonth.toString,
@@ -174,7 +173,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationDateMessages.title
+      document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
     "have no error heading message being displayed" in {
@@ -193,30 +192,30 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
   "Rendering the deregistration date page with missing first field" should {
 
     lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm(
-      "deregistrationDate.error.mandatoryRadioOption").bind(Map.empty[String,String]))
+      "chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map.empty[String,String]))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading}"
     }
     "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorYesNo) shouldBe DeregistrationDateMessages.yesNoError
+      elementText(Selectors.errorYesNo) shouldBe ChooseDeregistrationDateMessages.yesNoError
       element(Selectors.errorYesNo).attr("href") shouldBe Selectors.yesNoRadio
     }
 
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe DeregistrationDateMessages.yesNoError
+      elementText(Selectors.errorField) shouldBe ChooseDeregistrationDateMessages.yesNoError
     }
   }
 
   "Rendering the deregistration date page with a yes and one missing date field" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> "",
       DateForm.month -> LocalDate.now.getMonthValue.toString,
@@ -225,7 +224,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -244,7 +243,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and no date entered" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> "",
       DateForm.month -> "",
@@ -253,7 +252,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -270,13 +269,13 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorHiddenField) shouldBe DeregistrationDateMessages.errorInvalidDate
+      elementText(Selectors.errorHiddenField) shouldBe ChooseDeregistrationDateMessages.errorInvalidDate
     }
   }
 
   "Rendering the deregistration date page with a yes and one invalid date field entered" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> LocalDate.now.getDayOfMonth.toString,
       DateForm.month -> "0",
@@ -285,7 +284,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -304,7 +303,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and all date fields entered invalid" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> "0",
       DateForm.month -> "0",
@@ -313,7 +312,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -326,14 +325,14 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorHiddenField) shouldBe DeregistrationDateMessages.errorInvalidDate
+      elementText(Selectors.errorHiddenField) shouldBe ChooseDeregistrationDateMessages.errorInvalidDate
     }
   }
 
 
   "Rendering the deregistration date page with a no and all date fields entered invalid" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.no,
       DateForm.day -> "0",
       DateForm.month -> "0",
@@ -342,7 +341,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationDateMessages.title
+      document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
     "have an error heading message being displayed" in {
@@ -356,7 +355,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and incorrect characters in one field" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> LocalDate.now.getDayOfMonth.toString,
       DateForm.month -> LocalDate.now.getMonthValue.toString,
@@ -365,7 +364,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -384,7 +383,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and all date fields entered with invalid characters" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> "a",
       DateForm.month -> "b",
@@ -393,7 +392,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -410,13 +409,13 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorHiddenField) shouldBe DeregistrationDateMessages.errorInvalidDate
+      elementText(Selectors.errorHiddenField) shouldBe ChooseDeregistrationDateMessages.errorInvalidDate
     }
   }
 
   "Rendering the deregistration date page with a no and all date fields entered invalid characters" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption")
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption")
       .bind(Map(
         YesNoForm.yesNo -> YesNoForm.no,
         DateForm.day -> "a",
@@ -427,7 +426,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationDateMessages.title
+      document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
     "have no error heading message being displayed" in {
@@ -441,7 +440,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the deregistration date page with a yes and an impossible date" should {
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> "31",
       DateForm.month -> "2",
@@ -450,7 +449,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -458,12 +457,12 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorInvalidDate) shouldBe DeregistrationDateMessages.errorInvalidDate
+      elementText(Selectors.errorInvalidDate) shouldBe ChooseDeregistrationDateMessages.errorInvalidDate
       element(Selectors.errorInvalidDate).attr("href") shouldBe Selectors.dateForm
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorHiddenField) shouldBe DeregistrationDateMessages.errorInvalidDate
+      elementText(Selectors.errorHiddenField) shouldBe ChooseDeregistrationDateMessages.errorInvalidDate
     }
   }
 
@@ -471,7 +470,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
     val testDate = LocalDate.now().minusDays(1)
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> testDate.getDayOfMonth.toString,
       DateForm.month -> testDate.getMonthValue.toString,
@@ -480,7 +479,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -488,12 +487,12 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorInvalidDate) shouldBe DeregistrationDateMessages.errorPast
+      elementText(Selectors.errorInvalidDate) shouldBe ChooseDeregistrationDateMessages.errorPast
       element(Selectors.errorInvalidDate).attr("href") shouldBe Selectors.dateForm
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorHiddenField) shouldBe DeregistrationDateMessages.errorPast
+      elementText(Selectors.errorHiddenField) shouldBe ChooseDeregistrationDateMessages.errorPast
     }
   }
 
@@ -501,7 +500,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
     val testDate = LocalDate.now().plusMonths(3)
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> testDate.getDayOfMonth.toString,
       DateForm.month -> testDate.getMonthValue.toString,
@@ -510,7 +509,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe DeregistrationDateMessages.title
+      document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
     "have an error heading message being displayed" in {
@@ -526,7 +525,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
     val testDate = LocalDate.now().plusMonths(3).plusDays(1)
 
-    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption").bind(Map(
+    lazy val view = views.html.chooseDeregistrationDate(None ,ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes,
       DateForm.day -> testDate.getDayOfMonth.toString,
       DateForm.month -> testDate.getMonthValue.toString,
@@ -535,7 +534,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -543,12 +542,12 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorInvalidDate) shouldBe DeregistrationDateMessages.errorFuture
+      elementText(Selectors.errorInvalidDate) shouldBe ChooseDeregistrationDateMessages.errorFuture
       element(Selectors.errorInvalidDate).attr("href") shouldBe Selectors.dateForm
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorHiddenField) shouldBe DeregistrationDateMessages.errorFuture
+      elementText(Selectors.errorHiddenField) shouldBe ChooseDeregistrationDateMessages.errorFuture
     }
   }
 }

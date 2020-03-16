@@ -19,7 +19,7 @@ package forms
 import java.time.LocalDate
 
 import _root_.utils.TestUtil
-import assets.messages.{CommonMessages, DeregistrationDateMessages}
+import assets.messages.{CommonMessages, ChooseDeregistrationDateMessages}
 import models.{DateModel, ChooseDeregistrationDateModel, No, Yes}
 import play.api.i18n.Messages
 
@@ -217,7 +217,7 @@ class ChooseDeregistrationDateFormSpec extends TestUtil {
       }
 
       "have the correct error" in {
-        Messages(form.errors.head.message) shouldBe DeregistrationDateMessages.yesNoError
+        Messages(form.errors.head.message) shouldBe ChooseDeregistrationDateMessages.yesNoError
       }
     }
 
@@ -255,7 +255,7 @@ class ChooseDeregistrationDateFormSpec extends TestUtil {
       }
 
       "have the correct errors" in {
-        Messages(form.errors.head.message) shouldBe DeregistrationDateMessages.errorInvalidDate
+        Messages(form.errors.head.message) shouldBe ChooseDeregistrationDateMessages.errorInvalidDate
         form.errors.size shouldBe 1
       }
     }
@@ -318,7 +318,7 @@ class ChooseDeregistrationDateFormSpec extends TestUtil {
       }
 
       "have the correct errors" in {
-        Messages(form.errors.head.message) shouldBe DeregistrationDateMessages.errorInvalidDate
+        Messages(form.errors.head.message) shouldBe ChooseDeregistrationDateMessages.errorInvalidDate
         form.errors.size shouldBe 1
       }
     }
@@ -339,7 +339,7 @@ class ChooseDeregistrationDateFormSpec extends TestUtil {
       }
 
       "have the correct errors" in {
-        Messages(form.errors.head.message) shouldBe DeregistrationDateMessages.errorPast
+        Messages(form.errors.head.message) shouldBe ChooseDeregistrationDateMessages.errorPast
         form.errors.size shouldBe 1
       }
     }
@@ -360,7 +360,7 @@ class ChooseDeregistrationDateFormSpec extends TestUtil {
       }
 
       "have the correct errors" in {
-        Messages(form.errors.head.message) shouldBe DeregistrationDateMessages.errorFuture
+        Messages(form.errors.head.message) shouldBe ChooseDeregistrationDateMessages.errorFuture
         form.errors.size shouldBe 1
       }
     }

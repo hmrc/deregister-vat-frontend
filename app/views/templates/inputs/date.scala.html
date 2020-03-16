@@ -17,7 +17,13 @@
 @import templates.headings
 @import models.DateFormVariant
 
-@(form: Form[_], question: String, fieldName: String, formVariant: DateFormVariant, hint: Option[String] = None, renderQuestionAsHeading: Boolean = true)(implicit messages: Messages)
+@(form: Form[_],
+  question: String,
+  fieldName: String,
+  formVariant: DateFormVariant,
+  hint: Option[String] = None,
+  additionalContent: Option[Html] = None,
+  renderQuestionAsHeading: Boolean = true)(implicit messages: Messages)
 
 @defining(form.errors.filter(_.message.contains("error.date."))){ dateErrors =>
 
@@ -33,6 +39,10 @@
           </legend>
         } else {
           <legend class="form-label">@question</legend>
+        }
+
+        @additionalContent.map { content =>
+          @content
         }
 
         @hint.map { hint =>

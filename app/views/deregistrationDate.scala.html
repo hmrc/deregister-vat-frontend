@@ -21,8 +21,13 @@
 
 @(form: Form[DateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
+@additionalContent = {
+    <p>@messages("deregistrationDate.p1")</p>
+    <p>@messages("deregistrationDate.p2")</p>
+}
+
 @views.html.main_template(
-    title = title(messages(""), form),
+    title = title(messages("deregistrationDate.title"), form),
     appConfig = appConfig
 ) {
 
@@ -33,12 +38,14 @@
     @helpers.form(action = controllers.routes.DeregistrationDateController.submit, 'novalidate -> "novalidate") {
 
         <div id="deregistrationDate" class="form-group">
+
             @date(
                 form = form,
-                question = messages(""),
+                question = messages("deregistrationDate.title"),
                 fieldName = "date",
                 formVariant = DeregistrationDate,
-                hint = Some(messages(""))
+                hint = Some(messages("deregistrationDate.hint")),
+                additionalContent = Some(additionalContent)
             )
         </div>
 

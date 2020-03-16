@@ -16,11 +16,27 @@
 
 package controllers
 
+import config.AppConfig
+import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import forms.DeregistrationDateForm
+import javax.inject.Inject
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-class DeregistrationDateController {
+import scala.concurrent.{ExecutionContext, Future}
 
-  val show: Action[AnyContent] = ???
-  val submit: Action[AnyContent] = ???
+class DeregistrationDateController@Inject()(val messagesApi: MessagesApi,
+                                            val authenticate: AuthPredicate,
+                                            val pendingChangesCheck: PendingChangesPredicate,
+                                            implicit val appConfig: AppConfig,
+                                            implicit val ec: ExecutionContext) extends FrontendController with I18nSupport {
 
+  val show: Action[AnyContent] = (authenticate andThen pendingChangesCheck).async { implicit request =>
+    Future(Ok(views.html.deregistrationDate(DeregistrationDateForm.form)))
+  }
+
+  val submit: Action[AnyContent] = Action.async { implicit request =>
+    Future(Ok(""))
+  }
 }
