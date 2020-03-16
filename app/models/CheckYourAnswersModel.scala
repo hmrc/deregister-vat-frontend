@@ -32,7 +32,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  stocks: Option[YesNoAmountModel],
                                  newInvoices: Option[YesNo],
                                  outstandingInvoices: Option[YesNo],
-                                 deregDate: Option[DeregistrationDateModel],
+                                 deregDate: Option[ChooseDeregistrationDateModel],
                                  businessActivityChanged: Option[YesNo],
                                  sicCode: Option[String],
                                  zeroRatedSupplies: Option[NumberInputModel],
@@ -151,7 +151,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
       {Html(answer.date.get.longDate())}
     else
       {Html(messages("checkYourAnswers.answer.no"))},
-    controllers.routes.DeregistrationDateController.show().url,
+    controllers.routes.ChooseDeregistrationDateController.show().url,
     messages("checkYourAnswers.hidden.deregistrationDate")
   ))
 

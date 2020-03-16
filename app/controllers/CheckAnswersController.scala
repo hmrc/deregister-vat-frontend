@@ -41,7 +41,7 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
     checkAnswersService.checkYourAnswersModel() map {
       case Right(answers) =>
         answers.deregDate match {
-          case Some(_) => Ok(views.html.checkYourAnswers(controllers.routes.DeregistrationDateController.show().url, answers.seqAnswers))
+          case Some(_) => Ok(views.html.checkYourAnswers(controllers.routes.ChooseDeregistrationDateController.show().url, answers.seqAnswers))
           case None => Ok(views.html.checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
         }
       case Left(error) =>

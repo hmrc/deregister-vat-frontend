@@ -196,9 +196,9 @@ class CheckYourAnswersModelSpec extends TestUtil {
       }
     }
 
-    "the answer to the deregistrationDate question is 'No'" should{
+    "the answer to the chooseDeregistrationDate question is 'No'" should{
 
-      "return a sequence containing the deregistrationDate row with a value of 'No'" in {
+      "return a sequence containing the chooseDeregistrationDate row with a value of 'No'" in {
         cyaModel.copy(
           deregDate = Some(deregistrationDateNo)
         ).seqAnswers shouldBe

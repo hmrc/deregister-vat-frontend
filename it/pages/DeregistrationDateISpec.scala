@@ -18,9 +18,9 @@ package pages
 
 import java.time.LocalDate
 
-import forms.DeregistrationDateForm
+import forms.ChooseDeregistrationDateForm
 import helpers.IntegrationBaseSpec
-import models.{DateModel, DeregistrationDateModel, No, Yes}
+import models.{DateModel, ChooseDeregistrationDateModel, No, Yes}
 import play.api.http.Status._
 import play.api.libs.ws.WSResponse
 import stubs.DeregisterVatStub
@@ -33,9 +33,9 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
   val testDay = LocalDate.now().getDayOfMonth
   val testMonth = LocalDate.now().getMonthValue
   val testYear = LocalDate.now().getYear
-  val validYesModel = DeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
-  val validNoModel = DeregistrationDateModel(No,None)
-  val invalidYesModel = DeregistrationDateModel(Yes,None)
+  val validYesModel = ChooseDeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
+  val validNoModel = ChooseDeregistrationDateModel(No,None)
+  val invalidYesModel = ChooseDeregistrationDateModel(Yes,None)
 
   "Calling the GET Deregistration Date endpoint" when {
 
@@ -156,8 +156,8 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
   "Calling the POST Deregistration Date endpoint" when {
 
-    def postRequest(data: DeregistrationDateModel): WSResponse =
-      post("/deregister-date")(toFormData(DeregistrationDateForm.deregistrationDateForm("yesNoError"), data))
+    def postRequest(data: ChooseDeregistrationDateModel): WSResponse =
+      post("/deregister-date")(toFormData(ChooseDeregistrationDateForm.deregistrationDateForm("yesNoError"), data))
 
     "the user is authorised" when {
 

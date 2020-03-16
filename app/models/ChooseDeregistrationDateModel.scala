@@ -20,28 +20,28 @@ import java.time.LocalDate
 
 import play.api.libs.json.{Format, Json}
 
-case class DeregistrationDateModel(yesNo: YesNo, date: Option[DateModel]) {
+case class ChooseDeregistrationDateModel(yesNo: YesNo, date: Option[DateModel]) {
 
   val getLocalDate: Option[LocalDate] = date.fold[Option[LocalDate]](None)(dateModel => dateModel.date)
 
 }
 
-object DeregistrationDateModel {
+object ChooseDeregistrationDateModel {
 
   def customApply(yesNo: YesNo,
                   day:Option[Int],
                   month:Option[Int],
-                  year:Option[Int]): DeregistrationDateModel ={
+                  year:Option[Int]): ChooseDeregistrationDateModel ={
 
     (yesNo,day,month,year) match {
       case (Yes,Some(d),Some(m),Some(y)) =>
-        DeregistrationDateModel(yesNo, Some(DateModel(d, m, y)))
+        ChooseDeregistrationDateModel(yesNo, Some(DateModel(d, m, y)))
       case _ =>
-        DeregistrationDateModel(yesNo, None)
+        ChooseDeregistrationDateModel(yesNo, None)
     }
   }
 
-  def customUnapply(dateModel: DeregistrationDateModel): Option[(YesNo, Option[Int],Option[Int],Option[Int])] = {
+  def customUnapply(dateModel: ChooseDeregistrationDateModel): Option[(YesNo, Option[Int],Option[Int],Option[Int])] = {
 
     Some(dateModel.date match {
       case Some(date) => (
@@ -54,5 +54,5 @@ object DeregistrationDateModel {
     })
   }
 
-  implicit val format: Format[DeregistrationDateModel] = Json.format[DeregistrationDateModel]
+  implicit val format: Format[ChooseDeregistrationDateModel] = Json.format[ChooseDeregistrationDateModel]
 }

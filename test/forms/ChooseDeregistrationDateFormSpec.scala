@@ -20,10 +20,10 @@ import java.time.LocalDate
 
 import _root_.utils.TestUtil
 import assets.messages.{CommonMessages, DeregistrationDateMessages}
-import models.{DateModel, DeregistrationDateModel, No, Yes}
+import models.{DateModel, ChooseDeregistrationDateModel, No, Yes}
 import play.api.i18n.Messages
 
-class DeregistrationDateFormSpec extends TestUtil {
+class ChooseDeregistrationDateFormSpec extends TestUtil {
 
   val yesNoError = "Select yes if the business wants to choose the cancellation date"
 
@@ -37,14 +37,14 @@ class DeregistrationDateFormSpec extends TestUtil {
         DateForm.month -> LocalDate.now.getMonthValue.toString,
         DateForm.year -> LocalDate.now.getYear.toString
       )
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
       "result in a form with no errors" in {
         form.hasErrors shouldBe false
       }
 
       "generate a DateModel" in {
-        form.value shouldBe Some(DeregistrationDateModel(Yes,Some(
+        form.value shouldBe Some(ChooseDeregistrationDateModel(Yes,Some(
           DateModel(LocalDate.now.getDayOfMonth,LocalDate.now.getMonthValue,LocalDate.now.getYear)
         )))
       }
@@ -59,14 +59,14 @@ class DeregistrationDateFormSpec extends TestUtil {
         DateForm.month -> testDate.getMonthValue.toString,
         DateForm.year -> testDate.getYear.toString
       )
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
       "result in a form with no errors" in {
         form.hasErrors shouldBe false
       }
 
       "generate a DateModel" in {
-        form.value shouldBe Some(DeregistrationDateModel(Yes,Some(
+        form.value shouldBe Some(ChooseDeregistrationDateModel(Yes,Some(
           DateModel(testDate.getDayOfMonth,testDate.getMonthValue,testDate.getYear)
         )))
       }
@@ -78,14 +78,14 @@ class DeregistrationDateFormSpec extends TestUtil {
     val data = Map(
       YesNoForm.yesNo -> "no"
     )
-    val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+    val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
     }
 
     "generate a DateModel" in {
-      form.value shouldBe Some(DeregistrationDateModel(No,None))
+      form.value shouldBe Some(ChooseDeregistrationDateModel(No,None))
     }
   }
 
@@ -97,14 +97,14 @@ class DeregistrationDateFormSpec extends TestUtil {
       DateForm.month -> LocalDate.now.getMonthValue.toString,
       DateForm.year -> LocalDate.now.getYear.toString
     )
-    val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+    val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
     }
 
     "generate a DateModel" in {
-      form.value shouldBe Some(DeregistrationDateModel(No,None))
+      form.value shouldBe Some(ChooseDeregistrationDateModel(No,None))
     }
   }
 
@@ -116,14 +116,14 @@ class DeregistrationDateFormSpec extends TestUtil {
       DateForm.month -> "99",
       DateForm.year -> "99999"
     )
-    val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+    val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
     }
 
     "generate a DateModel" in {
-      form.value shouldBe Some(DeregistrationDateModel(No,None))
+      form.value shouldBe Some(ChooseDeregistrationDateModel(No,None))
     }
   }
 
@@ -135,14 +135,14 @@ class DeregistrationDateFormSpec extends TestUtil {
       DateForm.month -> "b",
       DateForm.year -> "c"
     )
-    val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+    val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
     }
 
     "generate a DateModel" in {
-      form.value shouldBe Some(DeregistrationDateModel(No,None))
+      form.value shouldBe Some(ChooseDeregistrationDateModel(No,None))
     }
   }
 
@@ -154,14 +154,14 @@ class DeregistrationDateFormSpec extends TestUtil {
       DateForm.month -> "2",
       DateForm.year -> "2018"
     )
-    val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+    val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
     }
 
     "generate a DateModel" in {
-      form.value shouldBe Some(DeregistrationDateModel(No,None))
+      form.value shouldBe Some(ChooseDeregistrationDateModel(No,None))
     }
   }
 
@@ -174,14 +174,14 @@ class DeregistrationDateFormSpec extends TestUtil {
       DateForm.month -> testDate.getMonthValue.toString,
       DateForm.year -> testDate.getYear.toString
     )
-    val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+    val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
     }
 
     "generate a DateModel" in {
-      form.value shouldBe Some(DeregistrationDateModel(No,None))
+      form.value shouldBe Some(ChooseDeregistrationDateModel(No,None))
     }
   }
 
@@ -194,14 +194,14 @@ class DeregistrationDateFormSpec extends TestUtil {
       DateForm.month -> testDate.getMonthValue.toString,
       DateForm.year -> testDate.getYear.toString
     )
-    val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+    val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
     }
 
     "generate a DateModel" in {
-      form.value shouldBe Some(DeregistrationDateModel(No,None))
+      form.value shouldBe Some(ChooseDeregistrationDateModel(No,None))
     }
   }
 
@@ -210,7 +210,7 @@ class DeregistrationDateFormSpec extends TestUtil {
     "no data has been entered" should {
 
       val missingOption: Map[String, String] = Map.empty
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(missingOption)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -229,7 +229,7 @@ class DeregistrationDateFormSpec extends TestUtil {
         DateForm.month -> "",
         DateForm.year -> ""
       )
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -248,7 +248,7 @@ class DeregistrationDateFormSpec extends TestUtil {
       val data = Map(
         YesNoForm.yesNo -> "yes"
       )
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -268,7 +268,7 @@ class DeregistrationDateFormSpec extends TestUtil {
         DateForm.month -> "99",
         DateForm.year -> "99999"
       )
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
       "result in a form with errors" in {
         form.hasErrors shouldBe true
@@ -290,7 +290,7 @@ class DeregistrationDateFormSpec extends TestUtil {
         DateForm.month -> "b",
         DateForm.year -> "c"
       )
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
       "result in a form with no errors" in {
         form.hasErrors shouldBe true
@@ -311,7 +311,7 @@ class DeregistrationDateFormSpec extends TestUtil {
         DateForm.month -> "2",
         DateForm.year -> "2018"
       )
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
       "result in a form with no errors" in {
         form.hasErrors shouldBe true
@@ -332,7 +332,7 @@ class DeregistrationDateFormSpec extends TestUtil {
         DateForm.month -> testDate.getMonthValue.toString,
         DateForm.year -> testDate.getYear.toString
       )
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
       "result in a form with no errors" in {
         form.hasErrors shouldBe true
@@ -353,7 +353,7 @@ class DeregistrationDateFormSpec extends TestUtil {
         DateForm.month -> testDate.getMonthValue.toString,
         DateForm.year -> testDate.getYear.toString
       )
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).bind(data)
 
       "result in a form with no errors" in {
         form.hasErrors shouldBe true
@@ -369,12 +369,12 @@ class DeregistrationDateFormSpec extends TestUtil {
   "A form built from a valid model" should {
 
     "generate the correct mapping" in {
-      val model = DeregistrationDateModel(Yes,Some(DateModel(
+      val model = ChooseDeregistrationDateModel(Yes,Some(DateModel(
         LocalDate.now.getDayOfMonth,
         LocalDate.now.getMonthValue,
         LocalDate.now.getYear
       )))
-      val form = DeregistrationDateForm.deregistrationDateForm(yesNoError).fill(model)
+      val form = ChooseDeregistrationDateForm.deregistrationDateForm(yesNoError).fill(model)
       form.data shouldBe Map(
         YesNoForm.yesNo -> YesNoForm.yes,
         DateForm.day -> LocalDate.now.getDayOfMonth.toString,

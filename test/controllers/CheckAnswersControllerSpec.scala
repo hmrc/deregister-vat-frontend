@@ -80,7 +80,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
         }
 
         "display the back url" in {
-          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.DeregistrationDateController.show().url
+          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.ChooseDeregistrationDateController.show().url
 
         }
       }

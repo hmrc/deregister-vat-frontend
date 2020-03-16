@@ -23,7 +23,7 @@
 @import views.utils.TitleUtil.title
 @import models.DeregistrationDate
 
-@(outstanding: Option[YesNo], form: Form[DeregistrationDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(outstanding: Option[YesNo], form: Form[ChooseDeregistrationDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @questionContent = {
   @headings(messages("deregistrationDate.title"))
@@ -44,7 +44,7 @@
 
   @errorSummary("common.errorSummary.heading", form, Some("date-fieldset"))
 
-  @helpers.form(action = controllers.routes.DeregistrationDateController.submit, 'novalidate -> "novalidate") {
+  @helpers.form(action = controllers.routes.ChooseDeregistrationDateController.submit, 'novalidate -> "novalidate") {
 
     <div id="@yesNo" class="form-group">
       @yesNoRevealHelper(

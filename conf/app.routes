@@ -26,8 +26,8 @@ POST       /capital-assets                  controllers.CapitalAssetsController.
 GET        /deregister-turnover-below-threshold     controllers.TaxableTurnoverController.show
 POST       /deregister-turnover-below-threshold     controllers.TaxableTurnoverController.submit
 
-GET        /deregister-date                 controllers.DeregistrationDateController.show
-POST       /deregister-date                 controllers.DeregistrationDateController.submit
+GET        /deregister-date                 controllers.ChooseDeregistrationDateController.show
+POST       /deregister-date                 controllers.ChooseDeregistrationDateController.submit
 
 GET        /expected-taxable-turnover              controllers.NextTaxableTurnoverController.show
 POST       /expected-taxable-turnover              controllers.NextTaxableTurnoverController.submit

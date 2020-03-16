@@ -180,7 +180,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.DeregistrationDateController.show().url)
+            redirectURI(controllers.routes.ChooseDeregistrationDateController.show().url)
           )
         }
       }
