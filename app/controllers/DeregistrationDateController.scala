@@ -40,7 +40,7 @@ class DeregistrationDateController @Inject()(val messagesApi: MessagesApi,
   val form: Form[DeregistrationDateModel] = DeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption")
 
   private def renderView(outstanding: Option[YesNo], form: Form[DeregistrationDateModel])
-                        (implicit user: User[_]) = views.html.deregistrationDate(outstanding,form)
+                        (implicit user: User[_]) = views.html.chooseDeregistrationDate(outstanding,form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     for {
