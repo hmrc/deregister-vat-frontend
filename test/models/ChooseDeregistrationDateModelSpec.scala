@@ -22,7 +22,7 @@ class ChooseDeregistrationDateModelSpec extends TestUtil {
 
   val validDate = DateModel(1,1,2018)
 
-  "DeregistrationDateModel.customerApply" should{
+  "ChooseDeregistrationDateModel.customerApply" should{
 
     "return a model with a yes and a date" when {
 
@@ -63,25 +63,25 @@ class ChooseDeregistrationDateModelSpec extends TestUtil {
     }
   }
 
-  "DeregistationDateModel.customUnnaply" should {
+  "ChooseDeregistrationDateModel.customUnnaply" should {
 
     "return Yes and a date" when {
 
-      "DeregistrationDateModel has both a Yes and a Date" in {
+      "ChooseDeregistrationDateModel has both a Yes and a Date" in {
         ChooseDeregistrationDateModel.customUnapply(ChooseDeregistrationDateModel(Yes, Some(validDate))) shouldBe Some((Yes, Some(1), Some(1), Some(2018)))
       }
     }
 
     "return Yes and 3 None" when {
 
-      "DeregistrationDateModel has both a Yes and no date" in {
+      "ChooseDeregistrationDateModel has both a Yes and no date" in {
         ChooseDeregistrationDateModel.customUnapply(ChooseDeregistrationDateModel(Yes, None)) shouldBe Some((Yes, None, None, None))
       }
     }
 
     "return No and 3 None" when {
 
-      "DeregistrationDateModel has a No and Some(date) or None" in {
+      "ChooseDeregistrationDateModel has a No and Some(date) or None" in {
         ChooseDeregistrationDateModel.customUnapply(ChooseDeregistrationDateModel(No, None)) shouldBe Some((No, None, None, None))
         ChooseDeregistrationDateModel.customUnapply(ChooseDeregistrationDateModel(No, Some(validDate))) shouldBe Some((No, Some(1), Some(1), Some(2018)))
       }

@@ -25,7 +25,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
 
-class DeregistrationDateSpec extends ViewBaseSpec {
+class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   object Selectors {
     val back = ".link-back"
