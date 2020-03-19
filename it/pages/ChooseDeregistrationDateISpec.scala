@@ -18,27 +18,28 @@ package pages
 
 import java.time.LocalDate
 
-import assets.IntegrationTestConstants._
-import forms.DeregistrationDateForm
+import forms.ChooseDeregistrationDateForm
 import helpers.IntegrationBaseSpec
-import models.DateModel
+import models.{DateModel, ChooseDeregistrationDateModel, No, Yes}
 import play.api.http.Status._
-import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import services.DeregDateAnswerService
 import stubs.DeregisterVatStub
+import assets.IntegrationTestConstants._
+import play.api.libs.json.Json
+import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService}
 
-class DeregistrationDateISpec extends IntegrationBaseSpec {
+class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
-  val testDay: Int = LocalDate.now().getDayOfMonth
-  val testMonth: Int = LocalDate.now().getMonthValue
-  val testYear: Int = LocalDate.now().getYear
-  val testDateModel: DateModel = DateModel(testDay, testMonth, testYear)
+  val testDay = LocalDate.now().getDayOfMonth
+  val testMonth = LocalDate.now().getMonthValue
+  val testYear = LocalDate.now().getYear
+  val validYesModel = ChooseDeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
+  val validNoModel = ChooseDeregistrationDateModel(No,None)
+  val invalidYesModel = ChooseDeregistrationDateModel(Yes,None)
 
-  "Calling the GET Deregistration Date endpoint" when {
+  "Calling the GET Choose Deregistration Date endpoint" when {
 
-    def getRequest(pendingDereg: Option[String] = Some("false")): WSResponse =
-      get("/enter-cancel-vat-date", formatPendingDereg(pendingDereg))
+    def getRequest: WSResponse = get("/deregister-date", formatPendingDereg(Some("false")))
 
     "the user is authorised" should {
 
@@ -46,13 +47,14 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(testDateModel))
+        DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(validYesModel))
+        DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
-          pageTitle("What is the cancellation date?" + titleSuffix)
+          pageTitle("Do you want to choose the cancellation date?" + titleSuffix)
         )
       }
     }
@@ -63,7 +65,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -78,7 +80,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = getRequest()
+        val response: WSResponse = getRequest
 
         response should have(
           httpStatus(FORBIDDEN),
@@ -86,9 +88,13 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
         )
       }
     }
+  }
 
-    "user has a pending deregistration request" should {
+  "Calling the GET Deregistration date endpoint" when {
 
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/deregister-date", formatPendingDereg(pendingDereg))
+
+    "user has a pending dereg request" should {
 
       "redirect the user" in {
         given.user.isAuthorised
@@ -102,7 +108,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
       }
     }
 
-    "no pending deregistration data in session and vat-subscription returns 'no pending deregistration'" should {
+    "no pending dereg data in session and vat-subscription returns 'no pending dereg'" should {
 
       "redirect user to the start of the journey" in {
         given.user.isAuthorised
@@ -117,7 +123,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
       }
     }
 
-    "no pending deregistration data in session and vat-subscription returns 'pending deregistration'" should {
+    "no pending dereg data in session and vat-subscription returns 'pending dereg'" should {
 
       "redirect the user" in {
         given.user.isAuthorised
@@ -132,7 +138,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
       }
     }
 
-    "no pending deregistration data in session and vat-subscription returns 'None'" should {
+    "no pending dereg data in session and vat-subscription returns 'None'" should {
 
       "redirect user to the start of the journey" in {
         given.user.isAuthorised
@@ -148,21 +154,21 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
     }
   }
 
-  "Calling the POST Deregistration Date endpoint" when {
+  "Calling the POST Choose Deregistration Date endpoint" when {
 
-    def postRequest(data: DateModel): WSResponse =
-      post("/enter-cancel-vat-date", formatPendingDereg(Some("false")))(toFormData(DeregistrationDateForm.form, data))
+    def postRequest(data: ChooseDeregistrationDateModel): WSResponse =
+      post("/deregister-date")(toFormData(ChooseDeregistrationDateForm.deregistrationDateForm("yesNoError"), data))
 
     "the user is authorised" when {
 
-      "the post request includes valid data" should {
+      "the post request includes valid Yes data" should {
 
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
-          DeregisterVatStub.successfulPutAnswer(vrn, DeregDateAnswerService.key)
+          DeregisterVatStub.successfulPutAnswer(vrn, ChooseDeregDateAnswerService.key)
 
-          val response: WSResponse = postRequest(testDateModel)
+          val response: WSResponse = postRequest(validYesModel)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -171,17 +177,33 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
         }
       }
 
-      "the post request includes invalid data" should {
+      "the post request includes valid No data" should {
 
-        "return 400 BAD_REQUEST" in {
+        "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
 
-          val response: WSResponse = postRequest(DateModel(0, 0, 0))
+          val response: WSResponse = postRequest(validNoModel)
+
+          response should have(
+            httpStatus(SEE_OTHER),
+            redirectURI(controllers.routes.CheckAnswersController.show().url)
+          )
+        }
+      }
+
+      "the post request includes invalid Yes data" should {
+
+        "return 400 BAD_REQUEST" in {
+
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          given.user.isAuthorised
+
+          val response: WSResponse = postRequest(invalidYesModel)
 
           response should have(
             httpStatus(BAD_REQUEST),
-            pageTitle("Error: What is the cancellation date?" + titleSuffix),
+            pageTitle("Error: Do you want to choose the cancellation date?" + titleSuffix),
             elementText(".error-message")("Enter a valid cancellation date")
           )
         }
@@ -194,7 +216,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(testDateModel)
+        val response: WSResponse = postRequest(validYesModel)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -209,7 +231,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(testDateModel)
+        val response: WSResponse = postRequest(validYesModel)
 
         response should have(
           httpStatus(FORBIDDEN),
