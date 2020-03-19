@@ -19,6 +19,8 @@ package assets.messages
 object DeregistrationDateMessages extends BaseMessages {
 
   val title: String = "What is the cancellation date?" + titleSuffix
+  val errorTitle: String = "Error: " + title
+  val errorSummaryTitle: String = "There is a problem"
   val heading: String = "What is the cancellation date?"
   val p1: String = "The date can be up to a maximum of 3 months from today."
   val p2: String = "We’ll confirm the date when we accept your request."

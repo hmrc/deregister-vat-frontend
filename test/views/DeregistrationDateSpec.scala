@@ -27,10 +27,20 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     val back = ".link-back"
     val h1 = "h1"
     val day = ".form-group-day > span"
+    val dayValue = ".form-group-day input"
     val month = ".form-group-month > span"
+    val monthValue = ".form-group-month input"
     val year = ".form-group-year > span"
+    val yearValue = ".form-group-year input"
     val button = ".button"
     val form = "form"
+    val p1 = ".form-group p:nth-of-type(1)"
+    val p2 = ".form-group p:nth-of-type(2)"
+    val hint = ".form-hint"
+    val errorSummaryHeading = "#error-summary-display h2"
+    val fieldError = ".error-message"
+    def errorSummaryText(row: Int): String = s"#error-summary-display li:nth-of-type($row)"
+    def errorSummaryLink(row: Int): String = s"#error-summary-display li:nth-of-type($row) a"
   }
 
   "Rendering DeregistrationDate view" when {
@@ -59,12 +69,13 @@ class DeregistrationDateSpec extends ViewBaseSpec {
         elementText(Selectors.h1) shouldBe DeregistrationDateMessages.heading
       }
 
-      "have correct date guidance" in {
-
+      "have correct guidance" in {
+        elementText(Selectors.p1) shouldBe DeregistrationDateMessages.p1
+        elementText(Selectors.p2) shouldBe DeregistrationDateMessages.p2
       }
 
       "have hint text" in {
-
+        elementText(Selectors.hint) shouldBe DeregistrationDateMessages.hintText
       }
 
       "have a date form" which {
@@ -92,10 +103,51 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
       "form is valid" should {
 
+        lazy val view = views.html.deregistrationDate(DeregistrationDateForm.form.bind(
+          Map("dateDay" -> "1", "dateMonth" -> "2", "dateYear" -> "1999")
+        ))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "contain previously filled data" in {
+          element(Selectors.dayValue).attr("value") shouldBe "1"
+          element(Selectors.monthValue).attr("value") shouldBe "2"
+          element(Selectors.yearValue).attr("value") shouldBe "1999"
+        }
       }
 
       "form is invalid" should {
 
+        lazy val view = views.html.deregistrationDate(DeregistrationDateForm.form.bind(
+          Map("dateDay" -> "", "dateMonth" -> "", "dateYear" -> "")
+        ))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct error heading" in {
+          document.title() shouldBe DeregistrationDateMessages.errorTitle
+        }
+
+        "display an error summary" which {
+
+          "has the correct header" in {
+            elementText(Selectors.errorSummaryHeading) shouldBe DeregistrationDateMessages.errorSummaryTitle
+          }
+
+          "contains an error" in {
+            elementText(Selectors.errorSummaryText(1)) shouldBe "Enter numbers between 1 and 31"
+            elementText(Selectors.errorSummaryText(2)) shouldBe "Enter numbers between 1 and 12"
+            elementText(Selectors.errorSummaryText(3)) shouldBe "Enter 4 numbers"
+          }
+
+          "contains a link to the correct field" in {
+            element(Selectors.errorSummaryLink(1)).attr("href") shouldBe "#dateDay"
+            element(Selectors.errorSummaryLink(2)).attr("href") shouldBe "#dateMonth"
+            element(Selectors.errorSummaryLink(3)).attr("href") shouldBe "#dateYear"
+          }
+        }
+
+        "display a field error" in {
+          elementText(Selectors.fieldError) shouldBe "Enter a valid cancellation date"
+        }
       }
     }
   }
