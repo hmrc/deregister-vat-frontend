@@ -18,7 +18,7 @@ package pages
 
 import assets.IntegrationTestConstants._
 import helpers.IntegrationBaseSpec
-import models.Yes
+import models.{BelowThreshold, Yes, YesNoAmountModel}
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
@@ -26,6 +26,8 @@ import services._
 import stubs.DeregisterVatStub
 
 class BusinessActivityISpec extends IntegrationBaseSpec {
+
+  val yesNoAmountYes: YesNoAmountModel = YesNoAmountModel(Yes, Some(BigDecimal(1000)))
 
   "Calling the GET BusinessActivity" when {
 
@@ -37,7 +39,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn,BusinessActivityAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetAnswer(vrn, BusinessActivityAnswerService.key)(Json.toJson(Yes))
 
         val response: WSResponse = getRequest
 
@@ -164,6 +166,18 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn, BusinessActivityAnswerService.key)
 
+          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulDeleteAnswer(vrn, CeasedTradingDateAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, OutstandingInvoicesAnswerService.key)
+
           val response: WSResponse = postRequest(yes)
 
           response should have(
@@ -184,6 +198,18 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn, BusinessActivityAnswerService.key)
 
+          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulDeleteAnswer(vrn, CeasedTradingDateAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn, OutstandingInvoicesAnswerService.key)
+
           val response: WSResponse = postRequest(no)
 
           response should have(
@@ -202,7 +228,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.putAnswerError(vrn ,BusinessActivityAnswerService.key)
+          DeregisterVatStub.putAnswerError(vrn, BusinessActivityAnswerService.key)
 
           val response: WSResponse = postRequest(yes)
 

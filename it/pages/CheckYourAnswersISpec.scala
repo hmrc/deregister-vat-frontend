@@ -60,6 +60,10 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
         DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
         DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
         DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(deregistrationDate))
+        DeregisterVatStub.successfulGetAnswer(vrn, BusinessActivityAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetAnswer(vrn, SicCodeAnswerService.key)(Json.toJson(sicCodeValue))
+        DeregisterVatStub.successfulGetAnswer(vrn, ZeroRatedSuppliesValueService.key)(Json.toJson(zeroRatedSuppliesValue))
+        DeregisterVatStub.successfulGetAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)(Json.toJson(Yes))
 
         given.user.isAuthorised
 
@@ -219,6 +223,9 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
             DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(deregistrationDate))
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, CeasedTradingDateAnswerService.key)
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, WhyTurnoverBelowAnswerService.key)
 
             VatSubscriptionStub.deregisterForVatSuccess()
 
@@ -250,6 +257,10 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
             DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(deregistrationDate))
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, CeasedTradingDateAnswerService.key)
+            DeregisterVatStub.successfulGetAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)(Json.toJson(Yes))
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, SicCodeAnswerService.key)
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, ZeroRatedSuppliesValueService.key)
 
             VatSubscriptionStub.deregisterForVatSuccess()
 
@@ -278,6 +289,13 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
             DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(deregistrationDate))
+            DeregisterVatStub.successfulGetAnswer(vrn, CeasedTradingDateAnswerService.key)(Json.toJson(DateModel(19, 3, 2020)))
+            DeregisterVatStub.successfulGetAnswer(vrn, TaxableTurnoverAnswerService.key)(Json.toJson(Yes))
+            DeregisterVatStub.successfulGetAnswer(vrn, NextTaxableTurnoverAnswerService.key)(Json.toJson(taxableTurnoverBelow))
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, WhyTurnoverBelowAnswerService.key)
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, SicCodeAnswerService.key)
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, ZeroRatedSuppliesValueService.key)
 
             VatSubscriptionStub.deregisterForVatSuccess()
 
@@ -306,6 +324,13 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
             DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(deregistrationDate))
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, CeasedTradingDateAnswerService.key)
+            DeregisterVatStub.successfulGetAnswer(vrn, TaxableTurnoverAnswerService.key)(Json.toJson(Yes))
+            DeregisterVatStub.successfulGetAnswer(vrn, NextTaxableTurnoverAnswerService.key)(Json.toJson(taxableTurnoverBelow))
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, WhyTurnoverBelowAnswerService.key)
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, SicCodeAnswerService.key)
+            DeregisterVatStub.successfulGetNoDataAnswer(vrn, ZeroRatedSuppliesValueService.key)
 
             VatSubscriptionStub.deregisterForVatSuccess()
 
@@ -338,6 +363,10 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
           DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(deregistrationDate))
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, CeasedTradingDateAnswerService.key)
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, SicCodeAnswerService.key)
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, ZeroRatedSuppliesValueService.key)
 
           VatSubscriptionStub.deregisterForVatFailure()
 

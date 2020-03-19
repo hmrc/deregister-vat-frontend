@@ -24,9 +24,9 @@ class ChooseDeregDateAnswerServiceSpec extends TestUtil with MockDeregisterVatCo
 
   object ChooseDeregDateAnswerService extends ChooseDeregDateAnswerService(mockDeregisterVatConnector)
 
-  "The DeregDateAnswerService" should {
+  "The ChooseDeregDateAnswerService" should {
 
-    "have the key 'deregDate'" in {
+    "have the key 'chooseDeregDate'" in {
       ChooseDeregDateAnswerService.answerKey shouldBe "chooseDeregDate"
     }
   }

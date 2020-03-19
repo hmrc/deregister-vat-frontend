@@ -40,7 +40,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService
   with MockTaxableTurnoverAnswerService   with MockIssueNewInvoicesAnswerService
   with MockOutstandingInvoicesService     with MockWhyTurnoverBelowAnswerService
-  with MockChooseDeregDateAnswerService         with MockNextTaxableTurnoverAnswerService
+  with MockChooseDeregDateAnswerService   with MockNextTaxableTurnoverAnswerService
   with MockStocksAnswerService            with MockOptionTaxAnswerService
   with MockAccountingMethodAnswerService  with MockPurchasesExceedSuppliesAnswerService
   with MockSicCodeAnswerService           with MockZeroRatedSuppliesValueService
