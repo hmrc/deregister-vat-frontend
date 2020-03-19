@@ -26,7 +26,7 @@ import play.api.libs.ws.WSResponse
 import stubs.DeregisterVatStub
 import assets.IntegrationTestConstants._
 import play.api.libs.json.Json
-import services.{DeregDateAnswerService, OutstandingInvoicesAnswerService}
+import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService}
 
 class DeregistrationDateISpec extends IntegrationBaseSpec {
 
@@ -47,7 +47,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(validYesModel))
+        DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(validYesModel))
         DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
         val response: WSResponse = getRequest
@@ -166,7 +166,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
-          DeregisterVatStub.successfulPutAnswer(vrn, DeregDateAnswerService.key)
+          DeregisterVatStub.successfulPutAnswer(vrn, ChooseDeregDateAnswerService.key)
 
           val response: WSResponse = postRequest(validYesModel)
 

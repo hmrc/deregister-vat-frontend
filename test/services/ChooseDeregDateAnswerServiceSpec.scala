@@ -16,15 +16,18 @@
 
 package services
 
-import connectors.DeregisterVatConnector
-import javax.inject.{Inject, Singleton}
-import models.DateModel
+import connectors.mocks.MockDeregisterVatConnector
+import utils.TestUtil
 
-@Singleton()
-class DeregDateAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[DateModel] {
-  override val answerKey: String = DeregDateAnswerService.key
-}
 
-object DeregDateAnswerService {
-  val key: String = "deregDate"
+class ChooseDeregDateAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector {
+
+  object ChooseDeregDateAnswerService extends ChooseDeregDateAnswerService(mockDeregisterVatConnector)
+
+  "The DeregDateAnswerService" should {
+
+    "have the key 'deregDate'" in {
+      ChooseDeregDateAnswerService.answerKey shouldBe "chooseDeregDate"
+    }
+  }
 }

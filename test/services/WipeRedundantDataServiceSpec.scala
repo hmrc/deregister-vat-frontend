@@ -24,7 +24,7 @@ import utils.TestUtil
 class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDeregReasonAnswerService
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
-  with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockBusinessActivityAnswerService
+  with MockChooseDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockBusinessActivityAnswerService
   with MockZeroRatedSuppliesValueService with MockPurchasesExceedSuppliesAnswerService with MockSicCodeAnswerService {
 
   object TestWipeRedundantDataService extends WipeRedundantDataService(
@@ -36,7 +36,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
     mockIssueNewInvoicesAnswerService,
     mockOutstandingInvoicesService,
     mockWhyTurnoverBelowAnswerService,
-    mockDeregDateAnswerService,
+    mockChooseDeregDateAnswerService,
     mockBusinessActivityAnswerService,
     mockZeroRatedSuppliesValueService,
     mockPurchasesExceedSuppliesAnswerService,
@@ -58,7 +58,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         val outstandingInvoices: Option[YesNo] = Some(No)
 
         "Delete deregistration date answer" in {
-          setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
+          setupMockDeleteChooseDeregDate(Right(DeregisterVatSuccess))
           val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
           await(result) shouldBe Right(DeregisterVatSuccess)
         }
@@ -71,7 +71,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         val outstandingInvoices: Option[YesNo] = Some(No)
 
         "Not delete deregistration date answer" in {
-          setupMockDeleteDeregDateNotCalled()
+          setupMockDeleteChooseDeregDateNotCalled()
           val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
           await(result) shouldBe Right(DeregisterVatSuccess)
         }
@@ -84,7 +84,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         val outstandingInvoices: Option[YesNo] = Some(No)
 
         "Not delete deregistration date answer" in {
-          setupMockDeleteDeregDateNotCalled()
+          setupMockDeleteChooseDeregDateNotCalled()
 
           val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
           await(result) shouldBe Right(DeregisterVatSuccess)
@@ -98,7 +98,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         val outstandingInvoices: Option[YesNo] = Some(Yes)
 
         "Not delete deregistration date answer" in {
-          setupMockDeleteDeregDateNotCalled()
+          setupMockDeleteChooseDeregDateNotCalled()
 
           val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
           await(result) shouldBe Right(DeregisterVatSuccess)
@@ -114,7 +114,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       val outstandingInvoices: Option[YesNo] = Some(Yes)
 
       "Not delete deregistration date answer" in {
-        setupMockDeleteDeregDateNotCalled()
+        setupMockDeleteChooseDeregDateNotCalled()
 
         val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
         await(result) shouldBe Right(DeregisterVatSuccess)
@@ -614,7 +614,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
               setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
               setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
-              setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
+              setupMockDeleteChooseDeregDate(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -732,7 +732,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
             setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
 
-            setupMockDeleteDeregDate(Left(errorModel))
+            setupMockDeleteChooseDeregDate(Left(errorModel))
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData

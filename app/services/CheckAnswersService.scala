@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMethodAnswerService,
                                     capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                     ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
-                                    deregDateAnswerService: DeregDateAnswerService,
+                                    deregDateAnswerService: ChooseDeregDateAnswerService,
                                     deregReasonAnswerService: DeregReasonAnswerService,
                                     nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
                                     optionTaxAnswerService: OptionTaxAnswerService,
