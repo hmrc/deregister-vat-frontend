@@ -76,13 +76,6 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
       elementText(Selectors.pageHeading) shouldBe ChooseDeregistrationDateMessages.heading
     }
 
-    s"have the correct a date form but be hidden" in {
-      elementText(Selectors.dayText) shouldBe CommonMessages.day
-      elementText(Selectors.monthText) shouldBe CommonMessages.month
-      elementText(Selectors.yearText) shouldBe CommonMessages.year
-      document.select("#hiddenContent").hasClass("js-hidden") shouldBe true
-    }
-
     s"have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
@@ -120,10 +113,6 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
     "have no error heading message being displayed" in {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
-    }
-
-    s"have the date form be hidden" in {
-      document.select("#hiddenContent").hasClass("js-hidden") shouldBe true
     }
 
     "have no error message being displayed for the fields" in {
