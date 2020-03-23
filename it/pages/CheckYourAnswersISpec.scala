@@ -16,6 +16,8 @@
 
 package pages
 
+import java.time.LocalDate
+
 import assets.IntegrationTestConstants._
 import helpers.IntegrationBaseSpec
 import models._
@@ -34,6 +36,10 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
   val yesNoAmountNo = YesNoAmountModel(No,None)
   val deregistrationDate = ChooseDeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
   val zeroRatedSuppliesValue = NumberInputModel(1000)
+  val dateModelNow: DateModel = DateModel(LocalDate.now().getDayOfMonth,
+    LocalDate.now().getMonthValue,
+    LocalDate.now().getYear
+  )
 
   override def beforeEach(): Unit = {
     super.beforeEach()
@@ -289,7 +295,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
             DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(deregistrationDate))
-            DeregisterVatStub.successfulGetAnswer(vrn, CeasedTradingDateAnswerService.key)(Json.toJson(DateModel(19, 3, 2020)))
+            DeregisterVatStub.successfulGetAnswer(vrn, CeasedTradingDateAnswerService.key)(Json.toJson(dateModelNow))
             DeregisterVatStub.successfulGetAnswer(vrn, TaxableTurnoverAnswerService.key)(Json.toJson(Yes))
             DeregisterVatStub.successfulGetAnswer(vrn, NextTaxableTurnoverAnswerService.key)(Json.toJson(taxableTurnoverBelow))
             DeregisterVatStub.successfulGetNoDataAnswer(vrn, WhyTurnoverBelowAnswerService.key)
