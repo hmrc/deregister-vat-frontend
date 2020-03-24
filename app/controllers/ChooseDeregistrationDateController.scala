@@ -25,19 +25,19 @@ import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{DeregDateAnswerService, OutstandingInvoicesAnswerService}
+import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
 class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
                                                    val authenticate: AuthPredicate,
                                                    val pendingDeregCheck: PendingChangesPredicate,
-                                                   val deregDateAnswerService: DeregDateAnswerService,
+                                                   val deregDateAnswerService: ChooseDeregDateAnswerService,
                                                    val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                                    val serviceErrorHandler: ServiceErrorHandler,
                                                    implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val form: Form[ChooseDeregistrationDateModel] = ChooseDeregistrationDateForm.deregistrationDateForm("deregistrationDate.error.mandatoryRadioOption")
+  val form: Form[ChooseDeregistrationDateModel] = ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption")
 
   private def renderView(outstanding: Option[YesNo], form: Form[ChooseDeregistrationDateModel])
                         (implicit user: User[_]) = views.html.chooseDeregistrationDate(outstanding,form)

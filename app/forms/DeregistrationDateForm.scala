@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package assets.messages
+package forms
 
-object DeregistrationDateMessages extends BaseMessages {
+import forms.DateForm.{day, formatter, isValidDateConstraint, month, year}
+import models.DateModel
+import play.api.data.Form
+import play.api.data.Forms.{mapping, of}
 
-  val title: String = "What is the cancellation date?" + titleSuffix
-  val errorTitle: String = "Error: " + title
-  val errorSummaryTitle: String = "There is a problem"
-  val heading: String = "What is the cancellation date?"
-  val p1: String = "The date can be up to a maximum of 3 months from today."
-  val p2: String = "We’ll confirm the date when we accept your request."
-  val hintText: String = "For example, 31 3 1980"
+object DeregistrationDateForm {
 
+  val form: Form[DateModel] = Form(
+    mapping(
+      day -> of(formatter),
+      month -> of(formatter),
+      year -> of(formatter)
+    )(DateModel.apply)(DateModel.unapply)
+      .verifying(isValidDateConstraint("deregistrationDate.error.date.noEntry"))
+  )
 }

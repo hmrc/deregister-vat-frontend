@@ -24,18 +24,18 @@ import common.SessionKeys
 import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.{MockCheckAnswersService, MockDeregDateAnswerService, MockUpdateDeregistrationService}
+import services.mocks.{MockCheckAnswersService, MockChooseDeregDateAnswerService, MockUpdateDeregistrationService}
 
 import scala.concurrent.Future
 
-class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswersService with MockDeregDateAnswerService with MockUpdateDeregistrationService {
+class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswersService with MockChooseDeregDateAnswerService with MockUpdateDeregistrationService {
 
   object TestCheckAnswersController extends CheckAnswersController(
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
     mockCheckAnswersService,
-    mockDeregDateAnswerService,
+    mockChooseDeregDateAnswerService,
     mockUpdateDeregistrationService,
     serviceErrorHandler,
     mockConfig

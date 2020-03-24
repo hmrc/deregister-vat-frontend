@@ -28,17 +28,17 @@ import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.{MockDeregDateAnswerService, MockOutstandingInvoicesService}
+import services.mocks.{MockChooseDeregDateAnswerService, MockOutstandingInvoicesService}
 
 import scala.concurrent.Future
 
-class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with MockDeregDateAnswerService with MockOutstandingInvoicesService {
+class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with MockChooseDeregDateAnswerService with MockOutstandingInvoicesService {
 
   object TestChooseDeregistrationDateController$ extends ChooseDeregistrationDateController(
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
-    mockDeregDateAnswerService,
+    mockChooseDeregDateAnswerService,
     mockOutstandingInvoicesService,
     serviceErrorHandler,
     mockConfig
@@ -59,7 +59,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetDeregDate(Right(None))
+          setupMockGetChooseDeregDate(Right(None))
           setupMockGetOutstandingInvoices(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
@@ -76,7 +76,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetDeregDate(Right(Some(testYesDeregModel)))
+          setupMockGetChooseDeregDate(Right(Some(testYesDeregModel)))
           setupMockGetOutstandingInvoices(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
@@ -109,7 +109,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.show()(request)
 
         "return Internal Server Error" in {
-          setupMockGetDeregDate(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
+          setupMockGetChooseDeregDate(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
           setupMockGetOutstandingInvoices(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
@@ -135,7 +135,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreDeregDate(testYesDeregModel)(Right(DeregisterVatSuccess))
+          setupMockStoreChooseDeregDate(testYesDeregModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -152,7 +152,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreDeregDate(testNoDeregModel)(Right(DeregisterVatSuccess))
+          setupMockStoreChooseDeregDate(testNoDeregModel)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -169,7 +169,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreDeregDate(testNoDeregModel)(Left(errorModel))
+          setupMockStoreChooseDeregDate(testNoDeregModel)(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

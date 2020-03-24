@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-package assets.messages
+package services
 
-object DeregistrationDateMessages extends BaseMessages {
+import connectors.mocks.MockDeregisterVatConnector
+import utils.TestUtil
 
-  val title: String = "What is the cancellation date?" + titleSuffix
-  val errorTitle: String = "Error: " + title
-  val errorSummaryTitle: String = "There is a problem"
-  val heading: String = "What is the cancellation date?"
-  val p1: String = "The date can be up to a maximum of 3 months from today."
-  val p2: String = "We’ll confirm the date when we accept your request."
-  val hintText: String = "For example, 31 3 1980"
 
+class ChooseDeregDateAnswerServiceSpec extends TestUtil with MockDeregisterVatConnector {
+
+  object ChooseDeregDateAnswerService extends ChooseDeregDateAnswerService(mockDeregisterVatConnector)
+
+  "The ChooseDeregDateAnswerService" should {
+
+    "have the key 'chooseDeregDate'" in {
+      ChooseDeregDateAnswerService.answerKey shouldBe "chooseDeregDate"
+    }
+  }
 }

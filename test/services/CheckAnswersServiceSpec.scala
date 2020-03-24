@@ -27,7 +27,7 @@ import utils.TestUtil
 class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
-  with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService
+  with MockChooseDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService
   with MockOptionTaxAnswerService with MockAccountingMethodAnswerService with MockBusinessActivityAnswerService
   with MockSicCodeAnswerService with MockZeroRatedSuppliesValueService with MockPurchasesExceedSuppliesAnswerService {
 
@@ -35,7 +35,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
     mockAccountingMethodAnswerService,
     mockCapitalAssetsAnswerService,
     mockCeasedTradingDateAnswerService,
-    mockDeregDateAnswerService,
+    mockChooseDeregDateAnswerService,
     mockDeregReasonAnswerService,
     mockNextTaxableTurnoverAnswerService,
     mockOptionTaxAnswerService,
@@ -70,7 +70,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
-        setupMockGetDeregDate(Right(Some(deregistrationDateYes)))
+        setupMockGetChooseDeregDate(Right(Some(deregistrationDateYes)))
         setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
         setupMockGetSicCode(Right(Some(sicCodeValue)))
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
@@ -124,7 +124,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
-        setupMockGetDeregDate(Right(Some(deregistrationDateYes)))
+        setupMockGetChooseDeregDate(Right(Some(deregistrationDateYes)))
         setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
         setupMockGetSicCode(Right(Some(sicCodeValue)))
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))

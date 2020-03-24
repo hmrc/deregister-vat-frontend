@@ -32,7 +32,7 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        val authenticate: AuthPredicate,
                                        val pendingDeregCheck: PendingChangesPredicate,
                                        checkAnswersService: CheckAnswersService,
-                                       deregDateAnswerService: DeregDateAnswerService,
+                                       deregDateAnswerService: ChooseDeregDateAnswerService,
                                        updateDeregistrationService: UpdateDeregistrationService,
                                        val serviceErrorHandler: ServiceErrorHandler,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {

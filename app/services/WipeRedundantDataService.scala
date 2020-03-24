@@ -33,7 +33,7 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                          val invoicesAnswer: IssueNewInvoicesAnswerService,
                                          val outstandingInvoicesAnswer: OutstandingInvoicesAnswerService,
                                          val whyTurnoverBelow: WhyTurnoverBelowAnswerService,
-                                         val deregDateAnswer: DeregDateAnswerService,
+                                         val deregDateAnswer: ChooseDeregDateAnswerService,
                                          val businessActivityAnswer: BusinessActivityAnswerService,
                                          val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
                                          val purchaseVatExceedSupplyVatAnswer: PurchasesExceedSuppliesAnswerService,

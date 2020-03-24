@@ -1,0 +1,62 @@
+/*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package controllers
+
+import config.{AppConfig, ServiceErrorHandler}
+import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import forms.DeregistrationDateForm
+import javax.inject.Inject
+import play.api.Logger
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent}
+import services.DeregDateAnswerService
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+
+import scala.concurrent.{ExecutionContext, Future}
+
+class DeregistrationDateController@Inject()(val messagesApi: MessagesApi,
+                                            authenticate: AuthPredicate,
+                                            pendingChangesCheck: PendingChangesPredicate,
+                                            serviceErrorHandler: ServiceErrorHandler,
+                                            answerService: DeregDateAnswerService,
+                                            implicit val appConfig: AppConfig,
+                                            implicit val ec: ExecutionContext) extends FrontendController with I18nSupport {
+
+  val show: Action[AnyContent] = (authenticate andThen pendingChangesCheck).async { implicit request =>
+    answerService.getAnswer.map {
+      case Right(Some(deregDate)) =>
+        Ok(views.html.deregistrationDate(DeregistrationDateForm.form.fill(deregDate)))
+      case Right(None) =>
+        Ok(views.html.deregistrationDate(DeregistrationDateForm.form))
+      case _ =>
+        Logger.warn("[DeregistrationDateController][show] - storedAnswerService returned an error retrieving answer")
+        serviceErrorHandler.showInternalServerError
+    }
+  }
+
+  val submit: Action[AnyContent] = (authenticate andThen pendingChangesCheck).async { implicit request =>
+    DeregistrationDateForm.form.bindFromRequest().fold(
+      error => Future(BadRequest(views.html.deregistrationDate(error))),
+      data => answerService.storeAnswer(data) map {
+        case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
+        case Left(err) =>
+          Logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + err.message)
+          serviceErrorHandler.showInternalServerError
+      }
+    )
+  }
+}
