@@ -23,11 +23,9 @@
 @import views.utils.TitleUtil.title
 @import models.DeregistrationDate
 
-@(outstanding: Option[YesNo], form: Form[ChooseDeregistrationDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(outstanding: Option[YesNo], form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @questionContent = {
-  @headings(messages("chooseDeregistrationDate.title"))
-
   <p>@messages("deregistrationDate.p1")</p>
 
   <p>@messages("deregistrationDate.p2")</p>

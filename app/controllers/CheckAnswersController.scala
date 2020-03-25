@@ -40,9 +40,10 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     checkAnswersService.checkYourAnswersModel() map {
       case Right(answers) =>
-        answers.deregDate match {
-          case Some(_) => Ok(views.html.checkYourAnswers(controllers.routes.ChooseDeregistrationDateController.show().url, answers.seqAnswers))
-          case None => Ok(views.html.checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
+        (answers.chooseDeregDate, answers.deregDate) match {
+          case (Some(_), Some(_)) => Ok(views.html.checkYourAnswers(controllers.routes.DeregistrationDateController.show().url, answers.seqAnswers))
+          case (Some(_), _) => Ok(views.html.checkYourAnswers(controllers.routes.ChooseDeregistrationDateController.show().url, answers.seqAnswers))
+          case _ => Ok(views.html.checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
         }
       case Left(error) =>
         Logger.warn("[CheckAnswersController][show] - storedAnswerService returned an error retrieving answers: " + error.message)

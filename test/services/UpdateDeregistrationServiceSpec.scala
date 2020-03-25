@@ -40,7 +40,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService
   with MockTaxableTurnoverAnswerService   with MockIssueNewInvoicesAnswerService
   with MockOutstandingInvoicesService     with MockWhyTurnoverBelowAnswerService
-  with MockChooseDeregDateAnswerService   with MockNextTaxableTurnoverAnswerService
+  with MockDeregDateAnswerService         with MockNextTaxableTurnoverAnswerService
   with MockStocksAnswerService            with MockOptionTaxAnswerService
   with MockAccountingMethodAnswerService  with MockPurchasesExceedSuppliesAnswerService
   with MockSicCodeAnswerService           with MockZeroRatedSuppliesValueService
@@ -58,7 +58,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
     mockStocksAnswerService,
     mockIssueNewInvoicesAnswerService,
     mockOutstandingInvoicesService,
-    mockChooseDeregDateAnswerService,
+    mockDeregDateAnswerService,
     mockPurchasesExceedSuppliesAnswerService,
     mockSicCodeAnswerService,
     mockZeroRatedSuppliesValueService,
@@ -87,7 +87,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
           setupMockGetStocks(Right(Some(stocksModel)))
           setupMockGetIssueNewInvoices(Right(Some(Yes)))
           setupMockGetOutstandingInvoices(Right(Some(Yes)))
-          setupMockGetChooseDeregDate(Right(Some(deregistrationDateModel)))
+          setupMockGetDeregDate(Right(Some(laterDateModel)))
           setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
           setupMockGetSicCode(Right(Some(sicCodeValue)))
           setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
@@ -114,7 +114,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
         setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
-        setupMockGetChooseDeregDate(Right(Some(deregistrationDateModel)))
+        setupMockGetDeregDate(Right(Some(laterDateModel)))
         setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
         setupMockGetSicCode(Right(Some(sicCodeValue)))
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))

@@ -36,7 +36,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
     Some(stocksModel),
     Some(Yes),
     Some(Yes),
-    Some(deregistrationDateYes),
+    Some(Yes),
+    Some(dateModel),
     Some(Yes),
     Some(sicCodeValue),
     Some(zeroRatedSuppliesValue),
@@ -61,7 +62,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
             stocksValueRow,
             newInvoicesRow,
             outstandingInvoicesRow,
-            deregDateRowYes
+            chooseDeregDateRowYes,
+            deregDateRow
           )
       }
     }
@@ -90,7 +92,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
             stocksValueRow,
             newInvoicesRow,
             outstandingInvoicesRow,
-            deregDateRowYes
+            chooseDeregDateRowYes,
+            deregDateRow
           )
       }
     }
@@ -118,7 +121,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
             stocksValueRow,
             newInvoicesRow,
             outstandingInvoicesRow,
-            deregDateRowYes
+            chooseDeregDateRowYes,
+            deregDateRow
           )
       }
     }
@@ -141,7 +145,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
             stocksValueRow,
             newInvoicesRow,
             outstandingInvoicesRow,
-            deregDateRowYes
+            chooseDeregDateRowYes,
+            deregDateRow
           )
       }
     }
@@ -163,7 +168,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
             stocksRowNo,
             newInvoicesRow,
             outstandingInvoicesRow,
-            deregDateRowYes
+            chooseDeregDateRowYes,
+            deregDateRow
           )
       }
     }
@@ -191,7 +197,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
             stocksValueRow,
             newInvoicesRow,
             outstandingInvoicesRow,
-            deregDateRowYes
+            chooseDeregDateRowYes,
+            deregDateRow
           )
       }
     }
@@ -200,7 +207,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
 
       "return a sequence containing the chooseDeregistrationDate row with a value of 'No'" in {
         cyaModel.copy(
-          deregDate = Some(deregistrationDateNo)
+          chooseDeregDate = Some(No),
+          deregDate = None
         ).seqAnswers shouldBe
           Seq(
             deregReasonCeasedTradingRow,
@@ -214,7 +222,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
             stocksValueRow,
             newInvoicesRow,
             outstandingInvoicesRow,
-            deregDateRowNo
+            chooseDeregDateRowNo
           )
       }
     }
@@ -223,7 +231,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
 
       "return an empty sequence" in {
         CheckYourAnswersModel(
-          None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None
+          None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None
         ).seqAnswers shouldBe Seq.empty[CheckYourAnswersRowModel]
       }
     }

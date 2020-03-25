@@ -29,13 +29,15 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
   with MockChooseDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService
   with MockOptionTaxAnswerService with MockAccountingMethodAnswerService with MockBusinessActivityAnswerService
-  with MockSicCodeAnswerService with MockZeroRatedSuppliesValueService with MockPurchasesExceedSuppliesAnswerService {
+  with MockSicCodeAnswerService with MockZeroRatedSuppliesValueService with MockPurchasesExceedSuppliesAnswerService
+  with MockDeregDateAnswerService {
 
   object TestCheckAnswersService extends CheckAnswersService(
     mockAccountingMethodAnswerService,
     mockCapitalAssetsAnswerService,
     mockCeasedTradingDateAnswerService,
     mockChooseDeregDateAnswerService,
+    mockDeregDateAnswerService,
     mockDeregReasonAnswerService,
     mockNextTaxableTurnoverAnswerService,
     mockOptionTaxAnswerService,
@@ -70,7 +72,8 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
-        setupMockGetChooseDeregDate(Right(Some(deregistrationDateYes)))
+        setupMockGetChooseDeregDate(Right(Some(Yes)))
+        setupMockGetDeregDate(Right(Some(dateModel)))
         setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
         setupMockGetSicCode(Right(Some(sicCodeValue)))
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
@@ -89,7 +92,8 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
             Some(stocksModel),
             Some(Yes),
             Some(Yes),
-            Some(deregistrationDateYes),
+            Some(Yes),
+            Some(dateModel),
             Some(Yes),
             Some(sicCodeValue),
             Some(zeroRatedSuppliesValue),
@@ -124,7 +128,8 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
         setupMockGetOutstandingInvoices(Right(Some(Yes)))
-        setupMockGetChooseDeregDate(Right(Some(deregistrationDateYes)))
+        setupMockGetChooseDeregDate(Right(Some(Yes)))
+        setupMockGetDeregDate(Right(Some(dateModel)))
         setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
         setupMockGetSicCode(Right(Some(sicCodeValue)))
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))

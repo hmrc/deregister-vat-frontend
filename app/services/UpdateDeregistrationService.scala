@@ -43,7 +43,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
                                             val stocksAnswerService: StocksAnswerService,
                                             val issueNewInvoicesAnswerService: IssueNewInvoicesAnswerService,
                                             val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
-                                            val deregDateAnswerService: ChooseDeregDateAnswerService,
+                                            val deregDateAnswerService: DeregDateAnswerService,
                                             val purchasesExceedSuppliesAnswerService: PurchasesExceedSuppliesAnswerService,
                                             val sicCodeAnswerService: SicCodeAnswerService,
                                             val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,

@@ -16,7 +16,7 @@
 
 package services.mocks
 
-import models.{DeregisterVatResponse, ChooseDeregistrationDateModel, ErrorModel, User}
+import models._
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Format
 import services.ChooseDeregDateAnswerService
@@ -29,10 +29,10 @@ trait MockChooseDeregDateAnswerService extends MockStoredAnswersService {
 
   val mockChooseDeregDateAnswerService: ChooseDeregDateAnswerService = mock[ChooseDeregDateAnswerService]
 
-  def setupMockGetChooseDeregDate(response: Either[ErrorModel, Option[ChooseDeregistrationDateModel]])(implicit user: User[_]): Unit =
+  def setupMockGetChooseDeregDate(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
     setupMockGetAnswers(mockChooseDeregDateAnswerService)(response)
 
-  def setupMockStoreChooseDeregDate(data: ChooseDeregistrationDateModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockStoreChooseDeregDate(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockChooseDeregDateAnswerService)(data)(response)
 
   def setupMockDeleteChooseDeregDate(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =

@@ -33,7 +33,8 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                          val invoicesAnswer: IssueNewInvoicesAnswerService,
                                          val outstandingInvoicesAnswer: OutstandingInvoicesAnswerService,
                                          val whyTurnoverBelow: WhyTurnoverBelowAnswerService,
-                                         val deregDateAnswer: ChooseDeregDateAnswerService,
+                                         val chooseDateAnswer: ChooseDeregDateAnswerService,
+                                         val deregDateAnswer: DeregDateAnswerService,
                                          val businessActivityAnswer: BusinessActivityAnswerService,
                                          val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
                                          val purchaseVatExceedSupplyVatAnswer: PurchasesExceedSuppliesAnswerService,
@@ -47,10 +48,12 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
       issueInvoices <- EitherT(invoicesAnswer.getAnswer)
       outstandingInvoices <- EitherT(outstandingInvoicesAnswer.getAnswer)
       businessActivity <- EitherT(businessActivityAnswer.getAnswer)
+      chooseDate <- EitherT(chooseDateAnswer.getAnswer)
       _ <- EitherT(wipeRedundantDeregReasonJourneyData(deregReason))
       _ <- EitherT(wipeOutstandingInvoices(issueInvoices))
       _ <- EitherT(wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices))
       _ <- EitherT(wipeSicCode(businessActivity))
+      _ <- EitherT(wipeChosenDate(chooseDate))
     } yield DeregisterVatSuccess).value
   }
 
@@ -139,7 +142,20 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                      (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
     (reason, capitalAssets, issueInvoices, outstandingInvoices) match {
-      case (Some(Ceased), Some(x), Some(No), Some(No)) if x.yesNo == No => deregDateAnswer.deleteAnswer
+      case (Some(Ceased), Some(x), Some(No), Some(No)) if x.yesNo == No =>
+        (for {
+          _ <- EitherT(chooseDateAnswer.deleteAnswer)
+          _ <- EitherT(deregDateAnswer.deleteAnswer)
+        } yield DeregisterVatSuccess).value
+      case _ => Future.successful(Right(DeregisterVatSuccess))
+    }
+  }
+
+  private[services] def wipeChosenDate(chooseDate: Option[YesNo])
+                                      (implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, DeregisterVatResponse]] = {
+    chooseDate match {
+      case Some(No) => deregDateAnswer.deleteAnswer
       case _ => Future.successful(Right(DeregisterVatSuccess))
     }
   }

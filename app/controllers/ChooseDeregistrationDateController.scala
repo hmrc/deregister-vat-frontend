@@ -16,37 +16,40 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
-import forms.ChooseDeregistrationDateForm
+import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
-import models.{ChooseDeregistrationDateModel, User, YesNo}
+import models.{No, User, Yes, YesNo}
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService}
+import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
 @Singleton
 class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
                                                    val authenticate: AuthPredicate,
                                                    val pendingDeregCheck: PendingChangesPredicate,
-                                                   val deregDateAnswerService: ChooseDeregDateAnswerService,
+                                                   val chooseDateAnswerService: ChooseDeregDateAnswerService,
                                                    val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
+                                                   val wipeRedundantDataService: WipeRedundantDataService,
                                                    val serviceErrorHandler: ServiceErrorHandler,
                                                    implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val form: Form[ChooseDeregistrationDateModel] = ChooseDeregistrationDateForm.deregistrationDateForm("chooseDeregistrationDate.error.mandatoryRadioOption")
+  val form: Form[YesNo] = YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption")
 
-  private def renderView(outstanding: Option[YesNo], form: Form[ChooseDeregistrationDateModel])
-                        (implicit user: User[_]) = views.html.chooseDeregistrationDate(outstanding,form)
+  private def renderView(outstanding: Option[YesNo], form: Form[YesNo])
+                        (implicit user: User[_]) = views.html.chooseDeregistrationDate(outstanding, form)
 
   val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
     for {
-      deregDateResult <- deregDateAnswerService.getAnswer
+      chooseDateResult <- chooseDateAnswerService.getAnswer
       outstandingInvoicesResult <- outstandingInvoicesAnswerService.getAnswer
-    } yield (outstandingInvoicesResult, deregDateResult) match {
+    } yield (outstandingInvoicesResult, chooseDateResult) match {
       case (Right(outstandingInvoices), Right(Some(deregDate))) =>
         Ok(renderView(outstandingInvoices,form.fill(deregDate)))
       case (Right(outstanding), Right(None)) =>
@@ -65,12 +68,21 @@ class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
           Logger.warn("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
           serviceErrorHandler.showInternalServerError
       },
-      data => deregDateAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
-        case Left(err) =>
-          Logger.warn("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + err.message)
+      data => (for {
+        _ <- EitherT(chooseDateAnswerService.storeAnswer(data))
+        _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
+        result = redirect(Some(data))
+      } yield result).value.map {
+        case Right(redirect) => redirect
+        case Left(error) =>
+          Logger.warn("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )
+  }
+
+  private def redirect (yesNo: Option[YesNo]) : Result = yesNo match {
+    case Some(Yes) => Redirect(controllers.routes.DeregistrationDateController.show())
+    case Some(No) => Redirect(controllers.routes.CheckAnswersController.show())
   }
 }
