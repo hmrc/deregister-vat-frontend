@@ -40,7 +40,7 @@ trait IntegrationBaseSpec extends UnitSpec
 
   val mockHost: String = WireMockHelper.host
   val mockPort: String = WireMockHelper.wmPort.toString
-  val appRouteContext: String = "/vat-through-software/account/deregister"
+  val appRouteContext: String = "/vat-through-software/account/cancel-vat"
 
   implicit lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
   lazy val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]

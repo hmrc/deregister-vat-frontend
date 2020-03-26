@@ -1,72 +1,72 @@
 # microservice specific routes
 
-GET        /                                    controllers.DeregisterForVATController.redirect
+GET         /                                          controllers.DeregisterForVATController.redirect
 
-GET        /deregister-reason                   controllers.DeregistrationReasonController.show
-POST       /deregister-reason                   controllers.DeregistrationReasonController.submit
+GET         /cancel-vat-reason                         controllers.DeregistrationReasonController.show
+POST        /cancel-vat-reason                         controllers.DeregistrationReasonController.submit
 
-GET        /accounting-method                   controllers.VATAccountsController.show
-POST       /accounting-method                   controllers.VATAccountsController.submit
+GET         /accounting-method                         controllers.VATAccountsController.show
+POST        /accounting-method                         controllers.VATAccountsController.submit
 
-GET        /date-ceased-trading                 controllers.CeasedTradingDateController.show
-POST       /date-ceased-trading                 controllers.CeasedTradingDateController.submit
+GET         /date-ceased-trading                       controllers.CeasedTradingDateController.show
+POST        /date-ceased-trading                       controllers.CeasedTradingDateController.submit
 
-GET        /option-to-tax                       controllers.OptionTaxController.show
-POST       /option-to-tax                       controllers.OptionTaxController.submit
+GET         /option-to-tax                             controllers.OptionTaxController.show
+POST        /option-to-tax                             controllers.OptionTaxController.submit
 
-GET        /new-invoices                        controllers.IssueNewInvoicesController.show
-POST       /new-invoices                        controllers.IssueNewInvoicesController.submit
+GET         /new-invoices                              controllers.IssueNewInvoicesController.show
+POST        /new-invoices                              controllers.IssueNewInvoicesController.submit
 
-GET        /stock                               controllers.OptionStocksToSellController.show
-POST       /stock                               controllers.OptionStocksToSellController.submit
+GET         /stock                                     controllers.OptionStocksToSellController.show
+POST        /stock                                     controllers.OptionStocksToSellController.submit
 
-GET        /capital-assets                      controllers.CapitalAssetsController.show
-POST       /capital-assets                      controllers.CapitalAssetsController.submit
+GET         /capital-assets                            controllers.CapitalAssetsController.show
+POST        /capital-assets                            controllers.CapitalAssetsController.submit
 
-GET        /deregister-turnover-below-threshold controllers.TaxableTurnoverController.show
-POST       /deregister-turnover-below-threshold controllers.TaxableTurnoverController.submit
+GET         /turnover-below-threshold                  controllers.TaxableTurnoverController.show
+POST        /turnover-below-threshold                  controllers.TaxableTurnoverController.submit
 
-GET        /deregister-date                     controllers.ChooseDeregistrationDateController.show
-POST       /deregister-date                     controllers.ChooseDeregistrationDateController.submit
+GET         /choose-cancel-vat-date                    controllers.ChooseDeregistrationDateController.show
+POST        /choose-cancel-vat-date                    controllers.ChooseDeregistrationDateController.submit
 
-GET        /enter-cancel-vat-date               controllers.DeregistrationDateController.show
-POST       /enter-cancel-vat-date               controllers.DeregistrationDateController.submit
+GET         /enter-cancel-vat-date                     controllers.DeregistrationDateController.show
+POST        /enter-cancel-vat-date                     controllers.DeregistrationDateController.submit
 
-GET        /expected-taxable-turnover           controllers.NextTaxableTurnoverController.show
-POST       /expected-taxable-turnover           controllers.NextTaxableTurnoverController.submit
+GET         /expected-taxable-turnover                 controllers.NextTaxableTurnoverController.show
+POST        /expected-taxable-turnover                 controllers.NextTaxableTurnoverController.submit
 
-GET        /reasons-for-low-turnover            controllers.WhyTurnoverBelowController.show
-POST       /reasons-for-low-turnover            controllers.WhyTurnoverBelowController.submit
+GET         /reasons-for-low-turnover                  controllers.WhyTurnoverBelowController.show
+POST        /reasons-for-low-turnover                  controllers.WhyTurnoverBelowController.submit
 
-GET        /check-your-answers                  controllers.CheckAnswersController.show
-POST       /check-your-answers                  controllers.CheckAnswersController.submit
+GET         /check-your-answers                        controllers.CheckAnswersController.show
+POST        /check-your-answers                        controllers.CheckAnswersController.submit
 
-GET        /deregister-request-received         controllers.DeregistrationConfirmationController.show
+GET         /cancel-vat-request-received               controllers.DeregistrationConfirmationController.show
 
-GET        /cannot-deregister                   controllers.CannotDeregisterThresholdController.show
+GET         /cannot-cancel-vat                         controllers.CannotDeregisterThresholdController.show
 
-GET        /assets/*file                        controllers.Assets.at(path="/public", file)
+GET         /assets/*file                              controllers.Assets.at(path="/public", file)
 
-GET        /outstanding-invoices                controllers.OutstandingInvoicesController.show
-POST       /outstanding-invoices                controllers.OutstandingInvoicesController.submit
+GET         /outstanding-invoices                      controllers.OutstandingInvoicesController.show
+POST        /outstanding-invoices                      controllers.OutstandingInvoicesController.submit
 
-GET        /has-the-business-activity-changed   controllers.zeroRated.BusinessActivityController.show
-POST       /has-the-business-activity-changed   controllers.zeroRated.BusinessActivityController.submit
+GET         /has-the-business-activity-changed         controllers.zeroRated.BusinessActivityController.show
+POST        /has-the-business-activity-changed         controllers.zeroRated.BusinessActivityController.submit
 
-GET        /what-is-the-sic-code                controllers.zeroRated.SicCodeController.show
-POST       /what-is-the-sic-code                controllers.zeroRated.SicCodeController.submit
+GET         /what-is-the-sic-code                      controllers.zeroRated.SicCodeController.show
+POST        /what-is-the-sic-code                      controllers.zeroRated.SicCodeController.submit
 
-GET        /expected-value-zero-rated-supplies  controllers.zeroRated.ZeroRatedSuppliesController.show
-POST       /expected-value-zero-rated-supplies  controllers.zeroRated.ZeroRatedSuppliesController.submit
+GET         /expected-value-zero-rated-supplies        controllers.zeroRated.ZeroRatedSuppliesController.show
+POST        /expected-value-zero-rated-supplies        controllers.zeroRated.ZeroRatedSuppliesController.submit
 
-GET        /expected-value-vat-purchases        controllers.zeroRated.PurchasesExceedSuppliesController.show
-POST       /expected-value-vat-purchases        controllers.zeroRated.PurchasesExceedSuppliesController.submit
+GET         /expected-value-vat-purchases              controllers.zeroRated.PurchasesExceedSuppliesController.show
+POST        /expected-value-vat-purchases              controllers.zeroRated.PurchasesExceedSuppliesController.submit
 
 #Sign Out Routes
-GET        /sign-out                            controllers.SignOutController.signOut(authorised: Boolean)
-GET        /timeout                             controllers.SignOutController.timeout
+GET         /sign-out                                  controllers.SignOutController.signOut(authorised: Boolean)
+GET         /timeout                                   controllers.SignOutController.timeout
 
 #Language Controller
-GET        /language/:lang                      controllers.LanguageController.switchLanguage(lang: String)
+GET         /language/:lang                            controllers.LanguageController.switchLanguage(lang: String)
 
-GET        /:userType                           controllers.DeregisterForVATController.show(userType: String)
+GET         /:userType                                 controllers.DeregisterForVATController.show(userType: String)
