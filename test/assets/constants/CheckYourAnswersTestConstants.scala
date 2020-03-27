@@ -199,7 +199,7 @@ object CheckYourAnswersTestConstants extends TestUtil {
   val deregDateRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.deregistrationDate,
     Html(dateModel.longDate),
-    controllers.routes.ChooseDeregistrationDateController.show().url,
+    controllers.routes.DeregistrationDateController.show().url,
     CheckYourAnswersMessages.deregistrationDateHidden
   )
 

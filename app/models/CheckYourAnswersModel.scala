@@ -159,7 +159,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
   private val deregDateAnswer = deregDate.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.deregistrationDate"),
     Html(answer.longDate),
-    controllers.routes.ChooseDeregistrationDateController.show().url,
+    controllers.routes.DeregistrationDateController.show().url,
     messages("checkYourAnswers.hidden.deregistrationDate")
   ))
 
