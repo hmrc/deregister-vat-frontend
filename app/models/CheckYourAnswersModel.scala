@@ -32,7 +32,8 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  stocks: Option[YesNoAmountModel],
                                  newInvoices: Option[YesNo],
                                  outstandingInvoices: Option[YesNo],
-                                 deregDate: Option[ChooseDeregistrationDateModel],
+                                 chooseDeregDate: Option[YesNo],
+                                 deregDate: Option[DateModel],
                                  businessActivityChanged: Option[YesNo],
                                  sicCode: Option[String],
                                  zeroRatedSupplies: Option[NumberInputModel],
@@ -145,13 +146,20 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     messages("checkYourAnswers.hidden.newInvoices")
   ))
 
+  private val chooseDeregDateAnswer = chooseDeregDate.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.chooseDeregistrationDate"),
+    if(answer.value)
+      {Html(messages("common.yes"))}
+    else
+      {Html(messages("common.no"))},
+    controllers.routes.ChooseDeregistrationDateController.show().url,
+    messages("checkYourAnswers.hidden.chooseDeregistrationDate")
+  ))
+
   private val deregDateAnswer = deregDate.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.deregistrationDate"),
-    if(answer.yesNo.value)
-      {Html(answer.date.get.longDate())}
-    else
-      {Html(messages("checkYourAnswers.answer.no"))},
-    controllers.routes.ChooseDeregistrationDateController.show().url,
+    Html(answer.longDate),
+    controllers.routes.DeregistrationDateController.show().url,
     messages("checkYourAnswers.hidden.deregistrationDate")
   ))
 
@@ -193,6 +201,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     stocksValueAnswer,
     newInvoicesAnswer,
     outstandingInvoicesAnswer,
+    chooseDeregDateAnswer,
     deregDateAnswer
   )
 

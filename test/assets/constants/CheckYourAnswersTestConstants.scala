@@ -27,8 +27,6 @@ import utils.{MoneyFormatter, TestUtil}
 object CheckYourAnswersTestConstants extends TestUtil {
 
   val dateModel = DateModel(1,1,2018)
-  val deregistrationDateYes = ChooseDeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
-  val deregistrationDateNo = ChooseDeregistrationDateModel(No,None)
 
   val deregReasonCeasedTradingRow = CheckYourAnswersRowModel(
     CheckYourAnswersMessages.reason,
@@ -184,17 +182,24 @@ object CheckYourAnswersTestConstants extends TestUtil {
     CheckYourAnswersMessages.newInvoicesHidden
   )
 
-  val deregDateRowYes = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.deregistrationDate,
-    Html(deregistrationDateYes.date.get.longDate),
+  val chooseDeregDateRowYes = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.chooseDeregDate,
+    Html(CommonMessages.yes),
     controllers.routes.ChooseDeregistrationDateController.show().url,
-    CheckYourAnswersMessages.deregistrationDateHidden
+    CheckYourAnswersMessages.chooseDeregDateHidden
   )
 
-  val deregDateRowNo = CheckYourAnswersRowModel(
-    CheckYourAnswersMessages.deregistrationDate,
-    Html("No"),
+  val chooseDeregDateRowNo = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.chooseDeregDate,
+    Html(CommonMessages.no),
     controllers.routes.ChooseDeregistrationDateController.show().url,
+    CheckYourAnswersMessages.chooseDeregDateHidden
+  )
+
+  val deregDateRow = CheckYourAnswersRowModel(
+    CheckYourAnswersMessages.deregistrationDate,
+    Html(dateModel.longDate),
+    controllers.routes.DeregistrationDateController.show().url,
     CheckYourAnswersMessages.deregistrationDateHidden
   )
 

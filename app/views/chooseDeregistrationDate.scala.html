@@ -17,17 +17,15 @@
 @import uk.gov.hmrc.play.views.html.helpers
 @import views.html.templates.errors.errorSummary
 @import templates.headings
-@import views.html.templates.inputs.yesNoRevealHelper
+@import views.html.templates.inputs.radioHelper
 @import views.html.templates.inputs.date
 @import forms.YesNoForm._
 @import views.utils.TitleUtil.title
 @import models.DeregistrationDate
 
-@(outstanding: Option[YesNo], form: Form[ChooseDeregistrationDateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(outstanding: Option[YesNo], form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @questionContent = {
-  @headings(messages("chooseDeregistrationDate.title"))
-
   <p>@messages("deregistrationDate.p1")</p>
 
   <p>@messages("deregistrationDate.p2")</p>
@@ -47,25 +45,15 @@
   @helpers.form(action = controllers.routes.ChooseDeregistrationDateController.submit, 'novalidate -> "novalidate") {
 
     <div id="@yesNo" class="form-group">
-      @yesNoRevealHelper(
-        field = form(yesNo),
-        choices = Seq(
-          yes -> messages("common.yes"),
-          no -> messages("common.no")
-        ),
-        question = messages("chooseDeregistrationDate.title"),
-        additionalContent = Some(questionContent),
-        hiddenContent = date(
-          form = form,
-          question = "",
-          fieldName = "date",
-          formVariant = DeregistrationDate,
-          hint = Some(messages("ceasedTrading.hint")),
-          renderQuestionAsHeading = false
-        ),
-        legendAsHeader = false,
-        hiddenContentError = form.hasErrors
-      )
+        @radioHelper(
+            field = form(yesNo),
+            choices = Seq(
+                yes -> messages("common.yes"),
+                no -> messages("common.no")),
+            additionalContent = Some(questionContent),
+            question = messages("chooseDeregistrationDate.title"),
+            inline = true
+        )
     </div>
 
     <button class="button" type ="submit" id="continue">

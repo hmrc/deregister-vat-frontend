@@ -51,7 +51,7 @@ object DeregistrationInfo {
                   stocks: YesNoAmountModel,
                   issueNewInvoices: YesNo,
                   outstandingInvoices: Option[YesNo],
-                  deregDate: Option[ChooseDeregistrationDateModel],
+                  deregDate: Option[DateModel],
                   purchasesExceedSupplies: Option[YesNo],
                   sicCode: Option[String],
                   zeroRatedSuppliesValue: Option[NumberInputModel],
@@ -76,7 +76,7 @@ object DeregistrationInfo {
 
   private[deregistrationRequest] val deregInfoDate: Option[DateModel] => LocalDate = _.fold(LocalDate.now)(_.date.fold(LocalDate.now)(x => x))
 
-  private[deregistrationRequest] val deregLaterDate: Option[ChooseDeregistrationDateModel] => Option[LocalDate] = _.flatMap(_.getLocalDate)
+  private[deregistrationRequest] val deregLaterDate: Option[DateModel] => Option[LocalDate] = _.flatMap(_.date)
 
   private[deregistrationRequest] def taxableTurnoverBelowReason(taxableTurnover: YesNo)(implicit appConfig: AppConfig): BelowThresholdReason =
     if (taxableTurnover.value) BelowNext12Months else BelowPast12Months

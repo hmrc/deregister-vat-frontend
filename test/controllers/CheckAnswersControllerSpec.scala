@@ -28,7 +28,11 @@ import services.mocks.{MockCheckAnswersService, MockChooseDeregDateAnswerService
 
 import scala.concurrent.Future
 
-class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswersService with MockChooseDeregDateAnswerService with MockUpdateDeregistrationService {
+class CheckAnswersControllerSpec
+  extends ControllerBaseSpec
+    with MockCheckAnswersService
+    with MockChooseDeregDateAnswerService
+    with MockUpdateDeregistrationService {
 
   object TestCheckAnswersController extends CheckAnswersController(
     messagesApi,
@@ -63,7 +67,8 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
               Some(yesNoAmountNo),
               Some(Yes),
               Some(Yes),
-              Some(deregistrationDateYes),
+              Some(Yes),
+              Some(dateModel),
               Some(Yes),
               Some(sicCodeValue),
               Some(zeroRatedSuppliesValue),
@@ -80,7 +85,7 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
         }
 
         "display the back url" in {
-          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.ChooseDeregistrationDateController.show().url
+          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.DeregistrationDateController.show().url
 
         }
       }
@@ -103,6 +108,47 @@ class CheckAnswersControllerSpec extends ControllerBaseSpec with MockCheckAnswer
               Some(yesNoAmountNo),
               Some(Yes),
               Some(Yes),
+              Some(No),
+              None,
+              Some(Yes),
+              Some(sicCodeValue),
+              Some(zeroRatedSuppliesValue),
+              Some(Yes)
+            )
+          ))
+          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          status(result) shouldBe Status.OK
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+
+        "display the back url" in {
+          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.ChooseDeregistrationDateController.show().url
+        }
+      }
+
+      "No option for ChooseDeregDateAnswerService is returned" should {
+
+        lazy val result = TestCheckAnswersController.show()(request)
+
+        "return 200 (OK)" in {
+          setupMockCheckYourAnswersModel(Right(
+            CheckYourAnswersModel(
+              Some(Ceased),
+              Some(dateModel),
+              Some(Yes),
+              Some(nextTaxableTurnoverBelow),
+              Some(whyTurnoverBelowAll),
+              Some(StandardAccounting),
+              Some(yesNoAmountNo),
+              Some(yesNoAmountNo),
+              Some(yesNoAmountNo),
+              Some(Yes),
+              Some(Yes),
+              None,
               None,
               Some(Yes),
               Some(sicCodeValue),

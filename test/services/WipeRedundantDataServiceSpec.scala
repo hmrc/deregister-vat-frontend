@@ -24,8 +24,9 @@ import utils.TestUtil
 class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDeregReasonAnswerService
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
-  with MockChooseDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockBusinessActivityAnswerService
-  with MockZeroRatedSuppliesValueService with MockPurchasesExceedSuppliesAnswerService with MockSicCodeAnswerService {
+  with MockChooseDeregDateAnswerService with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService
+  with MockBusinessActivityAnswerService with MockZeroRatedSuppliesValueService with MockPurchasesExceedSuppliesAnswerService
+  with MockSicCodeAnswerService {
 
   object TestWipeRedundantDataService extends WipeRedundantDataService(
     mockDeregReasonAnswerService,
@@ -37,6 +38,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
     mockOutstandingInvoicesService,
     mockWhyTurnoverBelowAnswerService,
     mockChooseDeregDateAnswerService,
+    mockDeregDateAnswerService,
     mockBusinessActivityAnswerService,
     mockZeroRatedSuppliesValueService,
     mockPurchasesExceedSuppliesAnswerService,
@@ -59,6 +61,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
         "Delete deregistration date answer" in {
           setupMockDeleteChooseDeregDate(Right(DeregisterVatSuccess))
+          setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
           val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
           await(result) shouldBe Right(DeregisterVatSuccess)
         }
@@ -592,9 +595,9 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
   "Calling .wipeRedundantData" when {
 
-    "all data retrievals are successful" should {
+    "all data retrievals are successful" when {
 
-      "all data deletions are successful" should {
+      "all data deletions are successful" when {
 
         "Dereg Reason is Ceased" should {
 
@@ -606,6 +609,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockGetIssueNewInvoices(Right(Some(No)))
               setupMockGetOutstandingInvoices(Right(Some(No)))
               setupMockGetBusinessActivityAnswer(Right(None))
+              setupMockGetChooseDeregDate(Right(Some(Yes)))
 
               setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
@@ -615,6 +619,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
               setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
               setupMockDeleteChooseDeregDate(Right(DeregisterVatSuccess))
+              setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -632,6 +637,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockGetIssueNewInvoices(Right(Some(No)))
               setupMockGetOutstandingInvoices(Right(Some(No)))
               setupMockGetBusinessActivityAnswer(Right(None))
+              setupMockGetChooseDeregDate(Right(Some(Yes)))
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
@@ -656,6 +662,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockGetIssueNewInvoices(Right(Some(No)))
               setupMockGetOutstandingInvoices(Right(Some(No)))
               setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+              setupMockGetChooseDeregDate(Right(Some(Yes)))
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
@@ -678,6 +685,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockGetIssueNewInvoices(Right(Some(No)))
               setupMockGetOutstandingInvoices(Right(Some(No)))
               setupMockGetBusinessActivityAnswer(Right(Some(No)))
+              setupMockGetChooseDeregDate(Right(Some(Yes)))
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
@@ -701,6 +709,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockGetIssueNewInvoices(Right(Some(Yes)))
               setupMockGetOutstandingInvoices(Right(Some(No)))
               setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+              setupMockGetChooseDeregDate(Right(Some(Yes)))
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
@@ -723,6 +732,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             setupMockGetIssueNewInvoices(Right(Some(No)))
             setupMockGetOutstandingInvoices(Right(Some(No)))
             setupMockGetBusinessActivityAnswer(Right(None))
+            setupMockGetChooseDeregDate(Right(Some(Yes)))
 
             setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
             setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))

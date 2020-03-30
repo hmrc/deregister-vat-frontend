@@ -28,27 +28,23 @@ import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.{MockChooseDeregDateAnswerService, MockOutstandingInvoicesService}
+import services.mocks.{MockChooseDeregDateAnswerService, MockOutstandingInvoicesService, MockWipeRedundantDataService}
 
 import scala.concurrent.Future
 
-class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with MockChooseDeregDateAnswerService with MockOutstandingInvoicesService {
+class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with MockChooseDeregDateAnswerService
+  with MockOutstandingInvoicesService with MockWipeRedundantDataService {
 
-  object TestChooseDeregistrationDateController$ extends ChooseDeregistrationDateController(
+  object TestChooseDeregistrationDateController$ extends ChooseDeregistrationDateController (
     messagesApi,
     mockAuthPredicate,
     mockPendingDeregPredicate,
     mockChooseDeregDateAnswerService,
     mockOutstandingInvoicesService,
+    mockWipeRedundantDataService,
     serviceErrorHandler,
     mockConfig
   )
-
-  val testDay: Int = LocalDate.now.getDayOfMonth
-  val testMonth: Int = LocalDate.now.getMonthValue
-  val testYear: Int = LocalDate.now.getYear
-  val testYesDeregModel = ChooseDeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
-  val testNoDeregModel = ChooseDeregistrationDateModel(No, None)
 
   "the user is authorised" when {
 
@@ -76,7 +72,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetChooseDeregDate(Right(Some(testYesDeregModel)))
+          setupMockGetChooseDeregDate(Right(Some(Yes)))
           setupMockGetOutstandingInvoices(Right(None))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.OK
@@ -91,17 +87,6 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
           document(result).select(s"#$yesNo-$yes").hasAttr("checked") shouldBe true
         }
 
-        "have the correct value for the day populated" in {
-          document(result).select(s"#$day").attr("value") shouldBe testDay.toString
-        }
-
-        "have the correct value for the month populated" in {
-          document(result).select(s"#$month").attr("value") shouldBe testMonth.toString
-        }
-
-        "have the correct value for the year populated" in {
-          document(result).select(s"#$year").attr("value") shouldBe testYear.toString
-        }
       }
 
       "the retrieval of submitted data fails" should {
@@ -123,37 +108,36 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
     "Calling the .submit action" when {
 
-      "the user submits after selecting a 'Yes' option and a date" should {
+      "the user submits after selecting 'Yes'" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
-            (yesNo, yes),
-            (day, testDay.toString),
-            (month, testMonth.toString),
-            (year, testYear.toString)
+            (yesNo, yes)
           )
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreChooseDeregDate(testYesDeregModel)(Right(DeregisterVatSuccess))
+          setupMockStoreChooseDeregDate(Yes)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockWipeRedundantData(Right(DeregisterVatSuccess))
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        "redirect to the check your answers controller" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CheckAnswersController.show().url)
+        "redirect to the deregDateController" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
         }
       }
 
-      "the user submits after selecting a 'No' option" should {
+      "the user submits after selecting 'No'" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, YesNoForm.no))
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreChooseDeregDate(testNoDeregModel)(Right(DeregisterVatSuccess))
+          setupMockStoreChooseDeregDate(No)(Right(DeregisterVatSuccess))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockWipeRedundantData(Right(DeregisterVatSuccess))
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -169,32 +153,9 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreChooseDeregDate(testNoDeregModel)(Left(errorModel))
+          setupMockStoreChooseDeregDate(No)(Left(errorModel))
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
-        }
-      }
-
-      "the user submits without selecting a date" should {
-
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
-            (yesNo, yes),
-            (day, ""),
-            (month, ""),
-            (year, "")
-          )
-        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
-
-        "return 400 (BAD REQUEST)" in {
-          setupMockGetOutstandingInvoices(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.BAD_REQUEST
-        }
-
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
         }
       }
 
@@ -202,10 +163,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
-            (yesNo, ""),
-            (day, ""),
-            (month, ""),
-            (year, "")
+            (yesNo, "")
           )
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
@@ -225,10 +183,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
-            (yesNo, ""),
-            (day, ""),
-            (month, ""),
-            (year, "")
+            (yesNo, "")
           )
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 

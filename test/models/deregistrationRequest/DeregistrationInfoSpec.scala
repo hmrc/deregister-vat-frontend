@@ -66,7 +66,7 @@ class DeregistrationInfoSpec extends TestUtil {
           capitalAssets = assetsModel,
           issueNewInvoices = Yes,
           outstandingInvoices = Some(Yes),
-          deregDate = Some(deregistrationDateModel),
+          deregDate = Some(laterDateModel),
           purchasesExceedSupplies = Some(Yes),
           sicCode = Some("00005"),
           zeroRatedSuppliesValue = Some(ZeroRatedTestConstants.zeroRatedSuppliesValue),
@@ -134,7 +134,7 @@ class DeregistrationInfoSpec extends TestUtil {
     ".deregLaterDate" should {
 
       "return a Some(date) when a deregistrationDateModel is supplied" in {
-        deregLaterDate(Some(deregistrationDateModel)) shouldBe Some(laterDate)
+        deregLaterDate(Some(laterDateModel)) shouldBe Some(laterDate)
       }
 
       "return a None when None is supplied" in {

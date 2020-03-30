@@ -28,7 +28,7 @@ import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import views.html.businessActivity
 import play.api.data.Form
-import forms.{YesNoForm}
+import forms.YesNoForm
 import play.api.Logger
 
 import scala.concurrent.Future

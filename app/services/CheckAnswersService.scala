@@ -30,7 +30,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMethodAnswerService,
                                     capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                     ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
-                                    deregDateAnswerService: ChooseDeregDateAnswerService,
+                                    chooseDeregDateAnswerService: ChooseDeregDateAnswerService,
+                                    deregDateAnswerService: DeregDateAnswerService,
                                     deregReasonAnswerService: DeregReasonAnswerService,
                                     nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
                                     optionTaxAnswerService: OptionTaxAnswerService,
@@ -60,6 +61,7 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
       stocks <- EitherT(stocksAnswerService.getAnswer)
       issueInvoice <- EitherT(issueNewInvoicesAnswerService.getAnswer)
       outstanding <- EitherT(outstandingInvoicesAnswerService.getAnswer)
+      chooseDeregDate <- EitherT(chooseDeregDateAnswerService.getAnswer)
       deregDate <- EitherT(deregDateAnswerService.getAnswer)
       businessActivity <- EitherT(businessActivityAnswerService.getAnswer)
       sicCode <- EitherT(sicCodeAnswerService.getAnswer)
@@ -78,6 +80,7 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
         stocks,
         issueInvoice,
         outstanding,
+        chooseDeregDate,
         deregDate,
         businessActivity,
         sicCode,

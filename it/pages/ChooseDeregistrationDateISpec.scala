@@ -18,9 +18,9 @@ package pages
 
 import java.time.LocalDate
 
-import forms.ChooseDeregistrationDateForm
+import forms.YesNoForm
 import helpers.IntegrationBaseSpec
-import models.{DateModel, ChooseDeregistrationDateModel, No, Yes}
+import models._
 import play.api.http.Status._
 import play.api.libs.ws.WSResponse
 import stubs.DeregisterVatStub
@@ -29,13 +29,6 @@ import play.api.libs.json.Json
 import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService}
 
 class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
-
-  val testDay = LocalDate.now().getDayOfMonth
-  val testMonth = LocalDate.now().getMonthValue
-  val testYear = LocalDate.now().getYear
-  val validYesModel = ChooseDeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
-  val validNoModel = ChooseDeregistrationDateModel(No,None)
-  val invalidYesModel = ChooseDeregistrationDateModel(Yes,None)
 
   "Calling the GET Choose Deregistration Date endpoint" when {
 
@@ -47,7 +40,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(validYesModel))
+        DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(Yes))
         DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
 
         val response: WSResponse = getRequest
@@ -156,8 +149,8 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
   "Calling the POST Choose Deregistration Date endpoint" when {
 
-    def postRequest(data: ChooseDeregistrationDateModel): WSResponse =
-      post("/deregister-date")(toFormData(ChooseDeregistrationDateForm.deregistrationDateForm("yesNoError"), data))
+    def postRequest(data: YesNo): WSResponse =
+      post("/deregister-date")(toFormData(YesNoForm.yesNoForm("yesNoError"), data))
 
     "the user is authorised" when {
 
@@ -168,11 +161,11 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
           given.user.isAuthorised
           DeregisterVatStub.successfulPutAnswer(vrn, ChooseDeregDateAnswerService.key)
 
-          val response: WSResponse = postRequest(validYesModel)
+          val response: WSResponse = postRequest(Yes)
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.CheckAnswersController.show().url)
+            redirectURI(controllers.routes.DeregistrationDateController.show().url)
           )
         }
       }
@@ -183,7 +176,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
-          val response: WSResponse = postRequest(validNoModel)
+          val response: WSResponse = postRequest(No)
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -199,12 +192,10 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
           given.user.isAuthorised
 
-          val response: WSResponse = postRequest(invalidYesModel)
-
-          response should have(
+          post("/deregister-date")(Map("yes_no" -> Seq(""))) should have(
             httpStatus(BAD_REQUEST),
             pageTitle("Error: Do you want to choose the cancellation date?" + titleSuffix),
-            elementText(".error-message")("Enter a valid cancellation date")
+            elementText(".error-message")("Select yes if the business wants to choose the cancellation date")
           )
         }
       }
@@ -216,7 +207,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(validYesModel)
+        val response: WSResponse = postRequest(Yes)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -231,7 +222,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(validYesModel)
+        val response: WSResponse = postRequest(Yes)
 
         response should have(
           httpStatus(FORBIDDEN),
