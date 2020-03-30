@@ -46,12 +46,6 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
     mockConfig
   )
 
-  val testDay: Int = LocalDate.now.getDayOfMonth
-  val testMonth: Int = LocalDate.now.getMonthValue
-  val testYear: Int = LocalDate.now.getYear
-  val testYesDeregModel = ChooseDeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
-  val testNoDeregModel = ChooseDeregistrationDateModel(No, None)
-
   "the user is authorised" when {
 
     "Calling the .show action" when {
@@ -114,7 +108,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
     "Calling the .submit action" when {
 
-      "the user submits after selecting a 'Yes' option and a date" should {
+      "the user submits after selecting 'Yes'" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody(
@@ -134,7 +128,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         }
       }
 
-      "the user submits after selecting a 'No' option" should {
+      "the user submits after selecting 'No'" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, YesNoForm.no))

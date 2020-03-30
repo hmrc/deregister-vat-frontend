@@ -34,7 +34,6 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
   val taxableTurnoverBelow = NumberInputModel(BigDecimal(200))
   val yesNoAmountYes = YesNoAmountModel(Yes,Some(BigDecimal(1000)))
   val yesNoAmountNo = YesNoAmountModel(No,None)
-  val deregistrationDate = ChooseDeregistrationDateModel(Yes,Some(DateModel(1,1,2018)))
   val zeroRatedSuppliesValue = NumberInputModel(1000)
   val dateModelNow: DateModel = DateModel(LocalDate.now().getDayOfMonth,
     LocalDate.now().getMonthValue,

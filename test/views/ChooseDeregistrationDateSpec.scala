@@ -118,7 +118,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the deregistration date page with a yes already selected" should {
+  "Rendering the deregistration date page with 'yes' already selected" should {
 
     lazy val view = views.html.chooseDeregistrationDate(None, YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes
@@ -129,7 +129,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
       document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
-    "have an error heading message being displayed" in {
+    "have no error heading message being displayed" in {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 

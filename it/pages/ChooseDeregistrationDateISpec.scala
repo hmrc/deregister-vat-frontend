@@ -30,13 +30,6 @@ import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService}
 
 class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
-  val testDay = LocalDate.now().getDayOfMonth
-  val testMonth = LocalDate.now().getMonthValue
-  val testYear = LocalDate.now().getYear
-  val validYesModel = ChooseDeregistrationDateModel(Yes, Some(DateModel(testDay, testMonth, testYear)))
-  val validNoModel = ChooseDeregistrationDateModel(No,None)
-  val invalidYesModel = ChooseDeregistrationDateModel(Yes,None)
-
   "Calling the GET Choose Deregistration Date endpoint" when {
 
     def getRequest: WSResponse = get("/deregister-date", formatPendingDereg(Some("false")))
