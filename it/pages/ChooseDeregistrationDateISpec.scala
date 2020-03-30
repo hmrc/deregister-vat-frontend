@@ -86,7 +86,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration date endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/cancel-vat-date", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/choose-cancel-vat-date", formatPendingDereg(pendingDereg))
 
     "user has a pending dereg request" should {
 
