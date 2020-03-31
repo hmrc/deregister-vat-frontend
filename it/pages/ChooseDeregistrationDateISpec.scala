@@ -25,6 +25,7 @@ import play.api.http.Status._
 import play.api.libs.ws.WSResponse
 import stubs.DeregisterVatStub
 import assets.IntegrationTestConstants._
+import common.Constants
 import play.api.libs.json.Json
 import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService}
 
@@ -32,7 +33,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
   "Calling the GET Choose Deregistration Date endpoint" when {
 
-    def getRequest: WSResponse = get("/deregister-date", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/deregister-date", formatPendingDereg(Some(Constants.registered)))
 
     "the user is authorised" should {
 
@@ -92,7 +93,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
       "redirect the user" in {
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest(Some("true"))
+        val response: WSResponse = getRequest(Some(Constants.pending))
 
         response should have(
           httpStatus(SEE_OTHER),

@@ -17,6 +17,7 @@
 package pages
 
 import assets.IntegrationTestConstants._
+import common.Constants
 import helpers.IntegrationBaseSpec
 import models._
 import play.api.http.Status._
@@ -31,7 +32,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
     val validYesModel = Yes
 
-    def getRequest: WSResponse = get("/outstanding-invoices", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/outstanding-invoices", formatPendingDereg(Some(Constants.registered)))
 
     "the user is authorised" should {
 
@@ -90,7 +91,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
       "redirect the user" in {
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest(Some("true"))
+        val response: WSResponse = getRequest(Some(Constants.pending))
 
         response should have(
           httpStatus(SEE_OTHER),

@@ -19,7 +19,7 @@ package controllers.zeroRated
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import javax.inject.{Inject, Singleton}
 import models.{No, User, Yes, YesNo}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -36,7 +36,7 @@ import scala.concurrent.Future
 @Singleton
 class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
-                                           val pendingDeregCheck: PendingChangesPredicate,
+                                           val regStatusCheck: RegistrationStatusPredicate,
                                            val businessActivityAnswerService: BusinessActivityAnswerService,
                                            val wipeRedundantDataService: WipeRedundantDataService,
                                            val serviceErrorHandler: ServiceErrorHandler,
@@ -51,7 +51,7 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
     case Some(No) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
   }
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
       businessActivityAnswerService.getAnswer map {
         case Right(Some(data)) => Ok(renderView(form.fill(data)))

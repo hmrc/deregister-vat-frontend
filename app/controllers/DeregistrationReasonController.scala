@@ -20,7 +20,7 @@ import cats.data.EitherT
 import cats.instances.future._
 import javax.inject.{Inject, Singleton}
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.DeregistrationReasonForm
 import models._
 import play.api.Logger
@@ -35,7 +35,7 @@ import scala.concurrent.Future
 @Singleton
 class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
                                                val authenticate: AuthPredicate,
-                                               val pendingDeregCheck: PendingChangesPredicate,
+                                               val regStatusCheck: RegistrationStatusPredicate,
                                                val deregReasonAnswerService: DeregReasonAnswerService,
                                                val wipeRedundantDataService: WipeRedundantDataService,
                                                val serviceErrorHandler: ServiceErrorHandler,
@@ -44,7 +44,7 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
   private def renderView(data: Form[DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
     views.html.deregistrationReason(data)
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     deregReasonAnswerService.getAnswer map {
       case Right(Some(data)) => Ok(renderView(DeregistrationReasonForm.deregistrationReasonForm.fill(data)))
       case _ => Ok(renderView())

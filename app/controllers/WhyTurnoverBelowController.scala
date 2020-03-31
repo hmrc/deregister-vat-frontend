@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.WhyTurnoverBelowForm
 import javax.inject.{Inject, Singleton}
 import models.DeregisterVatSuccess
@@ -32,12 +32,12 @@ import scala.concurrent.Future
 @Singleton
 class WhyTurnoverBelowController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
-                                           val pendingDeregCheck: PendingChangesPredicate,
+                                           val regStatusCheck: RegistrationStatusPredicate,
                                            val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     whyTurnoverBelowAnswerService.getAnswer.map {
       case Right(Some(data)) => Ok(views.html.whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm.fill(data)))
       case _ => Ok(views.html.whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm))

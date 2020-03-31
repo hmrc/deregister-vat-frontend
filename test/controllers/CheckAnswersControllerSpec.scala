@@ -20,7 +20,7 @@ import assets.constants.CheckYourAnswersTestConstants._
 import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
-import common.SessionKeys
+import common.{Constants, SessionKeys}
 import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
@@ -37,7 +37,7 @@ class CheckAnswersControllerSpec
   object TestCheckAnswersController extends CheckAnswersController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockCheckAnswersService,
     mockChooseDeregDateAnswerService,
     mockUpdateDeregistrationService,
@@ -200,7 +200,7 @@ class CheckAnswersControllerSpec
           redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationConfirmationController.show().url)
         }
         "add the pending dereg value to the session" in {
-        session(result).get(SessionKeys.pendingDeregKey) shouldBe Some("true")
+          session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.pending)
         }
 
         "add the successful dereg value to the session" in {

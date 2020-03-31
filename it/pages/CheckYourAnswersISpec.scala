@@ -19,6 +19,7 @@ package pages
 import java.time.LocalDate
 
 import assets.IntegrationTestConstants._
+import common.Constants
 import helpers.IntegrationBaseSpec
 import models._
 import play.api.http.Status._
@@ -30,11 +31,11 @@ import stubs.{DeregisterVatStub, VatSubscriptionStub}
 class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
   val dateModel: DateModel = DateModel(1,1,2018)
-  val taxableTurnoverAbove = NumberInputModel(BigDecimal(90000))
-  val taxableTurnoverBelow = NumberInputModel(BigDecimal(200))
-  val yesNoAmountYes = YesNoAmountModel(Yes,Some(BigDecimal(1000)))
-  val yesNoAmountNo = YesNoAmountModel(No,None)
-  val zeroRatedSuppliesValue = NumberInputModel(1000)
+  val taxableTurnoverAbove: NumberInputModel = NumberInputModel(BigDecimal(90000))
+  val taxableTurnoverBelow: NumberInputModel = NumberInputModel(BigDecimal(200))
+  val yesNoAmountYes: YesNoAmountModel = YesNoAmountModel(Yes,Some(BigDecimal(1000)))
+  val yesNoAmountNo: YesNoAmountModel = YesNoAmountModel(No,None)
+  val zeroRatedSuppliesValue: NumberInputModel = NumberInputModel(1000)
   val dateModelNow: DateModel = DateModel(LocalDate.now().getDayOfMonth,
     LocalDate.now().getMonthValue,
     LocalDate.now().getYear
@@ -47,7 +48,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
   "Calling GET Check your answers" when {
 
-    def getRequest: WSResponse = get("/check-your-answers", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/check-your-answers", formatPendingDereg(Some(Constants.registered)))
 
     "the user is authorised" should {
 
@@ -150,7 +151,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
       "redirect the user" in {
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest(Some("true"))
+        val response: WSResponse = getRequest(Some(Constants.pending))
 
         response should have(
           httpStatus(SEE_OTHER),

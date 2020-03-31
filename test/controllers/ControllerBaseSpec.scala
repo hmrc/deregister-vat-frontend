@@ -16,7 +16,7 @@
 
 package controllers
 
-import mocks.{MockAuth, MockPendingDereg}
+import mocks.{MockAuth, MockRegistrationStatusPredicate}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
@@ -29,7 +29,7 @@ import utils.TestUtil
 
 import scala.concurrent.Future
 
-trait ControllerBaseSpec extends TestUtil with MockAuth with MockPendingDereg{
+trait ControllerBaseSpec extends TestUtil with MockAuth with MockRegistrationStatusPredicate{
 
   implicit class CSRFTokenAdder[T](req: FakeRequest[T]) {
     def addToken: FakeRequest[T] = {

@@ -17,6 +17,7 @@
 package pages
 
 import assets.IntegrationTestConstants._
+import common.Constants
 import helpers.IntegrationBaseSpec
 import models.Yes
 import play.api.http.Status._
@@ -29,7 +30,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
   "Calling the SicCode page" when {
 
-    def getRequest: WSResponse = get("/what-is-the-sic-code", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/what-is-the-sic-code", formatPendingDereg(Some(Constants.registered)))
 
     "the user is authorised" should {
 
@@ -89,7 +90,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
       "redirect the user" in {
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest(Some("true"))
+        val response: WSResponse = getRequest(Some(Constants.pending))
 
         response should have(
           httpStatus(SEE_OTHER),

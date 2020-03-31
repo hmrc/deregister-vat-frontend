@@ -20,7 +20,7 @@ import cats.data.EitherT
 import cats.instances.future._
 import javax.inject.{Inject, Singleton}
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.YesNoAmountForm
 import models.{User, YesNoAmountModel}
 import play.api.Logger
@@ -34,19 +34,19 @@ import scala.concurrent.Future
 
 @Singleton
 class  CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
-                                        val authentication: AuthPredicate,
-                                        val pendingDeregCheck: PendingChangesPredicate,
-                                        val capitalAssetsAnswerService: CapitalAssetsAnswerService,
-                                        val wipeRedundantDataService: WipeRedundantDataService,
-                                        val serviceErrorHandler: ServiceErrorHandler,
-                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                         val authentication: AuthPredicate,
+                                         val regStatusCheck: RegistrationStatusPredicate,
+                                         val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+                                         val wipeRedundantDataService: WipeRedundantDataService,
+                                         val serviceErrorHandler: ServiceErrorHandler,
+                                         implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm("capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry")
 
   private def renderView(data: Form[YesNoAmountModel])(implicit user: User[_]) =
     views.html.capitalAssets(data)
 
-  val show: Action[AnyContent] = (authentication andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authentication andThen regStatusCheck).async { implicit user =>
     capitalAssetsAnswerService.getAnswer.map {
       case Right(Some(data)) => Ok(renderView(form.fill(data)))
       case _ => Ok(renderView(form))

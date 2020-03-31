@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.VATAccountsForm
 import javax.inject.{Inject, Singleton}
 import models._
@@ -33,7 +33,7 @@ import play.api.Logger
 @Singleton
 class VATAccountsController @Inject()(val messagesApi: MessagesApi,
                                       val authenticate: AuthPredicate,
-                                      val pendingDeregCheck: PendingChangesPredicate,
+                                      val regStatusCheck: RegistrationStatusPredicate,
                                       val accountingMethodAnswerService: AccountingMethodAnswerService,
                                       val deregReasonAnswerService: DeregReasonAnswerService,
                                       val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
@@ -43,7 +43,7 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
   private def renderView(backLink: String, form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)
                         (implicit user: User[_]) = views.html.vatAccounts(backLink, form)
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     for {
       lastTurnoverBelow <- taxableTurnoverAnswerService.getAnswer
       reasonResult <- deregReasonAnswerService.getAnswer

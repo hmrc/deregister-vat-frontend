@@ -32,7 +32,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
   object TestZeroRatedSuppliesController extends ZeroRatedSuppliesController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockZeroRatedSuppliesValueService,
     serviceErrorHandler,
     mockConfig

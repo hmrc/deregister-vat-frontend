@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.DeregistrationDateForm
 import javax.inject.Inject
 import play.api.Logger
@@ -30,13 +30,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DeregistrationDateController@Inject()(val messagesApi: MessagesApi,
                                             authenticate: AuthPredicate,
-                                            pendingChangesCheck: PendingChangesPredicate,
+                                            regStatusCheck: RegistrationStatusPredicate,
                                             serviceErrorHandler: ServiceErrorHandler,
                                             answerService: DeregDateAnswerService,
                                             implicit val appConfig: AppConfig,
                                             implicit val ec: ExecutionContext) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = (authenticate andThen pendingChangesCheck).async { implicit request =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit request =>
     answerService.getAnswer.map {
       case Right(Some(deregDate)) =>
         Ok(views.html.deregistrationDate(DeregistrationDateForm.form.fill(deregDate)))
@@ -48,7 +48,7 @@ class DeregistrationDateController@Inject()(val messagesApi: MessagesApi,
     }
   }
 
-  val submit: Action[AnyContent] = (authenticate andThen pendingChangesCheck).async { implicit request =>
+  val submit: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit request =>
     DeregistrationDateForm.form.bindFromRequest().fold(
       error => Future(BadRequest(views.html.deregistrationDate(error))),
       data => answerService.storeAnswer(data) map {

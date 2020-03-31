@@ -31,7 +31,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
   object TestCeasedTradingDateController extends CeasedTradingDateController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockCeasedTradingDateAnswerService,
     serviceErrorHandler,
     mockConfig

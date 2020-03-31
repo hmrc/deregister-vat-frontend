@@ -38,7 +38,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
   object TestChooseDeregistrationDateController$ extends ChooseDeregistrationDateController (
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockChooseDeregDateAnswerService,
     mockOutstandingInvoicesService,
     mockWipeRedundantDataService,

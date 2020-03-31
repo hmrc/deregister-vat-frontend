@@ -34,7 +34,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
   object TestVATAccountsController extends VATAccountsController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockAccountingMethodAnswerService,
     mockDeregReasonAnswerService,
     mockTaxableTurnoverAnswerService,

@@ -17,7 +17,7 @@
 package controllers.predicates
 
 import assets.constants.BaseTestConstants.vrn
-import common.SessionKeys
+import common.{Constants, SessionKeys}
 import mocks.MockAuth
 import models.{ErrorModel, User}
 import play.api.test.FakeRequest
@@ -25,12 +25,12 @@ import services.mocks.MockCustomerDetailsService
 import play.api.test.Helpers._
 import assets.constants.CustomerDetailsTestConstants._
 
-class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsService {
+class RegistrationStatusPredicateSpec extends MockAuth with MockCustomerDetailsService {
 
-  "PendingChangesPredicate" when {
+  "RegistrationStatusPredicate" when {
 
-    val mockPendingChangesPredicate: PendingChangesPredicate =
-      new PendingChangesPredicate(
+    val mockRegStatusPredicate: RegistrationStatusPredicate =
+      new RegistrationStatusPredicate(
         mockCustomerDetailsService,
         serviceErrorHandler,
         messagesApi,
@@ -38,16 +38,16 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
         ec
       )
 
-    "user has 'pendingDeregistration' in session" when {
+    "user has 'registrationStatus' in session" when {
 
-      "session key is set to true" should {
+      "session key is set to pending" should {
 
         lazy val fakeRequest = FakeRequest().withSession(
-          SessionKeys.pendingDeregKey -> "true"
+          SessionKeys.registrationStatusKey -> Constants.pending
         )
 
         lazy val result = {
-          await(mockPendingChangesPredicate.refine(User(vrn)(fakeRequest))).left.get
+          await(mockRegStatusPredicate.refine(User(vrn)(fakeRequest))).left.get
         }
 
         "return SEE_OTHER" in {
@@ -59,14 +59,14 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
         }
       }
 
-      "session key is set to false" should {
+      "session key is set to registered" should {
 
         lazy val fakeRequest = FakeRequest().withSession(
-          SessionKeys.pendingDeregKey -> "false"
+          SessionKeys.registrationStatusKey -> Constants.registered
         )
 
         lazy val result = {
-          await(mockPendingChangesPredicate.refine(User(vrn)(fakeRequest)))
+          await(mockRegStatusPredicate.refine(User(vrn)(fakeRequest)))
         }
 
         "allow the request through" in {
@@ -77,11 +77,11 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
       "session key is invalid" should {
 
         lazy val fakeRequest = FakeRequest().withSession(
-          SessionKeys.pendingDeregKey -> "error"
+          SessionKeys.registrationStatusKey -> "error"
         )
 
         lazy val result = {
-          await(mockPendingChangesPredicate.refine(User(vrn)(fakeRequest))).left.get
+          await(mockRegStatusPredicate.refine(User(vrn)(fakeRequest))).left.get
         }
 
         "return INTERNAL_SERVER_ERROR" in {
@@ -90,7 +90,7 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
       }
     }
 
-    "user has no 'pendingDeregistration' in session" when {
+    "user has no 'registrationStatus' in session" when {
 
       "call to customer details is successful" when {
 
@@ -98,11 +98,11 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
 
           lazy val result = {
             setupMockPendingDereg(vrn)(Right(pendingDeregTrue))
-            await(mockPendingChangesPredicate.refine(User(vrn)(request))).left.get
+            await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
           }
 
-          "add 'pendingDeregKey' = true to session" in {
-            session(result).get(SessionKeys.pendingDeregKey) shouldBe Some("true")
+          "add 'registrationStatus' = pending to session" in {
+            session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.pending)
           }
 
           "return SEE_OTHER" in {
@@ -118,11 +118,11 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
 
           lazy val result = {
             setupMockPendingDereg(vrn)(Right(pendingDeregTrue))
-            await(mockPendingChangesPredicate.refine(User(vrn, arn = Some("arn"))(request))).left.get
+            await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request))).left.get
           }
 
-          "add 'pendingDeregKey' = true to session" in {
-            session(result).get(SessionKeys.pendingDeregKey) shouldBe Some("true")
+          "add 'registrationStatus' = pending to session" in {
+            session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.pending)
           }
 
           "return SEE_OTHER" in {
@@ -138,11 +138,11 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
 
           lazy val result = {
             setupMockPendingDereg(vrn)(Right(pendingDeregFalse))
-            await(mockPendingChangesPredicate.refine(User(vrn)(request))).left.get
+            await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
           }
 
-          "add 'pendingDeregKey' = false to session" in {
-            session(result).get(SessionKeys.pendingDeregKey) shouldBe Some("false")
+          "add 'registrationStatus' = registered to session" in {
+            session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.registered)
           }
 
           "return SEE_OTHER" in {
@@ -158,11 +158,11 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
 
           lazy val result = {
             setupMockPendingDereg(vrn)(Right(noPendingDereg))
-            await(mockPendingChangesPredicate.refine(User(vrn)(request))).left.get
+            await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
           }
 
-          "add 'pendingDeregKey' = false to session" in {
-            session(result).get(SessionKeys.pendingDeregKey) shouldBe Some("false")
+          "add 'registrationStatus' = registered to session" in {
+            session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.registered)
           }
 
           "return SEE_OTHER" in {
@@ -179,7 +179,7 @@ class PendingChangesPredicateSpec extends MockAuth with MockCustomerDetailsServi
 
         lazy val result = {
           setupMockPendingDereg(vrn)(Left(ErrorModel(1, "")))
-          await(mockPendingChangesPredicate.refine(User(vrn)(request))).left.get
+          await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
         }
 
         "return INTERNAL_SERVER_ERROR" in {

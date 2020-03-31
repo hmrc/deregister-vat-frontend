@@ -18,7 +18,7 @@ package mocks
 
 import assets.constants.BaseTestConstants.vrn
 import connectors.mocks.MockVatSubscriptionConnector
-import controllers.predicates.PendingChangesPredicate
+import controllers.predicates.RegistrationStatusPredicate
 import models.User
 import org.scalamock.scalatest.MockFactory
 import play.api.mvc.Result
@@ -27,11 +27,11 @@ import utils.TestUtil
 
 import scala.concurrent.Future
 
-trait MockPendingDereg extends TestUtil with MockFactory with MockVatSubscriptionConnector {
+trait MockRegistrationStatusPredicate extends TestUtil with MockFactory with MockVatSubscriptionConnector {
 
-  val mockPendingDeregPredicate: PendingChangesPredicate = {
+  val mockRegistrationStatusPredicate: RegistrationStatusPredicate = {
 
-    object MockPredicate extends PendingChangesPredicate(
+    object MockPredicate extends RegistrationStatusPredicate(
       new CustomerDetailsService(mockVatSubscriptionConnector),
       serviceErrorHandler,
       messagesApi,

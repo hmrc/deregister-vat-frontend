@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.YesNoForm
 import javax.inject.Inject
 import models._
@@ -34,7 +34,7 @@ import scala.concurrent.Future
 
 class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
                                               val authenticate: AuthPredicate,
-                                              val pendingDeregCheck: PendingChangesPredicate,
+                                              val regStatusCheck: RegistrationStatusPredicate,
                                               val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                               val deregReasonAnswerService: DeregReasonAnswerService,
                                               val capitalAssetsAnswerService: CapitalAssetsAnswerService,
@@ -44,7 +44,7 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption")
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     outstandingInvoicesAnswerService.getAnswer map {
       case Right(Some(data)) => Ok(views.html.outstandingInvoices(form.fill(data)))
       case _ => Ok(views.html.outstandingInvoices(form))

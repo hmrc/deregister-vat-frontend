@@ -17,6 +17,7 @@
 package pages
 
 import assets.IntegrationTestConstants._
+import common.Constants
 import helpers.IntegrationBaseSpec
 import models._
 import play.api.http.Status._
@@ -30,7 +31,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration reason endpoint" when {
 
-    def getRequest: WSResponse = get("/deregister-reason?isAgent=false", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/deregister-reason?isAgent=false", formatPendingDereg(Some(Constants.registered)))
 
     "the user is authorised" should {
 
@@ -83,14 +84,15 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration reason endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/deregister-reason?isAgent=false", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse =
+      get("/deregister-reason?isAgent=false", formatPendingDereg(pendingDereg))
 
     "user has a pending dereg request" should {
 
       "redirect the user" in {
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest(Some("true"))
+        val response: WSResponse = getRequest(Some(Constants.pending))
 
         response should have(
           httpStatus(SEE_OTHER),

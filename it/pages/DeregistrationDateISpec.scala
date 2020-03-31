@@ -19,6 +19,7 @@ package pages
 import java.time.LocalDate
 
 import assets.IntegrationTestConstants._
+import common.Constants
 import forms.DeregistrationDateForm
 import helpers.IntegrationBaseSpec
 import models.DateModel
@@ -37,7 +38,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration Date endpoint" when {
 
-    def getRequest(pendingDereg: Option[String] = Some("false")): WSResponse =
+    def getRequest(pendingDereg: Option[String] = Some(Constants.registered)): WSResponse =
       get("/enter-cancel-vat-date", formatPendingDereg(pendingDereg))
 
     "the user is authorised" should {
@@ -93,7 +94,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
       "redirect the user" in {
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest(Some("true"))
+        val response: WSResponse = getRequest(Some(Constants.pending))
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -151,7 +152,9 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
   "Calling the POST Deregistration Date endpoint" when {
 
     def postRequest(data: DateModel): WSResponse =
-      post("/enter-cancel-vat-date", formatPendingDereg(Some("false")))(toFormData(DeregistrationDateForm.form, data))
+      post("/enter-cancel-vat-date", formatPendingDereg(Some(Constants.registered)))(
+        toFormData(DeregistrationDateForm.form, data)
+      )
 
     "the user is authorised" when {
 

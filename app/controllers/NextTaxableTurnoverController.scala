@@ -19,10 +19,10 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.NextTaxableTurnoverForm
 import javax.inject.{Inject, Singleton}
-import models.{BelowThreshold, No, NumberInputModel, User, Yes, YesNo, ZeroRated}
+import models.{No, NumberInputModel, User, Yes, YesNo, ZeroRated}
 import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -33,7 +33,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 @Singleton
 class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                               val authenticate: AuthPredicate,
-                                              val pendingDeregCheck: PendingChangesPredicate,
+                                              val regStatusCheck: RegistrationStatusPredicate,
                                               val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                               val businessActivityAnswerService: BusinessActivityAnswerService,
                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
@@ -52,7 +52,7 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
   private def renderView(form: Form[NumberInputModel] = NextTaxableTurnoverForm.taxableTurnoverForm, backLink: String)(implicit user: User[_]) =
     views.html.nextTaxableTurnover(form, backLink)
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     for {
       data <- nextTaxableTurnoverAnswerService.getAnswer
       businessActivity <- businessActivityAnswerService.getAnswer

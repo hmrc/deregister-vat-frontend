@@ -35,7 +35,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
   object TestNextTaxableTurnoverController extends NextTaxableTurnoverController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockTaxableTurnoverAnswerService,
     mockBusinessActivityAnswerService,
     mockNextTaxableTurnoverAnswerService,

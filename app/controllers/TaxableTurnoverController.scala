@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
 import models.{User, YesNo}
@@ -36,7 +36,7 @@ import scala.concurrent.Future
 @Singleton
 class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                           val authenticate: AuthPredicate,
-                                          val pendingDeregCheck: PendingChangesPredicate,
+                                          val regStatusCheck: RegistrationStatusPredicate,
                                           val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                           val wipeRedundantDataService: WipeRedundantDataService,
                                           val serviceErrorHandler: ServiceErrorHandler,
@@ -47,7 +47,7 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
   private def renderView(form: Form[YesNo])(implicit user: User[_]) =
     views.html.taxableTurnover(form)
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     taxableTurnoverAnswerService.getAnswer map {
       case Right(Some(data)) => Ok(renderView(form.fill(data)))
       case _ => Ok(renderView(form))

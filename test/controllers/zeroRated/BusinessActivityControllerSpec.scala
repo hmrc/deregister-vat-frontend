@@ -37,7 +37,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
   object TestController extends BusinessActivityController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockBusinessActivityAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,

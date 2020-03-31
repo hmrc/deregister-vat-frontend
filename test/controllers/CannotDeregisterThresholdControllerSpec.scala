@@ -26,7 +26,7 @@ class CannotDeregisterThresholdControllerSpec extends ControllerBaseSpec {
   object TestCannotDeregisterThresholdController extends CannotDeregisterThresholdController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockConfig
   )
 

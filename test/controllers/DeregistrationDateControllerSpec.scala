@@ -37,7 +37,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
   object TestDeregistrationDateController extends DeregistrationDateController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     serviceErrorHandler,
     mockDeregDateAnswerService,
     mockConfig,

@@ -17,6 +17,7 @@
 package pages
 
 import assets.IntegrationTestConstants._
+import common.Constants
 import helpers.IntegrationBaseSpec
 import models._
 import play.api.http.Status._
@@ -30,7 +31,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
   "Calling the GET VatAccounts" when {
 
-    def getRequest: WSResponse = get("/accounting-method", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/accounting-method", formatPendingDereg(Some(Constants.registered)))
 
     "the user is authorised" should {
 
@@ -92,7 +93,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
       "redirect the user" in {
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest(Some("true"))
+        val response: WSResponse = getRequest(Some(Constants.pending))
 
         response should have(
           httpStatus(SEE_OTHER),
