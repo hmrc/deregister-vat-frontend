@@ -38,24 +38,76 @@ class RegistrationStatusPredicateSpec extends MockAuth with MockCustomerDetailsS
         ec
       )
 
-    "user has 'registrationStatus' in session" when {
+    "there is a registration status in session" when {
 
-      "session key is set to pending" should {
+      "session key is set to pending" when {
 
         lazy val fakeRequest = FakeRequest().withSession(
           SessionKeys.registrationStatusKey -> Constants.pending
         )
 
-        lazy val result = {
-          await(mockRegStatusPredicate.refine(User(vrn)(fakeRequest))).left.get
+        "the user is a principal entity" should {
+          lazy val result = {
+            await(mockRegStatusPredicate.refine(User(vrn)(fakeRequest))).left.get
+          }
+
+          "return SEE_OTHER" in {
+            status(result) shouldBe SEE_OTHER
+          }
+
+          s"redirect to ${mockConfig.vatSummaryFrontendUrl}" in {
+            redirectLocation(result) shouldBe Some(mockConfig.vatSummaryFrontendUrl)
+          }
         }
 
-        "return SEE_OTHER" in {
-          status(result) shouldBe SEE_OTHER
+        "the user is an agent" should {
+          lazy val result = {
+            await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(fakeRequest))).left.get
+          }
+
+          "return SEE_OTHER" in {
+            status(result) shouldBe SEE_OTHER
+          }
+
+          s"redirect to ${mockConfig.agentClientLookupAgentHubPath}" in {
+            redirectLocation(result) shouldBe Some(mockConfig.agentClientLookupAgentHubPath)
+          }
+        }
+      }
+
+      "session key is set to deregistered" when {
+
+        lazy val fakeRequest = FakeRequest().withSession(
+          SessionKeys.registrationStatusKey -> Constants.deregistered
+        )
+
+        "the user is a principal entity" should {
+
+          lazy val result = {
+            await(mockRegStatusPredicate.refine(User(vrn)(fakeRequest))).left.get
+          }
+
+          "return SEE_OTHER" in {
+            status(result) shouldBe SEE_OTHER
+          }
+
+          s"redirect to ${mockConfig.vatSummaryFrontendUrl}" in {
+            redirectLocation(result) shouldBe Some(mockConfig.vatSummaryFrontendUrl)
+          }
         }
 
-        s"redirect to ${mockConfig.vatSummaryFrontendUrl}" in {
-          redirectLocation(result) shouldBe Some(mockConfig.vatSummaryFrontendUrl)
+        "the user is an agent" should {
+          lazy val result = {
+            await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(fakeRequest))).left.get
+          }
+
+          "return SEE_OTHER" in {
+            status(result) shouldBe SEE_OTHER
+          }
+
+          s"redirect to ${mockConfig.agentClientLookupAgentHubPath}" in {
+            redirectLocation(result) shouldBe Some(mockConfig.agentClientLookupAgentHubPath)
+          }
         }
       }
 
@@ -73,91 +125,102 @@ class RegistrationStatusPredicateSpec extends MockAuth with MockCustomerDetailsS
           result shouldBe Right(user)
         }
       }
-
-      "session key is invalid" should {
-
-        lazy val fakeRequest = FakeRequest().withSession(
-          SessionKeys.registrationStatusKey -> "error"
-        )
-
-        lazy val result = {
-          await(mockRegStatusPredicate.refine(User(vrn)(fakeRequest))).left.get
-        }
-
-        "return INTERNAL_SERVER_ERROR" in {
-          status(result) shouldBe INTERNAL_SERVER_ERROR
-        }
-      }
     }
 
-    "user has no 'registrationStatus' in session" when {
+    "there is no 'registrationStatus' in session" when {
 
-      "call to customer details is successful" when {
+      "the call to customer details is successful" when {
 
-        "user has a pending dereg change" should {
+        "there is a pending dereg change" when {
 
-          lazy val result = {
-            setupMockPendingDereg(vrn)(Right(pendingDeregTrue))
-            await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
+          "the user is a principal entity" should {
+
+            lazy val result = {
+              setupMockCustomerDetails(vrn)(Right(customerDetailsPendingDereg))
+              await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
+            }
+
+            "add 'registrationStatus' = pending to session" in {
+              session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.pending)
+            }
+
+            "return SEE_OTHER" in {
+              status(result) shouldBe SEE_OTHER
+            }
+
+            s"redirect to ${mockConfig.vatSummaryFrontendUrl}" in {
+              redirectLocation(result) shouldBe Some(mockConfig.vatSummaryFrontendUrl)
+            }
           }
 
-          "add 'registrationStatus' = pending to session" in {
-            session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.pending)
-          }
+          "the user is an agent" should {
 
-          "return SEE_OTHER" in {
-            status(result) shouldBe SEE_OTHER
-          }
+            lazy val result = {
+              setupMockCustomerDetails(vrn)(Right(customerDetailsPendingDereg))
+              await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request))).left.get
+            }
 
-          s"redirect to ${mockConfig.vatSummaryFrontendUrl}" in {
-            redirectLocation(result) shouldBe Some(mockConfig.vatSummaryFrontendUrl)
-          }
-        }
+            "add 'registrationStatus' = pending to session" in {
+              session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.pending)
+            }
 
-        "user is an agent and has a pending dereg change" should {
+            "return SEE_OTHER" in {
+              status(result) shouldBe SEE_OTHER
+            }
 
-          lazy val result = {
-            setupMockPendingDereg(vrn)(Right(pendingDeregTrue))
-            await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request))).left.get
-          }
-
-          "add 'registrationStatus' = pending to session" in {
-            session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.pending)
-          }
-
-          "return SEE_OTHER" in {
-            status(result) shouldBe SEE_OTHER
-          }
-
-          s"redirect to ${mockConfig.agentClientLookupAgentHubPath}" in {
-            redirectLocation(result) shouldBe Some(mockConfig.agentClientLookupAgentHubPath)
-          }
-        }
-
-        "user has no pending dereg change" should {
-
-          lazy val result = {
-            setupMockPendingDereg(vrn)(Right(pendingDeregFalse))
-            await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
-          }
-
-          "add 'registrationStatus' = registered to session" in {
-            session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.registered)
-          }
-
-          "return SEE_OTHER" in {
-            status(result) shouldBe SEE_OTHER
-          }
-
-          s"redirect to ${controllers.routes.DeregisterForVATController.redirect().url}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.DeregisterForVATController.redirect().url)
+            s"redirect to ${mockConfig.agentClientLookupAgentHubPath}" in {
+              redirectLocation(result) shouldBe Some(mockConfig.agentClientLookupAgentHubPath)
+            }
           }
         }
 
-        "no in-flight data is returned" should {
+        "the user has already deregistered" when {
+
+          "the user is a principal entity" should {
+
+            lazy val result = {
+              setupMockCustomerDetails(vrn)(Right(customerDetailsAlreadyDeregistered))
+              await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
+            }
+
+            "add 'registrationStatus' = deregistered to session" in {
+              session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.deregistered)
+            }
+
+            "return SEE_OTHER" in {
+              status(result) shouldBe SEE_OTHER
+            }
+
+            s"redirect to ${mockConfig.vatSummaryFrontendUrl}" in {
+              redirectLocation(result) shouldBe Some(mockConfig.vatSummaryFrontendUrl)
+            }
+          }
+
+          "the user is an agent" should {
+
+            lazy val result = {
+              setupMockCustomerDetails(vrn)(Right(customerDetailsAlreadyDeregistered))
+              await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request))).left.get
+            }
+
+            "add 'registrationStatus' = deregistered to session" in {
+              session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.deregistered)
+            }
+
+            "return SEE_OTHER" in {
+              status(result) shouldBe SEE_OTHER
+            }
+
+            s"redirect to ${mockConfig.agentClientLookupAgentHubPath}" in {
+              redirectLocation(result) shouldBe Some(mockConfig.agentClientLookupAgentHubPath)
+            }
+          }
+        }
+
+        "the user has no pending dereg change" should {
 
           lazy val result = {
-            setupMockPendingDereg(vrn)(Right(noPendingDereg))
+            setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
             await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
           }
 
@@ -175,10 +238,10 @@ class RegistrationStatusPredicateSpec extends MockAuth with MockCustomerDetailsS
         }
       }
 
-      "call to customer details is unsuccessful" should {
+      "the call to customer details is unsuccessful" should {
 
         lazy val result = {
-          setupMockPendingDereg(vrn)(Left(ErrorModel(1, "")))
+          setupMockCustomerDetails(vrn)(Left(ErrorModel(1, "")))
           await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
         }
 

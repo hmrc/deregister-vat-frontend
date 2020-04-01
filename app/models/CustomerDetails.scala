@@ -16,14 +16,15 @@
 
 package models
 
-import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
 case class CustomerDetails(firstName: Option[String],
                            lastName: Option[String],
                            organisationName: Option[String],
                            tradingName: Option[String],
-                           emailVerified: Option[Boolean]) {
+                           emailVerified: Option[Boolean],
+                           pendingDereg: Boolean,
+                           alreadyDeregistered: Boolean) {
 
   val isOrg: Boolean = organisationName.isDefined
   val isInd: Boolean = firstName.isDefined || lastName.isDefined
@@ -42,13 +43,24 @@ object CustomerDetails {
   private val organisationNamePath = __ \ "organisationName"
   private val tradingNamePath = __ \ "tradingName"
   private val emailPath = __ \\ "emailVerified"
+  private val pendingDeregPath = __ \ "changeIndicators" \ "deregister"
+  private val effectDateOfCancellationPath = __ \ "deregistration" \ "effectDateOfCancellation"
 
-  implicit val reads: Reads[CustomerDetails] = (
-    firstNamePath.readNullable[String] and
-      lastNamePath.readNullable[String] and
-      organisationNamePath.readNullable[String] and
-      tradingNamePath.readNullable[String] and
-    emailPath.readNullable[Boolean]
-    ) (CustomerDetails.apply _)
+  implicit val reads: Reads[CustomerDetails] = for {
+    firstName <- firstNamePath.readNullable[String]
+    lastName <- lastNamePath.readNullable[String]
+    orgName <- organisationNamePath.readNullable[String]
+    tradingName <- tradingNamePath.readNullable[String]
+    emailVerified <- emailPath.readNullable[Boolean]
+    deregChangeIndicator <- pendingDeregPath.readNullable[Boolean].orElse(Reads.pure(None))
+    deregDate <- effectDateOfCancellationPath.readNullable[String].orElse(Reads.pure(None))
+  } yield {
 
+    val pendingDereg = deregChangeIndicator.getOrElse(false)
+    val alreadyDeregistered = deregDate.isDefined
+
+    CustomerDetails(
+      firstName, lastName, orgName, tradingName, emailVerified, pendingDereg, alreadyDeregistered
+    )
+  }
 }
