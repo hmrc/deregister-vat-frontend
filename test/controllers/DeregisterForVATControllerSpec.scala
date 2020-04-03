@@ -17,8 +17,8 @@
 package controllers
 
 import assets.constants.BaseTestConstants.vrn
-import common.SessionKeys
-import controllers.predicates.PendingChangesPredicate
+import common.{Constants, SessionKeys}
+import controllers.predicates.RegistrationStatusPredicate
 import play.api.http.Status
 import play.api.test.Helpers._
 import services.CustomerDetailsService
@@ -27,7 +27,7 @@ import scala.concurrent.Future
 
 class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
-  val mockPendingDereg = new PendingChangesPredicate(
+  val mockPendingDereg = new RegistrationStatusPredicate(
     new CustomerDetailsService(mockVatSubscriptionConnector),
     serviceErrorHandler,
     messagesApi,
@@ -49,7 +49,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
         lazy val result = {
           mockAuthResult(Future.successful(mockAuthorisedAgent), isAgent = true)
           TestDeregisterForVATController.redirect()(request.withSession(
-            SessionKeys.pendingDeregKey -> "false",
+            SessionKeys.registrationStatusKey -> Constants.registered,
             SessionKeys.CLIENT_VRN -> vrn
           ))
         }
@@ -68,7 +68,9 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
       "redirect to .../non-agent" should {
         lazy val result = {
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          TestDeregisterForVATController.redirect()(request.withSession(SessionKeys.pendingDeregKey -> "false"))
+          TestDeregisterForVATController.redirect()(request.withSession(
+            SessionKeys.registrationStatusKey -> Constants.registered
+          ))
         }
 
         "return a 303" in {
@@ -83,7 +85,9 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
     "Calling the .show action with agent" should {
 
-      lazy val result = TestDeregisterForVATController.show("agent")(request.withSession(SessionKeys.pendingDeregKey -> "false"))
+      lazy val result = TestDeregisterForVATController.show("agent")(request.withSession(
+        SessionKeys.registrationStatusKey -> Constants.registered
+      ))
 
       "return 200 (OK)" in {
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
@@ -99,7 +103,9 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
     "Calling the .show action with non-agent" should {
 
-      lazy val result = TestDeregisterForVATController.show("non-agent")(request.withSession(SessionKeys.pendingDeregKey -> "false"))
+      lazy val result = TestDeregisterForVATController.show("non-agent")(request.withSession(
+        SessionKeys.registrationStatusKey -> Constants.registered
+      ))
 
       "return 200 (OK)" in {
         mockAuthResult(Future.successful(mockAuthorisedIndividual))

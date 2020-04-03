@@ -16,7 +16,6 @@
 
 package models
 
-import play.api.libs.json.Json
 import uk.gov.hmrc.play.test.UnitSpec
 import assets.constants.CustomerDetailsTestConstants._
 
@@ -24,13 +23,20 @@ class CustomerDetailsModelSpec extends UnitSpec {
 
   "Deserialize from JSON" when {
 
-    "succeeds when all registration fields are populated" in {
+    "all registration fields are populated" in {
       customerDetailsJsonMax.as[CustomerDetails] shouldBe customerDetailsMax
     }
 
-    "succeeds when optional values are not supplied" in {
+    "optional values are not supplied" in {
       customerDetailsJsonMin.as[CustomerDetails] shouldBe customerDetailsMin
     }
 
+    "there is a deregistration change indicator populated" in {
+      customerDetailsPendingDeregJson.as[CustomerDetails] shouldBe customerDetailsPendingDereg
+    }
+
+    "there is a deregistration date populated" in {
+      customerDetailsAlreadyDeregisteredJson.as[CustomerDetails] shouldBe customerDetailsAlreadyDeregistered
+    }
   }
 }

@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
 import models.{No, User, Yes, YesNo}
@@ -33,7 +33,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 @Singleton
 class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
                                                    val authenticate: AuthPredicate,
-                                                   val pendingDeregCheck: PendingChangesPredicate,
+                                                   val regStatusCheck: RegistrationStatusPredicate,
                                                    val chooseDateAnswerService: ChooseDeregDateAnswerService,
                                                    val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                                    val wipeRedundantDataService: WipeRedundantDataService,
@@ -45,7 +45,7 @@ class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
   private def renderView(outstanding: Option[YesNo], form: Form[YesNo])
                         (implicit user: User[_]) = views.html.chooseDeregistrationDate(outstanding, form)
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     for {
       chooseDateResult <- chooseDateAnswerService.getAnswer
       outstandingInvoicesResult <- outstandingInvoicesAnswerService.getAnswer

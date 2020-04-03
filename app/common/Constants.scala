@@ -21,4 +21,7 @@ object Constants {
   //TODO: This amount has been assumed, it needs to be updated with the max that the DES API supports
   val maxAmount: BigDecimal = 10000000000000.0
 
+  val registered: String = "registered"
+  val pending: String = "pending"
+  val deregistered: String = "deregistered"
 }

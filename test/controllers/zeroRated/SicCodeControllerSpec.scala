@@ -32,7 +32,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
   object TestController extends SicCodeController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     serviceErrorHandler,
     mockBusinessActivityAnswerService,
     mockSicCodeAnswerService,

@@ -31,7 +31,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
   object TestWhyTurnoverBelowController extends WhyTurnoverBelowController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockWhyTurnoverBelowAnswerService,
     serviceErrorHandler,
     mockConfig

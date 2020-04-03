@@ -32,7 +32,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
   object TestOptionStocksToSellController extends OptionStocksToSellController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockStocksAnswerService,
     serviceErrorHandler,
     mockConfig

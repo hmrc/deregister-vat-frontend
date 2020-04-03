@@ -18,17 +18,15 @@ package connectors
 
 import config.AppConfig
 import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads
-import connectors.httpParsers.PendingDeregHttpParser.PendingDeregReads
 import connectors.httpParsers.VatSubscriptionHttpParser
 import javax.inject.{Inject, Singleton}
-import models.{CustomerDetails, IndicatorModel, ErrorModel, VatSubscriptionResponse}
+import models.{CustomerDetails, ErrorModel, VatSubscriptionResponse}
 import models.deregistrationRequest.DeregistrationInfo
 import play.api.Logger
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
-
 
 @Singleton
 class VatSubscriptionConnector @Inject()(val http: HttpClient,
@@ -50,11 +48,4 @@ class VatSubscriptionConnector @Inject()(val http: HttpClient,
     Logger.debug(s"[VatSubscriptionConnector][getCustomerInfo]: Calling getCustomerInfo with URL - $url")
     http.GET(url)(CustomerDetailsReads, headerCarrier, ec)
   }
-
-  def getFullInformation(id: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext) : Future[Either[ErrorModel, IndicatorModel]] = {
-    val url = getFullDetailsUrl(id)
-    Logger.debug(s"[VatSubscriptionConnector][getFullInformation]: Calling getFullInfo with URL - $url")
-    http.GET(url)(PendingDeregReads, headerCarrier, ec)
-  }
-
 }

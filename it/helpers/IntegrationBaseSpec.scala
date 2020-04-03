@@ -26,7 +26,7 @@ import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.{Application, Environment, Mode}
-import stubs.{AuthStub, DeregisterVatStub, VatSubscriptionStub}
+import stubs.{AuthStub, VatSubscriptionStub}
 import uk.gov.hmrc.play.test.UnitSpec
 
 trait IntegrationBaseSpec extends UnitSpec
@@ -56,7 +56,7 @@ trait IntegrationBaseSpec extends UnitSpec
   }
 
   def formatPendingDereg: Option[String] => Map[String, String] =
-    _.fold(Map.empty[String, String])(x => Map(SessionKeys.pendingDeregKey -> x))
+    _.fold(Map.empty[String, String])(x => Map(SessionKeys.registrationStatusKey -> x))
 
   def given: PreconditionBuilder = new PreconditionBuilder
 

@@ -17,6 +17,7 @@
 package pages
 
 import assets.IntegrationTestConstants._
+import common.Constants
 import helpers.IntegrationBaseSpec
 import play.api.http.Status._
 import play.api.libs.json.Json
@@ -28,7 +29,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
   "Calling the GET ZeroRatedSupplies" when {
 
-    def getRequest: WSResponse = get("/expected-value-zero-rated-supplies", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/expected-value-zero-rated-supplies", formatPendingDereg(Some(Constants.registered)))
 
     "the user is authorised" should {
 
@@ -80,14 +81,15 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
   "Calling the GET ZeroRatedSupplies" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/expected-value-zero-rated-supplies", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse =
+      get("/expected-value-zero-rated-supplies", formatPendingDereg(pendingDereg))
 
     "user has a pending dereg request" should {
 
       "redirect the user" in {
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest(Some("true"))
+        val response: WSResponse = getRequest(Some(Constants.pending))
 
         response should have(
           httpStatus(SEE_OTHER),

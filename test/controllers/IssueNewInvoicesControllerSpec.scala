@@ -32,7 +32,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
   object TestIssueNewInvoicesController extends IssueNewInvoicesController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockIssueNewInvoicesAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,

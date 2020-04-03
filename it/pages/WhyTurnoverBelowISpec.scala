@@ -17,6 +17,7 @@
 package pages
 
 import assets.IntegrationTestConstants._
+import common.Constants
 import forms.WhyTurnoverBelowForm
 import helpers.IntegrationBaseSpec
 import models.WhyTurnoverBelowModel
@@ -30,7 +31,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
   "Calling the GET Why Turnover Below endpoint" when {
 
-    def getRequest: WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(Some(Constants.registered)))
 
     "the user is authorised" should {
 
@@ -89,7 +90,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
       "redirect the user" in {
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest(Some("true"))
+        val response: WSResponse = getRequest(Some(Constants.pending))
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -150,8 +151,24 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
     def postRequest(data: WhyTurnoverBelowModel): WSResponse =
       post("/reasons-for-low-turnover")(toFormData(WhyTurnoverBelowForm.whyTurnoverBelowForm, data))
 
-    val validModel = WhyTurnoverBelowModel(true, true, true, true, true, true, true)
-    val invalidModel = WhyTurnoverBelowModel(false, false, false, false, false, false, false)
+    val validModel = WhyTurnoverBelowModel(
+      lostContract = true,
+      semiRetiring = true,
+      moreCompetitors = true,
+      reducedTradingHours = true,
+      seasonalBusiness = true,
+      closedPlacesOfBusiness = true,
+      turnoverLowerThanExpected = true
+    )
+    val invalidModel = WhyTurnoverBelowModel(
+      lostContract = false,
+      semiRetiring = false,
+      moreCompetitors = false,
+      reducedTradingHours = false,
+      seasonalBusiness = false,
+      closedPlacesOfBusiness = false,
+      turnoverLowerThanExpected = false
+    )
 
     "the user is authorised" when {
 

@@ -16,9 +16,9 @@
 
 package controllers
 
-import common.SessionKeys
+import common.{Constants, SessionKeys}
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import javax.inject.{Inject, Singleton}
 import models.VatSubscriptionSuccess
 import play.api.Logger
@@ -30,14 +30,14 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 @Singleton
 class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        val authenticate: AuthPredicate,
-                                       val pendingDeregCheck: PendingChangesPredicate,
+                                       val regStatusCheck: RegistrationStatusPredicate,
                                        checkAnswersService: CheckAnswersService,
                                        deregDateAnswerService: ChooseDeregDateAnswerService,
                                        updateDeregistrationService: UpdateDeregistrationService,
                                        val serviceErrorHandler: ServiceErrorHandler,
                                        implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     checkAnswersService.checkYourAnswersModel() map {
       case Right(answers) =>
         (answers.chooseDeregDate, answers.deregDate) match {
@@ -54,7 +54,7 @@ class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     updateDeregistrationService.updateDereg.map {
       case Right(VatSubscriptionSuccess) => Redirect(controllers.routes.DeregistrationConfirmationController.show().url)
-          .addingToSession(SessionKeys.deregSuccessful -> "true", SessionKeys.pendingDeregKey -> "true")
+          .addingToSession(SessionKeys.deregSuccessful -> "true", SessionKeys.registrationStatusKey -> Constants.pending)
 
       case Left(error) =>
         Logger.warn("[CheckAnswersController][submit] - error returned from vat subscription when updating dereg: " + error.message)

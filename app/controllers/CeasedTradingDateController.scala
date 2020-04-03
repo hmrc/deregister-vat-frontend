@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.DateForm
 import javax.inject.{Inject, Singleton}
 import models.{DateModel, User}
@@ -33,14 +33,14 @@ import scala.concurrent.Future
 @Singleton
 class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
                                             val authenticate: AuthPredicate,
-                                            val pendingDeregCheck: PendingChangesPredicate,
+                                            val regStatusCheck: RegistrationStatusPredicate,
                                             val ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
                                             val serviceErrorHandler: ServiceErrorHandler,
                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   private def renderView(form: Form[DateModel] = DateForm.dateForm)(implicit user: User[_]) = views.html.ceasedTradingDate(form)
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     ceasedTradingDateAnswerService.getAnswer map {
       case Right(Some(data)) => Ok(renderView(DateForm.dateForm.fill(data)))
       case _ => Ok(renderView())

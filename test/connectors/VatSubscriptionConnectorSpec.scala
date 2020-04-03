@@ -31,7 +31,7 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
 
   object TestVatSubscriptionConnector extends VatSubscriptionConnector(mockHttp, mockConfig)
 
-  val deregInfoModel = DeregistrationInfo(
+  val deregInfoModel: DeregistrationInfo = DeregistrationInfo(
     deregReason = Ceased,
     deregDate = todayDate,
     deregLaterDate = None,

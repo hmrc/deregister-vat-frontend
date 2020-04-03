@@ -17,7 +17,7 @@
 package controllers
 
 import config.AppConfig
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -28,10 +28,10 @@ import scala.concurrent.Future
 @Singleton
 class DeregisterForVATController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
-                                           val pendingDeregCheck: PendingChangesPredicate,
+                                           val regStatusCheck: RegistrationStatusPredicate,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
-  val redirect: Action[AnyContent] = (authenticate andThen pendingDeregCheck) { implicit user =>
+  val redirect: Action[AnyContent] = (authenticate andThen regStatusCheck) { implicit user =>
     val userType: String = if (user.isAgent) "agent" else "non-agent"
 
     Redirect(
@@ -39,7 +39,7 @@ class DeregisterForVATController @Inject()(val messagesApi: MessagesApi,
     )
   }
 
-  val show: String => Action[AnyContent] = _ => (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: String => Action[AnyContent] = _ => (authenticate andThen regStatusCheck).async { implicit user =>
     Future.successful(Ok(views.html.deregisterForVAT()))
   }
 

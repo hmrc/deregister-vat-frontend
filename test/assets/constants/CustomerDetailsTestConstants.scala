@@ -16,7 +16,7 @@
 
 package assets.constants
 
-import models.{IndicatorModel, CustomerDetails, PendingDeregModel}
+import models.CustomerDetails
 import play.api.libs.json.{JsObject, Json}
 
 object CustomerDetailsTestConstants {
@@ -31,21 +31,20 @@ object CustomerDetailsTestConstants {
     "firstName" -> firstName,
     "lastName" -> lastName,
     "tradingName" -> tradingName,
-    "hasFlatRateScheme" -> false,
     "ppob" -> Json.obj("contactDetails" -> Some(Json.obj("emailVerified" -> Some(true))))
   )
 
 
-  val customerDetailsJsonMin: JsObject = Json.obj(
-    "hasFlatRateScheme" -> false
-  )
+  val customerDetailsJsonMin: JsObject = Json.obj()
 
   val customerDetailsMax: CustomerDetails = CustomerDetails(
     Some(firstName),
     Some(lastName),
     Some(orgName),
     Some(tradingName),
-    Some(true)
+    Some(true),
+    pendingDereg = false,
+    alreadyDeregistered = false
   )
 
   val customerDetailsMin: CustomerDetails = CustomerDetails(
@@ -53,7 +52,9 @@ object CustomerDetailsTestConstants {
     None,
     None,
     None,
-    None
+    None,
+    pendingDereg = false,
+    alreadyDeregistered = false
   )
 
   val customerDetailsUnverifiedEmail: CustomerDetails = CustomerDetails(
@@ -61,17 +62,22 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     Some(orgName),
     Some(tradingName),
-    Some(false)
+    Some(false),
+    pendingDereg = false,
+    alreadyDeregistered = false
   )
 
-  val pendingDeregFalseJson: JsObject = Json.obj(
+  val customerDetailsPendingDeregJson: JsObject = customerDetailsJsonMax ++ Json.obj(
     "changeIndicators" -> Json.obj(
-      "deregister" -> false
+      "deregister" -> true
+    ))
+
+  val customerDetailsAlreadyDeregisteredJson: JsObject = customerDetailsJsonMax ++ Json.obj(
+    "deregistration" -> Json.obj(
+      "effectDateOfCancellation" -> "2018-01-01"
     )
   )
 
-  val pendingDeregFalse: IndicatorModel = IndicatorModel(Some(PendingDeregModel(dereg = false)))
-  val pendingDeregTrue: IndicatorModel = IndicatorModel(Some(PendingDeregModel(dereg = true)))
-
-  val noPendingDereg: IndicatorModel = IndicatorModel(None)
+  val customerDetailsPendingDereg: CustomerDetails = customerDetailsMax.copy(pendingDereg = true)
+  val customerDetailsAlreadyDeregistered: CustomerDetails = customerDetailsMax.copy(alreadyDeregistered = true)
 }

@@ -34,7 +34,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
   object TestController extends PurchasesExceedSuppliesController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockPurchasesExceedSuppliesAnswerService,
     serviceErrorHandler,
     mockConfig

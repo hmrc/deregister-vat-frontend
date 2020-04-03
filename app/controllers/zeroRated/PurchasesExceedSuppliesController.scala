@@ -17,7 +17,7 @@
 package controllers.zeroRated
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import javax.inject.{Inject, Singleton}
 import models.{User, YesNo}
 import play.api.data.Form
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 @Singleton
 class PurchasesExceedSuppliesController @Inject()(val messagesApi: MessagesApi,
                                                   val authenticate: AuthPredicate,
-                                                  val pendingDeregCheck: PendingChangesPredicate,
+                                                  val regStatusCheck: RegistrationStatusPredicate,
                                                   val purchasesExceedSuppliesAnswerService: PurchasesExceedSuppliesAnswerService,
                                                   val serviceErrorHandler: ServiceErrorHandler,
                                                   implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
@@ -41,7 +41,7 @@ class PurchasesExceedSuppliesController @Inject()(val messagesApi: MessagesApi,
   private def renderView(form: Form[YesNo] = PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm)
                         (implicit user: User[_]) = views.html.purchasesExceedSupplies(form)
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
       for {
         pxs <- purchasesExceedSuppliesAnswerService.getAnswer

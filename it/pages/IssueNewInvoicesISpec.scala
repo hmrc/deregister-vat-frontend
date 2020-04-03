@@ -17,8 +17,9 @@
 package pages
 
 import assets.IntegrationTestConstants._
+import common.Constants
 import helpers.IntegrationBaseSpec
-import models.{Ceased,Yes, No}
+import models.{Ceased, No, Yes}
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
@@ -29,7 +30,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
   "Calling the GET IssueNewInvoices" when {
 
-    def getRequest: WSResponse = get("/new-invoices", formatPendingDereg(Some("false")))
+    def getRequest: WSResponse = get("/new-invoices", formatPendingDereg(Some(Constants.registered)))
 
     "the user is authorised" should {
 
@@ -89,7 +90,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
       "redirect the user" in {
         given.user.isAuthorised
 
-        val response: WSResponse = getRequest(Some("true"))
+        val response: WSResponse = getRequest(Some(Constants.pending))
 
         response should have(
           httpStatus(SEE_OTHER),

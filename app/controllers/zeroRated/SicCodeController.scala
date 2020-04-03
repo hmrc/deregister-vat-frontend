@@ -17,7 +17,7 @@
 package controllers.zeroRated
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.SicCodeForm
 import javax.inject.{Inject, Singleton}
 import models._
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 @Singleton
 class SicCodeController @Inject()(val messagesApi: MessagesApi,
                                   val authenticate: AuthPredicate,
-                                  val pendingDeregCheck: PendingChangesPredicate,
+                                  val regStatusCheck: RegistrationStatusPredicate,
                                   val serviceErrorHandler: ServiceErrorHandler,
                                   val businessActivityAnswerService: BusinessActivityAnswerService,
                                   val sicCodeAnswerService: SicCodeAnswerService,
@@ -41,7 +41,7 @@ class SicCodeController @Inject()(val messagesApi: MessagesApi,
 
   private def renderView(form: Form[String] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = views.html.sicCode(form)
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
       for {
         ba <- businessActivityAnswerService.getAnswer

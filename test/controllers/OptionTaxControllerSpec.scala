@@ -33,7 +33,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
   object TestOptionTaxController extends OptionTaxController(
     messagesApi,
     mockAuthPredicate,
-    mockPendingDeregPredicate,
+    mockRegistrationStatusPredicate,
     mockOptionTaxAnswerService,
     serviceErrorHandler,
     mockConfig

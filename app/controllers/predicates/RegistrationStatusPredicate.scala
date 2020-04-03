@@ -16,10 +16,11 @@
 
 package controllers.predicates
 
-import common.SessionKeys.pendingDeregKey
+import common.Constants
+import common.SessionKeys.registrationStatusKey
 import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.Inject
-import models.{PendingDeregModel, User}
+import models.User
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results.Redirect
@@ -30,43 +31,41 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PendingChangesPredicate @Inject()(customerDetailsService: CustomerDetailsService,
-                                        val serviceErrorHandler: ServiceErrorHandler,
-                                        implicit val messagesApi: MessagesApi,
-                                        implicit val appConfig: AppConfig,
-                                        implicit val ec: ExecutionContext) extends ActionRefiner[User, User] with I18nSupport {
+class RegistrationStatusPredicate @Inject()(customerDetailsService: CustomerDetailsService,
+                                            val serviceErrorHandler: ServiceErrorHandler,
+                                            implicit val messagesApi: MessagesApi,
+                                            implicit val appConfig: AppConfig,
+                                            implicit val ec: ExecutionContext) extends ActionRefiner[User, User] with I18nSupport {
 
   override def refine[A](request: User[A]): Future[Either[Result, User[A]]] = {
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
     implicit val req: User[A] = request
 
-    req.session.get(pendingDeregKey) match {
-      case Some("true") => Future.successful(Left(Redirect(redirectPage)))
-      case Some("false") => Future.successful(Right(req))
-      case Some(_) => Future.successful(Left(serviceErrorHandler.showInternalServerError))
-      case None => getCustomerInfoCall(req.vrn)
+    req.session.get(registrationStatusKey) match {
+      case Some(Constants.pending) | Some(Constants.deregistered) => Future.successful(Left(Redirect(redirectPage)))
+      case Some(Constants.registered) => Future.successful(Right(req))
+      case _ => getCustomerInfoCall(req.vrn)
     }
   }
 
   private def getCustomerInfoCall[A](vrn: String)(implicit hc: HeaderCarrier,
                                                   request: User[A]): Future[Either[Result, User[A]]] =
-    customerDetailsService.getDeregPending(vrn).map {
-      case Right(pending) =>
-        pending.deregistration match {
-          case Some(PendingDeregModel(true)) =>
+    customerDetailsService.getCustomerDetails(vrn).map {
+      case Right(details) =>
+        (details.pendingDereg, details.alreadyDeregistered) match {
+          case (true, _) =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "Deregistration pending. Redirecting to user hub/overview page.")
-            Left(Redirect(redirectPage).addingToSession(pendingDeregKey -> "true"))
-          case Some(PendingDeregModel(false)) =>
+            Left(Redirect(redirectPage).addingToSession(registrationStatusKey -> Constants.pending))
+          case (_, true) =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
-              "Pending deregistration is false - Setting to 'false' and redirecting to start of journey")
-            Left(Redirect(controllers.routes.DeregisterForVATController.redirect().url).addingToSession(pendingDeregKey -> "false"))
-          case None =>
-            Logger.debug("[InflightPPOBPredicate][getCustomerInfoCall] - " +
-              "There is no pending deregistration data - Setting to 'false' and redirecting to start of journey")
+              "User has already deregistered. Redirecting to user hub/overview page.")
+            Left(Redirect(redirectPage).addingToSession(registrationStatusKey -> Constants.deregistered))
+          case _ =>
+            Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - Redirecting user to start of journey")
             Left(Redirect(controllers.routes.DeregisterForVATController.redirect().url)
-              .addingToSession(pendingDeregKey -> "false"))
+              .addingToSession(registrationStatusKey -> Constants.registered))
         }
       case Left(error) =>
         Logger.warn(s"[InflightPPOBPredicate][getCustomerInfoCall] - " +

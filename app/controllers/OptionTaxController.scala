@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, PendingChangesPredicate}
+import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
 import forms.YesNoAmountForm
 import javax.inject.{Inject, Singleton}
 import models.{User, YesNoAmountModel}
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 @Singleton
 class OptionTaxController @Inject()(val messagesApi: MessagesApi,
                                     val authenticate: AuthPredicate,
-                                    val pendingDeregCheck: PendingChangesPredicate,
+                                    val regStatusCheck: RegistrationStatusPredicate,
                                     val optionTaxAnswerService: OptionTaxAnswerService,
                                     val serviceErrorHandler: ServiceErrorHandler,
                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
@@ -43,7 +43,7 @@ class OptionTaxController @Inject()(val messagesApi: MessagesApi,
   private def renderView(form: Form[YesNoAmountModel])(implicit user: User[_]) =
     views.html.optionTax(form)
 
-  val show: Action[AnyContent] = (authenticate andThen pendingDeregCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     optionTaxAnswerService.getAnswer map {
       case Right(Some(data)) => Ok(renderView(form.fill(data)))
       case _ => Ok(renderView(form))
