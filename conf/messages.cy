@@ -125,7 +125,7 @@ capitalAssets.error.amount.noEntry = Nodwch gyfanswm gwerth yr asedion cyfalaf
 
 cannotDeregister.title = Ni all y busnes ganslo ei gofrestriad TAW
 cannotDeregister.text = Mae hyn oherwydd bod y busnes yn disgwyl y bydd ei drosiant trethadwy ar gyfer y 12 mis nesaf yn fwy na £{0}.
-cannotDeregister.link.text = Gallwchƒ
+cannotDeregister.link.text = Gallwch
 cannotDeregister.link = ddiweddaru manylion TAW eraill y busnes.
 
 taxableTurnover.title = A oedd trosiant trethadwy’r busnes yn is nag £{0} yn ystod y 12 mis diwethaf?
