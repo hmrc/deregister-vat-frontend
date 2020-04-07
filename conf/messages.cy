@@ -86,7 +86,7 @@ deregistrationReason.reason.mandatoryRadioOption = Dewiswch reswm dros ganslo TA
 chooseDeregistrationDate.title = A ydych am ddewis y dyddiad canslo?
 chooseDeregistrationDate.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes eisiau dewis y dyddiad canslo
 
-deregistrationDate.title = Beth yw'r dyddiad canslo?
+deregistrationDate.title = Beth yw’r dyddiad canslo?
 deregistrationDate.p1 = Gall y dyddiad fod hyd at uchafswm o 3 mis o heddiw.
 deregistrationDate.p2 = Byddwn yn cadarnhau’r dyddiad pan fyddwn yn derbyn eich cais.
 deregistrationDate.hint = Er enghraifft, 31 3 1980
@@ -125,7 +125,7 @@ capitalAssets.error.amount.noEntry = Nodwch gyfanswm gwerth yr asedion cyfalaf
 
 cannotDeregister.title = Ni all y busnes ganslo ei gofrestriad TAW
 cannotDeregister.text = Mae hyn oherwydd bod y busnes yn disgwyl y bydd ei drosiant trethadwy ar gyfer y 12 mis nesaf yn fwy na £{0}.
-cannotDeregister.link.text = Gallwch
+cannotDeregister.link.text = Gallwchƒ
 cannotDeregister.link = ddiweddaru manylion TAW eraill y busnes.
 
 taxableTurnover.title = A oedd trosiant trethadwy’r busnes yn is nag £{0} yn ystod y 12 mis diwethaf?
