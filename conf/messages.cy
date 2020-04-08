@@ -86,7 +86,7 @@ deregistrationReason.reason.mandatoryRadioOption = Dewiswch reswm dros ganslo TA
 chooseDeregistrationDate.title = A ydych am ddewis y dyddiad canslo?
 chooseDeregistrationDate.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes eisiau dewis y dyddiad canslo
 
-deregistrationDate.title = Beth yw'r dyddiad canslo?
+deregistrationDate.title = Beth yw’r dyddiad canslo?
 deregistrationDate.p1 = Gall y dyddiad fod hyd at uchafswm o 3 mis o heddiw.
 deregistrationDate.p2 = Byddwn yn cadarnhau’r dyddiad pan fyddwn yn derbyn eich cais.
 deregistrationDate.hint = Er enghraifft, 31 3 1980

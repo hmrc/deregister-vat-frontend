@@ -6,3 +6,7 @@
     border-left: none;
     padding: 0em;
 }
+
+.date-entry-label-margin {
+    margin-right: 25px !important;
+}
