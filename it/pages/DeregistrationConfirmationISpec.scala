@@ -41,7 +41,7 @@ class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
 
   "Calling the DeregistrationConfirmationController.show" when {
 
-    def deregConfirmationRequest(): WSResponse = get("/deregister-request-received", session)
+    def deregConfirmationRequest(): WSResponse = get("/cancel-vat-request-received", session)
 
     "the user is authorised" should {
 

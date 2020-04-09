@@ -72,7 +72,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
     "return the correct call" in {
       lazy val result: Call = controller.langToCall("english")
 
-      result.url shouldBe "/vat-through-software/account/deregister/language/english"
+      result.url shouldBe "/vat-through-software/account/cancel-vat/language/english"
     }
   }
 }

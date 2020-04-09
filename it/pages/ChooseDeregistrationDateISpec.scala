@@ -33,7 +33,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
   "Calling the GET Choose Deregistration Date endpoint" when {
 
-    def getRequest: WSResponse = get("/deregister-date", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/choose-cancel-vat-date", formatPendingDereg(Some(Constants.registered)))
 
     "the user is authorised" should {
 
@@ -86,7 +86,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration date endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/deregister-date", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/choose-cancel-vat-date", formatPendingDereg(pendingDereg))
 
     "user has a pending dereg request" should {
 
@@ -151,7 +151,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
   "Calling the POST Choose Deregistration Date endpoint" when {
 
     def postRequest(data: YesNo): WSResponse =
-      post("/deregister-date")(toFormData(YesNoForm.yesNoForm("yesNoError"), data))
+      post("/choose-cancel-vat-date")(toFormData(YesNoForm.yesNoForm("yesNoError"), data))
 
     "the user is authorised" when {
 
@@ -193,7 +193,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
           given.user.isAuthorised
 
-          post("/deregister-date")(Map("yes_no" -> Seq(""))) should have(
+          post("/choose-cancel-vat-date")(Map("yes_no" -> Seq(""))) should have(
             httpStatus(BAD_REQUEST),
             pageTitle("Error: Do you want to choose the cancellation date?" + titleSuffix),
             elementText(".error-message")("Select yes if the business wants to choose the cancellation date")

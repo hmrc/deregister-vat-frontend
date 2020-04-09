@@ -59,7 +59,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
         }
 
         "redirect to the correct URL" in {
-          redirectLocation(result) shouldBe Some("/vat-through-software/account/deregister/agent")
+          redirectLocation(result) shouldBe Some("/vat-through-software/account/cancel-vat/agent")
         }
       }
     }
@@ -78,7 +78,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
         }
 
         "redirect to the correct url" in {
-          redirectLocation(result) shouldBe Some("/vat-through-software/account/deregister/non-agent")
+          redirectLocation(result) shouldBe Some("/vat-through-software/account/cancel-vat/non-agent")
         }
       }
     }
