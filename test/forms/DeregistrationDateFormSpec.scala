@@ -16,6 +16,8 @@
 
 package forms
 
+import java.time.LocalDate
+
 import _root_.utils.TestUtil
 import assets.messages.CommonMessages
 import models.DateModel
@@ -23,27 +25,52 @@ import play.api.i18n.Messages
 
 class DeregistrationDateFormSpec extends TestUtil {
 
-  "Binding a form with valid data" should {
+  "Binding a form with valid data" when {
 
-    val data = Map(
-      DateForm.day -> "31",
-      DateForm.month -> "12",
-      DateForm.year -> "2020"
-    )
-    val form = DeregistrationDateForm.form.bind(data)
+    "using today's date" should {
 
-    "return a DateModel" in {
-      form.value shouldBe Some(DateModel(31, 12, 2020))
+      val testDate = LocalDate.now
+      val data = Map(
+        DateForm.day -> testDate.getDayOfMonth.toString,
+        DateForm.month -> testDate.getMonthValue.toString,
+        DateForm.year -> testDate.getYear.toString
+      )
+      val form = DeregistrationDateForm.form.bind(data)
+
+      "return a DateModel" in {
+        form.value shouldBe Some(DateModel(testDate.getDayOfMonth, testDate.getMonthValue, testDate.getYear))
+      }
+
+      "have no errors" in {
+        form.hasErrors shouldBe false
+      }
     }
 
-    "have no errors" in {
-      form.hasErrors shouldBe false
+    "a valid future date is entered" should {
+
+      val testDate = LocalDate.now.plusMonths(3)
+      val data = Map(
+        DateForm.day -> testDate.getDayOfMonth.toString,
+        DateForm.month -> testDate.getMonthValue.toString,
+        DateForm.year -> testDate.getYear.toString
+      )
+      val form = DeregistrationDateForm.form.bind(data)
+
+      "result in a form with no errors" in {
+        form.hasErrors shouldBe false
+      }
+
+      "generate a DateModel" in {
+        form.value shouldBe Some(
+          DateModel(testDate.getDayOfMonth, testDate.getMonthValue, testDate.getYear)
+        )
+      }
     }
   }
 
   "Binding a form with invalid data" when {
 
-    "individual fields are invalid" should {
+    "individual fields are empty" should {
 
       val data: Map[String, String] = Map.empty
       val form = DeregistrationDateForm.form.bind(data)
@@ -71,6 +98,98 @@ class DeregistrationDateFormSpec extends TestUtil {
       "return an error message" in {
         Messages(form.errors.head.message) shouldBe "Enter a valid cancellation date"
       }
+    }
+
+    "day is not valid" should {
+
+      val data = Map(
+        DateForm.day -> "32",
+        DateForm.month -> "1",
+        DateForm.year -> "2018"
+      )
+      val form = DeregistrationDateForm.form.bind(data)
+
+      "return an error" in {
+        form.hasErrors shouldBe true
+      }
+
+      "return an error message" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorDateDay
+      }
+    }
+
+    "month is not valid" should {
+
+      val data = Map(
+        DateForm.day -> "1",
+        DateForm.month -> "13",
+        DateForm.year -> "2018"
+      )
+      val form = DeregistrationDateForm.form.bind(data)
+
+      "return an error" in {
+        form.hasErrors shouldBe true
+      }
+
+      "return an error message" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorDateMonth
+      }
+    }
+
+    "year is not a valid amount of characters" should {
+
+      val data = Map(
+        DateForm.day -> "1",
+        DateForm.month -> "1",
+        DateForm.year -> "2"
+      )
+      val form = DeregistrationDateForm.form.bind(data)
+
+      "return an error" in {
+        form.hasErrors shouldBe true
+      }
+
+      "return an error message" in {
+        Messages(form.errors.head.message) shouldBe CommonMessages.errorDateYear
+      }
+    }
+
+    "a date too far in the future is entered" should {
+
+      val testDate = LocalDate.now.plusMonths(3).plusDays(1)
+      val data = Map(
+        DateForm.day -> testDate.getDayOfMonth.toString,
+        DateForm.month -> testDate.getMonthValue.toString,
+        DateForm.year -> testDate.getYear.toString
+      )
+      val form = DeregistrationDateForm.form.bind(data)
+
+      "result in a form with no errors" in {
+        form.hasErrors shouldBe true
+      }
+
+      "return an error message" in {
+        Messages(form.errors.head.message) shouldBe "The cancellation date must not be more than 3 months from today"
+      }
+    }
+  }
+
+  "a date in the past is entered" should {
+
+    val testDate = LocalDate.now.minusDays(1)
+    val data = Map(
+      DateForm.day -> testDate.getDayOfMonth.toString,
+      DateForm.month -> testDate.getMonthValue.toString,
+      DateForm.year -> testDate.getYear.toString
+    )
+    val form = DeregistrationDateForm.form.bind(data)
+
+    "result in a form with no errors" in {
+      form.hasErrors shouldBe true
+    }
+
+    "return an error message" in {
+      Messages(form.errors.head.message) shouldBe "The cancellation date must be in the future"
     }
   }
 }

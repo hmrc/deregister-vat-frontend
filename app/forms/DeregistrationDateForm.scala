@@ -16,12 +16,33 @@
 
 package forms
 
-import forms.DateForm.{day, formatter, isValidDateConstraint, month, year}
+import java.time.LocalDate
+
+import forms.DateForm.{day, formatter, month, year}
 import models.DateModel
 import play.api.data.Form
 import play.api.data.Forms.{mapping, of}
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationResult}
 
 object DeregistrationDateForm {
+
+  val monthsAllowed = 3
+  val checkValidDate: Constraint[DateModel] = Constraint[DateModel]("checkValidDate") {
+    date =>
+      date.date.fold[ValidationResult](Invalid("deregistrationDate.error.date.noEntry")) {
+        validDate => isDateRangeValid(validDate)
+      }
+  }
+
+  private def isDateRangeValid(date: LocalDate) = {
+    if (date.isAfter(LocalDate.now.plusMonths(monthsAllowed))) {
+      Invalid("deregistrationDate.error.date.future")
+    } else if (date.isBefore(LocalDate.now)) {
+      Invalid("deregistrationDate.error.date.past")
+    } else {
+      Valid
+    }
+  }
 
   val form: Form[DateModel] = Form(
     mapping(
@@ -29,6 +50,6 @@ object DeregistrationDateForm {
       month -> of(formatter),
       year -> of(formatter)
     )(DateModel.apply)(DateModel.unapply)
-      .verifying(isValidDateConstraint("deregistrationDate.error.date.noEntry"))
+      .verifying(checkValidDate)
   )
 }
