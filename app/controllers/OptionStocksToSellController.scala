@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoAmountForm
 import javax.inject.Inject
 import models.{User, YesNoAmountModel}
@@ -32,7 +32,7 @@ import scala.concurrent.Future
 
 class OptionStocksToSellController @Inject()(val messagesApi: MessagesApi,
                                              val authenticate: AuthPredicate,
-                                             val regStatusCheck: RegistrationStatusPredicate,
+                                             val regStatusCheck: DeniedAccessPredicate,
                                              val stocksAnswerService: StocksAnswerService,
                                              val serviceErrorHandler: ServiceErrorHandler,
                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {

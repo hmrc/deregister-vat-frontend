@@ -18,7 +18,7 @@ package controllers
 
 import common.{Constants, SessionKeys}
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import javax.inject.{Inject, Singleton}
 import models.VatSubscriptionSuccess
 import play.api.Logger
@@ -30,7 +30,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 @Singleton
 class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
                                        val authenticate: AuthPredicate,
-                                       val regStatusCheck: RegistrationStatusPredicate,
+                                       val regStatusCheck: DeniedAccessPredicate,
                                        checkAnswersService: CheckAnswersService,
                                        deregDateAnswerService: ChooseDeregDateAnswerService,
                                        updateDeregistrationService: UpdateDeregistrationService,

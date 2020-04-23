@@ -20,7 +20,7 @@ import cats.data.EitherT
 import cats.instances.future._
 import javax.inject.{Inject, Singleton}
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoAmountForm
 import models.{User, YesNoAmountModel}
 import play.api.Logger
@@ -35,7 +35,7 @@ import scala.concurrent.Future
 @Singleton
 class  CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
                                          val authentication: AuthPredicate,
-                                         val regStatusCheck: RegistrationStatusPredicate,
+                                         val regStatusCheck: DeniedAccessPredicate,
                                          val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                          val wipeRedundantDataService: WipeRedundantDataService,
                                          val serviceErrorHandler: ServiceErrorHandler,

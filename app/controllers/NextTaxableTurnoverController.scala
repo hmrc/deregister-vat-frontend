@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.NextTaxableTurnoverForm
 import javax.inject.{Inject, Singleton}
 import models.{No, NumberInputModel, User, Yes, YesNo, ZeroRated}
@@ -33,7 +33,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 @Singleton
 class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                               val authenticate: AuthPredicate,
-                                              val regStatusCheck: RegistrationStatusPredicate,
+                                              val regStatusCheck: DeniedAccessPredicate,
                                               val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                               val businessActivityAnswerService: BusinessActivityAnswerService,
                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,

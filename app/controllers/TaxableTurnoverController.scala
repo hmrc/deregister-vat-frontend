@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
 import models.{User, YesNo}
@@ -36,7 +36,7 @@ import scala.concurrent.Future
 @Singleton
 class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                           val authenticate: AuthPredicate,
-                                          val regStatusCheck: RegistrationStatusPredicate,
+                                          val regStatusCheck: DeniedAccessPredicate,
                                           val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                           val wipeRedundantDataService: WipeRedundantDataService,
                                           val serviceErrorHandler: ServiceErrorHandler,

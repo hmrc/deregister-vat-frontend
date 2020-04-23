@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.VATAccountsForm
 import javax.inject.{Inject, Singleton}
 import models._
@@ -33,7 +33,7 @@ import play.api.Logger
 @Singleton
 class VATAccountsController @Inject()(val messagesApi: MessagesApi,
                                       val authenticate: AuthPredicate,
-                                      val regStatusCheck: RegistrationStatusPredicate,
+                                      val regStatusCheck: DeniedAccessPredicate,
                                       val accountingMethodAnswerService: AccountingMethodAnswerService,
                                       val deregReasonAnswerService: DeregReasonAnswerService,
                                       val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
