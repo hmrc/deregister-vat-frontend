@@ -28,6 +28,7 @@ import play.api.mvc.{ActionRefiner, Result}
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
+import common.Constants.vatGroup
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -54,7 +55,7 @@ class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsSer
     customerDetailsService.getCustomerDetails(vrn).map {
       case Right(details) =>
         (details.pendingDereg, details.alreadyDeregistered, details.partyType) match {
-          case (_, _, Some(partyType)) if partyType == "Z2" =>
+          case (_, _, Some(partyType)) if partyType == vatGroup =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "PartyType is VAT Group. Redirecting to appropriate hub/overview page.")
             Left(Redirect(redirectPage))
