@@ -28,14 +28,15 @@ import play.api.mvc.{ActionRefiner, Result}
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
+import common.Constants.vatGroup
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegistrationStatusPredicate @Inject()(customerDetailsService: CustomerDetailsService,
-                                            val serviceErrorHandler: ServiceErrorHandler,
-                                            implicit val messagesApi: MessagesApi,
-                                            implicit val appConfig: AppConfig,
-                                            implicit val ec: ExecutionContext) extends ActionRefiner[User, User] with I18nSupport {
+class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsService,
+                                      val serviceErrorHandler: ServiceErrorHandler,
+                                      implicit val messagesApi: MessagesApi,
+                                      implicit val appConfig: AppConfig,
+                                      implicit val ec: ExecutionContext) extends ActionRefiner[User, User] with I18nSupport {
 
   override def refine[A](request: User[A]): Future[Either[Result, User[A]]] = {
 
@@ -53,12 +54,16 @@ class RegistrationStatusPredicate @Inject()(customerDetailsService: CustomerDeta
                                                   request: User[A]): Future[Either[Result, User[A]]] =
     customerDetailsService.getCustomerDetails(vrn).map {
       case Right(details) =>
-        (details.pendingDereg, details.alreadyDeregistered) match {
-          case (true, _) =>
+        (details.pendingDereg, details.alreadyDeregistered, details.partyType) match {
+          case (_, _, Some(partyType)) if partyType == vatGroup =>
+            Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
+              "PartyType is VAT Group. Redirecting to appropriate hub/overview page.")
+            Left(Redirect(redirectPage))
+          case (true, _, _) =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "Deregistration pending. Redirecting to user hub/overview page.")
             Left(Redirect(redirectPage).addingToSession(registrationStatusKey -> Constants.pending))
-          case (_, true) =>
+          case (_, true, _) =>
             Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "User has already deregistered. Redirecting to user hub/overview page.")
             Left(Redirect(redirectPage).addingToSession(registrationStatusKey -> Constants.deregistered))

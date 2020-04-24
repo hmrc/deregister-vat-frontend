@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoAmountForm
 import javax.inject.{Inject, Singleton}
 import models.{User, YesNoAmountModel}
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 @Singleton
 class OptionTaxController @Inject()(val messagesApi: MessagesApi,
                                     val authenticate: AuthPredicate,
-                                    val regStatusCheck: RegistrationStatusPredicate,
+                                    val regStatusCheck: DeniedAccessPredicate,
                                     val optionTaxAnswerService: OptionTaxAnswerService,
                                     val serviceErrorHandler: ServiceErrorHandler,
                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {

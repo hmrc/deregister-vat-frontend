@@ -25,12 +25,12 @@ import services.mocks.MockCustomerDetailsService
 import play.api.test.Helpers._
 import assets.constants.CustomerDetailsTestConstants._
 
-class RegistrationStatusPredicateSpec extends MockAuth with MockCustomerDetailsService {
+class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService {
 
   "RegistrationStatusPredicate" when {
 
-    val mockRegStatusPredicate: RegistrationStatusPredicate =
-      new RegistrationStatusPredicate(
+    val mockRegStatusPredicate: DeniedAccessPredicate =
+      new DeniedAccessPredicate(
         mockCustomerDetailsService,
         serviceErrorHandler,
         messagesApi,
@@ -130,6 +130,42 @@ class RegistrationStatusPredicateSpec extends MockAuth with MockCustomerDetailsS
     "there is no 'registrationStatus' in session" when {
 
       "the call to customer details is successful" when {
+
+        "the user is has a party type of VAT Group (Z2)" should {
+
+          "the user is a principal entity" should {
+
+            lazy val result = {
+              setupMockCustomerDetails(vrn)(Right(customerDetailsVatGroup))
+              await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
+            }
+
+            "return SEE_OTHER" in {
+              status(result) shouldBe SEE_OTHER
+            }
+
+            s"redirect to ${mockConfig.vatSummaryFrontendUrl}" in {
+              redirectLocation(result) shouldBe Some(mockConfig.vatSummaryFrontendUrl)
+            }
+          }
+
+          "the user is an agent" should {
+
+            lazy val result = {
+              setupMockCustomerDetails(vrn)(Right(customerDetailsVatGroup))
+              await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request))).left.get
+            }
+
+            "return SEE_OTHER" in {
+              status(result) shouldBe SEE_OTHER
+            }
+
+            s"redirect to ${mockConfig.agentClientLookupAgentHubPath}" in {
+              redirectLocation(result) shouldBe Some(mockConfig.agentClientLookupAgentHubPath)
+            }
+          }
+
+        }
 
         "there is a pending dereg change" when {
 

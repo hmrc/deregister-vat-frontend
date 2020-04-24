@@ -17,7 +17,7 @@
 package controllers
 
 import config.AppConfig
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
@@ -28,7 +28,7 @@ import scala.concurrent.Future
 @Singleton
 class DeregisterForVATController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
-                                           val regStatusCheck: RegistrationStatusPredicate,
+                                           val regStatusCheck: DeniedAccessPredicate,
                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
 
   val redirect: Action[AnyContent] = (authenticate andThen regStatusCheck) { implicit user =>

@@ -18,7 +18,7 @@ package controllers
 
 import assets.constants.BaseTestConstants.vrn
 import common.{Constants, SessionKeys}
-import controllers.predicates.RegistrationStatusPredicate
+import controllers.predicates.DeniedAccessPredicate
 import play.api.http.Status
 import play.api.test.Helpers._
 import services.CustomerDetailsService
@@ -27,7 +27,7 @@ import scala.concurrent.Future
 
 class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
-  val mockPendingDereg = new RegistrationStatusPredicate(
+  val mockPendingDereg = new DeniedAccessPredicate(
     new CustomerDetailsService(mockVatSubscriptionConnector),
     serviceErrorHandler,
     messagesApi,

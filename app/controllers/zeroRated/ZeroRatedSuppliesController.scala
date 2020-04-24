@@ -17,7 +17,7 @@
 package controllers.zeroRated
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.ZeroRatedSuppliesForm
 import javax.inject.{Inject, Singleton}
 import models.{NumberInputModel, User}
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 @Singleton
 class ZeroRatedSuppliesController @Inject()(val messagesApi: MessagesApi,
                                             val authenticate: AuthPredicate,
-                                            val regStatusCheck: RegistrationStatusPredicate,
+                                            val regStatusCheck: DeniedAccessPredicate,
                                             val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
                                             val serviceErrorHandler: ServiceErrorHandler,
                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {

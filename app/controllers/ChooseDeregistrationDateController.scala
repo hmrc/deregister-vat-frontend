@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
 import models.{No, User, Yes, YesNo}
@@ -33,7 +33,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 @Singleton
 class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
                                                    val authenticate: AuthPredicate,
-                                                   val regStatusCheck: RegistrationStatusPredicate,
+                                                   val regStatusCheck: DeniedAccessPredicate,
                                                    val chooseDateAnswerService: ChooseDeregDateAnswerService,
                                                    val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                                    val wipeRedundantDataService: WipeRedundantDataService,

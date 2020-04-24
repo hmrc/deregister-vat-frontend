@@ -18,7 +18,7 @@ package mocks
 
 import assets.constants.BaseTestConstants.vrn
 import connectors.mocks.MockVatSubscriptionConnector
-import controllers.predicates.RegistrationStatusPredicate
+import controllers.predicates.DeniedAccessPredicate
 import models.User
 import org.scalamock.scalatest.MockFactory
 import play.api.mvc.Result
@@ -27,11 +27,11 @@ import utils.TestUtil
 
 import scala.concurrent.Future
 
-trait MockRegistrationStatusPredicate extends TestUtil with MockFactory with MockVatSubscriptionConnector {
+trait MockDeniedAccessPredicate extends TestUtil with MockFactory with MockVatSubscriptionConnector {
 
-  val mockRegistrationStatusPredicate: RegistrationStatusPredicate = {
+  val mockRegistrationStatusPredicate: DeniedAccessPredicate = {
 
-    object MockPredicate extends RegistrationStatusPredicate(
+    object MockPredicate extends DeniedAccessPredicate(
       new CustomerDetailsService(mockVatSubscriptionConnector),
       serviceErrorHandler,
       messagesApi,

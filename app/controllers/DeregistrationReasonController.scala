@@ -20,7 +20,7 @@ import cats.data.EitherT
 import cats.instances.future._
 import javax.inject.{Inject, Singleton}
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.DeregistrationReasonForm
 import models._
 import play.api.Logger
@@ -35,7 +35,7 @@ import scala.concurrent.Future
 @Singleton
 class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
                                                val authenticate: AuthPredicate,
-                                               val regStatusCheck: RegistrationStatusPredicate,
+                                               val regStatusCheck: DeniedAccessPredicate,
                                                val deregReasonAnswerService: DeregReasonAnswerService,
                                                val wipeRedundantDataService: WipeRedundantDataService,
                                                val serviceErrorHandler: ServiceErrorHandler,

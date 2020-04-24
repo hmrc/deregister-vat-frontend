@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.DateForm
 import javax.inject.{Inject, Singleton}
 import models.{DateModel, User}
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 @Singleton
 class CeasedTradingDateController @Inject()(val messagesApi: MessagesApi,
                                             val authenticate: AuthPredicate,
-                                            val regStatusCheck: RegistrationStatusPredicate,
+                                            val regStatusCheck: DeniedAccessPredicate,
                                             val ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
                                             val serviceErrorHandler: ServiceErrorHandler,
                                             implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {

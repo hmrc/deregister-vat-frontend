@@ -19,7 +19,7 @@ package controllers.zeroRated
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import javax.inject.{Inject, Singleton}
 import models.{No, User, Yes, YesNo}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -36,7 +36,7 @@ import scala.concurrent.Future
 @Singleton
 class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
-                                           val regStatusCheck: RegistrationStatusPredicate,
+                                           val regStatusCheck: DeniedAccessPredicate,
                                            val businessActivityAnswerService: BusinessActivityAnswerService,
                                            val wipeRedundantDataService: WipeRedundantDataService,
                                            val serviceErrorHandler: ServiceErrorHandler,

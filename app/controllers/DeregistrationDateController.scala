@@ -17,7 +17,7 @@
 package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.DeregistrationDateForm
 import javax.inject.Inject
 import play.api.Logger
@@ -30,7 +30,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DeregistrationDateController@Inject()(val messagesApi: MessagesApi,
                                             authenticate: AuthPredicate,
-                                            regStatusCheck: RegistrationStatusPredicate,
+                                            regStatusCheck: DeniedAccessPredicate,
                                             serviceErrorHandler: ServiceErrorHandler,
                                             answerService: DeregDateAnswerService,
                                             implicit val appConfig: AppConfig,

@@ -25,12 +25,15 @@ object CustomerDetailsTestConstants {
   val tradingName = "Dusty Relics"
   val firstName = "Fred"
   val lastName = "Flintstone"
+  val partyTypeValue = "50"
+  val vatGroupPartyTypeValue = "Z2"
 
   val customerDetailsJsonMax: JsObject = Json.obj(
     "organisationName" -> orgName,
     "firstName" -> firstName,
     "lastName" -> lastName,
     "tradingName" -> tradingName,
+    "partyType" -> partyTypeValue,
     "ppob" -> Json.obj("contactDetails" -> Some(Json.obj("emailVerified" -> Some(true))))
   )
 
@@ -42,12 +45,14 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     Some(orgName),
     Some(tradingName),
+    Some(partyTypeValue),
     Some(true),
     pendingDereg = false,
     alreadyDeregistered = false
   )
 
   val customerDetailsMin: CustomerDetails = CustomerDetails(
+    None,
     None,
     None,
     None,
@@ -62,6 +67,7 @@ object CustomerDetailsTestConstants {
     Some(lastName),
     Some(orgName),
     Some(tradingName),
+    Some(partyTypeValue),
     Some(false),
     pendingDereg = false,
     alreadyDeregistered = false
@@ -80,4 +86,5 @@ object CustomerDetailsTestConstants {
 
   val customerDetailsPendingDereg: CustomerDetails = customerDetailsMax.copy(pendingDereg = true)
   val customerDetailsAlreadyDeregistered: CustomerDetails = customerDetailsMax.copy(alreadyDeregistered = true)
+  val customerDetailsVatGroup: CustomerDetails = customerDetailsMax.copy(partyType = Some(vatGroupPartyTypeValue))
 }

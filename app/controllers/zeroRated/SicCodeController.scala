@@ -17,7 +17,7 @@
 package controllers.zeroRated
 
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.SicCodeForm
 import javax.inject.{Inject, Singleton}
 import models._
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 @Singleton
 class SicCodeController @Inject()(val messagesApi: MessagesApi,
                                   val authenticate: AuthPredicate,
-                                  val regStatusCheck: RegistrationStatusPredicate,
+                                  val regStatusCheck: DeniedAccessPredicate,
                                   val serviceErrorHandler: ServiceErrorHandler,
                                   val businessActivityAnswerService: BusinessActivityAnswerService,
                                   val sicCodeAnswerService: SicCodeAnswerService,

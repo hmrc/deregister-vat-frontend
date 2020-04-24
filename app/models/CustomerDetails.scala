@@ -22,6 +22,7 @@ case class CustomerDetails(firstName: Option[String],
                            lastName: Option[String],
                            organisationName: Option[String],
                            tradingName: Option[String],
+                           partyType: Option[String],
                            emailVerified: Option[Boolean],
                            pendingDereg: Boolean,
                            alreadyDeregistered: Boolean) {
@@ -42,6 +43,7 @@ object CustomerDetails {
   private val lastNamePath = __ \ "lastName"
   private val organisationNamePath = __ \ "organisationName"
   private val tradingNamePath = __ \ "tradingName"
+  private val partyTypePath = __ \ "partyType"
   private val emailPath = __ \\ "emailVerified"
   private val pendingDeregPath = __ \ "changeIndicators" \ "deregister"
   private val effectDateOfCancellationPath = __ \ "deregistration" \ "effectDateOfCancellation"
@@ -51,6 +53,7 @@ object CustomerDetails {
     lastName <- lastNamePath.readNullable[String]
     orgName <- organisationNamePath.readNullable[String]
     tradingName <- tradingNamePath.readNullable[String]
+    partyType <- partyTypePath.readNullable[String]
     emailVerified <- emailPath.readNullable[Boolean]
     deregChangeIndicator <- pendingDeregPath.readNullable[Boolean].orElse(Reads.pure(None))
     deregDate <- effectDateOfCancellationPath.readNullable[String].orElse(Reads.pure(None))
@@ -60,7 +63,7 @@ object CustomerDetails {
     val alreadyDeregistered = deregDate.isDefined
 
     CustomerDetails(
-      firstName, lastName, orgName, tradingName, emailVerified, pendingDereg, alreadyDeregistered
+      firstName, lastName, orgName, tradingName, partyType, emailVerified, pendingDereg, alreadyDeregistered
     )
   }
 }

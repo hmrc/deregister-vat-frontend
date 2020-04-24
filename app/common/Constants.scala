@@ -24,4 +24,6 @@ object Constants {
   val registered: String = "registered"
   val pending: String = "pending"
   val deregistered: String = "deregistered"
+
+  val vatGroup: String = "Z2"
 }

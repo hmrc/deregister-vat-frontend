@@ -19,7 +19,7 @@ package controllers
 import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
-import controllers.predicates.{AuthPredicate, RegistrationStatusPredicate}
+import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
 import models._
@@ -35,7 +35,7 @@ import scala.concurrent.Future
 @Singleton
 class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
                                            val authenticate: AuthPredicate,
-                                           val regStatusCheck: RegistrationStatusPredicate,
+                                           val regStatusCheck: DeniedAccessPredicate,
                                            val issueNewInvoiceAnswerService: IssueNewInvoicesAnswerService,
                                            val wipeRedundantDataService: WipeRedundantDataService,
                                            val serviceErrorHandler: ServiceErrorHandler,
