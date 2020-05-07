@@ -38,9 +38,33 @@ appConfig = appConfig) {
 
 @{
     if(user.isAgent){
-        (user.session.get(SessionKeys.verifiedAgentEmail), businessName) match {
+        (user.session.get(SessionKeys.verifiedAgentEmail), businessName, appConfig.features.bulkPaperOffFeature()) match {
 
-            case (Some(verifiedEmail), Some(businessName)) =>
+            case (Some(verifiedEmail), Some(businessName), true) =>
+                <p>{messages("deregistrationConfirmation.bpOffEmailP1")}
+                    <strong class="bold">{verifiedEmail}</strong>
+                    {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                    <strong class="bold">{businessName}</strong>{messages("common.fullStop")}</p>
+
+            case (Some(verifiedEmail), None, true) =>
+                <p>{messages("deregistrationConfirmation.bpOffEmailP1")}
+                    <strong class="bold">{verifiedEmail}</strong>
+                    {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                    {messages("deregistrationConfirmation.yourClient")}{messages("common.fullStop")}</p>
+
+            case (None, Some(businessName), true) =>
+                <p>{messages("deregistrationConfirmation.bpOffNoEmailP1")}
+                <strong class="bold">{businessName}</strong>
+                {messages("deregistrationConfirmation.bpOffNoEmailP2")}</p>
+
+            case (None, None, true) =>
+                <p>{messages("deregistrationConfirmation.bpOffNoEmailP1")}
+                {messages("deregistrationConfirmation.yourClient")}
+                {messages("deregistrationConfirmation.bpOffNoEmailP2")}</p>
+
+            case (Some(verifiedEmail), Some(businessName), _) =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
                     <strong class="bold">{verifiedEmail}</strong>
                     {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
@@ -48,7 +72,7 @@ appConfig = appConfig) {
                     <strong class="bold">{businessName}</strong>
                     {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
 
-            case (Some(verifiedEmail), None) =>
+            case (Some(verifiedEmail), None, _) =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
                     <strong class="bold">{verifiedEmail}</strong>
                     {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
@@ -56,7 +80,7 @@ appConfig = appConfig) {
                     {messages("deregistrationConfirmation.yourClient")}
                     {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
 
-            case (None, Some(businessName)) =>
+            case (None, Some(businessName), _) =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
                 <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
                     <strong class="bold">{businessName}</strong>

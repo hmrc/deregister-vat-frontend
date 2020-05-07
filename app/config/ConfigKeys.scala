@@ -42,6 +42,8 @@ object ConfigKeys {
   val useLanguageSelectorFeature: String = "features.useLanguageSelectorFeature.enabled"
   val accessibilityStatement: String = "features.accessibilityStatement.enabled"
   val zeroRatedJourney: String = "features.zeroRatedJourney.enabled"
+  val emailVerifiedFeature: String = "features.emailVerifiedFeature.enabled"
+  val bulkPaperOffFeature: String = "features.bulkPaperOffFeature.enabled"
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
 
@@ -79,6 +81,4 @@ object ConfigKeys {
 
   val accessibilityStatementHost: String = "accessibility-statement.host"
   val accessibilityStatementUrl: String = "accessibility-statement.url"
-
-  val emailVerifiedFeature: String = "features.emailVerifiedFeature.enabled"
 }

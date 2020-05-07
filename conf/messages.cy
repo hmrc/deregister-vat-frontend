@@ -229,6 +229,12 @@ deregistrationConfirmation.contactPrefError = Byddwn yn anfon diweddariad atoch 
 deregistrationConfirmation.contactDetails = Sicrhewch fod eich manylion cyswllt wedi’u diweddaru.
 deregistrationConfirmation.changeClient = Newid cleient
 
+deregistrationConfirmation.bpOffEmailP1 = Byddwn yn anfon e-bost i
+deregistrationConfirmation.bpOffEmailP2 = cyn pen 2 ddiwrnod gwaith i roi gwybod i chi a allwn dderbyn eich cais ai peidio.
+deregistrationConfirmation.bpOffNotifyBusiness = We’ll send a secure message about the change to
+deregistrationConfirmation.bpOffNoEmailP1 = Byddwn yn anfon neges ddiogel i
+deregistrationConfirmation.bpOffNoEmailP2 = cyn pen 2 ddiwrnod gwaith i roi gwybod iddynt a allwn dderbyn y cais ai peidio.
+
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
 unauthorised.agent.setUpAccount = agor cyfrif gwasanaethau asiantau

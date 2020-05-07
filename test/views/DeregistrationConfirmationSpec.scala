@@ -167,71 +167,116 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
   "Rendering the deregistration confirmation page for an agent" when {
 
-    "the user has verifiedAgentEmail (Yes pref inferred)" should {
-      val businessName: Option[String] = Some("Fake Business Name Limited")
-      lazy val view = views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig, hc, ec)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+    "the bulkPaperOff feature switch is disabled" when {
 
-      "have the correct document title" in {
-        document.title shouldBe DeregistrationConfirmationMessages.agentTitle
+      "the user has verifiedAgentEmail (Yes pref inferred)" should {
+        val businessName: Option[String] = Some("Fake Business Name Limited")
+        lazy val view = {
+          mockConfig.features.bulkPaperOffFeature(false)
+          views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig, hc, ec)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+
+        "have the correct document title" in {
+          document.title shouldBe DeregistrationConfirmationMessages.agentTitle
+        }
+
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
+        }
+
+        "have the correct page subheading" in {
+          elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+        }
+
+        "have the correct first paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textAgentPrefYes
+        }
+
+        "have the correct text for the second paragraph (including business name)" in {
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentWithOrgName
+        }
+
+        "have the correct finish button text" in {
+          elementText(Selectors.button) shouldBe CommonMessages.finish
+        }
+
+        "have the correct finish button url" in {
+          element(Selectors.button).attr("href") shouldBe mockConfig.agentClientLookupAgentHubPath
+        }
       }
 
-      "have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
-      }
+      "the user is without a verifiedAgentEmail (No pref inferred)" should {
+        lazy val noBusinessName: Option[String] = None
+        lazy val view = {
+          mockConfig.features.bulkPaperOffFeature(false)
+          views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig, hc, ec)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the correct page subheading" in {
-        elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
-      }
 
-      "have the correct first paragraph" in {
-        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textAgentPrefYes
-      }
+        "have the correct document title" in {
+          document.title shouldBe DeregistrationConfirmationMessages.agentTitle
+        }
 
-      "have the correct text for the second paragraph (including business name)" in {
-        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentWithOrgName
-      }
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
+        }
 
-      "have the correct finish button text" in {
-        elementText(Selectors.button) shouldBe CommonMessages.finish
-      }
+        "have the correct page subheading" in {
+          elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+        }
 
-      "have the correct finish button url" in {
-        element(Selectors.button).attr("href") shouldBe mockConfig.agentClientLookupAgentHubPath
+        "have the correct first paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textAgentPrefNo
+        }
+
+        "have the correct text for the second paragraph (no business name when one isn't found)" in {
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefNo
+        }
+
+        "have the correct finish button text" in {
+          elementText(Selectors.button) shouldBe CommonMessages.finish
+        }
+
+        "have the correct finish button url" in {
+          element(Selectors.button).attr("href") shouldBe mockConfig.agentClientLookupAgentHubPath
+        }
       }
     }
 
-    "the user is without a verifiedAgentEmail (No pref inferred)" should {
-      lazy val noBusinessName: Option[String] = None
-      lazy val view = views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig, hc, ec)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+    "the bulkPaperOff feature switch is enabled" when {
 
-      "have the correct document title" in {
-        document.title shouldBe DeregistrationConfirmationMessages.agentTitle
+      "the user has verifiedAgentEmail (Yes pref inferred)" should {
+        val businessName: Option[String] = Some("Fake Business Name Limited")
+        lazy val view = {
+          mockConfig.features.bulkPaperOffFeature(true)
+          views.html.deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig, hc, ec)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+
+        "have the correct first paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentPrefYes
+        }
+
+        "have the correct text for the second paragraph (including business name)" in {
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.bpOffAgentWithBName
+        }
       }
 
-      "have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
-      }
+      "the user is without a verifiedAgentEmail (No pref inferred) and no business name" should {
+        lazy val noBusinessName: Option[String] = None
+        lazy val view = {
+          mockConfig.features.bulkPaperOffFeature(true)
+          views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig, hc, ec)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the correct page subheading" in {
-        elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
-      }
-
-      "have the correct first paragraph" in {
-        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.textAgentPrefNo
-      }
-
-      "have the correct text for the second paragraph (no business name when one isn't found)" in {
-        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefNo
-      }
-
-      "have the correct finish button text" in {
-        elementText(Selectors.button) shouldBe CommonMessages.finish
-      }
-
-      "have the correct finish button url" in {
-        element(Selectors.button).attr("href") shouldBe mockConfig.agentClientLookupAgentHubPath
+        "have the correct paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentPrefNo
+        }
       }
     }
 
