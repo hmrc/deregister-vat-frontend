@@ -51,7 +51,8 @@ appConfig = appConfig) {
                 <p>{messages("deregistrationConfirmation.bpOffEmailP1")}
                     <strong class="bold">{verifiedEmail}</strong>
                     {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
-                <p>{messages("deregistrationConfirmation.bpOffNotifyClient")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                {messages("deregistrationConfirmation.yourClientsBTA")}{messages("common.fullStop")}</p>
 
             case (None, Some(businessName), true) =>
                 <p>{messages("deregistrationConfirmation.bpOffNoEmailP1")}
@@ -60,7 +61,7 @@ appConfig = appConfig) {
 
             case (None, None, true) =>
                 <p>{messages("deregistrationConfirmation.bpOffNoEmailP1")}
-                {messages("deregistrationConfirmation.yourClient")}
+                {messages("deregistrationConfirmation.yourClientsBTA")}
                 {messages("deregistrationConfirmation.bpOffNoEmailP2")}</p>
 
             case (Some(verifiedEmail), Some(businessName), _) =>
