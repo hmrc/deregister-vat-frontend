@@ -27,6 +27,7 @@ object VatSubscriptionStub extends WireMockMethods {
   def noDeregPending(): StubMapping = {
     when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
       .thenReturn(status = OK, body = Json.obj(
+        "customerDetails" -> Json.obj(),
         "changeIndicators" -> Json.obj(
           "deregister" -> false
         )
@@ -36,6 +37,7 @@ object VatSubscriptionStub extends WireMockMethods {
   def deregPending(): StubMapping = {
     when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
       .thenReturn(status = OK, body = Json.obj(
+        "customerDetails" -> Json.obj(),
         "changeIndicators" -> Json.obj(
           "deregister" -> true
         )
@@ -45,7 +47,7 @@ object VatSubscriptionStub extends WireMockMethods {
   def noPendingData(): StubMapping = {
     when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
       .thenReturn(status = OK, body = Json.obj(
-        "somethingElse" -> Json.obj()
+        "customerDetails" -> Json.obj()
       ))
   }
 

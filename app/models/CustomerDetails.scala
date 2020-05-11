@@ -39,10 +39,10 @@ case class CustomerDetails(firstName: Option[String],
 
 object CustomerDetails {
 
-  private val firstNamePath = __ \ "firstName"
-  private val lastNamePath = __ \ "lastName"
-  private val organisationNamePath = __ \ "organisationName"
-  private val tradingNamePath = __ \ "tradingName"
+  private val firstNamePath = __ \ "customerDetails" \ "firstName"
+  private val lastNamePath = __ \ "customerDetails" \ "lastName"
+  private val organisationNamePath = __ \ "customerDetails" \ "organisationName"
+  private val tradingNamePath = __ \ "customerDetails" \ "tradingName"
   private val partyTypePath = __ \ "partyType"
   private val emailPath = __ \\ "emailVerified"
   private val pendingDeregPath = __ \ "changeIndicators" \ "deregister"

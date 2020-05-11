@@ -248,7 +248,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     "the bulkPaperOff feature switch is enabled" when {
 
-      "the user has verifiedAgentEmail (Yes pref inferred)" should {
+      "the user has verifiedAgentEmail (Yes pref inferred) and a business name" should {
         val businessName: Option[String] = Some("Fake Business Name Limited")
         lazy val view = {
           mockConfig.features.bulkPaperOffFeature(true)
@@ -258,7 +258,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
 
         "have the correct first paragraph" in {
-          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentPrefYes
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPref
         }
 
         "have the correct text for the second paragraph (including business name)" in {
@@ -266,16 +266,45 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
       }
 
-      "the user is without a verifiedAgentEmail (No pref inferred) and no business name" should {
-        lazy val noBusinessName: Option[String] = None
+      "the user has verifiedAgentEmail (Yes pref inferred) and no business name" should {
         lazy val view = {
           mockConfig.features.bulkPaperOffFeature(true)
-          views.html.deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig, hc, ec)
+          views.html.deregistrationConfirmation()(agentUserPrefYes, messages, mockConfig, hc, ec)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+
+        "have the correct first paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPref
+        }
+
+        "have the correct text for the second paragraph (including business name)" in {
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPrefNoBName
+        }
+      }
+
+      "the user is without a verifiedAgentEmail (No pref inferred) and no business name" should {
+        lazy val view = {
+          mockConfig.features.bulkPaperOffFeature(true)
+          views.html.deregistrationConfirmation()(agentUserPrefNo, messages, mockConfig, hc, ec)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct paragraph" in {
-          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentPrefNo
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentNoPref
+        }
+      }
+
+      "the user is without a verifiedAgentEmail (No pref inferred) and has a business name" should {
+        val businessName: Option[String] = Some("Fake Business Name Limited")
+        lazy val view = {
+          mockConfig.features.bulkPaperOffFeature(true)
+          views.html.deregistrationConfirmation(businessName)(agentUserPrefNo, messages, mockConfig, hc, ec)
+        }
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentNoPrefYesBName
         }
       }
     }

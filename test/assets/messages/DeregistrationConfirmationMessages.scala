@@ -47,9 +47,14 @@ object DeregistrationConfirmationMessages extends BaseMessages {
 
   val checkContactDetails = "Check your contact details are up to date."
 
-  val bpOffAgentPrefYes = "We’ll send an email to agentEmail@test.com within 2 working days telling you whether we can accept your request."
+  val bpOffAgentYesPref = "We’ll send an email to agentEmail@test.com within 2 working days telling you whether we can accept your request."
 
   val bpOffAgentWithBName = "We’ll send a secure message about the change to Fake Business Name Limited."
 
-  val bpOffAgentPrefNo = "We’ll send a secure message, within 2 working days, to your client telling them whether we can accept the request."
+  val bpOffAgentNoPref = "We’ll send a secure message, within 2 working days, to your client telling them whether we can accept the request."
+
+  val bpOffAgentYesPrefNoBName = "We will also send a secure message about the change to your client’s business tax account."
+
+  val bpOffAgentNoPrefYesBName =
+    "We’ll send a secure message, within 2 working days, to Fake Business Name Limited telling them whether we can accept the request."
 }

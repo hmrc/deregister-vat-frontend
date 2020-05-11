@@ -231,7 +231,8 @@ deregistrationConfirmation.changeClient = Newid cleient
 
 deregistrationConfirmation.bpOffEmailP1 = Byddwn yn anfon e-bost i
 deregistrationConfirmation.bpOffEmailP2 = cyn pen 2 ddiwrnod gwaith i roi gwybod i chi a allwn dderbyn eich cais ai peidio.
-deregistrationConfirmation.bpOffNotifyBusiness = We’ll send a secure message about the change to
+deregistrationConfirmation.bpOffNotifyBusiness = Byddwn yn anfon neges ddiogel am y newid i
+deregistrationConfirmation.bpOffNotifyClient = Byddwn hefyd yn anfon neges ddiogel am y newid i gyfrif treth busnes eich cleient.
 deregistrationConfirmation.bpOffNoEmailP1 = Byddwn yn anfon neges ddiogel i
 deregistrationConfirmation.bpOffNoEmailP2 = cyn pen 2 ddiwrnod gwaith i roi gwybod iddynt a allwn dderbyn y cais ai peidio.
 

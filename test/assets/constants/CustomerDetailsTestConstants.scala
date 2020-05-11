@@ -29,16 +29,20 @@ object CustomerDetailsTestConstants {
   val vatGroupPartyTypeValue = "Z2"
 
   val customerDetailsJsonMax: JsObject = Json.obj(
-    "organisationName" -> orgName,
-    "firstName" -> firstName,
-    "lastName" -> lastName,
-    "tradingName" -> tradingName,
+    "customerDetails" -> Json.obj(
+      "organisationName" -> orgName,
+      "firstName" -> firstName,
+      "lastName" -> lastName,
+      "tradingName" -> tradingName
+    ),
     "partyType" -> partyTypeValue,
     "ppob" -> Json.obj("contactDetails" -> Some(Json.obj("emailVerified" -> Some(true))))
   )
 
 
-  val customerDetailsJsonMin: JsObject = Json.obj()
+  val customerDetailsJsonMin: JsObject = Json.obj(
+    "customerDetails" -> Json.obj()
+  )
 
   val customerDetailsMax: CustomerDetails = CustomerDetails(
     Some(firstName),
