@@ -279,7 +279,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
 
         "have the correct text for the second paragraph (including business name)" in {
-          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPrefNoBName
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.bpOffAgentNoBName
         }
       }
 
@@ -291,7 +291,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct paragraph" in {
-          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentNoPref
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentNoBName
         }
       }
 
@@ -304,7 +304,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct paragraph" in {
-          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentNoPrefYesBName
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentWithBName
         }
       }
     }

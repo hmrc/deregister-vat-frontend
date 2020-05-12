@@ -229,13 +229,11 @@ deregistrationConfirmation.contactPrefError = Byddwn yn anfon diweddariad atoch 
 deregistrationConfirmation.contactDetails = Sicrhewch fod eich manylion cyswllt wedi’u diweddaru.
 deregistrationConfirmation.changeClient = Newid cleient
 
-## Dereg Confirmation when Bulk Paper is off - TODO: needs translation
-deregistrationConfirmation.bpOffEmailP1 = We’ll send an email to
-deregistrationConfirmation.bpOffEmailP2 = within 2 working days telling you whether we can accept your request.
-deregistrationConfirmation.bpOffNotifyBusiness = We’ll send a secure message about the change to
-deregistrationConfirmation.yourClientsBTA = your client’s business tax account
-deregistrationConfirmation.bpOffNoEmailP1 = We’ll send a secure message to
-deregistrationConfirmation.bpOffNoEmailP2 = within 2 working days, telling them whether we can accept your request.
+## Dereg Confirmation when Bulk Paper is off
+deregistrationConfirmation.bpOffEmailP1 = Byddwn yn anfon e-bost i
+deregistrationConfirmation.bpOffEmailP2 = cyn pen 2 ddiwrnod gwaith i roi gwybod i chi a allwn dderbyn eich cais ai peidio.
+deregistrationConfirmation.bpOffNotifyBusiness = Byddwn hefyd yn cysylltu â
+deregistrationConfirmation.bpOffUpdateBusiness = gyda diweddariad.
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi

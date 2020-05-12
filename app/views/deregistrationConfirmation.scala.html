@@ -45,24 +45,26 @@ appConfig = appConfig) {
                     <strong class="bold">{verifiedEmail}</strong>
                     {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
                 <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-                    <strong class="bold">{businessName}</strong>{messages("common.fullStop")}</p>
+                    <strong class="bold">{businessName}</strong>
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
             case (Some(verifiedEmail), None, true) =>
                 <p>{messages("deregistrationConfirmation.bpOffEmailP1")}
                     <strong class="bold">{verifiedEmail}</strong>
                     {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
                 <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-                {messages("deregistrationConfirmation.yourClientsBTA")}{messages("common.fullStop")}</p>
+                {messages("deregistrationConfirmation.yourClient")}
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
             case (None, Some(businessName), true) =>
-                <p>{messages("deregistrationConfirmation.bpOffNoEmailP1")}
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
                 <strong class="bold">{businessName}</strong>
-                {messages("deregistrationConfirmation.bpOffNoEmailP2")}</p>
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
             case (None, None, true) =>
-                <p>{messages("deregistrationConfirmation.bpOffNoEmailP1")}
-                {messages("deregistrationConfirmation.yourClientsBTA")}
-                {messages("deregistrationConfirmation.bpOffNoEmailP2")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                {messages("deregistrationConfirmation.yourClient")}
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
             case (Some(verifiedEmail), Some(businessName), _) =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
