@@ -195,7 +195,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
 
         "have the correct text for the second paragraph (including business name)" in {
-          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentWithOrgName
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.agentWithBName
         }
 
         "have the correct finish button text" in {
@@ -233,7 +233,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
 
         "have the correct text for the second paragraph (no business name when one isn't found)" in {
-          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.text2AgentPrefNo
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.agentNoBName
         }
 
         "have the correct finish button text" in {
@@ -262,7 +262,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
 
         "have the correct text for the second paragraph (including business name)" in {
-          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.bpOffAgentWithBName
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.agentWithBName
         }
       }
 
@@ -279,7 +279,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
 
         "have the correct text for the second paragraph (including business name)" in {
-          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.bpOffAgentNoBName
+          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.agentNoBName
         }
       }
 
@@ -291,7 +291,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct paragraph" in {
-          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentNoBName
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.agentNoBName
         }
       }
 
@@ -304,7 +304,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct paragraph" in {
-          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentWithBName
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.agentWithBName
         }
       }
     }

@@ -70,30 +70,29 @@ appConfig = appConfig) {
                 <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
                     <strong class="bold">{verifiedEmail}</strong>
                     {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
-                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
                     <strong class="bold">{businessName}</strong>
-                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
             case (Some(verifiedEmail), None, _) =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
                     <strong class="bold">{verifiedEmail}</strong>
                     {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
-                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
                     {messages("deregistrationConfirmation.yourClient")}
-                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
             case (None, Some(businessName), _) =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
-                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
                     <strong class="bold">{businessName}</strong>
-                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
             case _ =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
-                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
                     {messages("deregistrationConfirmation.yourClient")}
-                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}
-                </p>
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
         }
     } else {
 
