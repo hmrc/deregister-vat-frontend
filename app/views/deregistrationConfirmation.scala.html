@@ -25,13 +25,17 @@
     if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
 }
 
+@pageTitle = @{
+    if(appConfig.features.bulkPaperOffFeature() && user.isAgent) messages("deregistrationConfirmation.bpOffTitle") else messages("deregistrationConfirmation.title")
+}
+
 @views.html.main_template(
-title = messages("deregistrationConfirmation.title"),
+title = pageTitle,
 bodyClasses = None,
 appConfig = appConfig) {
 
 <div class="govuk-box-highlight">
-    <h1 class="heading-xlarge">@messages("deregistrationConfirmation.title")</h1>
+    <h1 class="heading-xlarge">@pageTitle</h1>
 </div>
 
 <h2 class="heading-medium">@messages("deregistrationConfirmation.heading")</h2>

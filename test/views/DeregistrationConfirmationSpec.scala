@@ -256,6 +256,14 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
+        "have the correct document title" in {
+          document.title shouldBe DeregistrationConfirmationMessages.bpOffAgentTitle
+        }
+
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.bpOffHeading
+        }
+
 
         "have the correct first paragraph" in {
           elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPref
@@ -272,6 +280,14 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
           views.html.deregistrationConfirmation()(agentUserPrefYes, messages, mockConfig, hc, ec)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct document title" in {
+          document.title shouldBe DeregistrationConfirmationMessages.bpOffAgentTitle
+        }
+
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.bpOffHeading
+        }
 
 
         "have the correct first paragraph" in {
@@ -290,6 +306,14 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
+        "have the correct document title" in {
+          document.title shouldBe DeregistrationConfirmationMessages.bpOffAgentTitle
+        }
+
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.bpOffHeading
+        }
+
         "have the correct paragraph" in {
           elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.agentNoBName
         }
@@ -302,6 +326,14 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
           views.html.deregistrationConfirmation(businessName)(agentUserPrefNo, messages, mockConfig, hc, ec)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct document title" in {
+          document.title shouldBe DeregistrationConfirmationMessages.bpOffAgentTitle
+        }
+
+        "have the correct page heading" in {
+          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.bpOffHeading
+        }
 
         "have the correct paragraph" in {
           elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.agentWithBName
