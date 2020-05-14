@@ -183,7 +183,7 @@ checkYourAnswers.answer.reason.other = Other
 checkYourAnswers.answer.no = No
 checkYourAnswers.confirm = Confirm and cancel VAT registration
 
-deregistrationConfirmation.title = Request to cancel VAT registration received
+deregistrationConfirmation.title = You have asked to cancel the VAT registration
 deregistrationConfirmation.heading = What happens next
 deregistrationConfirmation.textAgentPrefYesP1 = We’ll send an email to
 deregistrationConfirmation.textAgentPrefYesP2 =  within 2 working days telling you whether or not the request has been accepted.
@@ -197,7 +197,6 @@ deregistrationConfirmation.contactDetails = Make sure your contact details are u
 deregistrationConfirmation.changeClient = Change client
 
 ## Dereg Confirmation when Bulk Paper is off
-deregistrationConfirmation.bpOffTitle = You have asked to cancel the VAT registration
 deregistrationConfirmation.bpOffEmailP1 = We’ll send an email to
 deregistrationConfirmation.bpOffEmailP2 = within 2 working days telling you whether we can accept your request.
 deregistrationConfirmation.bpOffNotifyBusiness = We’ll contact
