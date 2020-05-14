@@ -19,6 +19,7 @@ package views
 import assets.messages.{CommonMessages, DeregistrationConfirmationMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import play.twirl.api.Html
 
 class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
@@ -321,7 +322,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
       "the user is without a verifiedAgentEmail (No pref inferred) and has a business name" should {
         val businessName: Option[String] = Some("Fake Business Name Limited")
-        lazy val view = {
+        lazy val view: Html = {
           mockConfig.features.bulkPaperOffFeature(true)
           views.html.deregistrationConfirmation(businessName)(agentUserPrefNo, messages, mockConfig, hc, ec)
         }

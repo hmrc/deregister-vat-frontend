@@ -228,7 +228,7 @@ deregistrationConfirmation.contactDetails = Sicrhewch fod eich manylion cyswllt 
 deregistrationConfirmation.changeClient = Newid cleient
 
 ## Dereg Confirmation when Bulk Paper is off
-deregistrationConfirmation.bpOffTitle = Rydych wedi gofyn i ganslo'r cofrestriad TAW
+deregistrationConfirmation.bpOffTitle = Rydych wedi gofyn i ganslo’r cofrestriad TAW
 deregistrationConfirmation.bpOffEmailP1 = Byddwn yn anfon e-bost i
 deregistrationConfirmation.bpOffEmailP2 = cyn pen 2 ddiwrnod gwaith i roi gwybod i chi a allwn dderbyn eich cais ai peidio.
 deregistrationConfirmation.bpOffNotifyBusiness = Byddwn hefyd yn cysylltu â
