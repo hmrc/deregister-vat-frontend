@@ -21,6 +21,7 @@ case class FeatureSwitchModel(stubAgentClientLookup: Boolean,
                               useLanguagePreferencesFeature: Boolean,
                               accessibilityStatementEnabled: Boolean,
                               zeroRatedJourney: Boolean,
-                              emailVerifiedFeature: Boolean
+                              emailVerifiedFeature: Boolean,
+                              bulkPaperOffFeature: Boolean
                              )
 

@@ -25,6 +25,10 @@
     if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
 }
 
+@pageTitle = @{
+    if(appConfig.features.bulkPaperOffFeature() && user.isAgent) messages("deregistrationConfirmation.bpOffTitle") else messages("deregistrationConfirmation.title")
+}
+
 @views.html.main_template(
 title = messages("deregistrationConfirmation.title"),
 bodyClasses = None,
@@ -38,36 +42,61 @@ appConfig = appConfig) {
 
 @{
     if(user.isAgent){
-        (user.session.get(SessionKeys.verifiedAgentEmail), businessName) match {
+        (user.session.get(SessionKeys.verifiedAgentEmail), businessName, appConfig.features.bulkPaperOffFeature()) match {
 
-            case (Some(verifiedEmail), Some(businessName)) =>
-                <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
+            case (Some(verifiedEmail), Some(businessName), true) =>
+                <p>{messages("deregistrationConfirmation.bpOffEmailP1")}
                     <strong class="bold">{verifiedEmail}</strong>
-                    {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
-                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                    {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
                     <strong class="bold">{businessName}</strong>
-                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-            case (Some(verifiedEmail), None) =>
+            case (Some(verifiedEmail), None, true) =>
+                <p>{messages("deregistrationConfirmation.bpOffEmailP1")}
+                    <strong class="bold">{verifiedEmail}</strong>
+                    {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                {messages("deregistrationConfirmation.yourClient")}
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case (None, Some(businessName), true) =>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                <strong class="bold">{businessName}</strong>
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case (None, None, true) =>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                {messages("deregistrationConfirmation.yourClient")}
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case (Some(verifiedEmail), Some(businessName), _) =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
                     <strong class="bold">{verifiedEmail}</strong>
                     {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
-                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                    <strong class="bold">{businessName}</strong>
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case (Some(verifiedEmail), None, _) =>
+                <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
+                    <strong class="bold">{verifiedEmail}</strong>
+                    {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
                     {messages("deregistrationConfirmation.yourClient")}
-                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-            case (None, Some(businessName)) =>
+            case (None, Some(businessName), _) =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
-                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
                     <strong class="bold">{businessName}</strong>
-                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}</p>
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
             case _ =>
                 <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
-                <p>{messages("deregistrationConfirmation.text2AgentPrefYesP1")}
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
                     {messages("deregistrationConfirmation.yourClient")}
-                    {messages("deregistrationConfirmation.text2AgentPrefYesP2")}
-                </p>
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
         }
     } else {
 

@@ -214,12 +214,10 @@ checkYourAnswers.answer.reason.other = Arall
 checkYourAnswers.answer.no = Na
 checkYourAnswers.confirm = Cadarnhau a chanslo cofrestriad TAW
 
-deregistrationConfirmation.title = Cais i ganslo cofrestriad TAW wedi dod i law
+deregistrationConfirmation.title = Rydych wedi gofyn i ganslo’r cofrestriad TAW
 deregistrationConfirmation.heading = Yr hyn sy’n digwydd nesaf
 deregistrationConfirmation.textAgentPrefYesP1 = Byddwn yn anfon e-bost i
 deregistrationConfirmation.textAgentPrefYesP2 =  cyn pen 2 ddiwrnod gwaith i roi gwybod i chi a yw’r cais wedi’i dderbyn ai peidio.
-deregistrationConfirmation.text2AgentPrefYesP1 = Byddwn hefyd yn cysylltu ag
-deregistrationConfirmation.text2AgentPrefYesP2 =  i roi diweddariad.
 deregistrationConfirmation.yourClient = eich cleient
 deregistrationConfirmation.textAgentPrefNo = Byddwn yn anfon llythyr o gadarnhad i gyfeiriad yr asiantaeth sydd wedi’i gofrestru gyda CThEM cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.emailPreference = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith gyda diweddariad, neu gallwch wirio’ch negeseuon diogel oddi wrth CThEM.
@@ -228,6 +226,12 @@ deregistrationConfirmation.paperPreference = Byddwn yn anfon llythyr i’ch prif
 deregistrationConfirmation.contactPrefError = Byddwn yn anfon diweddariad atoch cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.contactDetails = Sicrhewch fod eich manylion cyswllt wedi’u diweddaru.
 deregistrationConfirmation.changeClient = Newid cleient
+
+## Dereg Confirmation when Bulk Paper is off
+deregistrationConfirmation.bpOffEmailP1 = Byddwn yn anfon e-bost i
+deregistrationConfirmation.bpOffEmailP2 = cyn pen 2 ddiwrnod gwaith i roi gwybod i chi a allwn dderbyn eich cais ai peidio.
+deregistrationConfirmation.bpOffNotifyBusiness = Byddwn hefyd yn cysylltu â
+deregistrationConfirmation.bpOffUpdateBusiness = gyda diweddariad.
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi

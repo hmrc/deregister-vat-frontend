@@ -18,9 +18,9 @@ package assets.messages
 
 object DeregistrationConfirmationMessages extends BaseMessages {
 
-  val title: String = "Request to cancel VAT registration received" + titleSuffix
-  val agentTitle: String = "Request to cancel VAT registration received" + titleSuffixAgent
-  val heading = "Request to cancel VAT registration received"
+  val heading = "You have asked to cancel the VAT registration"
+  val title: String = heading + titleSuffix
+  val agentTitle: String = heading + titleSuffixAgent
   val subheading = "What happens next"
 
   val contactPrefError = "We’ll send you an update within 15 working days."
@@ -46,4 +46,10 @@ object DeregistrationConfirmationMessages extends BaseMessages {
   val text2AgentPrefNo = "We’ll also contact your client with an update."
 
   val checkContactDetails = "Check your contact details are up to date."
+
+  val bpOffAgentYesPref = "We’ll send an email to agentEmail@test.com within 2 working days telling you whether we can accept your request."
+
+  val agentWithBName = "We’ll contact Fake Business Name Limited with an update."
+
+  val agentNoBName = "We’ll contact your client with an update."
 }
