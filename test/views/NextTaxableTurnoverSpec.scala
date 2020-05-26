@@ -20,8 +20,11 @@ import assets.messages.{CommonMessages, NextTaxableTurnoverMessages, OptionTaxMe
 import forms.NextTaxableTurnoverForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.NextTaxableTurnover
 
 class NextTaxableTurnoverSpec extends ViewBaseSpec {
+
+  lazy val nextTaxableTurnover: NextTaxableTurnover = injector.instanceOf[NextTaxableTurnover]
 
   object Selectors {
     val back = ".link-back"
@@ -36,7 +39,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,backLink)
+    lazy val view = nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,backLink)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -67,7 +70,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors when the user selected no on the business activity page" should {
 
-    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,
+    lazy val view = nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,
       controllers.zeroRated.routes.BusinessActivityController.show().url)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -83,7 +86,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors when the user selected yes on the business activity page" should {
 
-    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,
+    lazy val view = nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,
       controllers.zeroRated.routes.SicCodeController.show().url)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -99,7 +102,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "")),backLink)
+    lazy val view = nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm.bind(Map("turnover" -> "")),backLink)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

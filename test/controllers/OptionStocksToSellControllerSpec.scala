@@ -23,18 +23,23 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.mocks.MockStocksAnswerService
+import views.html.OptionStocksToSell
 
 import scala.concurrent.Future
 
 
 class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStocksAnswerService {
 
+  lazy val optionStocksToSell: OptionStocksToSell = injector.instanceOf[OptionStocksToSell]
+
   object TestOptionStocksToSellController extends OptionStocksToSellController(
-    messagesApi,
+    optionStocksToSell,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockStocksAnswerService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

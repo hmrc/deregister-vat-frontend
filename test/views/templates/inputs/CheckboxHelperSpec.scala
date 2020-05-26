@@ -20,10 +20,12 @@ import forms.WhyTurnoverBelowForm
 import play.api.data.{Form, FormError}
 import play.api.data.Forms._
 import play.twirl.api.Html
-import views.html.templates.inputs.checkboxHelper
+import views.html.templates.inputs.CheckboxHelper
 import views.templates.TemplateBaseSpec
 
 class CheckboxHelperSpec extends TemplateBaseSpec {
+
+  lazy val checkboxHelper: CheckboxHelper = injector.instanceOf[CheckboxHelper]
 
   val fieldName = "fieldName"
   val question = "question"

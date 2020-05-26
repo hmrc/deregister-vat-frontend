@@ -23,23 +23,26 @@ import models.{User, YesNo}
 import play.api.data.Form
 import forms.PurchasesExceedSuppliesForm
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.PurchasesExceedSuppliesAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.PurchasesExceedSupplies
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PurchasesExceedSuppliesController @Inject()(val messagesApi: MessagesApi,
+class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: PurchasesExceedSupplies,
+                                                  val mcc: MessagesControllerComponents,
                                                   val authenticate: AuthPredicate,
                                                   val regStatusCheck: DeniedAccessPredicate,
                                                   val purchasesExceedSuppliesAnswerService: PurchasesExceedSuppliesAnswerService,
                                                   val serviceErrorHandler: ServiceErrorHandler,
-                                                  implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                                  implicit val ec: ExecutionContext,
+                                                  implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   private def renderView(form: Form[YesNo] = PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm)
-                        (implicit user: User[_]) = views.html.purchasesExceedSupplies(form)
+                        (implicit user: User[_]) = purchasesExceedSupplies(form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
@@ -61,7 +64,7 @@ class PurchasesExceedSuppliesController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
       PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.bindFromRequest().fold(
-        error => Future.successful(BadRequest(views.html.purchasesExceedSupplies(error))),
+        error => Future.successful(BadRequest(purchasesExceedSupplies(error))),
         data => purchasesExceedSuppliesAnswerService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.routes.VATAccountsController.show().url)
           case Left(error) =>

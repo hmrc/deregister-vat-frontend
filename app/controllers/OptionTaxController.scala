@@ -23,25 +23,28 @@ import javax.inject.{Inject, Singleton}
 import models.{User, YesNoAmountModel}
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.OptionTaxAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.OptionTax
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class OptionTaxController @Inject()(val messagesApi: MessagesApi,
+class OptionTaxController @Inject()(optionTax: OptionTax,
+                                    val mcc: MessagesControllerComponents,
                                     val authenticate: AuthPredicate,
                                     val regStatusCheck: DeniedAccessPredicate,
                                     val optionTaxAnswerService: OptionTaxAnswerService,
                                     val serviceErrorHandler: ServiceErrorHandler,
-                                    implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                    implicit val ec: ExecutionContext,
+                                    implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm("optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry")
 
   private def renderView(form: Form[YesNoAmountModel])(implicit user: User[_]) =
-    views.html.optionTax(form)
+    optionTax(form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     optionTaxAnswerService.getAnswer map {
@@ -52,7 +55,7 @@ class OptionTaxController @Inject()(val messagesApi: MessagesApi,
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.optionTax(error))),
+      error => Future.successful(BadRequest(optionTax(error))),
       data => optionTaxAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show())
         case Left(error) =>

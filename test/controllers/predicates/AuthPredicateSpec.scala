@@ -23,12 +23,15 @@ import play.api.mvc.{Action, AnyContent}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.MissingBearerToken
+import views.html.errors.client.Unauthorised
 
 import scala.concurrent.Future
 
 class AuthPredicateSpec extends MockAuth {
 
-  object TestAuthPredicate extends AuthPredicate(mockEnrolmentsAuthService, serviceErrorHandler, mockAuthoriseAsAgent, messagesApi, mockConfig)
+  override lazy val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
+
+  object TestAuthPredicate extends AuthPredicate(unauthorised, mockEnrolmentsAuthService, serviceErrorHandler, mockAuthoriseAsAgent, mcc, mockConfig)
 
   def target(): Action[AnyContent] = {
     TestAuthPredicate.async {

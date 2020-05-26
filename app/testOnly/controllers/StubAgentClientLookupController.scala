@@ -20,20 +20,23 @@ import common.SessionKeys
 import config.AppConfig
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import testOnly.forms.StubAgentClientLookupForm
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import testOnly.views.html.{StubAgentClientLookup, StubAgentClientUnauth}
 
-class StubAgentClientLookupController @Inject()(val messagesApi: MessagesApi,
+class StubAgentClientLookupController @Inject()(stubAgentClientLookup: StubAgentClientLookup,
+                                                stubAgentClientUnauth: StubAgentClientUnauth,
+                                                mcc: MessagesControllerComponents,
                                                 implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport {
+  extends FrontendController(mcc) with I18nSupport {
 
   def show(redirectUrl: String): Action[AnyContent] = Action { implicit request =>
-    Ok(testOnly.views.html.stubAgentClientLookup(StubAgentClientLookupForm.form, redirectUrl))
+    Ok(stubAgentClientLookup(StubAgentClientLookupForm.form, redirectUrl))
   }
 
   def unauth(redirectUrl: String): Action[AnyContent] = Action { implicit request =>
-    Ok(testOnly.views.html.stubAgentClientUnauth(redirectUrl))
+    Ok(stubAgentClientUnauth(redirectUrl))
   }
 
   def post: Action[AnyContent] = Action { implicit request =>

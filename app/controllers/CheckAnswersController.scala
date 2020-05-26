@@ -22,28 +22,33 @@ import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import javax.inject.{Inject, Singleton}
 import models.VatSubscriptionSuccess
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.CheckYourAnswers
+
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class CheckAnswersController @Inject()(val messagesApi: MessagesApi,
+class CheckAnswersController @Inject()(checkYourAnswers: CheckYourAnswers,
+                                        val mcc: MessagesControllerComponents,
                                        val authenticate: AuthPredicate,
                                        val regStatusCheck: DeniedAccessPredicate,
                                        checkAnswersService: CheckAnswersService,
                                        deregDateAnswerService: ChooseDeregDateAnswerService,
                                        updateDeregistrationService: UpdateDeregistrationService,
                                        val serviceErrorHandler: ServiceErrorHandler,
-                                       implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                       implicit val appConfig: AppConfig,
+                                       implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     checkAnswersService.checkYourAnswersModel() map {
       case Right(answers) =>
         (answers.chooseDeregDate, answers.deregDate) match {
-          case (Some(_), Some(_)) => Ok(views.html.checkYourAnswers(controllers.routes.DeregistrationDateController.show().url, answers.seqAnswers))
-          case (Some(_), _) => Ok(views.html.checkYourAnswers(controllers.routes.ChooseDeregistrationDateController.show().url, answers.seqAnswers))
-          case _ => Ok(views.html.checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
+          case (Some(_), Some(_)) => Ok(checkYourAnswers(controllers.routes.DeregistrationDateController.show().url, answers.seqAnswers))
+          case (Some(_), _) => Ok(checkYourAnswers(controllers.routes.ChooseDeregistrationDateController.show().url, answers.seqAnswers))
+          case _ => Ok(checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
         }
       case Left(error) =>
         Logger.warn("[CheckAnswersController][show] - storedAnswerService returned an error retrieving answers: " + error.message)

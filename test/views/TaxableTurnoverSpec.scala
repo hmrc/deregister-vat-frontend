@@ -20,8 +20,11 @@ import assets.messages.{CommonMessages, TaxableTurnoverMessages}
 import forms.YesNoForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.TaxableTurnover
 
 class TaxableTurnoverSpec extends ViewBaseSpec {
+
+  lazy val taxableTurnover: TaxableTurnover = injector.instanceOf[TaxableTurnover]
 
   object Selectors {
     val back = ".link-back"
@@ -34,7 +37,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.taxableTurnover(YesNoForm.yesNoForm(
+    lazy val view = taxableTurnover(YesNoForm.yesNoForm(
       "taxableTurnover.error.mandatoryRadioOption"))(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -66,7 +69,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.taxableTurnover(YesNoForm.yesNoForm(
+    lazy val view = taxableTurnover(YesNoForm.yesNoForm(
       "taxableTurnover.error.mandatoryRadioOption","83,000").bind(Map("yes_no" -> "")))(agentUserPrefYes,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

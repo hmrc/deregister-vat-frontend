@@ -21,21 +21,24 @@ import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
-import uk.gov.hmrc.auth.core.retrieve.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
                                  val serviceErrorHandler: ServiceErrorHandler,
-                                 implicit val messagesApi: MessagesApi,
+                                 val mcc: MessagesControllerComponents,
                                  implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport with ActionBuilder[User] with ActionFunction[Request, User] {
+  extends FrontendController(mcc) with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] {
+
+  override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
+  override implicit protected val executionContext: ExecutionContext = mcc.executionContext
 
   override def invokeBlock[A](request: Request[A], block: User[A] => Future[Result]): Future[Result] = {
 

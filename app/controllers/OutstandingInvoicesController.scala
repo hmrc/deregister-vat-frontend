@@ -25,14 +25,16 @@ import javax.inject.Inject
 import models._
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OutstandingInvoicesAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.OutstandingInvoices
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
+class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingInvoices,
+                                              val mcc: MessagesControllerComponents,
                                               val authenticate: AuthPredicate,
                                               val regStatusCheck: DeniedAccessPredicate,
                                               val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
@@ -40,20 +42,21 @@ class OutstandingInvoicesController @Inject()(val messagesApi: MessagesApi,
                                               val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                               val wipeRedundantDataService: WipeRedundantDataService,
                                               val serviceErrorHandler: ServiceErrorHandler,
-                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                              implicit val ec: ExecutionContext,
+                                              implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption")
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     outstandingInvoicesAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(views.html.outstandingInvoices(form.fill(data)))
-      case _ => Ok(views.html.outstandingInvoices(form))
+      case Right(Some(data)) => Ok(outstandingInvoices(form.fill(data)))
+      case _ => Ok(outstandingInvoices(form))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.outstandingInvoices(error))),
+      error => Future.successful(BadRequest(outstandingInvoices(error))),
       data => (for {
         _ <- EitherT(outstandingInvoicesAnswerService.storeAnswer(data))
         _ <- EitherT(wipeRedundantDataService.wipeRedundantData)

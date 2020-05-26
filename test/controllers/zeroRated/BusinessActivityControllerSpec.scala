@@ -25,6 +25,7 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockBusinessActivityAnswerService, MockDeleteAllStoredAnswersService, MockWipeRedundantDataService}
+import views.html.BusinessActivity
 
 import scala.concurrent.Future
 
@@ -34,13 +35,17 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
   with MockWipeRedundantDataService
   {
 
+  lazy val businessActivity: BusinessActivity = injector.instanceOf[BusinessActivity]
+
   object TestController extends BusinessActivityController(
-    messagesApi,
+    businessActivity,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockBusinessActivityAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

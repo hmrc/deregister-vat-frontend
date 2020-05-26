@@ -22,26 +22,31 @@ import forms.VATAccountsForm
 import javax.inject.{Inject, Singleton}
 import models._
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{AccountingMethodAnswerService, DeregReasonAnswerService, TaxableTurnoverAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import cats.data.EitherT
 import cats.instances.future._
 import play.api.Logger
+import views.html.VatAccounts
+
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class VATAccountsController @Inject()(val messagesApi: MessagesApi,
+class VATAccountsController @Inject()(vatAccounts: VatAccounts,
+                                      val mcc: MessagesControllerComponents,
                                       val authenticate: AuthPredicate,
                                       val regStatusCheck: DeniedAccessPredicate,
                                       val accountingMethodAnswerService: AccountingMethodAnswerService,
                                       val deregReasonAnswerService: DeregReasonAnswerService,
                                       val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                       val serviceErrorHandler: ServiceErrorHandler,
-                                      implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                      implicit val ec: ExecutionContext,
+                                      implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   private def renderView(backLink: String, form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)
-                        (implicit user: User[_]) = views.html.vatAccounts(backLink, form)
+                        (implicit user: User[_]) = vatAccounts(backLink, form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     for {
@@ -66,7 +71,7 @@ class VATAccountsController @Inject()(val messagesApi: MessagesApi,
         reason <- EitherT(deregReasonAnswerService.getAnswer)
       } yield (lastTurnoverBelow, reason)).value.map {
         case Right((optionLTB, Some(reason))) =>
-          BadRequest(views.html.vatAccounts(backLink(optionLTB, reason), error))
+          BadRequest(vatAccounts(backLink(optionLTB, reason), error))
         case _ =>
           Logger.warn("[VATAccountsController][submit] - failed to retrieve one or more answers from answer service")
           serviceErrorHandler.showInternalServerError

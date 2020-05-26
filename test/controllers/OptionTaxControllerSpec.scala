@@ -25,17 +25,22 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockOptionTaxAnswerService
+import views.html.OptionTax
 
 import scala.concurrent.Future
 
 class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswerService {
 
+  lazy val optionTax: OptionTax = injector.instanceOf[OptionTax]
+
   object TestOptionTaxController extends OptionTaxController(
-    messagesApi,
+    optionTax,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockOptionTaxAnswerService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

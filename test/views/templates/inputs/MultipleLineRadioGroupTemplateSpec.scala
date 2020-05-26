@@ -20,10 +20,12 @@ import forms.YesNoForm
 import models.MultipleLineRadioGroupModel
 import play.api.data.{Field, FormError}
 import play.twirl.api.Html
-import views.html.templates.inputs.multipleLineRadioGroup
+import views.html.templates.inputs.MultipleLineRadioGroup
 import views.templates.TemplateBaseSpec
 
 class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
+
+  lazy val multipleLineRadioGroup: MultipleLineRadioGroup = injector.instanceOf[MultipleLineRadioGroup]
 
   val fieldName = "fieldName"
   val labelText = "labelText"

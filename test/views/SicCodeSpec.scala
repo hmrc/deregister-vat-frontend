@@ -20,8 +20,11 @@ import assets.messages.{CommonMessages, SicCodeMessages}
 import forms.SicCodeForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.SicCode
 
 class SicCodeSpec extends ViewBaseSpec {
+
+  lazy val sicCode: SicCode = injector.instanceOf[SicCode]
 
   object Selectors {
     val back = ".link-back"
@@ -35,7 +38,7 @@ class SicCodeSpec extends ViewBaseSpec {
 
   "Rendering the SIC Code page with no errors" should {
 
-    lazy val view = views.html.sicCode(SicCodeForm.sicCodeForm)
+    lazy val view = sicCode(SicCodeForm.sicCodeForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -75,7 +78,7 @@ class SicCodeSpec extends ViewBaseSpec {
 
   "Rendering the SIC Code page with errors" should {
 
-    lazy val view = views.html.sicCode(SicCodeForm.sicCodeForm.bind(Map("value" -> "")))
+    lazy val view = sicCode(SicCodeForm.sicCodeForm.bind(Map("value" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

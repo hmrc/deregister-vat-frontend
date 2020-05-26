@@ -1,0 +1,71 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.html.helper._
+@import views.html.templates.Legends
+
+@this(legends: Legends)
+
+@(field: Field,
+  choices: Seq[(String, String)],
+  question: String,
+  additionalContent: Option[Html] = None,
+  inline: Boolean = false,
+  hiddenContent: Html,
+  legendAsHeader: Boolean = true,
+  hiddenContentError: Boolean = false
+)(implicit messages: Messages)
+
+    @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
+
+    <div @if(elements.hasErrors){ class="form-field--error"}>
+
+        <fieldset>
+
+            @legends(question, legendAsHeader)
+
+            @additionalContent.map { content => @content }
+
+            @elements.errors.map { error => <span class="error-message">@messages(error)</span> }
+
+            <div @if(inline){class="inline"}>
+                 <div class="multiple-choice" data-target="hiddenContent">
+                     <input type="radio"
+                            id="@{elements.field.name}-yes"
+                            name="@elements.field.name"
+                            value="yes"
+                            @field.value.filter( _ == "yes").map{_ => checked="checked"}/>
+                     <label for="@{elements.field.name}-yes">@Messages("common.yes")</label>
+                 </div>
+
+                <div class="panel panel-border-narrow yes-no-hidden @if(!field.value.contains("yes")){js-hidden} @if(hiddenContentError){hidden-error-panel}" id="hiddenContent">
+                @hiddenContent
+                </div>
+
+                 <div class="multiple-choice">
+                     <input type="radio"
+                            id="@{elements.field.name}-no"
+                            name="@elements.field.name"
+                            value="no"
+                            @field.value.filter( _ == "no").map{_ => checked="checked"}/>
+                     <label for="@{elements.field.name}-no">@Messages("common.no")</label>
+                 </div>
+            </div>
+
+
+
+        </fieldset>
+    </div>

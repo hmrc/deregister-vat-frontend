@@ -20,8 +20,11 @@ import assets.messages.{CommonMessages, OptionTaxMessages}
 import forms.YesNoAmountForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.OptionTax
 
 class OptionTaxSpec extends ViewBaseSpec {
+
+  lazy val optionTax: OptionTax = injector.instanceOf[OptionTax]
 
   object Selectors {
     val back = ".link-back"
@@ -38,7 +41,7 @@ class OptionTaxSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(
+    lazy val view = optionTax(YesNoAmountForm.yesNoAmountForm(
       "optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -86,7 +89,7 @@ class OptionTaxSpec extends ViewBaseSpec {
 
     "nothing was entered" should {
 
-      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(
+      lazy val view = optionTax(YesNoAmountForm.yesNoAmountForm(
         "optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry").bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -105,7 +108,7 @@ class OptionTaxSpec extends ViewBaseSpec {
 
     "Yes was entered but no amount" should {
 
-      lazy val view = views.html.optionTax(YesNoAmountForm.yesNoAmountForm(
+      lazy val view = optionTax(YesNoAmountForm.yesNoAmountForm(
         "optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry").bind(Map(
         "yes_no" -> "yes",
         "amount" -> ""

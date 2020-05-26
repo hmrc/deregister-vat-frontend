@@ -24,18 +24,23 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.mocks.{MockDeleteAllStoredAnswersService, MockZeroRatedSuppliesValueService}
+import views.html.ZeroRatedSupplies
 
 import scala.concurrent.Future
 
 class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRatedSuppliesValueService {
 
+  lazy val zeroRatedSupplies: ZeroRatedSupplies = injector.instanceOf[ZeroRatedSupplies]
+
   object TestZeroRatedSuppliesController extends ZeroRatedSuppliesController(
-    messagesApi,
+    zeroRatedSupplies,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockZeroRatedSuppliesValueService,
     serviceErrorHandler,
-    mockConfig
+    mockConfig,
+    ec
   )
 
   val testZeroRatedSuppliesAmt = 500

@@ -23,17 +23,21 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockCeasedTradingDateAnswerService
+import views.html.CeasedTradingDate
 
 import scala.concurrent.Future
 
 class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeasedTradingDateAnswerService {
+  lazy val ceasedTradingDate: CeasedTradingDate = injector.instanceOf[CeasedTradingDate]
 
   object TestCeasedTradingDateController extends CeasedTradingDateController(
-    messagesApi,
+    ceasedTradingDate,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockCeasedTradingDateAnswerService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

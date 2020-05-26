@@ -21,27 +21,29 @@ import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.DeregistrationDateForm
 import javax.inject.Inject
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.DeregDateAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.DeregistrationDate
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeregistrationDateController@Inject()(val messagesApi: MessagesApi,
+class DeregistrationDateController@Inject()(deregistrationDate: DeregistrationDate,
+                                             val mcc: MessagesControllerComponents,
                                             authenticate: AuthPredicate,
                                             regStatusCheck: DeniedAccessPredicate,
                                             serviceErrorHandler: ServiceErrorHandler,
                                             answerService: DeregDateAnswerService,
                                             implicit val appConfig: AppConfig,
-                                            implicit val ec: ExecutionContext) extends FrontendController with I18nSupport {
+                                            implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit request =>
     answerService.getAnswer.map {
       case Right(Some(deregDate)) =>
-        Ok(views.html.deregistrationDate(DeregistrationDateForm.form.fill(deregDate)))
+        Ok(deregistrationDate(DeregistrationDateForm.form.fill(deregDate)))
       case Right(None) =>
-        Ok(views.html.deregistrationDate(DeregistrationDateForm.form))
+        Ok(deregistrationDate(DeregistrationDateForm.form))
       case _ =>
         Logger.warn("[DeregistrationDateController][show] - storedAnswerService returned an error retrieving answer")
         serviceErrorHandler.showInternalServerError
@@ -50,7 +52,7 @@ class DeregistrationDateController@Inject()(val messagesApi: MessagesApi,
 
   val submit: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit request =>
     DeregistrationDateForm.form.bindFromRequest().fold(
-      error => Future(BadRequest(views.html.deregistrationDate(error))),
+      error => Future(BadRequest(deregistrationDate(error))),
       data => answerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
         case Left(err) =>

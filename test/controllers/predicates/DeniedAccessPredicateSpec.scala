@@ -33,9 +33,9 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
       new DeniedAccessPredicate(
         mockCustomerDetailsService,
         serviceErrorHandler,
+        mcc,
         messagesApi,
-        mockConfig,
-        ec
+        mockConfig
       )
 
     "there is a registration status in session" when {

@@ -1,0 +1,141 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import common.SessionKeys
+@import uk.gov.hmrc.http.HeaderCarrier
+@import scala.concurrent.{ExecutionContext, Future}
+@import models.contactPreferences.ContactPreference
+
+
+@this(mainTemplate: MainTemplate)
+
+@(businessName: Option[String]=None,preference: Option[String]=None,verifiedEmail: Option[Boolean]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig, hc: HeaderCarrier, ec: ExecutionContext)
+
+@finishLink = @{
+    if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
+}
+
+@pageTitle = @{
+    if(appConfig.features.bulkPaperOffFeature() && user.isAgent) messages("deregistrationConfirmation.bpOffTitle") else messages("deregistrationConfirmation.title")
+}
+
+@mainTemplate(
+title = messages("deregistrationConfirmation.title"),
+bodyClasses = None,
+appConfig = appConfig) {
+
+<div class="govuk-box-highlight">
+    <h1 class="heading-xlarge">@messages("deregistrationConfirmation.title")</h1>
+</div>
+
+<h2 class="heading-medium">@messages("deregistrationConfirmation.heading")</h2>
+
+@{
+    if(user.isAgent){
+        (user.session.get(SessionKeys.verifiedAgentEmail), businessName, appConfig.features.bulkPaperOffFeature()) match {
+
+            case (Some(verifiedEmail), Some(businessName), true) =>
+                <p>{messages("deregistrationConfirmation.bpOffEmailP1")}
+                    <strong class="bold">{verifiedEmail}</strong>
+                    {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                    <strong class="bold">{businessName}</strong>
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case (Some(verifiedEmail), None, true) =>
+                <p>{messages("deregistrationConfirmation.bpOffEmailP1")}
+                    <strong class="bold">{verifiedEmail}</strong>
+                    {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                {messages("deregistrationConfirmation.yourClient")}
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case (None, Some(businessName), true) =>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                <strong class="bold">{businessName}</strong>
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case (None, None, true) =>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                {messages("deregistrationConfirmation.yourClient")}
+                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case (Some(verifiedEmail), Some(businessName), _) =>
+                <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
+                    <strong class="bold">{verifiedEmail}</strong>
+                    {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                    <strong class="bold">{businessName}</strong>
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case (Some(verifiedEmail), None, _) =>
+                <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
+                    <strong class="bold">{verifiedEmail}</strong>
+                    {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                    {messages("deregistrationConfirmation.yourClient")}
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case (None, Some(businessName), _) =>
+                <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                    <strong class="bold">{businessName}</strong>
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+
+            case _ =>
+                <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
+                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+                    {messages("deregistrationConfirmation.yourClient")}
+                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+        }
+    } else {
+
+        (preference, verifiedEmail) match {
+
+            case (Some("DIGITAL"), Some(true)) =>
+                <p id="preference-message">{messages("deregistrationConfirmation.emailPreference")}</p>
+                <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+
+            case (Some("DIGITAL"), _) =>
+                <p id="preference-message">{messages("deregistrationConfirmation.digitalPreference")}</p>
+                <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+
+            case (Some("PAPER"), _) =>
+                <p id="preference-message">{messages("deregistrationConfirmation.paperPreference")}</p>
+                <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+
+            case _ => <p>{messages("deregistrationConfirmation.contactPrefError")}</p>
+                      <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+
+        }
+
+    }
+}
+
+@if(user.isAgent) {
+    <p>
+        <a id="change-client-link"
+        href="@appConfig.changeClientUrl">@messages("deregistrationConfirmation.changeClient")
+        </a>
+    </p>
+}
+
+<p>
+    <a id="finish" href="@finishLink" class="button" role="button">
+        @messages("common.finish")
+    </a>
+</p>
+}

@@ -26,21 +26,26 @@ import assets.constants.BaseTestConstants.vrn
 import assets.messages.{DeregistrationConfirmationMessages => Messages}
 import common.SessionKeys
 import org.jsoup.Jsoup
+import views.html.DeregistrationConfirmation
 
 import scala.concurrent.Future
 
 class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
   with MockCustomerDetailsService with MockContactPreferencesService with MockAuditService {
 
+  lazy val deregistrationConfirmation: DeregistrationConfirmation = injector.instanceOf[DeregistrationConfirmation]
+
   object TestDeregistrationConfirmationController
     extends DeregistrationConfirmationController(
-      messagesApi,
+      deregistrationConfirmation,
+      mcc,
       mockAuthPredicate,
       mockDeleteAllStoredAnswersService,
       serviceErrorHandler,
       mockCustomerDetailsService,
       mockAuditService,
       mockContactPreferencesService,
+      ec,
       mockConfig)
 
  lazy val requestWithSession = request.withSession(SessionKeys.deregSuccessful -> "true")
@@ -79,8 +84,8 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                 }
 
                 "return the correct first paragraph" in {
-                  document.getElementById("content").getElementsByTag("article").first()
-                    .getElementsByTag("p").first().text() shouldBe Messages.emailPreference
+                  messages(document.getElementById("content").getElementsByTag("article").first()
+                    .getElementsByTag("p").first().text()) shouldBe Messages.emailPreference
                 }
 
               }
@@ -107,8 +112,8 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                 }
 
                 "return the correct first paragraph" in {
-                  document.getElementById("content").getElementsByTag("article").first()
-                    .getElementsByTag("p").first().text() shouldBe Messages.digitalPreference
+                  messages(document.getElementById("content").getElementsByTag("article").first()
+                    .getElementsByTag("p").first().text()) shouldBe Messages.digitalPreference
                 }
 
               }
@@ -143,8 +148,8 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
               }
 
               "return the correct first paragraph" in {
-                document.getElementById("content").getElementsByTag("article").first()
-                  .getElementsByTag("p").first().text() shouldBe Messages.digitalPreference
+                messages(document.getElementById("content").getElementsByTag("article").first()
+                  .getElementsByTag("p").first().text()) shouldBe Messages.digitalPreference
               }
 
             }
@@ -176,8 +181,8 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
             }
 
             "return the correct first paragraph" in {
-              document.getElementById("content").getElementsByTag("article").first()
-                .getElementsByTag("p").first().text() shouldBe Messages.paperPreference
+              messages(document.getElementById("content").getElementsByTag("article").first()
+                .getElementsByTag("p").first().text()) shouldBe Messages.paperPreference
             }
           }
 
@@ -201,8 +206,8 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
             }
 
             "return the correct first paragraph" in {
-              document.getElementById("content").getElementsByTag("article").first()
-                .getElementsByTag("p").first().text() shouldBe Messages.contactPrefError
+              messages(document.getElementById("content").getElementsByTag("article").first()
+                .getElementsByTag("p").first().text()) shouldBe Messages.contactPrefError
             }
           }
         }

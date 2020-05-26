@@ -26,16 +26,20 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockCapitalAssetsAnswerService, MockWipeRedundantDataService}
+import views.html.CapitalAssets
 
 class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockCapitalAssetsAnswerService {
+  lazy val capitalAssets: CapitalAssets = injector.instanceOf[CapitalAssets]
 
   object TestCapitalAssetsController extends CapitalAssetsController(
-    messagesApi,
+    capitalAssets,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockCapitalAssetsAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

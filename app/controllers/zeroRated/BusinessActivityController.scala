@@ -22,33 +22,35 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import javax.inject.{Inject, Singleton}
 import models.{No, User, Yes, YesNo}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import views.html.businessActivity
+import views.html.BusinessActivity
 import play.api.data.Form
 import forms.YesNoForm
 import play.api.Logger
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
+class BusinessActivityController @Inject()(businessActivity: BusinessActivity,
+                                           val mcc: MessagesControllerComponents,
                                            val authenticate: AuthPredicate,
                                            val regStatusCheck: DeniedAccessPredicate,
                                            val businessActivityAnswerService: BusinessActivityAnswerService,
                                            val wipeRedundantDataService: WipeRedundantDataService,
                                            val serviceErrorHandler: ServiceErrorHandler,
-                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                           implicit val ec: ExecutionContext,
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption")
 
   private def renderView(form: Form[YesNo])(implicit user: User[_]) = businessActivity(form)
 
-  private def redirect (yesNo: Option[YesNo]) : Result = yesNo match {
-    case Some(Yes) => Redirect(controllers.zeroRated.routes.SicCodeController.show())
-    case Some(No) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
+  private def redirect (yesNo: YesNo) : Result = yesNo match {
+    case Yes => Redirect(controllers.zeroRated.routes.SicCodeController.show())
+    case No => Redirect(controllers.routes.NextTaxableTurnoverController.show())
   }
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
@@ -65,11 +67,11 @@ class BusinessActivityController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
       form.bindFromRequest().fold(
-        error => Future.successful(BadRequest(views.html.businessActivity(error))),
+        error => Future.successful(BadRequest(businessActivity(error))),
         data => (for {
           _ <- EitherT(businessActivityAnswerService.storeAnswer(data))
           _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
-          result = redirect(Some(data))
+          result = redirect(data)
         } yield result).value.map {
           case Right(redirect) => redirect
           case Left(error) =>

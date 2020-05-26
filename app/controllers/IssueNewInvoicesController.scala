@@ -25,25 +25,28 @@ import javax.inject.{Inject, Singleton}
 import models._
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.IssueNewInvoices
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
+class IssueNewInvoicesController @Inject()(issueNewInvoices: IssueNewInvoices,
+                                           val mcc: MessagesControllerComponents,
                                            val authenticate: AuthPredicate,
                                            val regStatusCheck: DeniedAccessPredicate,
                                            val issueNewInvoiceAnswerService: IssueNewInvoicesAnswerService,
                                            val wipeRedundantDataService: WipeRedundantDataService,
                                            val serviceErrorHandler: ServiceErrorHandler,
-                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                           implicit val ec: ExecutionContext,
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption")
 
-  private def renderView(form: Form[YesNo])(implicit user: User[_]) = views.html.issueNewInvoices(form)
+  private def renderView(form: Form[YesNo])(implicit user: User[_]) = issueNewInvoices(form)
 
   private def redirect: YesNo => Result = {
     case Yes => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
@@ -59,7 +62,7 @@ class IssueNewInvoicesController @Inject()(val messagesApi: MessagesApi,
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.issueNewInvoices(error))),
+      error => Future.successful(BadRequest(issueNewInvoices(error))),
       data => (for {
         _ <- EitherT(issueNewInvoiceAnswerService.storeAnswer(data))
         _ <- EitherT(wipeRedundantDataService.wipeRedundantData)

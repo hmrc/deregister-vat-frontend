@@ -21,21 +21,22 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import models.User
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.DeleteAllStoredAnswersService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SignOutController @Inject()(val messagesApi: MessagesApi,
+class SignOutController @Inject()(val mcc: MessagesControllerComponents,
                                   val authentication: AuthPredicate,
                                   val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
+                                  implicit val ec: ExecutionContext,
                                   val serviceErrorHandler: ServiceErrorHandler)
-                                 (implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                 (implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   def signOut(authorised: Boolean): Action[AnyContent] = authentication.async { implicit user =>
     implicit val hc: HeaderCarrier =

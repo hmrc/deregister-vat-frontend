@@ -25,26 +25,28 @@ import forms.YesNoAmountForm
 import models.{User, YesNoAmountModel}
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.{CapitalAssetsAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-
-import scala.concurrent.Future
+import views.html.CapitalAssets
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class  CapitalAssetsController @Inject()(val messagesApi: MessagesApi,
+class  CapitalAssetsController @Inject()(capitalAssets: CapitalAssets,
+                                          val mcc: MessagesControllerComponents,
                                          val authentication: AuthPredicate,
                                          val regStatusCheck: DeniedAccessPredicate,
                                          val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                          val wipeRedundantDataService: WipeRedundantDataService,
                                          val serviceErrorHandler: ServiceErrorHandler,
-                                         implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                         implicit val ec: ExecutionContext,
+                                         implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm("capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry")
 
   private def renderView(data: Form[YesNoAmountModel])(implicit user: User[_]) =
-    views.html.capitalAssets(data)
+    capitalAssets(data)
 
   val show: Action[AnyContent] = (authentication andThen regStatusCheck).async { implicit user =>
     capitalAssetsAnswerService.getAnswer.map {

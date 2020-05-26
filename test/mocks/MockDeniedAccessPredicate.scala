@@ -34,9 +34,9 @@ trait MockDeniedAccessPredicate extends TestUtil with MockFactory with MockVatSu
     object MockPredicate extends DeniedAccessPredicate(
       new CustomerDetailsService(mockVatSubscriptionConnector),
       serviceErrorHandler,
+      mcc,
       messagesApi,
-      mockConfig,
-      ec
+      mockConfig
     ) {
       override def refine[A](request: User[A]): Future[Either[Result, User[A]]] =
         Future.successful(Right(User(vrn)(request)))

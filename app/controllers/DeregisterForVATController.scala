@@ -19,17 +19,19 @@ package controllers
 import config.AppConfig
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import javax.inject.{Inject, Singleton}
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.DeregisterForVAT
 
 import scala.concurrent.Future
 
 @Singleton
-class DeregisterForVATController @Inject()(val messagesApi: MessagesApi,
+class DeregisterForVATController @Inject()(deregisterForVAT: DeregisterForVAT,
+                                            val mcc: MessagesControllerComponents,
                                            val authenticate: AuthPredicate,
                                            val regStatusCheck: DeniedAccessPredicate,
-                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val redirect: Action[AnyContent] = (authenticate andThen regStatusCheck) { implicit user =>
     val userType: String = if (user.isAgent) "agent" else "non-agent"
@@ -40,7 +42,7 @@ class DeregisterForVATController @Inject()(val messagesApi: MessagesApi,
   }
 
   val show: String => Action[AnyContent] = _ => (authenticate andThen regStatusCheck).async { implicit user =>
-    Future.successful(Ok(views.html.deregisterForVAT()))
+    Future.successful(Ok(deregisterForVAT()))
   }
 
 }

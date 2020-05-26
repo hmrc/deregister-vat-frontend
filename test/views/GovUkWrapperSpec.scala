@@ -18,8 +18,11 @@ package views
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.GovukWrapper
 
 class GovUkWrapperSpec extends ViewBaseSpec {
+
+  lazy val govukWrapper: GovukWrapper = injector.instanceOf[GovukWrapper]
 
   "Gov Uk Wrapper" when {
 
@@ -29,7 +32,7 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
       lazy val view = {
         mockConfig.features.accessibilityStatement(true)
-        views.html.govuk_wrapper(appConfig = mockConfig, title = "title")(request, messages)
+        govukWrapper(appConfig = mockConfig, title = "title")(request, messages)
       }
 
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -48,7 +51,7 @@ class GovUkWrapperSpec extends ViewBaseSpec {
 
       lazy val view = {
         mockConfig.features.accessibilityStatement(false)
-        views.html.govuk_wrapper(appConfig = mockConfig, title = "title")(request, messages)
+        govukWrapper(appConfig = mockConfig, title = "title")(request, messages)
       }
 
       lazy implicit val document: Document = Jsoup.parse(view.body)

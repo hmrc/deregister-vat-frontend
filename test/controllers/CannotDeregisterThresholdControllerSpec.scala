@@ -18,13 +18,16 @@ package controllers
 
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
-
+import views.html.CannotDeregisterThreshold
 import scala.concurrent.Future
 
+
 class CannotDeregisterThresholdControllerSpec extends ControllerBaseSpec {
+  lazy val cannotDeregisterThreshold: CannotDeregisterThreshold = injector.instanceOf[CannotDeregisterThreshold]
 
   object TestCannotDeregisterThresholdController extends CannotDeregisterThresholdController(
-    messagesApi,
+    cannotDeregisterThreshold,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockConfig

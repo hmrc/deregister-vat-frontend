@@ -20,10 +20,13 @@ import assets.messages.{CommonMessages, ZeroRatedSuppliesMessages}
 import forms.ZeroRatedSuppliesForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.ZeroRatedSupplies
 
 
 
 class ZeroRatedSuppliesSpec extends ViewBaseSpec {
+
+  lazy val zeroRatedSupplies: ZeroRatedSupplies = injector.instanceOf[ZeroRatedSupplies]
 
   object Selectors {
     val back = ".link-back"
@@ -36,7 +39,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
 
   "Rendering the zero rated supplies page with no errors" should {
 
-    lazy val view = views.html.zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm)
+    lazy val view = zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -67,7 +70,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
 
   "Rendering the zero rated supplies page with errors" should {
 
-    lazy val view = views.html.zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("value" -> "")))
+    lazy val view = zeroRatedSupplies(ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bind(Map("value" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

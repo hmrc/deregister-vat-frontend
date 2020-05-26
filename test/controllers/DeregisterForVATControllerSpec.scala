@@ -22,21 +22,26 @@ import controllers.predicates.DeniedAccessPredicate
 import play.api.http.Status
 import play.api.test.Helpers._
 import services.CustomerDetailsService
+import views.html.DeregisterForVAT
 
 import scala.concurrent.Future
 
 class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
+
+  lazy val deregisterForVAT: DeregisterForVAT = injector.instanceOf[DeregisterForVAT]
+
   val mockPendingDereg = new DeniedAccessPredicate(
     new CustomerDetailsService(mockVatSubscriptionConnector),
     serviceErrorHandler,
+    mcc,
     messagesApi,
-    mockConfig,
-    ec
+    mockConfig
   )
 
   object TestDeregisterForVATController extends DeregisterForVATController(
-    messagesApi,
+    deregisterForVAT,
+    mcc,
     mockAuthPredicate,
     mockPendingDereg,
     mockConfig

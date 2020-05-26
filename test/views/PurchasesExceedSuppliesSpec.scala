@@ -16,12 +16,15 @@
 
 package views
 
-import assets.messages.{PurchasesExceedSuppliesMessages, CommonMessages}
+import assets.messages.{CommonMessages, PurchasesExceedSuppliesMessages}
 import forms.PurchasesExceedSuppliesForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.PurchasesExceedSupplies
 
 class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
+
+  lazy val purchasesExceedSupplies: PurchasesExceedSupplies = injector.instanceOf[PurchasesExceedSupplies]
 
   object Selectors {
     val back = ".link-back"
@@ -36,7 +39,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
 
   "Rendering the Purchases Exceed Supplies page with no errors" should {
 
-    lazy val view = views.html.purchasesExceedSupplies(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm)
+    lazy val view = purchasesExceedSupplies(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -76,7 +79,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
 
   "Rendering the Purchases Exceed Supplies page with errors" should {
 
-    lazy val view = views.html.purchasesExceedSupplies(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.bind(Map("yes_no" -> "")))
+    lazy val view = purchasesExceedSupplies(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
