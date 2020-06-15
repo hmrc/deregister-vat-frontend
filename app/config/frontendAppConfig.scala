@@ -82,7 +82,7 @@ trait AppConfig {
 class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val runModeConfiguration: Configuration) extends AppConfig {
 
 
-  lazy val appName: String = runModeConfiguration.getString("appName").getOrElse(throw new Exception("Missing configuration key: appName"))
+  lazy val appName: String = servicesConfig.getString("appName")
 
   private val contactHost = servicesConfig.getString(Keys.contactFrontendService)
   private val contactFormServiceIdentifier = "VATC"
