@@ -24,22 +24,25 @@ import controllers.predicates.AuthPredicate
 import javax.inject.Inject
 import models.User
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{ContactPreferencesService, CustomerDetailsService, DeleteAllStoredAnswersService}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.DeregistrationConfirmation
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesApi,
+class DeregistrationConfirmationController @Inject()(deregistrationConfirmation: DeregistrationConfirmation,
+                                                      val mcc: MessagesControllerComponents,
                                                      val authentication: AuthPredicate,
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
                                                      val customerDetailsService: CustomerDetailsService,
                                                      val auditService: AuditService,
                                                      implicit val customerContactPreference: ContactPreferencesService,
-                                                     implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                                     implicit val ec: ExecutionContext,
+                                                     implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
 
@@ -66,7 +69,7 @@ class DeregistrationConfirmationController @Inject()(val messagesApi: MessagesAp
 
               val verifiedEmail = if (appConfig.features.emailVerifiedFeature()) {result._1.fold(_ => None, _.emailVerified)} else Some(false)
 
-              Ok(views.html.deregistrationConfirmation(businessName, contactPreference, verifiedEmail))
+              Ok(deregistrationConfirmation(businessName, contactPreference, verifiedEmail))
             }
 
           case Left(_) =>

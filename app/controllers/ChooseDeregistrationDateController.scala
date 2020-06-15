@@ -25,25 +25,30 @@ import javax.inject.{Inject, Singleton}
 import models.{No, User, Yes, YesNo}
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.ChooseDeregistrationDate
+
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
+class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: ChooseDeregistrationDate,
+                                                    val mcc: MessagesControllerComponents,
                                                    val authenticate: AuthPredicate,
                                                    val regStatusCheck: DeniedAccessPredicate,
                                                    val chooseDateAnswerService: ChooseDeregDateAnswerService,
                                                    val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                                    val wipeRedundantDataService: WipeRedundantDataService,
                                                    val serviceErrorHandler: ServiceErrorHandler,
-                                                   implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                                   implicit val ec: ExecutionContext,
+                                                   implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption")
 
   private def renderView(outstanding: Option[YesNo], form: Form[YesNo])
-                        (implicit user: User[_]) = views.html.chooseDeregistrationDate(outstanding, form)
+                        (implicit user: User[_]) = chooseDeregistrationDate(outstanding, form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     for {
@@ -71,7 +76,7 @@ class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
       data => (for {
         _ <- EitherT(chooseDateAnswerService.storeAnswer(data))
         _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
-        result = redirect(Some(data))
+        result = redirect(data)
       } yield result).value.map {
         case Right(redirect) => redirect
         case Left(error) =>
@@ -81,8 +86,8 @@ class ChooseDeregistrationDateController @Inject()(val messagesApi: MessagesApi,
     )
   }
 
-  private def redirect (yesNo: Option[YesNo]) : Result = yesNo match {
-    case Some(Yes) => Redirect(controllers.routes.DeregistrationDateController.show())
-    case Some(No) => Redirect(controllers.routes.CheckAnswersController.show())
+  private def redirect (yesNo: YesNo) : Result = yesNo match {
+    case Yes => Redirect(controllers.routes.DeregistrationDateController.show())
+    case No => Redirect(controllers.routes.CheckAnswersController.show())
   }
 }

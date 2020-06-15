@@ -16,12 +16,15 @@
 
 package views
 
-import assets.messages.{CommonMessages, CapitalAssetsMessages}
+import assets.messages.{CapitalAssetsMessages, CommonMessages}
 import forms.YesNoAmountForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.CapitalAssets
 
 class CapitalAssetsSpec extends ViewBaseSpec {
+
+  lazy val capitalAssets: CapitalAssets = injector.instanceOf[CapitalAssets]
 
   object Selectors {
     val back = ".link-back"
@@ -38,7 +41,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm(
+    lazy val view = capitalAssets(YesNoAmountForm.yesNoAmountForm(
       "capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -86,7 +89,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
     "nothing was entered" should {
 
-      lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm(
+      lazy val view = capitalAssets(YesNoAmountForm.yesNoAmountForm(
         "capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry").bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -105,7 +108,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
     "Yes was entered but no amount" should {
 
-      lazy val view = views.html.capitalAssets(YesNoAmountForm.yesNoAmountForm(
+      lazy val view = capitalAssets(YesNoAmountForm.yesNoAmountForm(
         "capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry").bind(Map(
         "yes_no" -> "yes",
         "amount" -> ""

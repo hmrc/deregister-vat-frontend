@@ -20,8 +20,11 @@ import assets.messages.{CommonMessages, DeregistrationDateMessages}
 import forms.DeregistrationDateForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.DeregistrationDate
 
 class DeregistrationDateSpec extends ViewBaseSpec {
+
+  lazy val deregistrationDate: DeregistrationDate = injector.instanceOf[DeregistrationDate]
 
   object Selectors {
     val back = ".link-back"
@@ -47,7 +50,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
     "no data is previously entered" should {
 
-      lazy val view = views.html.deregistrationDate(DeregistrationDateForm.form)
+      lazy val view = deregistrationDate(DeregistrationDateForm.form)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct title" in {
@@ -103,7 +106,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
       "form is valid" should {
 
-        lazy val view = views.html.deregistrationDate(DeregistrationDateForm.form.bind(
+        lazy val view = deregistrationDate(DeregistrationDateForm.form.bind(
           Map("dateDay" -> "1", "dateMonth" -> "2", "dateYear" -> "1999")
         ))
         lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -117,7 +120,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
       "form is invalid" should {
 
-        lazy val view = views.html.deregistrationDate(DeregistrationDateForm.form.bind(
+        lazy val view = deregistrationDate(DeregistrationDateForm.form.bind(
           Map("dateDay" -> "", "dateMonth" -> "", "dateYear" -> "")
         ))
         lazy implicit val document: Document = Jsoup.parse(view.body)

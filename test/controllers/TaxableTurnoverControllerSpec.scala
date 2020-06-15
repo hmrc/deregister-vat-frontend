@@ -24,18 +24,23 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.mocks.{MockTaxableTurnoverAnswerService, MockWipeRedundantDataService}
+import views.html.TaxableTurnover
 
 import scala.concurrent.Future
 
 class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockTaxableTurnoverAnswerService {
 
+  lazy val taxableTurnover: TaxableTurnover = injector.instanceOf[TaxableTurnover]
+
   object TestTaxableTurnoverController extends TaxableTurnoverController(
-    messagesApi,
+    taxableTurnover,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockTaxableTurnoverAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

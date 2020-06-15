@@ -26,17 +26,22 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType}
 import services.mocks.MockPurchasesExceedSuppliesAnswerService
 import play.api.test.Helpers._
+import views.html.PurchasesExceedSupplies
 
 import scala.concurrent.Future
 
 class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with MockPurchasesExceedSuppliesAnswerService {
 
+  lazy val purchasesExceedSupplies: PurchasesExceedSupplies = injector.instanceOf[PurchasesExceedSupplies]
+
   object TestController extends PurchasesExceedSuppliesController(
-    messagesApi,
+    purchasesExceedSupplies,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockPurchasesExceedSuppliesAnswerService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

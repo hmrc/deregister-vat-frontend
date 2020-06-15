@@ -19,9 +19,12 @@ package views
 import assets.messages.{CannotDeregisterThresholdMessages, CommonMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.CannotDeregisterThreshold
 
 
 class CannotDeregisterThresholdSpec extends ViewBaseSpec {
+
+  lazy val cannotDeregisterThreshold: CannotDeregisterThreshold = injector.instanceOf[CannotDeregisterThreshold]
 
   "Rendering the Ceased trading date page" should {
 
@@ -33,7 +36,7 @@ class CannotDeregisterThresholdSpec extends ViewBaseSpec {
       val link = "#content > article > p:nth-child(4) > a"
     }
 
-    lazy val view = views.html.cannotDeregisterThreshold()
+    lazy val view = cannotDeregisterThreshold()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

@@ -25,18 +25,23 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks._
+import views.html.DeregistrationReason
 
 import scala.concurrent.Future
 
 class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockDeregReasonAnswerService {
 
+  lazy val deregistrationReason: DeregistrationReason = injector.instanceOf[DeregistrationReason]
+
   object TestDeregistrationReasonController extends DeregistrationReasonController(
-    messagesApi,
+    deregistrationReason,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockDeregReasonAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

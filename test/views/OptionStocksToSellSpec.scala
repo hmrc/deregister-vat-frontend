@@ -20,8 +20,11 @@ import assets.messages.{CommonMessages, OptionStocksToSellMessages}
 import forms.YesNoAmountForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.OptionStocksToSell
 
 class OptionStocksToSellSpec extends ViewBaseSpec {
+
+  lazy val optionStocksToSell: OptionStocksToSell = injector.instanceOf[OptionStocksToSell]
 
   object Selectors {
     val back = ".link-back"
@@ -38,7 +41,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.optionStocksToSell(YesNoAmountForm.yesNoAmountForm(
+    lazy val view = optionStocksToSell(YesNoAmountForm.yesNoAmountForm(
       "optionOwnsStockToSell.error.mandatoryRadioOption","optionOwnsStockToSell.error.amount.noEntry"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -86,7 +89,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec {
 
     "nothing was entered" should {
 
-      lazy val view = views.html.optionStocksToSell(YesNoAmountForm.yesNoAmountForm(
+      lazy val view = optionStocksToSell(YesNoAmountForm.yesNoAmountForm(
         "optionOwnsStockToSell.error.mandatoryRadioOption","optionOwnsStockToSell.error.amount.noEntry").bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -105,7 +108,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec {
 
     "Yes was entered but no amount" should {
 
-      lazy val view = views.html.optionStocksToSell(YesNoAmountForm.yesNoAmountForm(
+      lazy val view = optionStocksToSell(YesNoAmountForm.yesNoAmountForm(
         "optionOwnsStockToSell.error.mandatoryRadioOption","optionOwnsStockToSell.error.amount.noEntry").bind(Map(
         "yes_no" -> "yes",
         "amount" -> ""

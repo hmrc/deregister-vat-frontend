@@ -24,18 +24,23 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks._
+import views.html.IssueNewInvoices
 
 import scala.concurrent.Future
 
 class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockIssueNewInvoicesAnswerService {
 
+  lazy val issueNewInvoices: IssueNewInvoices = injector.instanceOf[IssueNewInvoices]
+
   object TestIssueNewInvoicesController extends IssueNewInvoicesController(
-    messagesApi,
+    issueNewInvoices,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockIssueNewInvoicesAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

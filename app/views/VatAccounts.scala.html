@@ -1,0 +1,63 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.play.views.html.helpers._
+@import views.html.templates.errors.ErrorSummary
+@import templates.inputs.MultipleLineRadioGroup
+@import templates.Headings
+@import models.MultipleLineRadioGroupModel
+@import views.utils.TitleUtil.title
+
+@this(headings: Headings, mainTemplate: MainTemplate, errorSummary: ErrorSummary, multipleLineRadioGroup: MultipleLineRadioGroup, formWithCSRF: FormWithCSRF)
+
+@(backLink: String, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+
+@questionContent = {
+  @headings(messages("vatAccounts.title"))
+
+  <p>@messages("vatAccounts.showMeAnExample.p1")</p>
+  <ul class="list bullets bullet list-bullet">
+    <li>@messages("vatAccounts.showMeAnExample.bullet1")</li>
+    <li>@messages("vatAccounts.showMeAnExample.bullet2")</li>
+  </ul>
+}
+
+@mainTemplate(title = title(messages("vatAccounts.title"), form), appConfig = appConfig) {
+
+  <a class="link-back" href=@backLink>@messages("common.back")</a>
+
+  @errorSummary("common.errorSummary.heading", form)
+
+  @formWithCSRF(action = controllers.routes.VATAccountsController.submit, 'novalidate -> "novalidate") {
+
+    <div class="form-group" id="accountingMethod">
+      @multipleLineRadioGroup(
+        field = form("accountingMethod"),
+        choices = Seq(
+          MultipleLineRadioGroupModel("standard", messages("vatAccounts.method.standard"), messages("vatAccounts.description.standard")),
+          MultipleLineRadioGroupModel("cash", messages("vatAccounts.method.cash"), messages("vatAccounts.description.cash"))
+        ),
+        question = messages("vatAccounts.title"),
+        additionalContent = Some(questionContent),
+        legendAsHeader = false
+      )
+    </div>
+
+    <button class="button" type="submit" id="continue">
+      @messages("common.continue")
+    </button>
+  }
+}

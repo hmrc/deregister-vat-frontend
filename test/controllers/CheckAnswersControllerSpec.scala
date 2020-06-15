@@ -25,6 +25,7 @@ import models._
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockCheckAnswersService, MockChooseDeregDateAnswerService, MockUpdateDeregistrationService}
+import views.html.CheckYourAnswers
 
 import scala.concurrent.Future
 
@@ -34,15 +35,19 @@ class CheckAnswersControllerSpec
     with MockChooseDeregDateAnswerService
     with MockUpdateDeregistrationService {
 
+  lazy val checkYourAnswers: CheckYourAnswers = injector.instanceOf[CheckYourAnswers]
+
   object TestCheckAnswersController extends CheckAnswersController(
-    messagesApi,
+    checkYourAnswers,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockCheckAnswersService,
     mockChooseDeregDateAnswerService,
     mockUpdateDeregistrationService,
     serviceErrorHandler,
-    mockConfig
+    mockConfig,
+    ec
   )
 
   "the user is authorised" when {

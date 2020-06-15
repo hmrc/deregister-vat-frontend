@@ -24,7 +24,7 @@ import models.User
 import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results.Redirect
-import play.api.mvc.{ActionRefiner, Result}
+import play.api.mvc.{ActionRefiner, MessagesControllerComponents, Result}
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
@@ -34,9 +34,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsService,
                                       val serviceErrorHandler: ServiceErrorHandler,
+                                      val mcc: MessagesControllerComponents,
                                       implicit val messagesApi: MessagesApi,
-                                      implicit val appConfig: AppConfig,
-                                      implicit val ec: ExecutionContext) extends ActionRefiner[User, User] with I18nSupport {
+                                      implicit val appConfig: AppConfig) extends ActionRefiner[User, User] with I18nSupport {
+
+  override implicit val executionContext: ExecutionContext = mcc.executionContext
 
   override def refine[A](request: User[A]): Future[Either[Result, User[A]]] = {
 

@@ -20,8 +20,11 @@ import assets.messages.{CommonMessages, VATAccountsMessages}
 import forms.VATAccountsForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.VatAccounts
 
 class VATAccountsSpec extends ViewBaseSpec {
+
+  lazy val vatAccounts: VatAccounts = injector.instanceOf[VatAccounts]
 
   object Selectors {
     val back = ".link-back"
@@ -35,7 +38,7 @@ class VATAccountsSpec extends ViewBaseSpec {
 
   "Rendering the VAT Accounts page with no errors from the ceased journey" should {
 
-    lazy val view = views.html.vatAccounts(
+    lazy val view = vatAccounts(
       controllers.routes.CeasedTradingDateController.show().url,
       VATAccountsForm.vatAccountsForm
     )
@@ -83,7 +86,7 @@ class VATAccountsSpec extends ViewBaseSpec {
 
   "Rendering the VAT Accounts page from the BelowThreshold journey with errors" should {
 
-    lazy val view = views.html.vatAccounts(
+    lazy val view = vatAccounts(
       controllers.routes.WhyTurnoverBelowController.show().url,
       VATAccountsForm.vatAccountsForm.bind(Map("accountingMethod" -> ""))
     )

@@ -21,28 +21,12 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.{Action, AnyContent, Request, Result}
-import play.api.test.FakeRequest
-import play.filters.csrf.CSRF.Token
-import play.filters.csrf.{CSRFConfigProvider, CSRFFilter}
 import uk.gov.hmrc.auth.core.{InsufficientEnrolments, MissingBearerToken}
 import utils.TestUtil
 
 import scala.concurrent.Future
 
 trait ControllerBaseSpec extends TestUtil with MockAuth with MockDeniedAccessPredicate{
-
-  implicit class CSRFTokenAdder[T](req: FakeRequest[T]) {
-    def addToken: FakeRequest[T] = {
-      val csrfConfig = app.injector.instanceOf[CSRFConfigProvider].get
-      val csrfFilter = app.injector.instanceOf[CSRFFilter]
-      val token = csrfFilter.tokenProvider.generateToken
-
-      req.copyFakeRequest(tags = req.tags ++ Map(
-        Token.NameRequestTag -> csrfConfig.tokenName,
-        Token.RequestTag -> token
-      )).withHeaders(csrfConfig.headerName -> token)
-    }
-  }
 
   def authChecks(name: String, action: Action[AnyContent], request: Request[AnyContent]): Unit = {
 

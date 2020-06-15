@@ -23,6 +23,7 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.mocks.{MockBusinessActivityAnswerService, MockDeregReasonAnswerService, MockNextTaxableTurnoverAnswerService, MockTaxableTurnoverAnswerService}
+import views.html.NextTaxableTurnover
 
 import scala.concurrent.Future
 
@@ -32,8 +33,11 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
   with MockBusinessActivityAnswerService
   with MockDeregReasonAnswerService {
 
+  lazy val nextTaxableTurnover: NextTaxableTurnover = injector.instanceOf[NextTaxableTurnover]
+
   object TestNextTaxableTurnoverController extends NextTaxableTurnoverController(
-    messagesApi,
+    nextTaxableTurnover,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockTaxableTurnoverAnswerService,
@@ -41,6 +45,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
     mockNextTaxableTurnoverAnswerService,
     mockDeregReasonAnswerService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

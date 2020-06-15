@@ -20,9 +20,12 @@ import assets.messages.{CommonMessages, WhyTurnoverBelowMessages}
 import forms.WhyTurnoverBelowForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.WhyTurnoverBelow
 
 
 class WhyTurnoverBelowSpec extends ViewBaseSpec {
+
+  lazy val whyTurnoverBelow: WhyTurnoverBelow = injector.instanceOf[WhyTurnoverBelow]
 
   "Rendering the Why is the Turnover Below page" when {
 
@@ -38,7 +41,7 @@ class WhyTurnoverBelowSpec extends ViewBaseSpec {
 
     "has no errors" should {
 
-      lazy val view = views.html.whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm)
+      lazy val view = whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct document title" in {
@@ -75,7 +78,7 @@ class WhyTurnoverBelowSpec extends ViewBaseSpec {
 
     "with errors" should {
 
-      lazy val view = views.html.whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm.bind(
+      lazy val view = whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm.bind(
         Map("" -> "")
       ))
       lazy implicit val document: Document = Jsoup.parse(view.body)

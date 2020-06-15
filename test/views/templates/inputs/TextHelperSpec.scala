@@ -19,9 +19,12 @@ package views.templates.inputs
 import play.api.data.{Field, FormError}
 import play.twirl.api.Html
 import testOnly.forms.FeatureSwitchForm
+import views.html.templates.inputs.Text
 import views.templates.TemplateBaseSpec
 
 class TextHelperSpec extends TemplateBaseSpec {
+
+  lazy val text: Text = injector.instanceOf[Text]
 
   val fieldName = "fieldName"
   val label = "myLabel"
@@ -42,7 +45,7 @@ class TextHelperSpec extends TemplateBaseSpec {
              |""".stripMargin
         )
 
-        val result = views.html.templates.inputs.text(field, label)
+        val result = text(field, label)
 
         formatHtml(result) shouldBe formatHtml(expectedMarkup)
       }
@@ -66,7 +69,7 @@ class TextHelperSpec extends TemplateBaseSpec {
              |""".stripMargin
         )
 
-        val result = views.html.templates.inputs.text(errorField, label)
+        val result = text(errorField, label)
 
         formatHtml(result) shouldBe formatHtml(expectedMarkup)
       }
@@ -85,7 +88,7 @@ class TextHelperSpec extends TemplateBaseSpec {
              |""".stripMargin
         )
 
-        val result = views.html.templates.inputs.text(field, label, labelHidden = false)
+        val result = text(field, label, labelHidden = false)
 
         formatHtml(result) shouldBe formatHtml(expectedMarkup)
       }
@@ -106,7 +109,7 @@ class TextHelperSpec extends TemplateBaseSpec {
         )
 
         val result =
-          views.html.templates.inputs.text(field, label, additionalContent = Some(Html("<p>Additional HTML</p>")))
+          text(field, label, additionalContent = Some(Html("<p>Additional HTML</p>")))
 
         formatHtml(result) shouldBe formatHtml(expectedMarkup)
       }
@@ -126,7 +129,7 @@ class TextHelperSpec extends TemplateBaseSpec {
              |""".stripMargin
         )
 
-        val result = views.html.templates.inputs.text(field, label, isMonetaryField = true)
+        val result = text(field, label, isMonetaryField = true)
 
         formatHtml(result) shouldBe formatHtml(expectedMarkup)
       }

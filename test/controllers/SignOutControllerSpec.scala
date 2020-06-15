@@ -26,9 +26,10 @@ import scala.concurrent.Future
 class SignOutControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService {
 
   object TestSignOutController extends SignOutController(
-    messagesApi,
+    mcc,
     mockAuthPredicate,
     mockDeleteAllStoredAnswersService,
+    ec,
     serviceErrorHandler
   )
 

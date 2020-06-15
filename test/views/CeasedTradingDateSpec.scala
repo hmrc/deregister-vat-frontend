@@ -20,9 +20,12 @@ import assets.messages.{CeasedTradingDateMessages, CommonMessages}
 import forms.DateForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.CeasedTradingDate
 
 
 class CeasedTradingDateSpec extends ViewBaseSpec {
+
+  lazy val ceasedTradingDate: CeasedTradingDate = injector.instanceOf[CeasedTradingDate]
 
   object Selectors {
     val back = ".link-back"
@@ -46,7 +49,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm)(user,messages,mockConfig)
+    lazy val view = ceasedTradingDate(DateForm.dateForm)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -87,7 +90,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with one missing field" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+    lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
       "dateMonth" -> "1",
       "dateYear" -> "2018"
     )))
@@ -114,7 +117,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with missing fields" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map.empty[String,String]))
+    lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map.empty[String,String]))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -141,7 +144,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with no values" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+    lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
       "dateDay" -> "",
       "dateMonth" -> "",
       "dateYear" -> ""
@@ -172,7 +175,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with one value missing" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+    lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
       "dateDay" -> "1",
       "dateMonth" -> "1",
       "dateYear" -> ""
@@ -199,7 +202,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with one incorrect value" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+    lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
       "dateDay" -> "1",
       "dateMonth" -> "1",
       "dateYear" -> "0"
@@ -226,7 +229,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with incorrect values" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+    lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
       "dateDay" -> "0",
       "dateMonth" -> "0",
       "dateYear" -> "0"
@@ -257,7 +260,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with a non numerical character" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+    lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
       "dateDay" -> "1",
       "dateMonth" -> "a",
       "dateYear" -> "2018"
@@ -284,7 +287,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with non numerical characters" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+    lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
       "dateDay" -> "a",
       "dateMonth" -> "a",
       "dateYear" -> "a"
@@ -315,7 +318,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
 
   "Rendering the Ceased trading date page with an invalid date" should {
 
-    lazy val view = views.html.ceasedTradingDate(DateForm.dateForm.bind(Map(
+    lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
       "dateDay" -> "31",
       "dateMonth" -> "2",
       "dateYear" -> "2018"

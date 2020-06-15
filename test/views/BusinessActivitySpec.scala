@@ -20,8 +20,11 @@ import assets.messages.{BusinessActivityPageMessages, CommonMessages}
 import forms.YesNoForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.BusinessActivity
 
 class BusinessActivitySpec extends ViewBaseSpec {
+
+  lazy val businessActivity: BusinessActivity = injector.instanceOf[BusinessActivity]
 
   object Selectors {
     val back = ".link-back"
@@ -37,7 +40,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
 
   "Rendering the Business Activity page with no errors" should {
 
-    lazy val view = views.html.businessActivity(YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption"))
+    lazy val view = businessActivity(YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -82,7 +85,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
 
   "Rendering the Business Activity page with errors" should {
 
-    lazy val view = views.html.businessActivity(YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
+    lazy val view = businessActivity(YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

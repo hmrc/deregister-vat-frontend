@@ -21,8 +21,11 @@ import models.CheckYourAnswersRowModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
+import views.html.CheckYourAnswers
 
 class CheckYourAnswersSpec extends ViewBaseSpec {
+
+  lazy val checkYourAnswers: CheckYourAnswers = injector.instanceOf[CheckYourAnswers]
 
   object Selectors {
     val back = ".link-back"
@@ -40,7 +43,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
       CheckYourAnswersRowModel("test question 1", Html("test answer 1"), "test/url/1", "test hidden text 1"),
       CheckYourAnswersRowModel("test question 2", Html("test answer 2"), "test/url/2", "test hidden text 2")
     )
-    lazy val view = views.html.checkYourAnswers("testUrl",checkYourAnswersModel)(user,messages,mockConfig)
+    lazy val view = checkYourAnswers("testUrl",checkYourAnswersModel)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -87,7 +90,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
 
     val checkYourAnswersModel = Seq()
 
-    lazy val view = views.html.checkYourAnswers("testUrl",checkYourAnswersModel)(user,messages,mockConfig)
+    lazy val view = checkYourAnswers("testUrl",checkYourAnswersModel)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

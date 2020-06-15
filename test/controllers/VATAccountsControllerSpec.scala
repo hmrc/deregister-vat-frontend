@@ -25,20 +25,25 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockAccountingMethodAnswerService, MockDeregReasonAnswerService, MockTaxableTurnoverAnswerService}
 import uk.gov.hmrc.auth.core._
+import views.html.VatAccounts
 
 import scala.concurrent.Future
 
 class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMethodAnswerService
                                 with MockDeregReasonAnswerService with MockTaxableTurnoverAnswerService {
 
+  lazy val vatAccounts: VatAccounts = injector.instanceOf[VatAccounts]
+
   object TestVATAccountsController extends VATAccountsController(
-    messagesApi,
+    vatAccounts,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockAccountingMethodAnswerService,
     mockDeregReasonAnswerService,
     mockTaxableTurnoverAnswerService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

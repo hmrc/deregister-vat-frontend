@@ -22,15 +22,18 @@ import play.api.mvc.{Request, RequestHeader, Result}
 import play.api.mvc.Results.{BadRequest, InternalServerError}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.http.FrontendErrorHandler
+import views.html.errors.StandardError
 
 import scala.concurrent.Future
 
-class ServiceErrorHandler @Inject()(val messagesApi: MessagesApi,
-                                    appConfig: AppConfig) extends FrontendErrorHandler {
+class ServiceErrorHandler @Inject()(standardError: StandardError,
+                                     val messagesApi: MessagesApi,
+                                    appConfig: AppConfig
+                                    ) extends FrontendErrorHandler {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)
                                     (implicit request: Request[_]): Html = {
-    views.html.errors.standardError(appConfig, pageTitle, heading, message)
+    standardError(appConfig, pageTitle, heading, message)
   }
 
   def showInternalServerError(implicit request: Request[_]): Result = InternalServerError(internalServerErrorTemplate)

@@ -23,23 +23,26 @@ import javax.inject.{Inject, Singleton}
 import models.{NumberInputModel, User}
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.ZeroRatedSuppliesValueService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.ZeroRatedSupplies
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ZeroRatedSuppliesController @Inject()(val messagesApi: MessagesApi,
+class ZeroRatedSuppliesController @Inject()(zeroRatedSupplies: ZeroRatedSupplies,
+                                            val mcc: MessagesControllerComponents,
                                             val authenticate: AuthPredicate,
                                             val regStatusCheck: DeniedAccessPredicate,
                                             val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
                                             val serviceErrorHandler: ServiceErrorHandler,
-                                            implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                            implicit val appConfig: AppConfig,
+                                            implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
   private def renderView(form: Form[NumberInputModel] = ZeroRatedSuppliesForm.zeroRatedSuppliesForm)(implicit user: User[_]) =
-    views.html.zeroRatedSupplies(form)
+    zeroRatedSupplies(form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
@@ -55,7 +58,7 @@ class ZeroRatedSuppliesController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
       ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bindFromRequest().fold(
-        error => Future.successful(BadRequest(views.html.zeroRatedSupplies(error))),
+        error => Future.successful(BadRequest(zeroRatedSupplies(error))),
         data => zeroRatedSuppliesValueService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show())
           case Left(error) =>

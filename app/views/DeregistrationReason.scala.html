@@ -1,0 +1,65 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.play.views.html.helpers._
+@import views.html.templates.errors.ErrorSummary
+@import views.html.templates.inputs.RadioHelper
+@import forms.DeregistrationReasonForm
+@import views.utils.TitleUtil._
+
+
+@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, radioHelper: RadioHelper, formWithCSRF: FormWithCSRF)
+
+@(form: Form[models.DeregistrationReason])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+
+@mainTemplate(
+    title = title(messages("deregistrationReason.title"), form),
+    bodyClasses = None,
+    appConfig = appConfig) {
+
+    <a class="link-back" href="@controllers.routes.DeregisterForVATController.redirect().url">@messages("common.back")</a>
+
+    @errorSummary("common.errorSummary.heading", form)
+
+    @formWithCSRF(action = controllers.routes.DeregistrationReasonController.submit, 'novalidate -> "novalidate") {
+
+        <div class="form-group" id="reason">
+            @radioHelper(
+                field = form("reason"),
+                choices = if(appConfig.features.zeroRatedJourney()) {
+                    Seq(
+                        (DeregistrationReasonForm.ceased, Messages("deregistrationReason.reason.ceased")),
+                        (DeregistrationReasonForm.belowThreshold, Messages("deregistrationReason.reason.belowThreshold", appConfig.deregThreshold)),
+                        (DeregistrationReasonForm.zeroRated, Messages("deregistrationReason.reason.zeroRated")),
+                        (DeregistrationReasonForm.exemptOnly, Messages("deregistrationReason.reason.exemptOnly")),
+                        (DeregistrationReasonForm.other, Messages("deregistrationReason.reason.other"))
+                    )
+                } else {
+                    Seq(
+                        (DeregistrationReasonForm.ceased, Messages("deregistrationReason.reason.ceased")),
+                        (DeregistrationReasonForm.belowThreshold, Messages("deregistrationReason.reason.belowThreshold", appConfig.deregThreshold)),
+                        (DeregistrationReasonForm.other, Messages("deregistrationReason.reason.other"))
+                    )
+                },
+                question = Messages("deregistrationReason.title")
+            )
+        </div>
+
+        <button class="button" type ="submit" id="continue">
+            @messages("common.continue")
+        </button>
+    }
+}

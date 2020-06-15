@@ -20,9 +20,12 @@ import assets.messages.{CommonMessages, DeregistrationReasonMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import forms.DeregistrationReasonForm
+import views.html.DeregistrationReason
 
 
 class DeregistrationReasonSpec extends ViewBaseSpec {
+
+  lazy val deregistrationReason: DeregistrationReason = injector.instanceOf[DeregistrationReason]
 
   object Selectors {
     val back = ".link-back"
@@ -39,7 +42,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
       lazy val view = {
         mockConfig.features.zeroRatedJourney(true)
-        views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
+        deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -81,7 +84,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
       lazy val view = {
         mockConfig.features.zeroRatedJourney(false)
-        views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
+        deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -95,7 +98,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration reason page with errors" should {
 
-    lazy val view = views.html.deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm.bind(Map("" -> "")))
+    lazy val view = deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm.bind(Map("" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

@@ -17,8 +17,11 @@
 package views.templates
 
 import play.twirl.api.Html
+import views.html.templates.Legends
 
 class LegendsSpec extends TemplateBaseSpec {
+
+  lazy val legends: Legends = injector.instanceOf[Legends]
 
   val legend = "I am a legend, for real"
 
@@ -28,7 +31,7 @@ class LegendsSpec extends TemplateBaseSpec {
 
       s"render the correct header legend markup" in {
         val expected = Html(generateExpectedLegendMarkup(legend))
-        val actual = views.html.templates.legends(legend, asHeader = true)
+        val actual = legends(legend, asHeader = true)
 
         formatHtml(actual) shouldBe formatHtml(expected)
       }
@@ -38,7 +41,7 @@ class LegendsSpec extends TemplateBaseSpec {
 
       s"render the correct header legend markup" in {
         val expected = Html(generateExpectedLegendMarkup(legend, asHeader = false))
-        val actual = views.html.templates.legends(legend, asHeader = false)
+        val actual = legends(legend, asHeader = false)
 
         formatHtml(actual) shouldBe formatHtml(expected)
       }

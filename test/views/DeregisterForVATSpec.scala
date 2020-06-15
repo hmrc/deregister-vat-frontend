@@ -19,8 +19,11 @@ package views
 import assets.messages.{CommonMessages, DeregisterForVATMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.DeregisterForVAT
 
 class DeregisterForVATSpec extends ViewBaseSpec {
+
+  lazy val deregisterForVAT: DeregisterForVAT = injector.instanceOf[DeregisterForVAT]
 
   object Selectors {
     val back = ".link-back"
@@ -32,7 +35,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
 
   "Rendering the cancel registration reason page for client" should {
 
-    lazy val view = views.html.deregisterForVAT()(user,messages,mockConfig)
+    lazy val view = deregisterForVAT()(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -70,7 +73,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
 
   "Rendering the cancel registration reason page for an agent" should {
 
-    lazy val view = views.html.deregisterForVAT()(agentUserPrefYes,messages,mockConfig)
+    lazy val view = deregisterForVAT()(agentUserPrefYes,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have a back link with the correct link location" in {

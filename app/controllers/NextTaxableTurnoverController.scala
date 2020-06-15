@@ -25,13 +25,17 @@ import javax.inject.{Inject, Singleton}
 import models.{No, NumberInputModel, User, Yes, YesNo, ZeroRated}
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{BusinessActivityAnswerService, DeregReasonAnswerService, NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.NextTaxableTurnover
+
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
+class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTurnover,
+                                              val mcc: MessagesControllerComponents,
                                               val authenticate: AuthPredicate,
                                               val regStatusCheck: DeniedAccessPredicate,
                                               val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
@@ -39,7 +43,8 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
                                               val deregReasonAnswerService: DeregReasonAnswerService,
                                               val serviceErrorHandler: ServiceErrorHandler,
-                                              implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                              implicit val ec: ExecutionContext,
+                                              implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   def backLink(businessActivityAnswer: Option[YesNo]): String = {
     businessActivityAnswer match {
@@ -50,7 +55,7 @@ class NextTaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
   }
 
   private def renderView(form: Form[NumberInputModel] = NextTaxableTurnoverForm.taxableTurnoverForm, backLink: String)(implicit user: User[_]) =
-    views.html.nextTaxableTurnover(form, backLink)
+    nextTaxableTurnover(form, backLink)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     for {

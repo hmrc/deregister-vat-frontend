@@ -20,8 +20,11 @@ import assets.messages.{CommonMessages, OutstandingInvoicesMessages}
 import forms.YesNoForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.html.OutstandingInvoices
 
 class OutstandingInvoicesSpec extends ViewBaseSpec {
+
+  lazy val outstandingInvoices: OutstandingInvoices = injector.instanceOf[OutstandingInvoices]
 
   object Selectors {
     val back = ".link-back"
@@ -35,7 +38,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption"))
+    lazy val view = outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
@@ -71,7 +74,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = views.html.outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
+    lazy val view = outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

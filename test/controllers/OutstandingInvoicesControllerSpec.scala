@@ -24,14 +24,18 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks._
+import views.html.OutstandingInvoices
 
 import scala.concurrent.Future
 
 class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
   with MockWipeRedundantDataService with MockOutstandingInvoicesService with MockDeregReasonAnswerService with MockCapitalAssetsAnswerService {
 
+  lazy val outstandingInvoices: OutstandingInvoices = injector.instanceOf[OutstandingInvoices]
+
   object TestOutstandingInvoicesController extends OutstandingInvoicesController(
-    messagesApi,
+    outstandingInvoices,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockOutstandingInvoicesService,
@@ -39,6 +43,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
     mockCapitalAssetsAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

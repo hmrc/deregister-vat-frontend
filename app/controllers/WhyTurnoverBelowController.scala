@@ -22,31 +22,34 @@ import forms.WhyTurnoverBelowForm
 import javax.inject.{Inject, Singleton}
 import models.DeregisterVatSuccess
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.WhyTurnoverBelowAnswerService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.WhyTurnoverBelow
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class WhyTurnoverBelowController @Inject()(val messagesApi: MessagesApi,
+class WhyTurnoverBelowController @Inject()(whyTurnoverBelow: WhyTurnoverBelow,
+                                            val mcc: MessagesControllerComponents,
                                            val authenticate: AuthPredicate,
                                            val regStatusCheck: DeniedAccessPredicate,
                                            val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
                                            val serviceErrorHandler: ServiceErrorHandler,
-                                           implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                           implicit val ec: ExecutionContext,
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     whyTurnoverBelowAnswerService.getAnswer.map {
-      case Right(Some(data)) => Ok(views.html.whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm.fill(data)))
-      case _ => Ok(views.html.whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm))
+      case Right(Some(data)) => Ok(whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm.fill(data)))
+      case _ => Ok(whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     WhyTurnoverBelowForm.whyTurnoverBelowForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.whyTurnoverBelow(error))),
+      error => Future.successful(BadRequest(whyTurnoverBelow(error))),
       data => {
         whyTurnoverBelowAnswerService.storeAnswer(data).map {
           case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show())

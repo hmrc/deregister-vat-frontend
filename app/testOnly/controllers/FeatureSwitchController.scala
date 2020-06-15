@@ -18,18 +18,20 @@ package testOnly.controllers
 
 import config.AppConfig
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, Result}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import testOnly.forms.FeatureSwitchForm
 import testOnly.models.FeatureSwitchModel
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import testOnly.views.html.FeatureSwitch
 
-class FeatureSwitchController @Inject()(val messagesApi: MessagesApi,
+class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
+                                        val mcc: MessagesControllerComponents,
                                         implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport {
+  extends FrontendController(mcc) with I18nSupport {
 
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
-    Ok(testOnly.views.html.featureSwitch(FeatureSwitchForm.form.fill(
+    Ok(featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         stubAgentClientLookup = appConfig.features.stubAgentClientLookup(),
         stubContactPreferences = appConfig.features.stubContactPreferences(),

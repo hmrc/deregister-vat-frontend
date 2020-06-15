@@ -20,18 +20,19 @@ import assets.constants.BaseTestConstants._
 import com.codahale.metrics.SharedMetricRegistries
 import common.SessionKeys
 import config.ServiceErrorHandler
-import connectors.ContactPreferenceConnector
 import mocks.MockAppConfig
 import models.User
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.i18n.{Lang, Messages, MessagesApi}
+import play.api.Configuration
+import play.api.i18n.{Lang, Messages, MessagesApi, MessagesImpl}
 import play.api.inject.Injector
-import play.api.mvc.AnyContentAsEmpty
+import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents}
 import play.api.test.FakeRequest
 import services.ContactPreferencesService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test._
+import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
 import scala.concurrent.ExecutionContext
 
@@ -46,15 +47,15 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
     mockConfig.features.zeroRatedJourney(true)
     SharedMetricRegistries.clear()
   }
-
-  lazy implicit val config = app.configuration
+  lazy val mcc: MessagesControllerComponents = stubMessagesControllerComponents()
+  lazy implicit val config: Configuration = app.configuration
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig
   lazy implicit val mockUserContactPref: ContactPreferencesService = injector.instanceOf[ContactPreferencesService]
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
   lazy val requestWithVRN: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.CLIENT_VRN -> vrn)
   lazy val injector: Injector = app.injector
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
-  implicit lazy val messages: Messages = Messages(Lang("en-GB"), messagesApi)
+  implicit lazy val messages: Messages = MessagesImpl(Lang("en-GB"), messagesApi)
   implicit lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn,true)(request)
   lazy val agentUserPrefYes: User[AnyContentAsEmpty.type] =
     User[AnyContentAsEmpty.type](vrn,true, Some(arn))(request.withSession(SessionKeys.verifiedAgentEmail -> agentEmail))

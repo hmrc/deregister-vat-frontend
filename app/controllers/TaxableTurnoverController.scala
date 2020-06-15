@@ -25,27 +25,30 @@ import javax.inject.{Inject, Singleton}
 import models.{User, YesNo}
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{TaxableTurnoverAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import utils.MoneyFormatter
+import views.html.TaxableTurnover
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
+class TaxableTurnoverController @Inject()(taxableTurnover: TaxableTurnover,
+                                           val mcc: MessagesControllerComponents,
                                           val authenticate: AuthPredicate,
                                           val regStatusCheck: DeniedAccessPredicate,
                                           val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                           val wipeRedundantDataService: WipeRedundantDataService,
                                           val serviceErrorHandler: ServiceErrorHandler,
-                                          implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                          implicit val ec: ExecutionContext,
+                                          implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("taxableTurnover.error.mandatoryRadioOption", MoneyFormatter.formatStringAmount(appConfig.deregThreshold))
 
   private def renderView(form: Form[YesNo])(implicit user: User[_]) =
-    views.html.taxableTurnover(form)
+    taxableTurnover(form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     taxableTurnoverAnswerService.getAnswer map {
@@ -56,7 +59,7 @@ class TaxableTurnoverController @Inject()(val messagesApi: MessagesApi,
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
-      error => Future.successful(BadRequest(views.html.taxableTurnover(error))),
+      error => Future.successful(BadRequest(taxableTurnover(error))),
       data => (for {
         _ <- EitherT(taxableTurnoverAnswerService.storeAnswer(data))
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)

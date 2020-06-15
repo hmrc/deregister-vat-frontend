@@ -25,24 +25,27 @@ import forms.DeregistrationReasonForm
 import models._
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.DeregistrationReason
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
+class DeregistrationReasonController @Inject()(deregistrationReason: DeregistrationReason,
+                                               val mcc: MessagesControllerComponents,
                                                val authenticate: AuthPredicate,
                                                val regStatusCheck: DeniedAccessPredicate,
                                                val deregReasonAnswerService: DeregReasonAnswerService,
                                                val wipeRedundantDataService: WipeRedundantDataService,
                                                val serviceErrorHandler: ServiceErrorHandler,
-                                               implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                               implicit val ec: ExecutionContext,
+                                               implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
-  private def renderView(data: Form[DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
-    views.html.deregistrationReason(data)
+  private def renderView(data: Form[models.DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
+    deregistrationReason(data)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     deregReasonAnswerService.getAnswer map {
@@ -67,7 +70,7 @@ class DeregistrationReasonController @Inject()(val messagesApi: MessagesApi,
     )
   }
 
-  private def redirect(deregReason: DeregistrationReason): Result = deregReason match {
+  private def redirect(deregReason: models.DeregistrationReason): Result = deregReason match {
     case Ceased => Redirect(controllers.routes.CeasedTradingDateController.show())
     case BelowThreshold => Redirect(controllers.routes.TaxableTurnoverController.show())
     case ZeroRated => Redirect(controllers.zeroRated.routes.BusinessActivityController.show())

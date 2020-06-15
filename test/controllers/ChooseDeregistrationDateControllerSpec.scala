@@ -16,10 +16,8 @@
 
 package controllers
 
-import java.time.LocalDate
 
 import assets.constants.BaseTestConstants._
-import forms.DateForm._
 import forms.YesNoForm
 import forms.YesNoForm._
 import models._
@@ -29,20 +27,25 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockChooseDeregDateAnswerService, MockOutstandingInvoicesService, MockWipeRedundantDataService}
+import views.html.ChooseDeregistrationDate
 
 import scala.concurrent.Future
 
 class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with MockChooseDeregDateAnswerService
   with MockOutstandingInvoicesService with MockWipeRedundantDataService {
 
+  lazy val chooseDeregistrationDate: ChooseDeregistrationDate = injector.instanceOf[ChooseDeregistrationDate]
+
   object TestChooseDeregistrationDateController$ extends ChooseDeregistrationDateController (
-    messagesApi,
+    chooseDeregistrationDate,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockChooseDeregDateAnswerService,
     mockOutstandingInvoicesService,
     mockWipeRedundantDataService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

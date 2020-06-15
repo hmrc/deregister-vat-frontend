@@ -23,19 +23,24 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.mocks.{MockBusinessActivityAnswerService, MockDeleteAllStoredAnswersService, MockSicCodeAnswerService}
+import views.html.SicCode
 
 import scala.concurrent.Future
 
 class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
                             with MockSicCodeAnswerService with MockBusinessActivityAnswerService {
 
+  lazy val sicCode: SicCode = injector.instanceOf[SicCode]
+
   object TestController extends SicCodeController(
-    messagesApi,
+    sicCode,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     serviceErrorHandler,
     mockBusinessActivityAnswerService,
     mockSicCodeAnswerService,
+    ec,
     mockConfig
   )
 

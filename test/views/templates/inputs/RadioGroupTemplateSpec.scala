@@ -19,10 +19,12 @@ package views.templates.inputs
 import forms.YesNoForm
 import play.api.data.{Field, FormError}
 import play.twirl.api.Html
-import views.html.templates.inputs.radioHelper
+import views.html.templates.inputs.RadioHelper
 import views.templates.TemplateBaseSpec
 
 class RadioGroupTemplateSpec extends TemplateBaseSpec {
+
+  lazy val radioHelper: RadioHelper = injector.instanceOf[RadioHelper]
 
   val fieldName = "fieldName"
   val labelText = "labelText"

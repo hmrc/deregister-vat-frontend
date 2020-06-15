@@ -23,17 +23,22 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockWhyTurnoverBelowAnswerService
+import views.html.WhyTurnoverBelow
 
 import scala.concurrent.Future
 
 class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurnoverBelowAnswerService {
 
+  lazy val whyTurnoverBelow: WhyTurnoverBelow = injector.instanceOf[WhyTurnoverBelow]
+
   object TestWhyTurnoverBelowController extends WhyTurnoverBelowController(
-    messagesApi,
+    whyTurnoverBelow,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockWhyTurnoverBelowAnswerService,
     serviceErrorHandler,
+    ec,
     mockConfig
   )
 

@@ -23,23 +23,26 @@ import javax.inject.{Inject, Singleton}
 import models._
 import play.api.Logger
 import play.api.data.Form
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.{BusinessActivityAnswerService, SicCodeAnswerService}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.SicCode
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SicCodeController @Inject()(val messagesApi: MessagesApi,
+class SicCodeController @Inject()(sicCode: SicCode,
+                                  val mcc: MessagesControllerComponents,
                                   val authenticate: AuthPredicate,
                                   val regStatusCheck: DeniedAccessPredicate,
                                   val serviceErrorHandler: ServiceErrorHandler,
                                   val businessActivityAnswerService: BusinessActivityAnswerService,
                                   val sicCodeAnswerService: SicCodeAnswerService,
-                                  implicit val appConfig: AppConfig) extends FrontendController with I18nSupport {
+                                  implicit val ec: ExecutionContext,
+                                  implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
-  private def renderView(form: Form[String] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = views.html.sicCode(form)
+  private def renderView(form: Form[String] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = sicCode(form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
@@ -63,7 +66,7 @@ class SicCodeController @Inject()(val messagesApi: MessagesApi,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     if (appConfig.features.zeroRatedJourney()) {
       SicCodeForm.sicCodeForm.bindFromRequest().fold(
-        error => Future.successful(BadRequest(views.html.sicCode(error))),
+        error => Future.successful(BadRequest(sicCode(error))),
         data => sicCodeAnswerService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
           case Left(error) =>

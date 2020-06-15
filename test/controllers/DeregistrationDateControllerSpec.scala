@@ -29,13 +29,17 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockDeregDateAnswerService
+import views.html.DeregistrationDate
 
 import scala.concurrent.Future
 
 class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDeregDateAnswerService {
 
+  lazy val deregistrationDate: DeregistrationDate = injector.instanceOf[DeregistrationDate]
+
   object TestDeregistrationDateController extends DeregistrationDateController(
-    messagesApi,
+    deregistrationDate,
+    mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     serviceErrorHandler,

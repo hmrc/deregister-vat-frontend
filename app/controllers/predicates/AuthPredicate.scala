@@ -21,22 +21,31 @@ import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.Inject
 import models.User
 import play.api.Logger
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{ActionBuilder, ActionFunction, Request, Result}
+
+import play.api.i18n.{I18nSupport}
+
+import play.api.mvc.{ActionBuilder, ActionFunction, AnyContent, BodyParser, MessagesControllerComponents, Request, Result}
+
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
-import uk.gov.hmrc.auth.core.retrieve.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import views.html.errors.client.Unauthorised
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class AuthPredicate @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
+class AuthPredicate @Inject()(unauthorised: Unauthorised,
+                              enrolmentsAuthService: EnrolmentsAuthService,
                               val serviceErrorHandler: ServiceErrorHandler,
                               val authoriseAsAgent: AuthoriseAsAgent,
-                              implicit val messagesApi: MessagesApi,
+                              val mcc: MessagesControllerComponents,
                               implicit val appConfig: AppConfig)
-  extends FrontendController with I18nSupport with ActionBuilder[User] with ActionFunction[Request, User] with AuthBasePredicate {
+
+  extends FrontendController(mcc) with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with AuthBasePredicate {
+
+  override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
+  override implicit protected val executionContext: ExecutionContext = mcc.executionContext
 
   override def invokeBlock[A](request: Request[A], block: User[A] => Future[Result]): Future[Result] = {
 
@@ -60,7 +69,7 @@ class AuthPredicate @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
         Redirect(appConfig.signInUrl)
       case _: AuthorisationException =>
         Logger.debug("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
-        Forbidden(views.html.errors.client.unauthorised())
+        Forbidden(unauthorised())
     }
   }
 
@@ -71,7 +80,7 @@ class AuthPredicate @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
     }
     else {
       Logger.debug(s"[AuthPredicate][checkVatEnrolment] - Individual without HMRC-MTD-VAT enrolment. $enrolments")
-      Future.successful(Forbidden(views.html.errors.client.unauthorised()))
+      Future.successful(Forbidden(unauthorised()))
     }
 
 }

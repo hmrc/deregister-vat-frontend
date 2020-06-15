@@ -36,8 +36,11 @@ import assets.messages.{CommonMessages, AgentUnauthorisedPageMessages => Message
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import views.ViewBaseSpec
+import views.html.errors.agent.Unauthorised
 
 class UnauthorisedViewSpec extends ViewBaseSpec {
+
+  lazy val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
 
   "Rendering the unauthorised page" should {
 
@@ -49,7 +52,7 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
       val button = "#content .button"
     }
 
-    lazy val view = views.html.errors.agent.unauthorised()(request, messages, mockConfig)
+    lazy val view = unauthorised()(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
