@@ -25,7 +25,8 @@ case class CustomerDetails(firstName: Option[String],
                            partyType: Option[String],
                            emailVerified: Option[Boolean],
                            pendingDereg: Boolean,
-                           alreadyDeregistered: Boolean) {
+                           alreadyDeregistered: Boolean,
+                           commsPreference: Option[String]) {
 
   val isOrg: Boolean = organisationName.isDefined
   val isInd: Boolean = firstName.isDefined || lastName.isDefined
@@ -47,6 +48,7 @@ object CustomerDetails {
   private val emailPath = __ \\ "emailVerified"
   private val pendingDeregPath = __ \ "changeIndicators" \ "deregister"
   private val effectDateOfCancellationPath = __ \ "deregistration" \ "effectDateOfCancellation"
+  private val commsPreferencePath = __ \ "commsPreference"
 
   implicit val reads: Reads[CustomerDetails] = for {
     firstName <- firstNamePath.readNullable[String]
@@ -57,13 +59,14 @@ object CustomerDetails {
     emailVerified <- emailPath.readNullable[Boolean]
     deregChangeIndicator <- pendingDeregPath.readNullable[Boolean].orElse(Reads.pure(None))
     deregDate <- effectDateOfCancellationPath.readNullable[String].orElse(Reads.pure(None))
+    commsPreference <- commsPreferencePath.readNullable[String].orElse(Reads.pure(None))
   } yield {
 
     val pendingDereg = deregChangeIndicator.getOrElse(false)
     val alreadyDeregistered = deregDate.isDefined
 
     CustomerDetails(
-      firstName, lastName, orgName, tradingName, partyType, emailVerified, pendingDereg, alreadyDeregistered
+      firstName, lastName, orgName, tradingName, partyType, emailVerified, pendingDereg, alreadyDeregistered, commsPreference
     )
   }
 }

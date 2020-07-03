@@ -31,7 +31,8 @@ object FeatureSwitchForm {
       ConfigKeys.accessibilityStatement -> boolean,
       ConfigKeys.zeroRatedJourney -> boolean,
       ConfigKeys.emailVerifiedFeature -> boolean,
-      ConfigKeys.bulkPaperOffFeature -> boolean
+      ConfigKeys.bulkPaperOffFeature -> boolean,
+      ConfigKeys.contactPrefMigrationFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 

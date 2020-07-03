@@ -26,6 +26,8 @@ import assets.constants.BaseTestConstants.vrn
 import assets.messages.{DeregistrationConfirmationMessages => Messages}
 import common.SessionKeys
 import org.jsoup.Jsoup
+import play.api.mvc.AnyContentAsEmpty
+import play.api.test.FakeRequest
 import views.html.DeregistrationConfirmation
 
 import scala.concurrent.Future
@@ -48,7 +50,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       ec,
       mockConfig)
 
- lazy val requestWithSession = request.withSession(SessionKeys.deregSuccessful -> "true")
+ lazy val requestWithSession: FakeRequest[AnyContentAsEmpty.type] = request.withSession(SessionKeys.deregSuccessful -> "true")
 
   "the user is authorised" when {
 
@@ -58,69 +60,90 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
         "answers are deleted successfully and a customerDetails is received" when {
 
-          "emailVerifiedFeature is enabled" when {
+          "contactPrefMigrationFeature is enabled" should {
 
-            "Contact Preference is set to 'DIGITAL'" when {
-
-              "the user has a verified email" should {
-                lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
-
-                lazy val document = Jsoup.parse(bodyOf(result))
-
-                "return 200 (OK)" in {
-                  mockConfig.features.emailVerifiedFeature(true)
-                  setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-                  mockAuthResult(Future.successful(mockAuthorisedIndividual))
-                  setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
-                  setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-                  setupAuditExtendedEvent
-
-                  status(result) shouldBe Status.OK
-                }
-
-                "return HTML" in {
-                  contentType(result) shouldBe Some("text/html")
-                  charset(result) shouldBe Some("utf-8")
-                }
-
-                "return the correct first paragraph" in {
-                  messages(document.getElementById("content").getElementsByTag("article").first()
-                    .getElementsByTag("p").first().text()) shouldBe Messages.emailPreference
-                }
-
-              }
-
-              "the user has an unverified email" should {
-                lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
-
-                lazy val document = Jsoup.parse(bodyOf(result))
-
-                "return 200 (OK)" in {
-                  mockConfig.features.emailVerifiedFeature(true)
-                  setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-                  mockAuthResult(Future.successful(mockAuthorisedIndividual))
-                  setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
-                  setupMockCustomerDetails(vrn)(Right(customerDetailsUnverifiedEmail))
-                  setupAuditExtendedEvent
-
-                  status(result) shouldBe Status.OK
-                }
-
-                "return HTML" in {
-                  contentType(result) shouldBe Some("text/html")
-                  charset(result) shouldBe Some("utf-8")
-                }
-
-                "return the correct first paragraph" in {
-                  messages(document.getElementById("content").getElementsByTag("article").first()
-                    .getElementsByTag("p").first().text()) shouldBe Messages.digitalPreference
-                }
-
-              }
-
+            lazy val result = {
+              mockConfig.features.contactPrefMigrationFeature(true)
+              setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+              TestDeregistrationConfirmationController.show()(requestWithSession)
             }
 
+            "return 200 (OK)" in {
+              status(result) shouldBe Status.OK
+            }
 
+            "return HTML" in {
+              contentType(result) shouldBe Some("text/html")
+              charset(result) shouldBe Some("utf-8")
+            }
+          }
+
+          "contactPrefMigrationFeature is disabled" when {
+
+            "emailVerifiedFeature is enabled" when {
+
+              "Contact Preference is set to 'DIGITAL'" when {
+
+                "the user has a verified email" should {
+                  lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
+
+                  lazy val document = Jsoup.parse(bodyOf(result))
+
+                  "return 200 (OK)" in {
+                    mockConfig.features.contactPrefMigrationFeature(false)
+                    mockConfig.features.emailVerifiedFeature(true)
+                    setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+                    mockAuthResult(Future.successful(mockAuthorisedIndividual))
+                    setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
+                    setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+                    setupAuditExtendedEvent
+
+                    status(result) shouldBe Status.OK
+                  }
+
+                  "return HTML" in {
+                    contentType(result) shouldBe Some("text/html")
+                    charset(result) shouldBe Some("utf-8")
+                  }
+
+                  "return the correct first paragraph" in {
+                    messages(document.getElementById("content").getElementsByTag("article").first()
+                      .getElementsByTag("p").first().text()) shouldBe Messages.emailPreference
+                  }
+
+                }
+
+                "the user has an unverified email" should {
+                  lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
+
+                  lazy val document = Jsoup.parse(bodyOf(result))
+
+                  "return 200 (OK)" in {
+                    mockConfig.features.contactPrefMigrationFeature(false)
+                    mockConfig.features.emailVerifiedFeature(true)
+                    setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
+                    mockAuthResult(Future.successful(mockAuthorisedIndividual))
+                    setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
+                    setupMockCustomerDetails(vrn)(Right(customerDetailsUnverifiedEmail))
+                    setupAuditExtendedEvent
+
+                    status(result) shouldBe Status.OK
+                  }
+
+                  "return HTML" in {
+                    contentType(result) shouldBe Some("text/html")
+                    charset(result) shouldBe Some("utf-8")
+                  }
+
+                  "return the correct first paragraph" in {
+                    messages(document.getElementById("content").getElementsByTag("article").first()
+                      .getElementsByTag("p").first().text()) shouldBe Messages.digitalPreference
+                  }
+                }
+              }
+            }
           }
 
           "emailVerifiedFeature is disabled" when {
@@ -132,6 +155,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
               lazy val document = Jsoup.parse(bodyOf(result))
 
               "return 200 (OK)" in {
+                mockConfig.features.contactPrefMigrationFeature(false)
                 mockConfig.features.emailVerifiedFeature(false)
                 setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
                 mockAuthResult(Future.successful(mockAuthorisedIndividual))

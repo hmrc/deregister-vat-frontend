@@ -47,7 +47,8 @@ object VatSubscriptionStub extends WireMockMethods {
   def noPendingData(): StubMapping = {
     when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
       .thenReturn(status = OK, body = Json.obj(
-        "customerDetails" -> Json.obj()
+        "customerDetails" -> Json.obj(),
+        "commsPreference" -> "DIGITAL"
       ))
   }
 

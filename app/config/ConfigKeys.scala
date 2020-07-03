@@ -44,6 +44,7 @@ object ConfigKeys {
   val zeroRatedJourney: String = "features.zeroRatedJourney.enabled"
   val emailVerifiedFeature: String = "features.emailVerifiedFeature.enabled"
   val bulkPaperOffFeature: String = "features.bulkPaperOffFeature.enabled"
+  val contactPrefMigrationFeature: String = "features.contactPrefMigration.enabled"
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
 

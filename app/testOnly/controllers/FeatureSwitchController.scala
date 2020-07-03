@@ -39,7 +39,8 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
         accessibilityStatementEnabled = appConfig.features.accessibilityStatement(),
         zeroRatedJourney = appConfig.features.zeroRatedJourney(),
         emailVerifiedFeature = appConfig.features.emailVerifiedFeature(),
-        bulkPaperOffFeature = appConfig.features.bulkPaperOffFeature()
+        bulkPaperOffFeature = appConfig.features.bulkPaperOffFeature(),
+        contactPrefMigrationFeature = appConfig.features.contactPrefMigrationFeature()
       )
     )))
   }
@@ -59,6 +60,7 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
     appConfig.features.zeroRatedJourney(model.zeroRatedJourney)
     appConfig.features.emailVerifiedFeature(model.emailVerifiedFeature)
     appConfig.features.bulkPaperOffFeature(model.bulkPaperOffFeature)
+    appConfig.features.contactPrefMigrationFeature(model.contactPrefMigrationFeature)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 
