@@ -34,7 +34,7 @@ import views.html.DeregistrationConfirmation
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeregistrationConfirmationController @Inject()(deregistrationConfirmation: DeregistrationConfirmation,
-                                                      val mcc: MessagesControllerComponents,
+                                                     val mcc: MessagesControllerComponents,
                                                      val authentication: AuthPredicate,
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
@@ -61,13 +61,21 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
             serviceCalls.map { result =>
 
               val businessName: Option[String] = result._1.fold(_ => None, _.businessName)
-              val contactPreference: Option[String] = result._2.fold(_ => None, {
-                model =>
-                  auditService.auditExtendedEvent(ContactPreferenceAuditModel(user.vrn, model.preference))
-                  Some(model.preference)
-              })
+              val contactPreference: Option[String] = if (appConfig.features.contactPrefMigrationFeature()) {
+                result._1.fold(_ => None, _.commsPreference)
+              } else {
+                result._2.fold(_ => None, {
+                  model =>
+                    auditService.auditExtendedEvent(ContactPreferenceAuditModel(user.vrn, model.preference))
+                    Some(model.preference)
+                })
+              }
 
-              val verifiedEmail = if (appConfig.features.emailVerifiedFeature()) {result._1.fold(_ => None, _.emailVerified)} else Some(false)
+              val verifiedEmail = if (appConfig.features.emailVerifiedFeature()) {
+                result._1.fold(_ => None, _.emailVerified)
+              } else {
+                Some(false)
+              }
 
               Ok(deregistrationConfirmation(businessName, contactPreference, verifiedEmail))
             }
@@ -81,10 +89,10 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
   }
 
   private def getContactPreference(implicit user: User[AnyContent], hc: HeaderCarrier, ec: ExecutionContext) = {
-    if (!user.isAgent) {
-      customerContactPreference.getCustomerContactPreferences(user.vrn)(hc, ec)
-    } else {
+    if (user.isAgent | appConfig.features.contactPrefMigrationFeature()) {
       Future(Left(None))(ec)
+    } else {
+      customerContactPreference.getCustomerContactPreferences(user.vrn)(hc, ec)
     }
   }
 }

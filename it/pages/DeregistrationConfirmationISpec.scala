@@ -51,7 +51,6 @@ class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
 
         DeregisterVatStub.successfulDeleteAllAnswers(vrn)
         VatSubscriptionStub.noPendingData()
-        ContactPreferencesStub.getContactPrefs(OK, Json.obj("preference" -> "DiGiTaL"))
 
         val res: WSResponse = deregConfirmationRequest()
 
