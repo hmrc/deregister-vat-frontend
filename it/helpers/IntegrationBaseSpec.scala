@@ -142,7 +142,7 @@ trait IntegrationBaseSpec extends UnitSpec
 
   def buildRequest(path: String, additionalCookies: Map[String, String] = Map.empty): WSRequest =
     client.url(s"http://localhost:$port$appRouteContext$path")
-      .withHeaders(HeaderNames.COOKIE -> SessionCookieBaker.bakeSessionCookie(additionalCookies), "Csrf-Token" -> "nocheck")
+      .withHttpHeaders(HeaderNames.COOKIE -> SessionCookieBaker.bakeSessionCookie(additionalCookies), "Csrf-Token" -> "nocheck")
       .withFollowRedirects(false)
 
   def redirectLocation(response: WSResponse): Option[String] = response.header(HeaderNames.LOCATION)

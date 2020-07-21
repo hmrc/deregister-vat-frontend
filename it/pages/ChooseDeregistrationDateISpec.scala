@@ -16,18 +16,16 @@
 
 package pages
 
-import java.time.LocalDate
-
+import assets.IntegrationTestConstants._
+import common.Constants
 import forms.YesNoForm
 import helpers.IntegrationBaseSpec
 import models._
 import play.api.http.Status._
-import play.api.libs.ws.WSResponse
-import stubs.DeregisterVatStub
-import assets.IntegrationTestConstants._
-import common.Constants
 import play.api.libs.json.Json
+import play.api.libs.ws.WSResponse
 import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService}
+import stubs.DeregisterVatStub
 
 class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 

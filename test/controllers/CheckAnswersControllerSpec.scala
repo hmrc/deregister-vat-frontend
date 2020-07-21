@@ -43,7 +43,6 @@ class CheckAnswersControllerSpec
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockCheckAnswersService,
-    mockChooseDeregDateAnswerService,
     mockUpdateDeregistrationService,
     serviceErrorHandler,
     mockConfig,

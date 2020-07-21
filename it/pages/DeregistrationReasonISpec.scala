@@ -26,7 +26,6 @@ import play.api.libs.ws.WSResponse
 import services._
 import stubs.DeregisterVatStub
 
-
 class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration reason endpoint" when {

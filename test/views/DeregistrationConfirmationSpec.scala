@@ -42,7 +42,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
       "verifiedEmail is true" should {
 
-      lazy val view = deregistrationConfirmation(preference = Some("DIGITAL"), verifiedEmail = Some(true))(user, messages, mockConfig, hc, ec)
+      lazy val view = deregistrationConfirmation(preference = Some("DIGITAL"), verifiedEmail = Some(true))(user, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -74,7 +74,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
       "verifiedEmail is false" should {
 
-        lazy val view = deregistrationConfirmation(preference = Some("DIGITAL"), verifiedEmail = Some(false))(user, messages, mockConfig, hc, ec)
+        lazy val view = deregistrationConfirmation(preference = Some("DIGITAL"), verifiedEmail = Some(false))(user, messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct document title" in {
@@ -108,7 +108,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     "contactPreferences returns 'PAPER'" should {
 
-      lazy val view = deregistrationConfirmation(preference = Some("PAPER"))(user, messages, mockConfig, hc, ec)
+      lazy val view = deregistrationConfirmation(preference = Some("PAPER"))(user, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -139,7 +139,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     "contactPreferences returns an error" should {
 
-      lazy val view = deregistrationConfirmation()(user, messages, mockConfig, hc, ec)
+      lazy val view = deregistrationConfirmation()(user, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
@@ -177,7 +177,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         val businessName: Option[String] = Some("Fake Business Name Limited")
         lazy val view = {
           mockConfig.features.bulkPaperOffFeature(false)
-          deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig, hc, ec)
+          deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -215,7 +215,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         lazy val noBusinessName: Option[String] = None
         lazy val view = {
           mockConfig.features.bulkPaperOffFeature(false)
-          deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig, hc, ec)
+          deregistrationConfirmation(noBusinessName)(agentUserPrefNo, messages, mockConfig)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -256,7 +256,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         val businessName: Option[String] = Some("Fake Business Name Limited")
         lazy val view = {
           mockConfig.features.bulkPaperOffFeature(true)
-          deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig, hc, ec)
+          deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -281,7 +281,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       "the user has verifiedAgentEmail (Yes pref inferred) and no business name" should {
         lazy val view = {
           mockConfig.features.bulkPaperOffFeature(true)
-          deregistrationConfirmation()(agentUserPrefYes, messages, mockConfig, hc, ec)
+          deregistrationConfirmation()(agentUserPrefYes, messages, mockConfig)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -306,7 +306,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       "the user is without a verifiedAgentEmail (No pref inferred) and no business name" should {
         lazy val view = {
           mockConfig.features.bulkPaperOffFeature(true)
-          deregistrationConfirmation()(agentUserPrefNo, messages, mockConfig, hc, ec)
+          deregistrationConfirmation()(agentUserPrefNo, messages, mockConfig)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -327,7 +327,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         val businessName: Option[String] = Some("Fake Business Name Limited")
         lazy val view: Html = {
           mockConfig.features.bulkPaperOffFeature(true)
-          deregistrationConfirmation(businessName)(agentUserPrefNo, messages, mockConfig, hc, ec)
+          deregistrationConfirmation(businessName)(agentUserPrefNo, messages, mockConfig)
         }
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -348,7 +348,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
     "isAgent is true" should {
       "display the change client link" in {
         val businessName: Option[String] = Some("Fake Business Name Limited")
-        lazy val view = deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig, hc, ec)
+        lazy val view = deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         elementText(Selectors.changeClientLink) shouldBe "Change client"
@@ -358,7 +358,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
     "isAgent is false" should {
       "not display the change client link" in {
         val businessName: Option[String] = Some("Fake Business Name Limited")
-        lazy val view = deregistrationConfirmation(businessName)(user, messages, mockConfig, hc, ec)
+        lazy val view = deregistrationConfirmation(businessName)(user, messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         elementText(Selectors.changeClientLink) shouldNot be("Change client")

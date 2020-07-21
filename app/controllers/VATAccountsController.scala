@@ -25,7 +25,7 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{AccountingMethodAnswerService, DeregReasonAnswerService, TaxableTurnoverAnswerService}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import cats.data.EitherT
 import cats.instances.future._
 import play.api.Logger

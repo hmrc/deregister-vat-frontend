@@ -17,13 +17,7 @@
 package services.mocks
 
 import models._
-import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.Format
 import services.CeasedTradingDateAnswerService
-import uk.gov.hmrc.http.HeaderCarrier
-import utils.TestUtil
-
-import scala.concurrent.ExecutionContext
 
 trait MockCeasedTradingDateAnswerService extends MockStoredAnswersService {
 

@@ -28,7 +28,7 @@ trait MockCustomerDetailsService extends UnitSpec with MockFactory {
 
   val mockCustomerDetailsService: CustomerDetailsService = mock[CustomerDetailsService]
 
-  def setupMockCustomerDetails(vrn: String)(response: Either[ErrorModel, CustomerDetails])(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
+  def setupMockCustomerDetails(vrn: String)(response: Either[ErrorModel, CustomerDetails]): Unit = {
     (mockCustomerDetailsService.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, *, *)
       .returns(response)
