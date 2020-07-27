@@ -18,9 +18,7 @@ package models.deregistrationRequest
 
 import java.time.LocalDate
 
-import config.AppConfig
-import models._
-import models.{ZeroRated => ZeroRatedDeregReason}
+import models.{ZeroRated => ZeroRatedDeregReason, _}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
 
@@ -55,7 +53,7 @@ object DeregistrationInfo {
                   purchasesExceedSupplies: Option[YesNo],
                   sicCode: Option[String],
                   zeroRatedSuppliesValue: Option[NumberInputModel],
-                  transactorOrCapacitorEmail: Option[String])(implicit appConfig: AppConfig): DeregistrationInfo = {
+                  transactorOrCapacitorEmail: Option[String]): DeregistrationInfo = {
 
         DeregistrationInfo(
           deregReason,
@@ -78,7 +76,7 @@ object DeregistrationInfo {
 
   private[deregistrationRequest] val deregLaterDate: Option[DateModel] => Option[LocalDate] = _.flatMap(_.date)
 
-  private[deregistrationRequest] def taxableTurnoverBelowReason(taxableTurnover: YesNo)(implicit appConfig: AppConfig): BelowThresholdReason =
+  private[deregistrationRequest] def taxableTurnoverBelowReason(taxableTurnover: YesNo): BelowThresholdReason =
     if (taxableTurnover.value) BelowNext12Months else BelowPast12Months
 
   private[deregistrationRequest] val nextTwelveMonthsTurnover: Option[NumberInputModel] => Option[BigDecimal] = _.map(_.value)
@@ -86,8 +84,8 @@ object DeregistrationInfo {
   private[deregistrationRequest] def turnoverBelowThreshold(deregistrationReason: DeregistrationReason,
                                                             taxableTurnover: Option[YesNo],
                                                             nextTaxableTurnover: Option[NumberInputModel],
-                                                            whyTurnoverBelow: Option[WhyTurnoverBelowModel])
-                                                           (implicit appConfig: AppConfig): Option[TurnoverBelowThreshold] = {
+                                                            whyTurnoverBelow: Option[WhyTurnoverBelowModel]):
+                                                            Option[TurnoverBelowThreshold] = {
     if(deregistrationReason equals BelowThreshold) {
       taxableTurnover.flatMap { turnover =>
         nextTwelveMonthsTurnover(nextTaxableTurnover).map { nextTaxableTurnover =>

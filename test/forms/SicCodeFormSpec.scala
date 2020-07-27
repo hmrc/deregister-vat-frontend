@@ -16,10 +16,9 @@
 
 package forms
 
-import play.api.i18n.Messages
 import _root_.utils.TestUtil
-import assets.messages.{CommonMessages, SicCodeMessages}
-import models.NumberInputModel
+import assets.messages.SicCodeMessages
+import play.api.i18n.Messages
 
 class SicCodeFormSpec extends TestUtil {
 

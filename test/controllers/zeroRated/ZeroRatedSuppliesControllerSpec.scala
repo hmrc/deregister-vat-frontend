@@ -23,7 +23,7 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.mocks.{MockDeleteAllStoredAnswersService, MockZeroRatedSuppliesValueService}
+import services.mocks.MockZeroRatedSuppliesValueService
 import views.html.ZeroRatedSupplies
 
 import scala.concurrent.Future
@@ -44,8 +44,8 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
   )
 
   val testZeroRatedSuppliesAmt = 500
-  val testZeroRatedSuppliesAmtAsString= testZeroRatedSuppliesAmt.toString()
-  val testZeroRatedSuppliesModel = NumberInputModel(testZeroRatedSuppliesAmt)
+  val testZeroRatedSuppliesAmtAsString: String = testZeroRatedSuppliesAmt.toString
+  val testZeroRatedSuppliesModel: NumberInputModel = NumberInputModel(testZeroRatedSuppliesAmt)
 
   "The zero rated journey feature switch is on" when {
 

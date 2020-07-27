@@ -16,7 +16,7 @@
 
 package views
 
-import assets.messages.{CommonMessages, NextTaxableTurnoverMessages, OptionTaxMessages}
+import assets.messages.{CommonMessages, NextTaxableTurnoverMessages}
 import forms.NextTaxableTurnoverForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

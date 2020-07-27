@@ -24,9 +24,7 @@ import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.DeleteAllStoredAnswersService
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -39,9 +37,6 @@ class SignOutController @Inject()(val mcc: MessagesControllerComponents,
                                  (implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   def signOut(authorised: Boolean): Action[AnyContent] = authentication.async { implicit user =>
-    implicit val hc: HeaderCarrier =
-      HeaderCarrierConverter.fromHeadersAndSession(user.headers, Some(user.session))
-
     (authorised, user.isAgent) match {
       case (true, true) => deleteDataAndRedirect(appConfig.signOutUrl("VATCA"))
       case (true, false) => deleteDataAndRedirect(appConfig.signOutUrl("VATC"))
@@ -57,7 +52,7 @@ class SignOutController @Inject()(val mcc: MessagesControllerComponents,
         serviceErrorHandler.showInternalServerError
     }
 
-  val timeout: Action[AnyContent] = Action { implicit request =>
+  val timeout: Action[AnyContent] = Action {
     Redirect(appConfig.unauthorisedSignOutUrl)
   }
 }

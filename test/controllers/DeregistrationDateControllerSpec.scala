@@ -20,8 +20,6 @@ import java.time.LocalDate
 
 import assets.constants.BaseTestConstants._
 import forms.DateForm._
-import forms.YesNoForm
-import forms.YesNoForm._
 import models._
 import play.api.http.Status
 import play.api.http.Status.INTERNAL_SERVER_ERROR

@@ -16,15 +16,14 @@
 
 package pages
 
-import common.SessionKeys
-import helpers.IntegrationBaseSpec
-import play.api.libs.ws.WSResponse
 import assets.IntegrationTestConstants.vrn
+import common.SessionKeys
 import config.FrontendAppConfig
+import helpers.IntegrationBaseSpec
 import play.api.i18n.Messages
-import play.api.libs.json.Json
-import stubs.{ContactPreferencesStub, DeregisterVatStub, VatSubscriptionStub}
+import play.api.libs.ws.WSResponse
 import play.api.test.Helpers.OK
+import stubs.{DeregisterVatStub, VatSubscriptionStub}
 
 class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
 

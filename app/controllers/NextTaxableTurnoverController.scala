@@ -28,7 +28,7 @@ import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{BusinessActivityAnswerService, DeregReasonAnswerService, NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.NextTaxableTurnover
 
 import scala.concurrent.ExecutionContext
@@ -54,7 +54,7 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
     }
   }
 
-  private def renderView(form: Form[NumberInputModel] = NextTaxableTurnoverForm.taxableTurnoverForm, backLink: String)(implicit user: User[_]) =
+  private def renderView(form: Form[NumberInputModel], backLink: String)(implicit user: User[_]) =
     nextTaxableTurnover(form, backLink)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>

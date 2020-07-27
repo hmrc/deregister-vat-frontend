@@ -17,7 +17,7 @@
 package forms
 
 import _root_.utils.TestUtil
-import assets.messages.{CommonMessages, OptionTaxMessages}
+import assets.messages.CommonMessages
 import common.Constants
 import models._
 import play.api.i18n.Messages

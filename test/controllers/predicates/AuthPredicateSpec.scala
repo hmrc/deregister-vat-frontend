@@ -35,7 +35,6 @@ class AuthPredicateSpec extends MockAuth {
 
   def target(): Action[AnyContent] = {
     TestAuthPredicate.async {
-      implicit user =>
         Future.successful(Ok)
     }
   }

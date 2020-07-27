@@ -15,21 +15,13 @@
  *@
 
 @import common.SessionKeys
-@import uk.gov.hmrc.http.HeaderCarrier
-@import scala.concurrent.{ExecutionContext, Future}
-@import models.contactPreferences.ContactPreference
-
 
 @this(mainTemplate: MainTemplate)
 
-@(businessName: Option[String]=None,preference: Option[String]=None,verifiedEmail: Option[Boolean]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig, hc: HeaderCarrier, ec: ExecutionContext)
+@(businessName: Option[String]=None,preference: Option[String]=None,verifiedEmail: Option[Boolean]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @finishLink = @{
     if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
-}
-
-@pageTitle = @{
-    if(appConfig.features.bulkPaperOffFeature() && user.isAgent) messages("deregistrationConfirmation.bpOffTitle") else messages("deregistrationConfirmation.title")
 }
 
 @mainTemplate(

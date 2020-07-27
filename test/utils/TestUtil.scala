@@ -27,12 +27,12 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.i18n.{Lang, Messages, MessagesApi, MessagesImpl}
 import play.api.inject.Injector
-import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents}
+import play.api.mvc._
 import play.api.test.FakeRequest
+import play.api.test.Helpers.{stubBodyParser, stubControllerComponents, stubMessagesApi}
 import services.ContactPreferencesService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test._
-import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 
 import scala.concurrent.ExecutionContext
 
@@ -47,7 +47,24 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
     mockConfig.features.zeroRatedJourney(true)
     SharedMetricRegistries.clear()
   }
-  lazy val mcc: MessagesControllerComponents = stubMessagesControllerComponents()
+
+
+
+  private lazy val cc: ControllerComponents = stubControllerComponents()
+
+  private lazy val messagesActionBuilder: MessagesActionBuilder =
+    new DefaultMessagesActionBuilderImpl(stubBodyParser[AnyContent](), stubMessagesApi())
+
+  lazy val mcc: MessagesControllerComponents = DefaultMessagesControllerComponents(
+    messagesActionBuilder,
+    DefaultActionBuilder(stubBodyParser[AnyContent]()),
+    cc.parsers,
+    fakeApplication.injector.instanceOf[MessagesApi],
+    cc.langs,
+    cc.fileMimeTypes,
+    ExecutionContext.global
+  )
+
   lazy implicit val config: Configuration = app.configuration
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig
   lazy implicit val mockUserContactPref: ContactPreferencesService = injector.instanceOf[ContactPreferencesService]
@@ -56,11 +73,12 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
   lazy val injector: Injector = app.injector
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
   implicit lazy val messages: Messages = MessagesImpl(Lang("en-GB"), messagesApi)
-  implicit lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn,true)(request)
+  implicit lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn,active = true)(request)
   lazy val agentUserPrefYes: User[AnyContentAsEmpty.type] =
-    User[AnyContentAsEmpty.type](vrn,true, Some(arn))(request.withSession(SessionKeys.verifiedAgentEmail -> agentEmail))
-  lazy val agentUserPrefNo: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn,true, Some(arn))(request)
+    User[AnyContentAsEmpty.type](vrn,active = true, Some(arn))(request.withSession(SessionKeys.verifiedAgentEmail -> agentEmail))
+  lazy val agentUserPrefNo: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn,active = true, Some(arn))(request)
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
   implicit lazy val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
   lazy val serviceErrorHandler: ServiceErrorHandler = injector.instanceOf[ServiceErrorHandler]
+  lazy val defaultActionBuilder: DefaultActionBuilder = injector.instanceOf[DefaultActionBuilder]
 }

@@ -28,7 +28,7 @@ trait MockAuditService extends MockFactory {
 
   val mockAuditService: AuditService = mock[AuditService]
 
-  def setupAuditExtendedEvent[T <: ExtendedAuditModel]()(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
+  def setupAuditExtendedEvent[T <: ExtendedAuditModel](): Unit = {
     (mockAuditService.auditExtendedEvent(_: T)(_: HeaderCarrier, _: ExecutionContext, _: Writes[T]))
       .expects(*, *, *, *)
   }

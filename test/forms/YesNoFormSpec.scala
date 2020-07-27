@@ -18,7 +18,6 @@ package forms
 
 import forms.YesNoForm._
 import models.{No, Yes}
-import play.api.data.FormError
 import uk.gov.hmrc.play.test.UnitSpec
 
 class YesNoFormSpec extends UnitSpec {

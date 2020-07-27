@@ -19,7 +19,7 @@ package controllers.zeroRated
 import assets.constants.BaseTestConstants.errorModel
 import controllers.ControllerBaseSpec
 import forms.YesNoForm.yesNo
-import models.{DeregisterVatSuccess, No, Yes, YesNo}
+import models.{DeregisterVatSuccess, No, Yes}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest

@@ -33,8 +33,6 @@ case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int) {
       case Failure(_) => None
     }
 
-  private val formatter = DateTimeFormatter.ofPattern("d MMMM uuuu")
-
   def longDate()(implicit messages: Messages): String = {
     date.fold(""){ datum => datum.format(DateTimeFormatter.ofPattern(
         if(messages.lang.language =="cy"){

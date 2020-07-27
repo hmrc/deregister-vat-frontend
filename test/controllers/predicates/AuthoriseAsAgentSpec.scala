@@ -39,7 +39,6 @@ class AuthoriseAsAgentSpec extends TestUtil with MockAuth {
 
   def target(): Action[AnyContent] = {
     mockAuthoriseAsAgent.async {
-      implicit user =>
         Future.successful(Ok)
     }
   }

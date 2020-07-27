@@ -19,11 +19,11 @@ package testOnly.controllers
 import common.SessionKeys
 import config.AppConfig
 import javax.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import testOnly.forms.StubAgentClientLookupForm
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import testOnly.views.html.{StubAgentClientLookup, StubAgentClientUnauth}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 class StubAgentClientLookupController @Inject()(stubAgentClientLookup: StubAgentClientLookup,
                                                 stubAgentClientUnauth: StubAgentClientUnauth,

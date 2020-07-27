@@ -32,47 +32,47 @@ class ContactPreferenceHttpParserSpec extends TestUtil {
 
       "preference is Digital" should {
 
-        val response = Json.obj("preference" -> "DIGITAL")
+        val response = Json.obj("preference" -> "DIGITAL").toString
 
         "return Digital" in {
-          ContactPreferenceReads.read("", "", HttpResponse(Status.OK, Some(response))) shouldBe Right(ContactPreference("DIGITAL"))
+          ContactPreferenceReads.read("", "", HttpResponse(Status.OK, response)) shouldBe Right(ContactPreference("DIGITAL"))
         }
       }
 
       "preference is Paper" should {
 
-        val response = Json.obj("preference" -> "PAPER")
+        val response = Json.obj("preference" -> "PAPER").toString
 
         "return Paper" in {
-          ContactPreferenceReads.read("", "", HttpResponse(Status.OK, Some(response))) shouldBe Right(ContactPreference("PAPER"))
+          ContactPreferenceReads.read("", "", HttpResponse(Status.OK, response)) shouldBe Right(ContactPreference("PAPER"))
         }
       }
 
       "preference is of various cases" should {
 
-        val response = Json.obj("preference" -> "digITaL")
+        val response = Json.obj("preference" -> "digITaL").toString
 
         "return DIGITAL" in {
-          ContactPreferenceReads.read("", "", HttpResponse(Status.OK, Some(response))) shouldBe Right(ContactPreference("DIGITAL"))
+          ContactPreferenceReads.read("", "", HttpResponse(Status.OK, response)) shouldBe Right(ContactPreference("DIGITAL"))
         }
       }
 
       "preference is invalid" should {
 
-        val response = Json.obj("preference" -> "Invalid")
+        val response = Json.obj("preference" -> "Invalid").toString
 
         "return an ErrorModel" in {
-          ContactPreferenceReads.read("", "", HttpResponse(Status.OK, Some(response))) shouldBe
+          ContactPreferenceReads.read("", "", HttpResponse(Status.OK, response)) shouldBe
             Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid preference type received from Contact Preferences"))
         }
       }
 
       "json is invalid" should {
 
-        val response = Json.obj("Invalid" -> "Invalid")
+        val response = Json.obj("Invalid" -> "Invalid").toString
 
         "return an ErrorModel" in {
-          ContactPreferenceReads.read("", "", HttpResponse(Status.OK, Some(response))) shouldBe
+          ContactPreferenceReads.read("", "", HttpResponse(Status.OK, response)) shouldBe
             Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json received from Contact Preferences"))
         }
       }
@@ -81,7 +81,7 @@ class ContactPreferenceHttpParserSpec extends TestUtil {
     "the http response status is unexpected" should {
 
       "return an ErrorModel" in {
-        ContactPreferenceReads.read("", "", HttpResponse(Status.NOT_FOUND, responseString = Some("Response body"))) shouldBe
+        ContactPreferenceReads.read("", "", HttpResponse(Status.NOT_FOUND, "Response body")) shouldBe
           Left(ErrorModel(Status.NOT_FOUND, "Unexpected Response. Response: Response body"))
       }
     }

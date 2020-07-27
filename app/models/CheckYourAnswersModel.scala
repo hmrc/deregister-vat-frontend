@@ -38,7 +38,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  sicCode: Option[String],
                                  zeroRatedSupplies: Option[NumberInputModel],
                                  purchasesExceedSupplies: Option[YesNo])
-                                (implicit user: User[_], messages: Messages, appConfig: AppConfig) {
+                                (implicit messages: Messages, appConfig: AppConfig) {
 
   def seqAnswers: Seq[CheckYourAnswersRowModel] = deregistrationReason match {
     case Some(ZeroRated) => zeroRatedAnswerSequence.flatten

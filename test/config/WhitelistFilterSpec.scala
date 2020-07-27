@@ -17,8 +17,8 @@
 package config
 
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.Call
 import play.api.mvc.Results.Ok
-import play.api.mvc.{Action, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.{Application, Configuration}
@@ -32,8 +32,8 @@ class WhitelistFilterSpec extends TestUtil {
         "whitelist.enabled" -> true
       ))
       .routes({
-        case ("GET", "/hello-world") => Action(Ok("success"))
-        case _ => Action(Ok("failure"))
+        case ("GET", "/hello-world") => defaultActionBuilder(Ok("success"))
+        case _ => defaultActionBuilder(Ok("failure"))
       })
       .build()
 

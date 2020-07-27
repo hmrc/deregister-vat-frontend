@@ -29,7 +29,7 @@ class DeregisterVatHttpParserSpec extends TestUtil {
     "the http response status is OK with valid Json" should {
 
       "return the expected model" in {
-        DeregisterVatHttpParser.getReads[TestModel].read("", "", HttpResponse(Status.OK, Some(testValidJson))) shouldBe
+        DeregisterVatHttpParser.getReads[TestModel].read("", "", HttpResponse(Status.OK, testValidJson.toString)) shouldBe
           Right(Some(testModel))
       }
     }
@@ -37,7 +37,7 @@ class DeregisterVatHttpParserSpec extends TestUtil {
     "the http response status is OK with invalid Json" should {
 
       "return an ErrorModel" in {
-        DeregisterVatHttpParser.getReads[TestModel].read("", "", HttpResponse(Status.OK, Some(testInvalidJson))) shouldBe
+        DeregisterVatHttpParser.getReads[TestModel].read("", "", HttpResponse(Status.OK, testInvalidJson.toString)) shouldBe
           Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from deregister-vat"))
       }
     }
@@ -45,7 +45,7 @@ class DeregisterVatHttpParserSpec extends TestUtil {
     "the http response status is NOT_FOUND" should {
 
       "return NONE" in {
-        DeregisterVatHttpParser.getReads[TestModel].read("", "", HttpResponse(Status.NOT_FOUND)) shouldBe
+        DeregisterVatHttpParser.getReads[TestModel].read("", "", HttpResponse(Status.NOT_FOUND, "")) shouldBe
           Right(None)
       }
     }
@@ -53,7 +53,7 @@ class DeregisterVatHttpParserSpec extends TestUtil {
     "the http response status is NOT OK" should {
 
       "return an ErrorModel" in {
-        DeregisterVatHttpParser.getReads[TestModel].read("", "", HttpResponse(Status.BAD_REQUEST)) shouldBe
+        DeregisterVatHttpParser.getReads[TestModel].read("", "", HttpResponse(Status.BAD_REQUEST, "")) shouldBe
           Left(ErrorModel(Status.BAD_REQUEST, "Downstream error returned when retrieving Model from Deregister Vat"))
       }
     }
@@ -64,14 +64,14 @@ class DeregisterVatHttpParserSpec extends TestUtil {
     "the http response status is NO_CONTENT" should {
 
       "return the expected model" in {
-        DeregisterVatHttpParser.updateReads.read("", "", HttpResponse(Status.NO_CONTENT)) shouldBe Right(DeregisterVatSuccess)
+        DeregisterVatHttpParser.updateReads.read("", "", HttpResponse(Status.NO_CONTENT, "")) shouldBe Right(DeregisterVatSuccess)
       }
     }
 
     "the http response status is NOT OK" should {
 
       "return an ErrorModel" in {
-        DeregisterVatHttpParser.updateReads.read("", "", HttpResponse(Status.BAD_REQUEST)) shouldBe
+        DeregisterVatHttpParser.updateReads.read("", "", HttpResponse(Status.BAD_REQUEST, "")) shouldBe
           Left(ErrorModel(Status.BAD_REQUEST, "Downstream error returned when updating Deregister Vat"))
       }
     }

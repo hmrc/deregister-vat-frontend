@@ -18,7 +18,7 @@ package controllers
 
 import play.api.Play
 import play.api.http.Status.SEE_OTHER
-import play.api.mvc.{AnyContentAsEmpty, Call, Cookie}
+import play.api.mvc.{AnyContentAsEmpty, Call}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 

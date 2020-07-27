@@ -21,16 +21,13 @@ import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.Inject
 import models.User
 import play.api.Logger
-
-import play.api.i18n.{I18nSupport}
-
+import play.api.i18n.I18nSupport
 import play.api.mvc.{ActionBuilder, ActionFunction, AnyContent, BodyParser, MessagesControllerComponents, Request, Result}
-
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.errors.client.Unauthorised
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,6 +44,8 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
   override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
   override implicit protected val executionContext: ExecutionContext = mcc.executionContext
 
+  val logger: Logger = Logger("authPredicateLogger")
+
   override def invokeBlock[A](request: Request[A], block: User[A] => Future[Result]): Future[Result] = {
 
     implicit val req: Request[A] = request
@@ -61,25 +60,25 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
             checkVatEnrolment(enrolments, block)
           }
         case _ =>
-          Logger.warn("[AuthPredicate][invokeBlock] - Missing affinity group")
+          logger.warn("[AuthPredicate][invokeBlock] - Missing affinity group")
           Future.successful(serviceErrorHandler.showInternalServerError)
       } recover {
       case _: NoActiveSession =>
-        Logger.debug("[AuthPredicate][invokeBlock] - No active session, redirect to GG Sign In")
+        logger.debug("[AuthPredicate][invokeBlock] - No active session, redirect to GG Sign In")
         Redirect(appConfig.signInUrl)
       case _: AuthorisationException =>
-        Logger.debug("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
+        logger.debug("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
         Forbidden(unauthorised())
     }
   }
 
   private[AuthPredicate] def checkVatEnrolment[A](enrolments: Enrolments, block: User[A] => Future[Result])(implicit request: Request[A]) =
     if (enrolments.enrolments.exists(_.key == EnrolmentKeys.vatEnrolmentId)) {
-      Logger.debug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
+      logger.debug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
       block(User(enrolments))
     }
     else {
-      Logger.debug(s"[AuthPredicate][checkVatEnrolment] - Individual without HMRC-MTD-VAT enrolment. $enrolments")
+      logger.debug(s"[AuthPredicate][checkVatEnrolment] - Individual without HMRC-MTD-VAT enrolment. $enrolments")
       Future.successful(Forbidden(unauthorised()))
     }
 

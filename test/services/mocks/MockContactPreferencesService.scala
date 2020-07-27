@@ -29,7 +29,7 @@ trait MockContactPreferencesService extends UnitSpec with MockFactory {
 
   val mockContactPreferencesService: ContactPreferencesService = mock[ContactPreferencesService]
 
-  def setupMockContactPreferences(vrn: String)(response: Either[ErrorModel, ContactPreference])(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
+  def setupMockContactPreferences(vrn: String)(response: Either[ErrorModel, ContactPreference]): Unit = {
     (mockContactPreferencesService.getCustomerContactPreferences(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, *, *)
       .returns(response)

@@ -24,7 +24,6 @@ import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockAccountingMethodAnswerService, MockDeregReasonAnswerService, MockTaxableTurnoverAnswerService}
-import uk.gov.hmrc.auth.core._
 import views.html.VatAccounts
 
 import scala.concurrent.Future
@@ -48,15 +47,6 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
   )
 
   "the user is authorised" when {
-
-    val goodEnrolments: Enrolments = Enrolments(
-      Set(
-        Enrolment(
-          "HMRC-MTD-VAT",
-          Seq(EnrolmentIdentifier("", "968501689")),
-          "Active")
-      )
-    )
 
     "Calling the .show action" when {
 

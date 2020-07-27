@@ -29,14 +29,14 @@ class VatSubscriptionHttpParserSpec extends TestUtil {
 
       "return the expected model" in {
         VatSubscriptionHttpParser.updateReads.read("", "",
-          HttpResponse(Status.OK)) shouldBe Right(VatSubscriptionSuccess)
+          HttpResponse(Status.OK, "")) shouldBe Right(VatSubscriptionSuccess)
       }
     }
 
     "the http response status is NOT OK" should {
 
       "return an ErrorModel" in {
-        VatSubscriptionHttpParser.updateReads.read("", "", HttpResponse(Status.BAD_REQUEST)) shouldBe
+        VatSubscriptionHttpParser.updateReads.read("", "", HttpResponse(Status.BAD_REQUEST, "")) shouldBe
           Left(ErrorModel(Status.BAD_REQUEST, "Downstream error returned when updating Vat Subscription"))
       }
     }
