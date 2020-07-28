@@ -33,6 +33,10 @@ lazy val coverageSettings: Seq[Setting[_]] = {
   val excludedPackages = Seq(
     "<empty>",
     "Reverse.*",
+    "controllers..*Reverse.*",
+    "com.kenshoo.play.metrics.*",
+    "controllers.zeroRated.javascript",
+    "controllers.javascript",
     ".*standardError*.*",
     ".*govuk_wrapper*.*",
     ".*main_template*.*",
