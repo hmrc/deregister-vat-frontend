@@ -118,16 +118,17 @@ appConfig = appConfig) {
 }
 
 @if(user.isAgent) {
-    <p>
-        <a id="change-client-link"
-        href="@appConfig.changeClientUrl">@messages("deregistrationConfirmation.changeClient")
-        </a>
-    </p>
-}
-
+<p>
+    <a id="finish" href="@finishLink" class="button" role="button">
+        @messages("deregistrationConfirmation.backToClient")
+    </a>
+</p>
+} else {
 <p>
     <a id="finish" href="@finishLink" class="button" role="button">
         @messages("common.finish")
     </a>
 </p>
+        }
+
 }

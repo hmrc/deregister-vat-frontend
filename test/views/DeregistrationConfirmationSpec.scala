@@ -203,7 +203,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
 
         "have the correct finish button text" in {
-          elementText(Selectors.button) shouldBe CommonMessages.finish
+          elementText(Selectors.button) shouldBe DeregistrationConfirmationMessages.agentFinish
         }
 
         "have the correct finish button url" in {
@@ -241,7 +241,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         }
 
         "have the correct finish button text" in {
-          elementText(Selectors.button) shouldBe CommonMessages.finish
+          elementText(Selectors.button) shouldBe DeregistrationConfirmationMessages.agentFinish
         }
 
         "have the correct finish button url" in {
@@ -342,26 +342,6 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
         "have the correct paragraph" in {
           elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.agentWithBName
         }
-      }
-    }
-
-    "isAgent is true" should {
-      "display the change client link" in {
-        val businessName: Option[String] = Some("Fake Business Name Limited")
-        lazy val view = deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        elementText(Selectors.changeClientLink) shouldBe "Change client"
-      }
-    }
-
-    "isAgent is false" should {
-      "not display the change client link" in {
-        val businessName: Option[String] = Some("Fake Business Name Limited")
-        lazy val view = deregistrationConfirmation(businessName)(user, messages, mockConfig)
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        elementText(Selectors.changeClientLink) shouldNot be("Change client")
       }
     }
   }
