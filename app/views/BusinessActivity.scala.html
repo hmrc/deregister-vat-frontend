@@ -30,7 +30,6 @@
 
     <p>@messages("businessActivity.forExample")</p>
 
-    <p><a id="rates-info" href="@{appConfig.govUkVatRatesInfo}" target="_blank">@messages("businessActivity.moreInfo")</a></p>
 }
 
 @mainTemplate(title = title(messages("businessActivity.title"), form), appConfig = appConfig) {
@@ -55,8 +54,10 @@
         )
     </div>
 
-        <button class="button" type="submit" id="continue">
+        <button class="form-group button" type="submit" id="continue">
             @messages("common.continue")
         </button>
+
+        <p><a id="rates-info" href="@{appConfig.govUkVatRatesInfo}" target="_blank">@messages("businessActivity.moreInfo")</a></p>
     }
 }
