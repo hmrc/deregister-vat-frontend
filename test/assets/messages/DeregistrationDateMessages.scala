@@ -24,6 +24,6 @@ object DeregistrationDateMessages extends BaseMessages {
   val heading: String = "What is the cancellation date?"
   val p1: String = "The date can be up to a maximum of 3 months from today."
   val p2: String = "We’ll confirm the date when we accept your request."
-  val hintText: String = "For example, 31 3 1980"
+  val hintText: String = "For example, 31 3 1980."
 
 }

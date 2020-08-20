@@ -89,7 +89,7 @@ chooseDeregistrationDate.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw�
 deregistrationDate.title = Beth yw’r dyddiad canslo?
 deregistrationDate.p1 = Gall y dyddiad fod hyd at uchafswm o 3 mis o heddiw.
 deregistrationDate.p2 = Byddwn yn cadarnhau’r dyddiad pan fyddwn yn derbyn eich cais.
-deregistrationDate.hint = Er enghraifft, 31 3 1980
+deregistrationDate.hint = Er enghraifft, 31 3 1980.
 deregistrationDate.error.date.noEntry = Nodwch ddyddiad canslo dilys
 deregistrationDate.error.date.past = Rhaid i’r dyddiad dadgofrestru fod yn y dyfodol
 deregistrationDate.error.date.future = Rhaid i’r dyddiad canslo beidio â bod mwy na 3 mis o heddiw
@@ -108,7 +108,7 @@ vatAccounts.showMeAnExample.bullet2 = mis Mehefin, rydych yn defnyddio cyfrifydd
 vatAccounts.showMeAnExample.mandatorySelection = Dewiswch sut y caiff cyfrifon TAW y busnes eu paratoi
 
 ceasedTrading.title = Y dyddiad y rhoddodd y busnes y gorau i fasnachu, neu’r dyddiad y bydd yn rhoi’r gorau i fasnachu
-ceasedTrading.hint = Er enghraifft, 31 3 1980
+ceasedTrading.hint = Er enghraifft, 31 3 1980.
 ceasedTrading.error.date.noEntry = Nodwch y dyddiad y rhoddodd y busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
 
 optionTax.title = A yw’r busnes wedi codi neu hawlio TAW ar dir neu eiddo masnachol?
