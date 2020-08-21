@@ -16,8 +16,6 @@
 
 package config
 
-import java.util.Base64
-
 import config.features.Features
 import config.{ConfigKeys => Keys}
 import javax.inject.{Inject, Singleton}
@@ -32,10 +30,6 @@ trait AppConfig {
   val analyticsHost: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
-  val whitelistEnabled: Boolean
-  val whitelistedIps: Seq[String]
-  val whitelistExcludedPaths: Seq[Call]
-  val shutterPage: String
   val signInUrl: String
   def signOutUrl(identifier: String): String
   def surveyUrl(identifier: String): String
@@ -94,17 +88,6 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
 
   override lazy val feedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
     s"&backUrl=${SafeRedirectUrl(platformHost + controllers.routes.DeregisterForVATController.redirect().url).encodedUrl}"
-
-  private def whitelistConfig(key: String): Seq[String] =
-    Some(new String(Base64.getDecoder.decode(servicesConfig.getString(key)), "UTF-8"))
-      .map(_.split(",")).getOrElse(Array.empty).toSeq
-
-  override lazy val whitelistEnabled: Boolean = servicesConfig.getBoolean(Keys.whitelistEnabled)
-  override lazy val whitelistedIps: Seq[String] = whitelistConfig(Keys.whitelistedIps)
-
-  override lazy val whitelistExcludedPaths: Seq[Call] = whitelistConfig(Keys.whitelistExcludedPaths)
-                                                        .map(path => Call("GET", path))
-  override lazy val shutterPage: String = servicesConfig.getString(Keys.whitelistShutterPage)
 
   private lazy val signInBaseUrl: String = servicesConfig.getString(Keys.signInBaseUrl)
   private lazy val signInContinueBaseUrl: String = servicesConfig.getString(Keys.signInContinueBaseUrl)

@@ -21,5 +21,5 @@ import javax.inject.Inject
 import play.api.http.DefaultHttpFilters
 import uk.gov.hmrc.play.bootstrap.frontend.filters.FrontendFilters
 
-class ServiceFilters @Inject()(defaultFilters: FrontendFilters, whitelistFilter: WhitelistFilter)
-  extends DefaultHttpFilters(defaultFilters.filters :+ whitelistFilter :_*)
+class ServiceFilters @Inject()(defaultFilters: FrontendFilters)
+  extends DefaultHttpFilters(defaultFilters.filters: _*)
