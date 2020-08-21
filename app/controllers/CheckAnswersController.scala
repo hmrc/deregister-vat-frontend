@@ -45,9 +45,9 @@ class CheckAnswersController @Inject()(checkYourAnswers: CheckYourAnswers,
     checkAnswersService.checkYourAnswersModel() map {
       case Right(answers) =>
         (answers.chooseDeregDate, answers.deregDate) match {
-          case (Some(_), Some(_)) => Ok(checkYourAnswers(controllers.routes.DeregistrationDateController.show().url, answers.seqAnswers))
-          case (Some(_), _) => Ok(checkYourAnswers(controllers.routes.ChooseDeregistrationDateController.show().url, answers.seqAnswers))
-          case _ => Ok(checkYourAnswers(controllers.routes.OutstandingInvoicesController.show().url, answers.seqAnswers))
+          case (Some(_), Some(_)) => Ok(checkYourAnswers(answers.seqAnswers))
+          case (Some(_), _) => Ok(checkYourAnswers(answers.seqAnswers))
+          case _ => Ok(checkYourAnswers(answers.seqAnswers))
         }
       case Left(error) =>
         Logger.warn("[CheckAnswersController][show] - storedAnswerService returned an error retrieving answers: " + error.message)

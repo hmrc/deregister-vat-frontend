@@ -43,16 +43,11 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
       CheckYourAnswersRowModel("test question 1", Html("test answer 1"), "test/url/1", "test hidden text 1"),
       CheckYourAnswersRowModel("test question 2", Html("test answer 2"), "test/url/2", "test hidden text 2")
     )
-    lazy val view = checkYourAnswers("testUrl",checkYourAnswersModel)(user,messages,mockConfig)
+    lazy val view = checkYourAnswers(checkYourAnswersModel)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {
       document.title shouldBe CheckYourAnswersMessages.title
-    }
-
-    s"have the correct back text" in {
-      elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe "testUrl"
     }
 
     s"have the correct page heading" in {
@@ -90,7 +85,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
 
     val checkYourAnswersModel = Seq()
 
-    lazy val view = checkYourAnswers("testUrl",checkYourAnswersModel)(user,messages,mockConfig)
+    lazy val view = checkYourAnswers(checkYourAnswersModel)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct document title" in {

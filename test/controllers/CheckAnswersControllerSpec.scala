@@ -87,11 +87,6 @@ class CheckAnswersControllerSpec
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
         }
-
-        "display the back url" in {
-          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.DeregistrationDateController.show().url
-
-        }
       }
 
       "No deregistration date for DeregDateAnswerService is returned" should {
@@ -128,10 +123,6 @@ class CheckAnswersControllerSpec
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
         }
-
-        "display the back url" in {
-          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.ChooseDeregistrationDateController.show().url
-        }
       }
 
       "No option for ChooseDeregDateAnswerService is returned" should {
@@ -167,10 +158,6 @@ class CheckAnswersControllerSpec
         "return HTML" in {
           contentType(result) shouldBe Some("text/html")
           charset(result) shouldBe Some("utf-8")
-        }
-
-        "display the back url" in {
-          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.routes.OutstandingInvoicesController.show().url
         }
       }
 
