@@ -225,7 +225,7 @@ deregistrationConfirmation.digitalPreference = Byddwn yn anfon e-bost atoch cyn 
 deregistrationConfirmation.paperPreference = Byddwn yn anfon llythyr i’ch prif fan busnes i roi diweddariad cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.contactPrefError = Byddwn yn anfon diweddariad atoch cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.contactDetails = Sicrhewch fod eich manylion cyswllt wedi’u diweddaru.
-deregistrationConfirmation.changeClient = Newid cleient
+deregistrationConfirmation.backToClient = Yn ôl i fanylion y cleient
 
 ## Dereg Confirmation when Bulk Paper is off
 deregistrationConfirmation.bpOffEmailP1 = Byddwn yn anfon e-bost i

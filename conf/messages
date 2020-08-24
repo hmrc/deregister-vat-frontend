@@ -194,7 +194,7 @@ deregistrationConfirmation.digitalPreference = We’ll send you an email within 
 deregistrationConfirmation.paperPreference = We’ll send a letter to your principal place of business with an update within 15 working days.
 deregistrationConfirmation.contactPrefError = We’ll send you an update within 15 working days.
 deregistrationConfirmation.contactDetails = Make sure your contact details are up to date.
-deregistrationConfirmation.changeClient = Change client
+deregistrationConfirmation.backToClient = Back to client’s details
 
 ## Dereg Confirmation when Bulk Paper is off
 deregistrationConfirmation.bpOffEmailP1 = We’ll send an email to

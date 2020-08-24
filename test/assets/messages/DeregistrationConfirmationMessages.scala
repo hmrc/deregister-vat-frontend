@@ -52,4 +52,6 @@ object DeregistrationConfirmationMessages extends BaseMessages {
   val agentWithBName = "We’ll contact Fake Business Name Limited with an update."
 
   val agentNoBName = "We’ll contact your client with an update."
+
+  val agentFinish = "Back to client’s details"
 }
