@@ -24,8 +24,6 @@ import play.api.mvc.Call
 
 class MockAppConfig(implicit val runModeConfiguration: Configuration) extends AppConfig {
   val mode: Mode = Mode.Test
-  override val analyticsToken: String = ""
-  override val analyticsHost: String = ""
   override val reportAProblemPartialUrl: String = ""
   override val reportAProblemNonJSUrl: String = ""
   override val govUkCancelVatRegistration: String = "https://www.gov.uk/government/publications/vat-application-to-cancel-your-vat-registration-vat7"
@@ -68,5 +66,6 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchLanguage(lang)
   override val changeClientUrl: String = "/changeClient"
   override val accessibilityStatementUrl: String = "http://localhost:9152/vat-through-software/accessibility"
+  override val trackingConsentUrl: String = "/tracking"
 }
 

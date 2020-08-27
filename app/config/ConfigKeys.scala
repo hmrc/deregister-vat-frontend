@@ -20,10 +20,6 @@ object ConfigKeys {
 
   val contactFrontendService: String = "contact-frontend.host"
 
-  private val googleAnalyticsRoot: String = "google-analytics"
-  val googleAnalyticsToken: String = googleAnalyticsRoot + ".token"
-  val googleAnalyticsHost: String = googleAnalyticsRoot + ".host"
-
   val signInBaseUrl: String = "signIn.url"
   val signInContinueBaseUrl: String = "signIn.continueBaseUrl"
 
@@ -77,4 +73,6 @@ object ConfigKeys {
 
   val accessibilityStatementHost: String = "accessibility-statement.host"
   val accessibilityStatementUrl: String = "accessibility-statement.url"
+
+  val trackingConsentUrl: String = "tracking-consent-frontend.url"
 }
