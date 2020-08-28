@@ -27,7 +27,7 @@ trait TemplateBaseSpec extends TestUtil {
   def generateExpectedLegendMarkup(legend: String, asHeader: Boolean = true): String =
     if(asHeader) {
       s"""
-         |  <legend>
+         |  <legend overflow="auto">
          |      <h1 id="page-heading" class="heading-large">$legend</h1>
          |  </legend>
       """.stripMargin
