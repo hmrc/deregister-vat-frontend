@@ -89,6 +89,9 @@
 }
 
 @scriptElement = {
+    <!--[if !IE]>-->
+    <script type="text/javascript" src="@appConfig.trackingConsentUrl"></script>
+    <!--<![endif]-->
     <script type="text/javascript" src=@routes.Assets.at("javascript/errorFocus.js?2")></script>
     <script type="text/javascript" src='@routes.Assets.at("javascript/deregister.js")'></script>
     <script>
@@ -105,15 +108,16 @@
     @scriptElem.map(x => x)
 }
 
-@afterHeader = {}
+@afterHeader = {
+}
 
 @bodyEnd = {
     @footer(
-      analyticsToken = Some(appConfig.analyticsToken),
-      analyticsHost = appConfig.analyticsHost,
-      ssoUrl = None,
-      scriptElem = Some(scriptElement),
-      gaCalls = None)
+        analyticsToken = None,
+        analyticsHost = "",
+        ssoUrl = None,
+        scriptElem = Some(scriptElement),
+        gaCalls = None)
 }
 
 @footerTop = {}

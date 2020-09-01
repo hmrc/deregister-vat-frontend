@@ -33,7 +33,6 @@
 )(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 
-
 @sidebarContent = {
     @if(sidebarLinks.isDefined) {
         @sidebar(sidebarLinks.get, Some("sidebar"))

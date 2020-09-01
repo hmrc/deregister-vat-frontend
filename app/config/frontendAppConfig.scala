@@ -26,8 +26,6 @@ import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
-  val analyticsToken: String
-  val analyticsHost: String
   val reportAProblemPartialUrl: String
   val reportAProblemNonJSUrl: String
   val signInUrl: String
@@ -70,6 +68,8 @@ trait AppConfig {
   val languageFallbackUrl: String
   val languageMap: Map[String, Lang]
   val routeToSwitchLanguage: String => Call
+
+  val trackingConsentUrl: String
 }
 
 @Singleton
@@ -81,8 +81,6 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   private val contactHost = servicesConfig.getString(Keys.contactFrontendService)
   private val contactFormServiceIdentifier = "VATC"
 
-  override lazy val analyticsToken: String = servicesConfig.getString(Keys.googleAnalyticsToken)
-  override lazy val analyticsHost: String = servicesConfig.getString(Keys.googleAnalyticsHost)
   override lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
@@ -190,4 +188,6 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   private lazy val accessibilityStatementHost: String = servicesConfig.getString(Keys.accessibilityStatementHost)
   override lazy val accessibilityStatementUrl: String
   = accessibilityStatementHost + servicesConfig.getString(Keys.accessibilityStatementUrl)
+
+  val trackingConsentUrl: String = servicesConfig.getString(Keys.trackingConsentUrl)
 }
