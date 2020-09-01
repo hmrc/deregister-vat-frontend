@@ -40,7 +40,7 @@ class TextHelperSpec extends TemplateBaseSpec {
           s"""
              |<div class="form-field">
              |  <label for="$fieldName" class="form-label visuallyhidden">$label</label>
-             |  <input class="form-control input--no-spinner " name="$fieldName" id="$fieldName" value="text">
+             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
              |</div>
              |""".stripMargin
         )
@@ -64,7 +64,7 @@ class TextHelperSpec extends TemplateBaseSpec {
              |  <span class="error-message" role="tooltip">
              |    ERROR
              |  </span>
-             |  <input class="form-control input--no-spinner " name="$fieldName" id="$fieldName" value="text">
+             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
              |</div>
              |""".stripMargin
         )
@@ -83,7 +83,7 @@ class TextHelperSpec extends TemplateBaseSpec {
           s"""
              |<div class="form-field">
              |  <label for="$fieldName" class="form-label ">$label</label>
-             |  <input class="form-control input--no-spinner " name="$fieldName" id="$fieldName" value="text">
+             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
              |</div>
              |""".stripMargin
         )
@@ -103,7 +103,7 @@ class TextHelperSpec extends TemplateBaseSpec {
              |<div class="form-field">
              |  <p>Additional HTML</p>
              |  <label for="$fieldName" class="form-label visuallyhidden">$label</label>
-             |  <input class="form-control input--no-spinner " name="$fieldName" id="$fieldName" value="text">
+             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
              |</div>
              |""".stripMargin
         )
@@ -117,14 +117,14 @@ class TextHelperSpec extends TemplateBaseSpec {
 
     "isMonetaryField is set to true" should {
 
-      "apply the money-input-padding class to the input and render the span containing the £ sign" in {
+      "be correctly marked up as a monetary field" in {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-field">
-             |  <label for="$fieldName" class="form-label visuallyhidden">$label</label>
-             |  <span class="input-currency"></span>
-             |  <input class="form-control input--no-spinner money-input-padding" name="$fieldName" id="$fieldName" value="text">
+             |<div class="form-field"> <label for="currency" class="form-label visuallyhidden">$label</label>
+             |<div class="hmrc-currency-input__wrapper"> <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
+             |<input class="govuk-input govuk-input--width-10" id="currency" name="fieldName" type="text" aria-describedby="currency" autocomplete="off" inputmode="decimal" value="text">
+             |</div>
              |</div>
              |""".stripMargin
         )

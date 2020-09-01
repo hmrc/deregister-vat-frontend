@@ -18,10 +18,10 @@ package assets.messages
 
 object ZeroRatedSuppliesMessages extends BaseMessages {
 
-  val title = "What is the expected value of zero-rate supplies for the next 12 months?" + titleSuffix
-  val heading = "What is the expected value of zero-rate supplies for the next 12 months?"
+  val title = "What is the expected value of zero-rated supplies for the next 12 months?" + titleSuffix
+  val heading = "What is the expected value of zero-rated supplies for the next 12 months?"
 
-  val mandatory = "Enter the value of zero-rate supplies for the next 12 months"
+  val mandatory = "Enter the value of zero-rated supplies for the next 12 months"
   val nonNumeric = "Enter an amount using numbers 0 to 9"
 
 }

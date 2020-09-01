@@ -86,8 +86,8 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
             charset(result) shouldBe Some("utf-8")
           }
 
-          "has the value pre-populated" in {
-            document(result).select(s"#value").attr("value") shouldBe testZeroRatedSuppliesAmtAsString
+          "have the value pre-populated" in {
+            document(result).select(s"#currency").attr("value") shouldBe testZeroRatedSuppliesAmtAsString
           }
         }
       }

@@ -1,0 +1,39 @@
+
+.hmrc-currency-input__wrapper {
+  position: relative;
+}
+
+.hmrc-currency-input__unit {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: 2rem;
+  border-right: 2px solid;
+  background-color: rgb(243, 242, 241);
+  text-align: center;
+  font-family: GDS Transport,Arial,sans-serif;
+  font-weight: 700;
+}
+
+.govuk-form-group--error .hmrc-currency-input__unit {
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+}
+
+.hmrc-currency-input__unit::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.hmrc-currency-input__unit ~ .govuk-input {
+  padding-left: 2.6rem;
+}
+
+.hmrc-currency-input__group {
+  display: inline-block;
+  margin-bottom: 0;
+}

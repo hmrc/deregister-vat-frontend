@@ -90,7 +90,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
 
         "have the amount pre-populate in the field" in {
-          document(result).select("#value").attr("value") shouldBe testTurnoverAmt.toString
+          document(result).select("#currency").attr("value") shouldBe testTurnoverAmt.toString
         }
       }
 
@@ -111,7 +111,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
 
         "have the amount pre-populate in the field" in {
-          document(result).select("#value").attr("value") shouldBe testTurnoverAmt.toString
+          document(result).select("#currency").attr("value") shouldBe testTurnoverAmt.toString
         }
         s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
           document(result).select(".link-back").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
