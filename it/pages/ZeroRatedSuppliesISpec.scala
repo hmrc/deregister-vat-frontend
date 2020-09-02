@@ -43,7 +43,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("What is the expected value of zero-rate supplies for the next 12 months?" + titleSuffix)
+          pageTitle("What is the expected value of zero-rated supplies for the next 12 months?" + titleSuffix)
         )
       }
     }
@@ -211,8 +211,8 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(BAD_REQUEST),
-          pageTitle("Error: What is the expected value of zero-rate supplies for the next 12 months?" + titleSuffix),
-          elementText(".error-message")("Enter the value of zero-rate supplies for the next 12 months")
+          pageTitle("Error: What is the expected value of zero-rated supplies for the next 12 months?" + titleSuffix),
+          elementText(".error-message")("Enter the value of zero-rated supplies for the next 12 months")
         )
       }
     }

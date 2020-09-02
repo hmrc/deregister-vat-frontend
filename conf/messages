@@ -104,8 +104,8 @@ taxableTurnover.error.mandatoryRadioOption = Select yes if the turnover was less
 
 nextTaxableTurnover.title = What is the business’s expected taxable turnover for the next 12 months?
 
-zeroRatedSupplies.title = What is the expected value of zero-rate supplies for the next 12 months?
-zeroRatedSupplies.error.mandatory = Enter the value of zero-rate supplies for the next 12 months
+zeroRatedSupplies.title = What is the expected value of zero-rated supplies for the next 12 months?
+zeroRatedSupplies.error.mandatory = Enter the value of zero-rated supplies for the next 12 months
 zeroRatedSupplies.error.nonNumeric = Enter an amount using numbers 0 to 9
 
 issueNewInvoices.title = Is the business going to issue any new invoices after you cancel the registration?
