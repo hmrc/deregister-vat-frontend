@@ -10,3 +10,7 @@
 .date-entry-label-margin {
     margin-right: 25px !important;
 }
+
+legend {
+    overflow: visible;
+}
