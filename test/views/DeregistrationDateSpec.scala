@@ -118,10 +118,10 @@ class DeregistrationDateSpec extends ViewBaseSpec {
         }
       }
 
-      "form is invalid" should {
+      "form is invalid in two fields" should {
 
         lazy val view = deregistrationDate(DeregistrationDateForm.form.bind(
-          Map("dateDay" -> "", "dateMonth" -> "", "dateYear" -> "")
+          Map("dateDay" -> "01", "dateMonth" -> "", "dateYear" -> "")
         ))
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -136,20 +136,47 @@ class DeregistrationDateSpec extends ViewBaseSpec {
           }
 
           "contains an error" in {
-            elementText(Selectors.errorSummaryText(1)) shouldBe "Enter numbers between 1 and 31"
-            elementText(Selectors.errorSummaryText(2)) shouldBe "Enter numbers between 1 and 12"
-            elementText(Selectors.errorSummaryText(3)) shouldBe "Enter 4 numbers"
+            elementText(Selectors.errorSummaryText(1)) shouldBe "Enter a valid cancellation date"
           }
 
           "contains a link to the correct field" in {
-            element(Selectors.errorSummaryLink(1)).attr("href") shouldBe "#dateDay"
-            element(Selectors.errorSummaryLink(2)).attr("href") shouldBe "#dateMonth"
-            element(Selectors.errorSummaryLink(3)).attr("href") shouldBe "#dateYear"
+            element(Selectors.errorSummaryLink(1)).attr("href") shouldBe "#dateMonth"
           }
         }
 
         "display a field error" in {
           elementText(Selectors.fieldError) shouldBe "Enter a valid cancellation date"
+        }
+      }
+
+      "form is invalid in one field" should {
+
+        lazy val view = deregistrationDate(DeregistrationDateForm.form.bind(
+          Map("dateDay" -> "01", "dateMonth" -> "01", "dateYear" -> "")
+        ))
+        lazy implicit val document: Document = Jsoup.parse(view.body)
+
+        "have the correct error heading" in {
+          document.title() shouldBe DeregistrationDateMessages.errorTitle
+        }
+
+        "display an error summary" which {
+
+          "has the correct header" in {
+            elementText(Selectors.errorSummaryHeading) shouldBe DeregistrationDateMessages.errorSummaryTitle
+          }
+
+          "contains an error" in {
+            elementText(Selectors.errorSummaryText(1)) shouldBe "Enter 4 numbers"
+          }
+
+          "contains a link to the correct field" in {
+            element(Selectors.errorSummaryLink(1)).attr("href") shouldBe "#dateYear"
+          }
+        }
+
+        "display a field error" in {
+          elementText(Selectors.fieldError) shouldBe "Enter 4 numbers"
         }
       }
     }

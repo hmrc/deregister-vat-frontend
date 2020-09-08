@@ -114,34 +114,6 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
   }
 
-
-  "Rendering the Ceased trading date page with missing fields" should {
-
-    lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map.empty[String,String]))
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    s"have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
-    }
-
-    "have an error heading message being displayed" in {
-      elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
-    }
-
-    "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorDay) shouldBe CommonMessages.errorDateDay
-      element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
-      elementText(Selectors.errorMonth) shouldBe CommonMessages.errorDateMonth
-      element(Selectors.errorMonth).attr("href") shouldBe Selectors.monthField
-      elementText(Selectors.errorYear) shouldBe CommonMessages.errorDateYear
-      element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
-    }
-
-    "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorNoEntry
-    }
-  }
-
   "Rendering the Ceased trading date page with no values" should {
 
     lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
@@ -159,13 +131,9 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
     }
 
-    "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorDay) shouldBe CommonMessages.errorDateDay
+    "have an error for all fields and link to the correct field" in {
+      elementText(Selectors.errorDay) shouldBe CommonMessages.errorAllFieldsInvalid
       element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
-      elementText(Selectors.errorMonth) shouldBe CommonMessages.errorDateMonth
-      element(Selectors.errorMonth).attr("href") shouldBe Selectors.monthField
-      elementText(Selectors.errorYear) shouldBe CommonMessages.errorDateYear
-      element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
     }
 
     "have an error message being displayed for the fields" in {
@@ -244,13 +212,9 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
     }
 
-    "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorDay) shouldBe CommonMessages.errorDateDay
+    "have an error for all fields and link to the correct field" in {
+      elementText(Selectors.errorDay) shouldBe CommonMessages.errorAllFieldsInvalid
       element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
-      elementText(Selectors.errorMonth) shouldBe CommonMessages.errorDateMonth
-      element(Selectors.errorMonth).attr("href") shouldBe Selectors.monthField
-      elementText(Selectors.errorYear) shouldBe CommonMessages.errorDateYear
-      element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
     }
 
     "have an error message being displayed for the fields" in {
@@ -305,14 +269,10 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     "have an error for each missing field linking to the correct field" in {
       elementText(Selectors.errorDay) shouldBe CommonMessages.errorDateInvalidCharacters
       element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
-      elementText(Selectors.errorMonth) shouldBe CommonMessages.errorDateInvalidCharacters
-      element(Selectors.errorMonth).attr("href") shouldBe Selectors.monthField
-      elementText(Selectors.errorYear) shouldBe CommonMessages.errorDateInvalidCharacters
-      element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorNoEntry
+      elementText(Selectors.errorField) shouldBe CommonMessages.errorDateInvalidCharacters
     }
   }
 
