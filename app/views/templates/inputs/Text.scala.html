@@ -22,33 +22,39 @@
   additionalContent: Option[Html] = None,
   isMonetaryField: Boolean = false)(implicit messages: Messages)
 
-<div class="form-field@if(field.hasErrors){--error panel-border-narrow}">
+<div class="form-group">
 
-  @additionalContent.map { content => @content }
+    <fieldset aria-describedby="form.hint@if(field.hasErrors){ form-error}">
 
-    @if(isMonetaryField){
-    <label for="currency" class="form-label @if(labelHidden){visuallyhidden}">@label</label>
-    }else{
-    <label for="@field.id" class="form-label @if(labelHidden){visuallyhidden}">@label</label>
-}
-  @field.errors.headOption.map { error =>
-    <span class="error-message" role="tooltip">
-      @messages(error.message, error.args: _*)
-    </span>
-  }
+        <div class="form-field@if(field.hasErrors){--error panel-border-narrow}">
 
-    @if(isMonetaryField){
-    <div class="hmrc-currency-input__wrapper">
-        <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
-        <input class="govuk-input govuk-input--width-10" id="currency"
-               name="@field.name" type="text" aria-describedby="currency" autocomplete="off" inputmode="decimal"
-               value="@field.value.getOrElse("")"/>
-    </div>}
+          @additionalContent.map { content => @content }
+
+            @if(isMonetaryField){
+            <label for="currency" class="form-label @if(labelHidden){visuallyhidden}">@label</label>
+            }else{
+            <label for="@field.id" class="form-label @if(labelHidden){visuallyhidden}">@label</label>
+        }
+          @field.errors.headOption.map { error =>
+            <span class="error-message">
+              @messages(error.message, error.args: _*)
+            </span>
+          }
+
+            @if(isMonetaryField){
+            <div class="hmrc-currency-input__wrapper">
+                <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
+                <input class="govuk-input govuk-input--width-10" id="currency"
+                       name="@field.name" type="text" aria-describedby="currency" autocomplete="off" inputmode="decimal"
+                       value="@field.value.getOrElse("")"/>
+            </div>}
 
 
-    @if(!isMonetaryField){
-    <input class="form-control input--no-spinner"
-           name="@field.name"
-           id="@field.name"
-           value="@field.value.getOrElse("")"/>}
+            @if(!isMonetaryField){
+            <input class="form-control input--no-spinner"
+                   name="@field.name"
+                   id="@field.name"
+                   value="@field.value.getOrElse("")"/>}
+        </div>
+    </fieldset>
 </div>
