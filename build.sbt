@@ -19,6 +19,7 @@ import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 import play.core.PlayVersion
+import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 
 val appName: String = "deregister-vat-frontend"
@@ -26,6 +27,7 @@ val appName: String = "deregister-vat-frontend"
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
+RoutesKeys.routesImport := Seq.empty
 
 lazy val coverageSettings: Seq[Setting[_]] = {
   import scoverage.ScoverageKeys

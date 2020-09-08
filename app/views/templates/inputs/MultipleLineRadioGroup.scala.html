@@ -28,9 +28,11 @@
 
 @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
 
-<div @if(elements.hasErrors){ class="form-field--error"}>
+<div id="accountingMethod" class="form-group">
 
-    <fieldset>
+    <fieldset aria-describedby="form-hint"@if(field.hasErrors){ form-error}>
+
+        <div class="form-field@if(field.hasErrors){--error panel-border-narrow}">
 
         @legends(question, legendAsHeader)
 
@@ -54,5 +56,6 @@
                 </div>
             }
         }
+        </div>
     </fieldset>
 </div>

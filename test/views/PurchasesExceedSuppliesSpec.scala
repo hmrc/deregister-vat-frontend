@@ -29,7 +29,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val forExample = "#yes_no > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
+    val forExample = "#yes_no > fieldset:nth-child(1) > div:nth-child(1) >  p:nth-child(3)"
     val yesOption = "div.multiple-choice:nth-child(1) > label:nth-child(2)"
     val noOption = "div.multiple-choice:nth-child(2) > label:nth-child(2)"
     val button = ".button"
