@@ -26,7 +26,6 @@ import uk.gov.hmrc.http.SessionKeys
 
 object SessionCookieBaker {
   private val cookieKey = "gvBoGdgzqG1AarzF1LY0zQ=="
-  val sessionId = s"stubbed-${UUID.randomUUID}"
   private val cookieSigner = new DefaultCookieSigner(SecretConfiguration(cookieKey))
 
   private def cookieValue(sessionData: Map[String, String]) = {
@@ -44,7 +43,7 @@ object SessionCookieBaker {
     s"""mdtp="$encrypted"; Path=/; HTTPOnly"; Path=/; HTTPOnly"""
   }
 
-  def bakeSessionCookie(additionalData: Map[String, String] = Map(), timeStampRollback: Long = 0): String = {
+  def bakeSessionCookie(additionalData: Map[String, String] = Map()): String = {
     cookieValue(additionalData)
   }
 }
