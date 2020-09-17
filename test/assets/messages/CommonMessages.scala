@@ -49,6 +49,7 @@ object CommonMessages {
   val errorDateDay = "Enter numbers between 1 and 31"
   val errorDateMonth = "Enter numbers between 1 and 12"
   val errorDateYear = "Enter 4 numbers"
+  val errorAllFieldsInvalid = "Enter the date the business stopped or will stop trading"
 
   val errorTitlePrefix = "Error:"
 

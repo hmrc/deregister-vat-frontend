@@ -16,7 +16,7 @@
 
 package views
 
-import assets.messages.{CheckYourAnswersMessages, CommonMessages}
+import assets.messages.CheckYourAnswersMessages
 import models.CheckYourAnswersRowModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document

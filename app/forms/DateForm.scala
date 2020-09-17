@@ -31,10 +31,11 @@ object DateForm extends FormValidation {
   val month = "dateMonth"
   val year = "dateYear"
 
-  def invalidDateError(key: String): FormError = key match {
-    case `day` => FormError(key, "error.date.day")
-    case `month` => FormError(key, "error.date.month")
-    case `year` => FormError(key, "error.date.year")
+  def invalidDateError(key: String): FormError =
+      key match {
+        case `day` => FormError(key, "error.date.day")
+        case `month` => FormError(key, "error.date.month")
+        case `year` => FormError(key, "error.date.year")
   }
 
   def isValidDate(key: String, value: Int): Boolean = key match {
@@ -46,14 +47,21 @@ object DateForm extends FormValidation {
   val formatter: Formatter[Int] = new Formatter[Int] {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] = {
       data.get(key) match {
-        case Some(value) if value.trim == "" => Left(Seq(invalidDateError(key)))
+        case Some(value) if value.trim == "" =>
+          Left(Seq(invalidDateError(key)))
         case Some(stringValue) => Try(stringValue.toInt) match {
           case Success(intValue) =>
-            if(isValidDate(key, intValue)) {Right(intValue)}
-            else {Left(Seq(invalidDateError(key)))}
-          case Failure(_) => Left(Seq(FormError(key, "error.date.invalidCharacters")))
+            if(isValidDate(key, intValue)) {
+              Right(intValue)
+            }
+            else {
+              Left(Seq(invalidDateError(key)))
+            }
+          case Failure(_) =>
+            Left(Seq(FormError(key, "error.date.invalidCharacters")))
         }
-        case _ => Left(Seq(invalidDateError(key)))
+        case _ =>
+          Left(Seq(invalidDateError(key)))
       }
     }
 
