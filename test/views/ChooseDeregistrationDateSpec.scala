@@ -47,7 +47,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     val yearText = "#date-fieldset > div> label.form-group.form-group-year > span"
     val errorHeading = "#error-summary-heading"
     val errorInvalidDate = "#date-fieldset-error-summary"
-    val errorField = "#yes_no > div > fieldset > span"
+    val errorField = "#yes_no > fieldset > div > span"
     val errorYesNo = "#yes_no-error-summary"
     val errorHiddenField = "#date-fieldset > div > span.error-message"
     val errorDay = "#dateDay-error-summary"

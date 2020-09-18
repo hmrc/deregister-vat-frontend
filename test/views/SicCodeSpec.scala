@@ -29,7 +29,7 @@ class SicCodeSpec extends ViewBaseSpec {
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val explanation = ".form-group > div:nth-child(1) > p:nth-child(2)"
+    val explanation = "#content > article > form > div > div > fieldset > div > p:nth-child(2)"
     val sicCodeLink = "#find-sic-code"
     val button = ".button"
     val errorHeading = "#error-summary-display"
