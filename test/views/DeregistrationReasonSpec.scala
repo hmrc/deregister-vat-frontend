@@ -30,10 +30,10 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val reasonOption: Int => String = (number: Int) => s"fieldset > div > div > div:nth-of-type($number) > label"
+    val reasonOption: Int => String = (number: Int) => s"fieldset > div > div:nth-of-type($number) > label"
     val button = ".button"
     val errorHeading = "#error-summary-display"
-    val error = "#yes_no > fieldset > div > span"
+    val error = "#content > article > form > div > div > fieldset > span"
   }
 
   "Rendering the Deregistration reason page" when {

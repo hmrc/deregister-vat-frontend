@@ -29,10 +29,10 @@ class VATAccountsSpec extends ViewBaseSpec {
   object Selectors {
     val back = ".link-back"
     val pageHeading = "#content h1"
-    val methodOption: Int => String = (number: Int) => s"fieldset > div > div:nth-child($number) > label"
+    val methodOption: Int => String = (number: Int) => s"fieldset > div:nth-of-type($number) > label"
     val button = ".button"
     val error = "#accountingMethod-error-summary"
-    val p1 = "#accountingMethod > fieldset:nth-child(1) > div:nth-child(1) > p:nth-child(3)"
+    val p1 = "#accountingMethod > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
     val bullet: Int => String = i => s".list > li:nth-child($i)"
   }
 
@@ -70,8 +70,8 @@ class VATAccountsSpec extends ViewBaseSpec {
     }
 
     s"have the correct a radio button form with the correct 2 options" in {
-      elementText(Selectors.methodOption(5)) shouldBe VATAccountsMessages.standard + " " + VATAccountsMessages.invoice
-      elementText(Selectors.methodOption(6)) shouldBe VATAccountsMessages.cash + " " + VATAccountsMessages.payment
+      elementText(Selectors.methodOption(1)) shouldBe VATAccountsMessages.standard + " " + VATAccountsMessages.invoice
+      elementText(Selectors.methodOption(2)) shouldBe VATAccountsMessages.cash + " " + VATAccountsMessages.payment
     }
 
     s"have the correct continue button text and url" in {
@@ -106,8 +106,8 @@ class VATAccountsSpec extends ViewBaseSpec {
     }
 
     s"have the correct a radio button form with the correct 2 options" in {
-      elementText(Selectors.methodOption(6)) shouldBe VATAccountsMessages.standard + " " + VATAccountsMessages.invoice
-      elementText(Selectors.methodOption(7)) shouldBe VATAccountsMessages.cash + " " + VATAccountsMessages.payment
+      elementText(Selectors.methodOption(1)) shouldBe VATAccountsMessages.standard + " " + VATAccountsMessages.invoice
+      elementText(Selectors.methodOption(2)) shouldBe VATAccountsMessages.cash + " " + VATAccountsMessages.payment
     }
 
     "display the correct error message" in {

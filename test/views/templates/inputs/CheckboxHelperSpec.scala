@@ -31,7 +31,7 @@ class CheckboxHelperSpec extends TemplateBaseSpec {
   val question = "question"
   val hintText = "hintText"
   val errorMessage = "error message"
-  val additionalContent: Html = Html("<h1>foo bar</h1>")
+  val additionalContent = Html("<h1>foo bar</h1>")
 
   val choices: Seq[(String, String)] = Seq(
     "value1" -> "display1",
@@ -105,7 +105,7 @@ class CheckboxHelperSpec extends TemplateBaseSpec {
            |
            |      $additionalContent
            |
-           |      <span id="form-hint" class="form-hint">
+           |      <span class="form-hint">
            |         $hintText
            |      </span>
            |

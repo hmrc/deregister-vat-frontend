@@ -54,9 +54,8 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
-           |  <div id="yes_no" class="form-group">
-           |     <fieldset aria-describedby="form-hint">
-           |      <div class="form-field">
+           |  <div>
+           |    <fieldset>
            |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      <div>
@@ -66,7 +65,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
            |        ${generateExpectedRadioMarkup("value4", "display4")}
            |        ${generateExpectedRadioMarkup("value5", "display5")}
            |      </div>
-           |    </div>
+           |
            |   </fieldset>
            |  </div>
         """.stripMargin
@@ -83,9 +82,8 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), Some("value2"))
       val expectedMarkup = Html(
         s"""
-           |  <div id="yes_no" class="form-group">
-           |     <fieldset aria-describedby="form-hint">
-           |      <div class="form-field">
+           |  <div>
+           |     <fieldset>
            |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      <div>
@@ -94,7 +92,6 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
            |        ${generateExpectedRadioMarkup("value3", "display3")}
            |        ${generateExpectedRadioMarkup("value4", "display4")}
            |        ${generateExpectedRadioMarkup("value5", "display5")}
-           |       </div>
            |       </div>
            |    </fieldset>
            |  </div>
@@ -113,9 +110,8 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(FormError("text", errorMessage)), None)
       val expectedMarkup = Html(
         s"""
-           |  <div id="yes_no" class="form-group">
-           |    <fieldset aria-describedby="form-hint form-error">
-           |      <div class="form-field--error panel-border-narrow">
+           |  <div class="form-field--error">
+           |    <fieldset>
            |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      <span class="error-message">$errorMessage</span>
@@ -125,7 +121,6 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
            |        ${generateExpectedRadioMarkup("value3", "display3")}
            |        ${generateExpectedRadioMarkup("value4", "display4")}
            |        ${generateExpectedRadioMarkup("value5", "display5")}
-           |      </div>
            |      </div>
            |    </fieldset>
            |  </div>
@@ -144,9 +139,8 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
-           |<div id="yes_no" class="form-group">
-           |    <fieldset aria-describedby="form-hint">
-           |      <div class="form-field">
+           |<div>
+           |    <fieldset>
            |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      $additionalContent
@@ -158,7 +152,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
            |        ${generateExpectedRadioMarkup("value4", "display4")}
            |        ${generateExpectedRadioMarkup("value5", "display5")}
            |      </div>
-           |      </div>
+           |
            |    </fieldset>
            |</div>
         """.stripMargin
@@ -176,9 +170,8 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
-           |<div id="yes_no" class="form-group">
-           |      <fieldset aria-describedby="form-hint">
-           |       <div class="form-field">
+           |<div>
+           |    <fieldset>
            |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      $additionalContent
@@ -190,7 +183,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
            |        ${generateExpectedRadioMarkup("value4", "display4")}
            |        ${generateExpectedRadioMarkup("value5", "display5")}
            |      </div>
-           |      </div>
+           |
            |    </fieldset>
            |</div>
         """.stripMargin
@@ -208,9 +201,8 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
-           | <div id="yes_no" class="form-group">
-           |    <fieldset aria-describedby="form-hint">
-           |      <div class="form-field">
+           |<div>
+           |    <fieldset>
            |      ${generateExpectedLegendMarkup(labelText, asHeader = false)}
            |
            |      $additionalContent
@@ -222,7 +214,7 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
            |        ${generateExpectedRadioMarkup("value4", "display4")}
            |        ${generateExpectedRadioMarkup("value5", "display5")}
            |      </div>
-           |      </div>
+           |
            |    </fieldset>
            |</div>
         """.stripMargin
