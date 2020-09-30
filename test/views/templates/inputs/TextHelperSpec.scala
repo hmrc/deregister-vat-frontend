@@ -28,7 +28,7 @@ class TextHelperSpec extends TemplateBaseSpec {
 
   val fieldName = "fieldName"
   val label = "myLabel"
-  val field: Field = Field(FeatureSwitchForm.form, fieldName, Seq(), None, Seq(), Some("text"))
+  val field = Field(FeatureSwitchForm.form, fieldName, Seq(), None, Seq(), Some("text"))
 
   "The text input form helper" when {
 
@@ -38,12 +38,9 @@ class TextHelperSpec extends TemplateBaseSpec {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-group">
-             |   <fieldset aria-describedby="form.hint">
-             |    <div class="form-field"> <label for="$fieldName" class="form-label visuallyhidden">$label</label>
-             |     <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
-             |    </div>
-             |   </fieldset>
+             |<div class="form-field">
+             |  <label for="$fieldName" class="form-label visuallyhidden">$label</label>
+             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
              |</div>
              |""".stripMargin
         )
@@ -62,12 +59,12 @@ class TextHelperSpec extends TemplateBaseSpec {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-group">
-             | <fieldset aria-describedby="form.hint form-error">
-             |  <div class="form-field--error panel-border-narrow"> <label for="$fieldName" class="form-label visuallyhidden">$label</label> <span class="error-message"> ERROR </span>
-             |   <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
-             |  </div>
-             | </fieldset>
+             |<div class="form-field--error panel-border-narrow">
+             |  <label for="$fieldName" class="form-label visuallyhidden">$label</label>
+             |  <span class="error-message" role="tooltip">
+             |    ERROR
+             |  </span>
+             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
              |</div>
              |""".stripMargin
         )
@@ -84,12 +81,9 @@ class TextHelperSpec extends TemplateBaseSpec {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-group">
-             |  <fieldset aria-describedby="form.hint">
-             |    <div class="form-field"> <label for="$fieldName" class="form-label ">$label</label>
-             |       <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
-             |    </div>
-             |  </fieldset>
+             |<div class="form-field">
+             |  <label for="$fieldName" class="form-label ">$label</label>
+             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
              |</div>
              |""".stripMargin
         )
@@ -106,14 +100,10 @@ class TextHelperSpec extends TemplateBaseSpec {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-group">
-             |  <fieldset aria-describedby="form.hint">
-             |    <div class="form-field">
-             |      <p>Additional HTML</p>
-             |        <label for="$fieldName" class="form-label visuallyhidden">$label</label>
-             |          <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
-             |    </div>
-             |   </fieldset>
+             |<div class="form-field">
+             |  <p>Additional HTML</p>
+             |  <label for="$fieldName" class="form-label visuallyhidden">$label</label>
+             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
              |</div>
              |""".stripMargin
         )
@@ -131,14 +121,10 @@ class TextHelperSpec extends TemplateBaseSpec {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-group">
-             |  <fieldset aria-describedby="form.hint">
-             |    <div class="form-field"> <label for="currency" class="form-label visuallyhidden">$label</label>
-             |      <div class="hmrc-currency-input__wrapper"> <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
-             |        <input class="govuk-input govuk-input--width-10" id="currency" name="fieldName" type="text" aria-describedby="currency" autocomplete="off" inputmode="decimal" value="text">
-             |      </div>
-             |    </div>
-             |   </fieldset>
+             |<div class="form-field"> <label for="currency" class="form-label visuallyhidden">$label</label>
+             |<div class="hmrc-currency-input__wrapper"> <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
+             |<input class="govuk-input govuk-input--width-10" id="currency" name="fieldName" type="text" aria-describedby="currency" autocomplete="off" inputmode="decimal" value="text">
+             |</div>
              |</div>
              |""".stripMargin
         )

@@ -55,14 +55,13 @@ class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
-           |  <div id="accountingMethod" class="form-group">
-           |    <fieldset aria-describedby="form-hint">
-           |      <div class="form-field">
+           |  <div>
+           |    <fieldset>
            |      ${generateExpectedLegendMarkup(labelText)}
            |
            |        ${generateExpectedRadioMarkup("value1", "display1", "content1")}
            |        ${generateExpectedRadioMarkup("value2", "display2", "content2")}
-           |    </div>
+           |
            |   </fieldset>
            |  </div>
         """.stripMargin
@@ -79,13 +78,11 @@ class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), Some("value2"))
       val expectedMarkup = Html(
         s"""
-           |  <div id="accountingMethod" class="form-group">
-           |     <fieldset aria-describedby="form-hint">
-           |      <div class="form-field">
+           |  <div>
+           |     <fieldset>
            |      ${generateExpectedLegendMarkup(labelText)}
            |        ${generateExpectedRadioMarkup("value1", "display1", "content1")}
            |        ${generateExpectedRadioMarkup("value2", "display2", "content2", checked = true)}
-           |      </div>
            |    </fieldset>
            |  </div>
         """.stripMargin
@@ -103,16 +100,14 @@ class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(FormError("text", errorMessage)), None)
       val expectedMarkup = Html(
         s"""
-           |  <div id="accountingMethod" class="form-group">
-           |    <fieldset aria-describedby="form-hint" form-error>
-           |      <div class="form-field--error panel-border-narrow">
+           |  <div class="form-field--error">
+           |    <fieldset>
            |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      <span class="error-message">$errorMessage</span>
            |
            |        ${generateExpectedRadioMarkup("value1", "display1", "content1")}
            |        ${generateExpectedRadioMarkup("value2", "display2", "content2")}
-           |      </div>
            |    </fieldset>
            |  </div>
         """.stripMargin
@@ -130,16 +125,15 @@ class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
-           |<div id="accountingMethod" class="form-group">
-           |    <fieldset aria-describedby="form-hint">
-           |      <div class="form-field">
+           |<div>
+           |    <fieldset>
            |      ${generateExpectedLegendMarkup(labelText)}
            |
            |      $additionalContent
            |
            |        ${generateExpectedRadioMarkup("value1", "display1", "content1")}
            |        ${generateExpectedRadioMarkup("value2", "display2", "content2")}
-           |      </div>
+           |
            |    </fieldset>
            |</div>
         """.stripMargin
@@ -157,16 +151,15 @@ class MultipleLineRadioGroupTemplateSpec extends TemplateBaseSpec {
       val field: Field = Field(YesNoForm.yesNoForm(yesNoError), fieldName, Seq(), None, Seq(), None)
       val expectedMarkup = Html(
         s"""
-           |<div id="accountingMethod" class="form-group">
-           |    <fieldset aria-describedby="form-hint">
-           |       <div class="form-field">
+           |<div>
+           |    <fieldset>
            |      ${generateExpectedLegendMarkup(labelText, asHeader = false)}
            |
            |      $additionalContent
            |
            |        ${generateExpectedRadioMarkup("value1", "display1", "content1")}
            |        ${generateExpectedRadioMarkup("value2", "display2", "content2")}
-           |      </div>
+           |
            |    </fieldset>
            |</div>
         """.stripMargin

@@ -33,7 +33,7 @@ class OptionTaxSpec extends ViewBaseSpec {
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
     val noOption = "fieldset > div > div:nth-of-type(3) > label"
     val hiddenField = "#hiddenContent"
-    val hint = "#hiddenContent > div > fieldset > div > label"
+    val hint = "#hiddenContent > div > label"
     val button = ".button"
     val errorHeading = "#error-summary-display"
     val error = "#yes_no-error-summary"
