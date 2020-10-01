@@ -95,7 +95,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe ZeroRatedSuppliesMessages.mandatory
+      elementText(Selectors.error) shouldBe s"${CommonMessages.errorPrefix} ${ZeroRatedSuppliesMessages.mandatory}"
     }
   }
 }

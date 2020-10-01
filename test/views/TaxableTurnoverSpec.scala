@@ -41,16 +41,16 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
       "taxableTurnover.error.mandatoryRadioOption"))(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe TaxableTurnoverMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe TaxableTurnoverMessages.heading
     }
 
@@ -58,7 +58,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -73,16 +73,16 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
       "taxableTurnover.error.mandatoryRadioOption","83,000").bind(Map("yes_no" -> "")))(agentUserPrefYes,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${TaxableTurnoverMessages.agentTitle}"
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe TaxableTurnoverMessages.heading
     }
 
@@ -90,7 +90,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${TaxableTurnoverMessages.mandatory}"
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 

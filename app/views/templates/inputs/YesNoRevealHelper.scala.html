@@ -20,52 +20,59 @@
 @this(legends: Legends)
 
 @(field: Field,
-  choices: Seq[(String, String)],
-  question: String,
-  additionalContent: Option[Html] = None,
-  inline: Boolean = false,
-  hiddenContent: Html,
-  legendAsHeader: Boolean = true,
-  hiddenContentError: Boolean = false
+        choices: Seq[(String, String)],
+        question: String,
+        additionalContent: Option[Html] = None,
+        inline: Boolean = false,
+        hiddenContent: Html,
+        legendAsHeader: Boolean = true,
+        hiddenContentError: Boolean = false
 )(implicit messages: Messages)
 
-    @elements = @{ FieldElements(field.id, field, null, Map(), messages) }
+@elements = @{
+    FieldElements(field.id, field, null, Map(), messages)
+}
 
-    <div @if(elements.hasErrors){ class="form-field--error"}>
+<div @if(elements.hasErrors) {class="form-field--error"}>
 
-        <fieldset>
+    <fieldset @if(elements.hasErrors){aria-describedby="error-message"}>
 
-            @legends(question, legendAsHeader)
+        @legends(question, legendAsHeader)
 
-            @additionalContent.map { content => @content }
+        @additionalContent.map { content => @content }
 
-            @elements.errors.map { error => <span class="error-message">@messages(error.toString)</span> }
+        @elements.errors.map { error =>
+            <span id="error-message" class="error-message">
+                <span class="visuallyhidden">@messages("common.error.titlePrefix")</span>
+                @messages(error.toString)
+            </span>
+        }
 
-            <div @if(inline){class="inline"}>
-                 <div class="multiple-choice" data-target="hiddenContent">
-                     <input type="radio"
-                            id="@{elements.field.name}-yes"
-                            name="@elements.field.name"
-                            value="yes"
-                            @field.value.filter( _ == "yes").map{_ => checked="checked"}/>
-                     <label for="@{elements.field.name}-yes">@Messages("common.yes")</label>
-                 </div>
-
-                <div class="panel panel-border-narrow yes-no-hidden @if(!field.value.contains("yes")){js-hidden} @if(hiddenContentError){hidden-error-panel}" id="hiddenContent">
-                @hiddenContent
-                </div>
-
-                 <div class="multiple-choice">
-                     <input type="radio"
-                            id="@{elements.field.name}-no"
-                            name="@elements.field.name"
-                            value="no"
-                            @field.value.filter( _ == "no").map{_ => checked="checked"}/>
-                     <label for="@{elements.field.name}-no">@Messages("common.no")</label>
-                 </div>
+        <div @if(inline) {class="inline"}>
+            <div class="multiple-choice" data-target="hiddenContent">
+                <input  type="radio"
+                        id="@{elements.field.name}-yes"
+                        name="@elements.field.name"
+                        value="yes" @field.value.filter(_ == "yes").map { _ => checked="checked"}/>
+                <label for="@{elements.field.name}-yes">@messages("common.yes")</label>
             </div>
 
+            <div class="panel panel-border-narrow yes-no-hidden
+                    @if(!field.value.contains("yes")) {js-hidden}
+                    @if(hiddenContentError) {hidden-error-panel}"
+                 id="hiddenContent">
+                @hiddenContent
+            </div>
+
+            <div class="multiple-choice">
+                <input  type="radio"
+                        id="@{elements.field.name}-no"
+                        name="@elements.field.name"
+                        value="no" @field.value.filter(_ == "no").map { _ => checked="checked"}/>
+                <label for="@{elements.field.name}-no">@messages("common.no")</label>
+            </div>
+        </div>
 
 
-        </fieldset>
-    </div>
+    </fieldset>
+</div>

@@ -37,7 +37,7 @@ class SessionTimeoutSpec extends ViewBaseSpec {
     lazy val view = sessionTimeout()(user, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe TimeoutMessages.title
     }
 
@@ -45,7 +45,7 @@ class SessionTimeoutSpec extends ViewBaseSpec {
       elementText(Selectors.pageHeading) shouldBe TimeoutMessages.h1
     }
 
-    s"have the correct instructions on the page" in {
+    "have the correct instructions on the page" in {
       elementText(Selectors.instructions) shouldBe TimeoutMessages.p1
     }
 

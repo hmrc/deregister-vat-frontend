@@ -31,32 +31,33 @@
 
     @defining(dateErrors.filter(_.message.contains("noEntry")).nonEmpty){ hasEmptyField =>
 
-    <div @if(dateErrors.nonEmpty){class="form-field--error"}>
+        <div @if(dateErrors.nonEmpty){class="form-field--error"}>
 
-      <fieldset id="@fieldName-fieldset">
+          <fieldset aria-describedby="form-hint@if(form.hasErrors){ error-message}" id="@fieldName-fieldset">
 
-        @if(renderQuestionAsHeading){
-          <legend>
-            @headings(question)
-          </legend>
-        } else {
-          <legend class="form-label">@question</legend>
-        }
+            @if(renderQuestionAsHeading){
+              <legend>
+                @headings(question)
+              </legend>
+            } else {
+              <legend class="form-label">@question</legend>
+            }
 
-        @additionalContent.map { content =>
-          @content
-        }
+            @additionalContent.map { content =>
+              @content
+            }
 
-        @hint.map { hint =>
-          <span class="form-hint">
-            @hint
-          </span>
-        }
+            @hint.map { hint =>
+              <span id="form-hint" class="form-hint">
+                @hint
+              </span>
+            }
 
-        <div class="form-date">
+            <div class="form-date">
 
                 @if(dateErrors.nonEmpty) {
-                    <span class="error-message" role="tooltip">
+                    <span id="error-message" class="error-message">
+                        <span class="visuallyhidden">@messages("common.error.titlePrefix")</span>
                         @(formVariant, form.errors.length > 1, form.errors.head.message == "error.date.invalidCharacters") match {
                             case (DeregistrationDate,true,false) => {@messages("deregistrationDate.error.date.noEntry")}
                             case (CeasedTradingDate,true,false) => {@messages("ceasedTrading.error.date.noEntry")}
@@ -85,9 +86,9 @@
                     "year",
                     form(fieldName + "Year").hasErrors || hasEmptyField
                 )
-            </div>
+                </div>
 
-      </fieldset>
-    </div>
+          </fieldset>
+        </div>
   }
 }

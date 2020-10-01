@@ -46,11 +46,11 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
     lazy val view = checkYourAnswers(checkYourAnswersModel)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe CheckYourAnswersMessages.title
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe CheckYourAnswersMessages.heading
     }
 
@@ -76,7 +76,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
       element(Selectors.changeColumn(2)).attr("aria-label") shouldBe "test hidden text 2"
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CheckYourAnswersMessages.confirm
     }
   }
@@ -88,11 +88,11 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
     lazy val view = checkYourAnswers(checkYourAnswersModel)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe CheckYourAnswersMessages.title
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe CheckYourAnswersMessages.heading
     }
 
@@ -105,7 +105,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
       document.select(Selectors.changeColumn(2)).isEmpty shouldBe true
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CheckYourAnswersMessages.confirm
     }
   }

@@ -153,7 +153,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
     val yes = Map("yes_no" -> Seq("yes"))
     val no = Map("yes_no" -> Seq("no"))
     val invalidModel = Map("yes_no" -> Seq(""))
-    val yesNoError = "Select yes if the business is expecting to receive payment for outstanding invoices after you cancel the registration"
+    val yesNoError = "Error: Select yes if the business is expecting to receive payment for outstanding invoices after you cancel the registration"
 
     "the user is authorised" when {
 

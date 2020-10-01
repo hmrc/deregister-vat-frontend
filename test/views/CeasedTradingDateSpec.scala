@@ -52,11 +52,11 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     lazy val view = ceasedTradingDate(DateForm.dateForm)(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe CeasedTradingDateMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
     }
@@ -65,21 +65,21 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe CeasedTradingDateMessages.heading
     }
 
-    s"have the correct date hint text" in {
+    "have the correct date hint text" in {
       elementText(Selectors.hint) shouldBe CeasedTradingDateMessages.dateHint
     }
 
-    s"have the correct a radio " in {
+    "have the correct a radio " in {
       elementText(Selectors.dayText) shouldBe CommonMessages.day
       elementText(Selectors.monthText) shouldBe CommonMessages.month
       elementText(Selectors.yearText) shouldBe CommonMessages.year
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -96,7 +96,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
@@ -110,7 +110,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CommonMessages.errorDateDay
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CommonMessages.errorDateDay}"
     }
   }
 
@@ -123,7 +123,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
@@ -137,7 +137,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorNoEntry
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.errorNoEntry}"
     }
   }
 
@@ -150,7 +150,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
@@ -164,7 +164,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CommonMessages.errorDateYear
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CommonMessages.errorDateYear}"
     }
   }
 
@@ -177,7 +177,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
@@ -191,7 +191,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CommonMessages.errorDateYear
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CommonMessages.errorDateYear}"
     }
   }
 
@@ -204,7 +204,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
@@ -218,7 +218,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorNoEntry
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.errorNoEntry}"
     }
   }
 
@@ -231,7 +231,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
@@ -245,7 +245,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CommonMessages.errorDateInvalidCharacters
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CommonMessages.errorDateInvalidCharacters}"
     }
   }
 
@@ -258,7 +258,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
@@ -272,7 +272,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CommonMessages.errorDateInvalidCharacters
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CommonMessages.errorDateInvalidCharacters}"
     }
   }
 
@@ -285,7 +285,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
@@ -299,7 +299,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe CeasedTradingDateMessages.errorNoEntry
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.errorNoEntry}"
     }
   }
 }

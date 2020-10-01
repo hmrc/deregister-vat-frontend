@@ -85,7 +85,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
           charset(result) shouldBe Some("utf-8")
         }
 
-        s"have the correct value 'standard' for the accounting method" in {
+        "have the correct value 'standard' for the accounting method" in {
           Jsoup.parse(bodyOf(result)).select("#accountingMethod-standard").hasAttr("checked") shouldBe true
         }
       }

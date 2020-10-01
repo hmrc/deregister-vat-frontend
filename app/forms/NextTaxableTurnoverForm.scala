@@ -26,7 +26,7 @@ object NextTaxableTurnoverForm extends FormValidation {
 
   val taxableTurnoverForm: Form[NumberInputModel] = Form(
     mapping(
-      "value" -> optional(text)
+      "amount" -> optional(text)
         .verifying("taxableTurnover.error.mandatory", _.isDefined)
         .transform[String](x => x.get, x => Some(x))
         .verifying(isNumericConstraint("taxableTurnover.error.nonNumeric"), hasMaxTwoDecimalsConstraint("common.error.tooManyDecimals"))

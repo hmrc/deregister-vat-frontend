@@ -32,7 +32,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
     val button = ".button"
     val errorHeading = "#error-summary-display"
-    val error = "#value-error-summary"
+    val error = "#amount-error-summary"
   }
 
   val backLink = controllers.routes.TaxableTurnoverController.show().url
@@ -74,11 +74,11 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
       controllers.zeroRated.routes.BusinessActivityController.show().url)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe NextTaxableTurnoverMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
     }
@@ -90,11 +90,11 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
       controllers.zeroRated.routes.SicCodeController.show().url)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe NextTaxableTurnoverMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
     }

@@ -44,16 +44,16 @@ class VATAccountsSpec extends ViewBaseSpec {
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe VATAccountsMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.CeasedTradingDateController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe VATAccountsMessages.heading
     }
 
@@ -69,12 +69,12 @@ class VATAccountsSpec extends ViewBaseSpec {
       elementText(Selectors.bullet(2)) shouldBe VATAccountsMessages.bullet2
     }
 
-    s"have the correct a radio button form with the correct 2 options" in {
+    "have the correct a radio button form with the correct 2 options" in {
       elementText(Selectors.methodOption(1)) shouldBe VATAccountsMessages.standard + " " + VATAccountsMessages.invoice
       elementText(Selectors.methodOption(2)) shouldBe VATAccountsMessages.cash + " " + VATAccountsMessages.payment
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -92,20 +92,20 @@ class VATAccountsSpec extends ViewBaseSpec {
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${VATAccountsMessages.title}"
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.WhyTurnoverBelowController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe VATAccountsMessages.heading
     }
 
-    s"have the correct a radio button form with the correct 2 options" in {
+    "have the correct a radio button form with the correct 2 options" in {
       elementText(Selectors.methodOption(1)) shouldBe VATAccountsMessages.standard + " " + VATAccountsMessages.invoice
       elementText(Selectors.methodOption(2)) shouldBe VATAccountsMessages.cash + " " + VATAccountsMessages.payment
     }

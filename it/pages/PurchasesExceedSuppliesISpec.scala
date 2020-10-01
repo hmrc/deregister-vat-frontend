@@ -255,7 +255,7 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
         response should have(
           httpStatus(BAD_REQUEST),
           pageTitle("Error: Do you expect the VAT on purchases to regularly exceed the VAT on supplies?" + titleSuffix),
-          elementText(".error-message")("Select yes if you expect VAT on purchases to be more than VAT on supplies")
+          elementText(".error-message")("Error: Select yes if you expect VAT on purchases to be more than VAT on supplies")
         )
       }
     }

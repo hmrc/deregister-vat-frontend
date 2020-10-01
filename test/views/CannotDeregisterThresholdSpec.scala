@@ -39,16 +39,16 @@ class CannotDeregisterThresholdSpec extends ViewBaseSpec {
     lazy val view = cannotDeregisterThreshold()
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe CannotDeregisterThresholdMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.NextTaxableTurnoverController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe CannotDeregisterThresholdMessages.heading
     }
 

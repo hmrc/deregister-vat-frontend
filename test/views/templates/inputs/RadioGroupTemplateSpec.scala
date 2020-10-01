@@ -111,10 +111,13 @@ class RadioGroupTemplateSpec extends TemplateBaseSpec {
       val expectedMarkup = Html(
         s"""
            |  <div class="form-field--error">
-           |    <fieldset>
+           |    <fieldset aria-describedby="error-message">
            |      ${generateExpectedLegendMarkup(labelText)}
            |
-           |      <span class="error-message">$errorMessage</span>
+           |      <span id="error-message" class="error-message">
+           |        <span class="visuallyhidden">Error:</span>
+           |        $errorMessage
+           |      </span>
            |      <div>
            |        ${generateExpectedRadioMarkup("value1", "display1")}
            |        ${generateExpectedRadioMarkup("value2", "display2")}

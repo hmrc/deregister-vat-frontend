@@ -55,32 +55,31 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     lazy val view = unauthorised()(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe Messages.title
     }
 
-// TODO: To be updated once deregister service name agreed.
-//    s"have the correct service name" in {
-//      elementText(Selectors.serviceName) shouldBe CommonMessages.agentServiceName
-//    }
+    "have the correct service name" in {
+      elementText(Selectors.serviceName) shouldBe CommonMessages.agentServiceName
+    }
 
-    s"have a the correct page heading" in {
+    "have a the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe Messages.pageHeading
     }
 
-    s"have the correct instructions on the page" in {
+    "have the correct instructions on the page" in {
       elementText(Selectors.instructions) shouldBe Messages.instructions
     }
 
-    s"have a link to GOV.UK guidance" in {
-      element(Selectors.instructionsLink).attr("href") shouldBe "guidance/get-an-hmrc-agent-services-account"
+    "have a link to GOV.UK guidance" in {
+      element(Selectors.instructionsLink).attr("href") shouldBe mockConfig.agentServicesGovUkGuidance
     }
 
-    s"have a Sign out button" in {
+    "have a Sign out button" in {
       elementText(Selectors.button) shouldBe CommonMessages.signOut
     }
 
-    s"have a link to sign out" in {
+    "have a link to sign out" in {
       element(Selectors.button).attr("href") shouldBe controllers.routes.SignOutController.signOut(authorised = false).url
     }
   }

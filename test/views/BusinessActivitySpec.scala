@@ -124,7 +124,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe BusinessActivityPageMessages.businessActivityError
+      elementText(Selectors.error) shouldBe s"${CommonMessages.errorPrefix} ${BusinessActivityPageMessages.businessActivityError}"
     }
   }
 }

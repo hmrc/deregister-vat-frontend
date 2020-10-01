@@ -41,16 +41,16 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
     lazy val view = issueNewInvoices(YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe IssueNewInvoicesMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.OptionStocksToSellController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe IssueNewInvoicesMessages.heading
     }
 
@@ -58,12 +58,12 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct a radio button form with yes/no answers" in {
+    "have the correct a radio button form with yes/no answers" in {
       elementText(Selectors.yesOption) shouldBe CommonMessages.yes
       elementText(Selectors.noOption) shouldBe CommonMessages.no
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -77,16 +77,16 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
     lazy val view = issueNewInvoices(YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${IssueNewInvoicesMessages.title}"
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.OptionStocksToSellController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe IssueNewInvoicesMessages.heading
     }
 
@@ -94,17 +94,17 @@ class IssueNewInvoicesMoneySpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${IssueNewInvoicesMessages.yesNoError}"
     }
 
-    s"have the correct a radio button form with yes/no answers" in {
+    "have the correct a radio button form with yes/no answers" in {
       elementText(Selectors.yesOption) shouldBe CommonMessages.yes
       elementText(Selectors.noOption) shouldBe CommonMessages.no
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe IssueNewInvoicesMessages.yesNoError
+      elementText(Selectors.error) shouldBe s"${CommonMessages.errorPrefix} ${IssueNewInvoicesMessages.yesNoError}"
     }
   }
 

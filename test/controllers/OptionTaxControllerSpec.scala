@@ -88,7 +88,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         }
 
         "have the correct value in the amount field" in {
-          document(result).select("#currency").attr("value") shouldBe testAmt.toString
+          document(result).select("#amount").attr("value") shouldBe testAmt.toString
         }
       }
 

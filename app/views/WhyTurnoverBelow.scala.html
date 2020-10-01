@@ -27,7 +27,6 @@
 @questionContent = {
   @headings(messages("whyTurnoverBelow.title", appConfig.deregThreshold))
 
-  <p>@messages("whyTurnoverBelow.text.1")</p>
 }
 
 @mainTemplate(title(messages("whyTurnoverBelow.title", appConfig.deregThreshold), form), appConfig = appConfig) {
@@ -51,6 +50,7 @@
           WhyTurnoverBelowModel.turnoverLowerThanExpected -> messages("whyTurnoverBelow.reason.turnoverLowerThanExpected")
         ),
         question = messages("whyTurnoverBelow.title", appConfig.deregThreshold),
+        hint = Some(messages("whyTurnoverBelow.text.1")),
         legendAsHeader = false,
         additionalContent = Some(questionContent)
       )

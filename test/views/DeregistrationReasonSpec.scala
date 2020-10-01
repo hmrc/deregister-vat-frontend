@@ -46,16 +46,16 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct document title" in {
+      "have the correct document title" in {
         document.title shouldBe DeregistrationReasonMessages.title
       }
 
-      s"have the correct back text" in {
+      "have the correct back text" in {
         elementText(Selectors.back) shouldBe CommonMessages.back
         element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.redirect().url
       }
 
-      s"have the correct page heading" in {
+      "have the correct page heading" in {
         elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.heading
       }
 
@@ -63,7 +63,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
         document.select(Selectors.errorHeading).isEmpty shouldBe true
       }
 
-      s"have the correct a radio button form with the correct 5 options" in {
+      "have the correct a radio button form with the correct 5 options" in {
         elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
         elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
         elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
@@ -71,7 +71,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
         elementText(Selectors.reasonOption(5)) shouldBe DeregistrationReasonMessages.reason5
       }
 
-      s"have the correct continue button text and url" in {
+      "have the correct continue button text and url" in {
         elementText(Selectors.button) shouldBe CommonMessages.continue
       }
 
@@ -88,7 +88,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct a radio button form with the correct 3 options" in {
+      "have the correct a radio button form with the correct 3 options" in {
         elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
         elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
         elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason5
@@ -101,16 +101,16 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
     lazy val view = deregistrationReason(DeregistrationReasonForm.deregistrationReasonForm.bind(Map("" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${DeregistrationReasonMessages.title}"
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.redirect().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe DeregistrationReasonMessages.heading
     }
 
@@ -118,7 +118,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${DeregistrationReasonMessages.yesNoError}"
     }
 
-    s"have the correct a radio button form with the correct 5 options" in {
+    "have the correct radio button form with the correct 5 options" in {
       elementText(Selectors.reasonOption(1)) shouldBe DeregistrationReasonMessages.reason1
       elementText(Selectors.reasonOption(2)) shouldBe DeregistrationReasonMessages.reason2
       elementText(Selectors.reasonOption(3)) shouldBe DeregistrationReasonMessages.reason3
@@ -126,12 +126,12 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
       elementText(Selectors.reasonOption(5)) shouldBe DeregistrationReasonMessages.reason5
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe DeregistrationReasonMessages.yesNoError
+      elementText(Selectors.error) shouldBe s"${CommonMessages.errorPrefix} ${DeregistrationReasonMessages.yesNoError}"
     }
   }
 }

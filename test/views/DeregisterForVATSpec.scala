@@ -38,34 +38,34 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     lazy val view = deregisterForVAT()(user,messages,mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe DeregisterForVATMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe mockConfig.vatSummaryFrontendUrl
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe DeregisterForVATMessages.heading
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
       element(Selectors.button).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
     }
 
-    s"have the correct paragraph" in {
+    "have the correct paragraph" in {
       elementText(Selectors.para(3)) shouldBe DeregisterForVATMessages.p1
     }
 
-    s"have the correct bullet points" in {
+    "have the correct bullet points" in {
       elementText(Selectors.bullets(1)) shouldBe DeregisterForVATMessages.bullet1
       elementText(Selectors.bullets(2)) shouldBe DeregisterForVATMessages.bullet2
     }
 
-    s"have the correct second paragraph" in {
+    "have the correct second paragraph" in {
       elementText(Selectors.para(5)) shouldBe DeregisterForVATMessages.p2
     }
 

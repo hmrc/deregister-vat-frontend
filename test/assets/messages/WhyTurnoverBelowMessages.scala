@@ -28,6 +28,7 @@ object WhyTurnoverBelowMessages extends BaseMessages {
   val reason5 = "Seasonal business"
   val reason6 = "Closed some places of business"
   val reason7 = "Turnover lower than expected"
-  val error = "Select a reason for cancelling the VAT registration"
+  val error = "Error: Select a reason for cancelling the VAT registration"
+  val errorSummary = "Select a reason for cancelling the VAT registration"
 
 }

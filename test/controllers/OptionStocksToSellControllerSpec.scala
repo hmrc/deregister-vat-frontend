@@ -87,7 +87,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
         }
 
         "prepopulate the amount" in {
-          document(result).select("#currency").attr("value") shouldBe testAmt.toString
+          document(result).select("#amount").attr("value") shouldBe testAmt.toString
         }
       }
 

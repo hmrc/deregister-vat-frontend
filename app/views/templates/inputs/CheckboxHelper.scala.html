@@ -27,19 +27,23 @@
 
 <div @if(form.hasErrors){ class="form-field--error"}>
 
-    <fieldset>
+    <fieldset aria-describedby="form-hint@if(form.hasErrors){ error-message}">
 
         @legends(question, legendAsHeader)
 
         @additionalContent.map { content => @content }
 
         @hint.map { hint =>
-            <span class="form-hint">
+            <p id="form-hint" class="form-hint">
                 @hint
-            </span>
+            </p>
         }
 
-        @form.errors.map { error => <span class="error-message">@messages(error.message)</span> }
+        @form.errors.map { error => <span id="error-message" class="error-message">
+                                        <span class="visuallyhidden">@messages("common.error.titlePrefix")</span>
+                                        @messages(error.message)
+                                    </span>
+        }
 
         <div>
             @choices.map { case (value, label) =>

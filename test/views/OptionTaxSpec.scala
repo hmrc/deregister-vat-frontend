@@ -33,7 +33,7 @@ class OptionTaxSpec extends ViewBaseSpec {
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
     val noOption = "fieldset > div > div:nth-of-type(3) > label"
     val hiddenField = "#hiddenContent"
-    val hint = "#hiddenContent > div > label"
+    val hint = "#hiddenContent > fieldset > div > label"
     val button = ".button"
     val errorHeading = "#error-summary-display"
     val error = "#yes_no-error-summary"
@@ -45,16 +45,16 @@ class OptionTaxSpec extends ViewBaseSpec {
       "optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe OptionTaxMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.VATAccountsController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe OptionTaxMessages.heading
     }
 
@@ -62,11 +62,11 @@ class OptionTaxSpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct content displayed" in {
+    "have the correct content displayed" in {
       elementText(Selectors.text) shouldBe OptionTaxMessages.text
     }
 
-    s"have the correct a radio button form with yes/no answers" in {
+    "have the correct a radio button form with yes/no answers" in {
       elementText(Selectors.yesOption) shouldBe CommonMessages.yes
       elementText(Selectors.noOption) shouldBe CommonMessages.no
     }
@@ -76,7 +76,7 @@ class OptionTaxSpec extends ViewBaseSpec {
       elementText(Selectors.hint) shouldBe OptionTaxMessages.hint
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -93,7 +93,7 @@ class OptionTaxSpec extends ViewBaseSpec {
         "optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry").bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct document title" in {
+      "have the correct document title" in {
         document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OptionTaxMessages.title}"
       }
 
@@ -115,7 +115,7 @@ class OptionTaxSpec extends ViewBaseSpec {
       )))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct document title" in {
+      "have the correct document title" in {
         document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OptionTaxMessages.title}"
       }
 
