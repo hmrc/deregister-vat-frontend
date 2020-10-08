@@ -31,7 +31,6 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     object Selectors {
       val serviceName = ".header__menu__proposition-name"
       val pageHeading = "#content h1"
-      val instructions = "#content p"
       val clientInstructions = "#content article >  p"
       val instructionsLink = "#content article > p > a"
       val button = "#content .button"
@@ -40,32 +39,31 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
     lazy val view = unauthorised()(request, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe Messages.title
     }
 
-// TODO: To be updated once deregister service name agreed.
-//    s"have the correct service name" in {
-//      elementText(Selectors.serviceName) shouldBe CommonMessages.agentServiceName
-//    }
+    "have the correct service name" in {
+      elementText(Selectors.serviceName) shouldBe CommonMessages.otherServiceName
+    }
 
-    s"have a the correct page heading" in {
+    "have a the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe Messages.pageHeading
     }
 
-    s"have the correct instructions on the page" in {
+    "have the correct instructions on the page" in {
       elementText(Selectors.clientInstructions) shouldBe Messages.clientInstructions
     }
 
-    s"have a link to GOV.UK guidance" in {
-      element(Selectors.instructionsLink).attr("href") shouldBe "government/publications/vat-returns-and-ec-sales-list-commercial-software-suppliers/vat-commercial-software-suppliers"
+    "have a link to GOV.UK guidance" in {
+      element(Selectors.instructionsLink).attr("href") shouldBe mockConfig.clientServicesGovUkGuidance
     }
 
-    s"have a Sign out button" in {
+    "have a Sign out button" in {
       elementText(Selectors.button) shouldBe CommonMessages.signOut
     }
 
-    s"have a link to sign out" in {
+    "have a link to sign out" in {
       element(Selectors.button).attr("href") shouldBe controllers.routes.SignOutController.signOut(authorised = false).url
     }
   }

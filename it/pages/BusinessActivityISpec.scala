@@ -282,7 +282,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
         response should have(
           httpStatus(BAD_REQUEST),
           pageTitle("Error: Has the business activity changed?" + titleSuffix),
-          elementText(".error-message")("Select yes if your business activity has changed")
+          elementText(".error-message")("Error: Select yes if your business activity has changed")
         )
       }
     }

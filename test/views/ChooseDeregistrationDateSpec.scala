@@ -60,11 +60,11 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy val view = chooseDeregistrationDate(None, YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
-    s"have a back link to the Issue New Invoices page" in {
+    "have a back link to the Issue New Invoices page" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.IssueNewInvoicesController.show().url
     }
@@ -73,11 +73,11 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe ChooseDeregistrationDateMessages.heading
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -91,11 +91,11 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy val view = chooseDeregistrationDate(outstanding = Some(Yes), YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
-    s"have a back link to the Outstanding Invoices page" in {
+    "have a back link to the Outstanding Invoices page" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.OutstandingInvoicesController.show().url
     }
@@ -108,7 +108,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
@@ -128,7 +128,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     )))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe ChooseDeregistrationDateMessages.title
     }
 
@@ -147,21 +147,21 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
       "chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map.empty[String,String]))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
       elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading}"
     }
+
     "have an error for each missing field linking to the correct field" in {
       elementText(Selectors.errorYesNo) shouldBe ChooseDeregistrationDateMessages.yesNoError
       element(Selectors.errorYesNo).attr("href") shouldBe Selectors.yesNoRadio
     }
 
-
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe ChooseDeregistrationDateMessages.yesNoError
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${ChooseDeregistrationDateMessages.yesNoError}"
     }
   }
 }

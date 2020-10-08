@@ -96,7 +96,9 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
     }
 
     "display the correct error heading" in {
-      elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${PurchasesExceedSuppliesMessages.purchasesExceedSuppliesError}"
+      elementText(Selectors.errorHeading) shouldBe
+        s"${CommonMessages.errorHeading} " +
+        s"${PurchasesExceedSuppliesMessages.purchasesExceedSuppliesError}"
     }
 
     "have the correct explanation text" in {
@@ -113,7 +115,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe PurchasesExceedSuppliesMessages.purchasesExceedSuppliesError
+      elementText(Selectors.error) shouldBe s"${CommonMessages.errorPrefix} ${PurchasesExceedSuppliesMessages.purchasesExceedSuppliesError}"
     }
   }
 }

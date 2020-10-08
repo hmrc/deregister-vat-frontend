@@ -185,7 +185,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
           response should have(
             httpStatus(BAD_REQUEST),
             pageTitle("Error: What is the cancellation date?" + titleSuffix),
-            elementText(".error-message")("Enter a valid cancellation date")
+            elementText(".error-message")("Error: Enter a valid cancellation date")
           )
         }
       }

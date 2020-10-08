@@ -317,7 +317,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
         response should have(
           httpStatus(BAD_REQUEST),
           pageTitle("Error: Why is the business cancelling its VAT registration?" + titleSuffix),
-          elementText(".error-message")("Select a VAT cancellation reason")
+          elementText(".error-message")("Error: Select a VAT cancellation reason")
         )
       }
     }

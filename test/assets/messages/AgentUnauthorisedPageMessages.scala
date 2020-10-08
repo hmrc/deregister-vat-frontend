@@ -22,5 +22,4 @@ object AgentUnauthorisedPageMessages extends BaseMessages {
   val pageHeading = "You can’t use this service yet"
   val instructions = "To use this service, you need to set up an agent services account."
   val clientInstructions = "You need to sign up to use software to submit your VAT Returns."
-
 }

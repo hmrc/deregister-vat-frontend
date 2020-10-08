@@ -44,16 +44,16 @@ class WhyTurnoverBelowSpec extends ViewBaseSpec {
       lazy val view = whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct document title" in {
+      "have the correct document title" in {
         document.title shouldBe WhyTurnoverBelowMessages.title
       }
 
-      s"have the correct back text" in {
+      "have the correct back text" in {
         elementText(Selectors.back) shouldBe CommonMessages.back
         element(Selectors.back).attr("href") shouldBe controllers.routes.NextTaxableTurnoverController.show().url
       }
 
-      s"have the correct page heading" in {
+      "have the correct page heading" in {
         elementText(Selectors.pageHeading) shouldBe WhyTurnoverBelowMessages.heading
       }
 
@@ -61,7 +61,7 @@ class WhyTurnoverBelowSpec extends ViewBaseSpec {
         elementText(Selectors.text1) shouldBe WhyTurnoverBelowMessages.text1
       }
 
-      s"have the correct a radio button form with the correct 7 options" in {
+      "have the correct a radio button form with the correct 7 options" in {
         elementText(Selectors.checkboxOption(1)) shouldBe WhyTurnoverBelowMessages.reason1
         elementText(Selectors.checkboxOption(2)) shouldBe WhyTurnoverBelowMessages.reason2
         elementText(Selectors.checkboxOption(3)) shouldBe WhyTurnoverBelowMessages.reason3
@@ -71,7 +71,7 @@ class WhyTurnoverBelowSpec extends ViewBaseSpec {
         elementText(Selectors.checkboxOption(7)) shouldBe WhyTurnoverBelowMessages.reason7
       }
 
-      s"have the correct continue button text and url" in {
+      "have the correct continue button text and url" in {
         elementText(Selectors.button) shouldBe CommonMessages.continue
       }
     }
@@ -84,7 +84,7 @@ class WhyTurnoverBelowSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "display the correct error heading" in {
-        elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${WhyTurnoverBelowMessages.error}"
+        elementText(Selectors.errorHeading) shouldBe s"${CommonMessages.errorHeading} ${WhyTurnoverBelowMessages.errorSummary}"
       }
 
       "display the error message above the checkbox fields" in {

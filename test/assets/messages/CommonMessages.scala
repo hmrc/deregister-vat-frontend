@@ -26,6 +26,7 @@ object CommonMessages {
   val yes = "Yes"
   val no = "No"
   val finish = "Finish"
+  val errorPrefix = "Error:"
   val agentServiceName = "Your client’s VAT details"
   val clientServiceName = "Business tax account"
   val otherServiceName = "VAT"

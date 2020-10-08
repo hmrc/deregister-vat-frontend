@@ -38,10 +38,12 @@ class TextHelperSpec extends TemplateBaseSpec {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-field">
-             |  <label for="$fieldName" class="form-label visuallyhidden">$label</label>
-             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
-             |</div>
+             |<fieldset>
+             |  <div class="form-field">
+             |    <label for="$fieldName" class="form-label visuallyhidden">$label</label>
+             |    <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
+             |  </div>
+             |</fieldset>
              |""".stripMargin
         )
 
@@ -53,19 +55,22 @@ class TextHelperSpec extends TemplateBaseSpec {
 
     "there is an error" should {
 
-      "render the error span and apply the form-field--error class to the field" in {
+      "render the error span and apply the form-field--error class to the field and the aria-describedby to the fieldset" in {
 
         val errorField = Field(FeatureSwitchForm.form, fieldName, Seq(), None, Seq(FormError("error", "ERROR")), Some("text"))
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-field--error panel-border-narrow">
-             |  <label for="$fieldName" class="form-label visuallyhidden">$label</label>
-             |  <span class="error-message" role="tooltip">
-             |    ERROR
-             |  </span>
-             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
-             |</div>
+             |<fieldset aria-describedby="error-message">
+             |  <div class="form-field--error panel-border-narrow">
+             |    <label for="$fieldName" class="form-label visuallyhidden">$label</label>
+             |    <span id="error-message" class="error-message" role="tooltip">
+             |      <span class="visuallyhidden">Error:</span>
+             |      ERROR
+             |    </span>
+             |    <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
+             |  </div>
+             |</fieldset>
              |""".stripMargin
         )
 
@@ -81,10 +86,12 @@ class TextHelperSpec extends TemplateBaseSpec {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-field">
-             |  <label for="$fieldName" class="form-label ">$label</label>
-             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
-             |</div>
+             |<fieldset>
+             |  <div class="form-field">
+             |    <label for="$fieldName" class="form-label ">$label</label>
+             |    <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
+             |  </div>
+             |</fieldset>
              |""".stripMargin
         )
 
@@ -100,11 +107,13 @@ class TextHelperSpec extends TemplateBaseSpec {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-field">
-             |  <p>Additional HTML</p>
-             |  <label for="$fieldName" class="form-label visuallyhidden">$label</label>
-             |  <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
-             |</div>
+             |<fieldset>
+             |  <div class="form-field">
+             |    <p>Additional HTML</p>
+             |    <label for="$fieldName" class="form-label visuallyhidden">$label</label>
+             |    <input class="form-control input--no-spinner" name="$fieldName" id="$fieldName" value="text">
+             |  </div>
+             |</fieldset>
              |""".stripMargin
         )
 
@@ -121,11 +130,13 @@ class TextHelperSpec extends TemplateBaseSpec {
 
         val expectedMarkup = Html(
           s"""
-             |<div class="form-field"> <label for="currency" class="form-label visuallyhidden">$label</label>
-             |<div class="hmrc-currency-input__wrapper"> <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
-             |<input class="govuk-input govuk-input--width-10" id="currency" name="fieldName" type="text" aria-describedby="currency" autocomplete="off" inputmode="decimal" value="text">
-             |</div>
-             |</div>
+             |<fieldset>
+             |  <div class="form-field"> <label for="currency" class="form-label visuallyhidden">$label</label>
+             |    <div class="hmrc-currency-input__wrapper"> <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
+             |      <input class="govuk-input govuk-input--width-10" id="amount" name="fieldName" type="text" aria-describedby="amount" autocomplete="off" inputmode="decimal" value="text">
+             |    </div>
+             |  </div>
+             |</fieldset>
              |""".stripMargin
         )
 

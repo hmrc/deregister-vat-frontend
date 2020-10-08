@@ -87,7 +87,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
           }
 
           "have the value pre-populated" in {
-            document(result).select(s"#currency").attr("value") shouldBe testZeroRatedSuppliesAmtAsString
+            document(result).select(s"#amount").attr("value") shouldBe testZeroRatedSuppliesAmtAsString
           }
         }
       }

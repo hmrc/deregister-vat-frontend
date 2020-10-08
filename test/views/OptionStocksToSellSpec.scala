@@ -45,16 +45,16 @@ class OptionStocksToSellSpec extends ViewBaseSpec {
       "optionOwnsStockToSell.error.mandatoryRadioOption","optionOwnsStockToSell.error.amount.noEntry"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe OptionStocksToSellMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.CapitalAssetsController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe OptionStocksToSellMessages.heading
     }
 
@@ -62,11 +62,11 @@ class OptionStocksToSellSpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct content displayed" in {
+    "have the correct content displayed" in {
       elementText(Selectors.text) shouldBe OptionStocksToSellMessages.text1
     }
 
-    s"have the correct a radio button form with yes/no answers" in {
+    "have the correct a radio button form with yes/no answers" in {
       elementText(Selectors.yesOption) shouldBe CommonMessages.yes
       elementText(Selectors.noOption) shouldBe CommonMessages.no
     }
@@ -76,7 +76,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec {
       elementText(Selectors.hint) shouldBe OptionStocksToSellMessages.hiddenText
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -93,7 +93,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec {
         "optionOwnsStockToSell.error.mandatoryRadioOption","optionOwnsStockToSell.error.amount.noEntry").bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct document title" in {
+      "have the correct document title" in {
         document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OptionStocksToSellMessages.title}"
       }
 
@@ -115,7 +115,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec {
       )))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct document title" in {
+      "have the correct document title" in {
         document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OptionStocksToSellMessages.title}"
       }
 

@@ -90,7 +90,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
 
         "have the amount pre-populate in the field" in {
-          document(result).select("#currency").attr("value") shouldBe testTurnoverAmt.toString
+          document(result).select("#amount").attr("value") shouldBe testTurnoverAmt.toString
         }
       }
 
@@ -111,7 +111,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
 
         "have the amount pre-populate in the field" in {
-          document(result).select("#currency").attr("value") shouldBe testTurnoverAmt.toString
+          document(result).select("#amount").attr("value") shouldBe testTurnoverAmt.toString
         }
         s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
           document(result).select(".link-back").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
@@ -192,7 +192,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -216,7 +216,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold + 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -238,7 +238,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -259,7 +259,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -280,7 +280,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -301,7 +301,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         val testTurnoverAmt = mockConfig.deregThreshold - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -320,7 +320,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
       "the user submits after inputting an amount and an error is returned when storing" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
@@ -334,7 +334,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
       "the user submits without inputting an amount and BusinessActivity is no" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", ""))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -356,7 +356,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
       "the user submits without inputting an amount and business activity is yes" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", ""))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -378,7 +378,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
       "the user submits without inputting an amount and an error model is returned from the database" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", ""))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", ""))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
@@ -397,7 +397,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
       "the user submits after selecting the 'No' option but an error is returned when storing" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("value", testTurnoverAmt.toString))
+          FakeRequest("POST", "/").withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {

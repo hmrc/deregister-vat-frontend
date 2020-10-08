@@ -31,13 +31,18 @@
 
     <div @if(elements.hasErrors){ class="form-field--error"}>
 
-        <fieldset>
+        <fieldset @if(elements.hasErrors){aria-describedby="error-message"}>
 
             @legends(question, legendAsHeader)
 
             @additionalContent.map { content => @content }
 
-            @elements.errors.map { error => <span class="error-message">@messages(error.toString)</span> }
+            @elements.errors.map { error =>
+                <span id="error-message" class="error-message">
+                    <span class="visuallyhidden">@messages("common.error.titlePrefix")</span>
+                    @messages(error.toString)
+                </span>
+            }
 
             <div @if(inline){ class="inline"}>
                 @choices.map { case (value, label) =>
@@ -45,9 +50,9 @@
                     @defining(s"${elements.field.name}-${value.toLowerCase}") { inputId =>
                         <div class="multiple-choice">
                             <input type="radio"
-                                id="@inputId"
-                                name="@elements.field.name"
-                                value="@value"
+                                   id="@inputId"
+                                   name="@elements.field.name"
+                                   value="@value"
                                     @field.value.filter( _ == value).map{_ => checked="checked"}/>
                                 <label for="@inputId">@label</label>
                         </div>

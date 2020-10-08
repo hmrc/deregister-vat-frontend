@@ -235,7 +235,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
         response should have(
           httpStatus(BAD_REQUEST),
           pageTitle("Error: How are the business’s VAT accounts prepared?" + titleSuffix),
-          elementText(".error-message")("Select how the business’s VAT accounts are prepared")
+          elementText(".error-message")("Error: Select how the business’s VAT accounts are prepared")
         )
       }
     }

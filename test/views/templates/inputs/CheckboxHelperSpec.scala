@@ -70,7 +70,7 @@ class CheckboxHelperSpec extends TemplateBaseSpec {
       val expectedMarkup = Html(
         s"""
            |  <div>
-           |    <fieldset>
+           |    <fieldset aria-describedby="form-hint">
            |
            |      ${generateExpectedLegendMarkup(question)}
            |
@@ -99,15 +99,15 @@ class CheckboxHelperSpec extends TemplateBaseSpec {
       val expectedMarkup = Html(
         s"""
            |  <div>
-           |     <fieldset>
+           |     <fieldset aria-describedby="form-hint">
            |
            |      ${generateExpectedLegendMarkup(question)}
            |
            |      $additionalContent
            |
-           |      <span class="form-hint">
+           |      <p id="form-hint" class="form-hint">
            |         $hintText
-           |      </span>
+           |      </p>
            |
            |      <div>
            |        ${generateExpectedCheckboxMarkup("value1", "display1", checked = true)}
@@ -143,10 +143,13 @@ class CheckboxHelperSpec extends TemplateBaseSpec {
       val expectedMarkup = Html(
         s"""
            |  <div class="form-field--error">
-           |    <fieldset>
+           |    <fieldset aria-describedby="form-hint error-message">
            |      ${generateExpectedLegendMarkup(question)}
            |
-           |      <span class="error-message">$errorMessage</span>
+           |      <span id="error-message" class="error-message">
+           |        <span class="visuallyhidden">Error:</span>
+           |        $errorMessage
+           |      </span>
            |      <div>
            |        ${generateExpectedCheckboxMarkup("value1", "display1")}
            |        ${generateExpectedCheckboxMarkup("value2", "display2")}
@@ -172,10 +175,13 @@ class CheckboxHelperSpec extends TemplateBaseSpec {
       val expectedMarkup = Html(
         s"""
            |  <div class="form-field--error">
-           |    <fieldset>
+           |    <fieldset aria-describedby="form-hint error-message">
            |      ${generateExpectedLegendMarkup(question, asHeader = false)}
            |
-           |      <span class="error-message">$errorMessage</span>
+           |      <span id="error-message" class="error-message">
+           |        <span class="visuallyhidden">Error:</span>
+           |        $errorMessage
+         |        </span>
            |      <div>
            |        ${generateExpectedCheckboxMarkup("value1", "display1")}
            |        ${generateExpectedCheckboxMarkup("value2", "display2")}

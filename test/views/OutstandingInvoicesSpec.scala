@@ -41,16 +41,16 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
     lazy val view = outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe OutstandingInvoicesMessages.title
     }
 
-    s"have the correct back text" in {
+    "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
       element(Selectors.back).attr("href") shouldBe controllers.routes.IssueNewInvoicesController.show().url
     }
 
-    s"have the correct page heading" in {
+    "have the correct page heading" in {
       elementText(Selectors.pageHeading) shouldBe OutstandingInvoicesMessages.heading
     }
 
@@ -58,12 +58,12 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
-    s"have the correct a radio button form with yes/no answers" in {
+    "have the correct a radio button form with yes/no answers" in {
       elementText(Selectors.yesOption) shouldBe CommonMessages.yes
       elementText(Selectors.noOption) shouldBe CommonMessages.no
     }
 
-    s"have the correct continue button text and url" in {
+    "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
     }
 
@@ -77,7 +77,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
     lazy val view = outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct document title" in {
+    "have the correct document title" in {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OutstandingInvoicesMessages.title}"
     }
 
@@ -86,7 +86,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe OutstandingInvoicesMessages.yesNoError
+      elementText(Selectors.error) shouldBe s"${CommonMessages.errorPrefix} ${OutstandingInvoicesMessages.yesNoError}"
     }
   }
 }

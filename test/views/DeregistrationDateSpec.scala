@@ -145,7 +145,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
         }
 
         "display a field error" in {
-          elementText(Selectors.fieldError) shouldBe "Enter a valid cancellation date"
+          elementText(Selectors.fieldError) shouldBe "Error: Enter a valid cancellation date"
         }
       }
 
@@ -176,7 +176,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
         }
 
         "display a field error" in {
-          elementText(Selectors.fieldError) shouldBe "Enter 4 numbers"
+          elementText(Selectors.fieldError) shouldBe "Error: Enter 4 numbers"
         }
       }
     }

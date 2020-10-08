@@ -30,22 +30,27 @@
 
 <div @if(elements.hasErrors){ class="form-field--error"}>
 
-    <fieldset>
+    <fieldset @if(elements.hasErrors){aria-describedby="error-message"}>
 
         @legends(question, legendAsHeader)
 
         @additionalContent.map { content => @content }
 
-        @elements.errors.map { error => <span class="error-message">@messages(error.toString)</span> }
+        @elements.errors.map { error =>
+            <span id="error-message" class="error-message">
+                <span class="visuallyhidden">@messages("common.error.titlePrefix")</span>
+                @messages(error.toString)
+            </span>
+        }
 
         @choices.map { model =>
 
             @defining(s"${elements.field.name}-${model.value.toLowerCase}") { inputId =>
                 <div class="multiple-choice">
                     <input type="radio"
-                        id="@inputId"
-                        name="@elements.field.name"
-                        value="@{model.value}"
+                           id="@inputId"
+                           name="@elements.field.name"
+                           value="@{model.value}"
                         @field.value.filter( _ == model.value).map{_ => checked="checked"}/>
                     <label for="@inputId">
                         <strong class="bold">@{model.label}</strong>

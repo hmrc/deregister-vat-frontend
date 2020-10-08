@@ -212,7 +212,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
         response should have(
           httpStatus(BAD_REQUEST),
           pageTitle("Error: What is the expected value of zero-rated supplies for the next 12 months?" + titleSuffix),
-          elementText(".error-message")("Enter the value of zero-rated supplies for the next 12 months")
+          elementText(".error-message")("Error: Enter the value of zero-rated supplies for the next 12 months")
         )
       }
     }

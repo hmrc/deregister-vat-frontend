@@ -21,7 +21,6 @@
 @value = @{ field.value match { case Some(x) => x case None => "false" case x => x }}
 
 <div class="multiple-choice">
-    <input id="@{field.name}" name="@{field.name}" type="checkbox" value="true" @if(value == "true"){ checked }>
+    <input id="@{field.name}" name="@{field.name}" type="checkbox" value="true" @if(value == "true"){checked}>
     <label for="@{field.name}">@label</label>
 </div>
-
