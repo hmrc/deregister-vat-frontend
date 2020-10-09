@@ -131,7 +131,7 @@ class TextHelperSpec extends TemplateBaseSpec {
         val expectedMarkup = Html(
           s"""
              |<fieldset>
-             |  <div class="form-field"> <label for="currency" class="form-label visuallyhidden">$label</label>
+             |  <div class="form-field"> <label for="amount" class="form-label visuallyhidden">$label</label>
              |    <div class="hmrc-currency-input__wrapper"> <span class="hmrc-currency-input__unit" aria-hidden="true">£</span>
              |      <input class="govuk-input govuk-input--width-10" id="amount" name="fieldName" type="text" aria-describedby="amount" autocomplete="off" inputmode="decimal" value="text">
              |    </div>
