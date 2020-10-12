@@ -29,7 +29,7 @@
         @additionalContent.map {content => @content }
 
         @if(isMonetaryField) {
-            <label for="currency" class="form-label @if(labelHidden) {visuallyhidden}">@label</label>
+            <label for="amount" class="form-label @if(labelHidden) {visuallyhidden}">@label</label>
         }else{
             <label for="@field.id" class="form-label @if(labelHidden) {visuallyhidden}">@label</label>
         }
