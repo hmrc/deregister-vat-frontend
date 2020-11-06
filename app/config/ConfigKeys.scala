@@ -74,5 +74,5 @@ object ConfigKeys {
   val accessibilityStatementHost: String = "accessibility-statement.host"
   val accessibilityStatementUrl: String = "accessibility-statement.url"
 
-  val trackingConsentUrl: String = "tracking-consent-frontend.url"
+  val gtmContainer: String = "tracking-consent-frontend.gtm.container"
 }
