@@ -69,7 +69,7 @@ trait AppConfig {
   val languageMap: Map[String, Lang]
   val routeToSwitchLanguage: String => Call
 
-  val trackingConsentUrl: String
+  val gtmContainer: String
 }
 
 @Singleton
@@ -189,5 +189,5 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override lazy val accessibilityStatementUrl: String
   = accessibilityStatementHost + servicesConfig.getString(Keys.accessibilityStatementUrl)
 
-  val trackingConsentUrl: String = servicesConfig.getString(Keys.trackingConsentUrl)
+  override val gtmContainer: String = servicesConfig.getString(Keys.gtmContainer)
 }

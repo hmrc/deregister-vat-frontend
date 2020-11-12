@@ -15,7 +15,7 @@
  */
 
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
+import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 import play.core.PlayVersion
@@ -61,10 +61,10 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"   %% "bootstrap-frontend-play-26"      % "2.24.0",
-  "uk.gov.hmrc"   %% "govuk-template"                  % "5.56.0-play-26",
-  "uk.gov.hmrc"   %% "play-ui"                         % "8.12.0-play-26",
-  "uk.gov.hmrc"   %% "play-partials"                   % "6.11.0-play-26",
+  "uk.gov.hmrc"   %% "bootstrap-frontend-play-26"      % "3.0.0",
+  "uk.gov.hmrc"   %% "govuk-template"                  % "5.58.0-play-26",
+  "uk.gov.hmrc"   %% "play-ui"                         % "8.14.0-play-26",
+  "uk.gov.hmrc"   %% "play-partials"                   % "7.0.0-play-26",
   "uk.gov.hmrc"   %% "play-language"                   % "4.4.0-play-26",
   "org.typelevel" %% "cats"                            % "0.9.0"
 )
@@ -90,7 +90,7 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
 }
 
 lazy val microservice: Project = Project(appName, file("."))
-  .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory) ++ plugins: _*)
+  .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(PlayKeys.playDefaultPort := 9153)
   .settings(coverageSettings: _*)

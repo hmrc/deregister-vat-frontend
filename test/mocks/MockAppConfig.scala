@@ -66,6 +66,6 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchLanguage(lang)
   override val changeClientUrl: String = "/changeClient"
   override val accessibilityStatementUrl: String = "http://localhost:9152/vat-through-software/accessibility"
-  override val trackingConsentUrl: String = "/tracking"
+  override val gtmContainer: String = "x"
 }
 
