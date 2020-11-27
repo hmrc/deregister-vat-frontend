@@ -155,9 +155,10 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override def surveyUrl(identifier: String): String = s"$surveyBaseUrl/$identifier"
 
   override def signOutUrl(identifier: String): String =
-    s"$governmentGatewayHost/gg/sign-out?continue=${surveyUrl(identifier)}"
+    s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=${surveyUrl(identifier)}"
 
-  override lazy val unauthorisedSignOutUrl: String = s"$governmentGatewayHost/gg/sign-out?continue=$signInContinueUrl"
+  override lazy val unauthorisedSignOutUrl: String =
+    s"$governmentGatewayHost/bas-gateway/sign-out-without-state?continue=$signInContinueUrl"
 
   override lazy val agentServicesGovUkGuidance: String = servicesConfig.getString(Keys.govUkSetupAgentServices)
 
