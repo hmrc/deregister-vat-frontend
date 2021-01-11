@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 package controllers.predicates
 
-import common.EnrolmentKeys
+import common.{EnrolmentKeys, SessionKeys}
 import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.Inject
 import models.User
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{ActionBuilder, ActionFunction, AnyContent, BodyParser, MessagesControllerComponents, Request, Result}
-import services.EnrolmentsAuthService
+import services.{CustomerDetailsService, EnrolmentsAuthService}
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
@@ -34,10 +34,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AuthPredicate @Inject()(unauthorised: Unauthorised,
                               enrolmentsAuthService: EnrolmentsAuthService,
+                              customerDetailsService: CustomerDetailsService,
                               val serviceErrorHandler: ServiceErrorHandler,
                               val authoriseAsAgent: AuthoriseAsAgent,
-                              val mcc: MessagesControllerComponents,
-                              implicit val appConfig: AppConfig)
+                              val mcc: MessagesControllerComponents)
+                             (implicit val appConfig: AppConfig)
 
   extends FrontendController(mcc) with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with AuthBasePredicate {
 
@@ -74,8 +75,24 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
 
   private[AuthPredicate] def checkVatEnrolment[A](enrolments: Enrolments, block: User[A] => Future[Result])(implicit request: Request[A]) =
     if (enrolments.enrolments.exists(_.key == EnrolmentKeys.vatEnrolmentId)) {
-      logger.debug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
-      block(User(enrolments))
+      val user = User(enrolments)
+      request.session.get(SessionKeys.insolventWithoutAccessKey) match {
+        case Some("true") => Future.successful(Forbidden(unauthorised()))
+        case Some("false") => block(user)
+        case _ =>
+          customerDetailsService.getCustomerDetails(user.vrn).flatMap {
+            case Right(details) if details.isInsolventWithoutAccess =>
+              Logger.debug("[AuthPredicate][checkVatEnrolment] - User is insolvent and not continuing to trade")
+              Future.successful(Forbidden(unauthorised()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
+            case Right(_) =>
+              logger.debug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
+              block(user).map(result => result.addingToSession(SessionKeys.insolventWithoutAccessKey -> "false"))
+          }
+        case _ =>
+          Logger.warn("[AuthPredicate][checkVatEnrolment] - Failure obtaining insolvency status from Customer Info API")
+          Future.successful(serviceErrorHandler.showInternalServerError)
+      }
+
     }
     else {
       logger.debug(s"[AuthPredicate][checkVatEnrolment] - Individual without HMRC-MTD-VAT enrolment. $enrolments")

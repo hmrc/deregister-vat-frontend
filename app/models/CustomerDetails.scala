@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,9 @@ case class CustomerDetails(firstName: Option[String],
                            emailVerified: Option[Boolean],
                            pendingDereg: Boolean,
                            alreadyDeregistered: Boolean,
-                           commsPreference: Option[String]) {
+                           commsPreference: Option[String],
+                           isInsolvent: Boolean,
+                           continueToTrade: Option[Boolean]) {
 
   val isOrg: Boolean = organisationName.isDefined
   val isInd: Boolean = firstName.isDefined || lastName.isDefined
@@ -36,6 +38,11 @@ case class CustomerDetails(firstName: Option[String],
   }
   val businessName: Option[String] = if(isOrg) organisationName else userName
   val clientName: Option[String] = if(tradingName.isDefined) tradingName else businessName
+
+  val isInsolventWithoutAccess: Boolean = continueToTrade match {
+    case Some(false) => isInsolvent
+    case _ => false
+  }
 }
 
 object CustomerDetails {
@@ -49,6 +56,8 @@ object CustomerDetails {
   private val pendingDeregPath = __ \ "changeIndicators" \ "deregister"
   private val effectDateOfCancellationPath = __ \ "deregistration" \ "effectDateOfCancellation"
   private val commsPreferencePath = __ \ "commsPreference"
+  private val isInsolventPath = __ \ "customerDetails" \ "isInsolvent"
+  private val continueToTradePath = __ \ "customerDetails" \ "continueToTrade"
 
   implicit val reads: Reads[CustomerDetails] = for {
     firstName <- firstNamePath.readNullable[String]
@@ -60,13 +69,15 @@ object CustomerDetails {
     deregChangeIndicator <- pendingDeregPath.readNullable[Boolean].orElse(Reads.pure(None))
     deregDate <- effectDateOfCancellationPath.readNullable[String].orElse(Reads.pure(None))
     commsPreference <- commsPreferencePath.readNullable[String].orElse(Reads.pure(None))
+    isInsolvent <- isInsolventPath.read[Boolean]
+    continueToTrade <- continueToTradePath.readNullable[Boolean]
   } yield {
 
     val pendingDereg = deregChangeIndicator.getOrElse(false)
     val alreadyDeregistered = deregDate.isDefined
 
     CustomerDetails(
-      firstName, lastName, orgName, tradingName, partyType, emailVerified, pendingDereg, alreadyDeregistered, commsPreference
+      firstName, lastName, orgName, tradingName, partyType, emailVerified, pendingDereg, alreadyDeregistered, commsPreference, isInsolvent, continueToTrade
     )
   }
 }
