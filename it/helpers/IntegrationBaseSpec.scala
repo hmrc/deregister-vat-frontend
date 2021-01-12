@@ -55,6 +55,8 @@ trait IntegrationBaseSpec extends UnitSpec
     def user: User = new User()
   }
 
+  def isNotInsolvent:  Map[String, String] = Map(SessionKeys.insolventWithoutAccessKey -> "false")
+
   def formatPendingDereg: Option[String] => Map[String, String] =
     _.fold(Map.empty[String, String])(x => Map(SessionKeys.registrationStatusKey -> x))
 

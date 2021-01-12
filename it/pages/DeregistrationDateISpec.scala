@@ -39,7 +39,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
   "Calling the GET Deregistration Date endpoint" when {
 
     def getRequest(pendingDereg: Option[String] = Some(Constants.registered)): WSResponse =
-      get("/enter-cancel-vat-date", formatPendingDereg(pendingDereg))
+      get("/enter-cancel-vat-date", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -152,7 +152,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
   "Calling the POST Deregistration Date endpoint" when {
 
     def postRequest(data: DateModel): WSResponse =
-      post("/enter-cancel-vat-date", formatPendingDereg(Some(Constants.registered)))(
+      post("/enter-cancel-vat-date", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)(
         toFormData(DeregistrationDateForm.form, data)
       )
 

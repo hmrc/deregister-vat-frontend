@@ -45,6 +45,15 @@ trait ControllerBaseSpec extends TestUtil with MockAuth with MockDeniedAccessPre
         status(result) shouldBe Status.FORBIDDEN
       }
     }
+
+    "the user is insolvent and not continuing to trade" should {
+
+      "return 403 (Forbidden)" in {
+        mockAuthResult(mockAuthorisedIndividual)
+        val result = action(insolventRequest)
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
   }
 
   def document(result: Future[Result]): Document = Jsoup.parse(bodyOf(result))

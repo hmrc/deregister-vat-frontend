@@ -68,8 +68,11 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
   lazy implicit val config: Configuration = app.configuration
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig
   lazy implicit val mockUserContactPref: ContactPreferencesService = injector.instanceOf[ContactPreferencesService]
-  lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest()
+  lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false")
   lazy val requestWithVRN: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.CLIENT_VRN -> vrn)
+  lazy val requestPost: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("POST", "/").withSession(SessionKeys.insolventWithoutAccessKey -> "false")
+  lazy val insolventRequest: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "true")
   lazy val injector: Injector = app.injector
   lazy val messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
   implicit lazy val messages: Messages = MessagesImpl(Lang("en-GB"), messagesApi)

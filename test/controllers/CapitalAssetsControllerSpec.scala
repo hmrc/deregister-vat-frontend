@@ -97,7 +97,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         "the user submits after selecting an 'Yes' option and entering an amount" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, yesChecked), (amountField, amount.toString))
+            requestPost.withFormUrlEncodedBody((yesNoField, yesChecked), (amountField, amount.toString))
           lazy val result = TestCapitalAssetsController.submit()(request)
 
 
@@ -116,7 +116,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         "the user submits after selecting the 'No' option" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, noChecked))
+            requestPost.withFormUrlEncodedBody((yesNoField, noChecked))
           lazy val result = TestCapitalAssetsController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
@@ -134,7 +134,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         "an error is returned when storing the data" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, noChecked))
+            requestPost.withFormUrlEncodedBody((yesNoField, noChecked))
           lazy val result = TestCapitalAssetsController.submit()(request)
 
           "return 500 (ISE)" in {
@@ -148,7 +148,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
       "an error response is returned from Wipe Redundant Data service" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, noChecked))
+          requestPost.withFormUrlEncodedBody((yesNoField, noChecked))
         lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 500 (ISE)" in {
@@ -162,7 +162,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
       "the user submits after selecting an 'Yes' option without entering an amount" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, yesChecked),(amountField, ""))
+          requestPost.withFormUrlEncodedBody((yesNoField, yesChecked),(amountField, ""))
         lazy val result = TestCapitalAssetsController.submit()(request)
 
 
@@ -175,7 +175,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
       "the user submits without selecting an option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, ""))
+          requestPost.withFormUrlEncodedBody((yesNoField, ""))
         lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -190,7 +190,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
       }
     }
 
-    authChecks(".submit", TestCapitalAssetsController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody((yesNoField, yesChecked)))
+    authChecks(".submit", TestCapitalAssetsController.submit(), requestPost.withFormUrlEncodedBody((yesNoField, yesChecked)))
 
   }
 }

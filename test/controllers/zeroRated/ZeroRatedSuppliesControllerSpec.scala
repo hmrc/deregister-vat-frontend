@@ -97,7 +97,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
           "the user submits after inputting an amount" should {
 
             lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-              FakeRequest("POST","/").withFormUrlEncodedBody(("value",testZeroRatedSuppliesAmtAsString))
+              requestPost.withFormUrlEncodedBody(("value",testZeroRatedSuppliesAmtAsString))
             lazy val result = TestZeroRatedSuppliesController.submit()(request)
 
             "return 303 (SEE_OTHER)" in {
@@ -116,7 +116,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
         "the user submits but does not input an amount" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST","/").withFormUrlEncodedBody(("value",""))
+            requestPost.withFormUrlEncodedBody(("value",""))
           lazy val result = TestZeroRatedSuppliesController.submit()(request)
 
           "return a 400" in {
@@ -129,7 +129,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
         "the user submits after inputting an amount and an error is returned when storing the answer" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST","/").withFormUrlEncodedBody(("value",testZeroRatedSuppliesAmtAsString))
+            requestPost.withFormUrlEncodedBody(("value",testZeroRatedSuppliesAmtAsString))
           lazy val result = TestZeroRatedSuppliesController.submit()(request)
 
           "return a 500" in {

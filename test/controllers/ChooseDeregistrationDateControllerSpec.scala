@@ -114,7 +114,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
       "the user submits after selecting 'Yes'" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
+          requestPost.withFormUrlEncodedBody(
             (yesNo, yes)
           )
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
@@ -134,7 +134,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
       "the user submits after selecting 'No'" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, YesNoForm.no))
+          requestPost.withFormUrlEncodedBody((yesNo, YesNoForm.no))
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -152,7 +152,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
       "the user submits after selecting an option but the storing of the answer fails" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, YesNoForm.no))
+          requestPost.withFormUrlEncodedBody((yesNo, YesNoForm.no))
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 500 (ISE)" in {
@@ -165,7 +165,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
       "the user submits without selecting anything" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
+          requestPost.withFormUrlEncodedBody(
             (yesNo, "")
           )
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
@@ -185,7 +185,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
       "the user submits without selecting anything and the retrieval of outstanding invoices data fails" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
+          requestPost.withFormUrlEncodedBody(
             (yesNo, "")
           )
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)

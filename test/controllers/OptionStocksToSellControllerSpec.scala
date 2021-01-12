@@ -99,7 +99,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
       "the user submits after selecting an 'Yes' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
+          requestPost.withFormUrlEncodedBody(
             ("yes_no", "yes"),
             ("amount", testAmt.toString)
           )
@@ -119,7 +119,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
       "the user submits after selecting the 'No' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no"))
+          requestPost.withFormUrlEncodedBody(("yes_no", "no"))
         lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -136,7 +136,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
       "the user submits after selecting the 'No' option but an error is returned when storing" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no"))
+          requestPost.withFormUrlEncodedBody(("yes_no", "no"))
         lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 500 (ISE)" in {
@@ -149,7 +149,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
       "the user submits without selecting an option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
+          requestPost.withFormUrlEncodedBody(("yes_no", ""))
         lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -164,7 +164,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
       }
     }
 
-    authChecks(".submit", TestOptionStocksToSellController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestOptionStocksToSellController.submit(), requestPost.withFormUrlEncodedBody(("yes_no", "no")))
   }
 
 }

@@ -96,7 +96,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+            requestPost.withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
@@ -117,7 +117,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+            requestPost.withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
@@ -138,7 +138,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+            requestPost.withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
@@ -157,7 +157,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
         "the user submits after inputting an amount but the store fails" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+            requestPost.withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 500 (ISE)" in {
@@ -170,7 +170,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
         "the user submits without inputting an amount" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody(("yesNo", ""))
+            requestPost.withFormUrlEncodedBody(("yesNo", ""))
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 400 (BAD REQUEST)" in {
@@ -188,7 +188,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
       "an error response is returned from the Wipe Redundant Data service" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          requestPost.withFormUrlEncodedBody((yesNo, "no"))
         lazy val result = TestTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
@@ -201,7 +201,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
       }
     }
 
-    authChecks(".submit", TestTaxableTurnoverController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes")))
+    authChecks(".submit", TestTaxableTurnoverController.submit(), requestPost.withFormUrlEncodedBody((yesNo, "yes")))
   }
 
 }

@@ -107,7 +107,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
       "the user submits after selecting at least one checkbox" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((WhyTurnoverBelowModel.lostContract, "true"))
+          requestPost.withFormUrlEncodedBody((WhyTurnoverBelowModel.lostContract, "true"))
         lazy val result = TestWhyTurnoverBelowController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -124,7 +124,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
       "the user submits without selecting an option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("", ""))
+          requestPost.withFormUrlEncodedBody(("", ""))
         lazy val result = TestWhyTurnoverBelowController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -141,7 +141,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
       "storing the answer fails" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((WhyTurnoverBelowModel.lostContract, "true"))
+          requestPost.withFormUrlEncodedBody((WhyTurnoverBelowModel.lostContract, "true"))
         lazy val result = TestWhyTurnoverBelowController.submit()(request)
 
         "return Internal Server Error" in {
@@ -153,7 +153,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
       }
     }
 
-    authChecks(".submit", TestWhyTurnoverBelowController.submit(), FakeRequest("POST", "/")
+    authChecks(".submit", TestWhyTurnoverBelowController.submit(), requestPost
       .withFormUrlEncodedBody((WhyTurnoverBelowModel.lostContract, "true")))
   }
 }

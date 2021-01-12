@@ -135,7 +135,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
         "the user submits 'yes'" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
+            requestPost.withFormUrlEncodedBody((yesNo, "yes"))
 
           lazy val result = {
             mockConfig.features.zeroRatedJourney(true)
@@ -156,7 +156,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
         "the user submits 'no'" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+            requestPost.withFormUrlEncodedBody((yesNo, "no"))
 
           lazy val result = {
             mockConfig.features.zeroRatedJourney(true)
@@ -177,7 +177,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
         "the user submits with nothing selected" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, ""))
+            requestPost.withFormUrlEncodedBody((yesNo, ""))
 
           lazy val result = {
             mockConfig.features.zeroRatedJourney(true)
@@ -193,7 +193,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
         "user submits and the service returns an error" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
+            requestPost.withFormUrlEncodedBody((yesNo, "yes"))
 
           lazy val result = {
             mockConfig.features.zeroRatedJourney(true)

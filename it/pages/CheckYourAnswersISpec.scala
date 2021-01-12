@@ -48,7 +48,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
   "Calling GET Check your answers" when {
 
-    def getRequest: WSResponse = get("/check-your-answers", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/check-your-answers", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -144,7 +144,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
   "Calling the GET Check Your Answers" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/check-your-answers", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/check-your-answers", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -208,7 +208,7 @@ class CheckYourAnswersISpec extends IntegrationBaseSpec {
 
   "Calling POST Check your answers" when {
 
-    def postRequest: WSResponse = post("/check-your-answers")(Map.empty)
+    def postRequest: WSResponse = post("/check-your-answers", isNotInsolvent)(Map.empty)
 
     "user is authorised" when {
 

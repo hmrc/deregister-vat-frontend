@@ -29,7 +29,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
   "Calling the GET ZeroRatedSupplies" when {
 
-    def getRequest: WSResponse = get("/expected-value-zero-rated-supplies", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/expected-value-zero-rated-supplies", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -82,7 +82,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
   "Calling the GET ZeroRatedSupplies" when {
 
     def getRequest(pendingDereg: Option[String]): WSResponse =
-      get("/expected-value-zero-rated-supplies", formatPendingDereg(pendingDereg))
+      get("/expected-value-zero-rated-supplies", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -149,7 +149,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
   "Calling the POST ZeroRatedSupplies" when {
 
     def postRequest(data:  Map[String, Seq[String]]): WSResponse =
-      post("/expected-value-zero-rated-supplies")(data)
+      post("/expected-value-zero-rated-supplies", isNotInsolvent)(data)
 
     "the user is authorised" when {
 

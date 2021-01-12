@@ -16,6 +16,7 @@
 
 package controllers.predicates
 
+import common.SessionKeys
 import mocks.MockAuth
 import play.api.http.Status
 import play.api.mvc.Results.Ok
@@ -24,6 +25,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.MissingBearerToken
 import views.html.errors.client.Unauthorised
+import assets.constants.CustomerDetailsTestConstants._
+import assets.constants.BaseTestConstants.vrn
+import models.ErrorModel
 
 import scala.concurrent.Future
 
@@ -31,9 +35,10 @@ class AuthPredicateSpec extends MockAuth {
 
   override lazy val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
 
-  object TestAuthPredicate extends AuthPredicate(unauthorised, mockEnrolmentsAuthService, serviceErrorHandler, mockAuthoriseAsAgent, mcc, mockConfig)
+  object TestAuthPredicate extends AuthPredicate(
+    unauthorised, mockEnrolmentsAuthService, mockCustomerDetailsService, serviceErrorHandler, mockAuthoriseAsAgent, mcc)(mockConfig)
 
-  def target(): Action[AnyContent] = {
+  def target: Action[AnyContent] = {
     TestAuthPredicate.async {
         Future.successful(Ok)
     }
@@ -45,13 +50,75 @@ class AuthPredicateSpec extends MockAuth {
 
       "the user is an individual" when {
 
-        "the user is enrolled to HMRC-MTD-VAT" should {
+        "the user is enrolled to HMRC-MTD-VAT" when {
 
-          lazy val result = target()(FakeRequest())
+          "they have a value in session for their insolvency status" when {
 
-          "return 200" in {
-            mockAuthResult(mockAuthorisedIndividual)
-            status(result) shouldBe Status.OK
+            "the value is 'true' (insolvent user not continuing to trade)" should {
+
+              "return Forbidden (403)" in {
+                mockAuthResult(mockAuthorisedIndividual)
+                status(target(insolventRequest)) shouldBe Status.FORBIDDEN
+              }
+            }
+
+            "the value is 'false' (user permitted to trade)" should {
+
+              "return OK (200)" in {
+                mockAuthResult(mockAuthorisedIndividual)
+                status(target(request)) shouldBe Status.OK
+              }
+            }
+          }
+
+          "they do not have a value in session for their insolvency status" when {
+
+            "they are insolvent and not continuing to trade" should {
+
+              lazy val result = {
+                mockAuthResult(mockAuthorisedIndividual)
+                setupMockCustomerDetails(vrn)(Right(customerDetailsInsolvent))
+                target(FakeRequest())
+              }
+
+              "return Forbidden (403)" in {
+                status(result) shouldBe Status.FORBIDDEN
+              }
+
+              "add the insolvent flag to the session" in {
+                session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe Some("true")
+              }
+            }
+
+            "they are permitted to trade" should {
+
+              lazy val result = {
+                mockAuthResult(mockAuthorisedIndividual)
+                setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+                target(FakeRequest())
+              }
+
+              "return OK (200)" in {
+                status(result) shouldBe Status.OK
+              }
+
+              "add the insolvent flag to the session" in {
+                session(result).get(SessionKeys.insolventWithoutAccessKey) shouldBe Some("false")
+              }
+            }
+
+            "there is an error returned from the customer information API" should {
+
+              lazy val result = {
+                mockAuthResult(mockAuthorisedIndividual)
+                setupMockCustomerDetails(vrn)(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Bad things!")))
+                target(FakeRequest())
+              }
+
+              "return Internal Server Error (500)" in {
+                status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+              }
+            }
           }
         }
 

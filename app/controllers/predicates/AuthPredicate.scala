@@ -87,10 +87,10 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
             case Right(_) =>
               logger.debug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
               block(user).map(result => result.addingToSession(SessionKeys.insolventWithoutAccessKey -> "false"))
+            case _ =>
+              Logger.warn("[AuthPredicate][checkVatEnrolment] - Failure obtaining insolvency status from Customer Info API")
+              Future.successful(serviceErrorHandler.showInternalServerError)
           }
-        case _ =>
-          Logger.warn("[AuthPredicate][checkVatEnrolment] - Failure obtaining insolvency status from Customer Info API")
-          Future.successful(serviceErrorHandler.showInternalServerError)
       }
 
     }

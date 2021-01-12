@@ -146,7 +146,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
       "the zero rated journey feature switch is on" when {
 
         "the form is filled correctly" should {
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody(("value", "12345"))
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody(("value", "12345"))
           lazy val result = TestController.submit()(request)
 
           "return a 303" in {
@@ -162,7 +162,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
         }
 
         "the form contains errors" should {
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody(("value", "7"))
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody(("value", "7"))
           lazy val result = TestController.submit()(request)
 
           "return a 303" in {

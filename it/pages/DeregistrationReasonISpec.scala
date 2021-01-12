@@ -30,7 +30,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration reason endpoint" when {
 
-    def getRequest: WSResponse = get("/cancel-vat-reason?isAgent=false", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/cancel-vat-reason?isAgent=false", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -83,7 +83,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration reason endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/cancel-vat-reason?isAgent=false", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/cancel-vat-reason?isAgent=false", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -149,7 +149,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
   "Calling the POST Deregister Reason endpoint" when {
 
     def postRequest(data: Map[String, Seq[String]]): WSResponse =
-      post("/cancel-vat-reason")(data)
+      post("/cancel-vat-reason", isNotInsolvent)(data)
 
     val ceased = Map("reason" -> Seq("stoppedTrading"))
     val belowThreshold = Map("reason" -> Seq("turnoverBelowThreshold"))
