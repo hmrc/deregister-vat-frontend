@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,16 +34,20 @@ object CustomerDetailsTestConstants {
       "organisationName" -> orgName,
       "firstName" -> firstName,
       "lastName" -> lastName,
-      "tradingName" -> tradingName
+      "tradingName" -> tradingName,
+      "isInsolvent" -> false,
+      "continueToTrade" -> true
     ),
     "partyType" -> partyTypeValue,
     "ppob" -> Json.obj("contactDetails" -> Some(Json.obj("emailVerified" -> Some(true)))),
-    "commsPreference" -> digital
+    "commsPreference" -> digital,
+    "isInsolvent" -> false,
+    "continueToTrade" -> true
   )
 
 
   val customerDetailsJsonMin: JsObject = Json.obj(
-    "customerDetails" -> Json.obj()
+    "customerDetails" -> Json.obj("isInsolvent" -> false)
   )
 
   val customerDetailsMax: CustomerDetails = CustomerDetails(
@@ -55,7 +59,9 @@ object CustomerDetailsTestConstants {
     Some(true),
     pendingDereg = false,
     alreadyDeregistered = false,
-    Some(digital)
+    Some(digital),
+    isInsolvent = false,
+    Some(true)
   )
 
   val customerDetailsMin: CustomerDetails = CustomerDetails(
@@ -67,6 +73,8 @@ object CustomerDetailsTestConstants {
     None,
     pendingDereg = false,
     alreadyDeregistered = false,
+    None,
+    isInsolvent = false,
     None
   )
 
@@ -79,7 +87,9 @@ object CustomerDetailsTestConstants {
     Some(false),
     pendingDereg = false,
     alreadyDeregistered = false,
-    Some(digital)
+    Some(digital),
+    false,
+    Some(true)
   )
 
   val customerDetailsPendingDeregJson: JsObject = customerDetailsJsonMax ++ Json.obj(
@@ -96,4 +106,5 @@ object CustomerDetailsTestConstants {
   val customerDetailsPendingDereg: CustomerDetails = customerDetailsMax.copy(pendingDereg = true)
   val customerDetailsAlreadyDeregistered: CustomerDetails = customerDetailsMax.copy(alreadyDeregistered = true)
   val customerDetailsVatGroup: CustomerDetails = customerDetailsMax.copy(partyType = Some(vatGroupPartyTypeValue))
+  val customerDetailsInsolvent: CustomerDetails = customerDetailsMax.copy(isInsolvent = true, continueToTrade = Some(false))
 }

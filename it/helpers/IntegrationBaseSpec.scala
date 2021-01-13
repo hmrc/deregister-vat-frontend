@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,6 +54,8 @@ trait IntegrationBaseSpec extends UnitSpec
 
     def user: User = new User()
   }
+
+  def isNotInsolvent:  Map[String, String] = Map(SessionKeys.insolventWithoutAccessKey -> "false")
 
   def formatPendingDereg: Option[String] => Map[String, String] =
     _.fold(Map.empty[String, String])(x => Map(SessionKeys.registrationStatusKey -> x))

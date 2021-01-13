@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,7 +102,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
       "the user submits entering a date" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
+          requestPost.withFormUrlEncodedBody(
             ("dateDay", testDay.toString),
             ("dateMonth", testMonth.toString),
             ("dateYear", testYear.toString)
@@ -123,7 +123,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
       "the user submits entering a date and an error is returned from stored data service" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
+          requestPost.withFormUrlEncodedBody(
             ("dateDay", testDay.toString),
             ("dateMonth", testMonth.toString),
             ("dateYear", testYear.toString)
@@ -140,7 +140,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
       "the user submits without entering any dates" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
+          requestPost.withFormUrlEncodedBody(
             ("dateDay", ""),
             ("dateMonth", ""),
             ("dateYear", "")
@@ -159,7 +159,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
       }
     }
 
-    authChecks(".submit", TestCeasedTradingDateController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(
+    authChecks(".submit", TestCeasedTradingDateController.submit(), requestPost.withFormUrlEncodedBody(
       ("dateDay", "1"),
       ("dateMonth", "1"),
       ("dateYear", "2018")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,7 +129,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       mockConfig.features.zeroRatedJourney(true)
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
+        requestPost.withFormUrlEncodedBody((yesNo, "yes"))
       lazy val result = TestController.submit()(request)
 
       "return 303 " in {
@@ -148,7 +148,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       mockConfig.features.zeroRatedJourney(true)
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+        requestPost.withFormUrlEncodedBody((yesNo, "no"))
       lazy val result = TestController.submit()(request)
 
       "return 303 " in {
@@ -167,7 +167,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
     "calling .submit with the user does not select an option" should {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, ""))
+        requestPost.withFormUrlEncodedBody((yesNo, ""))
       lazy val result = TestController.submit()(request)
 
       "return a 400" in {
@@ -179,7 +179,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
     "calling .submit with the zero rated journey feature switch off" should {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+        requestPost.withFormUrlEncodedBody((yesNo, "no"))
       lazy val result = {
         mockConfig.features.zeroRatedJourney(false)
         TestController.submit()(request)
@@ -194,7 +194,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
     "the user submits after selecting an option and an error is returned when storing the answer" should {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+        requestPost.withFormUrlEncodedBody((yesNo, "no"))
       lazy val result = TestController.submit()(request)
 
       "return a 500" in {

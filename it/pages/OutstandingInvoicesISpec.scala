@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
     val validYesModel = Yes
 
-    def getRequest: WSResponse = get("/outstanding-invoices", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/outstanding-invoices", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -84,7 +84,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
   "Calling the GET /outstanding-invoices" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/outstanding-invoices", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/outstanding-invoices", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -148,7 +148,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
   "Calling POST /outstanding-invoices" when {
 
-    def postRequest(data: Map[String, Seq[String]]): WSResponse = post("/outstanding-invoices")(data)
+    def postRequest(data: Map[String, Seq[String]]): WSResponse = post("/outstanding-invoices", isNotInsolvent)(data)
 
     val yes = Map("yes_no" -> Seq("yes"))
     val no = Map("yes_no" -> Seq("no"))

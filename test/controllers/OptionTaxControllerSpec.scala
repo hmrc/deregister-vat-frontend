@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,7 +100,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
       "the user submits after selecting an 'Yes' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
+          requestPost.withFormUrlEncodedBody(
             (yesNo, "yes"),
             (amount, testAmt.toString)
           )
@@ -120,7 +120,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
       "the user submits after selecting the 'No' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          requestPost.withFormUrlEncodedBody((yesNo, "no"))
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -137,7 +137,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
       "the user submits after selecting an option but an error is returned when storing answer" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          requestPost.withFormUrlEncodedBody((yesNo, "no"))
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 500 (ISE)" in {
@@ -150,7 +150,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
       "the user submits without selecting an option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
+          requestPost.withFormUrlEncodedBody(("yes_no", ""))
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -165,6 +165,6 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
       }
     }
 
-    authChecks(".submit", TestOptionTaxController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestOptionTaxController.submit(), requestPost.withFormUrlEncodedBody(("yes_no", "no")))
   }
 }

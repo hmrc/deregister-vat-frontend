@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import assets.constants.BaseTestConstants.{arn, vrn}
 import controllers.predicates.{AuthPredicate, AuthoriseAsAgent}
 import org.scalamock.scalatest.MockFactory
 import services.EnrolmentsAuthService
+import services.mocks.MockCustomerDetailsService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
@@ -29,7 +30,7 @@ import views.html.errors.client.Unauthorised
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAuth extends TestUtil with MockFactory {
+trait MockAuth extends TestUtil with MockFactory with MockCustomerDetailsService{
 
   type AuthResponse = Future[~[Option[AffinityGroup], Enrolments]]
   lazy val mockAuthConnector: AuthConnector = mock[AuthConnector]
@@ -39,9 +40,10 @@ trait MockAuth extends TestUtil with MockFactory {
   lazy val mockAuthoriseAsAgent: AuthoriseAsAgent = new AuthoriseAsAgent(mockEnrolmentsAuthService, serviceErrorHandler, mcc, mockConfig)
   lazy val mockAuthPredicate: AuthPredicate = new AuthPredicate(unauthorised,
                                                                 mockEnrolmentsAuthService,
+                                                                mockCustomerDetailsService,
                                                                 serviceErrorHandler,
                                                                 mockAuthoriseAsAgent,
-                                                                mcc,
+                                                                mcc)(
                                                                 mockConfig)
 
   def mockAuthResult(authResponse: AuthResponse, isAgent: Boolean = false): Unit = {

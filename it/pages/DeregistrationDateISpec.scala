@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
   "Calling the GET Deregistration Date endpoint" when {
 
     def getRequest(pendingDereg: Option[String] = Some(Constants.registered)): WSResponse =
-      get("/enter-cancel-vat-date", formatPendingDereg(pendingDereg))
+      get("/enter-cancel-vat-date", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -152,7 +152,7 @@ class DeregistrationDateISpec extends IntegrationBaseSpec {
   "Calling the POST Deregistration Date endpoint" when {
 
     def postRequest(data: DateModel): WSResponse =
-      post("/enter-cancel-vat-date", formatPendingDereg(Some(Constants.registered)))(
+      post("/enter-cancel-vat-date", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)(
         toFormData(DeregistrationDateForm.form, data)
       )
 

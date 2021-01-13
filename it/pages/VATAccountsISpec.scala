@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
   "Calling the GET VatAccounts" when {
 
-    def getRequest: WSResponse = get("/accounting-method", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/accounting-method", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -86,7 +86,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
   "Calling the GET VAT Accounts endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/accounting-method", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/accounting-method", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -152,7 +152,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
   "Calling the POST VatAccounts" when {
 
     def postRequest(data: Map[String, Seq[String]]): WSResponse =
-      post("/accounting-method")(data)
+      post("/accounting-method", isNotInsolvent)(data)
 
     val standard = Map("accountingMethod" -> Seq("standard"))
     val invalidModel = Map("accountingMethod" -> Seq(""))

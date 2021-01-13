@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
   "Calling the GET IssueNewInvoices" when {
 
-    def getRequest: WSResponse = get("/new-invoices", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/new-invoices", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -83,7 +83,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
   "Calling the GET IssueNewInvoices" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/new-invoices", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/new-invoices", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -148,7 +148,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
   "Calling the POST IssueNewInvoices" when {
 
-    def postRequest(data: Map[String, Seq[String]]): WSResponse = post("/new-invoices")(data)
+    def postRequest(data: Map[String, Seq[String]]): WSResponse = post("/new-invoices", isNotInsolvent)(data)
 
     val yes = Map("yes_no" -> Seq("yes"))
     val no = Map("yes_no" -> Seq("no"))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         "the user submits after selecting an 'stoppedTrading' option" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, ceased))
+            requestPost.withFormUrlEncodedBody((reason, ceased)).withSession()
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
@@ -114,7 +114,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         "the user submits after selecting the 'turnoverBelowThreshold' option" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, belowThreshold))
+            requestPost.withFormUrlEncodedBody((reason, belowThreshold))
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
 
@@ -134,7 +134,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         "the user submits after selecting the 'exemptOnly' option" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, exemptOnly))
+            requestPost.withFormUrlEncodedBody((reason, exemptOnly))
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
 
@@ -154,7 +154,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         "the user submits after selecting the 'other' option" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, other))
+            requestPost.withFormUrlEncodedBody((reason, other))
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
@@ -173,7 +173,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         "the user submits without selecting an option" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, ""))
+            requestPost.withFormUrlEncodedBody((reason, ""))
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return 400 (BAD REQUEST)" in {
@@ -190,7 +190,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         "if an error is returned when storing" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody((reason, other))
+            requestPost.withFormUrlEncodedBody((reason, other))
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return ISE (INTERNAL SERVER ERROR)" in {
@@ -204,7 +204,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
       "an error is returned when deleting redundant data" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody((reason, ceased))
+          requestPost.withFormUrlEncodedBody((reason, ceased))
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return ISE (INTERNAL SERVER ERROR)" in {
@@ -217,6 +217,6 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
       }
     }
 
-    authChecks(".submit", TestDeregistrationReasonController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody((reason, other)))
+    authChecks(".submit", TestDeregistrationReasonController.submit(), requestPost.withFormUrlEncodedBody((reason, other)))
   }
 }

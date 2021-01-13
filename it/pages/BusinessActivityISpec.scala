@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
   "Calling the GET BusinessActivity" when {
 
-    def getRequest: WSResponse = get("/has-the-business-activity-changed", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/has-the-business-activity-changed", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -86,7 +86,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
   "Calling the GET BusinessActivity" when {
 
     def getRequest(pendingDereg: Option[String]): WSResponse =
-      get("/has-the-business-activity-changed", formatPendingDereg(pendingDereg))
+      get("/has-the-business-activity-changed", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -152,7 +152,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
   "Calling the POST BusinessActivity" when {
 
     def postRequest(data: Map[String, Seq[String]]): WSResponse =
-      post("/has-the-business-activity-changed")(data)
+      post("/has-the-business-activity-changed", isNotInsolvent)(data)
 
     val yes = Map("yes_no" -> Seq("yes"))
     val no = Map("yes_no" -> Seq("no"))

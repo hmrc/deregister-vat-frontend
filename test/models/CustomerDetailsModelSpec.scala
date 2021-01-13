@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import assets.constants.CustomerDetailsTestConstants._
 
 class CustomerDetailsModelSpec extends UnitSpec {
 
-  "Deserialize from JSON" when {
+  "Deserializing from JSON" when {
 
     "all registration fields are populated" in {
       customerDetailsJsonMax.as[CustomerDetails] shouldBe customerDetailsMax
@@ -37,6 +37,23 @@ class CustomerDetailsModelSpec extends UnitSpec {
 
     "there is a deregistration date populated" in {
       customerDetailsAlreadyDeregisteredJson.as[CustomerDetails] shouldBe customerDetailsAlreadyDeregistered
+    }
+  }
+
+  "Calling .isInsolventWithoutAccess" should {
+
+    "return true when the user is insolvent and not continuing to trade" in {
+      customerDetailsInsolvent.isInsolventWithoutAccess shouldBe true
+    }
+
+    "return false when the user is insolvent but is continuing to trade" in {
+      customerDetailsInsolvent.copy(continueToTrade = Some(true)).isInsolventWithoutAccess shouldBe false
+    }
+
+    "return false when the user is not insolvent, regardless of the continueToTrade flag" in {
+      customerDetailsMax.isInsolventWithoutAccess shouldBe false
+      customerDetailsMax.copy(continueToTrade = Some(false)).isInsolventWithoutAccess shouldBe false
+      customerDetailsMax.copy(continueToTrade = None).isInsolventWithoutAccess shouldBe false
     }
   }
 }

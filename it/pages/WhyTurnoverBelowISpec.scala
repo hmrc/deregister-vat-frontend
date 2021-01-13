@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
   "Calling the GET Why Turnover Below endpoint" when {
 
-    def getRequest: WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -83,7 +83,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
   "Calling the GET Why Turnover Below endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -149,7 +149,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
   "Calling the POST Why Turnover Below endpoint" when {
 
     def postRequest(data: WhyTurnoverBelowModel): WSResponse =
-      post("/reasons-for-low-turnover")(toFormData(WhyTurnoverBelowForm.whyTurnoverBelowForm, data))
+      post("/reasons-for-low-turnover", isNotInsolvent)(toFormData(WhyTurnoverBelowForm.whyTurnoverBelowForm, data))
 
     val validModel = WhyTurnoverBelowModel(
       lostContract = true,

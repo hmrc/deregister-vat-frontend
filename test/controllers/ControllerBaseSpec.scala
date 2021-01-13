@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,15 @@ trait ControllerBaseSpec extends TestUtil with MockAuth with MockDeniedAccessPre
       "return 403 (Forbidden)" in {
         mockAuthResult(Future.failed(InsufficientEnrolments()))
         val result = action(request)
+        status(result) shouldBe Status.FORBIDDEN
+      }
+    }
+
+    "the user is insolvent and not continuing to trade" should {
+
+      "return 403 (Forbidden)" in {
+        mockAuthResult(mockAuthorisedIndividual)
+        val result = action(insolventRequest)
         status(result) shouldBe Status.FORBIDDEN
       }
     }

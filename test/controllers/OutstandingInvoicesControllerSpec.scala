@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +97,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
       "user selects 'Yes'" should {
 
-        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "yes"))
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "yes"))
         lazy val result = TestOutstandingInvoicesController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -119,7 +119,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
         "user is on 'below threshold' journey" should {
 
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
@@ -139,7 +139,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
         "user is on 'zero rated' journey" should {
 
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
@@ -159,7 +159,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
         "user is on 'exemptOnly' journey" should {
 
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
@@ -181,7 +181,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
           "user answered 'Yes' to having capital assets" should {
 
-            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+            lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
             lazy val result = TestOutstandingInvoicesController.submit()(request)
 
             val capitalAssetsAmount: Int = 1000
@@ -204,7 +204,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
           "user answered 'No' to having capital assets" should {
 
             lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-              FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+              requestPost.withFormUrlEncodedBody((yesNo, "no"))
             lazy val result = TestOutstandingInvoicesController.submit()(request)
 
             "return 303 (SEE OTHER)" in {
@@ -225,7 +225,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
           "no answer is returned for capital assets" should {
 
             lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-              FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+              requestPost.withFormUrlEncodedBody((yesNo, "no"))
             lazy val result = TestOutstandingInvoicesController.submit()(request)
 
             "return 500 (ISE)" in {
@@ -242,7 +242,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
           "error is returned for capital assets" should {
 
             lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-              FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+              requestPost.withFormUrlEncodedBody((yesNo, "no"))
             lazy val result = TestOutstandingInvoicesController.submit()(request)
 
             "return 500 (ISE)" in {
@@ -258,7 +258,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
         "no answer is returned for 'deregistration reason'" should {
 
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
 
@@ -276,7 +276,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
         "an error is returned for 'deregistration reason'" should {
 
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
 
@@ -295,7 +295,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
     "an error response is returned from the Wipe Redundant Data service" should {
 
-      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
       lazy val result = TestOutstandingInvoicesController.submit()(request)
 
       "return 500 (ISE)" in {
@@ -310,7 +310,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
     "an error is returned when storing the answer" should {
 
-      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody((yesNo, "no"))
+      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
       lazy val result = TestOutstandingInvoicesController.submit()(request)
 
       "return 500 (ISE)" in {
@@ -322,7 +322,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
     "the user submits without selecting an option" should {
 
-      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", ""))
+      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody(("yes_no", ""))
       lazy val result = TestOutstandingInvoicesController.submit()(request)
 
       "return 400 (BAD REQUEST)" in {
@@ -336,6 +336,6 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
       }
     }
 
-    authChecks(".submit", TestOutstandingInvoicesController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestOutstandingInvoicesController.submit(), requestPost.withFormUrlEncodedBody(("yes_no", "no")))
   }
 }

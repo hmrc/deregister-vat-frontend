@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,9 @@ object VatSubscriptionStub extends WireMockMethods {
   def noDeregPending(): StubMapping = {
     when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
       .thenReturn(status = OK, body = Json.obj(
-        "customerDetails" -> Json.obj(),
+        "customerDetails" -> Json.obj(
+          "isInsolvent" -> false
+        ),
         "changeIndicators" -> Json.obj(
           "deregister" -> false
         )
@@ -37,7 +39,9 @@ object VatSubscriptionStub extends WireMockMethods {
   def deregPending(): StubMapping = {
     when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
       .thenReturn(status = OK, body = Json.obj(
-        "customerDetails" -> Json.obj(),
+        "customerDetails" -> Json.obj(
+          "isInsolvent" -> false
+        ),
         "changeIndicators" -> Json.obj(
           "deregister" -> true
         )
@@ -47,19 +51,10 @@ object VatSubscriptionStub extends WireMockMethods {
   def noPendingData(): StubMapping = {
     when(method = GET, uri = "/vat-subscription/([0-9]+)/full-information")
       .thenReturn(status = OK, body = Json.obj(
-        "customerDetails" -> Json.obj(),
+        "customerDetails" -> Json.obj(
+          "isInsolvent" -> false
+        ),
         "commsPreference" -> "DIGITAL"
-      ))
-  }
-
-  def customerDetails(): StubMapping = {
-    when(method = GET, uri = "/vat-subscription/([0-9]+)/customer-details")
-      .thenReturn(status = OK, body = Json.obj(
-        "firstName" -> "First Name",
-        "lastName" -> "Last Name",
-        "tradingName" -> "Trading Name",
-        "organisationName" -> "Org Name",
-        "hasFlatRateScheme" -> true
       ))
   }
 

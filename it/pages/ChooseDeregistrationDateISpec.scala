@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
   "Calling the GET Choose Deregistration Date endpoint" when {
 
-    def getRequest: WSResponse = get("/choose-cancel-vat-date", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/choose-cancel-vat-date", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -84,7 +84,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
   "Calling the GET Deregistration date endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/choose-cancel-vat-date", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/choose-cancel-vat-date", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -149,7 +149,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
   "Calling the POST Choose Deregistration Date endpoint" when {
 
     def postRequest(data: YesNo): WSResponse =
-      post("/choose-cancel-vat-date")(toFormData(YesNoForm.yesNoForm("yesNoError"), data))
+      post("/choose-cancel-vat-date", isNotInsolvent)(toFormData(YesNoForm.yesNoForm("yesNoError"), data))
 
     "the user is authorised" when {
 

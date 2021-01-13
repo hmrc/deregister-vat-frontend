@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -122,7 +122,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
       "the user submits after selecting the 'Standard accounting' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", "standard"))
+          requestPost.withFormUrlEncodedBody(("accountingMethod", "standard"))
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -139,7 +139,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
       "the user submits after selecting the 'Cash accounting' option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", "cash"))
+          requestPost.withFormUrlEncodedBody(("accountingMethod", "cash"))
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
@@ -156,7 +156,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
       "the user submits without selecting an option" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", ""))
+          requestPost.withFormUrlEncodedBody(("accountingMethod", ""))
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -175,7 +175,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
       "the user submits without selecting an option and an error is returned from DeregReasonAnswerService" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", ""))
+          requestPost.withFormUrlEncodedBody(("accountingMethod", ""))
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
@@ -190,7 +190,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
     "if an error is returned when storing" should {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        FakeRequest("POST", "/").withFormUrlEncodedBody(("accountingMethod", "cash"))
+        requestPost.withFormUrlEncodedBody(("accountingMethod", "cash"))
       lazy val result = TestVATAccountsController.submit()(request)
 
       "return ISE (INTERNAL SERVER ERROR)" in {

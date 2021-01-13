@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,7 +124,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         "storing of data is successful" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-            FakeRequest("POST", "/").withFormUrlEncodedBody(
+            requestPost.withFormUrlEncodedBody(
               (day, testDay.toString),
               (month, testMonth.toString),
               (year, testYear.toString)
@@ -143,7 +143,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         }
 
         "storing of data is unsuccessful" should {
-          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest("POST", "/").withFormUrlEncodedBody(
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody(
             (day, testDay.toString),
             (month, testMonth.toString),
             (year, testYear.toString)
@@ -161,7 +161,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
       "the user submits invalid data" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-          FakeRequest("POST", "/").withFormUrlEncodedBody(
+          requestPost.withFormUrlEncodedBody(
             (day, ""),
             (month, ""),
             (year, "")
@@ -179,7 +179,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         }
       }
 
-      authChecks(".submit", TestDeregistrationDateController.submit(), FakeRequest("POST", "/").withFormUrlEncodedBody(
+      authChecks(".submit", TestDeregistrationDateController.submit(), requestPost.withFormUrlEncodedBody(
         ("dateDay", "1"),
         ("dateMonth", "1"),
         ("dateYear", "2018")

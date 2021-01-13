@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
   "Calling the SicCode page" when {
 
-    def getRequest: WSResponse = get("/what-is-the-sic-code", formatPendingDereg(Some(Constants.registered)))
+    def getRequest: WSResponse = get("/what-is-the-sic-code", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -83,7 +83,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
 
   "Calling the GET Sic Code endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/what-is-the-sic-code", formatPendingDereg(pendingDereg))
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/what-is-the-sic-code", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -148,7 +148,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
   "Calling the POST SicCode" when {
 
     def postRequest(data: Map[String, Seq[String]]): WSResponse =
-      post("/what-is-the-sic-code")(data)
+      post("/what-is-the-sic-code", isNotInsolvent)(data)
 
     "the user is authorised" when {
 
