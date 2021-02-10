@@ -36,13 +36,14 @@ object CustomerDetailsTestConstants {
       "lastName" -> lastName,
       "tradingName" -> tradingName,
       "isInsolvent" -> false,
-      "continueToTrade" -> true
+      "continueToTrade" -> true,
+      "insolvencyType" -> Some("01")
     ),
     "partyType" -> partyTypeValue,
     "ppob" -> Json.obj("contactDetails" -> Some(Json.obj("emailVerified" -> Some(true)))),
     "commsPreference" -> digital,
     "isInsolvent" -> false,
-    "continueToTrade" -> true
+    "continueToTrade" -> true,
   )
 
 
@@ -61,7 +62,8 @@ object CustomerDetailsTestConstants {
     alreadyDeregistered = false,
     Some(digital),
     isInsolvent = false,
-    Some(true)
+    Some(true),
+    Some("01")
   )
 
   val customerDetailsMin: CustomerDetails = CustomerDetails(
@@ -75,6 +77,7 @@ object CustomerDetailsTestConstants {
     alreadyDeregistered = false,
     None,
     isInsolvent = false,
+    None,
     None
   )
 
@@ -89,7 +92,8 @@ object CustomerDetailsTestConstants {
     alreadyDeregistered = false,
     Some(digital),
     false,
-    Some(true)
+    Some(true),
+    None
   )
 
   val customerDetailsPendingDeregJson: JsObject = customerDetailsJsonMax ++ Json.obj(

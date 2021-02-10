@@ -28,7 +28,11 @@ case class CustomerDetails(firstName: Option[String],
                            alreadyDeregistered: Boolean,
                            commsPreference: Option[String],
                            isInsolvent: Boolean,
-                           continueToTrade: Option[Boolean]) {
+                           continueToTrade: Option[Boolean],
+                           insolvencyType: Option[String]) {
+
+  val allowedInsolvencyTypes: Seq[String] = Seq("07", "12", "13", "14")
+  val blockedInsolvencyTypes: Seq[String] = Seq("08", "09", "10", "15")
 
   val isOrg: Boolean = organisationName.isDefined
   val isInd: Boolean = firstName.isDefined || lastName.isDefined
@@ -39,9 +43,16 @@ case class CustomerDetails(firstName: Option[String],
   val businessName: Option[String] = if(isOrg) organisationName else userName
   val clientName: Option[String] = if(tradingName.isDefined) tradingName else businessName
 
-  val isInsolventWithoutAccess: Boolean = continueToTrade match {
-    case Some(false) => isInsolvent
-    case _ => false
+  val isInsolventWithoutAccess: Boolean =  {
+    if (isInsolvent) {
+      insolvencyType match {
+        case Some(iType) if allowedInsolvencyTypes.contains(iType) => false
+        case Some(iType) if blockedInsolvencyTypes.contains(iType) => true
+        case _ => !continueToTrade.getOrElse(true)
+      }
+    } else {
+      false
+    }
   }
 }
 
@@ -58,6 +69,7 @@ object CustomerDetails {
   private val commsPreferencePath = __ \ "commsPreference"
   private val isInsolventPath = __ \ "customerDetails" \ "isInsolvent"
   private val continueToTradePath = __ \ "customerDetails" \ "continueToTrade"
+  private val insolvencyTypePath = __ \ "customerDetails" \ "insolvencyType"
 
   implicit val reads: Reads[CustomerDetails] = for {
     firstName <- firstNamePath.readNullable[String]
@@ -71,13 +83,25 @@ object CustomerDetails {
     commsPreference <- commsPreferencePath.readNullable[String].orElse(Reads.pure(None))
     isInsolvent <- isInsolventPath.read[Boolean]
     continueToTrade <- continueToTradePath.readNullable[Boolean]
+    insolvencyType <- insolvencyTypePath.readNullable[String].orElse(Reads.pure(None))
   } yield {
 
     val pendingDereg = deregChangeIndicator.getOrElse(false)
     val alreadyDeregistered = deregDate.isDefined
 
     CustomerDetails(
-      firstName, lastName, orgName, tradingName, partyType, emailVerified, pendingDereg, alreadyDeregistered, commsPreference, isInsolvent, continueToTrade
+      firstName,
+      lastName,
+      orgName,
+      tradingName,
+      partyType,
+      emailVerified,
+      pendingDereg,
+      alreadyDeregistered,
+      commsPreference,
+      isInsolvent,
+      continueToTrade,
+      insolvencyType
     )
   }
 }
