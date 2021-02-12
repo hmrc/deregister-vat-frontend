@@ -76,7 +76,6 @@ class SignOutControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
     "the user is unauthorised" should {
 
       lazy val result: Future[Result] = {
-        setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
         mockAuthResult(mockAuthorisedIndividual)
         TestSignOutController.signOut(authorised = false)(request)
       }

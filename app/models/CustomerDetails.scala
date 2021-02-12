@@ -48,7 +48,7 @@ case class CustomerDetails(firstName: Option[String],
       insolvencyType match {
         case Some(iType) if allowedInsolvencyTypes.contains(iType) => false
         case Some(iType) if blockedInsolvencyTypes.contains(iType) => true
-        case _ => !continueToTrade.getOrElse(true)
+        case _ => continueToTrade.contains(false)
       }
     } else {
       false

@@ -42,8 +42,6 @@ object CustomerDetailsTestConstants {
     "partyType" -> partyTypeValue,
     "ppob" -> Json.obj("contactDetails" -> Some(Json.obj("emailVerified" -> Some(true)))),
     "commsPreference" -> digital,
-    "isInsolvent" -> false,
-    "continueToTrade" -> true,
   )
 
 
