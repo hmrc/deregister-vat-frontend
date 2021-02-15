@@ -23,7 +23,11 @@ import models.User
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import services.DeleteAllStoredAnswersService
+import services.{DeleteAllStoredAnswersService, EnrolmentsAuthService}
+import uk.gov.hmrc.auth.core.{AffinityGroup, AuthorisationException}
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,7 +44,7 @@ class SignOutController @Inject()(val mcc: MessagesControllerComponents,
     (authorised, user.isAgent) match {
       case (true, true) => deleteDataAndRedirect(appConfig.signOutUrl("VATCA"))
       case (true, false) => deleteDataAndRedirect(appConfig.signOutUrl("VATC"))
-      case (false, _) => deleteDataAndRedirect(appConfig.unauthorisedSignOutUrl)
+      case (false, _) => Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
     }
   }
 
