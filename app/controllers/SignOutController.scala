@@ -40,12 +40,24 @@ class SignOutController @Inject()(val mcc: MessagesControllerComponents,
                                   val serviceErrorHandler: ServiceErrorHandler)
                                  (implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
-  def signOut(authorised: Boolean): Action[AnyContent] = authentication.async { implicit user =>
-    (authorised, user.isAgent) match {
-      case (true, true) => deleteDataAndRedirect(appConfig.signOutUrl("VATCA"))
-      case (true, false) => deleteDataAndRedirect(appConfig.signOutUrl("VATC"))
-      case (false, _) => Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
+  def signOut(authorised: Boolean): Action[AnyContent] = {
+    if(authorised){
+      signOutAuthorised
+    } else {
+      signOutUnauthorised
     }
+  }
+
+  def signOutAuthorised: Action[AnyContent] = authentication.async { implicit user =>
+    if(user.isAgent) {
+      deleteDataAndRedirect(appConfig.signOutUrl("VATCA"))
+    } else {
+      deleteDataAndRedirect(appConfig.signOutUrl("VATC"))
+    }
+  }
+
+  def signOutUnauthorised: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
   }
 
   private def deleteDataAndRedirect(redirectUrl: String)(implicit user: User[_]): Future[Result] =
