@@ -161,7 +161,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
           DeregisterVatStub.successfulPutAnswer(vrn, ZeroRatedSuppliesValueService.key)
 
-          val response: WSResponse = postRequest(Map("value" -> Seq("12345.67")))
+          val response: WSResponse = postRequest(Map("amount" -> Seq("12345.67")))
 
           response should have(
             httpStatus(SEE_OTHER),
@@ -177,7 +177,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(Map("value" -> Seq("12345.67")))
+        val response: WSResponse = postRequest(Map("amount" -> Seq("12345.67")))
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -192,7 +192,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(Map("value" -> Seq("12345.67")))
+        val response: WSResponse = postRequest(Map("amount" -> Seq("12345.67")))
 
         response should have(
           httpStatus(FORBIDDEN),
@@ -207,7 +207,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        val response: WSResponse = postRequest(Map("value" -> Seq("")))
+        val response: WSResponse = postRequest(Map("amount" -> Seq("")))
 
         response should have(
           httpStatus(BAD_REQUEST),
