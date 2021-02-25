@@ -26,7 +26,7 @@ object ZeroRatedSuppliesForm extends FormValidation {
 
   val zeroRatedSuppliesForm: Form[NumberInputModel] = Form(
     mapping(
-      "value" -> optional(text)
+      "amount" -> optional(text)
         .verifying("zeroRatedSupplies.error.mandatory", _.isDefined)
         .transform[String](x => x.get, x => Some(x))
         .verifying(isNumericConstraint("zeroRatedSupplies.error.nonNumeric"), hasMaxTwoDecimalsConstraint("common.error.tooManyDecimals"))
