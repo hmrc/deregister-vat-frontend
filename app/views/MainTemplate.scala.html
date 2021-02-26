@@ -29,7 +29,8 @@
     scriptElem: Option[Html] = None,
     appConfig: config.AppConfig,
     serviceName: Option[String] = None,
-    showSignOut: Boolean = true
+    showSignOut: Boolean = true,
+    feedbackOnSignOut: Boolean = true
 )(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
 
@@ -50,6 +51,7 @@
               mainBody = article(mainContent),
               serviceInfoContent = serviceInfoContent,
               scriptElem = scriptElem,
+              feedbackOnSignOut = feedbackOnSignOut,
               serviceName = serviceName,
               showSignOut = showSignOut
 )

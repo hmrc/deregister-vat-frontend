@@ -21,9 +21,10 @@
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @mainTemplate(
-title = messages("unauthorised.client.title"),
-bodyClasses = None,
-appConfig = appConfig
+    title = messages("unauthorised.client.title"),
+    bodyClasses = None,
+    appConfig = appConfig,
+    feedbackOnSignOut = false
 ){
    @headings(Messages("unauthorised.client.title"))
 
