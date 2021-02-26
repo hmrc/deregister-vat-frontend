@@ -23,11 +23,7 @@ import models.User
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import services.{DeleteAllStoredAnswersService, EnrolmentsAuthService}
-import uk.gov.hmrc.auth.core.{AffinityGroup, AuthorisationException}
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import services.DeleteAllStoredAnswersService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
