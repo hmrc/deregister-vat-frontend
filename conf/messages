@@ -28,10 +28,9 @@ global.error.InternalServerError500.title = There is a problem with the service 
 global.error.InternalServerError500.heading = Sorry, there is a problem with the service
 global.error.InternalServerError500.message = Try again later.
 
-error.date.invalidCharacters = Enter a date using numbers 0 to 9
-error.date.day = Enter numbers between 1 and 31
-error.date.month = Enter numbers between 1 and 12
-error.date.year = Enter 4 numbers
+error.date.day = Enter the day in the correct format
+error.date.month = Enter the month in the correct format
+error.date.year = Enter the year in the correct format
 
 #Feedback
 feedback.before = This is a new service – your

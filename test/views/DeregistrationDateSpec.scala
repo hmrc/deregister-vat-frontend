@@ -167,7 +167,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
           }
 
           "contains an error" in {
-            elementText(Selectors.errorSummaryText(1)) shouldBe "Enter 4 numbers"
+            elementText(Selectors.errorSummaryText(1)) shouldBe CommonMessages.errorDateYear
           }
 
           "contains a link to the correct field" in {
@@ -176,7 +176,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
         }
 
         "display a field error" in {
-          elementText(Selectors.fieldError) shouldBe "Error: Enter 4 numbers"
+          elementText(Selectors.fieldError) shouldBe s"${CommonMessages.errorPrefix} ${CommonMessages.errorDateYear}"
         }
       }
     }
