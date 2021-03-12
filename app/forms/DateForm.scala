@@ -58,7 +58,7 @@ object DateForm extends FormValidation {
               Left(Seq(invalidDateError(key)))
             }
           case Failure(_) =>
-            Left(Seq(FormError(key, "error.date.invalidCharacters")))
+            Left(Seq(invalidDateError(key)))
         }
         case _ =>
           Left(Seq(invalidDateError(key)))

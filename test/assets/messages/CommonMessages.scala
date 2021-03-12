@@ -46,11 +46,9 @@ object CommonMessages {
   val errorNegative = "Enter a positive amount"
   val errorMaximum = "You have entered too many numbers"
 
-  val errorDateInvalidCharacters = "Enter a date using numbers 0 to 9"
-  val errorDateDay = "Enter numbers between 1 and 31"
-  val errorDateMonth = "Enter numbers between 1 and 12"
-  val errorDateYear = "Enter 4 numbers"
-  val errorAllFieldsInvalid = "Enter the date the business stopped or will stop trading"
+  val errorDateDay = "Enter the day in the correct format"
+  val errorDateMonth = "Enter the month in the correct format"
+  val errorDateYear = "Enter the year in the correct format"
 
   val errorTitlePrefix = "Error:"
 

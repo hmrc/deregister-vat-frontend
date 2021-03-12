@@ -58,9 +58,9 @@
                 @if(dateErrors.nonEmpty) {
                     <span id="error-message" class="error-message">
                         <span class="visuallyhidden">@messages("common.error.titlePrefix")</span>
-                        @(formVariant, form.errors.length > 1, form.errors.head.message == "error.date.invalidCharacters") match {
-                            case (DeregistrationDate,true,false) => {@messages("deregistrationDate.error.date.noEntry")}
-                            case (CeasedTradingDate,true,false) => {@messages("ceasedTrading.error.date.noEntry")}
+                        @(formVariant, form.errors.length > 1) match {
+                            case (DeregistrationDate, true) => {@messages("deregistrationDate.error.date.noEntry")}
+                            case (CeasedTradingDate, true) => {@messages("ceasedTrading.error.date.noEntry")}
                             case _ => {@messages(form.errors.head.message)}
                             }
                     </span>

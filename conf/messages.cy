@@ -59,10 +59,9 @@ global.error.pageNotFound404.title = Heb ddod o hyd i’r dudalen – 404
 global.error.pageNotFound404.heading = Ni ellir dod o hyd i’r dudalen hon
 global.error.pageNotFound404.message = Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
 
-error.date.invalidCharacters = Nodwch ddyddiad gan ddefnyddio’r rhifau 0 i 9
-error.date.day = Nodwch rifau rhwng 1 a 31
-error.date.month = Nodwch rifau rhwng 1 a 12
-error.date.year = Nodwch 4 rhif
+error.date.day = Nodwch y diwrnod yn y fformat cywir
+error.date.month = Nodwch y mis yn y fformat cywir
+error.date.year = Nodwch y flwyddyn yn y fformat cywir
 
 #Feedback
 feedback.before = Gwasanaeth newydd yw hwn – bydd eich

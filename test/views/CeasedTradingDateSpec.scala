@@ -61,7 +61,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       element(Selectors.back).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
     }
 
-    "have no error heading message being displayed" in {
+    "have no error summary heading message being displayed" in {
       document.select(Selectors.errorHeading).isEmpty shouldBe true
     }
 
@@ -73,7 +73,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       elementText(Selectors.hint) shouldBe CeasedTradingDateMessages.dateHint
     }
 
-    "have the correct a radio " in {
+    "have the correct label text for the inputs" in {
       elementText(Selectors.dayText) shouldBe CommonMessages.day
       elementText(Selectors.monthText) shouldBe CommonMessages.month
       elementText(Selectors.yearText) shouldBe CommonMessages.year
@@ -100,11 +100,11 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
-    "have an error heading message being displayed" in {
+    "have an error summary heading message being displayed" in {
       elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
     }
 
-    "have an error for each missing field linking to the correct field" in {
+    "have an error summary item linking to the incorrect field" in {
       elementText(Selectors.errorDay) shouldBe CommonMessages.errorDateDay
       element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
     }
@@ -127,12 +127,12 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
-    "have an error heading message being displayed" in {
+    "have an error summary heading message being displayed" in {
       elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
     }
 
-    "have an error for all fields and link to the correct field" in {
-      elementText(Selectors.errorDay) shouldBe CommonMessages.errorAllFieldsInvalid
+    "have an error summary item that links to the first incorrect field" in {
+      elementText(Selectors.errorDay) shouldBe CeasedTradingDateMessages.errorNoEntry
       element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
     }
 
@@ -158,7 +158,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
     }
 
-    "have an error for each missing field linking to the correct field" in {
+    "have an error summary item linking to the incorrect field" in {
       elementText(Selectors.errorYear) shouldBe CommonMessages.errorDateYear
       element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
     }
@@ -181,11 +181,11 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
-    "have an error heading message being displayed" in {
+    "have an error summary heading message being displayed" in {
       elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
     }
 
-    "have an error for each missing field linking to the correct field" in {
+    "have an error summary item linking to the incorrect field" in {
       elementText(Selectors.errorYear) shouldBe CommonMessages.errorDateYear
       element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
     }
@@ -208,12 +208,12 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
-    "have an error heading message being displayed" in {
+    "have an error summary heading message being displayed" in {
       elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
     }
 
-    "have an error for all fields and link to the correct field" in {
-      elementText(Selectors.errorDay) shouldBe CommonMessages.errorAllFieldsInvalid
+    "have an error summary item that links to the first incorrect field" in {
+      elementText(Selectors.errorDay) shouldBe CeasedTradingDateMessages.errorNoEntry
       element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
     }
 
@@ -222,7 +222,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
   }
 
-  "Rendering the Ceased trading date page with a non numerical character" should {
+  "Rendering the Ceased trading date page with a non numerical character in one field" should {
 
     lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
       "dateDay" -> "1",
@@ -235,21 +235,21 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
-    "have an error heading message being displayed" in {
+    "have an error summary heading message being displayed" in {
       elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
     }
 
-    "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorMonth) shouldBe CommonMessages.errorDateInvalidCharacters
+    "have an error summary item linking to the incorrect field" in {
+      elementText(Selectors.errorMonth) shouldBe CommonMessages.errorDateMonth
       element(Selectors.errorMonth).attr("href") shouldBe Selectors.monthField
     }
 
-    "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CommonMessages.errorDateInvalidCharacters}"
+    "have an error message being displayed for the field" in {
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CommonMessages.errorDateMonth}"
     }
   }
 
-  "Rendering the Ceased trading date page with non numerical characters" should {
+  "Rendering the Ceased trading date page with non numerical characters in all fields" should {
 
     lazy val view = ceasedTradingDate(DateForm.dateForm.bind(Map(
       "dateDay" -> "a",
@@ -262,17 +262,17 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
-    "have an error heading message being displayed" in {
+    "have an error summary heading message being displayed" in {
       elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
     }
 
-    "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorDay) shouldBe CommonMessages.errorDateInvalidCharacters
+    "have an error summary item that links to the first incorrect field" in {
+      elementText(Selectors.errorDay) shouldBe CeasedTradingDateMessages.errorNoEntry
       element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CommonMessages.errorDateInvalidCharacters}"
+      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.errorNoEntry}"
     }
   }
 
@@ -289,11 +289,11 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
       document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
     }
 
-    "have an error heading message being displayed" in {
+    "have an error summary heading message being displayed" in {
       elementText(Selectors.errorHeading) shouldBe CommonMessages.errorHeading
     }
 
-    "have an error for the incorrect field linking to the correct field" in {
+    "have an error summary item linking to the form ID which focuses the first incorrect field" in {
       elementText(Selectors.errorCeasedTrading) shouldBe CeasedTradingDateMessages.errorNoEntry
       element(Selectors.errorCeasedTrading).attr("href") shouldBe Selectors.ceasedTradingField
     }
