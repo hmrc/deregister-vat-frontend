@@ -37,6 +37,12 @@ feedback.before = This is a new service – your
 feedback.link = feedback
 feedback.after = will help us to improve it.
 
+footerLinks.cookies = Cookies
+footerLinks.accessibility = Accessibility
+footerLinks.privacyPolicy = Privacy policy
+footerLinks.termsAndConditions = Terms and conditions
+footerLinks.help = Help using GOV.UK
+
 deregisterForVAT.title = Cancel VAT registration
 deregisterForVAT.p1 = To cancel the registration, you need to know the value of any:
 deregisterForVAT.p2 = You also need to know how the business’s VAT accounts are prepared (standard accounting or cash accounting).

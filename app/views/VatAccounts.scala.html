@@ -15,49 +15,73 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import templates.inputs.MultipleLineRadioGroup
-@import templates.Headings
-@import models.MultipleLineRadioGroupModel
-@import views.utils.TitleUtil.title
+@import views.html.MainTemplate
 
-@this(headings: Headings, mainTemplate: MainTemplate, errorSummary: ErrorSummary, multipleLineRadioGroup: MultipleLineRadioGroup, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
 
 @(backLink: String, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@questionContent = {
-  @headings(messages("vatAccounts.title"))
+@mainTemplate(pageTitle = title(messages("vatAccounts.title"), form)) {
 
-  <p>@messages("vatAccounts.showMeAnExample.p1")</p>
-  <ul class="list bullets bullet list-bullet">
-    <li>@messages("vatAccounts.showMeAnExample.bullet1")</li>
-    <li>@messages("vatAccounts.showMeAnExample.bullet2")</li>
-  </ul>
-}
+    @govukBackLink(BackLink(
+        href = backLink
+        content = Text(messages("common.back"))
+    ))
 
-@mainTemplate(title = title(messages("vatAccounts.title"), form), appConfig = appConfig) {
-
-  <a class="link-back" href=@backLink>@messages("common.back")</a>
-
-  @errorSummary("common.errorSummary.heading", form)
+    @if(form.hasErrors) {
+        @govukErrorSummary(ErrorSummary(
+            title = Text(messages("common.errorSummary.heading")),
+            errorList = form.errors.map { error =>
+                ErrorLink(
+                    href = Some("#vat-accounts")
+                    content = Text(messages(error.message))
+                )
+            }
+        ))
+    }
 
   @formWithCSRF(action = controllers.routes.VATAccountsController.submit, 'novalidate -> "novalidate") {
 
-    <div class="form-group" id="accountingMethod">
-      @multipleLineRadioGroup(
-        field = form("accountingMethod"),
-        choices = Seq(
-          MultipleLineRadioGroupModel("standard", messages("vatAccounts.method.standard"), messages("vatAccounts.description.standard")),
-          MultipleLineRadioGroupModel("cash", messages("vatAccounts.method.cash"), messages("vatAccounts.description.cash"))
-        ),
-        question = messages("vatAccounts.title"),
-        additionalContent = Some(questionContent),
-        legendAsHeader = false
-      )
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="vat-accounts-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    @messages("vatAccounts.title")
+                </h1>
+            </legend>
+            <div id="vat-accounts-hint" class="govuk-hint">
+                <p class="govuk-body">@messages("vatAccounts.showMeAnExample.p1")</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>@messages("vatAccounts.showMeAnExample.bullet1")</li>
+                    <li>@messages("vatAccounts.showMeAnExample.bullet2")</li>
+                </ul>
+            </div>
+            <div class="govuk-radios">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="vat-accounts" name="vat-accounts" type="radio" value="government-gateway" aria-describedby="vat-accounts-item-hint">
+                    <label class="govuk-label govuk-radios__label" for="vat-accounts">
+                        @messages("vatAccounts.method.standard")
+                    </label>
+                    <div id="vat-accounts-item-hint" class="govuk-hint govuk-radios__hint">
+                        @messages("vatAccounts.description.standard")
+                    </div>
+                </div>
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="vat-accounts-2" name="vat-accounts" type="radio" value="govuk-verify" aria-describedby="vat-accounts-2-item-hint">
+                    <label class="govuk-label govuk-radios__label" for="vat-accounts-2">
+                        @messages("vatAccounts.method.cash")
+                    </label>
+                    <div id="vat-accounts-2-item-hint" class="govuk-hint govuk-radios__hint">
+                        @messages("vatAccounts.description.cash")
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
     </div>
 
-    <button class="button" type="submit" id="continue">
-      @messages("common.continue")
+    <button class="govuk-button" data-module="govuk-button">
+        @messages("common.continue")
     </button>
   }
 }

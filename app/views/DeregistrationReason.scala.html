@@ -15,51 +15,102 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import views.html.templates.inputs.RadioHelper
+@import views.html.MainTemplate
 @import forms.DeregistrationReasonForm
-@import views.utils.TitleUtil._
+@import views.html.MainTemplate
 
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, radioHelper: RadioHelper, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
 
 @(form: Form[models.DeregistrationReason])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(
-    title = title(messages("deregistrationReason.title"), form),
-    bodyClasses = None,
-    appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("deregistrationReason.title"), form)) {
 
-    <a class="link-back" href="@controllers.routes.DeregisterForVATController.redirect().url">@messages("common.back")</a>
+    @govukBackLink(BackLink(
+        href = "@controllers.routes.DeregisterForVATController.redirect().url",
+        content = Text(messages("common.back"))
+    ))
 
-    @errorSummary("common.errorSummary.heading", form)
+    @if(form.hasErrors) {
+        @govukErrorSummary(ErrorSummary(
+            title = Text(messages("common.errorSummary.heading")),
+            errorList = form.errors.map { error =>
+                ErrorLink(
+                    href = Some("#deregistration-reason")
+                    content = Text(messages(common.errorSummary.heading))
+                )
+            }
+        ))
+    }
 
     @formWithCSRF(action = controllers.routes.DeregistrationReasonController.submit, 'novalidate -> "novalidate") {
 
-        <div class="form-group" id="reason">
-            @radioHelper(
-                field = form("reason"),
-                choices = if(appConfig.features.zeroRatedJourney()) {
-                    Seq(
-                        (DeregistrationReasonForm.ceased, Messages("deregistrationReason.reason.ceased")),
-                        (DeregistrationReasonForm.belowThreshold, Messages("deregistrationReason.reason.belowThreshold", appConfig.deregThreshold)),
-                        (DeregistrationReasonForm.zeroRated, Messages("deregistrationReason.reason.zeroRated")),
-                        (DeregistrationReasonForm.exemptOnly, Messages("deregistrationReason.reason.exemptOnly")),
-                        (DeregistrationReasonForm.other, Messages("deregistrationReason.reason.other"))
-                    )
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    @messages("deregistrationReason.title")
+                </h1>
+            </legend>
+            <div class="govuk-radios">
+                @if(appConfig.features.zeroRatedJourney()) {
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="deregistration-reason" name="deregistration-reason" type="radio" value="stopped-trading">
+                        <label class="govuk-label govuk-radios__label" for="deregistration-reason">
+                            @messages("deregistrationReason.reason.ceased")
+                        </label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="deregistration-reason-2" name="deregistration-reason" type="radio" value="below-threshold">
+                        <label class="govuk-label govuk-radios__label" for="deregistration-reason-2">
+                            @messages("deregistrationReason.reason.belowThreshold")
+                        </label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="deregistration-reason-3" name="deregistration-reason" type="radio" value="zero-rated">
+                        <label class="govuk-label govuk-radios__label" for="deregistration-reason-3">
+                            @messages("deregistrationReason.reason.zeroRated")
+                        </label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="deregistration-reason-4" name="deregistration-reason" type="radio" value="vat-exempt-supplies">
+                        <label class="govuk-label govuk-radios__label" for="deregistration-reason-4">
+                            @messages("deregistrationReason.reason.exemptOnly")
+                        </label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="deregistration-reason-5" name="deregistration-reason" type="radio" value="other">
+                        <label class="govuk-label govuk-radios__label" for="deregistration-reason-5">
+                            @messages("deregistrationReason.reason.other")
+                        </label>
+                    </div>
                 } else {
-                    Seq(
-                        (DeregistrationReasonForm.ceased, Messages("deregistrationReason.reason.ceased")),
-                        (DeregistrationReasonForm.belowThreshold, Messages("deregistrationReason.reason.belowThreshold", appConfig.deregThreshold)),
-                        (DeregistrationReasonForm.other, Messages("deregistrationReason.reason.other"))
-                    )
-                },
-                question = Messages("deregistrationReason.title")
-            )
-        </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="deregistration-reason-6" name="deregistration-reason" type="radio" value="stopped-trading">
+                        <label class="govuk-label govuk-radios__label" for="deregistration-reason-6">
+                            @messages("deregistrationReason.reason.ceased")
+                        </label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="deregistration-reason-7" name="deregistration-reason" type="radio" value="below-threshold">
+                        <label class="govuk-label govuk-radios__label" for="deregistration-reason-7">
+                            @messages("deregistrationReason.reason.belowThreshold")
+                        </label>
+                    </div>
+                    <div class="govuk-radios__item">
+                        <input class="govuk-radios__input" id="deregistration-reason-8" name="deregistration-reason" type="radio" value="other">
+                        <label class="govuk-label govuk-radios__label" for="deregistration-reason-8">
+                            @messages("deregistrationReason.reason.other")
+                        </label>
+                    </div>
+                }
+            </div>
 
-        <button class="button" type ="submit" id="continue">
-            @messages("common.continue")
-        </button>
+        </fieldset>
+    </div>
+
+    <button class="govuk-button" data-module="govuk-button">
+        @messages("common.continue")
+    </button>
     }
 }

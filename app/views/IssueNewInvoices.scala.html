@@ -15,36 +15,60 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import views.html.templates.inputs.RadioHelper
-@import forms.YesNoForm._
-@import views.utils.TitleUtil.title
+@import views.html.MainTemplate
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, radioHelper: RadioHelper, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
 
 @(form: Form[YesNo])(implicit user: User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(title = title(messages("issueNewInvoices.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("issueNewInvoices.title"), form)) {
 
-  <a class="link-back" href="@controllers.routes.OptionStocksToSellController.show().url">@messages("common.back")</a>
+    @govukBackLink(BackLink(
+        href = "@controllers.routes.OptionStocksToSellController.show().url",
+        content = Text(messages("common.back"))
+    ))
 
-  @errorSummary("common.errorSummary.heading", form)
+    @if(form.hasErrors) {
+        @govukErrorSummary(ErrorSummary(
+            title = Text(messages("common.errorSummary.heading")),
+            errorList = form.errors.map { error =>
+                ErrorLink(
+                    href = Some("#issue-new-invoices")
+                    content = Text(messages(common.errorSummary.heading))
+                )
+            }
+        ))
+    }
 
   @formWithCSRF(action = controllers.routes.IssueNewInvoicesController.submit, 'novalidate -> "novalidate") {
 
-    <div class="form-group" id="@yesNo">
-      @radioHelper(
-        field = form(yesNo),
-        choices = Seq(
-          yes -> messages("common.yes"),
-          no -> messages("common.no")),
-        question = messages("issueNewInvoices.title"),
-        inline = true
-      )
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    @messages("issueNewInvoices.title")
+                </h1>
+            </legend>
+            <div class="govuk-radios govuk-radios--inline">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="issue-new-invoices-yes" name="issue-new-invoices" type="radio" value="yes">
+                    <label class="govuk-label govuk-radios__label" for="issue-new-invoices-yes">
+                        messages("common.yes")
+                    </label>
+                </div>
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="issue-new-invoices-no" name="issue-new-invoices" type="radio" value="no">
+                    <label class="govuk-label govuk-radios__label" for="issue-new-invoices-no">
+                        messages("common.no")
+                    </label>
+                </div>
+            </div>
+
+        </fieldset>
     </div>
 
-    <button class="button" type="submit" id="continue">
-      @messages("common.continue")
+    <button class="govuk-button" data-module="govuk-button">
+        @messages("common.continue")
     </button>
   }
 }

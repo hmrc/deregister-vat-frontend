@@ -15,34 +15,47 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import templates.Headings
-@import views.html.templates.inputs.Text
-@import views.utils.TitleUtil.title
+@import views.html.MainTemplate
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, text: Text, headings: Headings, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
 
 @(form: Form[NumberInputModel],backLinkUrl: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(title = title(messages("nextTaxableTurnover.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("nextTaxableTurnover.title"), form)) {
 
-  <a class="link-back" href="@backLinkUrl">@messages("common.back")</a>
+    @govukBackLink(BackLink(
+        href = "@backLinkUrl",
+        content = Text(messages("common.back"))
+    ))
 
-  @errorSummary("common.errorSummary.heading", form)
+
+    @if(form.hasErrors) {
+        @govukErrorSummary(ErrorSummary(
+            title = Text(messages("common.errorSummary.heading")),
+            errorList = form.errors.map { error =>
+            ErrorLink(
+                href = Some("#cost")
+                content = Text(messages(error.message))
+                )
+            }
+        ))
+    }
 
   @formWithCSRF(action = controllers.routes.NextTaxableTurnoverController.submit, 'novalidate -> "novalidate") {
 
-    <div class="form-group">
-      @text(
-        field = form("amount"),
-        label = messages("nextTaxableTurnover.title"),
-        additionalContent = Some(headings(messages("nextTaxableTurnover.title"))),
-        isMonetaryField = true
-      )
+    <div class="govuk-form-group">
+        <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--l" for="cost">
+            @messages("nextTaxableTurnover.title")
+        </label>
+        </h1>
+        <div class="govuk-input__wrapper">
+            <div class="govuk-input__prefix" aria-hidden="true">£</div>
+            <input class="govuk-input govuk-input--width-5" id="cost" name="cost" type="text" spellcheck="false">
+        </div>
     </div>
 
-    <button class="button" type ="submit" id="continue">
-      @messages("common.continue")
-    </button>
+    @govukButton(Button(
+        content = Text(messages("common.continue"))
+    ))
   }
 }

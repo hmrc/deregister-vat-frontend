@@ -15,46 +15,63 @@
  *@
 
 @import forms.PurchasesExceedSuppliesForm._
-@import templates.Headings
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import views.html.templates.inputs.RadioHelper
-@import views.utils.TitleUtil.title
+@import views.html.MainTemplate
 
-@this(mainTemplate: MainTemplate, headings: Headings, errorSummary: ErrorSummary, radioHelper: RadioHelper, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@questionContent = {
-  @headings(messages("purchasesExceedSupplies.title"))
+@mainTemplate(pageTitle = title(messages("purchasesExceedSupplies.title"), form)) {
 
-  <p>@messages("purchasesExceedSupplies.explanation")</p>
-}
+    @govukBackLink(BackLink(
+        href = controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url
+        content = Text(messages("common.back"))
+    ))
 
-@mainTemplate(title = title(messages("purchasesExceedSupplies.title"), form), appConfig = appConfig) {
-
-  <a class="link-back" href="@controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url">@messages("common.back")</a>
-
-  @errorSummary("common.errorSummary.heading", form)
+    @if(form.hasErrors) {
+        @govukErrorSummary(ErrorSummary(
+            title = Text(messages("common.errorSummary.heading")),
+            errorList = form.errors.map { error =>
+                ErrorLink(
+                    href = Some("#purchases-exceed-supplies")
+                    content = Text(messages(error.message))
+                )
+            }
+        ))
+    }
 
   @formWithCSRF(action = controllers.zeroRated.routes.PurchasesExceedSuppliesController.submit, 'novalidate -> "novalidate") {
 
-    <div class="form-group" id="@yesNo">
-      @radioHelper(
-        field = form(yesNo),
-        choices = Seq(
-          (yes, messages("common.yes")),
-          (no, messages("common.no"))
-        ),
-        question = messages("purchasesExceedSupplies.title"),
-        additionalContent = Some(questionContent),
-        inline = true,
-        legendAsHeader = false
-      )
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="purchases-exceed-supplies-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    @messages("purchasesExceedSupplies.title")
+                </h1>
+            </legend>
+            <div id="purchases-exceed-supplies-hint" class="govuk-hint">
+                @messages("purchasesExceedSupplies.explanation")
+            </div>
+            <div class="govuk-radios govuk-radios--inline">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="purchases-exceed-supplies" name="purchases-exceed-supplies" type="radio" value="yes">
+                    <label class="govuk-label govuk-radios__label" for="purchases-exceed-supplies">
+                        @messages("common.yes")
+                    </label>
+                </div>
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="purchases-exceed-supplies-2" name="purchases-exceed-supplies" type="radio" value="no">
+                    <label class="govuk-label govuk-radios__label" for="purchases-exceed-supplies-2">
+                        @messages("common.no")
+                    </label>
+                </div>
+            </div>
+
+        </fieldset>
     </div>
 
-    <button class="button" type="submit" id="continue">
-      @messages("common.continue")
+    <button class="govuk-button" data-module="govuk-button">
+        @messages("common.continue")
     </button>
   }
 }

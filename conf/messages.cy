@@ -68,6 +68,12 @@ feedback.before = Gwasanaeth newydd yw hwn – bydd eich
 feedback.link = adborth
 feedback.after = yn ein helpu i’w wella.
 
+footerLinks.cookies = Cwcis
+footerLinks.accessibility = Hygyrchedd
+footerLinks.privacyPolicy = Polisi preifatrwydd
+footerLinks.termsAndConditions = Telerau ac Amodau
+footerLinks.help = Help wrth ddefnyddio GOV.UK
+
 deregisterForVAT.title = Canslo cofrestriad TAW
 deregisterForVAT.p1 = I ganslo’ch cofrestriad, mae angen i chi wybod gwerth unrhyw rai o’r canlynol:
 deregisterForVAT.p2 = Hefyd, mae angen i chi wybod sut mae cyfrifon TAW y busnes yn cael eu paratoi (cyfrifyddu safonol neu gyfrifyddu arian parod).

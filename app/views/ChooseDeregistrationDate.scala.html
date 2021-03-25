@@ -15,48 +15,70 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import views.html.templates.inputs.RadioHelper
-@import forms.YesNoForm._
-@import views.utils.TitleUtil.title
+@import views.html.MainTemplate
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, radioHelper: RadioHelper, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
 
 @(outstanding: Option[YesNo], form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@questionContent = {
-  <p>@messages("deregistrationDate.p1")</p>
-
-  <p>@messages("deregistrationDate.p2")</p>
+@backLink = @if(outstanding.isDefined) {
+    href = @controllers.routes.OutstandingInvoicesController.show().url
+} else {
+    href = @controllers.routes.IssueNewInvoicesController.show().url
 }
 
-@mainTemplate(title = title(messages("chooseDeregistrationDate.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("chooseDeregistrationDate.title"), form)) {
 
-  <a class="link-back"
-  @if(outstanding.isDefined){
-     href="@controllers.routes.OutstandingInvoicesController.show().url"
-  }else{
-     href="@controllers.routes.IssueNewInvoicesController.show().url"
-  }>@messages("common.back")</a>
+    @govukBackLink(BackLink(
+        href = backLink
+        content = Text(messages("common.back"))
+    ))
 
-  @errorSummary("common.errorSummary.heading", form, Some("date-fieldset"))
+    @if(form.hasErrors) {
+        @govukErrorSummary(ErrorSummary(
+            title = Text(messages("common.errorSummary.heading")),
+            errorList = form.errors.map { error =>
+                ErrorLink(
+                    href = Some("#option-tax")
+                    content = Text(messages(error.message))
+                )
+            }
+        ))
+    }
 
   @formWithCSRF(action = controllers.routes.ChooseDeregistrationDateController.submit, 'novalidate -> "novalidate") {
 
-    <div id="@yesNo" class="form-group">
-        @radioHelper(
-            field = form(yesNo),
-            choices = Seq(
-                yes -> messages("common.yes"),
-                no -> messages("common.no")),
-            additionalContent = Some(questionContent),
-            question = messages("chooseDeregistrationDate.title"),
-            inline = true
-        )
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="choose-deregistration-date-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    @messages("chooseDeregistrationDate.title")
+                </h1>
+            </legend>
+            <div id="choose-deregistration-date-hint" class="govuk-hint">
+                <p>@messages("deregistrationDate.p1")</p>
+                <p>@messages("deregistrationDate.p2")</p>
+            </div>
+            <div class="govuk-radios govuk-radios--inline">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="choose-deregistration-date" name="choose-deregistration-date" type="radio" value="yes">
+                    <label class="govuk-label govuk-radios__label" for="choose-deregistration-date">
+                        @messages("common.yes")
+                    </label>
+                </div>
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="choose-deregistration-date-2" name="choose-deregistration-date" type="radio" value="no">
+                    <label class="govuk-label govuk-radios__label" for="choose-deregistration-date">
+                        @messages("common.no")
+                    </label>
+                </div>
+            </div>
+
+        </fieldset>
     </div>
 
-    <button class="button" type ="submit" id="continue">
-      @messages("common.continue")
+    <button class="govuk-button" data-module="govuk-button">
+        @messages("common.continue")
     </button>
   }
 }

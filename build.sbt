@@ -66,6 +66,8 @@ val compile: Seq[ModuleID] = Seq(
   "uk.gov.hmrc"   %% "play-ui"                         % "9.0.0-play-26",
   "uk.gov.hmrc"   %% "play-partials"                   % "7.1.0-play-26",
   "uk.gov.hmrc"   %% "play-language"                   % "4.10.0-play-26",
+  "uk.gov.hmrc"   %% "play-frontend-govuk"             % "0.63.0-play-26",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "0.48.0-play-26",
   "org.typelevel" %% "cats"                            % "0.9.0"
 )
 
@@ -88,6 +90,12 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
       ForkOptions().withRunJVMOptions(Vector("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml"))
     ))
 }
+
+TwirlKeys.templateImports ++= Seq(
+  "uk.gov.hmrc.govukfrontend.views.html.components._",
+  "uk.gov.hmrc.govukfrontend.views.html.helpers._",
+  "uk.gov.hmrc.hmrcfrontend.views.html.components._"
+)
 
 lazy val microservice: Project = Project(appName, file("."))
   .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)

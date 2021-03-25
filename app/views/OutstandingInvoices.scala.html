@@ -15,36 +15,64 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
+@import views.html.MainTemplate
 @import views.html.templates.inputs.RadioHelper
 @import config.AppConfig
 @import forms.YesNoForm._
 @import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, radioHelper: RadioHelper, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: AppConfig)
 
-@mainTemplate(title = title(messages("outstandingInvoice.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("outstandingInvoice.title"), form)) {
 
-  <a class="link-back" href="@controllers.routes.IssueNewInvoicesController.show().url">@messages("common.back")</a>
+    @govukBackLink(BackLink(
+        href = "@controllers.routes.IssueNewInvoicesController.show().url",
+        content = Text(messages("common.back"))
+    ))
 
-  @errorSummary("common.errorSummary.heading", form)
+    @if(form.hasErrors) {
+        @govukErrorSummary(ErrorSummary(
+            title = Text(messages("common.errorSummary.heading")),
+            errorList = form.errors.map { error =>
+                ErrorLink(
+                    href = Some("#govuk-radios__item")
+                    content = Text(messages(common.errorSummary.heading))
+                )
+            }
+        ))
+    }
 
   @formWithCSRF(action = controllers.routes.OutstandingInvoicesController.submit, 'novalidate -> "novalidate") {
 
-    <div id="@yesNo" class="form-group">
-      @radioHelper(
-        field = form(yesNo),
-        choices = Seq(
-          yes -> messages("common.yes"),
-          no -> messages("common.no")
-        ),
-        question = messages("outstandingInvoice.title"),
-        inline = true
-      )
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    @messages("outstandingInvoice.title")
+                </h1>
+            </legend>
+            <div class="govuk-radios govuk-radios--inline">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="outstanding-invoices-yes" name="outstanding-invoices" type="radio" value="yes">
+                    <label class="govuk-label govuk-radios__label" for="outstanding-invoices-yes">
+                        messages("common.yes")
+                    </label>
+                </div>
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="outstanding-invoices-no" name="outstanding-invoices" type="radio" value="no">
+                    <label class="govuk-label govuk-radios__label" for="outstanding-invoices-no">
+                        messages("common.no")
+                    </label>
+                </div>
+            </div>
+
+        </fieldset>
     </div>
 
-    <button class="button" type="submit" id="continue">@messages("common.continue")</button>
+    @govukButton(Button(
+        content = Text(messages("common.continue"))
+    ))
   }
 }

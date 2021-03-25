@@ -62,6 +62,7 @@ trait AppConfig {
   val timeoutPeriod: Int
   val timeoutCountdown: Int
   val contactPreferencesService: String
+  val contactFormServiceIdentifier: String
 
   def contactPreferencesUrl(vrn: String): String
 
@@ -70,6 +71,11 @@ trait AppConfig {
   val routeToSwitchLanguage: String => Call
 
   val gtmContainer: String
+
+  val footerCookiesUrl: String
+  val footerPrivacyUrl: String
+  val footerTermsConditionsUrl: String
+  val footerHelpUrl: String
 }
 
 @Singleton
@@ -79,7 +85,7 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   lazy val appName: String = servicesConfig.getString("appName")
 
   private val contactHost = servicesConfig.getString(Keys.contactFrontendService)
-  private val contactFormServiceIdentifier = "VATC"
+  override lazy val contactFormServiceIdentifier = "VATC"
 
   override lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
@@ -191,4 +197,9 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   = accessibilityStatementHost + servicesConfig.getString(Keys.accessibilityStatementUrl)
 
   override val gtmContainer: String = servicesConfig.getString(Keys.gtmContainer)
+
+  override val footerCookiesUrl: String = servicesConfig.getString(ConfigKeys.footerCookiesUrl)
+  override val footerPrivacyUrl: String = servicesConfig.getString(ConfigKeys.footerPrivacyUrl)
+  override val footerTermsConditionsUrl: String = servicesConfig.getString(ConfigKeys.footerTermsConditionsUrl)
+  override val footerHelpUrl: String = servicesConfig.getString(ConfigKeys.footerHelpUrl)
 }

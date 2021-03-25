@@ -15,43 +15,102 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.layouts.Article
-@import views.utils.ServiceNameUtil.generateHeader
-@import uk.gov.hmrc.play.views.html.layouts.Sidebar
+@import uk.gov.hmrc.hmrcfrontend.views.Aliases.{LanguageSelect, ReportTechnicalIssue}
+@import views.utils.ServiceNameUtil
+@import views.components.FooterLinks
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.header.Header
 
 
-@this(govukWrapper: GovukWrapper, article: Article, sidebar: Sidebar)
+@this(govukLayout: GovukLayout,
+      govukHeader: GovukHeader,
+      govukPhaseBanner: GovukPhaseBanner,
+      hmrcReportTechnicalIssue: HmrcReportTechnicalIssue,
+      hmrcLanguageSelect: HmrcLanguageSelect,
+      hmrcTimeoutDialog: HmrcTimeoutDialog,
+      footerLinks: FooterLinks)
 
-@(title: String,
-    sidebarLinks: Option[Html] = None,
-    contentHeader: Option[Html] = None,
-    bodyClasses: Option[String] = None,
-    mainClass: Option[String] = None,
-    scriptElem: Option[Html] = None,
+@(pageTitle: String,
     appConfig: config.AppConfig,
     serviceName: Option[String] = None,
     showSignOut: Boolean = true,
     feedbackOnSignOut: Boolean = true
 )(mainContent: Html)(implicit request : Request[_], messages: Messages)
 
-
-@sidebarContent = {
-    @if(sidebarLinks.isDefined) {
-        @sidebar(sidebarLinks.get, Some("sidebar"))
+@navTitle = @{
+    serviceName.fold{
+        ServiceNameUtil.generateHeader
+    }{
+        name => name
     }
 }
 
-@serviceInfoContent = {}
+@scripts = {
 
-@govukWrapper(appConfig = appConfig,
-              title = messages("common.pageTitle", title, generateHeader),
-              mainClass = mainClass,
-              bodyClasses = bodyClasses,
-              sidebar = sidebarContent,
-              contentHeader = contentHeader,
-              mainBody = article(mainContent),
-              serviceInfoContent = serviceInfoContent,
-              scriptElem = scriptElem,
-              feedbackOnSignOut = feedbackOnSignOut,
-              serviceName = serviceName,
-              showSignOut = showSignOut
-)
+    <script src='@routes.Assets.at("lib/govuk-frontend/govuk/all.js")'></script>
+    <script src='@routes.Assets.at("lib/hmrc-frontend/hmrc/all.js")'></script>
+
+    <script type="text/javascript" src='@routes.Assets.at("javascript/vddfe-v1.js")'></script>
+
+    <script>window.GOVUKFrontend.initAll();</script>
+    <script>window.HMRCFrontend.initAll();</script>
+}
+
+@phaseBannerContent = {
+    @messages("banner.phaseName")
+    @messages("banner.newService")
+    <a id="beta-banner-feedback" href="@appConfig.feedbackUrl(request.uri)">
+        @messages("banner.feedback")
+    </a>
+    @messages("banner.feedbackImprove")
+}
+
+@beforeContentHtml = {
+    @govukPhaseBanner(PhaseBanner(
+        tag = Some(Tag(content = Text(messages("banner.phaseName")))),
+        content = HtmlContent(phaseBannerContent)
+    ))
+    @hmrcLanguageSelect(LanguageSelect(
+        language = if(messages.lang.language == "en") En else Cy,
+        languageLinks =
+            En -> appConfig.routeToSwitchLanguage("english").url,
+            Cy -> appConfig.routeToSwitchLanguage("cymraeg").url
+    ))
+}
+
+@head = {
+    <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/application.css")' media="all">
+}
+
+@header = @{
+    govukHeader(Header(
+        serviceName = Some(navTitle),
+        navigation =
+            if(showSignOut)
+                Some(Seq(HeaderNavigation(
+                    text = Some(messages("base.signOut")),
+                    href = Some(routes.SignOutController.signOut(feedbackOnSignOut).url)
+                )))
+            else None
+    ))
+}
+
+@getHelpHtml = @{hmrcReportTechnicalIssue(ReportTechnicalIssue(
+    serviceCode = appConfig.contactFormServiceIdentifier,
+    language = Some(messages.lang.language)
+))}
+
+@fullContent = {
+    <div id="content" class="govuk-!-margin-bottom-6">
+        @mainContent
+    </div>
+    @getHelpHtml
+}
+
+@govukLayout(
+    pageTitle = Some(messages("base.pageTitle", pageTitle, navTitle)),
+    headBlock = Some(head),
+    headerBlock = Some(header),
+    beforeContentBlock = Some(beforeContentHtml),
+    footerItems = footerLinks.items,
+    scriptsBlock = Some(scripts)
+    )(fullContent)

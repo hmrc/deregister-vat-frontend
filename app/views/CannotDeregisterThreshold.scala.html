@@ -14,32 +14,33 @@
  * limitations under the License.
  *@
 
-@import templates.Headings
+@import views.html.MainTemplate
 
-@this(mainTemplate: MainTemplate, headings: Headings)
+@this(mainTemplate: MainTemplate)
 
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(
-    title = messages("cannotDeregister.title"),
-    bodyClasses = None,
-    appConfig = appConfig) {
+@mainTemplate(pageTitle = messages("cannotDeregister.title")) {
 
-    <a class="link-back" href="@controllers.routes.NextTaxableTurnoverController.show().url">@messages("common.back")</a>
+    <div class="govuk-width-container">
+        <a href="@controllers.routes.NextTaxableTurnoverController.show().url" class="govuk-back-link">Back</a>
 
+        <main class="govuk-main-wrapper">
 
-    <div class="form-group">
-        @headings(messages("cannotDeregister.title"))
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">@messages("cannotDeregister.title")</h1>
+                    <p class="govuk-body">@messages("cannotDeregister.text")</p>
+                    <p class="govuk-body">
+                        @messages("cannotDeregister.link.text")
+                        <a href="@appConfig.manageVatSubscriptionFrontendUrl" class="govuk-link">
+                            @messages("cannotDeregister.link")
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+        </main>
     </div>
-
-    <p>@messages("cannotDeregister.text", appConfig.deregThreshold)</p>
-
-    <p>@messages("cannotDeregister.link.text")
-        <a href="@appConfig.manageVatSubscriptionFrontendUrl">
-        @messages("cannotDeregister.link")
-        </a>
-    </p>
-
-
 
 }

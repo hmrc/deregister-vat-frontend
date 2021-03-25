@@ -15,52 +15,81 @@
  *@
 
 @import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import views.html.templates.inputs.Text
-@import views.html.templates.inputs.YesNoRevealHelper
-@import templates.Headings
-@import forms.YesNoForm._
-@import views.utils.TitleUtil.title
+@import views.html.MainTemplate
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, yesNoRevealHelper: YesNoRevealHelper, text: Text, headings: Headings, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
 
 @(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@questionContent = {
-  @headings(messages("capitalAssets.title"))
+@mainTemplate(pageTitle = title(messages("capitalAssets.title"), form)) {
 
-  <p>@messages("capitalAssets.text.1")</p>
-}
-
-@mainTemplate(title = title(messages("capitalAssets.title"), form), appConfig = appConfig) {
-
-  <a class="link-back" href="@controllers.routes.OptionTaxController.show().url">@messages("common.back")</a>
+    @govukBackLink(BackLink(
+        href = "@controllers.routes.OptionTaxController.show().url"
+        content = Text(messages("common.back"))
+    ))
 
   @errorSummary("common.errorSummary.heading", form)
 
+    @if(form.hasErrors) {
+        @govukErrorSummary(ErrorSummary(
+            title = Text(messages("common.errorSummary.heading")),
+            errorList = form.errors.map { error =>
+                ErrorLink(
+                    href = Some("#option-tax")
+                    content = Text(messages(error.message))
+                )
+            }
+        ))
+    }
+
   @formWithCSRF(action = controllers.routes.CapitalAssetsController.submit, 'novalidate -> "novalidate") {
 
-    <div id="@yesNo" class="form-group">
-      @yesNoRevealHelper(
-        field = form(yesNo),
-        choices = Seq(
-          yes -> messages("common.yes"),
-          no -> messages("common.no")
-        ),
-        question = messages("capitalAssets.title"),
-        additionalContent = Some(questionContent),
-        hiddenContent = text(
-          field = form("amount"),
-          label = messages("capitalAssets.totalSaleValue"),
-          labelHidden = false,
-          isMonetaryField = true
-        ),
-        legendAsHeader = false,
-        hiddenContentError = form("amount").hasErrors
-      )
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="capital-assets-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    @messages("capitalAssets.title")
+                </h1>
+            </legend>
+            <div id="option-tax-hint" class="govuk-hint">
+                @messages("capitalAssets.text.1")
+            </div>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="capital-assets" name="capital-assets" type="radio" value="yes" data-aria-controls="conditional-yes">
+                    <label class="govuk-label govuk-radios__label" for="capital-assets">
+                        @messages("common.yes")
+                    </label>
+                </div>
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-yes">
+                    <div class="govuk-form-group">
+                        <label class="govuk-label" for="answer-yes">
+                            <div class="govuk-form-group">
+                                <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--l" for="value">
+                                    @messages("capitalAssets.totalSaleValue")
+                                </label>
+                                </h1>
+                                <div class="govuk-input__wrapper">
+                                    <div class="govuk-input__prefix" aria-hidden="true">£</div>
+                                    <input class="govuk-input govuk-input--width-5" id="value" name="value" type="text" spellcheck="false">
+                                </div>
+                            </div>
+                        </label>
+                        <input class="govuk-input govuk-!-width-one-third" id="answer-yes" name="answer-yes" type="yes" spellcheck="false"></div>
+
+                </div>
+                <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="capital-assets-2" name="capital-assets" type="radio" value="no" data-aria-controls="capital-assets-2">
+                    <label class="govuk-label govuk-radios__label" for="capital-assets-2">
+                        @messages("common.no")
+                    </label>
+                </div>
+            </div>
+
+        </fieldset>
     </div>
 
-    <button class="button" type ="submit" id="continue">
+    <button class="govuk-button" data-module="govuk-button">
       @messages("common.continue")
     </button>
   }

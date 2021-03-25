@@ -37,27 +37,66 @@
 
   @formWithCSRF(action = controllers.routes.WhyTurnoverBelowController.submit, 'novalidate -> "novalidate") {
 
-    <div class="form-group" id="reason">
-      @checkboxHelper(
-        form = form,
-        choices = Seq(
-          WhyTurnoverBelowModel.lostContract -> messages("whyTurnoverBelow.reason.lostContract"),
-          WhyTurnoverBelowModel.semiRetiring -> messages("whyTurnoverBelow.reason.semiRetiring"),
-          WhyTurnoverBelowModel.moreCompetitors -> messages("whyTurnoverBelow.reason.moreCompetitors"),
-          WhyTurnoverBelowModel.reducedTradingHours -> messages("whyTurnoverBelow.reason.reducedTradingHours"),
-          WhyTurnoverBelowModel.seasonalBusiness -> messages("whyTurnoverBelow.reason.seasonalBusiness"),
-          WhyTurnoverBelowModel.closedPlacesOfBusiness -> messages("whyTurnoverBelow.reason.closedPlacesOfBusiness"),
-          WhyTurnoverBelowModel.turnoverLowerThanExpected -> messages("whyTurnoverBelow.reason.turnoverLowerThanExpected")
-        ),
-        question = messages("whyTurnoverBelow.title", appConfig.deregThreshold),
-        hint = Some(messages("whyTurnoverBelow.text.1")),
-        legendAsHeader = false,
-        additionalContent = Some(questionContent)
-      )
+    <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="why-below-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h1 class="govuk-fieldset__heading">
+                    @messages("whyTurnoverBelow.title")
+                </h1>
+            </legend>
+            <div id="why-below-hint" class="govuk-hint">
+                @messages("whyTurnoverBelow.text.1")
+            </div>
+            <div class="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="why-below" name="why-below" type="checkbox" value="lost-contract">
+                    <label class="govuk-label govuk-checkboxes__label" for="why-below">
+                        @messages("whyTurnoverBelow.reason.lostContract")
+                    </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="why-below-2" name="why-below" type="checkbox" value="semi-retiring">
+                    <label class="govuk-label govuk-checkboxes__label" for="why-below-2">
+                        @messages("whyTurnoverBelow.reason.semiRetiring")
+                    </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="why-below-3" name="why-below" type="checkbox" value="more-competitors">
+                    <label class="govuk-label govuk-checkboxes__label" for="why-below-3">
+                        @messages("whyTurnoverBelow.reason.moreCompetitors")
+                    </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="why-below-4" name="why-below" type="checkbox" value="reduced-hours">
+                    <label class="govuk-label govuk-checkboxes__label" for="why-below-4">
+                        @messages("whyTurnoverBelow.reason.reducedTradingHours")
+                    </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="why-below-5" name="why-below" type="checkbox" value="seasonal">
+                    <label class="govuk-label govuk-checkboxes__label" for="why-below-5">
+                        @messages("whyTurnoverBelow.reason.seasonalBusiness")
+                    </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="why-below-6" name="why-below" type="checkbox" value="closed-places-of-business">
+                    <label class="govuk-label govuk-checkboxes__label" for="why-below-6">
+                        @messages("whyTurnoverBelow.reason.closedPlacesOfBusiness")
+                    </label>
+                </div>
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="why-below-7" name="why-below" type="checkbox" value="turnover-lower">
+                    <label class="govuk-label govuk-checkboxes__label" for="why-below-7">
+                        @messages("whyTurnoverBelow.reason.turnoverLowerThanExpected")
+                    </label>
+                </div>
+            </div>
+
+        </fieldset>
     </div>
 
-    <button class="button" type ="submit" id="continue">
-      @messages("common.continue")
+    <button class="govuk-button" data-module="govuk-button">
+        @messages("common.continue")
     </button>
   }
 }
