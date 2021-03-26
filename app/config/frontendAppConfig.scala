@@ -71,11 +71,6 @@ trait AppConfig {
   val routeToSwitchLanguage: String => Call
 
   val gtmContainer: String
-
-  val footerCookiesUrl: String
-  val footerPrivacyUrl: String
-  val footerTermsConditionsUrl: String
-  val footerHelpUrl: String
 }
 
 @Singleton
@@ -193,13 +188,8 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchLanguage(lang)
 
   private lazy val accessibilityStatementHost: String = servicesConfig.getString(Keys.accessibilityStatementHost)
-  override lazy val accessibilityStatementUrl: String
-  = accessibilityStatementHost + servicesConfig.getString(Keys.accessibilityStatementUrl)
+  override lazy val accessibilityStatementUrl: String =
+    accessibilityStatementHost + servicesConfig.getString(Keys.accessibilityStatementUrl)
 
   override val gtmContainer: String = servicesConfig.getString(Keys.gtmContainer)
-
-  override val footerCookiesUrl: String = servicesConfig.getString(ConfigKeys.footerCookiesUrl)
-  override val footerPrivacyUrl: String = servicesConfig.getString(ConfigKeys.footerPrivacyUrl)
-  override val footerTermsConditionsUrl: String = servicesConfig.getString(ConfigKeys.footerTermsConditionsUrl)
-  override val footerHelpUrl: String = servicesConfig.getString(ConfigKeys.footerHelpUrl)
 }

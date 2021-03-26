@@ -20,11 +20,11 @@
 
 @mainTemplate(pageTitle = Messages("sessionTimeout.title"), showSignOut = false) {
 
-    <h1 class="govuk-heading-l">@messages("sessionTimeout.title")</h1>
+  <h1 class="govuk-heading-l">@messages("sessionTimeout.title")</h1>
 
   <p class="govuk-body">
-      @messages("sessionTimeout.helpOne")
-      <a class="govuk-link" href=@appConfig.signInUrl>@messages("sessionTimeout.helpTwo")</a>
-      @messages("sessionTimeout.helpThree")
+    @messages("sessionTimeout.helpOne")
+    <a class="govuk-link" href=@appConfig.signInUrl>@messages("sessionTimeout.helpTwo")</a>
+    @messages("sessionTimeout.helpThree")
   </p>
 }

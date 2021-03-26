@@ -14,25 +14,22 @@
  * limitations under the License.
  *@
 
-@import views.html.MainTemplate
-
 @this(mainTemplate: MainTemplate, govukButton: GovukButton)
 
 @()(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(pageTitle = messages("unauthorised.client.title")) {
+@mainTemplate(pageTitle = messages("unauthorised.client.title"), feedbackOnSignOut = false) {
 
-    <h1 class="govuk-heading-l">@messages("unauthorised.client.title")</h1>
+  <h1 class="govuk-heading-l">@messages("unauthorised.client.title")</h1>
 
-    <p class="govuk-body">
-        @messages("unauthorised.client.useThisService")
+  <p class="govuk-body">
+    @messages("unauthorised.client.useThisService")
+    <a class="govuk-link" href="@appConfig.clientServicesGovUkGuidance">
+    @messages("unauthorised.client.signUp")</a>@messages("common.fullStop")
+  </p>
 
-        <a class="govuk-link" href="@appConfig.clientServicesGovUkGuidance">
-            @messages("unauthorised.client.signUp")</a>@messages("common.fullStop")
-    </p>
-
-    @govukButton(Button(
-        href = Some(routes.SignOutController.signOut(authorised = false).url),
-        content = Text(messages("base.sign-out"))
-    ))
+  @govukButton(Button(
+    href = Some(routes.SignOutController.signOut(authorised = false).url),
+    content = Text(messages("base.sign-out"))
+  ))
 }

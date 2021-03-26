@@ -14,81 +14,39 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.MainTemplate
+@import views.html.templates.errors.ErrorSummaryHelper
+@import views.html.templates.inputs.YesNoRevealHelper
+@import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, headings: Headings, errorSummary: ErrorSummary, yesNoRevealHelper: YesNoRevealHelper, text: Text, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      yesNoRevealHelper: YesNoRevealHelper,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      errorSummaryHelper: ErrorSummaryHelper,
+      govukButton: GovukButton)
 
 @(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @mainTemplate(pageTitle = title(messages("optionOwnsStockToSell.title"), form)) {
 
-    @govukBackLink(BackLink(
-        href = "@controllers.routes.CapitalAssetsController.show().url"
-        content = Text(messages("common.back"))
+  @govukBackLink(BackLink(
+    href = controllers.routes.CapitalAssetsController.show().url,
+    content = Text(messages("common.back"))
+  ))
+
+  @errorSummaryHelper(form)
+
+  @formWithCSRF(action = controllers.routes.OptionStocksToSellController.submit) {
+
+    @yesNoRevealHelper(
+      form = form,
+      title = "optionOwnsStockToSell.title",
+      hintText = "optionOwnsStockToSell.text.1",
+      currencyLabelText = "optionOwnsStockToSell.hint"
+    )
+
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
     ))
-
-    @if(form.hasErrors) {
-        @govukErrorSummary(ErrorSummary(
-            title = Text(messages("common.errorSummary.heading")),
-            errorList = form.errors.map { error =>
-                ErrorLink(
-                    href = Some("#option-tax")
-                    content = Text(messages(error.message))
-                )
-            }
-        ))
-    }
-
-  @formWithCSRF(action = controllers.routes.OptionStocksToSellController.submit, 'novalidate -> "novalidate") {
-
-    <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset" aria-describedby="stocks-hint">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">
-                    @messages("optionOwnsStockToSell.title")
-                </h1>
-            </legend>
-            <div id="stocks-hint" class="govuk-hint">
-                @messages("optionOwnsStockToSell.text.1")
-            </div>
-            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-                <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="stocks" name="stocks" type="radio" value="yes" data-aria-controls="conditional-yes">
-                    <label class="govuk-label govuk-radios__label" for="stocks">
-                        @messages("common.yes")
-                    </label>
-                </div>
-                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-yes">
-                    <div class="govuk-form-group">
-                        <label class="govuk-label" for="answer-yes">
-                            <div class="govuk-form-group">
-                                <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--l" for="value">
-                                    @messages("optionOwnsStockToSell.hint")
-                                </label>
-                                </h1>
-                                <div class="govuk-input__wrapper">
-                                    <div class="govuk-input__prefix" aria-hidden="true">£</div>
-                                    <input class="govuk-input govuk-input--width-5" id="value" name="value" type="text" spellcheck="false">
-                                </div>
-                            </div>
-                        </label>
-                        <input class="govuk-input govuk-!-width-one-third" id="answer-yes" name="answer-yes" type="yes" spellcheck="false"></div>
-
-                </div>
-                <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="stocks-2" name="stocks" type="radio" value="no" data-aria-controls="stocks-2">
-                    <label class="govuk-label govuk-radios__label" for="stocks-2">
-                        @messages("common.no")
-                    </label>
-                </div>
-            </div>
-
-        </fieldset>
-    </div>
-
-    <button class="govuk-button" data-module="govuk-button">
-      @messages("common.continue")
-    </button>
   }
 }

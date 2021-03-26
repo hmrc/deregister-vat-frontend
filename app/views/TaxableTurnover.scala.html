@@ -14,60 +14,43 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.MainTemplate
+@import views.html.templates.inputs.YesNoHelper
+@import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      govukErrorSummary: GovukErrorSummary,
+      govukButton: GovukButton,
+      yesNoHelper: YesNoHelper)
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @mainTemplate(pageTitle = title(messages("taxableTurnover.title", appConfig.deregThreshold), form)) {
 
-    @govukBackLink(BackLink(
-        href = "@controllers.routes.DeregistrationReasonController.show().url",
-        content = Text(messages("common.back"))
+  @govukBackLink(BackLink(
+    href = controllers.routes.DeregistrationReasonController.show().url,
+    content = Text(messages("common.back"))
+  ))
+
+  @if(form.hasErrors) {
+    @govukErrorSummary(ErrorSummary(
+      title = Text(messages("common.errorSummary.heading")),
+      errorList = form.errors.map { error =>
+        ErrorLink(
+          href = Some(s"#${error.key}"),
+          content = Text(messages(error.message, appConfig.deregThreshold))
+        )
+      }
     ))
+  }
 
-    @if(form.hasErrors) {
-        @govukErrorSummary(ErrorSummary(
-            title = Text(messages("common.errorSummary.heading")),
-            errorList = form.errors.map { error =>
-                ErrorLink(
-                    href = Some("#turnover-threshold")
-                    content = Text(messages(common.errorSummary.heading))
-                )
-            }
-        ))
-    }
+  @formWithCSRF(action = controllers.routes.TaxableTurnoverController.submit) {
 
-    @formWithCSRF(action = controllers.routes.TaxableTurnoverController.submit, 'novalidate -> "novalidate") {
+    @yesNoHelper(form = form, title = messages("taxableTurnover.title", appConfig.deregThreshold))
 
-    <div class="govuk-form-group">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            <h1 class="govuk-fieldset__heading">
-                @messages("taxableTurnover.title", appConfig.deregThreshold)
-            </h1>
-        </legend>
-        <div class="govuk-radios govuk-radios--inline">
-            <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="turnover-threshold" name="turnover-threshold" type="radio" value="yes">
-                <label class="govuk-label govuk-radios__label" for="turnover-threshold">
-                    @messages("common.yes")
-                </label>
-            </div>
-            <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="turnover-threshold-2" name="turnover-threshold" type="radio" value="no">
-                <label class="govuk-label govuk-radios__label" for="turnover-threshold-2">
-                    @messages("common.no")
-                </label>
-            </div>
-        </div>
-
-    </div>
-
-    <button class="govuk-button" data-module="govuk-button">
-        @messages("common.continue")
-    </button>
-    }
-
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
+  }
 }

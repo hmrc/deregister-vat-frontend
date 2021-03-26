@@ -194,7 +194,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
           post("/choose-cancel-vat-date")(Map("yes_no" -> Seq(""))) should have(
             httpStatus(BAD_REQUEST),
             pageTitle("Error: Do you want to choose the cancellation date?" + titleSuffix),
-            elementText(".error-message")("Error: Select yes if the business wants to choose the cancellation date")
+            elementText(".govuk-error-message")("Error: Select yes if the business wants to choose the cancellation date")
           )
         }
       }

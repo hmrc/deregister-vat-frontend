@@ -70,7 +70,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
           }
 
           "have the 'Yes' radio option checked" in {
-            document(result).select(s"#$yesNo-yes").hasAttr("checked") shouldBe true
+            document(result).select(s"#$yesNo").hasAttr("checked") shouldBe true
           }
         }
 

@@ -14,49 +14,35 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import views.html.MainTemplate
+@import views.html.templates.errors.ErrorSummaryHelper
+@import views.html.templates.inputs.CurrencyInputHelper
+@import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF, govukButton: GovukButton)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukButton: GovukButton,
+      govukBackLink: GovukBackLink,
+      errorSummaryHelper: ErrorSummaryHelper,
+      currencyInputHelper: CurrencyInputHelper)
 
 @(form: Form[NumberInputModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @mainTemplate(pageTitle = title(messages("zeroRatedSupplies.title"), form)) {
 
-    @govukBackLink(BackLink(
-        href = "@controllers.routes.NextTaxableTurnoverController.show().url",
-        content = Text(messages("common.back"))
+  @govukBackLink(BackLink(
+    href = controllers.routes.NextTaxableTurnoverController.show().url,
+    content = Text(messages("common.back"))
+  ))
+
+  @errorSummaryHelper(form)
+
+  @formWithCSRF(action = controllers.zeroRated.routes.ZeroRatedSuppliesController.submit) {
+
+    @currencyInputHelper(form = form, title = "zeroRatedSupplies.title")
+
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
     ))
-
-    @if(form.hasErrors) {
-        @govukErrorSummary(ErrorSummary(
-            title = Text(messages("common.errorSummary.heading")),
-            errorList = form.errors.map { error =>
-                ErrorLink(
-                    href = Some("#value")
-                    content = Text(messages(error.message))
-                )
-            }
-        ))
-    }
-
-@formWithCSRF(action = controllers.zeroRated.routes.ZeroRatedSuppliesController.submit, 'novalidate -> "novalidate") {
-
-    <div class="govuk-form-group">
-        <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--l" for="value">
-            @messages("zeroRatedSupplies.title")
-            </label>
-        </h1>
-        <div class="govuk-input__wrapper">
-            <div class="govuk-input__prefix" aria-hidden="true">£</div>
-            <input class="govuk-input govuk-input--width-5" id="value" name="value" type="text" spellcheck="false">
-        </div>
-    </div>
-
-    <button class="govuk-button" data-module="govuk-button">
-        @messages("common.continue")
-    </button>
   }
 }
 

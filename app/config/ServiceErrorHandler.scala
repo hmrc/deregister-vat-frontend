@@ -25,13 +25,12 @@ import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.errors.StandardError
 
 class ServiceErrorHandler @Inject()(standardError: StandardError,
-                                     val messagesApi: MessagesApi,
-                                    appConfig: AppConfig
-                                    ) extends FrontendErrorHandler {
+                                    val messagesApi: MessagesApi,
+                                    implicit val appConfig: AppConfig) extends FrontendErrorHandler {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)
                                     (implicit request: Request[_]): Html = {
-    standardError(appConfig, pageTitle, heading, message)
+    standardError(pageTitle, heading, message)
   }
 
   def showInternalServerError(implicit request: Request[_]): Result = InternalServerError(internalServerErrorTemplate)

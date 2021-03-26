@@ -14,44 +14,27 @@
  * limitations under the License.
  *@
 
-@import views.html.MainTemplate
-
-@this(mainTemplate: MainTemplate)
+@this(mainTemplate: MainTemplate, govukBackLink: GovukBackLink, govukButton: GovukButton)
 
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-
-@backLink = if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
 @mainTemplate(pageTitle = messages("deregisterForVAT.title")) {
 
-    @govukBackLink(BackLink(
-        href = if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
-        content = Text(messages("common.back"))
-    ))
+  @govukBackLink(BackLink(
+    href = if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl,
+    content = Text(messages("common.back"))
+  ))
 
-    <div class="govuk-width-container">
-        <a href=backLink class="govuk-back-link">Back</a>
+  <h1 class="govuk-heading-l">@messages("deregisterForVAT.title")</h1>
+  <p class="govuk-body">@messages("deregisterForVAT.p1")</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>@messages("deregisterForVAT.bullet1")</li>
+    <li>@messages("deregisterForVAT.bullet2")</li>
+  </ul>
+  <p class="govuk-body">@messages("deregisterForVAT.p2")</p>
 
-        <main class="govuk-main-wrapper">
-
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    <h1 class="govuk-heading-xl">@messages("deregisterForVAT.title")</h1>
-                    <p class="govuk-body">@messages("deregisterForVAT.p1")</p>
-                    <ul class="govuk-list govuk-list--bullet">
-                        <li>@messages("deregisterForVAT.bullet1")</li>
-                        <li>@messages("deregisterForVAT.bullet2")</li>
-                    </ul>
-                    <p class="govuk-body">@messages("deregisterForVAT.p2")</p>
-                </div>
-            </div>
-
-        </main>
-    </div>
-
-    @govukButton(Button(
-        href = Some(routes.DeregistrationReasonController.show().url),
-        content = Text(messages("common.continue"))
-    ))
-
+  @govukButton(Button(
+    href = Some(routes.DeregistrationReasonController.show().url),
+    content = Text(messages("common.continue"))
+  ))
 }

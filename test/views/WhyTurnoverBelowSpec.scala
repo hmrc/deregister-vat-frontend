@@ -30,13 +30,13 @@ class WhyTurnoverBelowSpec extends ViewBaseSpec {
   "Rendering the Why is the Turnover Below page" when {
 
     object Selectors {
-      val back = ".link-back"
+      val back = ".govuk-back-link"
       val pageHeading = "#content h1"
-      val text1 = "#reason > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
-      val checkboxOption: Int => String = (number: Int) => s"fieldset > div > div:nth-of-type($number) > label"
-      val button = ".button"
-      val errorHeading = "#error-summary-display"
-      val error = ".error-message"
+      val text1 = ".govuk-hint"
+      val checkboxOption: Int => String = (number: Int) => s".govuk-checkboxes__item:nth-of-type($number) > label"
+      val button = ".govuk-button"
+      val errorHeading = ".govuk-error-summary"
+      val error = ".govuk-error-message"
     }
 
     "has no errors" should {

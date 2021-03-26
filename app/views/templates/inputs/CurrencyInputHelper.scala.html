@@ -14,14 +14,24 @@
  * limitations under the License.
  *@
 
-@this()
+@this(govukInput: GovukInput)
 
-@(field: play.api.data.Field, label: String, formClass: String, hasErrors: Boolean)
+@(form: Form[NumberInputModel], title: String)(implicit messages: Messages)
 
-<label for="@field.name" class="form-group form-group-@formClass date-entry-label-margin">
-
-    <span>@label</span>
-
-    <input class="form-control input--xsmall input--no-spinner @if(hasErrors){error-field}" name="@field.name" id="@field.name" value="@field.value"/>
-
-</label>
+@govukInput(Input(
+  id = "amount",
+  name = "amount",
+  classes = "govuk-!-width-one-half",
+  value = form("amount").value,
+  label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--l",
+    content = Text(messages(title))
+  ),
+  prefix = Some(PrefixOrSuffix(
+    content = Text("£")
+  )),
+  errorMessage = form("amount").error.map { error =>
+    ErrorMessage(content = Text(messages(error.message)))
+  }
+))

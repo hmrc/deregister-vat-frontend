@@ -14,74 +14,73 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.MainTemplate
+@import views.html.templates.errors.ErrorSummaryHelper
+@import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      errorSummaryHelper: ErrorSummaryHelper,
+      govukButton: GovukButton,
+      govukRadios: GovukRadios)
 
 @(backLink: String, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
+@questionContent = {
+  <div id="vat-accounts-hint" class="govuk-hint">
+    <p class="govuk-body">@messages("vatAccounts.showMeAnExample.p1")</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>@messages("vatAccounts.showMeAnExample.bullet1")</li>
+      <li>@messages("vatAccounts.showMeAnExample.bullet2")</li>
+    </ul>
+  </div>
+}
+
 @mainTemplate(pageTitle = title(messages("vatAccounts.title"), form)) {
 
-    @govukBackLink(BackLink(
-        href = backLink
-        content = Text(messages("common.back"))
+  @govukBackLink(BackLink(
+    href = backLink,
+    content = Text(messages("common.back"))
+  ))
+
+  @errorSummaryHelper(form)
+
+  @formWithCSRF(action = controllers.routes.VATAccountsController.submit) {
+
+    @govukRadios(Radios(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(messages("vatAccounts.title")),
+          classes = "govuk-fieldset__legend--l",
+          isPageHeading = true
+        ))
+      )),
+      idPrefix = Some(form("accountingMethod").id),
+      name = "accountingMethod",
+      hint = Some(Hint(
+        content = HtmlContent(questionContent)
+      )),
+      items = Seq(
+        RadioItem(
+          content = Text(messages("vatAccounts.method.standard")),
+          hint = Some(Hint(content = Text(messages("vatAccounts.description.standard")))),
+          value = Some(StandardAccounting.value),
+          checked = form("accountingMethod").value.contains(StandardAccounting.value)
+        ),
+        RadioItem(
+          content = Text(messages("vatAccounts.method.cash")),
+          hint = Some(Hint(content = Text(messages("vatAccounts.description.cash")))),
+          value = Some(CashAccounting.value),
+          checked = form("accountingMethod").value.contains(CashAccounting.value)
+        )
+      ),
+      errorMessage = form("accountingMethod").error.map { err =>
+        ErrorMessage(content = Text(messages(err.message)))
+      }
     ))
 
-    @if(form.hasErrors) {
-        @govukErrorSummary(ErrorSummary(
-            title = Text(messages("common.errorSummary.heading")),
-            errorList = form.errors.map { error =>
-                ErrorLink(
-                    href = Some("#vat-accounts")
-                    content = Text(messages(error.message))
-                )
-            }
-        ))
-    }
-
-  @formWithCSRF(action = controllers.routes.VATAccountsController.submit, 'novalidate -> "novalidate") {
-
-    <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset" aria-describedby="vat-accounts-hint">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">
-                    @messages("vatAccounts.title")
-                </h1>
-            </legend>
-            <div id="vat-accounts-hint" class="govuk-hint">
-                <p class="govuk-body">@messages("vatAccounts.showMeAnExample.p1")</p>
-                <ul class="govuk-list govuk-list--bullet">
-                    <li>@messages("vatAccounts.showMeAnExample.bullet1")</li>
-                    <li>@messages("vatAccounts.showMeAnExample.bullet2")</li>
-                </ul>
-            </div>
-            <div class="govuk-radios">
-                <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="vat-accounts" name="vat-accounts" type="radio" value="government-gateway" aria-describedby="vat-accounts-item-hint">
-                    <label class="govuk-label govuk-radios__label" for="vat-accounts">
-                        @messages("vatAccounts.method.standard")
-                    </label>
-                    <div id="vat-accounts-item-hint" class="govuk-hint govuk-radios__hint">
-                        @messages("vatAccounts.description.standard")
-                    </div>
-                </div>
-                <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="vat-accounts-2" name="vat-accounts" type="radio" value="govuk-verify" aria-describedby="vat-accounts-2-item-hint">
-                    <label class="govuk-label govuk-radios__label" for="vat-accounts-2">
-                        @messages("vatAccounts.method.cash")
-                    </label>
-                    <div id="vat-accounts-2-item-hint" class="govuk-hint govuk-radios__hint">
-                        @messages("vatAccounts.description.cash")
-                    </div>
-                </div>
-            </div>
-
-        </fieldset>
-    </div>
-
-    <button class="govuk-button" data-module="govuk-button">
-        @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }

@@ -14,42 +14,56 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import templates.Headings
-@import templates.inputs.Text
-@import views.utils.TitleUtil._
+@import views.html.templates.errors.ErrorSummaryHelper
+@import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, headings: Headings, errorSummary: ErrorSummary, text: Text, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      govukButton: GovukButton,
+      govukInput: GovukInput,
+      errorSummaryHelper: ErrorSummaryHelper)
 
 @(form: Form[String])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @questionContent = {
-  @headings(messages("sicCode.title"))
-
-  <p>@messages("sicCode.explanation")</p>
-
-  <p><a id="find-sic-code" href="@{appConfig.govUkFindSicCode}" target="_blank">@messages("sicCode.find")</a></p>
+  <p class="govuk-body">@messages("sicCode.explanation")</p>
+  <p class="govuk-body"><a class="govuk-link" id="find-sic-code" href="@{appConfig.govUkFindSicCode}" target="_blank">
+    @messages("sicCode.find")
+  </a></p>
 }
 
-@mainTemplate(title = title(messages("sicCode.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("sicCode.title"), form)) {
 
-  <a class="link-back" href="@controllers.zeroRated.routes.BusinessActivityController.show().url">@messages("common.back")</a>
+  @govukBackLink(BackLink(
+    href = controllers.zeroRated.routes.BusinessActivityController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-  @errorSummary("common.errorSummary.heading", form)
+  @errorSummaryHelper(form)
 
-  @formWithCSRF(action = controllers.zeroRated.routes.SicCodeController.submit, 'novalidate -> "novalidate") {
+  @formWithCSRF(action = controllers.zeroRated.routes.SicCodeController.submit) {
 
-    <div class="form-group">
-      @text(
-        field = form("value"),
-        label = messages("sicCode.title"),
-        additionalContent = Some(questionContent)
-      )
-    </div>
+    @govukInput(Input(
+      id = "value",
+      name = "value",
+      classes = "govuk-!-width-one-half",
+      value = form("value").value,
+      label = Label(
+        isPageHeading = true,
+        classes = "govuk-label--l",
+        content = Text(messages("sicCode.title"))
+      ),
+      hint = Some(Hint(
+        content = HtmlContent(questionContent)
+      )),
+      errorMessage = form("value").error.map { error =>
+        ErrorMessage(content = Text(messages(error.message)))
+      }
+    ))
 
-    <button class="button" type="submit" id="continue">
-      @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }

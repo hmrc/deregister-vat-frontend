@@ -27,15 +27,14 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
   lazy val nextTaxableTurnover: NextTaxableTurnover = injector.instanceOf[NextTaxableTurnover]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-
-    val button = ".button"
-    val errorHeading = "#error-summary-display"
-    val error = "#amount-error-summary"
+    val button = ".govuk-button"
+    val errorHeading = ".govuk-error-summary"
+    val error = ".govuk-error-message"
   }
 
-  val backLink = controllers.routes.TaxableTurnoverController.show().url
+  val backLink: String = controllers.routes.TaxableTurnoverController.show().url
 
   "Rendering the option to tax page with no errors" should {
 
@@ -106,7 +105,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${NextTaxableTurnoverMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${NextTaxableTurnoverMessages.title}"
     }
 
     "have the correct back text" in {
@@ -127,8 +126,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe NextTaxableTurnoverMessages.mandatory
+      elementText(Selectors.error) shouldBe s"${CommonMessages.errorPrefix} ${NextTaxableTurnoverMessages.mandatory}"
     }
   }
-
 }

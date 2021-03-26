@@ -80,7 +80,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
         }
 
         "have the 'No' radio option checked" in {
-          document(result).select(s"#$yesNo-no").hasAttr("checked") shouldBe true
+          document(result).select(s"#$yesNo-2").hasAttr("checked") shouldBe true
         }
       }
 

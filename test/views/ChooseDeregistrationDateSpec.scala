@@ -28,16 +28,16 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
   lazy val chooseDeregistrationDate: ChooseDeregistrationDate = injector.instanceOf[ChooseDeregistrationDate]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
     val hint = ".form-hint"
-    val button = ".button"
+    val button = ".govuk-button"
     val yesNoRadio = "#yes_no"
     val yesOption = "#yes_no-yes"
     val noOption = "#yes_no-no"
     val yesLabel = "#reason > div > fieldset > div.inline.form-group > div:nth-child(1) > label"
     val noLabel = "#reason > div > fieldset > div.inline.form-group > div:nth-child(1) > label"
-    val hiddenForm = "#hiddenContent"
+    val hiddenForm = "#conditional-yes_no"
     val dayField = "#dateDay"
     val monthField = "#dateMonth"
     val yearField = "#dateYear"
@@ -45,11 +45,10 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     val dayText = "#date-fieldset > div >label.form-group.form-group-day > span"
     val monthText = "#date-fieldset > div > label.form-group.form-group-month > span"
     val yearText = "#date-fieldset > div> label.form-group.form-group-year > span"
-    val errorHeading = "#error-summary-heading"
+    val errorHeading = ".govuk-error-summary h2"
     val errorInvalidDate = "#date-fieldset-error-summary"
-    val errorField = "#yes_no > div > fieldset > span"
-    val errorYesNo = "#yes_no-error-summary"
-    val errorHiddenField = "#date-fieldset > div > span.error-message"
+    val errorMessage = ".govuk-error-message"
+    val errorLink = ".govuk-error-summary a"
     val errorDay = "#dateDay-error-summary"
     val errorMonth = "#dateMonth-error-summary"
     val errorYear = "#dateYear-error-summary"
@@ -82,7 +81,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have no error message being displayed for the fields" in {
-      document.select(Selectors.errorField).isEmpty shouldBe true
+      document.select(Selectors.errorMessage).isEmpty shouldBe true
     }
   }
 
@@ -117,7 +116,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have no error message being displayed for the fields" in {
-      document.select(Selectors.errorField).isEmpty shouldBe true
+      document.select(Selectors.errorMessage).isEmpty shouldBe true
     }
   }
 
@@ -137,7 +136,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error message being displayed for the fields" in {
-      document.select(Selectors.errorHiddenField).isEmpty shouldBe true
+      document.select(Selectors.errorMessage).isEmpty shouldBe true
     }
   }
 
@@ -148,7 +147,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ChooseDeregistrationDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${ChooseDeregistrationDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -156,12 +155,12 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     }
 
     "have an error for each missing field linking to the correct field" in {
-      elementText(Selectors.errorYesNo) shouldBe ChooseDeregistrationDateMessages.yesNoError
-      element(Selectors.errorYesNo).attr("href") shouldBe Selectors.yesNoRadio
+      elementText(Selectors.errorLink) shouldBe ChooseDeregistrationDateMessages.yesNoError
+      element(Selectors.errorLink).attr("href") shouldBe Selectors.yesNoRadio
     }
 
     "have an error message being displayed for the fields" in {
-      elementText(Selectors.errorField) shouldBe s"${CommonMessages.errorPrefix} ${ChooseDeregistrationDateMessages.yesNoError}"
+      elementText(Selectors.errorMessage) shouldBe s"${CommonMessages.errorPrefix} ${ChooseDeregistrationDateMessages.yesNoError}"
     }
   }
 }

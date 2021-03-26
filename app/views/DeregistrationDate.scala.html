@@ -14,46 +14,54 @@
  * limitations under the License.
  *@
 
+@import views.html.templates.inputs.DateHelper
+@import views.utils.DateErrorHelper
 @import views.utils.TitleUtil.title
-@import views.html.templates.errors.ErrorSummary
-@import templates.inputs.Date
-@import uk.gov.hmrc.play.views.html.helpers._
 
-
-@this(mainTemplate: MainTemplate, date: Date, errorSummary: ErrorSummary, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukErrorSummary: GovukErrorSummary,
+      govukBackLink: GovukBackLink,
+      govukButton: GovukButton,
+      dateHelper: DateHelper)
 
 @(form: Form[DateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@additionalContent = {
-    <p>@messages("deregistrationDate.p1")</p>
-    <p>@messages("deregistrationDate.p2")</p>
+@questionContent = {
+  <p class="govuk-body">@messages("deregistrationDate.p1")</p>
+  <p class="govuk-body">@messages("deregistrationDate.p2")</p>
+  <div>@messages("deregistrationDate.hint")</div>
 }
 
-@mainTemplate(
-    title = title(messages("deregistrationDate.title"), form),
-    appConfig = appConfig
-) {
+@mainTemplate(pageTitle = title(messages("deregistrationDate.title"), form)) {
 
-    <a class="link-back" href="@controllers.routes.ChooseDeregistrationDateController.show().url">@messages("common.back")</a>
+  @govukBackLink(BackLink(
+    href = controllers.routes.ChooseDeregistrationDateController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-    @errorSummary("common.errorSummary.heading", form, Some("deregistrationDate"))
+  @if(form.hasErrors) {
+    @govukErrorSummary(ErrorSummary(
+      title = Text(messages("common.errorSummary.heading")),
+      errorList = Seq(ErrorLink(
+        href = Some(DateErrorHelper.dateFieldErrorId(form)),
+        content = Text(messages(DateErrorHelper.errorContent(form, DeregistrationDate)))
+      ))
+    ))
+  }
 
-    @formWithCSRF(action = controllers.routes.DeregistrationDateController.submit, 'novalidate -> "novalidate") {
+  @formWithCSRF(action = controllers.routes.DeregistrationDateController.submit) {
 
-        <div id="deregistrationDate" class="form-group">
+    @dateHelper(
+      form = form,
+      title = "deregistrationDate.title",
+      id = "deregistrationDate",
+      hintContent = questionContent,
+      formVariant = DeregistrationDate
+    )
 
-            @date(
-                form = form,
-                question = messages("deregistrationDate.title"),
-                fieldName = "date",
-                formVariant = DeregistrationDate,
-                hint = Some(messages("deregistrationDate.hint")),
-                additionalContent = Some(additionalContent)
-            )
-        </div>
-
-        <button class="button" type="submit" id="continue">
-            @messages("common.continue")
-        </button>
-    }
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
+  }
 }

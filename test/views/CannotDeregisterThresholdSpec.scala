@@ -29,11 +29,11 @@ class CannotDeregisterThresholdSpec extends ViewBaseSpec {
   "Rendering the Ceased trading date page" should {
 
     object Selectors {
-      val back = ".link-back"
+      val back = ".govuk-back-link"
       val pageHeading = "#content h1"
-      val text = "#content > article > p:nth-child(3)"
-      val linkText = "#content > article > p:nth-child(4)"
-      val link = "#content > article > p:nth-child(4) > a"
+      val text = "#content .govuk-body"
+      val linkText = "#content .govuk-body:nth-of-type(2)"
+      val link = "#content .govuk-link"
     }
 
     lazy val view = cannotDeregisterThreshold()

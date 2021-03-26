@@ -27,13 +27,13 @@ class VATAccountsSpec extends ViewBaseSpec {
   lazy val vatAccounts: VatAccounts = injector.instanceOf[VatAccounts]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val methodOption: Int => String = (number: Int) => s"fieldset > div:nth-of-type($number) > label"
-    val button = ".button"
-    val error = "#accountingMethod-error-summary"
-    val p1 = "#accountingMethod > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
-    val bullet: Int => String = i => s".list > li:nth-child($i)"
+    val methodOption: Int => String = (number: Int) => s".govuk-radios__item:nth-of-type($number)"
+    val button = ".govuk-button"
+    val error = ".govuk-error-message"
+    val p1 = "#content .govuk-body"
+    val bullet: Int => String = i => s".govuk-list > li:nth-of-type($i)"
   }
 
   "Rendering the VAT Accounts page with no errors from the ceased journey" should {
@@ -93,7 +93,7 @@ class VATAccountsSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${VATAccountsMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${VATAccountsMessages.title}"
     }
 
     "have the correct back text" in {
@@ -111,7 +111,7 @@ class VATAccountsSpec extends ViewBaseSpec {
     }
 
     "display the correct error message" in {
-      elementText(Selectors.error) shouldBe VATAccountsMessages.yesNoError
+      elementText(Selectors.error) shouldBe s"${CommonMessages.errorPrefix} ${VATAccountsMessages.yesNoError}"
     }
   }
 }

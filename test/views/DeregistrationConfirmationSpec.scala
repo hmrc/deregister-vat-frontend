@@ -27,13 +27,13 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
   lazy val deregistrationConfirmation: DeregistrationConfirmation = injector.instanceOf[DeregistrationConfirmation]
 
   object Selectors {
-    val pageHeading = "#content > article > div > h1"
-    val subheading = "#content > article > h2"
-    val text = "#content > article > p:nth-child(3)"
-    val text2 = "#content > article > p:nth-child(4)"
-    val button = ".button"
-    val link = "a[href*=\"change-business-details\"]"
-    val changeClientLink = "#content > article > p:nth-child(5) > a"
+    val pageHeading = "#content h1"
+    val subheading = "#content h2"
+    val text = "#content .govuk-body:nth-child(3)"
+    val text2 = "#content .govuk-body:nth-child(4)"
+    val button = ".govuk-button"
+    val link = "#content .govuk-link[href*=\"change-business-details\"]"
+    val changeClientLink = "#content .govuk-body:nth-child(5) > a"
   }
 
   "Rendering the deregistration confirmation page for a non-agent user" when {

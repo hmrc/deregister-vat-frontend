@@ -1,0 +1,50 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.AppConfig
+
+@this(govukRadios: GovukRadios)
+
+@(form: Form[YesNo], title: String, additionalContent: Option[Html] = None)(implicit messages: Messages, appConfig: AppConfig)
+
+@govukRadios(Radios(
+  idPrefix = Some(form("yes_no").id),
+  classes = "govuk-radios--inline",
+  name = "yes_no",
+  fieldset = Some(Fieldset(
+    legend = Some(Legend(
+      content = Text(title),
+      isPageHeading = true,
+      classes = "govuk-fieldset__legend--l"
+    ))
+  )),
+  hint = additionalContent.fold[Option[Hint]](None)(additional => Some(Hint(content = HtmlContent(additional)))),
+  items = Seq(
+    RadioItem(
+      value = Some(Yes.toString),
+      content = Text(messages("common.yes")),
+      checked = form("yes_no").value.contains(Yes.toString)
+    ),
+    RadioItem(
+      value = Some(No.toString),
+      content = Text(messages("common.no")),
+      checked = form("yes_no").value.contains(No.toString)
+    )
+  ),
+  errorMessage = form("yes_no").error.map { err =>
+    ErrorMessage(content = Text(messages(err.message, appConfig.deregThreshold)))
+  }
+))

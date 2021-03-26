@@ -14,12 +14,8 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.layouts.Article
-@import uk.gov.hmrc.hmrcfrontend.views.Aliases.{LanguageSelect, ReportTechnicalIssue}
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Header
 @import views.utils.ServiceNameUtil
-@import views.components.FooterLinks
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.header.Header
-
 
 @this(govukLayout: GovukLayout,
       govukHeader: GovukHeader,
@@ -27,14 +23,14 @@
       hmrcReportTechnicalIssue: HmrcReportTechnicalIssue,
       hmrcLanguageSelect: HmrcLanguageSelect,
       hmrcTimeoutDialog: HmrcTimeoutDialog,
-      footerLinks: FooterLinks)
+      hmrcStandardFooter: HmrcStandardFooter,
+      trackingConsentSnippet: HmrcTrackingConsentSnippet)
 
 @(pageTitle: String,
-    appConfig: config.AppConfig,
-    serviceName: Option[String] = None,
-    showSignOut: Boolean = true,
-    feedbackOnSignOut: Boolean = true
-)(mainContent: Html)(implicit request : Request[_], messages: Messages)
+  serviceName: Option[String] = None,
+  showSignOut: Boolean = true,
+  feedbackOnSignOut: Boolean = true
+)(mainContent: Html)(implicit request : Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @navTitle = @{
     serviceName.fold{
@@ -45,28 +41,21 @@
 }
 
 @scripts = {
-
     <script src='@routes.Assets.at("lib/govuk-frontend/govuk/all.js")'></script>
     <script src='@routes.Assets.at("lib/hmrc-frontend/hmrc/all.js")'></script>
-
-    <script type="text/javascript" src='@routes.Assets.at("javascript/vddfe-v1.js")'></script>
-
     <script>window.GOVUKFrontend.initAll();</script>
     <script>window.HMRCFrontend.initAll();</script>
 }
 
 @phaseBannerContent = {
-    @messages("banner.phaseName")
-    @messages("banner.newService")
-    <a id="beta-banner-feedback" href="@appConfig.feedbackUrl(request.uri)">
-        @messages("banner.feedback")
-    </a>
-    @messages("banner.feedbackImprove")
+    @messages("feedback.before")
+    <a class="govuk-link" id="beta-banner-feedback" href="@appConfig.feedbackUrl">@messages("feedback.link")</a>
+    @messages("feedback.after")
 }
 
 @beforeContentHtml = {
     @govukPhaseBanner(PhaseBanner(
-        tag = Some(Tag(content = Text(messages("banner.phaseName")))),
+        tag = Some(Tag(content = Text(messages("feedback.phaseName")))),
         content = HtmlContent(phaseBannerContent)
     ))
     @hmrcLanguageSelect(LanguageSelect(
@@ -78,25 +67,35 @@
 }
 
 @head = {
-    <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/application.css")' media="all">
+  @trackingConsentSnippet(nonce = None)
+
+  <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/application.css")' media="all">
+
+  @hmrcTimeoutDialog(TimeoutDialog(
+    timeout = Some(appConfig.timeoutPeriod),
+    countdown = Some(appConfig.timeoutCountdown),
+    signOutUrl = Some(routes.SignOutController.timeout.url),
+    keepAliveUrl = Some("#"),
+    signOutButtonText = Some(messages("base.sign-out"))
+  ))
 }
 
 @header = @{
-    govukHeader(Header(
-        serviceName = Some(navTitle),
-        navigation =
-            if(showSignOut)
-                Some(Seq(HeaderNavigation(
-                    text = Some(messages("base.signOut")),
-                    href = Some(routes.SignOutController.signOut(feedbackOnSignOut).url)
-                )))
-            else None
-    ))
+  govukHeader(Header(
+    serviceName = Some(navTitle),
+    navigation =
+      if(showSignOut)
+        Some(Seq(HeaderNavigation(
+          text = Some(messages("base.sign-out")),
+          href = Some(routes.SignOutController.signOut(feedbackOnSignOut).url)
+        )))
+      else None
+  ))
 }
 
 @getHelpHtml = @{hmrcReportTechnicalIssue(ReportTechnicalIssue(
     serviceCode = appConfig.contactFormServiceIdentifier,
-    language = Some(messages.lang.language)
+    language = if (messages.lang.language == "en") En else Cy
 ))}
 
 @fullContent = {
@@ -107,10 +106,10 @@
 }
 
 @govukLayout(
-    pageTitle = Some(messages("base.pageTitle", pageTitle, navTitle)),
-    headBlock = Some(head),
-    headerBlock = Some(header),
-    beforeContentBlock = Some(beforeContentHtml),
-    footerItems = footerLinks.items,
-    scriptsBlock = Some(scripts)
-    )(fullContent)
+  pageTitle = Some(messages("common.pageTitle", pageTitle, navTitle)),
+  headBlock = Some(head),
+  headerBlock = Some(header),
+  beforeContentBlock = Some(beforeContentHtml),
+  footerBlock = Some(hmrcStandardFooter(accessibilityStatementUrl = Some(appConfig.accessibilityStatementUrl))),
+  scriptsBlock = Some(scripts)
+)(fullContent)

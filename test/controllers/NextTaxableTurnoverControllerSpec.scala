@@ -114,7 +114,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           document(result).select("#amount").attr("value") shouldBe testTurnoverAmt.toString
         }
         s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
-          document(result).select(".link-back").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+          document(result).select(".govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
         }
       }
 
@@ -138,7 +138,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           document(result).select("#turnover").attr("value") shouldBe ""
         }
         s"have the correct back link of ${controllers.zeroRated.routes.BusinessActivityController.show().url}" in {
-          document(result).select(".link-back").attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+          document(result).select(".govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
         }
       }
 
@@ -162,7 +162,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           document(result).select("#turnover").attr("value") shouldBe ""
         }
         s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
-          document(result).select(".link-back").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+          document(result).select(".govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
         }
       }
 
@@ -349,7 +349,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
 
         "display the back url" in {
-          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+          document(result).getElementsByClass("govuk-back-link").attr("href") shouldBe
+            controllers.zeroRated.routes.BusinessActivityController.show().url
         }
       }
 
@@ -371,7 +372,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
 
         "display the back url" in {
-          document(result).getElementsByClass("link-back").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+          document(result).getElementsByClass("govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
         }
       }
 

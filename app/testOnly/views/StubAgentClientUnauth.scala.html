@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import views.html.MainTemplate
 @import config.AppConfig
 
 @this(mainTemplate: MainTemplate, govukButton: GovukButton)
@@ -25,7 +24,7 @@
 
  <h1 class="govuk-heading-m">Agent Unauthorised</h1>
 
-  <p><span class="govuk-heading-s">RedirectUrl:</span> <p1 class="govuk-body"> @redirectUrl</p1></p>
+  <p class="govuk-body"><span class="govuk-heading-s">RedirectUrl:</span> @redirectUrl</p>
 
  @govukButton(Button(
   href = Some(redirectUrl),

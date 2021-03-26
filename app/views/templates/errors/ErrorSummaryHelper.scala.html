@@ -14,7 +14,18 @@
  * limitations under the License.
  *@
 
-@this()
-@(heading: String)
+@this(govukErrorSummary: GovukErrorSummary)
 
-    <h1 id="page-heading" class="heading-large">@heading</h1>
+@(form: Form[_], hrefId: Option[String] = None)(implicit messages: Messages)
+
+@if(form.hasErrors) {
+  @govukErrorSummary(ErrorSummary(
+    title = Text(messages("common.errorSummary.heading")),
+    errorList = form.errors.map { error =>
+      ErrorLink(
+        href = hrefId.fold(Some(s"#${error.key}"))(providedHref => Some(providedHref)),
+        content = Text(messages(error.message))
+      )
+    }
+  ))
+}

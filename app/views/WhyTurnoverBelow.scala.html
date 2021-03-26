@@ -14,89 +14,97 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import templates.Headings
-@import views.html.templates.inputs.CheckboxHelper
+@import views.html.templates.errors.ErrorSummaryHelper
 @import views.utils.TitleUtil.title
 
-@this(headings: Headings, mainTemplate: MainTemplate, errorSummary: ErrorSummary, checkboxHelper: CheckboxHelper, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      govukButton: GovukButton,
+      govukCheckboxes: GovukCheckboxes,
+      errorSummaryHelper: ErrorSummaryHelper)
 
 @(form: Form[WhyTurnoverBelowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@questionContent = {
-  @headings(messages("whyTurnoverBelow.title", appConfig.deregThreshold))
+@mainTemplate(pageTitle = title(messages("whyTurnoverBelow.title", appConfig.deregThreshold), form)) {
 
-}
+  @govukBackLink(BackLink(
+    href = controllers.routes.NextTaxableTurnoverController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-@mainTemplate(title(messages("whyTurnoverBelow.title", appConfig.deregThreshold), form), appConfig = appConfig) {
+  @errorSummaryHelper(form, Some(s"#${WhyTurnoverBelowModel.lostContract}"))
 
-  <a class="link-back" href="@controllers.routes.NextTaxableTurnoverController.show().url">@messages("common.back")</a>
+  @formWithCSRF(action = controllers.routes.WhyTurnoverBelowController.submit) {
 
-  @errorSummary("common.errorSummary.heading", form, Some("reason"))
+    @govukCheckboxes(Checkboxes(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(messages("whyTurnoverBelow.title", appConfig.deregThreshold)),
+          classes = "govuk-fieldset__legend--l",
+          isPageHeading = true
+        ))
+      )),
+      name = "whyTurnoverBelow",
+      hint = Some(Hint(content = Text(messages("whyTurnoverBelow.text.1")))),
+      items = Seq(
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.lostContract),
+          name = Some(WhyTurnoverBelowModel.lostContract),
+          content = Text(messages("whyTurnoverBelow.reason.lostContract")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.lostContract).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.semiRetiring),
+          name = Some(WhyTurnoverBelowModel.semiRetiring),
+          content = Text(messages("whyTurnoverBelow.reason.semiRetiring")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.semiRetiring).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.moreCompetitors),
+          name = Some(WhyTurnoverBelowModel.moreCompetitors),
+          content = Text(messages("whyTurnoverBelow.reason.moreCompetitors")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.moreCompetitors).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.reducedTradingHours),
+          name = Some(WhyTurnoverBelowModel.reducedTradingHours),
+          content = Text(messages("whyTurnoverBelow.reason.reducedTradingHours")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.reducedTradingHours).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.seasonalBusiness),
+          name = Some(WhyTurnoverBelowModel.seasonalBusiness),
+          content = Text(messages("whyTurnoverBelow.reason.seasonalBusiness")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.seasonalBusiness).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.closedPlacesOfBusiness),
+          name = Some(WhyTurnoverBelowModel.closedPlacesOfBusiness),
+          content = Text(messages("whyTurnoverBelow.reason.closedPlacesOfBusiness")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.closedPlacesOfBusiness).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.turnoverLowerThanExpected),
+          name = Some(WhyTurnoverBelowModel.turnoverLowerThanExpected),
+          content = Text(messages("whyTurnoverBelow.reason.turnoverLowerThanExpected")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.turnoverLowerThanExpected).value.contains("true")
+        )
+      ),
+      errorMessage = form.errors.headOption.map { error =>
+        ErrorMessage(content = Text(messages(error.message)))
+      }
+    ))
 
-  @formWithCSRF(action = controllers.routes.WhyTurnoverBelowController.submit, 'novalidate -> "novalidate") {
-
-    <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset" aria-describedby="why-below-hint">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">
-                    @messages("whyTurnoverBelow.title")
-                </h1>
-            </legend>
-            <div id="why-below-hint" class="govuk-hint">
-                @messages("whyTurnoverBelow.text.1")
-            </div>
-            <div class="govuk-checkboxes">
-                <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="why-below" name="why-below" type="checkbox" value="lost-contract">
-                    <label class="govuk-label govuk-checkboxes__label" for="why-below">
-                        @messages("whyTurnoverBelow.reason.lostContract")
-                    </label>
-                </div>
-                <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="why-below-2" name="why-below" type="checkbox" value="semi-retiring">
-                    <label class="govuk-label govuk-checkboxes__label" for="why-below-2">
-                        @messages("whyTurnoverBelow.reason.semiRetiring")
-                    </label>
-                </div>
-                <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="why-below-3" name="why-below" type="checkbox" value="more-competitors">
-                    <label class="govuk-label govuk-checkboxes__label" for="why-below-3">
-                        @messages("whyTurnoverBelow.reason.moreCompetitors")
-                    </label>
-                </div>
-                <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="why-below-4" name="why-below" type="checkbox" value="reduced-hours">
-                    <label class="govuk-label govuk-checkboxes__label" for="why-below-4">
-                        @messages("whyTurnoverBelow.reason.reducedTradingHours")
-                    </label>
-                </div>
-                <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="why-below-5" name="why-below" type="checkbox" value="seasonal">
-                    <label class="govuk-label govuk-checkboxes__label" for="why-below-5">
-                        @messages("whyTurnoverBelow.reason.seasonalBusiness")
-                    </label>
-                </div>
-                <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="why-below-6" name="why-below" type="checkbox" value="closed-places-of-business">
-                    <label class="govuk-label govuk-checkboxes__label" for="why-below-6">
-                        @messages("whyTurnoverBelow.reason.closedPlacesOfBusiness")
-                    </label>
-                </div>
-                <div class="govuk-checkboxes__item">
-                    <input class="govuk-checkboxes__input" id="why-below-7" name="why-below" type="checkbox" value="turnover-lower">
-                    <label class="govuk-label govuk-checkboxes__label" for="why-below-7">
-                        @messages("whyTurnoverBelow.reason.turnoverLowerThanExpected")
-                    </label>
-                </div>
-            </div>
-
-        </fieldset>
-    </div>
-
-    <button class="govuk-button" data-module="govuk-button">
-        @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }

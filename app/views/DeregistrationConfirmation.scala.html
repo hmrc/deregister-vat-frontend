@@ -16,119 +16,111 @@
 
 @import common.SessionKeys
 
-@this(mainTemplate: MainTemplate)
+@this(mainTemplate: MainTemplate, govukPanel: GovukPanel, govukButton: GovukButton)
 
-@(businessName: Option[String]=None,preference: Option[String]=None,verifiedEmail: Option[Boolean]=None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(businessName: Option[String] = None,
+  preference: Option[String]= None,
+  verifiedEmail: Option[Boolean] = None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @finishLink = @{
-    if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
+  if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
 }
 
-@mainTemplate(
-title = messages("deregistrationConfirmation.title"),
-bodyClasses = None,
-appConfig = appConfig) {
+@buttonMessage = @{
+  if(user.isAgent) "deregistrationConfirmation.backToClient" else "common.finish"
+}
 
-<div class="govuk-box-highlight">
-    <h1 class="heading-xlarge">@messages("deregistrationConfirmation.title")</h1>
-</div>
+@mainTemplate(pageTitle = messages("deregistrationConfirmation.title")) {
 
-<h2 class="heading-medium">@messages("deregistrationConfirmation.heading")</h2>
+  @govukPanel(Panel(
+    title = Text(messages("deregistrationConfirmation.title"))
+  ))
 
-@{
+  <h2 class="govuk-heading-m">@messages("deregistrationConfirmation.heading")</h2>
+
+  @{
     if(user.isAgent){
-        (user.session.get(SessionKeys.verifiedAgentEmail), businessName, appConfig.features.bulkPaperOffFeature()) match {
+      (user.session.get(SessionKeys.verifiedAgentEmail), businessName, appConfig.features.bulkPaperOffFeature()) match {
 
-            case (Some(verifiedEmail), Some(businessName), true) =>
-                <p>{messages("deregistrationConfirmation.bpOffEmailP1")}
-                    <strong class="bold">{verifiedEmail}</strong>
-                    {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
-                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-                    <strong class="bold">{businessName}</strong>
-                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+        case (Some(verifiedEmail), Some(businessName), true) =>
+          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffEmailP1")}
+              <strong class="bold">{verifiedEmail}</strong>
+              {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
+          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+              <strong class="bold">{businessName}</strong>
+          {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-            case (Some(verifiedEmail), None, true) =>
-                <p>{messages("deregistrationConfirmation.bpOffEmailP1")}
-                    <strong class="bold">{verifiedEmail}</strong>
-                    {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
-                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-                {messages("deregistrationConfirmation.yourClient")}
-                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+        case (Some(verifiedEmail), None, true) =>
+          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffEmailP1")}
+              <strong class="bold">{verifiedEmail}</strong>
+              {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
+          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+          {messages("deregistrationConfirmation.yourClient")}
+          {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-            case (None, Some(businessName), true) =>
-                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-                <strong class="bold">{businessName}</strong>
-                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+        case (None, Some(businessName), true) =>
+          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+          <strong class="bold">{businessName}</strong>
+          {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-            case (None, None, true) =>
-                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-                {messages("deregistrationConfirmation.yourClient")}
-                {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+        case (None, None, true) =>
+          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+          {messages("deregistrationConfirmation.yourClient")}
+          {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-            case (Some(verifiedEmail), Some(businessName), _) =>
-                <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
-                    <strong class="bold">{verifiedEmail}</strong>
-                    {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
-                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-                    <strong class="bold">{businessName}</strong>
-                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+        case (Some(verifiedEmail), Some(businessName), _) =>
+          <p class="govuk-body">{messages("deregistrationConfirmation.textAgentPrefYesP1")}
+              <strong class="bold">{verifiedEmail}</strong>
+              {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
+          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+              <strong class="bold">{businessName}</strong>
+              {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-            case (Some(verifiedEmail), None, _) =>
-                <p>{messages("deregistrationConfirmation.textAgentPrefYesP1")}
-                    <strong class="bold">{verifiedEmail}</strong>
-                    {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
-                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-                    {messages("deregistrationConfirmation.yourClient")}
-                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+        case (Some(verifiedEmail), None, _) =>
+          <p class="govuk-body">{messages("deregistrationConfirmation.textAgentPrefYesP1")}
+              <strong class="bold">{verifiedEmail}</strong>
+              {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
+          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+              {messages("deregistrationConfirmation.yourClient")}
+              {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-            case (None, Some(businessName), _) =>
-                <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
-                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-                    <strong class="bold">{businessName}</strong>
-                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+        case (None, Some(businessName), _) =>
+          <p class="govuk-body">{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
+          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+              <strong class="bold">{businessName}</strong>
+              {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-            case _ =>
-                <p>{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
-                <p>{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-                    {messages("deregistrationConfirmation.yourClient")}
-                    {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
-        }
+        case _ =>
+          <p class="govuk-body">{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
+          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+              {messages("deregistrationConfirmation.yourClient")}
+              {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
+      }
     } else {
 
-        (preference, verifiedEmail) match {
+      (preference, verifiedEmail) match {
 
-            case (Some("DIGITAL"), Some(true)) =>
-                <p id="preference-message">{messages("deregistrationConfirmation.emailPreference")}</p>
-                <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+        case (Some("DIGITAL"), Some(true)) =>
+          <p class="govuk-body" id="preference-message">{messages("deregistrationConfirmation.emailPreference")}</p>
+          <p class="govuk-body">{messages("deregistrationConfirmation.contactDetails")}</p>
 
-            case (Some("DIGITAL"), _) =>
-                <p id="preference-message">{messages("deregistrationConfirmation.digitalPreference")}</p>
-                <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+        case (Some("DIGITAL"), _) =>
+          <p class="govuk-body" id="preference-message">{messages("deregistrationConfirmation.digitalPreference")}</p>
+          <p class="govuk-body">{messages("deregistrationConfirmation.contactDetails")}</p>
 
-            case (Some("PAPER"), _) =>
-                <p id="preference-message">{messages("deregistrationConfirmation.paperPreference")}</p>
-                <p>{messages("deregistrationConfirmation.contactDetails")}</p>
+        case (Some("PAPER"), _) =>
+          <p class="govuk-body" id="preference-message">{messages("deregistrationConfirmation.paperPreference")}</p>
+          <p class="govuk-body">{messages("deregistrationConfirmation.contactDetails")}</p>
 
-            case _ => <p>{messages("deregistrationConfirmation.contactPrefError")}</p>
-                      <p>{messages("deregistrationConfirmation.contactDetails")}</p>
-
-        }
-
+        case _ =>
+          <p class="govuk-body">{messages("deregistrationConfirmation.contactPrefError")}</p>
+          <p class="govuk-body">{messages("deregistrationConfirmation.contactDetails")}</p>
+      }
     }
-}
+  }
 
-@if(user.isAgent) {
-<p>
-    <a id="finish" href="@finishLink" class="button" role="button">
-        @messages("deregistrationConfirmation.backToClient")
-    </a>
-</p>
-} else {
-<p>
-    <a id="finish" href="@finishLink" class="button" role="button">
-        @messages("common.finish")
-    </a>
-</p>
-        }
-
+  @govukButton(Button(
+    href = Some(finishLink),
+    content = Text(messages(buttonMessage))
+  ))
 }

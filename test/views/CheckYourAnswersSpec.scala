@@ -28,13 +28,13 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
   lazy val checkYourAnswers: CheckYourAnswers = injector.instanceOf[CheckYourAnswers]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val questionColumn: Int => String = row => s"#content > article > div > dl > div:nth-child($row) > dt"
-    val answerColumn: Int => String = row => s"#content > article > div > dl > div:nth-child($row) > dd.cya-answer"
-    val changeColumn: Int => String = row => s"#content > article > div > dl > div:nth-child($row) > dd.cya-change > a"
+    val questionColumn: Int => String = row => s"div.govuk-summary-list__row:nth-child($row) > dt:nth-child(1)"
+    val answerColumn: Int => String = row => s"div.govuk-summary-list__row:nth-child($row) > dd:nth-child(2)"
+    val changeColumn: Int => String = row => s"div.govuk-summary-list__row:nth-child($row) > dd:nth-child(3) > a"
     val text = "#content > article > p"
-    val button = ".button"
+    val button = ".govuk-button"
   }
 
   "Rendering the Check your answers page" should {
@@ -43,7 +43,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
       CheckYourAnswersRowModel("test question 1", Html("test answer 1"), "test/url/1", "test hidden text 1"),
       CheckYourAnswersRowModel("test question 2", Html("test answer 2"), "test/url/2", "test hidden text 2")
     )
-    lazy val view = checkYourAnswers(checkYourAnswersModel)(user,messages,mockConfig)
+    lazy val view = checkYourAnswers(checkYourAnswersModel)(user, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -85,7 +85,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
 
     val checkYourAnswersModel = Seq()
 
-    lazy val view = checkYourAnswers(checkYourAnswersModel)(user,messages,mockConfig)
+    lazy val view = checkYourAnswers(checkYourAnswersModel)(user, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -109,5 +109,4 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
       elementText(Selectors.button) shouldBe CheckYourAnswersMessages.confirm
     }
   }
-
 }

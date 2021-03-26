@@ -14,71 +14,47 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.MainTemplate
+@import views.html.templates.errors.ErrorSummaryHelper
+@import views.html.templates.inputs.YesNoHelper
+@import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      errorSummaryHelper: ErrorSummaryHelper,
+      yesNoHelper: YesNoHelper,
+      govukButton: GovukButton)
 
 @(outstanding: Option[YesNo], form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@backLink = @if(outstanding.isDefined) {
-    href = @controllers.routes.OutstandingInvoicesController.show().url
+@backLink = @{if(outstanding.isDefined) {
+  controllers.routes.OutstandingInvoicesController.show().url
 } else {
-    href = @controllers.routes.IssueNewInvoicesController.show().url
+  controllers.routes.IssueNewInvoicesController.show().url
+}}
+
+@questionContent = {
+  <div id="choose-deregistration-date-hint" class="govuk-hint">
+    <p class="govuk-body">@messages("deregistrationDate.p1")</p>
+    <p class="govuk-body">@messages("deregistrationDate.p2")</p>
+  </div>
 }
 
 @mainTemplate(pageTitle = title(messages("chooseDeregistrationDate.title"), form)) {
 
-    @govukBackLink(BackLink(
-        href = backLink
-        content = Text(messages("common.back"))
+  @govukBackLink(BackLink(
+    href = backLink,
+    content = Text(messages("common.back"))
+  ))
+
+  @errorSummaryHelper(form)
+
+  @formWithCSRF(action = controllers.routes.ChooseDeregistrationDateController.submit) {
+
+    @yesNoHelper(form = form, title = messages("chooseDeregistrationDate.title"), additionalContent = Some(questionContent))
+
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
     ))
-
-    @if(form.hasErrors) {
-        @govukErrorSummary(ErrorSummary(
-            title = Text(messages("common.errorSummary.heading")),
-            errorList = form.errors.map { error =>
-                ErrorLink(
-                    href = Some("#option-tax")
-                    content = Text(messages(error.message))
-                )
-            }
-        ))
-    }
-
-  @formWithCSRF(action = controllers.routes.ChooseDeregistrationDateController.submit, 'novalidate -> "novalidate") {
-
-    <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset" aria-describedby="choose-deregistration-date-hint">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                <h1 class="govuk-fieldset__heading">
-                    @messages("chooseDeregistrationDate.title")
-                </h1>
-            </legend>
-            <div id="choose-deregistration-date-hint" class="govuk-hint">
-                <p>@messages("deregistrationDate.p1")</p>
-                <p>@messages("deregistrationDate.p2")</p>
-            </div>
-            <div class="govuk-radios govuk-radios--inline">
-                <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="choose-deregistration-date" name="choose-deregistration-date" type="radio" value="yes">
-                    <label class="govuk-label govuk-radios__label" for="choose-deregistration-date">
-                        @messages("common.yes")
-                    </label>
-                </div>
-                <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="choose-deregistration-date-2" name="choose-deregistration-date" type="radio" value="no">
-                    <label class="govuk-label govuk-radios__label" for="choose-deregistration-date">
-                        @messages("common.no")
-                    </label>
-                </div>
-            </div>
-
-        </fieldset>
-    </div>
-
-    <button class="govuk-button" data-module="govuk-button">
-        @messages("common.continue")
-    </button>
   }
 }
