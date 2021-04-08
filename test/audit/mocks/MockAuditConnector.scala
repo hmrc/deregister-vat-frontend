@@ -16,23 +16,20 @@
 
 package audit.mocks
 
-
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import utils.TestUtil
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 trait MockAuditConnector extends TestUtil with MockFactory {
 
   val mockAuditConnector: AuditConnector = mock[AuditConnector]
 
-  def setupMockSendExplicitAudit[T](auditType: String, detail: T)(response: Future[AuditResult]): Unit = {
+  def setupMockSendExplicitAudit[T](auditType: String, detail: T): Unit =
     (mockAuditConnector.sendExplicitAudit(_: String, _: T)(_: HeaderCarrier, _: ExecutionContext, _: Writes[T]))
       .expects(auditType, detail, *, *, *)
-      .returns(response)
       .atLeastOnce()
-  }
 }

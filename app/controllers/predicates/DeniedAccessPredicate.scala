@@ -27,7 +27,7 @@ import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, MessagesControllerComponents, Result}
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import common.Constants.vatGroup
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -42,7 +42,7 @@ class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsSer
 
   override def refine[A](request: User[A]): Future[Either[Result, User[A]]] = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     implicit val req: User[A] = request
 
     req.session.get(registrationStatusKey) match {

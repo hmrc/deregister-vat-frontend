@@ -19,10 +19,7 @@ package audit.services
 import audit.mocks.MockAuditConnector
 import audit.models.ContactPreferenceAuditModel
 import play.api.libs.json.{JsValue, Json}
-import uk.gov.hmrc.play.audit.http.connector.AuditResult.Success
 import utils.TestUtil
-
-import scala.concurrent.Future
 
 class AuditServiceSpec extends TestUtil with MockAuditConnector {
 
@@ -32,7 +29,7 @@ class AuditServiceSpec extends TestUtil with MockAuditConnector {
     lazy val auditService = new AuditService(mockAuditConnector)
 
     "audit an event" in {
-      setupMockSendExplicitAudit[JsValue](model.auditType, Json.toJson(model))(Future.successful(Success))
+      setupMockSendExplicitAudit[JsValue](model.auditType, Json.toJson(model))
       auditService.auditExtendedEvent(model)
     }
   }
