@@ -61,16 +61,17 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"   %% "bootstrap-frontend-play-26"      % "3.4.0",
-  "uk.gov.hmrc"   %% "govuk-template"                  % "5.63.0-play-26",
-  "uk.gov.hmrc"   %% "play-ui"                         % "9.0.0-play-26",
+  "uk.gov.hmrc"   %% "bootstrap-frontend-play-26"      % "4.2.0",
+  "uk.gov.hmrc"   %% "govuk-template"                  % "5.65.0-play-26",
+  "uk.gov.hmrc"   %% "play-ui"                         % "9.1.0-play-26",
   "uk.gov.hmrc"   %% "play-partials"                   % "7.1.0-play-26",
-  "uk.gov.hmrc"   %% "play-language"                   % "4.10.0-play-26",
+  "uk.gov.hmrc"   %% "play-language"                   % "4.12.0-play-26",
+  "uk.gov.hmrc"   %% "play-frontend-govuk"             % "0.69.0-play-26",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "0.57.0-play-26",
   "org.typelevel" %% "cats"                            % "0.9.0"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"             %% "bootstrap-play-26"            % "2.3.0"             % scope classifier "tests",
   "uk.gov.hmrc"             %% "hmrctest"                     % "3.10.0-play-26"    % scope,
   "org.scalatest"           %% "scalatest"                    % "3.0.9"             % scope,
   "org.pegdown"             %  "pegdown"                      % "1.6.0"             % scope,
@@ -88,6 +89,13 @@ def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
       ForkOptions().withRunJVMOptions(Vector("-Dtest.name=" + test.name, "-Dlogger.resource=logback-test.xml"))
     ))
 }
+
+TwirlKeys.templateImports ++= Seq(
+  "uk.gov.hmrc.govukfrontend.views.html.components._",
+  "uk.gov.hmrc.govukfrontend.views.html.helpers._",
+  "uk.gov.hmrc.hmrcfrontend.views.html.components._",
+  "uk.gov.hmrc.hmrcfrontend.views.html.helpers._"
+)
 
 lazy val microservice: Project = Project(appName, file("."))
   .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)

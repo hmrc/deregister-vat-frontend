@@ -14,35 +14,48 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import templates.inputs.Date
+@import views.html.templates.inputs.DateHelper
+@import views.utils.DateErrorHelper
 @import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, date: Date, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukErrorSummary: GovukErrorSummary,
+      dateHelper: DateHelper,
+      govukBackLink: GovukBackLink,
+      govukButton: GovukButton)
 
 @(form: Form[DateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(title = title(messages("ceasedTrading.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("ceasedTrading.title"), form)) {
 
-  <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url">@messages("common.back")</a>
+  @govukBackLink(BackLink(
+    href = controllers.routes.DeregistrationReasonController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-  @errorSummary("common.errorSummary.heading", form, Some("ceasedTrading"))
+  @if(form.hasErrors) {
+    @govukErrorSummary(ErrorSummary(
+      title = Text(messages("common.errorSummary.heading")),
+      errorList = Seq(ErrorLink(
+        href = Some(DateErrorHelper.dateFieldErrorId(form)),
+        content = Text(messages(DateErrorHelper.errorContent(form, CeasedTradingDate)))
+      ))
+    ))
+  }
 
-  @formWithCSRF(action = controllers.routes.CeasedTradingDateController.submit, 'novalidate -> "novalidate") {
+  @formWithCSRF(action = controllers.routes.CeasedTradingDateController.submit) {
 
-    <div id="ceasedTrading" class="form-group">
-      @date(
-        form = form,
-        question = messages("ceasedTrading.title"),
-        fieldName = "date",
-        formVariant = CeasedTradingDate,
-        hint = Some(messages("ceasedTrading.hint"))
-      )
-    </div>
+    @dateHelper(
+      form = form,
+      title = "ceasedTrading.title",
+      id = "ceasedTrading",
+      hintContent = Html(messages("ceasedTrading.hint")),
+      formVariant = CeasedTradingDate
+    )
 
-    <button class="button" type ="submit" id="continue">
-      @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }

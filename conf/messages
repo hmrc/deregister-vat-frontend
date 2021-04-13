@@ -33,6 +33,7 @@ error.date.month = Enter the month in the correct format
 error.date.year = Enter the year in the correct format
 
 #Feedback
+feedback.phaseName = BETA
 feedback.before = This is a new service – your
 feedback.link = feedback
 feedback.after = will help us to improve it.

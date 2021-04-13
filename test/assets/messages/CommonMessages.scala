@@ -16,9 +16,11 @@
 
 package assets.messages
 
+import java.text.NumberFormat
+
 object CommonMessages {
 
-  val formatter = java.text.NumberFormat.getIntegerInstance
+  val formatter: NumberFormat = java.text.NumberFormat.getIntegerInstance
 
   val continue = "Continue"
   val back = "Back"
@@ -39,7 +41,6 @@ object CommonMessages {
   val enterAmount = "No amount entered"
   val moreInfo = "More information"
 
-
   val errorMandatoryAmount = "Enter the amount using numbers 0 to 9"
   val errorTooManyDecimals = "Enter a maximum of 2 decimal places for pence"
   val errorTooManyNumbersBeforeDecimal = "Enter a maximum of 13 decimal places for pounds"
@@ -49,7 +50,4 @@ object CommonMessages {
   val errorDateDay = "Enter the day in the correct format"
   val errorDateMonth = "Enter the month in the correct format"
   val errorDateYear = "Enter the year in the correct format"
-
-  val errorTitlePrefix = "Error:"
-
 }

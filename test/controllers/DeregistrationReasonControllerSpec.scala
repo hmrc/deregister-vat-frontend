@@ -81,7 +81,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         }
 
         "should have the 'Ceased' option checked" in {
-          Jsoup.parse(bodyOf(result)).select("#reason-stoppedtrading").hasAttr("checked") shouldBe true
+          Jsoup.parse(bodyOf(result)).select("#reason").hasAttr("checked") shouldBe true
         }
       }
 

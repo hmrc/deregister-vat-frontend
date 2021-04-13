@@ -86,7 +86,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         }
 
         "have the correct value 'standard' for the accounting method" in {
-          Jsoup.parse(bodyOf(result)).select("#accountingMethod-standard").hasAttr("checked") shouldBe true
+          Jsoup.parse(bodyOf(result)).select("#accountingMethod").hasAttr("checked") shouldBe true
         }
       }
 

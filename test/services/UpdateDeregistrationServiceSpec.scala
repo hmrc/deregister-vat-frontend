@@ -30,10 +30,7 @@ import models._
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.mvc.AnyContentAsEmpty
 import services.mocks._
-import uk.gov.hmrc.play.audit.http.connector.AuditResult.Success
 import utils.TestUtil
-
-import scala.concurrent.Future
 
 class UpdateDeregistrationServiceSpec     extends TestUtil
   with MockVatSubscriptionConnector       with MockDeregReasonAnswerService
@@ -93,7 +90,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
           setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
           setupMockSubmit(vrn, deregistrationInfoMaxModel)(Right(VatSubscriptionSuccess))
-          setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))(Future.successful(Success))
+          setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))
 
           await(TestUpdateDeregistrationService.updateDereg) shouldBe Right(VatSubscriptionSuccess)
         }
@@ -120,7 +117,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
         setupMockSubmit(vrn, deregistrationInfoMaxModel)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
-        setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))(Future.successful(Success))
+        setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))
 
         await(TestUpdateDeregistrationService.updateDereg) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
 

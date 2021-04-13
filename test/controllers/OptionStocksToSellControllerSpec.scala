@@ -83,7 +83,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
         }
 
         "prepopulate the radio option" in {
-          document(result).select("#yes_no-yes").hasAttr("checked") shouldBe true
+          document(result).select("#yes_no").hasAttr("checked") shouldBe true
         }
 
         "prepopulate the amount" in {

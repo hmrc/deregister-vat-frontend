@@ -27,13 +27,13 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
   lazy val outstandingInvoices: OutstandingInvoices = injector.instanceOf[OutstandingInvoices]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val yesOption = "div.multiple-choice:nth-child(1) > label:nth-child(2)"
-    val noOption = "div.multiple-choice:nth-child(2) > label:nth-child(2)"
-    val button = ".button"
-    val errorHeading = "#error-summary-display"
-    val error = ".error-message"
+    val yesOption = "div.govuk-radios__item:nth-child(1) > label:nth-child(2)"
+    val noOption = "div.govuk-radios__item:nth-child(2) > label:nth-child(2)"
+    val button = ".govuk-button"
+    val errorHeading = ".govuk-error-summary"
+    val error = ".govuk-error-message"
   }
 
   "Rendering the option to tax page with no errors" should {
@@ -78,7 +78,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${OutstandingInvoicesMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${OutstandingInvoicesMessages.title}"
     }
 
     "display the correct error heading" in {

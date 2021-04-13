@@ -14,54 +14,39 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
+@import views.html.templates.errors.ErrorSummaryHelper
 @import views.html.templates.inputs.YesNoRevealHelper
-@import views.html.templates.inputs.Text
-@import templates.Headings
-@import forms.YesNoForm._
 @import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, headings: Headings, errorSummary: ErrorSummary, yesNoRevealHelper: YesNoRevealHelper, text: Text, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      yesNoRevealHelper: YesNoRevealHelper,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      errorSummaryHelper: ErrorSummaryHelper,
+      govukButton: GovukButton)
 
 @(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@questionContent = {
-  @headings(messages("optionOwnsStockToSell.title"))
+@mainTemplate(pageTitle = title(messages("optionOwnsStockToSell.title"), form)) {
 
-  <p>@messages("optionOwnsStockToSell.text.1")</p>
-}
+  @govukBackLink(BackLink(
+    href = controllers.routes.CapitalAssetsController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-@mainTemplate(title = title(messages("optionOwnsStockToSell.title"), form), appConfig = appConfig) {
+  @errorSummaryHelper(form)
 
-  <a class="link-back" href="@controllers.routes.CapitalAssetsController.show().url">@messages("common.back")</a>
+  @formWithCSRF(action = controllers.routes.OptionStocksToSellController.submit) {
 
-  @errorSummary("common.errorSummary.heading", form)
+    @yesNoRevealHelper(
+      form = form,
+      title = "optionOwnsStockToSell.title",
+      hintText = "optionOwnsStockToSell.text.1",
+      currencyLabelText = "optionOwnsStockToSell.hint"
+    )
 
-  @formWithCSRF(action = controllers.routes.OptionStocksToSellController.submit, 'novalidate -> "novalidate") {
-
-    <div id="@yesNo" class="form-group">
-      @yesNoRevealHelper(
-        field = form(yesNo),
-        choices = Seq(
-          yes -> messages("common.yes"),
-          no -> messages("common.no")
-        ),
-        question = messages("optionOwnsStockToSell.title"),
-        additionalContent = Some(questionContent),
-        hiddenContent = text(
-          field = form("amount"),
-          label = messages("optionOwnsStockToSell.hint"),
-          labelHidden = false,
-          isMonetaryField = true
-        ),
-        legendAsHeader = false,
-        hiddenContentError = form("amount").hasErrors
-      )
-    </div>
-
-    <button class="button" type="submit" id="continue">
-      @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }

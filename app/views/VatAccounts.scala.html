@@ -14,50 +14,73 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import templates.inputs.MultipleLineRadioGroup
-@import templates.Headings
-@import models.MultipleLineRadioGroupModel
+@import views.html.templates.errors.ErrorSummaryHelper
 @import views.utils.TitleUtil.title
 
-@this(headings: Headings, mainTemplate: MainTemplate, errorSummary: ErrorSummary, multipleLineRadioGroup: MultipleLineRadioGroup, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      errorSummaryHelper: ErrorSummaryHelper,
+      govukButton: GovukButton,
+      govukRadios: GovukRadios)
 
 @(backLink: String, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @questionContent = {
-  @headings(messages("vatAccounts.title"))
-
-  <p>@messages("vatAccounts.showMeAnExample.p1")</p>
-  <ul class="list bullets bullet list-bullet">
-    <li>@messages("vatAccounts.showMeAnExample.bullet1")</li>
-    <li>@messages("vatAccounts.showMeAnExample.bullet2")</li>
-  </ul>
+  <div id="vat-accounts-hint" class="govuk-hint">
+    <p class="govuk-body">@messages("vatAccounts.showMeAnExample.p1")</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>@messages("vatAccounts.showMeAnExample.bullet1")</li>
+      <li>@messages("vatAccounts.showMeAnExample.bullet2")</li>
+    </ul>
+  </div>
 }
 
-@mainTemplate(title = title(messages("vatAccounts.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("vatAccounts.title"), form)) {
 
-  <a class="link-back" href=@backLink>@messages("common.back")</a>
+  @govukBackLink(BackLink(
+    href = backLink,
+    content = Text(messages("common.back"))
+  ))
 
-  @errorSummary("common.errorSummary.heading", form)
+  @errorSummaryHelper(form)
 
-  @formWithCSRF(action = controllers.routes.VATAccountsController.submit, 'novalidate -> "novalidate") {
+  @formWithCSRF(action = controllers.routes.VATAccountsController.submit) {
 
-    <div class="form-group" id="accountingMethod">
-      @multipleLineRadioGroup(
-        field = form("accountingMethod"),
-        choices = Seq(
-          MultipleLineRadioGroupModel("standard", messages("vatAccounts.method.standard"), messages("vatAccounts.description.standard")),
-          MultipleLineRadioGroupModel("cash", messages("vatAccounts.method.cash"), messages("vatAccounts.description.cash"))
+    @govukRadios(Radios(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(messages("vatAccounts.title")),
+          classes = "govuk-fieldset__legend--l",
+          isPageHeading = true
+        ))
+      )),
+      idPrefix = Some(form("accountingMethod").id),
+      name = "accountingMethod",
+      hint = Some(Hint(
+        content = HtmlContent(questionContent)
+      )),
+      items = Seq(
+        RadioItem(
+          content = Text(messages("vatAccounts.method.standard")),
+          hint = Some(Hint(content = Text(messages("vatAccounts.description.standard")))),
+          value = Some(StandardAccounting.value),
+          checked = form("accountingMethod").value.contains(StandardAccounting.value)
         ),
-        question = messages("vatAccounts.title"),
-        additionalContent = Some(questionContent),
-        legendAsHeader = false
-      )
-    </div>
+        RadioItem(
+          content = Text(messages("vatAccounts.method.cash")),
+          hint = Some(Hint(content = Text(messages("vatAccounts.description.cash")))),
+          value = Some(CashAccounting.value),
+          checked = form("accountingMethod").value.contains(CashAccounting.value)
+        )
+      ),
+      errorMessage = form("accountingMethod").error.map { err =>
+        ErrorMessage(content = Text(messages(err.message)))
+      }
+    ))
 
-    <button class="button" type="submit" id="continue">
-      @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }

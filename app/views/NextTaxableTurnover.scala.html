@@ -14,35 +14,34 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import templates.Headings
-@import views.html.templates.inputs.Text
+@import views.html.templates.errors.ErrorSummaryHelper
+@import views.html.templates.inputs.CurrencyInputHelper
 @import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, text: Text, headings: Headings, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      errorSummaryHelper: ErrorSummaryHelper,
+      govukButton: GovukButton,
+      currencyInputHelper: CurrencyInputHelper)
 
-@(form: Form[NumberInputModel],backLinkUrl: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[NumberInputModel], backLinkUrl: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(title = title(messages("nextTaxableTurnover.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("nextTaxableTurnover.title"), form)) {
 
-  <a class="link-back" href="@backLinkUrl">@messages("common.back")</a>
+  @govukBackLink(BackLink(
+    href = backLinkUrl,
+    content = Text(messages("common.back"))
+  ))
 
-  @errorSummary("common.errorSummary.heading", form)
+  @errorSummaryHelper(form)
 
-  @formWithCSRF(action = controllers.routes.NextTaxableTurnoverController.submit, 'novalidate -> "novalidate") {
+  @formWithCSRF(action = controllers.routes.NextTaxableTurnoverController.submit) {
 
-    <div class="form-group">
-      @text(
-        field = form("amount"),
-        label = messages("nextTaxableTurnover.title"),
-        additionalContent = Some(headings(messages("nextTaxableTurnover.title"))),
-        isMonetaryField = true
-      )
-    </div>
+    @currencyInputHelper(form = form, title = "nextTaxableTurnover.title")
 
-    <button class="button" type ="submit" id="continue">
-      @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }

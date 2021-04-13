@@ -14,36 +14,35 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import templates.Headings
-@import views.html.templates.inputs.Text
+@import views.html.templates.errors.ErrorSummaryHelper
+@import views.html.templates.inputs.CurrencyInputHelper
 @import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, text: Text, headings: Headings, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukButton: GovukButton,
+      govukBackLink: GovukBackLink,
+      errorSummaryHelper: ErrorSummaryHelper,
+      currencyInputHelper: CurrencyInputHelper)
 
 @(form: Form[NumberInputModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(title = title(messages("zeroRatedSupplies.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("zeroRatedSupplies.title"), form)) {
 
-  <a class="link-back" href="@controllers.routes.NextTaxableTurnoverController.show().url">@messages("common.back")</a>
+  @govukBackLink(BackLink(
+    href = controllers.routes.NextTaxableTurnoverController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-  @errorSummary("common.errorSummary.heading", form)
+  @errorSummaryHelper(form)
 
-  @formWithCSRF(action = controllers.zeroRated.routes.ZeroRatedSuppliesController.submit, 'novalidate -> "novalidate") {
+  @formWithCSRF(action = controllers.zeroRated.routes.ZeroRatedSuppliesController.submit) {
 
-    <div class="form-group">
-      @text(
-        field = form("amount"),
-        label = messages("zeroRatedSupplies.title"),
-        additionalContent = Some(headings(messages("zeroRatedSupplies.title"))),
-        isMonetaryField = true
-      )
-    </div>
+    @currencyInputHelper(form = form, title = "zeroRatedSupplies.title")
 
-    <button class="button" type ="submit" id="continue">
-      @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }
 

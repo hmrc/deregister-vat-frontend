@@ -30,9 +30,8 @@ class SessionTimeoutSpec extends ViewBaseSpec {
 
     object Selectors {
       val pageHeading = "#content h1"
-      val instructions = "#content article > p"
+      val instructions = "#content .govuk-body"
     }
-
 
     lazy val view = sessionTimeout()(user, messages, mockConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)

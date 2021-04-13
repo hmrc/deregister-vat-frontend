@@ -27,23 +27,23 @@ class DeregistrationDateSpec extends ViewBaseSpec {
   lazy val deregistrationDate: DeregistrationDate = injector.instanceOf[DeregistrationDate]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val h1 = "h1"
-    val day = ".form-group-day > span"
-    val dayValue = ".form-group-day input"
-    val month = ".form-group-month > span"
-    val monthValue = ".form-group-month input"
-    val year = ".form-group-year > span"
-    val yearValue = ".form-group-year input"
-    val button = ".button"
+    val day = "div.govuk-date-input__item:nth-child(1) > div:nth-child(1) > label:nth-child(1)"
+    val dayValue = "#dateDay"
+    val month = "div.govuk-date-input__item:nth-child(2) > div:nth-child(1) > label:nth-child(1)"
+    val monthValue = "#dateMonth"
+    val year = "div.govuk-date-input__item:nth-child(3) > div:nth-child(1) > label:nth-child(1)"
+    val yearValue = "#dateYear"
+    val button = ".govuk-button"
     val form = "form"
-    val p1 = ".form-group p:nth-of-type(1)"
-    val p2 = ".form-group p:nth-of-type(2)"
-    val hint = ".form-hint"
-    val errorSummaryHeading = "#error-summary-display h2"
-    val fieldError = ".error-message"
-    def errorSummaryText(row: Int): String = s"#error-summary-display li:nth-of-type($row)"
-    def errorSummaryLink(row: Int): String = s"#error-summary-display li:nth-of-type($row) a"
+    val p1 = "p.govuk-body:nth-child(1)"
+    val p2 = "p.govuk-body:nth-child(2)"
+    val hint = ".govuk-hint > div"
+    val errorSummaryHeading = ".govuk-error-summary h2"
+    val fieldError = ".govuk-error-message"
+    def errorSummaryText(row: Int): String = s".govuk-error-summary li:nth-of-type($row)"
+    def errorSummaryLink(row: Int): String = s".govuk-error-summary li:nth-of-type($row) a"
   }
 
   "Rendering DeregistrationDate view" when {

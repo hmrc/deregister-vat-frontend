@@ -14,39 +14,27 @@
  * limitations under the License.
  *@
 
-@import templates.Headings
-
-@this(mainTemplate: MainTemplate, headings: Headings)
+@this(mainTemplate: MainTemplate, govukBackLink: GovukBackLink, govukButton: GovukButton)
 
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@linkBack = @{
-if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
-}
+@mainTemplate(pageTitle = messages("deregisterForVAT.title")) {
 
-@mainTemplate(
-title = messages("deregisterForVAT.title"),
-bodyClasses = None,
-appConfig = appConfig) {
+  @govukBackLink(BackLink(
+    href = if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl,
+    content = Text(messages("common.back"))
+  ))
 
-    <a class="link-back" href="@linkBack">@messages("common.back")</a>
+  <h1 class="govuk-heading-l">@messages("deregisterForVAT.title")</h1>
+  <p class="govuk-body">@messages("deregisterForVAT.p1")</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>@messages("deregisterForVAT.bullet1")</li>
+    <li>@messages("deregisterForVAT.bullet2")</li>
+  </ul>
+  <p class="govuk-body">@messages("deregisterForVAT.p2")</p>
 
-    <div>
-        @headings(messages("deregisterForVAT.title"))
-    </div>
-
-    <p>@messages("deregisterForVAT.p1")</p>
-
-    <ul class="list list-bullet">
-        <li>@messages("deregisterForVAT.bullet1")</li>
-        <li>@messages("deregisterForVAT.bullet2")</li>
-    </ul>
-
-    <p>@messages("deregisterForVAT.p2")</p>
-
-    <a class="button" id="continue" role="button"
-       href="@{controllers.routes.DeregistrationReasonController.show().url}">
-        @messages("common.continue")
-    </a>
-
+  @govukButton(Button(
+    href = Some(routes.DeregistrationReasonController.show().url),
+    content = Text(messages("common.continue"))
+  ))
 }

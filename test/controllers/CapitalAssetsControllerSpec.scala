@@ -81,7 +81,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         }
 
         "should have the 'Yes' option checked and an amount already entered" in {
-          Jsoup.parse(bodyOf(result)).select("#yes_no-yes").hasAttr("checked") shouldBe true
+          Jsoup.parse(bodyOf(result)).select("#yes_no").hasAttr("checked") shouldBe true
           Jsoup.parse(bodyOf(result)).select("#amount").attr("value") shouldBe amount.toString
         }
       }

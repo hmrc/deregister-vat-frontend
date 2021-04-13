@@ -16,39 +16,86 @@
 
 @import config.ConfigKeys
 @import testOnly.models.FeatureSwitchModel
-@import uk.gov.hmrc.play.views.html.helpers.FormWithCSRF
-@import views.html.templates.inputs.SingleCheckbox
-@import views.html.MainTemplate
 
-@this(singleCheckbox: SingleCheckbox, mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF)
+@this(govukCheckboxes: GovukCheckboxes, mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF, govukButton: GovukButton)
 
-@(featureSwitchForm: Form[FeatureSwitchModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[FeatureSwitchModel])(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(title = messages("featureSwitch.title"), appConfig = appConfig) {
+@mainTemplate(pageTitle = messages("featureSwitch.title")) {
 
   @formWithCSRF(action = testOnly.controllers.routes.FeatureSwitchController.submitFeatureSwitch) {
 
-    <div class="form-group">
-      <fieldset>
-        <legend>
-          <h1 class="heading-medium">Features</h1>
-        </legend>
-        @singleCheckbox(featureSwitchForm(ConfigKeys.useLanguageSelectorFeature), messages(ConfigKeys.useLanguageSelectorFeature))
-        @singleCheckbox(featureSwitchForm(ConfigKeys.accessibilityStatement), "Enable Accessibility Statement link")
-        @singleCheckbox(featureSwitchForm(ConfigKeys.zeroRatedJourney), "Enable Zero Rated Journey")
-        @singleCheckbox(featureSwitchForm(ConfigKeys.emailVerifiedFeature), "Enable email verification for removal of bulk paper")
-        @singleCheckbox(featureSwitchForm(ConfigKeys.bulkPaperOffFeature), "Enable content change for removal of bulk paper")
-        @singleCheckbox(featureSwitchForm(ConfigKeys.contactPrefMigrationFeature), "Retrieve contact pref from vat-subscription")
-      </fieldset>
+    @govukCheckboxes(Checkboxes(
+      fieldset = Some(Fieldset(
+          legend = Some(Legend(
+              content = Text("Features"),
+              classes = "govuk-fieldset__legend--l",
+              isPageHeading = true
+          ))
+      )),
+      name = "featureSwitch",
+      items = Seq(
+        CheckboxItem(
+          id = Some(ConfigKeys.useLanguageSelectorFeature),
+          name = Some(ConfigKeys.useLanguageSelectorFeature),
+          content = Text(messages(ConfigKeys.useLanguageSelectorFeature)),
+          value = "true",
+          checked = appConfig.features.useLanguageSelector()
+        ),
+        CheckboxItem(
+          id = Some(ConfigKeys.accessibilityStatement),
+          name = Some(ConfigKeys.accessibilityStatement),
+          content = Text("Enable Accessibility Statement link"),
+          value = "true",
+          checked = appConfig.features.accessibilityStatement()
+        ),
+        CheckboxItem(
+          id = Some(ConfigKeys.zeroRatedJourney),
+          name = Some(ConfigKeys.zeroRatedJourney),
+          content = Text("Enable Zero Rated Journey"),
+          value = "true",
+          checked = appConfig.features.zeroRatedJourney()
+        ),
+        CheckboxItem(
+          id = Some(ConfigKeys.emailVerifiedFeature),
+          name = Some(ConfigKeys.emailVerifiedFeature),
+          content = Text("Enable email verification"),
+          value = "true",
+          checked = appConfig.features.emailVerifiedFeature()
+        ),
+        CheckboxItem(
+          id = Some(ConfigKeys.bulkPaperOffFeature),
+          name = Some(ConfigKeys.bulkPaperOffFeature),
+          content = Text("Enable content change for removal of bulk paper"),
+          value = "true",
+          checked = appConfig.features.bulkPaperOffFeature()
+        ),
+        CheckboxItem(
+          id = Some(ConfigKeys.contactPrefMigrationFeature),
+          name = Some(ConfigKeys.contactPrefMigrationFeature),
+          content = Text("Retrieve contact pref from vat-subscription"),
+          value = "true",
+          checked = appConfig.features.contactPrefMigrationFeature()
+        ),
+        CheckboxItem(
+          id = Some(ConfigKeys.stubAgentClientLookupFeature),
+          name = Some(ConfigKeys.stubAgentClientLookupFeature),
+          content = Text(messages("Stub Agent Client Lookup")),
+          value = "true",
+          checked = appConfig.features.stubAgentClientLookup()
+        ),
+        CheckboxItem(
+          id = Some(ConfigKeys.stubContactPreferencesFeature),
+          name = Some(ConfigKeys.stubContactPreferencesFeature),
+          content = Text(messages("Stub Contact Preferences")),
+          value = "true",
+          checked = appConfig.features.stubContactPreferences()
+        )
+      )
+    ))
 
-      <fieldset>
-        <label><h4>Agent Client Lookup Settings</h4></label>
-        @singleCheckbox(featureSwitchForm(ConfigKeys.stubAgentClientLookupFeature), "Stub Agent Client Lookup?")
-        @singleCheckbox(featureSwitchForm(ConfigKeys.stubContactPreferencesFeature), "Stub Contact Preferences")
-      </fieldset>
-    </div>
-
-    <button class="button" type="submit" id="continue-button">Submit</button>
-
+    @govukButton(Button(
+      content = Text("Submit")
+    ))
   }
 }

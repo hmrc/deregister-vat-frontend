@@ -64,6 +64,7 @@ error.date.month = Nodwch y mis yn y fformat cywir
 error.date.year = Nodwch y flwyddyn yn y fformat cywir
 
 #Feedback
+feedback.phaseName = BETA
 feedback.before = Gwasanaeth newydd yw hwn – bydd eich
 feedback.link = adborth
 feedback.after = yn ein helpu i’w wella.

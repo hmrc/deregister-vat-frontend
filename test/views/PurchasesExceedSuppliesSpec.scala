@@ -27,14 +27,14 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
   lazy val purchasesExceedSupplies: PurchasesExceedSupplies = injector.instanceOf[PurchasesExceedSupplies]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val forExample = "#yes_no > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
-    val yesOption = "div.multiple-choice:nth-child(1) > label:nth-child(2)"
-    val noOption = "div.multiple-choice:nth-child(2) > label:nth-child(2)"
-    val button = ".button"
-    val errorHeading = "#error-summary-display"
-    val error = ".error-message"
+    val forExample = ".govuk-hint"
+    val yesOption = "div.govuk-radios__item:nth-child(1) > label:nth-child(2)"
+    val noOption = "div.govuk-radios__item:nth-child(2) > label:nth-child(2)"
+    val button = ".govuk-button"
+    val errorHeading = ".govuk-error-summary"
+    val error = ".govuk-error-message"
   }
 
   "Rendering the Purchases Exceed Supplies page with no errors" should {
@@ -83,7 +83,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${PurchasesExceedSuppliesMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${PurchasesExceedSuppliesMessages.title}"
     }
 
     "have the correct back text" in {

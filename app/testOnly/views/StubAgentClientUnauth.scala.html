@@ -14,16 +14,20 @@
  * limitations under the License.
  *@
 
-@this(mainTemplate: MainTemplate)
+@import config.AppConfig
 
-@(redirectUrl: String)(implicit request: Request[_], messages: Messages, appConfig: config.AppConfig)
+@this(mainTemplate: MainTemplate, govukButton: GovukButton)
 
-@mainTemplate(title = "Stub Agent Client Lookup Frontend - Unauthorised", bodyClasses = None, appConfig = appConfig) {
+@(redirectUrl: String)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
 
-    <h1>Agent Unauthorised</h1>
+@mainTemplate(pageTitle = "Stub Agent Client Lookup Frontend - Unauthorised") {
 
-    <p><span class="bold-small">RedirectUrl:</span> @redirectUrl</p>
+ <h1 class="govuk-heading-m">Agent Unauthorised</h1>
 
-    <a class="button" role="button" id="continue-button" href="@redirectUrl">Redirect</a>
+  <p class="govuk-body"><span class="govuk-heading-s">RedirectUrl:</span> @redirectUrl</p>
 
+ @govukButton(Button(
+  href = Some(redirectUrl),
+  content = Text("Redirect")
+ ))
 }

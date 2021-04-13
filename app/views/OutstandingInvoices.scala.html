@@ -14,37 +14,35 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import views.html.templates.inputs.RadioHelper
 @import config.AppConfig
-@import forms.YesNoForm._
+@import views.html.templates.errors.ErrorSummaryHelper
+@import views.html.templates.inputs.YesNoHelper
 @import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, radioHelper: RadioHelper, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      errorSummaryHelper: ErrorSummaryHelper,
+      govukButton: GovukButton,
+      yesNoHelper: YesNoHelper)
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: AppConfig)
 
-@mainTemplate(title = title(messages("outstandingInvoice.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("outstandingInvoice.title"), form)) {
 
-  <a class="link-back" href="@controllers.routes.IssueNewInvoicesController.show().url">@messages("common.back")</a>
+  @govukBackLink(BackLink(
+    href = controllers.routes.IssueNewInvoicesController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-  @errorSummary("common.errorSummary.heading", form)
+  @errorSummaryHelper(form)
 
-  @formWithCSRF(action = controllers.routes.OutstandingInvoicesController.submit, 'novalidate -> "novalidate") {
+  @formWithCSRF(action = controllers.routes.OutstandingInvoicesController.submit) {
 
-    <div id="@yesNo" class="form-group">
-      @radioHelper(
-        field = form(yesNo),
-        choices = Seq(
-          yes -> messages("common.yes"),
-          no -> messages("common.no")
-        ),
-        question = messages("outstandingInvoice.title"),
-        inline = true
-      )
-    </div>
+    @yesNoHelper(form = form, title = messages("outstandingInvoice.title"))
 
-    <button class="button" type="submit" id="continue">@messages("common.continue")</button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }

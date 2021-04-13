@@ -14,65 +14,58 @@
  * limitations under the License.
  *@
 
-@import views.html.helper._
-@import views.html.templates.Legends
+@this(govukRadios: GovukRadios, govukInput: GovukInput)
 
-@this(legends: Legends)
+@(form: Form[YesNoAmountModel], title: String, hintText: String, currencyLabelText: String)(implicit messages: Messages)
 
-@(field: Field,
-        choices: Seq[(String, String)],
-        question: String,
-        additionalContent: Option[Html] = None,
-        inline: Boolean = false,
-        hiddenContent: Html,
-        legendAsHeader: Boolean = true,
-        hiddenContentError: Boolean = false
-)(implicit messages: Messages)
-
-@elements = @{
-    FieldElements(field.id, field, null, Map(), messages)
+@currencyInput = {
+  @govukInput(Input(
+    id = "amount",
+    name = "amount",
+    classes = "govuk-input--width-10",
+    label = Label(
+      content = Text(messages(currencyLabelText))
+    ),
+    value = form("amount").value,
+    prefix = Some(PrefixOrSuffix(
+      content = Text("£")
+    )),
+    errorMessage =
+      if(form("amount").hasErrors) {
+        Some(ErrorMessage(content = Text(messages(form("amount").errors.head.message))))
+      } else {
+        None
+      }
+  ))
 }
 
-<div @if(elements.hasErrors) {class="form-field--error"}>
-
-    <fieldset @if(elements.hasErrors){aria-describedby="error-message"}>
-
-        @legends(question, legendAsHeader)
-
-        @additionalContent.map { content => @content }
-
-        @elements.errors.map { error =>
-            <span id="error-message" class="error-message">
-                <span class="visuallyhidden">@messages("common.error.titlePrefix")</span>
-                @messages(error.toString)
-            </span>
-        }
-
-        <div @if(inline) {class="inline"}>
-            <div class="multiple-choice" data-target="hiddenContent">
-                <input  type="radio"
-                        id="@{elements.field.name}-yes"
-                        name="@elements.field.name"
-                        value="yes" @field.value.filter(_ == "yes").map { _ => checked="checked"}/>
-                <label for="@{elements.field.name}-yes">@messages("common.yes")</label>
-            </div>
-
-            <div class="panel panel-border-narrow yes-no-hidden
-                    @if(!field.value.contains("yes")) {js-hidden}
-                    @if(hiddenContentError) {hidden-error-panel}"
-                 id="hiddenContent">
-                @hiddenContent
-            </div>
-
-            <div class="multiple-choice">
-                <input  type="radio"
-                        id="@{elements.field.name}-no"
-                        name="@elements.field.name"
-                        value="no" @field.value.filter(_ == "no").map { _ => checked="checked"}/>
-                <label for="@{elements.field.name}-no">@messages("common.no")</label>
-            </div>
-        </div>
-
-
-    </fieldset>
-</div>
+@govukRadios(Radios(
+  fieldset = Some(Fieldset(
+    legend = Some(Legend(
+      content = Text(messages(title)),
+      classes = "govuk-fieldset__legend--l",
+      isPageHeading = true
+    ))
+  )),
+  idPrefix = Some(form("yes_no").id),
+  name = "yes_no",
+  hint = Some(Hint(
+    content = Text(messages(hintText))
+  )),
+  items = Seq(
+    RadioItem(
+      content = Text(messages("common.yes")),
+      value = Some(Yes.toString),
+      checked = form("yes_no").value.contains(Yes.toString),
+      conditionalHtml = Some(currencyInput)
+    ),
+    RadioItem(
+      content = Text(messages("common.no")),
+      value = Some(No.toString),
+      checked = form("yes_no").value.contains(No.toString)
+    )
+  ),
+  errorMessage = form("yes_no").error.map { err =>
+    ErrorMessage(content = Text(messages(err.message)))
+  }
+))

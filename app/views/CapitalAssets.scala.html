@@ -14,55 +14,40 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import views.html.templates.inputs.Text
+@import views.html.templates.errors.ErrorSummaryHelper
 @import views.html.templates.inputs.YesNoRevealHelper
-@import templates.Headings
-@import forms.YesNoForm._
 @import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, yesNoRevealHelper: YesNoRevealHelper, text: Text, headings: Headings, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      errorSummaryHelper: ErrorSummaryHelper,
+      govukButton: GovukButton,
+      yesNoRevealHelper: YesNoRevealHelper)
 
 @(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@questionContent = {
-  @headings(messages("capitalAssets.title"))
+@mainTemplate(pageTitle = title(messages("capitalAssets.title"), form)) {
 
-  <p>@messages("capitalAssets.text.1")</p>
-}
+  @govukBackLink(BackLink(
+    href = controllers.routes.OptionTaxController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-@mainTemplate(title = title(messages("capitalAssets.title"), form), appConfig = appConfig) {
+  @errorSummaryHelper(form)
 
-  <a class="link-back" href="@controllers.routes.OptionTaxController.show().url">@messages("common.back")</a>
+  @formWithCSRF(action = controllers.routes.CapitalAssetsController.submit) {
 
-  @errorSummary("common.errorSummary.heading", form)
+    @yesNoRevealHelper(
+      form = form,
+      title = "capitalAssets.title",
+      hintText = "capitalAssets.text.1",
+      currencyLabelText = "capitalAssets.totalSaleValue"
+    )
 
-  @formWithCSRF(action = controllers.routes.CapitalAssetsController.submit, 'novalidate -> "novalidate") {
-
-    <div id="@yesNo" class="form-group">
-      @yesNoRevealHelper(
-        field = form(yesNo),
-        choices = Seq(
-          yes -> messages("common.yes"),
-          no -> messages("common.no")
-        ),
-        question = messages("capitalAssets.title"),
-        additionalContent = Some(questionContent),
-        hiddenContent = text(
-          field = form("amount"),
-          label = messages("capitalAssets.totalSaleValue"),
-          labelHidden = false,
-          isMonetaryField = true
-        ),
-        legendAsHeader = false,
-        hiddenContentError = form("amount").hasErrors
-      )
-    </div>
-
-    <button class="button" type ="submit" id="continue">
-      @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 
 }

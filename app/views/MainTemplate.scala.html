@@ -14,44 +14,102 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.layouts.Article
-@import views.utils.ServiceNameUtil.generateHeader
-@import uk.gov.hmrc.play.views.html.layouts.Sidebar
+@import uk.gov.hmrc.govukfrontend.views.Aliases.Header
+@import views.utils.ServiceNameUtil
 
+@this(govukLayout: GovukLayout,
+      govukHeader: GovukHeader,
+      govukPhaseBanner: GovukPhaseBanner,
+      hmrcReportTechnicalIssue: HmrcReportTechnicalIssue,
+      hmrcLanguageSelect: HmrcLanguageSelect,
+      hmrcTimeoutDialog: HmrcTimeoutDialog,
+      hmrcStandardFooter: HmrcStandardFooter,
+      trackingConsentSnippet: HmrcTrackingConsentSnippet)
 
-@this(govukWrapper: GovukWrapper, article: Article, sidebar: Sidebar)
+@(pageTitle: String,
+  serviceName: Option[String] = None,
+  showSignOut: Boolean = true,
+  feedbackOnSignOut: Boolean = true
+)(mainContent: Html)(implicit request : Request[_], messages: Messages, appConfig: config.AppConfig)
 
-@(title: String,
-    sidebarLinks: Option[Html] = None,
-    contentHeader: Option[Html] = None,
-    bodyClasses: Option[String] = None,
-    mainClass: Option[String] = None,
-    scriptElem: Option[Html] = None,
-    appConfig: config.AppConfig,
-    serviceName: Option[String] = None,
-    showSignOut: Boolean = true,
-    feedbackOnSignOut: Boolean = true
-)(mainContent: Html)(implicit request : Request[_], messages: Messages)
-
-
-@sidebarContent = {
-    @if(sidebarLinks.isDefined) {
-        @sidebar(sidebarLinks.get, Some("sidebar"))
+@navTitle = @{
+    serviceName.fold{
+        ServiceNameUtil.generateHeader
+    }{
+        name => name
     }
 }
 
-@serviceInfoContent = {}
+@scripts = {
+    <script src='@routes.Assets.at("lib/govuk-frontend/govuk/all.js")'></script>
+    <script src='@routes.Assets.at("lib/hmrc-frontend/hmrc/all.js")'></script>
+    <script>window.GOVUKFrontend.initAll();</script>
+    <script>window.HMRCFrontend.initAll();</script>
+}
 
-@govukWrapper(appConfig = appConfig,
-              title = messages("common.pageTitle", title, generateHeader),
-              mainClass = mainClass,
-              bodyClasses = bodyClasses,
-              sidebar = sidebarContent,
-              contentHeader = contentHeader,
-              mainBody = article(mainContent),
-              serviceInfoContent = serviceInfoContent,
-              scriptElem = scriptElem,
-              feedbackOnSignOut = feedbackOnSignOut,
-              serviceName = serviceName,
-              showSignOut = showSignOut
-)
+@phaseBannerContent = {
+    @messages("feedback.before")
+    <a class="govuk-link" id="beta-banner-feedback" href="@appConfig.feedbackUrl">@messages("feedback.link")</a>
+    @messages("feedback.after")
+}
+
+@beforeContentHtml = {
+    @govukPhaseBanner(PhaseBanner(
+        tag = Some(Tag(content = Text(messages("feedback.phaseName")))),
+        content = HtmlContent(phaseBannerContent)
+    ))
+    @hmrcLanguageSelect(LanguageSelect(
+        language = if(messages.lang.language == "en") En else Cy,
+        languageLinks =
+            En -> appConfig.routeToSwitchLanguage("english").url,
+            Cy -> appConfig.routeToSwitchLanguage("cymraeg").url
+    ))
+}
+
+@head = {
+  @trackingConsentSnippet(nonce = None)
+
+  <link rel="stylesheet" type="text/css" href='@routes.Assets.at("stylesheets/application.css")' media="all">
+
+  @hmrcTimeoutDialog(TimeoutDialog(
+    timeout = Some(appConfig.timeoutPeriod),
+    countdown = Some(appConfig.timeoutCountdown),
+    signOutUrl = Some(routes.SignOutController.timeout.url),
+    keepAliveUrl = Some("#"),
+    signOutButtonText = Some(messages("base.sign-out"))
+  ))
+}
+
+@header = @{
+  govukHeader(Header(
+    serviceName = Some(navTitle),
+    navigation =
+      if(showSignOut)
+        Some(Seq(HeaderNavigation(
+          text = Some(messages("base.sign-out")),
+          href = Some(routes.SignOutController.signOut(feedbackOnSignOut).url)
+        )))
+      else None
+  ))
+}
+
+@getHelpHtml = @{hmrcReportTechnicalIssue(ReportTechnicalIssue(
+    serviceCode = appConfig.contactFormServiceIdentifier,
+    language = if (messages.lang.language == "en") En else Cy
+))}
+
+@fullContent = {
+    <div id="content" class="govuk-!-margin-bottom-6">
+        @mainContent
+    </div>
+    @getHelpHtml
+}
+
+@govukLayout(
+  pageTitle = Some(messages("common.pageTitle", pageTitle, navTitle)),
+  headBlock = Some(head),
+  headerBlock = Some(header),
+  beforeContentBlock = Some(beforeContentHtml),
+  footerBlock = Some(hmrcStandardFooter(accessibilityStatementUrl = Some(appConfig.accessibilityStatementUrl))),
+  scriptsBlock = Some(scripts)
+)(fullContent)

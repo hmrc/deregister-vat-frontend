@@ -27,16 +27,16 @@ class CapitalAssetsSpec extends ViewBaseSpec {
   lazy val capitalAssets: CapitalAssets = injector.instanceOf[CapitalAssets]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val text = "#yes_no > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
+    val text = ".govuk-hint"
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
     val noOption = "fieldset > div > div:nth-of-type(3) > label"
-    val hiddenField = "#hiddenContent"
-    val hint = "#hiddenContent > fieldset > div > label"
-    val button = ".button"
-    val errorHeading = "#error-summary-display"
-    val error = "#yes_no-error-summary"
+    val hiddenField = "#conditional-yes_no"
+    val hint = "#conditional-yes_no label"
+    val button = ".govuk-button"
+    val errorHeading = ".govuk-error-summary"
+    val error = ".govuk-error-message"
   }
 
   "Rendering the option to tax page with no errors" should {
@@ -72,7 +72,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
     }
 
     "have the correct hint text for the hidden field and be hidden" in {
-      document.select(Selectors.hiddenField).hasClass("js-hidden") shouldBe true
+      document.select(Selectors.hiddenField).hasClass("govuk-radios__conditional--hidden") shouldBe true
       elementText(Selectors.hint) shouldBe CapitalAssetsMessages.hint
     }
 
@@ -94,7 +94,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
-        document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CapitalAssetsMessages.title}"
+        document.title shouldBe s"${CommonMessages.errorPrefix} ${CapitalAssetsMessages.title}"
       }
 
       "display the correct error heading" in {
@@ -102,7 +102,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
       }
 
       "display the correct error messages" in {
-        elementText(Selectors.error) shouldBe CapitalAssetsMessages.yesNoError
+        elementText(Selectors.error) shouldBe s"${CommonMessages.errorPrefix} ${CapitalAssetsMessages.yesNoError}"
       }
     }
 
@@ -116,7 +116,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "have the correct document title" in {
-        document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CapitalAssetsMessages.title}"
+        document.title shouldBe s"${CommonMessages.errorPrefix} ${CapitalAssetsMessages.title}"
       }
 
       "display the correct error heading" in {

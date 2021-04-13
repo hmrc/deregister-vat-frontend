@@ -84,7 +84,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         }
 
         "have the yes radio option checked" in {
-          document(result).select(s"#$yesNo-yes").hasAttr("checked") shouldBe true
+          document(result).select(s"#$yesNo").hasAttr("checked") shouldBe true
         }
 
         "have the correct value in the amount field" in {

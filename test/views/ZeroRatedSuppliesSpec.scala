@@ -29,12 +29,12 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
   lazy val zeroRatedSupplies: ZeroRatedSupplies = injector.instanceOf[ZeroRatedSupplies]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
 
-    val button = ".button"
-    val errorHeading = "#error-summary-display"
-    val error = ".error-message"
+    val button = ".govuk-button"
+    val errorHeading = ".govuk-error-summary"
+    val error = ".govuk-error-message"
   }
 
   "Rendering the zero rated supplies page with no errors" should {
@@ -74,7 +74,7 @@ class ZeroRatedSuppliesSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${ZeroRatedSuppliesMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${ZeroRatedSuppliesMessages.title}"
     }
 
     "have the correct back text" in {

@@ -27,15 +27,15 @@ class BusinessActivitySpec extends ViewBaseSpec {
   lazy val businessActivity: BusinessActivity = injector.instanceOf[BusinessActivity]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val forExample = "#yes_no > div:nth-child(1) > fieldset:nth-child(1) > p:nth-child(3)"
+    val forExample = ".govuk-hint"
     val moreInfoLink = "#rates-info"
-    val yesOption = "div.multiple-choice:nth-child(1) > label:nth-child(2)"
-    val noOption = "div.multiple-choice:nth-child(2) > label:nth-child(2)"
-    val button = ".button"
-    val errorHeading = "#error-summary-display"
-    val error = ".error-message"
+    val yesOption = "div.govuk-radios__item:nth-child(1) > label:nth-child(2)"
+    val noOption = "div.govuk-radios__item:nth-child(2) > label:nth-child(2)"
+    val button = ".govuk-button"
+    val errorHeading = ".govuk-error-summary"
+    val error = ".govuk-error-message"
   }
 
   "Rendering the Business Activity page with no errors" should {
@@ -89,7 +89,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${BusinessActivityPageMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${BusinessActivityPageMessages.title}"
     }
 
     "have the correct back text" in {

@@ -52,8 +52,8 @@ class SignOutController @Inject()(val mcc: MessagesControllerComponents,
     }
   }
 
-  def signOutUnauthorised: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Redirect(appConfig.unauthorisedSignOutUrl))
+  def signOutUnauthorised: Action[AnyContent] = Action {
+    Redirect(appConfig.unauthorisedSignOutUrl)
   }
 
   private def deleteDataAndRedirect(redirectUrl: String)(implicit user: User[_]): Future[Result] =

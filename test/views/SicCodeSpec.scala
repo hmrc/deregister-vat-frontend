@@ -27,13 +27,13 @@ class SicCodeSpec extends ViewBaseSpec {
   lazy val sicCode: SicCode = injector.instanceOf[SicCode]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val explanation = ".form-group > fieldset > div:nth-child(1) > p:nth-child(2)"
+    val explanation = "p.govuk-body:nth-child(1)"
     val sicCodeLink = "#find-sic-code"
-    val button = ".button"
-    val errorHeading = "#error-summary-display"
-    val error = ".error-summary > ul > li > a"
+    val button = ".govuk-button"
+    val errorHeading = ".govuk-error-summary"
+    val error = ".govuk-error-message"
   }
 
   "Rendering the SIC Code page with no errors" should {
@@ -82,7 +82,7 @@ class SicCodeSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${SicCodeMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${SicCodeMessages.title}"
     }
 
     "have the correct back text" in {
@@ -112,7 +112,7 @@ class SicCodeSpec extends ViewBaseSpec {
     }
 
     "display the correct error messages" in {
-      elementText(Selectors.error) shouldBe SicCodeMessages.invalid
+      elementText(Selectors.error) shouldBe s"${CommonMessages.errorPrefix} ${SicCodeMessages.invalid}"
     }
   }
 }

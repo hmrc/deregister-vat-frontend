@@ -62,6 +62,7 @@ trait AppConfig {
   val timeoutPeriod: Int
   val timeoutCountdown: Int
   val contactPreferencesService: String
+  val contactFormServiceIdentifier: String
 
   def contactPreferencesUrl(vrn: String): String
 
@@ -79,7 +80,7 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   lazy val appName: String = servicesConfig.getString("appName")
 
   private val contactHost = servicesConfig.getString(Keys.contactFrontendService)
-  private val contactFormServiceIdentifier = "VATC"
+  override lazy val contactFormServiceIdentifier = "VATC"
 
   override lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
@@ -187,8 +188,8 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override val routeToSwitchLanguage: String => Call = (lang: String) => controllers.routes.LanguageController.switchLanguage(lang)
 
   private lazy val accessibilityStatementHost: String = servicesConfig.getString(Keys.accessibilityStatementHost)
-  override lazy val accessibilityStatementUrl: String
-  = accessibilityStatementHost + servicesConfig.getString(Keys.accessibilityStatementUrl)
+  override lazy val accessibilityStatementUrl: String =
+    accessibilityStatementHost + servicesConfig.getString(Keys.accessibilityStatementUrl)
 
   override val gtmContainer: String = servicesConfig.getString(Keys.gtmContainer)
 }

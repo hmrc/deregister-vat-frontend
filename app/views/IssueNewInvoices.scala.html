@@ -14,37 +14,34 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import views.html.templates.inputs.RadioHelper
-@import forms.YesNoForm._
+@import views.html.templates.errors.ErrorSummaryHelper
+@import views.html.templates.inputs.YesNoHelper
 @import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, radioHelper: RadioHelper, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      govukButton: GovukButton,
+      yesNoHelper: YesNoHelper,
+      errorSummaryHelper: ErrorSummaryHelper)
 
 @(form: Form[YesNo])(implicit user: User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(title = title(messages("issueNewInvoices.title"), form), appConfig = appConfig) {
+@mainTemplate(pageTitle = title(messages("issueNewInvoices.title"), form)) {
 
-  <a class="link-back" href="@controllers.routes.OptionStocksToSellController.show().url">@messages("common.back")</a>
+  @govukBackLink(BackLink(
+    href = controllers.routes.OptionStocksToSellController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-  @errorSummary("common.errorSummary.heading", form)
+  @errorSummaryHelper(form)
 
-  @formWithCSRF(action = controllers.routes.IssueNewInvoicesController.submit, 'novalidate -> "novalidate") {
+  @formWithCSRF(action = controllers.routes.IssueNewInvoicesController.submit) {
 
-    <div class="form-group" id="@yesNo">
-      @radioHelper(
-        field = form(yesNo),
-        choices = Seq(
-          yes -> messages("common.yes"),
-          no -> messages("common.no")),
-        question = messages("issueNewInvoices.title"),
-        inline = true
-      )
-    </div>
+    @yesNoHelper(form = form, title = messages("issueNewInvoices.title"))
 
-    <button class="button" type="submit" id="continue">
-      @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }

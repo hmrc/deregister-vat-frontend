@@ -228,7 +228,7 @@ class SicCodeISpec extends IntegrationBaseSpec {
         response should have(
           httpStatus(BAD_REQUEST),
           pageTitle("Error: What is the business’s Standard Industrial Classification (SIC) Code?" + titleSuffix),
-          elementText(".error-message")("Error: Enter the 5 digit code which best describes your business activity")
+          elementText(".govuk-error-message")("Error: Enter the 5 digit code which best describes your business activity")
         )
       }
     }

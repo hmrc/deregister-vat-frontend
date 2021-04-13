@@ -28,23 +28,19 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
   lazy val ceasedTradingDate: CeasedTradingDate = injector.instanceOf[CeasedTradingDate]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val hint = ".form-hint"
-    val button = ".button"
+    val hint = ".govuk-hint"
+    val button = ".govuk-button"
     val dayField = "#dateDay"
     val monthField = "#dateMonth"
     val yearField = "#dateYear"
-    val ceasedTradingField = "#ceasedTrading"
-    val dayText = "#date-fieldset > div > label.form-group.form-group-day > span"
-    val monthText = "#date-fieldset > div > label.form-group.form-group-month > span"
-    val yearText = "#date-fieldset > div > label.form-group.form-group-year > span"
-    val errorHeading = "#error-summary-heading"
-    val errorCeasedTrading = "#ceasedTrading-error-summary"
-    val errorDay = "#dateDay-error-summary"
-    val errorMonth = "#dateMonth-error-summary"
-    val errorYear = "#dateYear-error-summary"
-    val errorField = "#date-fieldset > div > span.error-message"
+    val dayText = "[for=dateDay]"
+    val monthText = "[for=dateMonth]"
+    val yearText = "[for=dateYear]"
+    val errorHeading = ".govuk-error-summary h2"
+    val errorHeadingLink = ".govuk-error-summary a"
+    val errorField = ".govuk-error-message"
   }
 
   "Rendering the Ceased trading date page" should {
@@ -97,7 +93,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.title}"
     }
 
     "have an error summary heading message being displayed" in {
@@ -105,8 +101,8 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error summary item linking to the incorrect field" in {
-      elementText(Selectors.errorDay) shouldBe CommonMessages.errorDateDay
-      element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
+      elementText(Selectors.errorHeadingLink) shouldBe CommonMessages.errorDateDay
+      element(Selectors.errorHeadingLink).attr("href") shouldBe Selectors.dayField
     }
 
     "have an error message being displayed for the fields" in {
@@ -124,7 +120,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.title}"
     }
 
     "have an error summary heading message being displayed" in {
@@ -132,8 +128,8 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error summary item that links to the first incorrect field" in {
-      elementText(Selectors.errorDay) shouldBe CeasedTradingDateMessages.errorNoEntry
-      element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
+      elementText(Selectors.errorHeadingLink) shouldBe CeasedTradingDateMessages.errorNoEntry
+      element(Selectors.errorHeadingLink).attr("href") shouldBe Selectors.dayField
     }
 
     "have an error message being displayed for the fields" in {
@@ -151,7 +147,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.title}"
     }
 
     "have an error heading message being displayed" in {
@@ -159,8 +155,8 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error summary item linking to the incorrect field" in {
-      elementText(Selectors.errorYear) shouldBe CommonMessages.errorDateYear
-      element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
+      elementText(Selectors.errorHeadingLink) shouldBe CommonMessages.errorDateYear
+      element(Selectors.errorHeadingLink).attr("href") shouldBe Selectors.yearField
     }
 
     "have an error message being displayed for the fields" in {
@@ -178,7 +174,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.title}"
     }
 
     "have an error summary heading message being displayed" in {
@@ -186,8 +182,8 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error summary item linking to the incorrect field" in {
-      elementText(Selectors.errorYear) shouldBe CommonMessages.errorDateYear
-      element(Selectors.errorYear).attr("href") shouldBe Selectors.yearField
+      elementText(Selectors.errorHeadingLink) shouldBe CommonMessages.errorDateYear
+      element(Selectors.errorHeadingLink).attr("href") shouldBe Selectors.yearField
     }
 
     "have an error message being displayed for the fields" in {
@@ -205,7 +201,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.title}"
     }
 
     "have an error summary heading message being displayed" in {
@@ -213,8 +209,8 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error summary item that links to the first incorrect field" in {
-      elementText(Selectors.errorDay) shouldBe CeasedTradingDateMessages.errorNoEntry
-      element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
+      elementText(Selectors.errorHeadingLink) shouldBe CeasedTradingDateMessages.errorNoEntry
+      element(Selectors.errorHeadingLink).attr("href") shouldBe Selectors.dayField
     }
 
     "have an error message being displayed for the fields" in {
@@ -232,7 +228,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.title}"
     }
 
     "have an error summary heading message being displayed" in {
@@ -240,8 +236,8 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error summary item linking to the incorrect field" in {
-      elementText(Selectors.errorMonth) shouldBe CommonMessages.errorDateMonth
-      element(Selectors.errorMonth).attr("href") shouldBe Selectors.monthField
+      elementText(Selectors.errorHeadingLink) shouldBe CommonMessages.errorDateMonth
+      element(Selectors.errorHeadingLink).attr("href") shouldBe Selectors.monthField
     }
 
     "have an error message being displayed for the field" in {
@@ -259,7 +255,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.title}"
     }
 
     "have an error summary heading message being displayed" in {
@@ -267,8 +263,8 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error summary item that links to the first incorrect field" in {
-      elementText(Selectors.errorDay) shouldBe CeasedTradingDateMessages.errorNoEntry
-      element(Selectors.errorDay).attr("href") shouldBe Selectors.dayField
+      elementText(Selectors.errorHeadingLink) shouldBe CeasedTradingDateMessages.errorNoEntry
+      element(Selectors.errorHeadingLink).attr("href") shouldBe Selectors.dayField
     }
 
     "have an error message being displayed for the fields" in {
@@ -286,7 +282,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
-      document.title shouldBe s"${CommonMessages.errorTitlePrefix} ${CeasedTradingDateMessages.title}"
+      document.title shouldBe s"${CommonMessages.errorPrefix} ${CeasedTradingDateMessages.title}"
     }
 
     "have an error summary heading message being displayed" in {
@@ -294,8 +290,8 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     }
 
     "have an error summary item linking to the form ID which focuses the first incorrect field" in {
-      elementText(Selectors.errorCeasedTrading) shouldBe CeasedTradingDateMessages.errorNoEntry
-      element(Selectors.errorCeasedTrading).attr("href") shouldBe Selectors.ceasedTradingField
+      elementText(Selectors.errorHeadingLink) shouldBe CeasedTradingDateMessages.errorNoEntry
+      element(Selectors.errorHeadingLink).attr("href") shouldBe Selectors.dayField
     }
 
     "have an error message being displayed for the fields" in {

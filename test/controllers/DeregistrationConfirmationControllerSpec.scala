@@ -98,7 +98,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                     mockAuthResult(Future.successful(mockAuthorisedIndividual))
                     setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
                     setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-                    setupAuditExtendedEvent
+                    setupAuditExtendedEvent()
 
                     status(result) shouldBe Status.OK
                   }
@@ -109,8 +109,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                   }
 
                   "return the correct first paragraph" in {
-                    messages(document.getElementById("content").getElementsByTag("article").first()
-                      .getElementsByTag("p").first().text()) shouldBe Messages.emailPreference
+                    messages(document.getElementsByClass("govuk-body").first().text()) shouldBe Messages.emailPreference
                   }
 
                 }
@@ -127,7 +126,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                     mockAuthResult(Future.successful(mockAuthorisedIndividual))
                     setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
                     setupMockCustomerDetails(vrn)(Right(customerDetailsUnverifiedEmail))
-                    setupAuditExtendedEvent
+                    setupAuditExtendedEvent()
 
                     status(result) shouldBe Status.OK
                   }
@@ -138,8 +137,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                   }
 
                   "return the correct first paragraph" in {
-                    messages(document.getElementById("content").getElementsByTag("article").first()
-                      .getElementsByTag("p").first().text()) shouldBe Messages.digitalPreference
+                    messages(document.getElementsByClass("govuk-body").first().text()) shouldBe Messages.digitalPreference
                   }
                 }
               }
@@ -161,7 +159,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                 mockAuthResult(Future.successful(mockAuthorisedIndividual))
                 setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
                 setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-                setupAuditExtendedEvent
+                setupAuditExtendedEvent()
 
                 status(result) shouldBe Status.OK
               }
@@ -172,8 +170,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
               }
 
               "return the correct first paragraph" in {
-                messages(document.getElementById("content").getElementsByTag("article").first()
-                  .getElementsByTag("p").first().text()) shouldBe Messages.digitalPreference
+                messages(document.getElementsByClass("govuk-body").first().text()) shouldBe Messages.digitalPreference
               }
 
             }
@@ -195,7 +192,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
               mockAuthResult(Future.successful(mockAuthorisedIndividual))
               setupMockContactPreferences(vrn)(Right(contactPreferencesPaper))
               setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-              setupAuditExtendedEvent
+              setupAuditExtendedEvent()
               status(result) shouldBe Status.OK
             }
 
@@ -205,8 +202,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
             }
 
             "return the correct first paragraph" in {
-              messages(document.getElementById("content").getElementsByTag("article").first()
-                .getElementsByTag("p").first().text()) shouldBe Messages.paperPreference
+              messages(document.getElementsByClass("govuk-body").first().text()) shouldBe Messages.paperPreference
             }
           }
 
@@ -230,8 +226,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
             }
 
             "return the correct first paragraph" in {
-              messages(document.getElementById("content").getElementsByTag("article").first()
-                .getElementsByTag("p").first().text()) shouldBe Messages.contactPrefError
+              messages(document.getElementsByClass("govuk-body").first().text()) shouldBe Messages.contactPrefError
             }
           }
         }
@@ -261,4 +256,3 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     }
   }
 }
-

@@ -14,50 +14,97 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import views.html.templates.errors.ErrorSummary
-@import templates.Headings
-@import views.html.templates.inputs.CheckboxHelper
+@import views.html.templates.errors.ErrorSummaryHelper
 @import views.utils.TitleUtil.title
 
-@this(headings: Headings, mainTemplate: MainTemplate, errorSummary: ErrorSummary, checkboxHelper: CheckboxHelper, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      govukButton: GovukButton,
+      govukCheckboxes: GovukCheckboxes,
+      errorSummaryHelper: ErrorSummaryHelper)
 
 @(form: Form[WhyTurnoverBelowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@questionContent = {
-  @headings(messages("whyTurnoverBelow.title", appConfig.deregThreshold))
+@mainTemplate(pageTitle = title(messages("whyTurnoverBelow.title", appConfig.deregThreshold), form)) {
 
-}
+  @govukBackLink(BackLink(
+    href = controllers.routes.NextTaxableTurnoverController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-@mainTemplate(title(messages("whyTurnoverBelow.title", appConfig.deregThreshold), form), appConfig = appConfig) {
+  @errorSummaryHelper(form, Some(s"#${WhyTurnoverBelowModel.lostContract}"))
 
-  <a class="link-back" href="@controllers.routes.NextTaxableTurnoverController.show().url">@messages("common.back")</a>
+  @formWithCSRF(action = controllers.routes.WhyTurnoverBelowController.submit) {
 
-  @errorSummary("common.errorSummary.heading", form, Some("reason"))
-
-  @formWithCSRF(action = controllers.routes.WhyTurnoverBelowController.submit, 'novalidate -> "novalidate") {
-
-    <div class="form-group" id="reason">
-      @checkboxHelper(
-        form = form,
-        choices = Seq(
-          WhyTurnoverBelowModel.lostContract -> messages("whyTurnoverBelow.reason.lostContract"),
-          WhyTurnoverBelowModel.semiRetiring -> messages("whyTurnoverBelow.reason.semiRetiring"),
-          WhyTurnoverBelowModel.moreCompetitors -> messages("whyTurnoverBelow.reason.moreCompetitors"),
-          WhyTurnoverBelowModel.reducedTradingHours -> messages("whyTurnoverBelow.reason.reducedTradingHours"),
-          WhyTurnoverBelowModel.seasonalBusiness -> messages("whyTurnoverBelow.reason.seasonalBusiness"),
-          WhyTurnoverBelowModel.closedPlacesOfBusiness -> messages("whyTurnoverBelow.reason.closedPlacesOfBusiness"),
-          WhyTurnoverBelowModel.turnoverLowerThanExpected -> messages("whyTurnoverBelow.reason.turnoverLowerThanExpected")
+    @govukCheckboxes(Checkboxes(
+      fieldset = Some(Fieldset(
+        legend = Some(Legend(
+          content = Text(messages("whyTurnoverBelow.title", appConfig.deregThreshold)),
+          classes = "govuk-fieldset__legend--l",
+          isPageHeading = true
+        ))
+      )),
+      name = "whyTurnoverBelow",
+      hint = Some(Hint(content = Text(messages("whyTurnoverBelow.text.1")))),
+      items = Seq(
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.lostContract),
+          name = Some(WhyTurnoverBelowModel.lostContract),
+          content = Text(messages("whyTurnoverBelow.reason.lostContract")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.lostContract).value.contains("true")
         ),
-        question = messages("whyTurnoverBelow.title", appConfig.deregThreshold),
-        hint = Some(messages("whyTurnoverBelow.text.1")),
-        legendAsHeader = false,
-        additionalContent = Some(questionContent)
-      )
-    </div>
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.semiRetiring),
+          name = Some(WhyTurnoverBelowModel.semiRetiring),
+          content = Text(messages("whyTurnoverBelow.reason.semiRetiring")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.semiRetiring).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.moreCompetitors),
+          name = Some(WhyTurnoverBelowModel.moreCompetitors),
+          content = Text(messages("whyTurnoverBelow.reason.moreCompetitors")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.moreCompetitors).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.reducedTradingHours),
+          name = Some(WhyTurnoverBelowModel.reducedTradingHours),
+          content = Text(messages("whyTurnoverBelow.reason.reducedTradingHours")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.reducedTradingHours).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.seasonalBusiness),
+          name = Some(WhyTurnoverBelowModel.seasonalBusiness),
+          content = Text(messages("whyTurnoverBelow.reason.seasonalBusiness")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.seasonalBusiness).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.closedPlacesOfBusiness),
+          name = Some(WhyTurnoverBelowModel.closedPlacesOfBusiness),
+          content = Text(messages("whyTurnoverBelow.reason.closedPlacesOfBusiness")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.closedPlacesOfBusiness).value.contains("true")
+        ),
+        CheckboxItem(
+          id = Some(WhyTurnoverBelowModel.turnoverLowerThanExpected),
+          name = Some(WhyTurnoverBelowModel.turnoverLowerThanExpected),
+          content = Text(messages("whyTurnoverBelow.reason.turnoverLowerThanExpected")),
+          value = "true",
+          checked = form(WhyTurnoverBelowModel.turnoverLowerThanExpected).value.contains("true")
+        )
+      ),
+      errorMessage = form.errors.headOption.map { error =>
+        ErrorMessage(content = Text(messages(error.message)))
+      }
+    ))
 
-    <button class="button" type ="submit" id="continue">
-      @messages("common.continue")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
   }
 }

@@ -31,8 +31,9 @@ trait MockHttp extends TestUtil with MockFactory {
   val mockHttp: HttpClient = mock[HttpClient]
 
   def setupMockHttpGet[T](url: String)(response: Either[ErrorModel, T]): Unit = {
-    (mockHttp.GET(_: String)(_: HttpReads[Either[ErrorModel, T]], _: HeaderCarrier, _: ExecutionContext))
-      .expects(url, *, *, *)
+    (mockHttp.GET(_: String, _: Seq[(String, String)], _: Seq[(String, String)])
+                 (_: HttpReads[Either[ErrorModel, T]], _: HeaderCarrier, _: ExecutionContext))
+      .expects(url, *, *, *, *, *)
       .returns(response)
   }
 

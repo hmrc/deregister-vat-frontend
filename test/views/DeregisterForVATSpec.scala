@@ -26,11 +26,11 @@ class DeregisterForVATSpec extends ViewBaseSpec {
   lazy val deregisterForVAT: DeregisterForVAT = injector.instanceOf[DeregisterForVAT]
 
   object Selectors {
-    val back = ".link-back"
+    val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val button = ".button"
-    val para:  Int => String = n => s"#content article > p:nth-child($n)"
-    val bullets: Int => String = n => s"#content > article > ul > li:nth-child($n)"
+    val button = ".govuk-button"
+    val para:  Int => String = n => s"#content .govuk-body:nth-child($n)"
+    val bullets: Int => String = n => s"#content ul > li:nth-child($n)"
   }
 
   "Rendering the cancel registration reason page for client" should {

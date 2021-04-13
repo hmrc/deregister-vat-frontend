@@ -14,49 +14,42 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import templates.Headings
 @import models.CheckYourAnswersRowModel
 
-@this(mainTemplate: MainTemplate, headings: Headings, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate, formWithCSRF: FormWithCSRF, govukButton: GovukButton)
 
 @(answers: Seq[CheckYourAnswersRowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @answerRow(answerModel: CheckYourAnswersRowModel) = {
-  <div>
-    <dt class="cya-question">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
       @answerModel.question
     </dt>
-    <dd class="cya-answer">
+    <dd class="govuk-summary-list__value">
       @answerModel.answer
     </dd>
-    <dd class="cya-change">
-      <a href="@answerModel.url" aria-label="@answerModel.hiddenText">
-      @messages("checkYourAnswers.change")
+    <dd class="govuk-summary-list__actions">
+      <a class="govuk-link" href="@answerModel.url" aria-label="@answerModel.hiddenText">
+        @messages("checkYourAnswers.change")
       </a>
     </dd>
   </div>
 }
 
-@mainTemplate(
-  title = messages("checkYourAnswers.title"),
-  bodyClasses = None,
-  appConfig = appConfig) {
+@mainTemplate(pageTitle = messages("checkYourAnswers.title")) {
 
-  @headings(messages("checkYourAnswers.title"))
+  <h1 class="govuk-heading-l">@messages("checkYourAnswers.title")</h1>
 
-  <div class="form-group">
-    <dl class="govuk-check-your-answers cya-questions-long">
-      @answers.map{ answer =>
-        @answerRow(answer)
-      }
-    </dl>
-  </div>
+  <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+    @answers.map{ answer =>
+      @answerRow(answer)
+    }
+  </dl>
 
   @formWithCSRF(action = controllers.routes.CheckAnswersController.submit) {
-    <button class="button" type ="submit" id="continue">
-      @messages("checkYourAnswers.confirm")
-    </button>
+    @govukButton(Button(
+      content = Text(messages("checkYourAnswers.confirm"))
+    ))
   }
 }
 

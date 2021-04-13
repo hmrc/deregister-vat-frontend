@@ -14,50 +14,46 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.play.views.html.helpers._
-@import templates.inputs.RadioHelper
-@import views.html.templates.errors.ErrorSummary
-@import templates.Headings
-@import forms.YesNoForm._
+@import views.html.templates.errors.ErrorSummaryHelper
+@import views.html.templates.inputs.YesNoHelper
 @import views.utils.TitleUtil.title
 
-@this(mainTemplate: MainTemplate, errorSummary: ErrorSummary, radioHelper: RadioHelper, headings: Headings, formWithCSRF: FormWithCSRF)
+@this(mainTemplate: MainTemplate,
+      errorSummaryHelper: ErrorSummaryHelper,
+      yesNoHelper: YesNoHelper,
+      formWithCSRF: FormWithCSRF,
+      govukBackLink: GovukBackLink,
+      govukButton: GovukButton)
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@questionContent = {
-    @headings(messages("businessActivity.title"))
+@mainTemplate(pageTitle = title(messages("businessActivity.title"), form)) {
 
-    <p>@messages("businessActivity.forExample")</p>
+  @govukBackLink(BackLink(
+    href = controllers.routes.DeregistrationReasonController.show().url,
+    content = Text(messages("common.back"))
+  ))
 
-}
+  @errorSummaryHelper(form)
 
-@mainTemplate(title = title(messages("businessActivity.title"), form), appConfig = appConfig) {
+  @formWithCSRF(action = controllers.zeroRated.routes.BusinessActivityController.submit) {
 
-    <a class="link-back" href="@controllers.routes.DeregistrationReasonController.show().url">@messages("common.back")</a>
+    @yesNoHelper(
+      form = form,
+      title = messages("businessActivity.title"),
+      additionalContent = Some(Html(messages("businessActivity.forExample")))
+    )
 
-    @errorSummary("common.errorSummary.heading", form)
+    <p class="govuk-body">
+      <a id="rates-info"
+         href="@{appConfig.govUkVatRatesInfo}"
+         class="govuk-link"
+         rel="noreferrer noopener"
+         target="_blank">@messages("businessActivity.moreInfo")</a>
+    </p>
 
-    @formWithCSRF(action = controllers.zeroRated.routes.BusinessActivityController.submit, 'novalidate -> "novalidate") {
-
-    <div class="form-group" id="@yesNo">
-        @radioHelper(
-            field = form(yesNo),
-            choices = Seq(
-                yes -> messages("common.yes"),
-                no -> messages("common.no")
-            ),
-            question = messages("businessActivity.title"),
-            additionalContent = Some(questionContent),
-            inline = true,
-            legendAsHeader = false
-        )
-    </div>
-
-        <button class="form-group button" type="submit" id="continue">
-            @messages("common.continue")
-        </button>
-
-        <p><a id="rates-info" href="@{appConfig.govUkVatRatesInfo}" target="_blank">@messages("businessActivity.moreInfo")</a></p>
-    }
+    @govukButton(Button(
+      content = Text(messages("common.continue"))
+    ))
+  }
 }

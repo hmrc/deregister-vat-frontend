@@ -80,7 +80,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         }
 
         "has the Yes radio option checked" in {
-          document(result).select(s"#$yesNo-yes").hasAttr("checked") shouldBe true
+          document(result).select(s"#$yesNo").hasAttr("checked") shouldBe true
         }
       }
 

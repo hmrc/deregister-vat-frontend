@@ -356,7 +356,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
           response should have(
             httpStatus(BAD_REQUEST),
             pageTitle("Error: Will the business receive payment for outstanding invoices after you cancel the registration?" + titleSuffix),
-            elementText(".error-message")(yesNoError)
+            elementText(".govuk-error-message")(yesNoError)
           )
         }
       }

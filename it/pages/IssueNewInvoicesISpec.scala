@@ -295,7 +295,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
         response should have(
           httpStatus(BAD_REQUEST),
           pageTitle("Error: Is the business going to issue any new invoices after you cancel the registration?" + titleSuffix),
-          elementText(".error-message")("Error: Select yes if the business is expecting to issue any new invoices after you cancel the registration")
+          elementText(".govuk-error-message")("Error: Select yes if the business is expecting to issue any new invoices after you cancel the registration")
         )
       }
     }
