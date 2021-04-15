@@ -34,3 +34,10 @@ $hmrc-assets-path: "/vat-through-software/account/cancel-vat/assets/lib/hmrc-fro
   background:#28a197;
   text-align:center;
 }
+
+.js-enabled .govuk-header__menu-button {
+  display: none;
+}
+.js-enabled .govuk-header__navigation {
+  display: block;
+}
