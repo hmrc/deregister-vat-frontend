@@ -64,13 +64,6 @@
           checked = appConfig.features.emailVerifiedFeature()
         ),
         CheckboxItem(
-          id = Some(ConfigKeys.bulkPaperOffFeature),
-          name = Some(ConfigKeys.bulkPaperOffFeature),
-          content = Text("Enable content change for removal of bulk paper"),
-          value = "true",
-          checked = appConfig.features.bulkPaperOffFeature()
-        ),
-        CheckboxItem(
           id = Some(ConfigKeys.contactPrefMigrationFeature),
           name = Some(ConfigKeys.contactPrefMigrationFeature),
           content = Text("Retrieve contact pref from vat-subscription"),
