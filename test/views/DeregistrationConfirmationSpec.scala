@@ -188,6 +188,11 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
           elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
         }
 
+
+        "have the correct first paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPref
+        }
+
         "have the correct text for the second paragraph (including business name)" in {
           elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.agentWithBName
         }
@@ -205,6 +210,11 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
         "have the correct page heading" in {
           elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
+        }
+
+
+        "have the correct first paragraph" in {
+          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPref
         }
 
         "have the correct text for the second paragraph (including business name)" in {
