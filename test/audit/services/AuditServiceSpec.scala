@@ -17,15 +17,25 @@
 package audit.services
 
 import audit.mocks.MockAuditConnector
-import audit.models.ContactPreferenceAuditModel
-import play.api.libs.json.{JsValue, Json}
+import audit.models.ExtendedAuditModel
+import play.api.libs.json.{JsValue, Json, Writes}
 import utils.TestUtil
 
 class AuditServiceSpec extends TestUtil with MockAuditConnector {
 
   "Calling .auditExtendedEvent" should {
 
-    val model = ContactPreferenceAuditModel("999999999", "DIGITAL")
+    case class ExampleAuditModel(value: Int) extends ExtendedAuditModel {
+      override val transactionName: String = "my-transaction"
+      override val detail: JsValue = Json.toJson(this)
+      override val auditType: String = "ExampleAudit"
+    }
+
+    object ExampleAuditModel {
+      implicit val writes: Writes[ExampleAuditModel] = Writes { model => Json.obj("fieldName" -> model.value) }
+    }
+
+    val model = ExampleAuditModel(1)
     lazy val auditService = new AuditService(mockAuditConnector)
 
     "audit an event" in {

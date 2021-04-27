@@ -19,6 +19,4 @@ package testOnly.models
 case class FeatureSwitchModel(stubAgentClientLookup: Boolean,
                               stubContactPreferences: Boolean,
                               useLanguagePreferencesFeature: Boolean,
-                              accessibilityStatementEnabled: Boolean,
-                              contactPrefMigrationFeature: Boolean)
-
+                              accessibilityStatementEnabled: Boolean)

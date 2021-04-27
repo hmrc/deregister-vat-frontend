@@ -36,8 +36,7 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
         stubAgentClientLookup = appConfig.features.stubAgentClientLookup(),
         stubContactPreferences = appConfig.features.stubContactPreferences(),
         useLanguagePreferencesFeature = appConfig.features.useLanguageSelector(),
-        accessibilityStatementEnabled = appConfig.features.accessibilityStatement(),
-        contactPrefMigrationFeature = appConfig.features.contactPrefMigrationFeature()
+        accessibilityStatementEnabled = appConfig.features.accessibilityStatement()
       )
     )))
   }
@@ -54,8 +53,6 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
     appConfig.features.stubContactPreferences(model.stubContactPreferences)
     appConfig.features.useLanguageSelector(model.useLanguagePreferencesFeature)
     appConfig.features.accessibilityStatement(model.accessibilityStatementEnabled)
-    appConfig.features.contactPrefMigrationFeature(model.contactPrefMigrationFeature)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
-
 }
