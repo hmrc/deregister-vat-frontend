@@ -27,16 +27,13 @@ object DeregistrationConfirmationMessages extends BaseMessages {
 
   val contactDetails = "Make sure your contact details are up to date."
 
-  val digitalPreference: String = "We’ll send you an email within 2 working days with an update, followed by a " +
+  val digitalPreference: String =  "We’ll send you an email within 2 working days with an update, followed by a " +
     "letter to your principal place of business. You can also check your HMRC secure messages for an update."
 
   val emailPreference: String = "We’ll send you an email within 2 working days with an update " +
     "or you can check your HMRC secure messages."
 
   val paperPreference = "We’ll send a letter to your principal place of business with an update within 15 working days."
-
-  val textAgentPrefYes: String = "We’ll send an email to agentEmail@test.com within 2 working days telling you " +
-    "whether or not the request has been accepted."
 
   val text2AgentWithOrgName = "We’ll also contact Fake Business Name Limited with an update."
 

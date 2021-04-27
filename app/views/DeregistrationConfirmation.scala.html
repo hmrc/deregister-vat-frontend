@@ -40,9 +40,9 @@
 
   @{
     if(user.isAgent){
-      (user.session.get(SessionKeys.verifiedAgentEmail), businessName, appConfig.features.bulkPaperOffFeature()) match {
+      (user.session.get(SessionKeys.verifiedAgentEmail), businessName) match {
 
-        case (Some(verifiedEmail), Some(businessName), true) =>
+        case (Some(verifiedEmail), Some(businessName)) =>
           <p class="govuk-body">{messages("deregistrationConfirmation.bpOffEmailP1")}
               <strong class="bold">{verifiedEmail}</strong>
               {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
@@ -50,7 +50,7 @@
               <strong class="bold">{businessName}</strong>
           {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-        case (Some(verifiedEmail), None, true) =>
+        case (Some(verifiedEmail), None) =>
           <p class="govuk-body">{messages("deregistrationConfirmation.bpOffEmailP1")}
               <strong class="bold">{verifiedEmail}</strong>
               {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
@@ -58,38 +58,15 @@
           {messages("deregistrationConfirmation.yourClient")}
           {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-        case (None, Some(businessName), true) =>
+        case (None, Some(businessName)) =>
           <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
           <strong class="bold">{businessName}</strong>
           {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
-        case (None, None, true) =>
+        case (None, None) =>
           <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
           {messages("deregistrationConfirmation.yourClient")}
           {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
-
-        case (Some(verifiedEmail), Some(businessName), _) =>
-          <p class="govuk-body">{messages("deregistrationConfirmation.textAgentPrefYesP1")}
-              <strong class="bold">{verifiedEmail}</strong>
-              {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
-          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-              <strong class="bold">{businessName}</strong>
-              {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
-
-        case (Some(verifiedEmail), None, _) =>
-          <p class="govuk-body">{messages("deregistrationConfirmation.textAgentPrefYesP1")}
-              <strong class="bold">{verifiedEmail}</strong>
-              {messages("deregistrationConfirmation.textAgentPrefYesP2")}</p>
-          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-              {messages("deregistrationConfirmation.yourClient")}
-              {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
-
-        case (None, Some(businessName), _) =>
-          <p class="govuk-body">{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
-          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
-              <strong class="bold">{businessName}</strong>
-              {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
-
         case _ =>
           <p class="govuk-body">{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
           <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
