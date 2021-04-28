@@ -16,18 +16,14 @@
 
 package controllers
 
-import audit.models.ContactPreferenceAuditModel
-import audit.services.AuditService
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import javax.inject.Inject
-import models.User
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{ContactPreferencesService, CustomerDetailsService, DeleteAllStoredAnswersService}
-import uk.gov.hmrc.http.HeaderCarrier
+import services.{CustomerDetailsService, DeleteAllStoredAnswersService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.DeregistrationConfirmation
 
@@ -38,11 +34,9 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
                                                      val authentication: AuthPredicate,
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
-                                                     val customerDetailsService: CustomerDetailsService,
-                                                     val auditService: AuditService,
-                                                     implicit val customerContactPreference: ContactPreferencesService,
-                                                     implicit val ec: ExecutionContext,
-                                                     implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                                     val customerDetailsService: CustomerDetailsService)
+                                                    (implicit val ec: ExecutionContext,
+                                                     val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
 
@@ -53,27 +47,11 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
 
           case Right(_) =>
 
-            val serviceCalls = for {
-              customerDetailsCall <- customerDetailsService.getCustomerDetails(user.vrn)
-              contactPreferenceCall <- getContactPreference
-            } yield (customerDetailsCall, contactPreferenceCall)
+            customerDetailsService.getCustomerDetails(user.vrn).map { result =>
 
-            serviceCalls.map { result =>
-
-              val businessName: Option[String] = result._1.fold(_ => None, _.businessName)
-              val contactPreference: Option[String] = if (appConfig.features.contactPrefMigrationFeature()) {
-                result._1.fold(_ => None, _.commsPreference)
-              } else {
-                result._2.fold(_ => None, {
-                  model =>
-                    auditService.auditExtendedEvent(ContactPreferenceAuditModel(user.vrn, model.preference))
-                    Some(model.preference)
-                })
-              }
-
-              val verifiedEmail = {
-                result._1.fold(_ => None, _.emailVerified)
-              }
+              val businessName: Option[String] = result.fold(_ => None, _.businessName)
+              val contactPreference: Option[String] = result.fold(_ => None, _.commsPreference)
+              val verifiedEmail = result.fold(_ => None, _.emailVerified)
 
               Ok(deregistrationConfirmation(businessName, contactPreference, verifiedEmail))
             }
@@ -83,14 +61,6 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
             Future.successful(serviceErrorHandler.showInternalServerError)
         }
       case _ => Future.successful(Redirect(controllers.routes.DeregisterForVATController.redirect()))
-    }
-  }
-
-  private def getContactPreference(implicit user: User[AnyContent], hc: HeaderCarrier, ec: ExecutionContext) = {
-    if (user.isAgent | appConfig.features.contactPrefMigrationFeature()) {
-      Future(Left(None))(ec)
-    } else {
-      customerContactPreference.getCustomerContactPreferences(user.vrn)(hc, ec)
     }
   }
 }

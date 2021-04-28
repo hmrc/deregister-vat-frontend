@@ -38,7 +38,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
   "Rendering the deregistration confirmation page for a non-agent user" when {
 
-    "contactPreferences returns 'DIGITAL'" when {
+    "contactPreference is 'DIGITAL'" when {
 
       "verifiedEmail is true" should {
 
@@ -106,7 +106,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     }
 
-    "contactPreferences returns 'PAPER'" should {
+    "contactPreference is 'PAPER'" should {
 
       lazy val view = deregistrationConfirmation(preference = Some("PAPER"))(user, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -137,7 +137,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
     }
 
-    "contactPreferences returns an error" should {
+    "a contact preference is not present" should {
 
       lazy val view = deregistrationConfirmation()(user, messages, mockConfig)
       lazy implicit val document: Document = Jsoup.parse(view.body)

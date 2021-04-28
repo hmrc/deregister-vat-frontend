@@ -30,7 +30,6 @@ import play.api.inject.Injector
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{stubBodyParser, stubControllerComponents, stubMessagesApi}
-import services.ContactPreferencesService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.test._
 
@@ -66,10 +65,11 @@ trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach
 
   lazy implicit val config: Configuration = app.configuration
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig
-  lazy implicit val mockUserContactPref: ContactPreferencesService = injector.instanceOf[ContactPreferencesService]
-  lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false")
+  lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false")
   lazy val requestWithVRN: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.CLIENT_VRN -> vrn)
-  lazy val requestPost: FakeRequest[AnyContentAsEmpty.type] = FakeRequest("POST", "/").withSession(SessionKeys.insolventWithoutAccessKey -> "false")
+  lazy val requestPost: FakeRequest[AnyContentAsEmpty.type] =
+    FakeRequest("POST", "/").withSession(SessionKeys.insolventWithoutAccessKey -> "false")
   lazy val insolventRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "true")
   lazy val injector: Injector = app.injector

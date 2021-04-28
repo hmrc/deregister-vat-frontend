@@ -50,13 +50,6 @@
           checked = appConfig.features.accessibilityStatement()
         ),
         CheckboxItem(
-          id = Some(ConfigKeys.contactPrefMigrationFeature),
-          name = Some(ConfigKeys.contactPrefMigrationFeature),
-          content = Text("Retrieve contact pref from vat-subscription"),
-          value = "true",
-          checked = appConfig.features.contactPrefMigrationFeature()
-        ),
-        CheckboxItem(
           id = Some(ConfigKeys.stubAgentClientLookupFeature),
           name = Some(ConfigKeys.stubAgentClientLookupFeature),
           content = Text(messages("Stub Agent Client Lookup")),
