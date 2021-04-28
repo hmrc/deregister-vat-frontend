@@ -18,5 +18,14 @@ package testOnly.models
 
 case class FeatureSwitchModel(stubAgentClientLookup: Boolean,
                               stubContactPreferences: Boolean,
+<<<<<<< HEAD
                               useLanguagePreferencesFeature: Boolean,
                               accessibilityStatementEnabled: Boolean)
+=======
+                              accessibilityStatementEnabled: Boolean,
+                              zeroRatedJourney: Boolean,
+                              emailVerifiedFeature: Boolean,
+                              bulkPaperOffFeature: Boolean,
+                              contactPrefMigrationFeature: Boolean)
+
+>>>>>>> 3606d1c... [BTAT-9174] Removed useLanguageSelector feature switch
