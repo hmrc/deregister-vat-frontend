@@ -21,6 +21,5 @@ case class FeatureSwitchModel(stubAgentClientLookup: Boolean,
                               useLanguagePreferencesFeature: Boolean,
                               accessibilityStatementEnabled: Boolean,
                               zeroRatedJourney: Boolean,
-                              emailVerifiedFeature: Boolean,
                               contactPrefMigrationFeature: Boolean)
 

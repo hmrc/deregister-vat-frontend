@@ -30,7 +30,6 @@ object FeatureSwitchForm {
       ConfigKeys.useLanguageSelectorFeature -> boolean,
       ConfigKeys.accessibilityStatement -> boolean,
       ConfigKeys.zeroRatedJourney -> boolean,
-      ConfigKeys.emailVerifiedFeature -> boolean,
       ConfigKeys.contactPrefMigrationFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
