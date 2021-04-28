@@ -54,18 +54,13 @@ class BusinessActivityController @Inject()(businessActivity: BusinessActivity,
   }
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    if (appConfig.features.zeroRatedJourney()) {
       businessActivityAnswerService.getAnswer map {
         case Right(Some(data)) => Ok(renderView(form.fill(data)))
         case _ => Ok(renderView(form))
       }
-    } else {
-      Future(serviceErrorHandler.showBadRequestError)
-    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    if (appConfig.features.zeroRatedJourney()) {
       form.bindFromRequest().fold(
         error => Future.successful(BadRequest(businessActivity(error))),
         data => (for {
@@ -79,9 +74,6 @@ class BusinessActivityController @Inject()(businessActivity: BusinessActivity,
             serviceErrorHandler.showInternalServerError
         }
       )
-    } else {
-      Future(serviceErrorHandler.showBadRequestError)
-    }
   }
 }
 

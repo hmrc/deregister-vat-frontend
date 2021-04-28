@@ -45,7 +45,6 @@ class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: Purch
                         (implicit user: User[_]) = purchasesExceedSupplies(form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    if (appConfig.features.zeroRatedJourney()) {
       for {
         pxs <- purchasesExceedSuppliesAnswerService.getAnswer
       } yield pxs match {
@@ -56,13 +55,9 @@ class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: Purch
 
           serviceErrorHandler.showInternalServerError
       }
-    } else {
-      Future(serviceErrorHandler.showBadRequestError)
-    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    if (appConfig.features.zeroRatedJourney()) {
       PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(purchasesExceedSupplies(error))),
         data => purchasesExceedSuppliesAnswerService.storeAnswer(data) map {
@@ -72,9 +67,6 @@ class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: Purch
             serviceErrorHandler.showInternalServerError
         }
       )
-    } else {
-      Future.successful(serviceErrorHandler.showBadRequestError)
     }
-  }
 }
 

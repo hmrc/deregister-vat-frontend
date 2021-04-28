@@ -32,7 +32,6 @@ object ConfigKeys {
   val stubContactPreferencesFeature: String = "features.stubContactPreferences.enabled"
   val useLanguageSelectorFeature: String = "features.useLanguageSelectorFeature.enabled"
   val accessibilityStatement: String = "features.accessibilityStatement.enabled"
-  val zeroRatedJourney: String = "features.zeroRatedJourney.enabled"
   val contactPrefMigrationFeature: String = "features.contactPrefMigration.enabled"
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"

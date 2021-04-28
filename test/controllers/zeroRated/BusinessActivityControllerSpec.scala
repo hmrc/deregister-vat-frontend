@@ -57,7 +57,6 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       "return a 200" in {
 
-        mockConfig.features.zeroRatedJourney(true)
         setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.OK
@@ -75,7 +74,6 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       "return a 200" in {
 
-        mockConfig.features.zeroRatedJourney(true)
         setupMockGetBusinessActivityAnswer(Right(Some(No)))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.OK
@@ -93,7 +91,6 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       "return a 200" in {
 
-        mockConfig.features.zeroRatedJourney(true)
         setupMockGetBusinessActivityAnswer(Right(None))
         mockAuthResult(Future.successful(mockAuthorisedIndividual))
         status(result) shouldBe Status.OK
@@ -115,19 +112,8 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       }
     }
 
-    "calling .show with the zero rated journey feature switch off" should {
-
-      "return a 400" in {
-        mockConfig.features.zeroRatedJourney(false)
-        lazy val result = TestController.show()(request)
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        status(result) shouldBe Status.BAD_REQUEST
-      }
-    }
-
     "calling .submit with the zero rated journey feature switch on and yes is selected" should {
 
-      mockConfig.features.zeroRatedJourney(true)
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
         requestPost.withFormUrlEncodedBody((yesNo, "yes"))
       lazy val result = TestController.submit()(request)
@@ -146,7 +132,6 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
     "calling .submit with the zero rated journey feature switch on and no is selected" should {
 
-      mockConfig.features.zeroRatedJourney(true)
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
         requestPost.withFormUrlEncodedBody((yesNo, "no"))
       lazy val result = TestController.submit()(request)
@@ -169,21 +154,6 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
         requestPost.withFormUrlEncodedBody((yesNo, ""))
       lazy val result = TestController.submit()(request)
-
-      "return a 400" in {
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        status(result) shouldBe Status.BAD_REQUEST
-      }
-    }
-
-    "calling .submit with the zero rated journey feature switch off" should {
-
-      lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
-        requestPost.withFormUrlEncodedBody((yesNo, "no"))
-      lazy val result = {
-        mockConfig.features.zeroRatedJourney(false)
-        TestController.submit()(request)
-      }
 
       "return a 400" in {
         mockAuthResult(Future.successful(mockAuthorisedIndividual))

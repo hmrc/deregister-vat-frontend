@@ -54,7 +54,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
         "the user has stored information for the page" should {
 
           lazy val result = {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             TestController.show()(request)
           }
@@ -76,7 +75,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
 
         "the user has no stored information for the page" should {
           lazy val result = {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             TestController.show()(request)
           }
@@ -95,7 +93,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
         "the storedAnswerService returns an error" should {
 
           lazy val result = {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             TestController.show()(request)
           }
@@ -104,24 +101,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
             setupMockGetPurchasesExceedSuppliesAnswer(Left(errorModel))
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
-        }
-      }
-
-      "zero rated journey feature switch is off" should {
-
-        lazy val result = {
-          mockConfig.features.zeroRatedJourney(false)
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          TestController.show()(request)
-        }
-
-        "return a 400" in {
-          status(result) shouldBe Status.BAD_REQUEST
-        }
-
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
         }
       }
 
@@ -138,7 +117,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
             requestPost.withFormUrlEncodedBody((yesNo, "yes"))
 
           lazy val result = {
-            mockConfig.features.zeroRatedJourney(true)
             setupMockStorePurchasesExceedSuppliesAnswer(Yes)(Right(DeregisterVatSuccess))
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             TestController.submit()(request)
@@ -159,7 +137,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
             requestPost.withFormUrlEncodedBody((yesNo, "no"))
 
           lazy val result = {
-            mockConfig.features.zeroRatedJourney(true)
             setupMockStorePurchasesExceedSuppliesAnswer(No)(Right(DeregisterVatSuccess))
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             TestController.submit()(request)
@@ -180,7 +157,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
             requestPost.withFormUrlEncodedBody((yesNo, ""))
 
           lazy val result = {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             TestController.submit()(request)
           }
@@ -196,7 +172,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
             requestPost.withFormUrlEncodedBody((yesNo, "yes"))
 
           lazy val result = {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockStorePurchasesExceedSuppliesAnswer(Yes)(Left(errorModel))
             TestController.submit()(request)
@@ -211,7 +186,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
       "the zero rated journey feature switch off" should {
 
         lazy val result = {
-          mockConfig.features.zeroRatedJourney(false)
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           TestController.submit()(request)
         }

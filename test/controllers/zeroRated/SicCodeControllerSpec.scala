@@ -54,7 +54,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.show()(request)
 
           "return a 200" in {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
             setupMockGetSicCode(Right(Some("12345")))
@@ -75,7 +74,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.show()(request)
 
           "return a 200" in {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
             setupMockGetSicCode(Right(None))
@@ -92,7 +90,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.show()(request)
 
           "return a 303" in {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockGetBusinessActivityAnswer(Right(None))
             setupMockGetSicCode(Right(None))
@@ -108,7 +105,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.show()(request)
 
           "return a 303" in {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockGetBusinessActivityAnswer(Right(Some(No)))
             setupMockGetSicCode(Right(None))
@@ -129,16 +125,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           status(result) shouldBe Status.FORBIDDEN
         }
       }
-
-      "the zero rated journey feature is switched off" should {
-
-        "return a 400" in {
-          mockConfig.features.zeroRatedJourney(false)
-          lazy val result = TestController.show()(request)
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.BAD_REQUEST
-        }
-      }
     }
 
     "calling the .submit method" when {
@@ -150,7 +136,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.submit()(request)
 
           "return a 303" in {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             setupMockStoreSicCode("12345")(Right(DeregisterVatSuccess))
             status(result) shouldBe Status.SEE_OTHER
@@ -166,8 +151,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.submit()(request)
 
           "return a 303" in {
-            mockConfig.features.zeroRatedJourney(true)
-
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             status(result) shouldBe Status.BAD_REQUEST
           }
@@ -184,7 +167,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
       "the zero rated journey feature switch is off" should {
 
         "return a 400" in {
-          mockConfig.features.zeroRatedJourney(false)
           lazy val result = TestController.submit()(request)
           mockAuthResult(Future.successful(mockAuthorisedIndividual))
           status(result) shouldBe Status.BAD_REQUEST
