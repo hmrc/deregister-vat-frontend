@@ -28,6 +28,5 @@ class Features @Inject()(implicit config: Configuration) {
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature)
   val accessibilityStatement = new Feature(ConfigKeys.accessibilityStatement)
   val zeroRatedJourney = new Feature(ConfigKeys.zeroRatedJourney)
-  val emailVerifiedFeature = new Feature(ConfigKeys.emailVerifiedFeature)
   val contactPrefMigrationFeature = new Feature(ConfigKeys.contactPrefMigrationFeature)
 }

@@ -82,8 +82,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
           "contactPrefMigrationFeature is disabled" when {
 
-            "emailVerifiedFeature is enabled" when {
-
               "Contact Preference is set to 'DIGITAL'" when {
 
                 "the user has a verified email" should {
@@ -93,7 +91,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
                   "return 200 (OK)" in {
                     mockConfig.features.contactPrefMigrationFeature(false)
-                    mockConfig.features.emailVerifiedFeature(true)
                     setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
                     mockAuthResult(Future.successful(mockAuthorisedIndividual))
                     setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
@@ -121,7 +118,6 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
                   "return 200 (OK)" in {
                     mockConfig.features.contactPrefMigrationFeature(false)
-                    mockConfig.features.emailVerifiedFeature(true)
                     setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
                     mockAuthResult(Future.successful(mockAuthorisedIndividual))
                     setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
@@ -141,42 +137,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
                   }
                 }
               }
-            }
           }
-
-          "emailVerifiedFeature is disabled" when {
-
-            "Contact Preference is set to 'DIGITAL'" should {
-
-              lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
-
-              lazy val document = Jsoup.parse(bodyOf(result))
-
-              "return 200 (OK)" in {
-                mockConfig.features.contactPrefMigrationFeature(false)
-                mockConfig.features.emailVerifiedFeature(false)
-                setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-                mockAuthResult(Future.successful(mockAuthorisedIndividual))
-                setupMockContactPreferences(vrn)(Right(contactPreferencesDigital))
-                setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-                setupAuditExtendedEvent()
-
-                status(result) shouldBe Status.OK
-              }
-
-              "return HTML" in {
-                contentType(result) shouldBe Some("text/html")
-                charset(result) shouldBe Some("utf-8")
-              }
-
-              "return the correct first paragraph" in {
-                messages(document.getElementsByClass("govuk-body").first().text()) shouldBe Messages.digitalPreference
-              }
-
-            }
-
-          }
-
         }
 
         "answers are deleted successfully and an error is received for CustomerDetails call" when {

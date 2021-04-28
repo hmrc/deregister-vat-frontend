@@ -71,10 +71,8 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
                 })
               }
 
-              val verifiedEmail = if (appConfig.features.emailVerifiedFeature()) {
+              val verifiedEmail = {
                 result._1.fold(_ => None, _.emailVerified)
-              } else {
-                Some(false)
               }
 
               Ok(deregistrationConfirmation(businessName, contactPreference, verifiedEmail))
