@@ -27,16 +27,7 @@ object FeatureSwitchForm {
     mapping(
       ConfigKeys.stubAgentClientLookupFeature -> boolean,
       ConfigKeys.stubContactPreferencesFeature -> boolean,
-<<<<<<< HEAD
-      ConfigKeys.useLanguageSelectorFeature -> boolean,
       ConfigKeys.accessibilityStatement -> boolean
-=======
-      ConfigKeys.accessibilityStatement -> boolean,
-      ConfigKeys.zeroRatedJourney -> boolean,
-      ConfigKeys.emailVerifiedFeature -> boolean,
-      ConfigKeys.bulkPaperOffFeature -> boolean,
-      ConfigKeys.contactPrefMigrationFeature -> boolean
->>>>>>> 3606d1c... [BTAT-9174] Removed useLanguageSelector feature switch
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

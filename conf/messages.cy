@@ -245,7 +245,6 @@ unauthorised.client.useThisService = Mae’n rhaid i chi
 unauthorised.client.signUp = gofrestru i ddefnyddio meddalwedd er mwyn cyflwyno’ch Ffurflenni TAW
 
 featureSwitch.title = Feature switches
-features.useLanguageSelectorFeature.enabled = Language selector
 
 outstandingInvoice.title = A fydd y busnes yn cael taliad am anfonebau heb eu setlo ar ôl i chi ganslo’r cofrestriad?
 outstandingInvoice.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes yn disgwyl cael taliad am anfonebau heb eu setlo ar ôl i chi ganslo’r cofrestriad
