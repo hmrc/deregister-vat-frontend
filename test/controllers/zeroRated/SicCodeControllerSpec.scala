@@ -48,8 +48,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
 
     "calling .show method" when {
 
-      "the zero rated journey feature switch on" when {
-
         "the user has a value saved" should {
           lazy val result = TestController.show()(request)
 
@@ -115,7 +113,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
             redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
           }
         }
-      }
 
       "the user is unauthorised" should {
 
@@ -128,8 +125,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
     }
 
     "calling the .submit method" when {
-
-      "the zero rated journey feature switch is on" when {
 
         "the form is filled correctly" should {
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody(("value", "12345"))
@@ -160,18 +155,6 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
             charset(result) shouldBe Some("utf-8")
           }
         }
-
-
-      }
-
-      "the zero rated journey feature switch is off" should {
-
-        "return a 400" in {
-          lazy val result = TestController.submit()(request)
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.BAD_REQUEST
-        }
-      }
     }
   }
 }

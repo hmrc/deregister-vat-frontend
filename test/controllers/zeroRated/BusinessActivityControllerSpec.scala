@@ -51,7 +51,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
   "The BusinessActivityController" when {
 
-    "calling .show with the zero rated journey feature switch on with existing data of yes" should {
+    "calling .show with existing data of yes" should {
 
       lazy val result = TestController.show()(request)
 
@@ -68,7 +68,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       }
     }
 
-    "calling .show with the zero rated journey feature switch on with existing data of no" should {
+    "calling .show with existing data of no" should {
 
       lazy val result = TestController.show()(request)
 
@@ -85,7 +85,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       }
     }
 
-    "calling .show with the zero rated journey feature switch on with no existing data" should {
+    "calling .show  with no existing data" should {
 
       lazy val result = TestController.show()(request)
 
@@ -112,7 +112,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       }
     }
 
-    "calling .submit with the zero rated journey feature switch on and yes is selected" should {
+    "calling .submit and yes is selected" should {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
         requestPost.withFormUrlEncodedBody((yesNo, "yes"))
@@ -130,7 +130,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       }
     }
 
-    "calling .submit with the zero rated journey feature switch on and no is selected" should {
+    "calling .submit and no is selected" should {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
         requestPost.withFormUrlEncodedBody((yesNo, "no"))

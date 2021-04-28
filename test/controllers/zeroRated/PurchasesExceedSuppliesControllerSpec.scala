@@ -49,8 +49,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
 
     "calling .show" when {
 
-      "the zero rated journey feature switch on" when {
-
         "the user has stored information for the page" should {
 
           lazy val result = {
@@ -102,14 +100,11 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
-      }
 
       authChecks(".show", TestController.show(), request)
     }
 
     "calling .submit" when {
-
-      "the zero rated journey feature switch is on " when {
 
         "the user submits 'yes'" should {
 
@@ -181,24 +176,6 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
-      }
-
-      "the zero rated journey feature switch off" should {
-
-        lazy val result = {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          TestController.submit()(request)
-        }
-
-        "return a 400" in {
-          status(result) shouldBe Status.BAD_REQUEST
-        }
-
-        "return HTML" in {
-          contentType(result) shouldBe Some("text/html")
-          charset(result) shouldBe Some("utf-8")
-        }
-      }
 
       authChecks(".submit", TestController.submit(), request)
     }
