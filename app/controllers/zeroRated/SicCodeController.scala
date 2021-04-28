@@ -45,7 +45,6 @@ class SicCodeController @Inject()(sicCode: SicCode,
   private def renderView(form: Form[String] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = sicCode(form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    if (appConfig.features.zeroRatedJourney()) {
       for {
         ba <- businessActivityAnswerService.getAnswer
         sc <- sicCodeAnswerService.getAnswer
@@ -58,13 +57,9 @@ class SicCodeController @Inject()(sicCode: SicCode,
           Logger.warn("[SicCodeController][show] - storedAnswerService returned an error retrieving answers")
           serviceErrorHandler.showInternalServerError
       }
-    } else {
-      Future.successful(serviceErrorHandler.showBadRequestError)
-    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    if (appConfig.features.zeroRatedJourney()) {
       SicCodeForm.sicCodeForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(sicCode(error))),
         data => sicCodeAnswerService.storeAnswer(data) map {
@@ -74,9 +69,6 @@ class SicCodeController @Inject()(sicCode: SicCode,
             serviceErrorHandler.showInternalServerError
         }
       )
-    } else {
-      Future.successful(serviceErrorHandler.showBadRequestError)
-    }
   }
 }
 

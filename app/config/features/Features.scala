@@ -27,6 +27,5 @@ class Features @Inject()(implicit config: Configuration) {
   val stubContactPreferences = new Feature(ConfigKeys.stubContactPreferencesFeature)
   val useLanguageSelector = new Feature(ConfigKeys.useLanguageSelectorFeature)
   val accessibilityStatement = new Feature(ConfigKeys.accessibilityStatement)
-  val zeroRatedJourney = new Feature(ConfigKeys.zeroRatedJourney)
   val contactPrefMigrationFeature = new Feature(ConfigKeys.contactPrefMigrationFeature)
 }

@@ -47,8 +47,6 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
   val testZeroRatedSuppliesAmtAsString: String = testZeroRatedSuppliesAmt.toString
   val testZeroRatedSuppliesModel: NumberInputModel = NumberInputModel(testZeroRatedSuppliesAmt)
 
-  "The zero rated journey feature switch is on" when {
-
       "The user is authorised" when {
 
         "calling .show action" when {
@@ -58,7 +56,6 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
            lazy val result = TestZeroRatedSuppliesController.show()(request)
 
             "return 200 (OK)" in {
-              mockConfig.features.zeroRatedJourney(true)
               setupMockGetZeroRatedSupplies(Right(None))
               mockAuthResult(Future.successful(mockAuthorisedIndividual))
               status(result) shouldBe Status.OK
@@ -75,7 +72,6 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
           lazy val result = TestZeroRatedSuppliesController.show()(request)
 
           "return 200 (OK)" in {
-            mockConfig.features.zeroRatedJourney(true)
             setupMockGetZeroRatedSupplies(Right(Some(testZeroRatedSuppliesModel)))
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             status(result) shouldBe Status.OK
@@ -101,7 +97,6 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
             lazy val result = TestZeroRatedSuppliesController.submit()(request)
 
             "return 303 (SEE_OTHER)" in {
-              mockConfig.features.zeroRatedJourney(true)
               setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Right(DeregisterVatSuccess))
               mockAuthResult(Future.successful(mockAuthorisedIndividual))
               status(result) shouldBe Status.SEE_OTHER
@@ -120,7 +115,6 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
           lazy val result = TestZeroRatedSuppliesController.submit()(request)
 
           "return a 400" in {
-            mockConfig.features.zeroRatedJourney(true)
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             status(result) shouldBe Status.BAD_REQUEST
           }
@@ -133,7 +127,6 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
           lazy val result = TestZeroRatedSuppliesController.submit()(request)
 
           "return a 500" in {
-            mockConfig.features.zeroRatedJourney(true)
             setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Left(errorModel))
             mockAuthResult(Future.successful(mockAuthorisedIndividual))
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
@@ -145,35 +138,6 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
     "The user is unauthorised" when {
       authChecks(".show", TestZeroRatedSuppliesController.show(), request)
     }
-
-  }
-
-  "The zero rated journey feature is switched off" when {
-
-    "the user is authorised" when {
-
-      "calling the .show method" should {
-
-        "return a 400" in {
-          mockConfig.features.zeroRatedJourney(false)
-          lazy val result = TestZeroRatedSuppliesController.show()(request)
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.BAD_REQUEST
-        }
-      }
-
-      "calling .submit with the zero rated journey feature switch off" should {
-
-        "return a 400" in {
-          mockConfig.features.zeroRatedJourney(false)
-          lazy val result = TestZeroRatedSuppliesController.submit()(request)
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          status(result) shouldBe Status.BAD_REQUEST
-        }
-      }
-
-    }
-  }
 }
 
 

@@ -45,18 +45,13 @@ class ZeroRatedSuppliesController @Inject()(zeroRatedSupplies: ZeroRatedSupplies
     zeroRatedSupplies(form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    if (appConfig.features.zeroRatedJourney()) {
       zeroRatedSuppliesValueService.getAnswer map {
         case Right(Some(data)) => Ok(renderView(ZeroRatedSuppliesForm.zeroRatedSuppliesForm.fill(data)))
         case _ => Ok(renderView())
       }
-    } else{
-      Future(serviceErrorHandler.showBadRequestError)
-    }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    if (appConfig.features.zeroRatedJourney()) {
       ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(zeroRatedSupplies(error))),
         data => zeroRatedSuppliesValueService.storeAnswer(data) map {
@@ -66,9 +61,6 @@ class ZeroRatedSuppliesController @Inject()(zeroRatedSupplies: ZeroRatedSupplies
             serviceErrorHandler.showInternalServerError
         }
       )
-    }  else {
-      Future(serviceErrorHandler.showBadRequestError)
-    }
   }
 }
 
