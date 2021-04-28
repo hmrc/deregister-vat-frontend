@@ -47,8 +47,6 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
   val testZeroRatedSuppliesAmtAsString: String = testZeroRatedSuppliesAmt.toString
   val testZeroRatedSuppliesModel: NumberInputModel = NumberInputModel(testZeroRatedSuppliesAmt)
 
-  "The zero rated journey feature switch is on" when {
-
       "The user is authorised" when {
 
         "calling .show action" when {
@@ -140,8 +138,6 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
     "The user is unauthorised" when {
       authChecks(".show", TestZeroRatedSuppliesController.show(), request)
     }
-
-  }
 }
 
 
