@@ -214,7 +214,6 @@ unauthorised.client.useThisService = You need to
 unauthorised.client.signUp = sign up to use software to submit your VAT Returns
 
 featureSwitch.title = Feature switches
-features.useLanguageSelectorFeature.enabled = Language selector
 
 outstandingInvoice.title = Will the business receive payment for outstanding invoices after you cancel the registration?
 outstandingInvoice.error.mandatoryRadioOption = Select yes if the business is expecting to receive payment for outstanding invoices after you cancel the registration

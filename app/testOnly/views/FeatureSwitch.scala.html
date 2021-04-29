@@ -36,13 +36,6 @@
       name = "featureSwitch",
       items = Seq(
         CheckboxItem(
-          id = Some(ConfigKeys.useLanguageSelectorFeature),
-          name = Some(ConfigKeys.useLanguageSelectorFeature),
-          content = Text(messages(ConfigKeys.useLanguageSelectorFeature)),
-          value = "true",
-          checked = appConfig.features.useLanguageSelector()
-        ),
-        CheckboxItem(
           id = Some(ConfigKeys.accessibilityStatement),
           name = Some(ConfigKeys.accessibilityStatement),
           content = Text("Enable Accessibility Statement link"),
