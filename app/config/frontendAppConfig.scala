@@ -61,10 +61,7 @@ trait AppConfig {
   val platformHost: String
   val timeoutPeriod: Int
   val timeoutCountdown: Int
-  val contactPreferencesService: String
   val contactFormServiceIdentifier: String
-
-  def contactPreferencesUrl(vrn: String): String
 
   val languageFallbackUrl: String
   val languageMap: Map[String, Lang]
@@ -135,12 +132,6 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
     } else {
       vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.redirect().url)
     }
-
-  override lazy val contactPreferencesService: String = {
-      servicesConfig.baseUrl("vat-subscription-dynamic-stub")
-  }
-
-  override def contactPreferencesUrl(vrn: String): String = contactPreferencesService + s"/contact-preferences/vat/vrn/$vrn"
 
   override lazy val vatSubscriptionUrl: String = servicesConfig.baseUrl(Keys.vatSubscriptionService)
 

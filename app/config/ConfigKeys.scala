@@ -63,8 +63,6 @@ object ConfigKeys {
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountdown: String = "timeout.countdown"
 
-  val contactPreferencesService: String = "contact-preferences"
-
   val accessibilityStatementHost: String = "accessibility-statement.host"
   val accessibilityStatementUrl: String = "accessibility-statement.url"
 
