@@ -25,8 +25,7 @@ object FeatureSwitchForm {
 
   val form: Form[FeatureSwitchModel] = Form(
     mapping(
-      ConfigKeys.stubAgentClientLookupFeature -> boolean,
-      ConfigKeys.accessibilityStatement -> boolean
+      ConfigKeys.stubAgentClientLookupFeature -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

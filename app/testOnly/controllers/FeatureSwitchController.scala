@@ -33,8 +33,7 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
     Ok(featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
-        stubAgentClientLookup = appConfig.features.stubAgentClientLookup(),
-        accessibilityStatementEnabled = appConfig.features.accessibilityStatement()
+        stubAgentClientLookup = appConfig.features.stubAgentClientLookup()
       )
     )))
   }
@@ -48,7 +47,6 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.stubAgentClientLookup(model.stubAgentClientLookup)
-    appConfig.features.accessibilityStatement(model.accessibilityStatementEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch())
   }
 }
