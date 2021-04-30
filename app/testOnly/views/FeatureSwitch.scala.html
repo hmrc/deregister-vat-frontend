@@ -36,13 +36,6 @@
       name = "featureSwitch",
       items = Seq(
         CheckboxItem(
-          id = Some(ConfigKeys.accessibilityStatement),
-          name = Some(ConfigKeys.accessibilityStatement),
-          content = Text("Enable Accessibility Statement link"),
-          value = "true",
-          checked = appConfig.features.accessibilityStatement()
-        ),
-        CheckboxItem(
           id = Some(ConfigKeys.stubAgentClientLookupFeature),
           name = Some(ConfigKeys.stubAgentClientLookupFeature),
           content = Text(messages("Stub Agent Client Lookup")),
