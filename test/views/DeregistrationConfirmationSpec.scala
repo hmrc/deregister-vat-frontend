@@ -171,94 +171,91 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
   "Rendering the deregistration confirmation page for an agent" when {
 
-    "the bulkPaperOff feature switch is enabled" when {
+    "the user has verifiedAgentEmail (Yes pref inferred) and a business name" should {
+      val businessName: Option[String] = Some("Fake Business Name Limited")
+      lazy val view = {
+        deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "the user has verifiedAgentEmail (Yes pref inferred) and a business name" should {
-        val businessName: Option[String] = Some("Fake Business Name Limited")
-        lazy val view = {
-          deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
-        }
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        "have the correct document title" in {
-          document.title shouldBe DeregistrationConfirmationMessages.agentTitle
-        }
-
-        "have the correct page heading" in {
-          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
-        }
-
-
-        "have the correct first paragraph" in {
-          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPref
-        }
-
-        "have the correct text for the second paragraph (including business name)" in {
-          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.agentWithBName
-        }
+      "have the correct document title" in {
+        document.title shouldBe DeregistrationConfirmationMessages.agentTitle
       }
 
-      "the user has verifiedAgentEmail (Yes pref inferred) and no business name" should {
-        lazy val view = {
-          deregistrationConfirmation()(agentUserPrefYes, messages, mockConfig)
-        }
-        lazy implicit val document: Document = Jsoup.parse(view.body)
-
-        "have the correct document title" in {
-          document.title shouldBe DeregistrationConfirmationMessages.agentTitle
-        }
-
-        "have the correct page heading" in {
-          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
-        }
-
-
-        "have the correct first paragraph" in {
-          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPref
-        }
-
-        "have the correct text for the second paragraph (including business name)" in {
-          elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.agentNoBName
-        }
+      "have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
       }
 
-      "the user is without a verifiedAgentEmail (No pref inferred) and no business name" should {
-        lazy val view = {
-          deregistrationConfirmation()(agentUserPrefNo, messages, mockConfig)
-        }
-        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        "have the correct document title" in {
-          document.title shouldBe DeregistrationConfirmationMessages.agentTitle
-        }
-
-        "have the correct page heading" in {
-          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
-        }
-
-        "have the correct paragraph" in {
-          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.agentNoBName
-        }
+      "have the correct first paragraph" in {
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPref
       }
 
-      "the user is without a verifiedAgentEmail (No pref inferred) and has a business name" should {
-        val businessName: Option[String] = Some("Fake Business Name Limited")
-        lazy val view: Html = {
-          deregistrationConfirmation(businessName)(agentUserPrefNo, messages, mockConfig)
-        }
-        lazy implicit val document: Document = Jsoup.parse(view.body)
+      "have the correct text for the second paragraph (including business name)" in {
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.agentWithBName
+      }
+    }
 
-        "have the correct document title" in {
-          document.title shouldBe DeregistrationConfirmationMessages.agentTitle
-        }
+    "the user has verifiedAgentEmail (Yes pref inferred) and no business name" should {
+      lazy val view = {
+        deregistrationConfirmation()(agentUserPrefYes, messages, mockConfig)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
 
-        "have the correct page heading" in {
-          elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
-        }
+      "have the correct document title" in {
+        document.title shouldBe DeregistrationConfirmationMessages.agentTitle
+      }
 
-        "have the correct paragraph" in {
-          elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.agentWithBName
-        }
+      "have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
+      }
+
+
+      "have the correct first paragraph" in {
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPref
+      }
+
+      "have the correct text for the second paragraph (including business name)" in {
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.agentNoBName
+      }
+    }
+
+    "the user is without a verifiedAgentEmail (No pref inferred) and no business name" should {
+      lazy val view = {
+        deregistrationConfirmation()(agentUserPrefNo, messages, mockConfig)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct document title" in {
+        document.title shouldBe DeregistrationConfirmationMessages.agentTitle
+      }
+
+      "have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
+      }
+
+      "have the correct paragraph" in {
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.agentNoBName
+      }
+    }
+
+    "the user is without a verifiedAgentEmail (No pref inferred) and has a business name" should {
+      val businessName: Option[String] = Some("Fake Business Name Limited")
+      lazy val view: Html = {
+        deregistrationConfirmation(businessName)(agentUserPrefNo, messages, mockConfig)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct document title" in {
+        document.title shouldBe DeregistrationConfirmationMessages.agentTitle
+      }
+
+      "have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
+      }
+
+      "have the correct paragraph" in {
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.agentWithBName
       }
     }
   }
