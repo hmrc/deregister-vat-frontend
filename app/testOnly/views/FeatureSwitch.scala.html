@@ -48,13 +48,6 @@
           content = Text(messages("Stub Agent Client Lookup")),
           value = "true",
           checked = appConfig.features.stubAgentClientLookup()
-        ),
-        CheckboxItem(
-          id = Some(ConfigKeys.stubContactPreferencesFeature),
-          name = Some(ConfigKeys.stubContactPreferencesFeature),
-          content = Text(messages("Stub Contact Preferences")),
-          value = "true",
-          checked = appConfig.features.stubContactPreferences()
         )
       )
     ))

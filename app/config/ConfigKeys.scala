@@ -29,7 +29,6 @@ object ConfigKeys {
   val governmentGatewayHost: String = "government-gateway.host"
 
   val stubAgentClientLookupFeature: String = "features.stubAgentClientLookup"
-  val stubContactPreferencesFeature: String = "features.stubContactPreferences.enabled"
   val accessibilityStatement: String = "features.accessibilityStatement.enabled"
 
   val govUkCancelVatRegistration: String = "gov-uk.cancelVatRegistration.url"
@@ -63,8 +62,6 @@ object ConfigKeys {
 
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountdown: String = "timeout.countdown"
-
-  val contactPreferencesService: String = "contact-preferences"
 
   val accessibilityStatementHost: String = "accessibility-statement.host"
   val accessibilityStatementUrl: String = "accessibility-statement.url"
