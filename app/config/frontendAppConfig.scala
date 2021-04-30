@@ -137,11 +137,7 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
     }
 
   override lazy val contactPreferencesService: String = {
-    if (features.stubContactPreferences()) {
       servicesConfig.baseUrl("vat-subscription-dynamic-stub")
-    } else {
-      servicesConfig.baseUrl(Keys.contactPreferencesService)
-    }
   }
 
   override def contactPreferencesUrl(vrn: String): String = contactPreferencesService + s"/contact-preferences/vat/vrn/$vrn"

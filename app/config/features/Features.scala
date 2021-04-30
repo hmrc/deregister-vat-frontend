@@ -24,6 +24,5 @@ import play.api.Configuration
 @Singleton
 class Features @Inject()(implicit config: Configuration) {
   val stubAgentClientLookup = new Feature(ConfigKeys.stubAgentClientLookupFeature)
-  val stubContactPreferences = new Feature(ConfigKeys.stubContactPreferencesFeature)
   val accessibilityStatement = new Feature(ConfigKeys.accessibilityStatement)
 }
