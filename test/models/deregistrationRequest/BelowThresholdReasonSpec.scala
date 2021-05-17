@@ -16,10 +16,10 @@
 
 package models.deregistrationRequest
 
+import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import play.api.libs.json.{JsString, Json}
-import uk.gov.hmrc.play.test.UnitSpec
 
-class BelowThresholdReasonSpec extends UnitSpec {
+class BelowThresholdReasonSpec extends WordSpecLike with Matchers with OptionValues {
 
   "BelowThreshold" when {
 

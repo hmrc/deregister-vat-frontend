@@ -54,8 +54,8 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         lazy val result = TestDeregistrationReasonController.show()(user)
 
         "return 200 (OK)" in {
-          setupMockGetDeregReason(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregReason(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -70,8 +70,8 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         lazy val result = TestDeregistrationReasonController.show()(user)
 
         "return 200 (OK)" in {
-          setupMockGetDeregReason(Right(Some(Ceased)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -81,7 +81,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         }
 
         "should have the 'Ceased' option checked" in {
-          Jsoup.parse(bodyOf(result)).select("#reason").hasAttr("checked") shouldBe true
+          Jsoup.parse(contentAsString(result)).select("#reason").hasAttr("checked") shouldBe true
         }
       }
 
@@ -99,10 +99,10 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreDeregReason(Ceased)(Right(DeregisterVatSuccess))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockStoreDeregReason(Ceased)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -119,10 +119,10 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreDeregReason(BelowThreshold)(Right(DeregisterVatSuccess))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockStoreDeregReason(BelowThreshold)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -139,10 +139,10 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreDeregReason(ExemptOnly)(Right(DeregisterVatSuccess))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockStoreDeregReason(ExemptOnly)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -158,10 +158,10 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreDeregReason(Other)(Right(DeregisterVatSuccess))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockStoreDeregReason(Other)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -177,7 +177,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return 400 (BAD REQUEST)" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.BAD_REQUEST
           }
 
@@ -194,8 +194,8 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
           lazy val result = TestDeregistrationReasonController.submit()(request)
 
           "return ISE (INTERNAL SERVER ERROR)" in {
-            setupMockStoreDeregReason(Other)(Left(errorModel))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            setupMockStoreDeregReason(Other)(Future.successful(Left(errorModel)))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
@@ -208,10 +208,10 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         lazy val result = TestDeregistrationReasonController.submit()(request)
 
         "return ISE (INTERNAL SERVER ERROR)" in {
-          setupMockStoreDeregReason(Ceased)(Right(DeregisterVatSuccess))
-          setupMockWipeRedundantData(Left(errorModel))
+          setupMockStoreDeregReason(Ceased)(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockWipeRedundantData(Future.successful(Left(errorModel)))
 
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }

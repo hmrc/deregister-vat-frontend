@@ -55,8 +55,8 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
         lazy val result = TestCeasedTradingDateController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetCeasedTradingDate(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetCeasedTradingDate(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -71,8 +71,8 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
         lazy val result = TestCeasedTradingDateController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetCeasedTradingDate(Right(Some(testDateModel)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetCeasedTradingDate(Future.successful(Right(Some(testDateModel))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -110,8 +110,8 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
         lazy val result = TestCeasedTradingDateController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreCeasedTradingDate(testDateModel)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockStoreCeasedTradingDate(testDateModel)(Future.successful(Right(DeregisterVatSuccess)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -131,8 +131,8 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
         lazy val result = TestCeasedTradingDateController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreCeasedTradingDate(testDateModel)(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockStoreCeasedTradingDate(testDateModel)(Future.successful(Left(errorModel)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -148,7 +148,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
         lazy val result = TestCeasedTradingDateController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 

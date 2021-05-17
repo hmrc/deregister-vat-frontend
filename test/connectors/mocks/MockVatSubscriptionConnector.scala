@@ -23,19 +23,19 @@ import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockVatSubscriptionConnector extends TestUtil with MockFactory {
 
   val mockVatSubscriptionConnector: VatSubscriptionConnector = mock[VatSubscriptionConnector]
 
-  def setupMockSubmit(vrn: String, data: DeregistrationInfo)(response: Either[ErrorModel, VatSubscriptionResponse]): Unit = {
+  def setupMockSubmit(vrn: String, data: DeregistrationInfo)(response: Future[Either[ErrorModel, VatSubscriptionResponse]]): Unit = {
     (mockVatSubscriptionConnector.submit(_: String, _: DeregistrationInfo)(_: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, data, *, *)
       .returns(response)
   }
 
-  def setupMockGetCustomerCircumstanceDetails(vrn: String)(response: Either[ErrorModel, CustomerDetails]): Unit = {
+  def setupMockGetCustomerCircumstanceDetails(vrn: String)(response: Future[Either[ErrorModel, CustomerDetails]]): Unit = {
     (mockVatSubscriptionConnector.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, *, *)
       .returns(response)

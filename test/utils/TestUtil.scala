@@ -22,7 +22,7 @@ import common.SessionKeys
 import config.ServiceErrorHandler
 import mocks.MockAppConfig
 import models.User
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfterEach, Matchers, OptionValues, WordSpecLike}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.i18n.{Lang, Messages, MessagesApi, MessagesImpl}
@@ -31,11 +31,15 @@ import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{stubBodyParser, stubControllerComponents, stubMessagesApi}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test._
 
 import scala.concurrent.ExecutionContext
 
-trait TestUtil extends UnitSpec with GuiceOneAppPerSuite with BeforeAndAfterEach with MaterializerSupport {
+trait TestUtil extends WordSpecLike
+  with Matchers
+  with OptionValues
+  with GuiceOneAppPerSuite
+  with BeforeAndAfterEach
+  with MaterializerSupport {
 
   override def beforeEach() {
     super.beforeEach()

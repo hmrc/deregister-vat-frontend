@@ -19,19 +19,21 @@ package services.mocks
 import models._
 import services.PurchasesExceedSuppliesAnswerService
 
+import scala.concurrent.Future
+
 trait MockPurchasesExceedSuppliesAnswerService extends MockStoredAnswersService {
 
   val mockPurchasesExceedSuppliesAnswerService: PurchasesExceedSuppliesAnswerService = mock[PurchasesExceedSuppliesAnswerService]
 
-  def setupMockDeletePurchasesExceedSuppliesAnswer(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockDeletePurchasesExceedSuppliesAnswer(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockPurchasesExceedSuppliesAnswerService)(response)
 
   def setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockPurchasesExceedSuppliesAnswerService)
 
-  def setupMockGetPurchasesExceedSuppliesAnswer(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
+  def setupMockGetPurchasesExceedSuppliesAnswer(response: Future[Either[ErrorModel, Option[YesNo]]])(implicit user: User[_]): Unit =
     setupMockGetAnswers(mockPurchasesExceedSuppliesAnswerService)(response)
 
-  def setupMockStorePurchasesExceedSuppliesAnswer(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockStorePurchasesExceedSuppliesAnswer(data: YesNo)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockPurchasesExceedSuppliesAnswerService)(data)(response)
 }

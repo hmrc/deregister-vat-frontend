@@ -19,18 +19,20 @@ package services.mocks
 import models._
 import services.SicCodeAnswerService
 
+import scala.concurrent.Future
+
 
 trait MockSicCodeAnswerService extends MockStoredAnswersService {
 
   val mockSicCodeAnswerService: SicCodeAnswerService = mock[SicCodeAnswerService]
 
-  def setupMockGetSicCode(response: Either[ErrorModel, Option[String]])(implicit user: User[_]): Unit =
+  def setupMockGetSicCode(response: Future[Either[ErrorModel, Option[String]]])(implicit user: User[_]): Unit =
     setupMockGetAnswers(mockSicCodeAnswerService)(response)
 
-  def setupMockStoreSicCode(data: String)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockStoreSicCode(data: String)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockSicCodeAnswerService)(data)(response)
 
-  def setupMockDeleteSicCodeAnswerService(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockDeleteSicCodeAnswerService(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockSicCodeAnswerService)(response)
 
   def setupMockDeleteSicCodeAnswerServiceNotCalled()(implicit user: User[_]): Unit =

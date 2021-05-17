@@ -19,18 +19,20 @@ package services.mocks
 import models._
 import services.IssueNewInvoicesAnswerService
 
+import scala.concurrent.Future
+
 trait MockIssueNewInvoicesAnswerService extends MockStoredAnswersService {
 
   val mockIssueNewInvoicesAnswerService: IssueNewInvoicesAnswerService = mock[IssueNewInvoicesAnswerService]
 
-  def setupMockGetIssueNewInvoices(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
+  def setupMockGetIssueNewInvoices(response: Future[Either[ErrorModel, Option[YesNo]]])(implicit user: User[_]): Unit =
     setupMockGetAnswers(mockIssueNewInvoicesAnswerService)(response)
 
-  def setupMockStoreIssueNewInvoices(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockStoreIssueNewInvoices(data: YesNo)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockIssueNewInvoicesAnswerService)(data)(response)
 
 
-  def setupMockDeleteIssueNewInvoices(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockDeleteIssueNewInvoices(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockIssueNewInvoicesAnswerService)(response)
 
 

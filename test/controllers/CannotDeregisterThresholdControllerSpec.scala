@@ -19,7 +19,6 @@ package controllers
 import play.api.http.Status
 import play.api.test.Helpers.{contentType, _}
 import views.html.CannotDeregisterThreshold
-import scala.concurrent.Future
 
 
 class CannotDeregisterThresholdControllerSpec extends ControllerBaseSpec {
@@ -42,7 +41,7 @@ class CannotDeregisterThresholdControllerSpec extends ControllerBaseSpec {
         lazy val result = TestCannotDeregisterThresholdController.show()(request)
 
         "return 200 (OK)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 

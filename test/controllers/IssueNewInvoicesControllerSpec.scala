@@ -53,8 +53,8 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         lazy val result = TestIssueNewInvoicesController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetIssueNewInvoices(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetIssueNewInvoices(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -69,8 +69,8 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         lazy val result = TestIssueNewInvoicesController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetIssueNewInvoices(Right(Some(Yes)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetIssueNewInvoices(Future.successful(Right(Some(Yes))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -98,10 +98,10 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
           lazy val result = TestIssueNewInvoicesController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreIssueNewInvoices(Yes)(Right(DeregisterVatSuccess))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockStoreIssueNewInvoices(Yes)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -116,10 +116,10 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
           lazy val result = TestIssueNewInvoicesController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreIssueNewInvoices(No)(Right(DeregisterVatSuccess))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockStoreIssueNewInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -135,10 +135,10 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreIssueNewInvoices(Yes)(Right(DeregisterVatSuccess))
-          setupMockWipeRedundantData(Left(errorModel))
+          setupMockStoreIssueNewInvoices(Yes)(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockWipeRedundantData(Future.successful(Left(errorModel)))
 
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -150,8 +150,8 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreIssueNewInvoices(No)(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockStoreIssueNewInvoices(No)(Future.successful(Left(errorModel)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -163,7 +163,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 

@@ -22,13 +22,13 @@ import services.UpdateDeregistrationService
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockUpdateDeregistrationService extends TestUtil with MockFactory {
 
   val mockUpdateDeregistrationService: UpdateDeregistrationService = mock[UpdateDeregistrationService]
 
-  def setupUpdateDeregistration(response: Either[ErrorModel, VatSubscriptionResponse])(implicit user: User[_]): Unit = {
+  def setupUpdateDeregistration(response: Future[Either[ErrorModel, VatSubscriptionResponse]])(implicit user: User[_]): Unit = {
     (mockUpdateDeregistrationService.updateDereg(_: User[_], _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *)
       .returns(response)

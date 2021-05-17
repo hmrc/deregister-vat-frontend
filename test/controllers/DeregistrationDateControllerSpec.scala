@@ -17,7 +17,6 @@
 package controllers
 
 import java.time.LocalDate
-
 import assets.constants.BaseTestConstants._
 import forms.DateForm._
 import models._
@@ -60,8 +59,8 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         lazy val result = TestDeregistrationDateController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetDeregDate(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregDate(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -76,8 +75,8 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         lazy val result = TestDeregistrationDateController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetDeregDate(Right(Some(testDateModel)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregDate(Future.successful(Right(Some(testDateModel))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -104,8 +103,8 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         lazy val result = TestDeregistrationDateController.show()(request)
 
         "return Internal Server Error" in {
-          setupMockGetDeregDate(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregDate(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = ""))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
 
@@ -132,8 +131,8 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
           lazy val result = TestDeregistrationDateController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockStoreDeregDate(testDateModel)(Right(DeregisterVatSuccess))
+            mockAuthResult(mockAuthorisedIndividual)
+            setupMockStoreDeregDate(testDateModel)(Future.successful(Right(DeregisterVatSuccess)))
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -151,8 +150,8 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
           lazy val result = TestDeregistrationDateController.submit()(request)
 
           "return 500 (ISE)" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
-            setupMockStoreDeregDate(testDateModel)(Left(errorModel))
+            mockAuthResult(mockAuthorisedIndividual)
+            setupMockStoreDeregDate(testDateModel)(Future.successful(Left(errorModel)))
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
@@ -169,7 +168,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         lazy val result = TestDeregistrationDateController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 

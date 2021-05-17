@@ -55,10 +55,10 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         lazy val result = TestVATAccountsController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetDeregReason(Right(Some(Ceased)))
-          setupMockGetAccountingMethod(Right(None))
-          setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
+          setupMockGetAccountingMethod(Future.successful(Right(None)))
+          setupMockGetTaxableTurnover(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -73,10 +73,10 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         lazy val result = TestVATAccountsController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
-          setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregReason(Future.successful(Right(Some(BelowThreshold))))
+          setupMockGetAccountingMethod(Future.successful(Right(Some(StandardAccounting))))
+          setupMockGetTaxableTurnover(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -86,7 +86,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         }
 
         "have the correct value 'standard' for the accounting method" in {
-          Jsoup.parse(bodyOf(result)).select("#accountingMethod").hasAttr("checked") shouldBe true
+          Jsoup.parse(contentAsString(result)).select("#accountingMethod").hasAttr("checked") shouldBe true
         }
       }
 
@@ -95,10 +95,10 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         lazy val result = TestVATAccountsController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetDeregReason(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
-          setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
-          setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregReason(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))))
+          setupMockGetAccountingMethod(Future.successful(Right(Some(StandardAccounting))))
+          setupMockGetTaxableTurnover(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -108,10 +108,10 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         lazy val result = TestVATAccountsController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetDeregReason(Right(Some(Ceased)))
-          setupMockGetAccountingMethod(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
-          setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
+          setupMockGetAccountingMethod(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))))
+          setupMockGetTaxableTurnover(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -126,8 +126,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreAccountingMethod(StandardAccounting)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockStoreAccountingMethod(StandardAccounting)(Future.successful(Right(DeregisterVatSuccess)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -143,8 +143,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreAccountingMethod(CashAccounting)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockStoreAccountingMethod(CashAccounting)(Future.successful(Right(DeregisterVatSuccess)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -160,9 +160,9 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregReason(Future.successful(Right(Some(BelowThreshold))))
+          setupMockGetTaxableTurnover(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 
@@ -179,9 +179,9 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         lazy val result = TestVATAccountsController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          setupMockGetDeregReason(Left(ErrorModel(INTERNAL_SERVER_ERROR,"error")))
-          setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregReason(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR,"error"))))
+          setupMockGetTaxableTurnover(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -194,8 +194,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
       lazy val result = TestVATAccountsController.submit()(request)
 
       "return ISE (INTERNAL SERVER ERROR)" in {
-        setupMockStoreAccountingMethod(CashAccounting)(Left(errorModel))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        setupMockStoreAccountingMethod(CashAccounting)(Future.successful(Left(errorModel)))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }

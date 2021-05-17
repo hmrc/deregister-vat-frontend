@@ -19,17 +19,19 @@ package services.mocks
 import models._
 import services.AccountingMethodAnswerService
 
+import scala.concurrent.Future
+
 trait MockAccountingMethodAnswerService extends MockStoredAnswersService {
 
   val mockAccountingMethodAnswerService: AccountingMethodAnswerService = mock[AccountingMethodAnswerService]
 
-  def setupMockGetAccountingMethod(response: Either[ErrorModel, Option[VATAccountsModel]])(implicit user: User[_]): Unit =
+  def setupMockGetAccountingMethod(response: Future[Either[ErrorModel, Option[VATAccountsModel]]])(implicit user: User[_]): Unit =
     setupMockGetAnswers(mockAccountingMethodAnswerService)(response)
 
-  def setupMockStoreAccountingMethod(data: VATAccountsModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockStoreAccountingMethod(data: VATAccountsModel)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockAccountingMethodAnswerService)(data)(response)
 
-  def setupMockDeleteAccountingMethod(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockDeleteAccountingMethod(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockAccountingMethodAnswerService)(response)
 
   def setupMockDeleteAccountingMethodNotCalled()(implicit user: User[_]): Unit =

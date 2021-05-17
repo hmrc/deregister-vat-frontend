@@ -20,7 +20,10 @@ import assets.constants.BaseTestConstants.{vrn, _}
 import connectors.DeregisterVatConnector
 import connectors.mocks.MockDeregisterVatConnector
 import models.DeregisterVatSuccess
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import utils.TestUtil
+
+import scala.concurrent.Future
 
 
 class StoredAnswersServiceSpec extends TestUtil with MockDeregisterVatConnector {
@@ -37,16 +40,16 @@ class StoredAnswersServiceSpec extends TestUtil with MockDeregisterVatConnector 
       "a success response is returned from the connector" should {
 
         "return the expected model" in {
-          setupMockGetAnswers[TestModel](vrn, testKey)(Right(Some(testModel)))
-          await(TestStoreAnswersService.getAnswer) shouldBe Right(Some(testModel))
+          setupMockGetAnswers[TestModel](vrn, testKey)(Future.successful(Right(Some(testModel))))
+          TestStoreAnswersService.getAnswer.futureValue shouldBe Right(Some(testModel))
         }
       }
 
       "an error response is returned form the connector" should {
 
         "return the expected error model" in {
-          setupMockGetAnswers[TestModel](vrn, testKey)(Left(errorModel))
-          await(TestStoreAnswersService.getAnswer) shouldBe Left(errorModel)
+          setupMockGetAnswers[TestModel](vrn, testKey)(Future.successful(Left(errorModel)))
+          TestStoreAnswersService.getAnswer.futureValue shouldBe Left(errorModel)
         }
       }
     }
@@ -56,16 +59,16 @@ class StoredAnswersServiceSpec extends TestUtil with MockDeregisterVatConnector 
       "a success response is returned from the connector" should {
 
         "return the expected model" in {
-          setupMockStoreAnswers[TestModel](vrn, testKey, testModel)(Right(DeregisterVatSuccess))
-          await(TestStoreAnswersService.storeAnswer(testModel)) shouldBe Right(DeregisterVatSuccess)
+          setupMockStoreAnswers[TestModel](vrn, testKey, testModel)(Future.successful(Right(DeregisterVatSuccess)))
+          TestStoreAnswersService.storeAnswer(testModel).futureValue shouldBe Right(DeregisterVatSuccess)
         }
       }
 
       "an error response is returned form the connector" should {
 
         "return the expected error model" in {
-          setupMockStoreAnswers[TestModel](vrn, testKey, testModel)(Left(errorModel))
-          await(TestStoreAnswersService.storeAnswer(testModel)) shouldBe Left(errorModel)
+          setupMockStoreAnswers[TestModel](vrn, testKey, testModel)(Future.successful(Left(errorModel)))
+          TestStoreAnswersService.storeAnswer(testModel).futureValue shouldBe Left(errorModel)
         }
       }
     }
@@ -75,16 +78,16 @@ class StoredAnswersServiceSpec extends TestUtil with MockDeregisterVatConnector 
       "a success response is returned from the connector" should {
 
         "return the expected model" in {
-          setupMockDeleteAnswer(vrn, testKey)(Right(DeregisterVatSuccess))
-          await(TestStoreAnswersService.deleteAnswer) shouldBe Right(DeregisterVatSuccess)
+          setupMockDeleteAnswer(vrn, testKey)(Future.successful(Right(DeregisterVatSuccess)))
+          TestStoreAnswersService.deleteAnswer.futureValue shouldBe Right(DeregisterVatSuccess)
         }
       }
 
       "an error response is returned form the connector" should {
 
         "return the expected error model" in {
-          setupMockDeleteAnswer(vrn, testKey)(Left(errorModel))
-          await(TestStoreAnswersService.deleteAnswer) shouldBe Left(errorModel)
+          setupMockDeleteAnswer(vrn, testKey)(Future.successful(Left(errorModel)))
+          TestStoreAnswersService.deleteAnswer.futureValue shouldBe Left(errorModel)
         }
       }
     }

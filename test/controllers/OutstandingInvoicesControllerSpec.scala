@@ -56,8 +56,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
         lazy val result = TestOutstandingInvoicesController.show()(request)
 
         "return 200 (OK)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          setupMockGetOutstandingInvoices(Right(None))
+          mockAuthResult(mockAuthorisedIndividual)
+          setupMockGetOutstandingInvoices(Future.successful(Right(None)))
           status(result) shouldBe Status.OK
         }
 
@@ -72,8 +72,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
         lazy val result = TestOutstandingInvoicesController.show()(request)
 
         "return 200 (OK)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          setupMockGetOutstandingInvoices(Right(Some(Yes)))
+          mockAuthResult(mockAuthorisedIndividual)
+          setupMockGetOutstandingInvoices(Future.successful(Right(Some(Yes))))
           status(result) shouldBe Status.OK
         }
 
@@ -101,12 +101,12 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
         lazy val result = TestOutstandingInvoicesController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreOutstandingInvoices(Yes)(Right(DeregisterVatSuccess))
-          setupMockGetCapitalAssets(Right(None))
-          setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+          setupMockStoreOutstandingInvoices(Yes)(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockGetCapitalAssets(Future.successful(Right(None)))
+          setupMockGetDeregReason(Future.successful(Right(Some(BelowThreshold))))
+          setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -123,12 +123,12 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockGetDeregReason(Right(Some(BelowThreshold)))
-            setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
-            setupMockGetCapitalAssets(Right(None))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockGetDeregReason(Future.successful(Right(Some(BelowThreshold))))
+            setupMockStoreOutstandingInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockGetCapitalAssets(Future.successful(Right(None)))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -143,12 +143,12 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockGetDeregReason(Right(Some(ZeroRated)))
-            setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
-            setupMockGetCapitalAssets(Right(None))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockGetDeregReason(Future.successful(Right(Some(ZeroRated))))
+            setupMockStoreOutstandingInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockGetCapitalAssets(Future.successful(Right(None)))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -163,12 +163,12 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
           lazy val result = TestOutstandingInvoicesController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockGetDeregReason(Right(Some(ExemptOnly)))
-            setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
-            setupMockGetCapitalAssets(Right(None))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockGetDeregReason(Future.successful(Right(Some(ExemptOnly))))
+            setupMockStoreOutstandingInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockGetCapitalAssets(Future.successful(Right(None)))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -187,12 +187,12 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
             val capitalAssetsAmount: Int = 1000
 
             "return 303 (SEE OTHER)" in {
-              setupMockGetDeregReason(Right(Some(Ceased)))
-              setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(Yes, Some(capitalAssetsAmount)))))
-              setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
-              setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+              setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
+              setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(Yes, Some(capitalAssetsAmount))))))
+              setupMockStoreOutstandingInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+              setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              mockAuthResult(mockAuthorisedIndividual)
               status(result) shouldBe Status.SEE_OTHER
             }
 
@@ -208,12 +208,12 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
             lazy val result = TestOutstandingInvoicesController.submit()(request)
 
             "return 303 (SEE OTHER)" in {
-              setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
-              setupMockGetDeregReason(Right(Some(Ceased)))
-              setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
-              setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+              setupMockStoreOutstandingInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+              setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
+              setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
+              setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              mockAuthResult(mockAuthorisedIndividual)
               status(result) shouldBe Status.SEE_OTHER
             }
 
@@ -229,12 +229,12 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
             lazy val result = TestOutstandingInvoicesController.submit()(request)
 
             "return 500 (ISE)" in {
-              setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
-              setupMockGetDeregReason(Right(Some(Ceased)))
-              setupMockGetCapitalAssets(Right(None))
-              setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+              setupMockStoreOutstandingInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+              setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
+              setupMockGetCapitalAssets(Future.successful(Right(None)))
+              setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              mockAuthResult(mockAuthorisedIndividual)
               status(result) shouldBe Status.INTERNAL_SERVER_ERROR
             }
           }
@@ -246,11 +246,11 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
             lazy val result = TestOutstandingInvoicesController.submit()(request)
 
             "return 500 (ISE)" in {
-              setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
-              setupMockGetCapitalAssets(Left(errorModel))
-              setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+              setupMockStoreOutstandingInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+              setupMockGetCapitalAssets(Future.successful(Left(errorModel)))
+              setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              mockAuthResult(mockAuthorisedIndividual)
               status(result) shouldBe Status.INTERNAL_SERVER_ERROR
             }
           }
@@ -264,12 +264,12 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
           "return 500 (ISE)" in {
 
-            setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
-            setupMockGetDeregReason(Right(None))
-            setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockStoreOutstandingInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockGetDeregReason(Future.successful(Right(None)))
+            setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
@@ -281,12 +281,12 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
 
           "return 500 (ISE)" in {
-            setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
-            setupMockGetDeregReason(Left(errorModel))
-            setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
-            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+            setupMockStoreOutstandingInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockGetDeregReason(Future.successful(Left(errorModel)))
+            setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
+            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
@@ -299,10 +299,10 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
       lazy val result = TestOutstandingInvoicesController.submit()(request)
 
       "return 500 (ISE)" in {
-        setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
-        setupMockWipeRedundantData(Left(errorModel))
+        setupMockStoreOutstandingInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
+        setupMockWipeRedundantData(Future.successful(Left(errorModel)))
 
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
 
@@ -314,8 +314,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
       lazy val result = TestOutstandingInvoicesController.submit()(request)
 
       "return 500 (ISE)" in {
-        setupMockStoreOutstandingInvoices(No)(Left(errorModel))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        setupMockStoreOutstandingInvoices(No)(Future.successful(Left(errorModel)))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
@@ -326,7 +326,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
       lazy val result = TestOutstandingInvoicesController.submit()(request)
 
       "return 400 (BAD REQUEST)" in {
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.BAD_REQUEST
       }
 

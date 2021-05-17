@@ -19,17 +19,19 @@ package services.mocks
 import models._
 import services.TaxableTurnoverAnswerService
 
+import scala.concurrent.Future
+
 trait MockTaxableTurnoverAnswerService extends MockStoredAnswersService {
 
   val mockTaxableTurnoverAnswerService: TaxableTurnoverAnswerService = mock[TaxableTurnoverAnswerService]
 
-  def setupMockGetTaxableTurnover(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
+  def setupMockGetTaxableTurnover(response: Future[Either[ErrorModel, Option[YesNo]]])(implicit user: User[_]): Unit =
     setupMockGetAnswers(mockTaxableTurnoverAnswerService)(response)
 
-  def setupMockStoreTaxableTurnover(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockStoreTaxableTurnover(data: YesNo)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockTaxableTurnoverAnswerService)(data)(response)
 
-  def setupMockDeleteTaxableTurnover(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockDeleteTaxableTurnover(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockTaxableTurnoverAnswerService)(response)
 
   def setupMockDeleteTaxableTurnoverNotCalled()(implicit user: User[_]): Unit =

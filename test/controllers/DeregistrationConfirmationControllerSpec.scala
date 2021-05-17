@@ -55,12 +55,12 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       "User has successful dereg session key" when {
 
         lazy val result = {
-          setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+          setupMockDeleteAllStoredAnswers(Future.successful(Right(DeregisterVatSuccess)))
+          mockAuthResult(mockAuthorisedIndividual)
+          setupMockCustomerDetails(vrn)(Future.successful(Right(customerDetailsMax)))
           TestDeregistrationConfirmationController.show()(requestWithSession)
         }
-        lazy val document = Jsoup.parse(bodyOf(result))
+        lazy val document = Jsoup.parse(contentAsString(result))
 
         "return 200 (OK)" in {
           status(result) shouldBe Status.OK
@@ -78,7 +78,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
       "user does not have session key" should {
         lazy val result = {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           TestDeregistrationConfirmationController.show()(request)
         }
 
@@ -95,12 +95,12 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     "answers are deleted successfully and an error is received for CustomerDetails call" should {
 
       lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return 200 (OK)" in {
-        setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
-        setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+        setupMockDeleteAllStoredAnswers(Future.successful(Right(DeregisterVatSuccess)))
+        mockAuthResult(mockAuthorisedIndividual)
+        setupMockCustomerDetails(vrn)(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things"))))
         status(result) shouldBe Status.OK
       }
 
@@ -116,8 +116,8 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
     "answers are not deleted successfully should return internal server error" in {
       lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
-      setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-      mockAuthResult(Future.successful(mockAuthorisedIndividual))
+      setupMockDeleteAllStoredAnswers(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things"))))
+      mockAuthResult(mockAuthorisedIndividual)
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
     }
   }

@@ -19,7 +19,10 @@ package services
 import assets.constants.BaseTestConstants.{vrn, _}
 import connectors.mocks.MockDeregisterVatConnector
 import models.DeregisterVatSuccess
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import utils.TestUtil
+
+import scala.concurrent.Future
 
 
 class DeleteAllStoredAnswersServiceSpec extends TestUtil with MockDeregisterVatConnector {
@@ -33,16 +36,16 @@ class DeleteAllStoredAnswersServiceSpec extends TestUtil with MockDeregisterVatC
       "a success response is returned from the connector" should {
 
         "return the expected model" in {
-          setupMockDeleteAllAnswers(vrn)(Right(DeregisterVatSuccess))
-          await(TestDeleteAllStoredAnswersService.deleteAllAnswers) shouldBe Right(DeregisterVatSuccess)
+          setupMockDeleteAllAnswers(vrn)(Future.successful(Right(DeregisterVatSuccess)))
+          TestDeleteAllStoredAnswersService.deleteAllAnswers.futureValue shouldBe Right(DeregisterVatSuccess)
         }
       }
 
       "an error response is returned form the connector" should {
 
         "return the expected error model" in {
-          setupMockDeleteAllAnswers(vrn)(Left(errorModel))
-          await(TestDeleteAllStoredAnswersService.deleteAllAnswers) shouldBe Left(errorModel)
+          setupMockDeleteAllAnswers(vrn)(Future.successful(Left(errorModel)))
+          TestDeleteAllStoredAnswersService.deleteAllAnswers.futureValue shouldBe Left(errorModel)
         }
       }
     }

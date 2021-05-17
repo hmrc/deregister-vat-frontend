@@ -61,9 +61,9 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetNextTaxableTurnover(Right(None))
-          setupMockGetBusinessActivityAnswer(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetNextTaxableTurnover(Future.successful(Right(None)))
+          setupMockGetBusinessActivityAnswer(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -78,9 +78,9 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
-          setupMockGetBusinessActivityAnswer(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetNextTaxableTurnover(Future.successful(Right(Some(testTurnoverModel))))
+          setupMockGetBusinessActivityAnswer(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -99,9 +99,9 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
-          setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetNextTaxableTurnover(Future.successful(Right(Some(testTurnoverModel))))
+          setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(Yes))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -123,9 +123,9 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetNextTaxableTurnover(Right(None))
-          setupMockGetBusinessActivityAnswer(Right(Some(No)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetNextTaxableTurnover(Future.successful(Right(None)))
+          setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(No))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -147,9 +147,9 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetNextTaxableTurnover(Right(None))
-          setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetNextTaxableTurnover(Future.successful(Right(None)))
+          setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(Yes))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -171,9 +171,9 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.show()(request)
 
         "return 500 (ISE)" in {
-          setupMockGetNextTaxableTurnover(Left(errorModel))
-          setupMockGetBusinessActivityAnswer(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetNextTaxableTurnover(Future.successful(Left(errorModel)))
+          setupMockGetBusinessActivityAnswer(Future.successful(Left(errorModel)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
 
@@ -196,13 +196,13 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockGetTaxableTurnover(Right(Some(No)))
+          setupMockGetTaxableTurnover(Future.successful(Right(Some(No))))
 
-          setupMockGetDeregReason(Right(Some(BelowThreshold)))
+          setupMockGetDeregReason(Future.successful(Right(Some(BelowThreshold))))
 
-          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Future.successful(Right(DeregisterVatSuccess)))
 
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -220,11 +220,11 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockGetTaxableTurnover(Right(Some(Yes)))
-          setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
+          setupMockGetTaxableTurnover(Future.successful(Right(Some(Yes))))
+          setupMockGetDeregReason(Future.successful(Right(Some(BelowThreshold))))
+          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Future.successful(Right(DeregisterVatSuccess)))
 
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -242,10 +242,10 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockGetTaxableTurnover(Right(Some(Yes)))
-          setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetTaxableTurnover(Future.successful(Right(Some(Yes))))
+          setupMockGetDeregReason(Future.successful(Right(Some(BelowThreshold))))
+          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Future.successful(Right(DeregisterVatSuccess)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -263,10 +263,10 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockGetDeregReason(Right(Some(BelowThreshold)))
-          setupMockGetTaxableTurnover(Right(Some(No)))
-          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregReason(Future.successful(Right(Some(BelowThreshold))))
+          setupMockGetTaxableTurnover(Future.successful(Right(Some(No))))
+          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Future.successful(Right(DeregisterVatSuccess)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -284,10 +284,10 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockGetDeregReason(Right(Some(ZeroRated)))
-          setupMockGetTaxableTurnover(Right(Some(No)))
-          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetDeregReason(Future.successful(Right(Some(ZeroRated))))
+          setupMockGetTaxableTurnover(Future.successful(Right(Some(No))))
+          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Future.successful(Right(DeregisterVatSuccess)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -305,10 +305,10 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockGetTaxableTurnover(Right(None))
-          setupMockGetDeregReason(Right(Some(ZeroRated)))
-          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetTaxableTurnover(Future.successful(Right(None)))
+          setupMockGetDeregReason(Future.successful(Right(Some(ZeroRated))))
+          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Future.successful(Right(DeregisterVatSuccess)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -324,8 +324,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Future.successful(Left(errorModel)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -338,8 +338,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          setupMockGetBusinessActivityAnswer(Right(Some(No)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(No))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 
@@ -361,8 +361,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(Yes))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 
@@ -383,8 +383,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockGetBusinessActivityAnswer(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetBusinessActivityAnswer(Future.successful(Left(errorModel)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
 
@@ -402,8 +402,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         lazy val result = TestNextTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Future.successful(Left(errorModel)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }

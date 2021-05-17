@@ -17,9 +17,9 @@
 package forms
 
 import models.WhyTurnoverBelowModel
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 
-class WhyTurnoverBelowFormSpec extends UnitSpec {
+class WhyTurnoverBelowFormSpec extends WordSpecLike with Matchers with OptionValues {
 
   "Binding a form with valid data" should {
 

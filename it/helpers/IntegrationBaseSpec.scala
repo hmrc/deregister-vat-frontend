@@ -18,7 +18,8 @@ package helpers
 
 import common.SessionKeys
 import config.AppConfig
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen, TestSuite}
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen, Matchers, OptionValues, TestSuite, WordSpecLike}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.data.Form
 import play.api.http.HeaderNames
@@ -27,9 +28,10 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.{Application, Environment, Mode}
 import stubs.{AuthStub, VatSubscriptionStub}
-import uk.gov.hmrc.play.test.UnitSpec
 
-trait IntegrationBaseSpec extends UnitSpec
+trait IntegrationBaseSpec extends WordSpecLike
+  with Matchers
+  with OptionValues
   with WireMockHelper
   with GuiceOneServerPerSuite
   with TestSuite
@@ -128,17 +130,16 @@ trait IntegrationBaseSpec extends UnitSpec
     super.afterAll()
   }
 
-  def get(path: String, additionalCookies: Map[String, String] = Map.empty): WSResponse = await(
-    buildRequest(path, additionalCookies).get()
-  )
+  def get(path: String, additionalCookies: Map[String, String] = Map.empty): WSResponse =
+    buildRequest(path, additionalCookies).get().futureValue
 
-  def post(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse = await(
-    buildRequest(path, additionalCookies).post(body)
-  )
 
-  def put(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse = await(
-    buildRequest(path, additionalCookies).put(body)
-  )
+  def post(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse =
+    buildRequest(path, additionalCookies).post(body).futureValue
+
+  def put(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse =
+    buildRequest(path, additionalCookies).put(body).futureValue
+
 
   def buildRequest(path: String, additionalCookies: Map[String, String] = Map.empty): WSRequest =
     client.url(s"http://localhost:$port$appRouteContext$path")

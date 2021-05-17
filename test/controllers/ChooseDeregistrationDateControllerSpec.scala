@@ -58,9 +58,9 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetChooseDeregDate(Right(None))
-          setupMockGetOutstandingInvoices(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetChooseDeregDate(Future.successful(Right(None)))
+          setupMockGetOutstandingInvoices(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -75,9 +75,9 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetChooseDeregDate(Right(Some(Yes)))
-          setupMockGetOutstandingInvoices(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetChooseDeregDate(Future.successful(Right(Some(Yes))))
+          setupMockGetOutstandingInvoices(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -97,9 +97,9 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.show()(request)
 
         "return Internal Server Error" in {
-          setupMockGetChooseDeregDate(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
-          setupMockGetOutstandingInvoices(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetChooseDeregDate(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = ""))))
+          setupMockGetOutstandingInvoices(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = ""))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
 
@@ -120,9 +120,9 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreChooseDeregDate(Yes)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+          setupMockStoreChooseDeregDate(Yes)(Future.successful(Right(DeregisterVatSuccess)))
+          mockAuthResult(mockAuthorisedIndividual)
+          setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -138,9 +138,9 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreChooseDeregDate(No)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
-          setupMockWipeRedundantData(Right(DeregisterVatSuccess))
+          setupMockStoreChooseDeregDate(No)(Future.successful(Right(DeregisterVatSuccess)))
+          mockAuthResult(mockAuthorisedIndividual)
+          setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -156,8 +156,8 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreChooseDeregDate(No)(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockStoreChooseDeregDate(No)(Future.successful(Left(errorModel)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -171,8 +171,8 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          setupMockGetOutstandingInvoices(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetOutstandingInvoices(Future.successful(Right(None)))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 
@@ -191,8 +191,8 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         lazy val result = TestChooseDeregistrationDateController$.submit()(request)
 
         "return Internal Server Error" in {
-          setupMockGetOutstandingInvoices(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          setupMockGetOutstandingInvoices(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = ""))))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
 

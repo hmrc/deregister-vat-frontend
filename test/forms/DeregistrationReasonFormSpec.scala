@@ -17,9 +17,9 @@
 package forms
 
 import models.Other
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 
-class DeregistrationReasonFormSpec extends UnitSpec {
+class DeregistrationReasonFormSpec extends WordSpecLike with Matchers with OptionValues {
 
   "Binding a form with valid data" should {
 

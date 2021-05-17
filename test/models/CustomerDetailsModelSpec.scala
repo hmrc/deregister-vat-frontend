@@ -16,10 +16,10 @@
 
 package models
 
-import uk.gov.hmrc.play.test.UnitSpec
 import assets.constants.CustomerDetailsTestConstants._
+import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 
-class CustomerDetailsModelSpec extends UnitSpec {
+class CustomerDetailsModelSpec extends WordSpecLike with Matchers with OptionValues {
 
   "Deserializing from JSON" when {
 

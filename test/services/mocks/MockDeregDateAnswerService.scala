@@ -19,17 +19,19 @@ package services.mocks
 import models.{DateModel, DeregisterVatResponse, ErrorModel, User}
 import services.DeregDateAnswerService
 
+import scala.concurrent.Future
+
 trait MockDeregDateAnswerService extends MockStoredAnswersService {
 
   val mockDeregDateAnswerService: DeregDateAnswerService = mock[DeregDateAnswerService]
 
-  def setupMockGetDeregDate(response: Either[ErrorModel, Option[DateModel]])(implicit user: User[_]): Unit =
+  def setupMockGetDeregDate(response: Future[Either[ErrorModel, Option[DateModel]]])(implicit user: User[_]): Unit =
     setupMockGetAnswers(mockDeregDateAnswerService)(response)
 
-  def setupMockStoreDeregDate(data: DateModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockStoreDeregDate(data: DateModel)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockDeregDateAnswerService)(data)(response)
 
-  def setupMockDeleteDeregDate(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockDeleteDeregDate(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockDeregDateAnswerService)(response)
 
   def setupMockDeleteDeregDateNotCalled()(implicit user: User[_]): Unit =

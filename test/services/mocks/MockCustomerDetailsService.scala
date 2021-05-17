@@ -18,17 +18,17 @@ package services.mocks
 
 import models.{CustomerDetails, ErrorModel}
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.{Matchers, OptionValues, WordSpecLike}
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCustomerDetailsService extends UnitSpec with MockFactory {
+trait MockCustomerDetailsService extends WordSpecLike with Matchers with OptionValues with MockFactory {
 
   val mockCustomerDetailsService: CustomerDetailsService = mock[CustomerDetailsService]
 
-  def setupMockCustomerDetails(vrn: String)(response: Either[ErrorModel, CustomerDetails]): Unit = {
+  def setupMockCustomerDetails(vrn: String)(response: Future[Either[ErrorModel, CustomerDetails]]): Unit = {
     (mockCustomerDetailsService.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, *, *)
       .returns(response)

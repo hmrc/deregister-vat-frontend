@@ -18,6 +18,7 @@ package controllers
 
 import mocks.{MockAuth, MockDeniedAccessPredicate}
 import org.jsoup.Jsoup
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.{Action, AnyContent, Request, Result}
@@ -56,5 +57,5 @@ trait ControllerBaseSpec extends TestUtil with MockAuth with MockDeniedAccessPre
     }
   }
 
-  def document(result: Future[Result]): Document = Jsoup.parse(bodyOf(result))
+  def document(result: Future[Result]): Document = Jsoup.parse(contentAsString(result))
 }

@@ -77,7 +77,7 @@ class AuthPredicateSpec extends MockAuth {
 
               lazy val result = {
                 mockAuthResult(mockAuthorisedIndividual)
-                setupMockCustomerDetails(vrn)(Right(customerDetailsInsolvent))
+                setupMockCustomerDetails(vrn)(Future.successful(Right(customerDetailsInsolvent)))
                 target(FakeRequest())
               }
 
@@ -94,7 +94,7 @@ class AuthPredicateSpec extends MockAuth {
 
               lazy val result = {
                 mockAuthResult(mockAuthorisedIndividual)
-                setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+                setupMockCustomerDetails(vrn)(Future.successful(Right(customerDetailsMax)))
                 target(FakeRequest())
               }
 
@@ -111,7 +111,7 @@ class AuthPredicateSpec extends MockAuth {
 
               lazy val result = {
                 mockAuthResult(mockAuthorisedIndividual)
-                setupMockCustomerDetails(vrn)(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Bad things!")))
+                setupMockCustomerDetails(vrn)(Future.successful(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Bad things!"))))
                 target(FakeRequest())
               }
 
