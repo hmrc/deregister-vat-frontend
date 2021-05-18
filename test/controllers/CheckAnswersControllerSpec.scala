@@ -59,7 +59,7 @@ class CheckAnswersControllerSpec
         lazy val result = TestCheckAnswersController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockCheckYourAnswersModel(Future.successful(Right(
+          setupMockCheckYourAnswersModel(Right(
             CheckYourAnswersModel(
               Some(Ceased),
               Some(dateModel),
@@ -79,7 +79,7 @@ class CheckAnswersControllerSpec
               Some(zeroRatedSuppliesValue),
               Some(Yes)
             )
-          )))
+          ))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -95,7 +95,7 @@ class CheckAnswersControllerSpec
         lazy val result = TestCheckAnswersController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockCheckYourAnswersModel(Future.successful(Right(
+          setupMockCheckYourAnswersModel(Right(
             CheckYourAnswersModel(
               Some(Ceased),
               Some(dateModel),
@@ -115,7 +115,7 @@ class CheckAnswersControllerSpec
               Some(zeroRatedSuppliesValue),
               Some(Yes)
             )
-          )))
+          ))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -131,7 +131,7 @@ class CheckAnswersControllerSpec
         lazy val result = TestCheckAnswersController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockCheckYourAnswersModel(Future.successful(Right(
+          setupMockCheckYourAnswersModel(Right(
             CheckYourAnswersModel(
               Some(Ceased),
               Some(dateModel),
@@ -151,7 +151,7 @@ class CheckAnswersControllerSpec
               Some(zeroRatedSuppliesValue),
               Some(Yes)
             )
-          )))
+          ))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -167,7 +167,7 @@ class CheckAnswersControllerSpec
         lazy val result = TestCheckAnswersController.show()(request)
 
         "return 500 (INTERNAL SERVER ERROR)" in {
-          setupMockCheckYourAnswersModel(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR,"Error"))))
+          setupMockCheckYourAnswersModel(Left(ErrorModel(INTERNAL_SERVER_ERROR,"Error")))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
@@ -183,7 +183,7 @@ class CheckAnswersControllerSpec
         lazy val result = TestCheckAnswersController.submit()(request)
 
         "return 303 (see other)" in {
-          setupUpdateDeregistration(Future.successful(Right(VatSubscriptionSuccess)))
+          setupUpdateDeregistration(Right(VatSubscriptionSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -205,7 +205,7 @@ class CheckAnswersControllerSpec
         lazy val result = TestCheckAnswersController.submit()(request)
 
         "return 200 (OK)" in {
-          setupUpdateDeregistration(Future.successful(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,"error message"))))
+          setupUpdateDeregistration(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,"error message")))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

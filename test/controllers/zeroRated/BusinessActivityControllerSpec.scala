@@ -57,7 +57,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       "return a 200" in {
 
-        setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(Yes))))
+        setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
         mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.OK
       }
@@ -74,7 +74,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       "return a 200" in {
 
-        setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(No))))
+        setupMockGetBusinessActivityAnswer(Right(Some(No)))
         mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.OK
       }
@@ -91,7 +91,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       "return a 200" in {
 
-        setupMockGetBusinessActivityAnswer(Future.successful(Right(None)))
+        setupMockGetBusinessActivityAnswer(Right(None))
         mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.OK
       }
@@ -119,8 +119,8 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       lazy val result = TestController.submit()(request)
 
       "return 303 " in {
-        setupMockStoreBusinessActivityAnswer(Yes)(Future.successful(Right(DeregisterVatSuccess)))
-        setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
+        setupMockStoreBusinessActivityAnswer(Yes)(Right(DeregisterVatSuccess))
+        setupMockWipeRedundantData(Right(DeregisterVatSuccess))
         mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.SEE_OTHER
       }
@@ -137,8 +137,8 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       lazy val result = TestController.submit()(request)
 
       "return 303 " in {
-        setupMockStoreBusinessActivityAnswer(No)(Future.successful(Right(DeregisterVatSuccess)))
-        setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
+        setupMockStoreBusinessActivityAnswer(No)(Right(DeregisterVatSuccess))
+        setupMockWipeRedundantData(Right(DeregisterVatSuccess))
         mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.SEE_OTHER
       }
@@ -168,7 +168,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       lazy val result = TestController.submit()(request)
 
       "return a 500" in {
-        setupMockStoreBusinessActivityAnswer(No)(Future.successful(Left(errorModel)))
+        setupMockStoreBusinessActivityAnswer(No)(Left(errorModel))
         mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }

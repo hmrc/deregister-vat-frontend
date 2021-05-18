@@ -25,14 +25,14 @@ trait MockDeregDateAnswerService extends MockStoredAnswersService {
 
   val mockDeregDateAnswerService: DeregDateAnswerService = mock[DeregDateAnswerService]
 
-  def setupMockGetDeregDate(response: Future[Either[ErrorModel, Option[DateModel]]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockDeregDateAnswerService)(response)
+  def setupMockGetDeregDate(response: Either[ErrorModel, Option[DateModel]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockDeregDateAnswerService)(Future.successful(response))
 
-  def setupMockStoreDeregDate(data: DateModel)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockDeregDateAnswerService)(data)(response)
+  def setupMockStoreDeregDate(data: DateModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockDeregDateAnswerService)(data)(Future.successful(response))
 
-  def setupMockDeleteDeregDate(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockDeregDateAnswerService)(response)
+  def setupMockDeleteDeregDate(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockDeregDateAnswerService)(Future.successful(response))
 
   def setupMockDeleteDeregDateNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockDeregDateAnswerService)

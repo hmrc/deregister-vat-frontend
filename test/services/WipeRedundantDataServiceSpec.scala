@@ -63,8 +63,8 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         val outstandingInvoices: Option[YesNo] = Some(No)
 
         "Delete deregistration date answer" in {
-          setupMockDeleteChooseDeregDate(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteDeregDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteChooseDeregDate(Right(DeregisterVatSuccess))
+          setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
           val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
           result.futureValue shouldBe Right(DeregisterVatSuccess)
         }
@@ -135,7 +135,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       val issueInvoices: Option[YesNo] = Some(Yes)
 
       "Delete outstanding invoices answer" in {
-        setupMockDeleteOutstandingInvoices(Future.successful(Right(DeregisterVatSuccess)))
+        setupMockDeleteOutstandingInvoices(Right(DeregisterVatSuccess))
 
         val result = TestWipeRedundantDataService.wipeOutstandingInvoices(issueInvoices)
         result.futureValue shouldBe Right(DeregisterVatSuccess)
@@ -174,7 +174,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       val businessActivity: Option[YesNo] = Some(No)
 
       "Delete sic code answer" in {
-        setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
+        setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
 
         val result = TestWipeRedundantDataService.wipeSicCode(businessActivity)
         result.futureValue shouldBe Right(DeregisterVatSuccess)
@@ -189,15 +189,15 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Delete Data to start Ceased Trading Journey" in {
 
         inSequence {
-          setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteNextTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeletePurchasesExceedSuppliesAnswer(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
@@ -212,7 +212,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteTaxableTurnover(Future.successful(Left(errorModel)))
+          setupMockDeleteTaxableTurnover(Left(errorModel))
 
           setupMockDeleteWhyTurnoverBelowNotCalled()
           setupMockDeleteNextTaxableTurnoverNotCalled()
@@ -233,9 +233,9 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Left(errorModel)))
+          setupMockDeleteWhyTurnoverBelow(Left(errorModel))
           setupMockDeleteNextTaxableTurnoverNotCalled()
 
           setupMockDeleteBusinessActivityAnswerNotCalled()
@@ -253,10 +253,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteNextTaxableTurnover(Future.successful(Left(errorModel)))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Left(errorModel))
 
           setupMockDeleteBusinessActivityAnswerNotCalled()
           setupMockDeleteSicCodeAnswerServiceNotCalled()
@@ -273,12 +273,12 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteNextTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Left(errorModel)))
+          setupMockDeleteBusinessActivityAnswer(Left(errorModel))
           setupMockDeleteSicCodeAnswerServiceNotCalled()
           setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
           setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
@@ -293,13 +293,13 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteNextTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteSicCodeAnswerService(Future.successful(Left(errorModel)))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Left(errorModel))
           setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
           setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
@@ -313,14 +313,14 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteNextTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Left(errorModel)))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Left(errorModel))
           setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
 
@@ -333,15 +333,15 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteNextTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeletePurchasesExceedSuppliesAnswer(Future.successful(Left(errorModel)))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Left(errorModel))
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
@@ -357,12 +357,12 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Delete Data to start Below Threshold Journey" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeletePurchasesExceedSuppliesAnswer(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
@@ -376,7 +376,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Left(errorModel)))
+          setupMockDeleteCeasedTradingDate(Left(errorModel))
 
           setupMockDeleteBusinessActivityAnswerNotCalled()
           setupMockDeleteSicCodeAnswerServiceNotCalled()
@@ -394,9 +394,9 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Left(errorModel)))
+          setupMockDeleteBusinessActivityAnswer(Left(errorModel))
           setupMockDeleteSicCodeAnswerServiceNotCalled()
           setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
           setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
@@ -412,10 +412,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteSicCodeAnswerService(Future.successful(Left(errorModel)))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Left(errorModel))
           setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()
           setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
@@ -430,11 +430,11 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Left(errorModel)))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Left(errorModel))
           setupMockDeletePurchasesExceedSuppliesAnswerNotCalled()
         }
 
@@ -448,12 +448,12 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Return an error model" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeletePurchasesExceedSuppliesAnswer(Future.successful(Left(errorModel)))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Left(errorModel))
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
@@ -468,10 +468,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Delete Data ready for Zero Rated Journey" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         result.futureValue shouldBe Right(DeregisterVatSuccess)
@@ -482,7 +482,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Not first answer" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Left(errorModel)))
+          setupMockDeleteCeasedTradingDate(Left(errorModel))
 
           setupMockDeleteWhyTurnoverBelowNotCalled()
           setupMockDeleteTaxableTurnoverNotCalled()
@@ -496,9 +496,9 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Not second answer" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Left(errorModel)))
+          setupMockDeleteWhyTurnoverBelow(Left(errorModel))
           setupMockDeleteTaxableTurnoverNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
@@ -511,10 +511,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Not third answer" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteTaxableTurnover(Future.successful(Left(errorModel)))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteTaxableTurnover(Left(errorModel))
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
         result.futureValue shouldBe Left(errorModel)
@@ -533,15 +533,15 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Call .wipe to remove redundant data" in {
 
         inSequence {
-          setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteNextTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeletePurchasesExceedSuppliesAnswer(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
@@ -556,12 +556,12 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       "Delete Ceased Trading date answer" in {
 
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeletePurchasesExceedSuppliesAnswer(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
@@ -575,10 +575,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
       "Delete Ceased Trading date, Why Turnover Below and Next Taxable Turnover answers" in {
         inSequence {
-          setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
 
-          setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
@@ -607,22 +607,22 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           "make calls to wipe relevant data" in {
 
             inSequence {
-              setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
-              setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
-              setupMockGetIssueNewInvoices(Future.successful(Right(Some(No))))
-              setupMockGetOutstandingInvoices(Future.successful(Right(Some(No))))
-              setupMockGetBusinessActivityAnswer(Future.successful(Right(None)))
-              setupMockGetChooseDeregDate(Future.successful(Right(Some(Yes))))
+              setupMockGetDeregReason(Right(Some(Ceased)))
+              setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+              setupMockGetIssueNewInvoices(Right(Some(No)))
+              setupMockGetOutstandingInvoices(Right(Some(No)))
+              setupMockGetBusinessActivityAnswer(Right(None))
+              setupMockGetChooseDeregDate(Right(Some(Yes)))
 
-              setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteNextTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeletePurchasesExceedSuppliesAnswer(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteChooseDeregDate(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteDeregDate(Future.successful(Right(DeregisterVatSuccess)))
+              setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+              setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+              setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+              setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+              setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+              setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+              setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
+              setupMockDeleteChooseDeregDate(Right(DeregisterVatSuccess))
+              setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -635,18 +635,18 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           "make calls to wipe relevant data" in {
 
             inSequence {
-              setupMockGetDeregReason(Future.successful(Right(Some(BelowThreshold))))
-              setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
-              setupMockGetIssueNewInvoices(Future.successful(Right(Some(No))))
-              setupMockGetOutstandingInvoices(Future.successful(Right(Some(No))))
-              setupMockGetBusinessActivityAnswer(Future.successful(Right(None)))
-              setupMockGetChooseDeregDate(Future.successful(Right(Some(Yes))))
+              setupMockGetDeregReason(Right(Some(BelowThreshold)))
+              setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+              setupMockGetIssueNewInvoices(Right(Some(No)))
+              setupMockGetOutstandingInvoices(Right(Some(No)))
+              setupMockGetBusinessActivityAnswer(Right(None))
+              setupMockGetChooseDeregDate(Right(Some(Yes)))
 
-              setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeletePurchasesExceedSuppliesAnswer(Future.successful(Right(DeregisterVatSuccess)))
+              setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+              setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+              setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+              setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+              setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -660,16 +660,16 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           "make calls to wipe relevant data" in {
 
             inSequence {
-              setupMockGetDeregReason(Future.successful(Right(Some(ZeroRated))))
-              setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
-              setupMockGetIssueNewInvoices(Future.successful(Right(Some(No))))
-              setupMockGetOutstandingInvoices(Future.successful(Right(Some(No))))
-              setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(Yes))))
-              setupMockGetChooseDeregDate(Future.successful(Right(Some(Yes))))
+              setupMockGetDeregReason(Right(Some(ZeroRated)))
+              setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+              setupMockGetIssueNewInvoices(Right(Some(No)))
+              setupMockGetOutstandingInvoices(Right(Some(No)))
+              setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+              setupMockGetChooseDeregDate(Right(Some(Yes)))
 
-              setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+              setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+              setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+              setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -683,17 +683,17 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           "make calls to wipe relevant data" in {
 
             inSequence {
-              setupMockGetDeregReason(Future.successful(Right(Some(ZeroRated))))
-              setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
-              setupMockGetIssueNewInvoices(Future.successful(Right(Some(No))))
-              setupMockGetOutstandingInvoices(Future.successful(Right(Some(No))))
-              setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(No))))
-              setupMockGetChooseDeregDate(Future.successful(Right(Some(Yes))))
+              setupMockGetDeregReason(Right(Some(ZeroRated)))
+              setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+              setupMockGetIssueNewInvoices(Right(Some(No)))
+              setupMockGetOutstandingInvoices(Right(Some(No)))
+              setupMockGetBusinessActivityAnswer(Right(Some(No)))
+              setupMockGetChooseDeregDate(Right(Some(Yes)))
 
-              setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
+              setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+              setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+              setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+              setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -707,18 +707,18 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           "return an error model" in {
 
             inSequence {
-              setupMockGetDeregReason(Future.successful(Right(Some(ZeroRated))))
-              setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
-              setupMockGetIssueNewInvoices(Future.successful(Right(Some(Yes))))
-              setupMockGetOutstandingInvoices(Future.successful(Right(Some(No))))
-              setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(Yes))))
-              setupMockGetChooseDeregDate(Future.successful(Right(Some(Yes))))
+              setupMockGetDeregReason(Right(Some(ZeroRated)))
+              setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+              setupMockGetIssueNewInvoices(Right(Some(Yes)))
+              setupMockGetOutstandingInvoices(Right(Some(No)))
+              setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+              setupMockGetChooseDeregDate(Right(Some(Yes)))
 
-              setupMockDeleteCeasedTradingDate(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-              setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
+              setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+              setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+              setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
 
-              setupMockDeleteOutstandingInvoices(Future.successful(Left(errorModel)))
+              setupMockDeleteOutstandingInvoices(Left(errorModel))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -730,22 +730,22 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         "return an error model" in {
 
           inSequence {
-            setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
-            setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
-            setupMockGetIssueNewInvoices(Future.successful(Right(Some(No))))
-            setupMockGetOutstandingInvoices(Future.successful(Right(Some(No))))
-            setupMockGetBusinessActivityAnswer(Future.successful(Right(None)))
-            setupMockGetChooseDeregDate(Future.successful(Right(Some(Yes))))
+            setupMockGetDeregReason(Right(Some(Ceased)))
+            setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+            setupMockGetIssueNewInvoices(Right(Some(No)))
+            setupMockGetOutstandingInvoices(Right(Some(No)))
+            setupMockGetBusinessActivityAnswer(Right(None))
+            setupMockGetChooseDeregDate(Right(Some(Yes)))
 
-            setupMockDeleteTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockDeleteWhyTurnoverBelow(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockDeleteNextTaxableTurnover(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockDeleteBusinessActivityAnswer(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockDeleteSicCodeAnswerService(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockDeleteZeroRatedSuppliesValueAnswer(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockDeletePurchasesExceedSuppliesAnswer(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+            setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+            setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+            setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+            setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+            setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+            setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
 
-            setupMockDeleteChooseDeregDate(Future.successful(Left(errorModel)))
+            setupMockDeleteChooseDeregDate(Left(errorModel))
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
@@ -760,7 +760,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         "return an error model" in {
 
           inSequence {
-            setupMockGetDeregReason(Future.successful(Left(errorModel)))
+            setupMockGetDeregReason(Left(errorModel))
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
@@ -771,8 +771,8 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         "return an error model" in {
 
           inSequence {
-            setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
-            setupMockGetCapitalAssets(Future.successful(Left(errorModel)))
+            setupMockGetDeregReason(Right(Some(Ceased)))
+            setupMockGetCapitalAssets(Left(errorModel))
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
@@ -783,9 +783,9 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         "return an error model" in {
 
           inSequence {
-            setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
-            setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
-            setupMockGetIssueNewInvoices(Future.successful(Left(errorModel)))
+            setupMockGetDeregReason(Right(Some(Ceased)))
+            setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+            setupMockGetIssueNewInvoices(Left(errorModel))
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
@@ -796,10 +796,10 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         "return an error model" in {
 
           inSequence {
-            setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
-            setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
-            setupMockGetIssueNewInvoices(Future.successful(Right(Some(No))))
-            setupMockGetOutstandingInvoices(Future.successful(Left(errorModel)))
+            setupMockGetDeregReason(Right(Some(Ceased)))
+            setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+            setupMockGetIssueNewInvoices(Right(Some(No)))
+            setupMockGetOutstandingInvoices(Left(errorModel))
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
@@ -810,11 +810,11 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         "return an error model" in {
 
           inSequence {
-            setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
-            setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(No, None)))))
-            setupMockGetIssueNewInvoices(Future.successful(Right(Some(No))))
-            setupMockGetOutstandingInvoices(Future.successful(Right(Some(No))))
-            setupMockGetBusinessActivityAnswer(Future.successful(Left(errorModel)))
+            setupMockGetDeregReason(Right(Some(Ceased)))
+            setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(No, None))))
+            setupMockGetIssueNewInvoices(Right(Some(No)))
+            setupMockGetOutstandingInvoices(Right(Some(No)))
+            setupMockGetBusinessActivityAnswer(Left(errorModel))
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData

@@ -25,14 +25,14 @@ trait MockOutstandingInvoicesService extends MockStoredAnswersService {
 
   val mockOutstandingInvoicesService: OutstandingInvoicesAnswerService = mock[OutstandingInvoicesAnswerService]
 
-  def setupMockGetOutstandingInvoices(response: Future[Either[ErrorModel, Option[YesNo]]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockOutstandingInvoicesService)(response)
+  def setupMockGetOutstandingInvoices(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockOutstandingInvoicesService)(Future.successful(response))
 
-  def setupMockStoreOutstandingInvoices(data: YesNo)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockOutstandingInvoicesService)(data)(response)
+  def setupMockStoreOutstandingInvoices(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockOutstandingInvoicesService)(data)(Future.successful(response))
 
-  def setupMockDeleteOutstandingInvoices(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockOutstandingInvoicesService)(response)
+  def setupMockDeleteOutstandingInvoices(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockOutstandingInvoicesService)(Future.successful(response))
 
   def setupMockDeleteOutstandingInvoicesNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockOutstandingInvoicesService)

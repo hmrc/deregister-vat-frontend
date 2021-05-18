@@ -25,14 +25,14 @@ trait MockStocksAnswerService extends MockStoredAnswersService {
 
   val mockStocksAnswerService: StocksAnswerService = mock[StocksAnswerService]
 
-  def setupMockGetStocks(response: Future[Either[ErrorModel, Option[YesNoAmountModel]]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockStocksAnswerService)(response)
+  def setupMockGetStocks(response: Either[ErrorModel, Option[YesNoAmountModel]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockStocksAnswerService)(Future.successful(response))
 
-  def setupMockStoreStocks(data: YesNoAmountModel)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockStocksAnswerService)(data)(response)
+  def setupMockStoreStocks(data: YesNoAmountModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockStocksAnswerService)(data)(Future.successful(response))
 
-  def setupMockDeleteStocks(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockStocksAnswerService)(response)
+  def setupMockDeleteStocks(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockStocksAnswerService)(Future.successful(response))
 
   def setupMockDeleteStocksNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockStocksAnswerService)

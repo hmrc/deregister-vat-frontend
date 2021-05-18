@@ -41,7 +41,7 @@ class SignOutControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
 
         lazy val result: Future[Result] = {
           implicit val user: User[AnyContentAsEmpty.type] = agentUserPrefYes
-          setupMockDeleteAllStoredAnswers(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedAgent, isAgent = true)
           TestSignOutController.signOut(authorised = true)(requestWithVRN)
         }
@@ -58,7 +58,7 @@ class SignOutControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
       "the user is a principal entity" should {
 
         lazy val result: Future[Result] = {
-          setupMockDeleteAllStoredAnswers(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           TestSignOutController.signOut(authorised = true)(request)
         }
@@ -93,7 +93,7 @@ class SignOutControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
       "throw an internal server error" in {
 
         lazy val result: Future[Result] = {
-          setupMockDeleteAllStoredAnswers(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things"))))
+          setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
           mockAuthResult(mockAuthorisedIndividual)
           TestSignOutController.signOut(authorised = true)(request)
         }

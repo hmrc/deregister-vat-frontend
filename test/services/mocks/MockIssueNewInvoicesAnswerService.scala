@@ -25,15 +25,15 @@ trait MockIssueNewInvoicesAnswerService extends MockStoredAnswersService {
 
   val mockIssueNewInvoicesAnswerService: IssueNewInvoicesAnswerService = mock[IssueNewInvoicesAnswerService]
 
-  def setupMockGetIssueNewInvoices(response: Future[Either[ErrorModel, Option[YesNo]]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockIssueNewInvoicesAnswerService)(response)
+  def setupMockGetIssueNewInvoices(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockIssueNewInvoicesAnswerService)(Future.successful(response))
 
-  def setupMockStoreIssueNewInvoices(data: YesNo)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockIssueNewInvoicesAnswerService)(data)(response)
+  def setupMockStoreIssueNewInvoices(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockIssueNewInvoicesAnswerService)(data)(Future.successful(response))
 
 
-  def setupMockDeleteIssueNewInvoices(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockIssueNewInvoicesAnswerService)(response)
+  def setupMockDeleteIssueNewInvoices(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockIssueNewInvoicesAnswerService)(Future.successful(response))
 
 
   def setupMockIssueNewInvoicesNotCalled()(implicit user: User[_]): Unit =

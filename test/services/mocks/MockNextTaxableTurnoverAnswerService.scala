@@ -25,14 +25,14 @@ trait MockNextTaxableTurnoverAnswerService extends MockStoredAnswersService {
 
   val mockNextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService = mock[NextTaxableTurnoverAnswerService]
 
-  def setupMockGetNextTaxableTurnover(response: Future[Either[ErrorModel, Option[NumberInputModel]]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockNextTaxableTurnoverAnswerService)(response)
+  def setupMockGetNextTaxableTurnover(response: Either[ErrorModel, Option[NumberInputModel]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockNextTaxableTurnoverAnswerService)(Future.successful(response))
 
-  def setupMockStoreNextTaxableTurnover(data: NumberInputModel)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockNextTaxableTurnoverAnswerService)(data)(response)
+  def setupMockStoreNextTaxableTurnover(data: NumberInputModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockNextTaxableTurnoverAnswerService)(data)(Future.successful(response))
 
-  def setupMockDeleteNextTaxableTurnover(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockNextTaxableTurnoverAnswerService)(response)
+  def setupMockDeleteNextTaxableTurnover(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockNextTaxableTurnoverAnswerService)(Future.successful(response))
 
   def setupMockDeleteNextTaxableTurnoverNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockNextTaxableTurnoverAnswerService)

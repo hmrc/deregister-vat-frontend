@@ -53,8 +53,8 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
 
           "return a 200" in {
             mockAuthResult(mockAuthorisedIndividual)
-            setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(Yes))))
-            setupMockGetSicCode(Future.successful(Right(Some("12345"))))
+            setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+            setupMockGetSicCode(Right(Some("12345")))
             status(result) shouldBe Status.OK
           }
 
@@ -73,8 +73,8 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
 
           "return a 200" in {
             mockAuthResult(mockAuthorisedIndividual)
-            setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(Yes))))
-            setupMockGetSicCode(Future.successful(Right(None)))
+            setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+            setupMockGetSicCode(Right(None))
             status(result) shouldBe Status.OK
           }
 
@@ -89,8 +89,8 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
 
           "return a 303" in {
             mockAuthResult(mockAuthorisedIndividual)
-            setupMockGetBusinessActivityAnswer(Future.successful(Right(None)))
-            setupMockGetSicCode(Future.successful(Right(None)))
+            setupMockGetBusinessActivityAnswer(Right(None))
+            setupMockGetSicCode(Right(None))
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -104,8 +104,8 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
 
           "return a 303" in {
             mockAuthResult(mockAuthorisedIndividual)
-            setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(No))))
-            setupMockGetSicCode(Future.successful(Right(None)))
+            setupMockGetBusinessActivityAnswer(Right(Some(No)))
+            setupMockGetSicCode(Right(None))
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -132,7 +132,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
 
           "return a 303" in {
             mockAuthResult(mockAuthorisedIndividual)
-            setupMockStoreSicCode("12345")(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStoreSicCode("12345")(Right(DeregisterVatSuccess))
             status(result) shouldBe Status.SEE_OTHER
           }
 

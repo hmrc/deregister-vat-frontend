@@ -57,7 +57,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetOptionTax(Future.successful(Right(None)))
+          setupMockGetOptionTax(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -73,7 +73,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetOptionTax(Future.successful(Right(Some(testYesModel))))
+          setupMockGetOptionTax(Right(Some(testYesModel)))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -107,7 +107,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreOptionTax(testYesModel)(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockStoreOptionTax(testYesModel)(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -124,7 +124,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreOptionTax(testNoModel)(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockStoreOptionTax(testNoModel)(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -141,7 +141,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreOptionTax(testNoModel)(Future.successful(Left(errorModel)))
+          setupMockStoreOptionTax(testNoModel)(Left(errorModel))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

@@ -28,9 +28,9 @@ trait MockWipeRedundantDataService extends TestUtil with MockFactory {
 
   val mockWipeRedundantDataService: WipeRedundantDataService = mock[WipeRedundantDataService]
 
-  def setupMockWipeRedundantData(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit = {
+  def setupMockWipeRedundantData(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit = {
     (mockWipeRedundantDataService.wipeRedundantData(_: User[_], _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *)
-      .returns(response)
+      .returns(Future.successful(response))
   }
 }

@@ -25,15 +25,15 @@ trait MockBusinessActivityAnswerService extends MockStoredAnswersService{
 
   val mockBusinessActivityAnswerService: BusinessActivityAnswerService = mock[BusinessActivityAnswerService]
 
-  def setupMockDeleteBusinessActivityAnswer(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockBusinessActivityAnswerService)(response)
+  def setupMockDeleteBusinessActivityAnswer(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockBusinessActivityAnswerService)(Future.successful(response))
 
   def setupMockDeleteBusinessActivityAnswerNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockBusinessActivityAnswerService)
 
-  def setupMockGetBusinessActivityAnswer(response: Future[Either[ErrorModel, Option[YesNo]]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockBusinessActivityAnswerService)(response)
+  def setupMockGetBusinessActivityAnswer(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockBusinessActivityAnswerService)(Future.successful(response))
 
-  def setupMockStoreBusinessActivityAnswer(data: YesNo)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockBusinessActivityAnswerService)(data)(response)
+  def setupMockStoreBusinessActivityAnswer(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockBusinessActivityAnswerService)(data)(Future.successful(response))
 }

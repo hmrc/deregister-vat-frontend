@@ -53,7 +53,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
         lazy val result = TestTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetTaxableTurnover(Future.successful(Right(None)))
+          setupMockGetTaxableTurnover(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -69,7 +69,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
         lazy val result = TestTaxableTurnoverController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetTaxableTurnover(Future.successful(Right(Some(No))))
+          setupMockGetTaxableTurnover(Right(Some(No)))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -100,8 +100,8 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreTaxableTurnover(No)(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
@@ -121,8 +121,8 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreTaxableTurnover(No)(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
@@ -142,8 +142,8 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreTaxableTurnover(No)(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
@@ -161,7 +161,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 500 (ISE)" in {
-            setupMockStoreTaxableTurnover(No)(Future.successful(Left(errorModel)))
+            setupMockStoreTaxableTurnover(No)(Left(errorModel))
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
@@ -192,8 +192,8 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
         lazy val result = TestTaxableTurnoverController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreTaxableTurnover(No)(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockWipeRedundantData(Future.successful(Left(errorModel)))
+          setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
+          setupMockWipeRedundantData(Left(errorModel))
 
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR

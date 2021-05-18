@@ -25,14 +25,14 @@ trait MockCeasedTradingDateAnswerService extends MockStoredAnswersService {
 
   val mockCeasedTradingDateAnswerService: CeasedTradingDateAnswerService = mock[CeasedTradingDateAnswerService]
 
-  def setupMockGetCeasedTradingDate(response: Future[Either[ErrorModel, Option[DateModel]]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockCeasedTradingDateAnswerService)(response)
+  def setupMockGetCeasedTradingDate(response: Either[ErrorModel, Option[DateModel]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockCeasedTradingDateAnswerService)(Future.successful(response))
 
-  def setupMockStoreCeasedTradingDate(data: DateModel)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockCeasedTradingDateAnswerService)(data)(response)
+  def setupMockStoreCeasedTradingDate(data: DateModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockCeasedTradingDateAnswerService)(data)(Future.successful(response))
 
-  def setupMockDeleteCeasedTradingDate(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockCeasedTradingDateAnswerService)(response)
+  def setupMockDeleteCeasedTradingDate(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockCeasedTradingDateAnswerService)(Future.successful(response))
 
   def setupMockDeleteCeasedTradingDateNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockCeasedTradingDateAnswerService)

@@ -25,14 +25,14 @@ trait MockOptionTaxAnswerService extends MockStoredAnswersService {
 
   val mockOptionTaxAnswerService: OptionTaxAnswerService = mock[OptionTaxAnswerService]
 
-  def setupMockGetOptionTax(response: Future[Either[ErrorModel, Option[YesNoAmountModel]]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockOptionTaxAnswerService)(response)
+  def setupMockGetOptionTax(response: Either[ErrorModel, Option[YesNoAmountModel]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockOptionTaxAnswerService)(Future.successful(response))
 
-  def setupMockStoreOptionTax(data: YesNoAmountModel)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockOptionTaxAnswerService)(data)(response)
+  def setupMockStoreOptionTax(data: YesNoAmountModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockOptionTaxAnswerService)(data)(Future.successful(response))
 
-  def setupMockDeleteOptionTax(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockOptionTaxAnswerService)(response)
+  def setupMockDeleteOptionTax(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockOptionTaxAnswerService)(Future.successful(response))
 
   def setupMockOptionTaxNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockOptionTaxAnswerService)

@@ -29,9 +29,9 @@ trait MockCheckAnswersService extends TestUtil with MockFactory {
 
   val mockCheckAnswersService: CheckAnswersService = mock[CheckAnswersService]
 
-  def setupMockCheckYourAnswersModel(response: Future[Either[ErrorModel, CheckYourAnswersModel]])(implicit user: User[_]): Unit = {
+  def setupMockCheckYourAnswersModel(response: Either[ErrorModel, CheckYourAnswersModel])(implicit user: User[_]): Unit = {
     (mockCheckAnswersService.checkYourAnswersModel()(_: User[_], _: Messages, _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *, *)
-      .returns(response)
+      .returns(Future.successful(response))
   }
 }

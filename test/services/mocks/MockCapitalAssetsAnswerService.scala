@@ -25,14 +25,14 @@ trait MockCapitalAssetsAnswerService extends MockStoredAnswersService {
 
   val mockCapitalAssetsAnswerService: CapitalAssetsAnswerService = mock[CapitalAssetsAnswerService]
 
-  def setupMockGetCapitalAssets(response: Future[Either[ErrorModel, Option[YesNoAmountModel]]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockCapitalAssetsAnswerService)(response)
+  def setupMockGetCapitalAssets(response: Either[ErrorModel, Option[YesNoAmountModel]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockCapitalAssetsAnswerService)(Future.successful(response))
 
-  def setupMockStoreCapitalAssets(data: YesNoAmountModel)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockCapitalAssetsAnswerService)(data)(response)
+  def setupMockStoreCapitalAssets(data: YesNoAmountModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockCapitalAssetsAnswerService)(data)(Future.successful(response))
 
-  def setupMockDeleteCapitalAssets(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockCapitalAssetsAnswerService)(response)
+  def setupMockDeleteCapitalAssets(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockCapitalAssetsAnswerService)(Future.successful(response))
 
   def setupMockDeleteCapitalAssetsNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockCapitalAssetsAnswerService)

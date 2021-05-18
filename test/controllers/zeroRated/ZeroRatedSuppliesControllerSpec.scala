@@ -56,7 +56,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
            lazy val result = TestZeroRatedSuppliesController.show()(request)
 
             "return 200 (OK)" in {
-              setupMockGetZeroRatedSupplies(Future.successful(Right(None)))
+              setupMockGetZeroRatedSupplies(Right(None))
               mockAuthResult(mockAuthorisedIndividual)
               status(result) shouldBe Status.OK
             }
@@ -72,7 +72,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
           lazy val result = TestZeroRatedSuppliesController.show()(request)
 
           "return 200 (OK)" in {
-            setupMockGetZeroRatedSupplies(Future.successful(Right(Some(testZeroRatedSuppliesModel))))
+            setupMockGetZeroRatedSupplies(Right(Some(testZeroRatedSuppliesModel)))
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.OK
           }
@@ -97,7 +97,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
             lazy val result = TestZeroRatedSuppliesController.submit()(request)
 
             "return 303 (SEE_OTHER)" in {
-              setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Future.successful(Right(DeregisterVatSuccess)))
+              setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Right(DeregisterVatSuccess))
               mockAuthResult(mockAuthorisedIndividual)
               status(result) shouldBe Status.SEE_OTHER
             }
@@ -127,7 +127,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
           lazy val result = TestZeroRatedSuppliesController.submit()(request)
 
           "return a 500" in {
-            setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Future.successful(Left(errorModel)))
+            setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Left(errorModel))
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }

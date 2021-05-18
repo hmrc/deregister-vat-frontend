@@ -28,10 +28,10 @@ trait MockDeleteAllStoredAnswersService extends TestUtil with MockFactory {
 
   val mockDeleteAllStoredAnswersService: DeleteAllStoredAnswersService = mock[DeleteAllStoredAnswersService]
 
-  def setupMockDeleteAllStoredAnswers(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit = {
+  def setupMockDeleteAllStoredAnswers(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit = {
     (mockDeleteAllStoredAnswersService.deleteAllAnswers(_: User[_], _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *)
-      .returns(response)
+      .returns(Future.successful(response))
   }
 
 }

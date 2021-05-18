@@ -64,23 +64,23 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
 
       "return a CheckYourAnswerModel with every answer" in {
 
-        setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
-        setupMockGetCeasedTradingDate(Future.successful(Right(Some(dateModel))))
-        setupMockGetAccountingMethod(Future.successful(Right(Some(StandardAccounting))))
-        setupMockGetTaxableTurnover(Future.successful(Right(Some(Yes))))
-        setupMockGetNextTaxableTurnover(Future.successful(Right(Some(nextTaxableTurnoverBelow))))
-        setupMockGetWhyTurnoverBelow(Future.successful(Right(Some(whyTurnoverBelowAll))))
-        setupMockGetOptionTax(Future.successful(Right(Some(ottModel))))
-        setupMockGetCapitalAssets(Future.successful(Right(Some(assetsModel))))
-        setupMockGetStocks(Future.successful(Right(Some(stocksModel))))
-        setupMockGetIssueNewInvoices(Future.successful(Right(Some(Yes))))
-        setupMockGetOutstandingInvoices(Future.successful(Right(Some(Yes))))
-        setupMockGetChooseDeregDate(Future.successful(Right(Some(Yes))))
-        setupMockGetDeregDate(Future.successful(Right(Some(dateModel))))
-        setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(Yes))))
-        setupMockGetSicCode(Future.successful(Right(Some(sicCodeValue))))
-        setupMockGetZeroRatedSupplies(Future.successful(Right(Some(zeroRatedSuppliesValue))))
-        setupMockGetPurchasesExceedSuppliesAnswer(Future.successful(Right(Some(Yes))))
+        setupMockGetDeregReason(Right(Some(Ceased)))
+        setupMockGetCeasedTradingDate(Right(Some(dateModel)))
+        setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
+        setupMockGetTaxableTurnover(Right(Some(Yes)))
+        setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
+        setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
+        setupMockGetOptionTax(Right(Some(ottModel)))
+        setupMockGetCapitalAssets(Right(Some(assetsModel)))
+        setupMockGetStocks(Right(Some(stocksModel)))
+        setupMockGetIssueNewInvoices(Right(Some(Yes)))
+        setupMockGetOutstandingInvoices(Right(Some(Yes)))
+        setupMockGetChooseDeregDate(Right(Some(Yes)))
+        setupMockGetDeregDate(Right(Some(dateModel)))
+        setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+        setupMockGetSicCode(Right(Some(sicCodeValue)))
+        setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
+        setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
 
         TestCheckAnswersService.checkYourAnswersModel().futureValue shouldBe Right(
           CheckYourAnswersModel(
@@ -110,7 +110,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
 
       "return an error model" in {
 
-        setupMockGetDeregReason(Future.successful(Left(errorModel)))
+        setupMockGetDeregReason(Left(errorModel))
 
         TestCheckAnswersService.checkYourAnswersModel().futureValue shouldBe Left(errorModel)
       }
@@ -120,23 +120,23 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
 
       "return an error model" in {
 
-        setupMockGetDeregReason(Future.successful(Right(Some(Ceased))))
-        setupMockGetCeasedTradingDate(Future.successful(Right(Some(dateModel))))
-        setupMockGetAccountingMethod(Future.successful(Right(Some(StandardAccounting))))
-        setupMockGetTaxableTurnover(Future.successful(Right(Some(Yes))))
-        setupMockGetNextTaxableTurnover(Future.successful(Right(Some(nextTaxableTurnoverBelow))))
-        setupMockGetWhyTurnoverBelow(Future.successful(Right(Some(whyTurnoverBelowAll))))
-        setupMockGetOptionTax(Future.successful(Right(Some(ottModel))))
-        setupMockGetCapitalAssets(Future.successful(Right(Some(assetsModel))))
-        setupMockGetStocks(Future.successful(Right(Some(stocksModel))))
-        setupMockGetIssueNewInvoices(Future.successful(Right(Some(Yes))))
-        setupMockGetOutstandingInvoices(Future.successful(Right(Some(Yes))))
-        setupMockGetChooseDeregDate(Future.successful(Right(Some(Yes))))
-        setupMockGetDeregDate(Future.successful(Right(Some(dateModel))))
-        setupMockGetBusinessActivityAnswer(Future.successful(Right(Some(Yes))))
-        setupMockGetSicCode(Future.successful(Right(Some(sicCodeValue))))
-        setupMockGetZeroRatedSupplies(Future.successful(Right(Some(zeroRatedSuppliesValue))))
-        setupMockGetPurchasesExceedSuppliesAnswer(Future.successful(Left(errorModel)))
+        setupMockGetDeregReason(Right(Some(Ceased)))
+        setupMockGetCeasedTradingDate(Right(Some(dateModel)))
+        setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
+        setupMockGetTaxableTurnover(Right(Some(Yes)))
+        setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
+        setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
+        setupMockGetOptionTax(Right(Some(ottModel)))
+        setupMockGetCapitalAssets(Right(Some(assetsModel)))
+        setupMockGetStocks(Right(Some(stocksModel)))
+        setupMockGetIssueNewInvoices(Right(Some(Yes)))
+        setupMockGetOutstandingInvoices(Right(Some(Yes)))
+        setupMockGetChooseDeregDate(Right(Some(Yes)))
+        setupMockGetDeregDate(Right(Some(dateModel)))
+        setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
+        setupMockGetSicCode(Right(Some(sicCodeValue)))
+        setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
+        setupMockGetPurchasesExceedSuppliesAnswer(Left(errorModel))
 
         TestCheckAnswersService.checkYourAnswersModel().futureValue shouldBe Left(errorModel)
       }

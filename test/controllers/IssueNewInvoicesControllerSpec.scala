@@ -53,7 +53,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         lazy val result = TestIssueNewInvoicesController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetIssueNewInvoices(Future.successful(Right(None)))
+          setupMockGetIssueNewInvoices(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -69,7 +69,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         lazy val result = TestIssueNewInvoicesController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetIssueNewInvoices(Future.successful(Right(Some(Yes))))
+          setupMockGetIssueNewInvoices(Right(Some(Yes)))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -98,8 +98,8 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
           lazy val result = TestIssueNewInvoicesController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreIssueNewInvoices(Yes)(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStoreIssueNewInvoices(Yes)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
@@ -116,8 +116,8 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
           lazy val result = TestIssueNewInvoicesController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreIssueNewInvoices(No)(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStoreIssueNewInvoices(No)(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
@@ -135,8 +135,8 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreIssueNewInvoices(Yes)(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockWipeRedundantData(Future.successful(Left(errorModel)))
+          setupMockStoreIssueNewInvoices(Yes)(Right(DeregisterVatSuccess))
+          setupMockWipeRedundantData(Left(errorModel))
 
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
@@ -150,7 +150,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreIssueNewInvoices(No)(Future.successful(Left(errorModel)))
+          setupMockStoreIssueNewInvoices(No)(Left(errorModel))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

@@ -56,7 +56,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
         lazy val result = TestOptionStocksToSellController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetStocks(Future.successful(Right(None)))
+          setupMockGetStocks(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -72,7 +72,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
         lazy val result = TestOptionStocksToSellController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetStocks(Future.successful(Right(Some(testYesStocksModel))))
+          setupMockGetStocks(Right(Some(testYesStocksModel)))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -106,7 +106,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
         lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreStocks(testYesStocksModel)(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockStoreStocks(testYesStocksModel)(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -123,7 +123,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
         lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreStocks(testNoStocksModel)(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockStoreStocks(testNoStocksModel)(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -140,7 +140,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
         lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreStocks(testNoStocksModel)(Future.successful(Left(errorModel)))
+          setupMockStoreStocks(testNoStocksModel)(Left(errorModel))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

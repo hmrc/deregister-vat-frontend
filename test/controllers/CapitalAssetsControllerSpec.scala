@@ -56,7 +56,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetCapitalAssets(Future.successful(Right(None)))
+          setupMockGetCapitalAssets(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -72,7 +72,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         lazy val result = TestCapitalAssetsController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetCapitalAssets(Future.successful(Right(Some(YesNoAmountModel(Yes,Some(amount))))))
+          setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(Yes,Some(amount)))))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -104,8 +104,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
 
           "return 303 (SEE_OTHER)" in {
-            setupMockStoreCapitalAssets(YesNoAmountModel(Yes, Some(amount)))(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStoreCapitalAssets(YesNoAmountModel(Yes, Some(amount)))(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
@@ -122,8 +122,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
           lazy val result = TestCapitalAssetsController.submit()(request)
 
           "return 303 (SEE OTHER)" in {
-            setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Future.successful(Right(DeregisterVatSuccess)))
-            setupMockWipeRedundantData(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
+            setupMockWipeRedundantData(Right(DeregisterVatSuccess))
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
@@ -140,7 +140,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
           lazy val result = TestCapitalAssetsController.submit()(request)
 
           "return 500 (ISE)" in {
-            setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Future.successful(Left(errorModel)))
+            setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Left(errorModel))
             mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
@@ -154,8 +154,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         lazy val result = TestCapitalAssetsController.submit()(request)
 
         "return 500 (ISE)" in {
-          setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Future.successful(Right(DeregisterVatSuccess)))
-          setupMockWipeRedundantData(Future.successful(Left(errorModel)))
+          setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
+          setupMockWipeRedundantData(Left(errorModel))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

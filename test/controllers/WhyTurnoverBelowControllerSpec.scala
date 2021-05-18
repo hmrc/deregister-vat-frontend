@@ -51,7 +51,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         lazy val result = TestWhyTurnoverBelowController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetWhyTurnoverBelow(Future.successful(Right(None)))
+          setupMockGetWhyTurnoverBelow(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -67,7 +67,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         lazy val result = TestWhyTurnoverBelowController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetWhyTurnoverBelow(Future.successful(Right(Some(WhyTurnoverBelowModel(true,true,true,true,true,true,true)))))
+          setupMockGetWhyTurnoverBelow(Right(Some(WhyTurnoverBelowModel(true,true,true,true,true,true,true))))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -111,7 +111,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         lazy val result = TestWhyTurnoverBelowController.submit()(request)
 
         "return 303 (SEE OTHER)" in {
-          setupMockStoreWhyTurnoverBelow(model)(Future.successful(Right(DeregisterVatSuccess)))
+          setupMockStoreWhyTurnoverBelow(model)(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -146,7 +146,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
 
         "return Internal Server Error" in {
 
-          setupMockStoreWhyTurnoverBelow(model)(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, ""))))
+          setupMockStoreWhyTurnoverBelow(model)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "")))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe INTERNAL_SERVER_ERROR
         }

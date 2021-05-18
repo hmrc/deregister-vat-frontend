@@ -25,14 +25,14 @@ trait MockZeroRatedSuppliesValueService extends MockStoredAnswersService {
 
   val mockZeroRatedSuppliesValueService: ZeroRatedSuppliesValueService = mock[ZeroRatedSuppliesValueService]
 
-  def setupMockGetZeroRatedSupplies(response: Future[Either[ErrorModel, Option[NumberInputModel]]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockZeroRatedSuppliesValueService)(response)
+  def setupMockGetZeroRatedSupplies(response: Either[ErrorModel, Option[NumberInputModel]])(implicit user: User[_]): Unit =
+    setupMockGetAnswers(mockZeroRatedSuppliesValueService)(Future.successful(response))
 
-  def setupMockStoreZeroRatedSupplies(data: NumberInputModel)(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockZeroRatedSuppliesValueService)(data)(response)
+  def setupMockStoreZeroRatedSupplies(data: NumberInputModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockStoreAnswers(mockZeroRatedSuppliesValueService)(data)(Future.successful(response))
 
-  def setupMockDeleteZeroRatedSuppliesValueAnswer(response: Future[Either[ErrorModel, DeregisterVatResponse]])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockZeroRatedSuppliesValueService)(response)
+  def setupMockDeleteZeroRatedSuppliesValueAnswer(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+    setupMockDeleteAnswer(mockZeroRatedSuppliesValueService)(Future.successful(response))
 
   def setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockZeroRatedSuppliesValueService)

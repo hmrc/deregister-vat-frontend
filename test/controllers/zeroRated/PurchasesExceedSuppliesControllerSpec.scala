@@ -57,7 +57,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
           }
 
           "return a 200" in {
-            setupMockGetPurchasesExceedSuppliesAnswer(Future.successful(Right(Some(Yes))))
+            setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
             status(result) shouldBe Status.OK
           }
 
@@ -78,7 +78,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
           }
 
           "return a 200" in {
-            setupMockGetPurchasesExceedSuppliesAnswer(Future.successful(Right(None)))
+            setupMockGetPurchasesExceedSuppliesAnswer(Right(None))
           }
 
           "return HTML" in {
@@ -95,7 +95,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
           }
 
           "return a 500" in {
-            setupMockGetPurchasesExceedSuppliesAnswer(Future.successful(Left(errorModel)))
+            setupMockGetPurchasesExceedSuppliesAnswer(Left(errorModel))
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
@@ -111,7 +111,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
             requestPost.withFormUrlEncodedBody((yesNo, "yes"))
 
           lazy val result = {
-            setupMockStorePurchasesExceedSuppliesAnswer(Yes)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStorePurchasesExceedSuppliesAnswer(Yes)(Right(DeregisterVatSuccess))
             mockAuthResult(mockAuthorisedIndividual)
             TestController.submit()(request)
           }
@@ -131,7 +131,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
             requestPost.withFormUrlEncodedBody((yesNo, "no"))
 
           lazy val result = {
-            setupMockStorePurchasesExceedSuppliesAnswer(No)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStorePurchasesExceedSuppliesAnswer(No)(Right(DeregisterVatSuccess))
             mockAuthResult(mockAuthorisedIndividual)
             TestController.submit()(request)
           }
@@ -167,7 +167,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
 
           lazy val result = {
             mockAuthResult(mockAuthorisedIndividual)
-            setupMockStorePurchasesExceedSuppliesAnswer(Yes)(Future.successful(Left(errorModel)))
+            setupMockStorePurchasesExceedSuppliesAnswer(Yes)(Left(errorModel))
             TestController.submit()(request)
           }
 

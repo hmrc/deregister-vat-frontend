@@ -28,9 +28,9 @@ trait MockCustomerDetailsService extends WordSpecLike with Matchers with OptionV
 
   val mockCustomerDetailsService: CustomerDetailsService = mock[CustomerDetailsService]
 
-  def setupMockCustomerDetails(vrn: String)(response: Future[Either[ErrorModel, CustomerDetails]]): Unit = {
+  def setupMockCustomerDetails(vrn: String)(response: Either[ErrorModel, CustomerDetails]): Unit = {
     (mockCustomerDetailsService.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, *, *)
-      .returns(response)
+      .returns(Future.successful(response))
   }
 }

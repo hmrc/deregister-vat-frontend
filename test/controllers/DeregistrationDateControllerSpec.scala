@@ -59,7 +59,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         lazy val result = TestDeregistrationDateController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetDeregDate(Future.successful(Right(None)))
+          setupMockGetDeregDate(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -75,7 +75,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         lazy val result = TestDeregistrationDateController.show()(request)
 
         "return 200 (OK)" in {
-          setupMockGetDeregDate(Future.successful(Right(Some(testDateModel))))
+          setupMockGetDeregDate(Right(Some(testDateModel)))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -103,7 +103,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         lazy val result = TestDeregistrationDateController.show()(request)
 
         "return Internal Server Error" in {
-          setupMockGetDeregDate(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = ""))))
+          setupMockGetDeregDate(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
@@ -132,7 +132,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
           "return 303 (SEE OTHER)" in {
             mockAuthResult(mockAuthorisedIndividual)
-            setupMockStoreDeregDate(testDateModel)(Future.successful(Right(DeregisterVatSuccess)))
+            setupMockStoreDeregDate(testDateModel)(Right(DeregisterVatSuccess))
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -151,7 +151,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
           "return 500 (ISE)" in {
             mockAuthResult(mockAuthorisedIndividual)
-            setupMockStoreDeregDate(testDateModel)(Future.successful(Left(errorModel)))
+            setupMockStoreDeregDate(testDateModel)(Left(errorModel))
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
