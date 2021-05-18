@@ -28,8 +28,6 @@ import services.mocks.MockPurchasesExceedSuppliesAnswerService
 import play.api.test.Helpers._
 import views.html.PurchasesExceedSupplies
 
-import scala.concurrent.Future
-
 class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with MockPurchasesExceedSuppliesAnswerService {
 
   lazy val purchasesExceedSupplies: PurchasesExceedSupplies = injector.instanceOf[PurchasesExceedSupplies]
@@ -79,6 +77,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
 
           "return a 200" in {
             setupMockGetPurchasesExceedSuppliesAnswer(Right(None))
+            status(result) shouldBe Status.OK
           }
 
           "return HTML" in {

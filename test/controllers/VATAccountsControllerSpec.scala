@@ -26,7 +26,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockAccountingMethodAnswerService, MockDeregReasonAnswerService, MockTaxableTurnoverAnswerService}
 import views.html.VatAccounts
 
-import scala.concurrent.Future
 
 class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMethodAnswerService
                                 with MockDeregReasonAnswerService with MockTaxableTurnoverAnswerService {

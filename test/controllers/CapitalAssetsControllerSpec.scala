@@ -28,7 +28,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockCapitalAssetsAnswerService, MockWipeRedundantDataService}
 import views.html.CapitalAssets
 
-import scala.concurrent.Future
 
 class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockCapitalAssetsAnswerService {
   lazy val capitalAssets: CapitalAssets = injector.instanceOf[CapitalAssets]

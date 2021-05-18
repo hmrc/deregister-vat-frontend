@@ -28,7 +28,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockDeregDateAnswerService
 import views.html.DeregistrationDate
 
-import scala.concurrent.Future
 
 class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDeregDateAnswerService {
 

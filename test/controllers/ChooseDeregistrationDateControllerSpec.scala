@@ -29,7 +29,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockChooseDeregDateAnswerService, MockOutstandingInvoicesService, MockWipeRedundantDataService}
 import views.html.ChooseDeregistrationDate
 
-import scala.concurrent.Future
 
 class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with MockChooseDeregDateAnswerService
   with MockOutstandingInvoicesService with MockWipeRedundantDataService {

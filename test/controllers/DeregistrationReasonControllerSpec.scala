@@ -27,7 +27,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks._
 import views.html.DeregistrationReason
 
-import scala.concurrent.Future
 
 class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockDeregReasonAnswerService {
 

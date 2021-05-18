@@ -26,7 +26,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks._
 import views.html.OutstandingInvoices
 
-import scala.concurrent.Future
 
 class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
   with MockWipeRedundantDataService with MockOutstandingInvoicesService with MockDeregReasonAnswerService with MockCapitalAssetsAnswerService {

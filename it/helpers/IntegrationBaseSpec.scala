@@ -105,6 +105,7 @@ trait IntegrationBaseSpec extends WordSpecLike
 
   def servicesConfig: Map[String, String] = Map(
     "play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
+    "auditing.enabled" -> "false",
     "microservice.services.auth.host" -> mockHost,
     "microservice.services.auth.port" -> mockPort,
     "microservice.services.deregister-vat.host" -> mockHost,

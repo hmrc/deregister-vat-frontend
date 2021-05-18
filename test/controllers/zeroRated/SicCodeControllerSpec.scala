@@ -25,8 +25,6 @@ import play.api.test.Helpers._
 import services.mocks.{MockBusinessActivityAnswerService, MockDeleteAllStoredAnswersService, MockSicCodeAnswerService}
 import views.html.SicCode
 
-import scala.concurrent.Future
-
 class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
                             with MockSicCodeAnswerService with MockBusinessActivityAnswerService {
 

@@ -26,8 +26,6 @@ import play.api.test.Helpers._
 import services.mocks.MockZeroRatedSuppliesValueService
 import views.html.ZeroRatedSupplies
 
-import scala.concurrent.Future
-
 class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRatedSuppliesValueService {
 
   lazy val zeroRatedSupplies: ZeroRatedSupplies = injector.instanceOf[ZeroRatedSupplies]

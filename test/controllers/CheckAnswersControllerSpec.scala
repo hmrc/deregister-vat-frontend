@@ -27,8 +27,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockCheckAnswersService, MockChooseDeregDateAnswerService, MockUpdateDeregistrationService}
 import views.html.CheckYourAnswers
 
-import scala.concurrent.Future
-
 
 class CheckAnswersControllerSpec
   extends ControllerBaseSpec

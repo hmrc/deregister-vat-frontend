@@ -29,7 +29,6 @@ import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import views.html.DeregistrationConfirmation
 
-import scala.concurrent.Future
 
 class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
   with MockCustomerDetailsService with MockAuditService {

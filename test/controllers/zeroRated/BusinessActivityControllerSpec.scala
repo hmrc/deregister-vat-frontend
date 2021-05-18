@@ -27,8 +27,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockBusinessActivityAnswerService, MockDeleteAllStoredAnswersService, MockWipeRedundantDataService}
 import views.html.BusinessActivity
 
-import scala.concurrent.Future
-
 class BusinessActivityControllerSpec extends ControllerBaseSpec
   with MockDeleteAllStoredAnswersService
   with MockBusinessActivityAnswerService

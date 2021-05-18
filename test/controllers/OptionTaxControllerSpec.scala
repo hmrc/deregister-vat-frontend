@@ -27,7 +27,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockOptionTaxAnswerService
 import views.html.OptionTax
 
-import scala.concurrent.Future
 
 class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswerService {
 

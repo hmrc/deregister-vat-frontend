@@ -26,7 +26,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks._
 import views.html.IssueNewInvoices
 
-import scala.concurrent.Future
 
 class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockIssueNewInvoicesAnswerService {
 

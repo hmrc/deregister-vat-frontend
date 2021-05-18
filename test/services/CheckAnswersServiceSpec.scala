@@ -25,8 +25,6 @@ import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import services.mocks._
 import utils.TestUtil
 
-import scala.concurrent.Future
-
 class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService

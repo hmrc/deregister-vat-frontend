@@ -26,7 +26,6 @@ import play.api.test.Helpers._
 import services.mocks.{MockTaxableTurnoverAnswerService, MockWipeRedundantDataService}
 import views.html.TaxableTurnover
 
-import scala.concurrent.Future
 
 class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockTaxableTurnoverAnswerService {
 
