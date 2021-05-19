@@ -67,23 +67,23 @@ trait MockAuth extends TestUtil with MockFactory with MockCustomerDetailsService
                                                                 mcc)(
                                                                 mockConfig)
 
-  def mockAuthResult(authResponse: AuthResponse, isAgent: Boolean = false, agentAuthorised: Boolean = true): Unit = {
+  def mockAuthResult(authResponse: AuthResponse, isAgent: Boolean = false, isUnauthorisedAgent: Boolean = false): Unit = {
 
     (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *)
       .returns(authResponse)
 
     if (isAgent) {
-      agentAuthorised match {
+      isUnauthorisedAgent match {
         case true => {
           (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *, *)
-            .returns(Future.successful(authorisedAgentEnrolment))
+            .returns(Future.successful(unauthorisedAgentEnrolment))
         }
         case false => {
           (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
             .expects(*, *, *, *)
-            .returns(Future.successful(unauthorisedAgentEnrolment))
+            .returns(Future.successful(authorisedAgentEnrolment))
         }
       }
 

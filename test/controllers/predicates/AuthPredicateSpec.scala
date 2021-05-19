@@ -150,7 +150,7 @@ class AuthPredicateSpec extends MockAuth {
           lazy val result = target()(requestWithVRN)
 
           "return 303" in {
-            mockAuthResult(mockUnauthorisedAgent, isAgent = true, agentAuthorised = false)
+            mockAuthResult(mockUnauthorisedAgent, isAgent = true, isUnauthorisedAgent = true)
             status(result) shouldBe Status.SEE_OTHER
           }
 
