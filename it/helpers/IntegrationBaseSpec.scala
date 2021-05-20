@@ -18,7 +18,6 @@ package helpers
 
 import common.SessionKeys
 import config.AppConfig
-import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.data.Form
@@ -101,7 +100,6 @@ trait IntegrationBaseSpec extends CustomMatchers
 
   def servicesConfig: Map[String, String] = Map(
     "play.filters.csrf.header.bypassHeaders.Csrf-Token" -> "nocheck",
-    "auditing.enabled" -> "false",
     "microservice.services.auth.host" -> mockHost,
     "microservice.services.auth.port" -> mockPort,
     "microservice.services.deregister-vat.host" -> mockHost,
@@ -127,16 +125,17 @@ trait IntegrationBaseSpec extends CustomMatchers
     super.afterAll()
   }
 
-  def get(path: String, additionalCookies: Map[String, String] = Map.empty): WSResponse =
-    await(buildRequest(path, additionalCookies).get())
+  def get(path: String, additionalCookies: Map[String, String] = Map.empty): WSResponse = await(
+    buildRequest(path, additionalCookies).get()
+  )
 
+  def post(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse = await(
+    buildRequest(path, additionalCookies).post(body)
+  )
 
-  def post(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse =
-    buildRequest(path, additionalCookies).post(body).futureValue
-
-  def put(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse =
-    buildRequest(path, additionalCookies).put(body).futureValue
-
+  def put(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse = await(
+    buildRequest(path, additionalCookies).put(body)
+  )
 
   def buildRequest(path: String, additionalCookies: Map[String, String] = Map.empty): WSRequest =
     client.url(s"http://localhost:$port$appRouteContext$path")
