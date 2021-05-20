@@ -19,29 +19,25 @@ package helpers
 import common.SessionKeys
 import config.AppConfig
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen, Matchers, OptionValues, TestSuite, WordSpecLike}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.data.Form
 import play.api.http.HeaderNames
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.{Application, Environment, Mode}
 import stubs.{AuthStub, VatSubscriptionStub}
 
-trait IntegrationBaseSpec extends WordSpecLike
-  with Matchers
-  with OptionValues
+trait IntegrationBaseSpec extends CustomMatchers
   with WireMockHelper
   with GuiceOneServerPerSuite
-  with TestSuite
   with BeforeAndAfterEach
-  with BeforeAndAfterAll
-  with GivenWhenThen
-  with CustomMatchers {
+  with BeforeAndAfterAll {
 
-  val mockHost: String = WireMockHelper.host
-  val mockPort: String = WireMockHelper.wmPort.toString
+  val mockHost: String = host
+  val mockPort: String = wmPort.toString
   val appRouteContext: String = "/vat-through-software/account/cancel-vat"
 
   implicit lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
@@ -132,7 +128,7 @@ trait IntegrationBaseSpec extends WordSpecLike
   }
 
   def get(path: String, additionalCookies: Map[String, String] = Map.empty): WSResponse =
-    buildRequest(path, additionalCookies).get().futureValue
+    await(buildRequest(path, additionalCookies).get())
 
 
   def post(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse =

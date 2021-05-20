@@ -24,17 +24,13 @@ import org.scalatest.concurrent.{Eventually, IntegrationPatience}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.libs.ws.WSClient
 
-object WireMockHelper extends Eventually with IntegrationPatience {
 
-  val wmPort: Int = 11111
-  val host: String = "localhost"
-}
-
-trait WireMockHelper {
+trait WireMockHelper extends Eventually with IntegrationPatience {
 
   self: GuiceOneServerPerSuite =>
 
-  import WireMockHelper._
+  val wmPort: Int = 11111
+  val host: String = "localhost"
 
   lazy val client: WSClient = app.injector.instanceOf[WSClient]
   lazy val wmConfig: WireMockConfiguration = wireMockConfig.port(wmPort)
