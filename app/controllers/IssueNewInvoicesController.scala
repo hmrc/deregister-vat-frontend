@@ -23,7 +23,7 @@ import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoForm
 import javax.inject.{Inject, Singleton}
 import models._
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -42,7 +42,8 @@ class IssueNewInvoicesController @Inject()(issueNewInvoices: IssueNewInvoices,
                                            val wipeRedundantDataService: WipeRedundantDataService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val ec: ExecutionContext,
-                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc)
+                                           with Logging with I18nSupport {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption")
 
@@ -70,7 +71,7 @@ class IssueNewInvoicesController @Inject()(issueNewInvoices: IssueNewInvoices,
       } yield result).value.map {
         case Right(redirect) => redirect
         case Left(error) =>
-          Logger.warn("[IssueNewInvoicesController][submit] - storedAnswerService returned an error: " + error.message)
+          logger.warn("[IssueNewInvoicesController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

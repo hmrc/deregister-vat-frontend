@@ -23,7 +23,7 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.DeregistrationReasonForm
 import models._
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -42,7 +42,8 @@ class DeregistrationReasonController @Inject()(deregistrationReason: Deregistrat
                                                val wipeRedundantDataService: WipeRedundantDataService,
                                                val serviceErrorHandler: ServiceErrorHandler,
                                                implicit val ec: ExecutionContext,
-                                               implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                               implicit val appConfig: AppConfig) extends FrontendController(mcc)
+                                               with Logging with I18nSupport {
 
   private def renderView(data: Form[models.DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
     deregistrationReason(data)
@@ -64,7 +65,7 @@ class DeregistrationReasonController @Inject()(deregistrationReason: Deregistrat
       } yield route).value.map {
         case Right(result) => result
         case Left(error) =>
-          Logger.warn("[DeregistrationReasonController][submit] - storedAnswerService returned an error: " + error.message)
+          logger.warn("[DeregistrationReasonController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

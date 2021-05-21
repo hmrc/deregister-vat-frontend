@@ -23,7 +23,7 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoAmountForm
 import models.{User, YesNoAmountModel}
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -41,7 +41,8 @@ class  CapitalAssetsController @Inject()(capitalAssets: CapitalAssets,
                                          val wipeRedundantDataService: WipeRedundantDataService,
                                          val serviceErrorHandler: ServiceErrorHandler,
                                          implicit val ec: ExecutionContext,
-                                         implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                         implicit val appConfig: AppConfig) extends FrontendController(mcc)
+                                         with Logging with I18nSupport {
 
   val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm("capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry")
 
@@ -64,7 +65,7 @@ class  CapitalAssetsController @Inject()(capitalAssets: CapitalAssets,
       } yield result).value.map {
         case Right(_) => Redirect(controllers.routes.OptionStocksToSellController.show())
         case Left(error) =>
-          Logger.warn("[CapitalAssetsController][submit] - storedAnswerService returned an error: " + error.message)
+          logger.warn("[CapitalAssetsController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

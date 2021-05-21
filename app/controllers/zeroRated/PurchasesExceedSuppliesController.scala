@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import models.{User, YesNo}
 import play.api.data.Form
 import forms.PurchasesExceedSuppliesForm
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.PurchasesExceedSuppliesAnswerService
@@ -39,7 +39,8 @@ class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: Purch
                                                   val purchasesExceedSuppliesAnswerService: PurchasesExceedSuppliesAnswerService,
                                                   val serviceErrorHandler: ServiceErrorHandler,
                                                   implicit val ec: ExecutionContext,
-                                                  implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                                  implicit val appConfig: AppConfig) extends FrontendController(mcc)
+                                                  with Logging with I18nSupport {
 
   private def renderView(form: Form[YesNo] = PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm)
                         (implicit user: User[_]) = purchasesExceedSupplies(form)
@@ -51,7 +52,7 @@ class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: Purch
         case Right(Some(data)) => Ok(renderView(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.fill(data)))
         case Right(None) => Ok(renderView())
         case Left(error) =>
-          Logger.warn("[PurchasesExceedSuppliesController][show] - storedAnswerService returned an error retrieving answer: " + error.message)
+          logger.warn("[PurchasesExceedSuppliesController][show] - storedAnswerService returned an error retrieving answer: " + error.message)
 
           serviceErrorHandler.showInternalServerError
       }
@@ -63,7 +64,7 @@ class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: Purch
         data => purchasesExceedSuppliesAnswerService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.routes.VATAccountsController.show().url)
           case Left(error) =>
-            Logger.warn("[PurchasesExceedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            logger.warn("[PurchasesExceedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError
         }
       )

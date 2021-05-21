@@ -21,7 +21,7 @@ import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.DateForm
 import javax.inject.{Inject, Singleton}
 import models.{DateModel, User}
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -39,7 +39,8 @@ class CeasedTradingDateController @Inject()(ceasedTradingDate: CeasedTradingDate
                                             val ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
                                             val serviceErrorHandler: ServiceErrorHandler,
                                             implicit val ec: ExecutionContext,
-                                            implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                            implicit val appConfig: AppConfig) extends FrontendController(mcc)
+                                            with Logging with I18nSupport {
 
   private def renderView(form: Form[DateModel] = DateForm.dateForm)(implicit user: User[_]) = ceasedTradingDate(form)
 
@@ -56,7 +57,7 @@ class CeasedTradingDateController @Inject()(ceasedTradingDate: CeasedTradingDate
       data => ceasedTradingDateAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.VATAccountsController.show())
         case Left(error) =>
-          Logger.warn("[CeasedTradingDateController][submit] - storedAnswerService returned an error: " + error.message)
+          logger.warn("[CeasedTradingDateController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

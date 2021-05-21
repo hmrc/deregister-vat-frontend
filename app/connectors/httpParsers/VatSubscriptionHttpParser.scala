@@ -18,18 +18,18 @@ package connectors.httpParsers
 
 import models.{VatSubscriptionResponse, VatSubscriptionSuccess}
 import models.ErrorModel
-import play.api.Logger
+import play.api.Logging
 import play.api.http.Status
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
-object VatSubscriptionHttpParser {
+object VatSubscriptionHttpParser extends Logging {
 
   def updateReads: HttpReads[Either[ErrorModel, VatSubscriptionResponse]] = new HttpReads[Either[ErrorModel, VatSubscriptionResponse]] {
     override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, VatSubscriptionResponse] = {
       response.status match {
         case Status.OK => Right(VatSubscriptionSuccess)
         case status =>
-          Logger.warn(s"[VatSubscriptionHttpParser][updateReads]: Unexpected Response, Status: $status. Body: ${response.body}")
+          logger.warn(s"[VatSubscriptionHttpParser][updateReads]: Unexpected Response, Status: $status. Body: ${response.body}")
           Left(ErrorModel(status, "Downstream error returned when updating Vat Subscription"))
       }
     }

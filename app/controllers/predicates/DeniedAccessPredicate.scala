@@ -21,7 +21,7 @@ import common.SessionKeys.registrationStatusKey
 import config.{AppConfig, ServiceErrorHandler}
 import javax.inject.Inject
 import models.User
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, MessagesControllerComponents, Result}
@@ -36,7 +36,8 @@ class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsSer
                                       val serviceErrorHandler: ServiceErrorHandler,
                                       val mcc: MessagesControllerComponents,
                                       implicit val messagesApi: MessagesApi,
-                                      implicit val appConfig: AppConfig) extends ActionRefiner[User, User] with I18nSupport {
+                                      implicit val appConfig: AppConfig) extends ActionRefiner[User, User]
+                                      with Logging with I18nSupport {
 
   override implicit val executionContext: ExecutionContext = mcc.executionContext
 
@@ -58,24 +59,24 @@ class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsSer
       case Right(details) =>
         (details.pendingDereg, details.alreadyDeregistered, details.partyType) match {
           case (_, _, Some(partyType)) if partyType == vatGroup =>
-            Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
+            logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "PartyType is VAT Group. Redirecting to appropriate hub/overview page.")
             Left(Redirect(redirectPage))
           case (true, _, _) =>
-            Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
+            logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "Deregistration pending. Redirecting to user hub/overview page.")
             Left(Redirect(redirectPage).addingToSession(registrationStatusKey -> Constants.pending))
           case (_, true, _) =>
-            Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
+            logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "User has already deregistered. Redirecting to user hub/overview page.")
             Left(Redirect(redirectPage).addingToSession(registrationStatusKey -> Constants.deregistered))
           case _ =>
-            Logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - Redirecting user to start of journey")
+            logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - Redirecting user to start of journey")
             Left(Redirect(controllers.routes.DeregisterForVATController.redirect().url)
               .addingToSession(registrationStatusKey -> Constants.registered))
         }
       case Left(error) =>
-        Logger.warn(s"[InflightPPOBPredicate][getCustomerInfoCall] - " +
+        logger.warn(s"[InflightPPOBPredicate][getCustomerInfoCall] - " +
           s"The call to the GetCustomerInfo API failed. Error: ${error.message}")
         Left(serviceErrorHandler.showInternalServerError)
     }

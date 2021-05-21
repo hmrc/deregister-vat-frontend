@@ -21,7 +21,7 @@ import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.ZeroRatedSuppliesForm
 import javax.inject.{Inject, Singleton}
 import models.{NumberInputModel, User}
-import play.api.Logger
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -39,7 +39,8 @@ class ZeroRatedSuppliesController @Inject()(zeroRatedSupplies: ZeroRatedSupplies
                                             val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
                                             val serviceErrorHandler: ServiceErrorHandler,
                                             implicit val appConfig: AppConfig,
-                                            implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
+                                            implicit val ec: ExecutionContext) extends FrontendController(mcc)
+                                            with Logging with I18nSupport {
 
   private def renderView(form: Form[NumberInputModel] = ZeroRatedSuppliesForm.zeroRatedSuppliesForm)(implicit user: User[_]) =
     zeroRatedSupplies(form)
@@ -57,7 +58,7 @@ class ZeroRatedSuppliesController @Inject()(zeroRatedSupplies: ZeroRatedSupplies
         data => zeroRatedSuppliesValueService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show())
           case Left(error) =>
-            Logger.warn("[ZeroRatedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            logger.warn("[ZeroRatedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError
         }
       )

@@ -21,7 +21,7 @@ import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.WhyTurnoverBelowForm
 import javax.inject.{Inject, Singleton}
 import models.DeregisterVatSuccess
-import play.api.Logger
+import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.WhyTurnoverBelowAnswerService
@@ -38,7 +38,8 @@ class WhyTurnoverBelowController @Inject()(whyTurnoverBelow: WhyTurnoverBelow,
                                            val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val ec: ExecutionContext,
-                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc)
+                                           with Logging with I18nSupport {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     whyTurnoverBelowAnswerService.getAnswer.map {
@@ -54,7 +55,7 @@ class WhyTurnoverBelowController @Inject()(whyTurnoverBelow: WhyTurnoverBelow,
         whyTurnoverBelowAnswerService.storeAnswer(data).map {
           case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show())
           case Left(error) =>
-            Logger.warn("[WhyTurnoverBelowController][submit] - storedAnswerService returned an error storing answers: " + error.message)
+            logger.warn("[WhyTurnoverBelowController][submit] - storedAnswerService returned an error storing answers: " + error.message)
             serviceErrorHandler.showInternalServerError
         }
       }

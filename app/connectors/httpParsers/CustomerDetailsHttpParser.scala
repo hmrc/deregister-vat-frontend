@@ -18,12 +18,12 @@ package connectors.httpParsers
 
 import models.CustomerDetails
 import models.ErrorModel
-import play.api.Logger
+import play.api.Logging
 import play.api.http.Status
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 
-object CustomerDetailsHttpParser {
+object CustomerDetailsHttpParser extends Logging {
 
   implicit object CustomerDetailsReads extends HttpReads[Either[ErrorModel, CustomerDetails]] {
 
@@ -31,18 +31,18 @@ object CustomerDetailsHttpParser {
 
       response.status match {
         case Status.OK => {
-          Logger.debug("[CustomerDetailsHttpParser][read]: Status OK")
+          logger.debug("[CustomerDetailsHttpParser][read]: Status OK")
           response.json.validate[CustomerDetails].fold(
             invalid => {
-              Logger.debug(s"[CustomerDetailsHttpParser][read]: Invalid Json - $invalid")
-              Logger.warn(s"[CustomerDetailsHttpParser][read]: Invalid Json")
+              logger.debug(s"[CustomerDetailsHttpParser][read]: Invalid Json - $invalid")
+              logger.warn(s"[CustomerDetailsHttpParser][read]: Invalid Json")
               Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json"))
             },
             valid => Right(valid)
           )
         }
         case status =>
-          Logger.warn(s"[CustomerDetailsHttpParser][read]: Unexpected Response, Status $status returned")
+          logger.warn(s"[CustomerDetailsHttpParser][read]: Unexpected Response, Status $status returned")
           Left(ErrorModel(status,"Downstream error returned when retrieving CustomerDetails"))
       }
     }

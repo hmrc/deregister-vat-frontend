@@ -48,9 +48,6 @@ trait TestUtil extends WordSpecLike
     SharedMetricRegistries.clear()
   }
 
-  implicit override lazy val app: Application =
-    new GuiceApplicationBuilder().configure(Map("auditing.enabled" -> false)).build()
-
   private lazy val cc: ControllerComponents = stubControllerComponents()
 
   private lazy val messagesActionBuilder: MessagesActionBuilder =
@@ -60,7 +57,7 @@ trait TestUtil extends WordSpecLike
     messagesActionBuilder,
     DefaultActionBuilder(stubBodyParser[AnyContent]()),
     cc.parsers,
-    app.injector.instanceOf[MessagesApi],
+    fakeApplication.injector.instanceOf[MessagesApi],
     cc.langs,
     cc.fileMimeTypes,
     ExecutionContext.global
