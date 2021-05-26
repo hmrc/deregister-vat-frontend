@@ -77,4 +77,3 @@ class BusinessActivityController @Inject()(businessActivity: BusinessActivity,
       )
   }
 }
-

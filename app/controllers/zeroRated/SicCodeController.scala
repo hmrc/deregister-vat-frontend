@@ -72,4 +72,3 @@ class SicCodeController @Inject()(sicCode: SicCode,
       )
   }
 }
-

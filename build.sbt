@@ -41,7 +41,6 @@ lazy val coverageSettings: Seq[Setting[_]] = {
     "controllers.zeroRated.javascript",
     "controllers.javascript",
     ".*standardError*.*",
-    ".*govuk_wrapper*.*",
     ".*main_template*.*",
     "uk.gov.hmrc.BuildInfo",
     "app.*",

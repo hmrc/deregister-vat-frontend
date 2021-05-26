@@ -64,4 +64,3 @@ class ZeroRatedSuppliesController @Inject()(zeroRatedSupplies: ZeroRatedSupplies
       )
   }
 }
-

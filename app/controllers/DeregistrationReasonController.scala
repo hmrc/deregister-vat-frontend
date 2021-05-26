@@ -79,4 +79,3 @@ class DeregistrationReasonController @Inject()(deregistrationReason: Deregistrat
     case Other => Redirect(appConfig.govUkCancelVatRegistration)
   }
 }
-
