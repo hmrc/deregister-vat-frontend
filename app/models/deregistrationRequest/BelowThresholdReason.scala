@@ -24,10 +24,12 @@ sealed trait BelowThresholdReason {
 
 case object BelowPast12Months extends BelowThresholdReason {
   override val value = "belowPast12Months"
+  implicit val writes: Writes[BelowPast12Months.type] = Writes { _ => JsString(value)}
 }
 
 case object BelowNext12Months extends BelowThresholdReason {
   override val value = "belowNext12Months"
+  implicit val writes: Writes[BelowNext12Months.type] = Writes { _ => JsString(value)}
 }
 
 

@@ -78,7 +78,7 @@ def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "com.typesafe.play"       %% "play-test"                    % PlayVersion.current % scope,
   "org.scalatestplus.play"  %% "scalatestplus-play"           % "5.0.0"             % scope,
   "org.scalamock"           %% "scalamock-scalatest-support"  % "3.6.0"             % scope,
-  "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.27.2"            % scope,
+  "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.26.3"            % scope,
   "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.62.2"            % scope
 )
 

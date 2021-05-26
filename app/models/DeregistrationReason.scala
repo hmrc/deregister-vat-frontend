@@ -45,20 +45,30 @@ object DeregistrationReason {
 
 object Ceased extends DeregistrationReason {
   override val value = "ceased"
+  implicit val writes: Writes[Ceased.type] = Writes { _ => Json.obj("deregReason" -> value) }
+  val submissionWrites: Writes[Ceased.type] = Writes { _ => JsString(value)}
 }
 
 object BelowThreshold extends DeregistrationReason {
   override val value = "belowThreshold"
+  implicit val writes: Writes[BelowThreshold.type] = Writes { _ => Json.obj("deregReason" -> value) }
+  val submissionWrites: Writes[BelowThreshold.type] = Writes { _ => JsString(value)}
 }
 
 object ZeroRated extends DeregistrationReason {
   override val value = "zeroRated"
+  implicit val writes: Writes[ZeroRated.type] = Writes { _ => Json.obj("deregReason" -> value) }
+  val submissionWrites: Writes[ZeroRated.type] = Writes { _ => JsString(value)}
 }
 
 object ExemptOnly extends DeregistrationReason {
   override val value = "exemptOnly"
+  implicit val writes: Writes[ExemptOnly.type] = Writes { _ => Json.obj("deregReason" -> value) }
+  val submissionWrites: Writes[ExemptOnly.type] = Writes { _ => JsString(value)}
 }
 
 object Other extends DeregistrationReason {
   override val value = "other"
+  implicit val writes: Writes[Other.type] = Writes { _ => Json.obj("deregReason" -> value) }
+  val submissionWrites: Writes[Other.type] = Writes { _ => JsString(value)}
 }
