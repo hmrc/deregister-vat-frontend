@@ -21,14 +21,15 @@ import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.NextTaxableTurnoverForm
+
 import javax.inject.{Inject, Singleton}
 import models.{No, NumberInputModel, User, Yes, YesNo, ZeroRated}
-import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{BusinessActivityAnswerService, DeregReasonAnswerService, NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil.logWarn
 import views.html.NextTaxableTurnover
 
 import scala.concurrent.ExecutionContext
@@ -44,8 +45,7 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
                                               val deregReasonAnswerService: DeregReasonAnswerService,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val ec: ExecutionContext,
-                                              implicit val appConfig: AppConfig) extends FrontendController(mcc)
-                                              with Logging with I18nSupport {
+                                              implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   def backLink(businessActivityAnswer: Option[YesNo]): String = {
     businessActivityAnswer match {
@@ -68,7 +68,7 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
       case (_, Right(businessActivityAnswer)) =>
         Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm, backLink(businessActivityAnswer)))
       case _ =>
-        logger.warn("[NextTaxableTurnoverController][show] - storedAnswerService returned an error retrieving answers")
+        logWarn("[NextTaxableTurnoverController][show] - storedAnswerService returned an error retrieving answers")
         serviceErrorHandler.showInternalServerError
     }
   }
@@ -81,7 +81,7 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
         case Right(businessActivity) =>
           BadRequest(renderView(error, backLink(businessActivity)))
         case Left(err) =>
-          logger.warn("[NextTaxableTurnoverController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
+          logWarn("[NextTaxableTurnoverController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
           serviceErrorHandler.showInternalServerError
       },
       data => (for {
@@ -95,7 +95,7 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
         case Right((Some(Yes), Some(_))) => Redirect(controllers.routes.VATAccountsController.show())
         case Right((Some(No), Some(_))) => Redirect(controllers.routes.WhyTurnoverBelowController.show())
         case _ =>
-          logger.warn("[NextTaxableTurnoverController][submit] - storedAnswerService returned an error")
+          logWarn("[NextTaxableTurnoverController][submit] - storedAnswerService returned an error")
           serviceErrorHandler.showInternalServerError
       }
     )

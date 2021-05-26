@@ -19,12 +19,13 @@ package controllers
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.DeregistrationDateForm
+
 import javax.inject.Inject
-import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.DeregDateAnswerService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil.logWarn
 import views.html.DeregistrationDate
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,8 +37,7 @@ class DeregistrationDateController@Inject()(deregistrationDate: DeregistrationDa
                                             serviceErrorHandler: ServiceErrorHandler,
                                             answerService: DeregDateAnswerService,
                                             implicit val appConfig: AppConfig,
-                                            implicit val ec: ExecutionContext) extends FrontendController(mcc)
-                                            with Logging with I18nSupport {
+                                            implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit request =>
     answerService.getAnswer.map {
@@ -46,7 +46,7 @@ class DeregistrationDateController@Inject()(deregistrationDate: DeregistrationDa
       case Right(None) =>
         Ok(deregistrationDate(DeregistrationDateForm.form))
       case _ =>
-        logger.warn("[DeregistrationDateController][show] - storedAnswerService returned an error retrieving answer")
+        logWarn("[DeregistrationDateController][show] - storedAnswerService returned an error retrieving answer")
         serviceErrorHandler.showInternalServerError
     }
   }
@@ -57,7 +57,7 @@ class DeregistrationDateController@Inject()(deregistrationDate: DeregistrationDa
       data => answerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
         case Left(err) =>
-          logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + err.message)
+          logWarn("[DeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + err.message)
           serviceErrorHandler.showInternalServerError
       }
     )

@@ -18,9 +18,9 @@ package controllers.predicates
 
 import common.{EnrolmentKeys, SessionKeys}
 import config.{AppConfig, ServiceErrorHandler}
+
 import javax.inject.Inject
 import models.User
-import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{ActionBuilder, ActionFunction, AnyContent, BodyParser, MessagesControllerComponents, Request, Result}
 import services.{CustomerDetailsService, EnrolmentsAuthService}
@@ -28,6 +28,7 @@ import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSessio
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil.{logDebug, logWarn}
 import views.html.errors.client.Unauthorised
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -41,7 +42,7 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
                              (implicit val appConfig: AppConfig)
 
   extends FrontendController(mcc)
-  with Logging with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with AuthBasePredicate {
+  with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with AuthBasePredicate {
 
   override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
   override implicit protected val executionContext: ExecutionContext = mcc.executionContext
@@ -60,14 +61,14 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
             checkVatEnrolment(enrolments, block)
           }
         case _ =>
-          logger.warn("[AuthPredicate][invokeBlock] - Missing affinity group")
+          logWarn("[AuthPredicate][invokeBlock] - Missing affinity group")
           Future.successful(serviceErrorHandler.showInternalServerError)
       } recover {
       case _: NoActiveSession =>
-        logger.debug("[AuthPredicate][invokeBlock] - No active session, redirect to GG Sign In")
+        logDebug("[AuthPredicate][invokeBlock] - No active session, redirect to GG Sign In")
         Redirect(appConfig.signInUrl)
       case _: AuthorisationException =>
-        logger.debug("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
+        logDebug("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
         Forbidden(unauthorised())
     }
   }
@@ -81,20 +82,20 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
         case _ =>
           customerDetailsService.getCustomerDetails(user.vrn).flatMap {
             case Right(details) if details.isInsolventWithoutAccess =>
-              logger.debug("[AuthPredicate][checkVatEnrolment] - User is insolvent and not continuing to trade")
+              logDebug("[AuthPredicate][checkVatEnrolment] - User is insolvent and not continuing to trade")
               Future.successful(Forbidden(unauthorised()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
             case Right(_) =>
-              logger.debug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
+              logDebug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
               block(user).map(result => result.addingToSession(SessionKeys.insolventWithoutAccessKey -> "false"))
             case _ =>
-              logger.warn("[AuthPredicate][checkVatEnrolment] - Failure obtaining insolvency status from Customer Info API")
+              logWarn("[AuthPredicate][checkVatEnrolment] - Failure obtaining insolvency status from Customer Info API")
               Future.successful(serviceErrorHandler.showInternalServerError)
           }
       }
 
     }
     else {
-      logger.debug(s"[AuthPredicate][checkVatEnrolment] - Individual without HMRC-MTD-VAT enrolment. $enrolments")
+      logDebug(s"[AuthPredicate][checkVatEnrolment] - Individual without HMRC-MTD-VAT enrolment. $enrolments")
       Future.successful(Forbidden(unauthorised()))
     }
 

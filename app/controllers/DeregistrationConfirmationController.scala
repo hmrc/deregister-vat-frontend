@@ -19,12 +19,13 @@ package controllers
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
+
 import javax.inject.Inject
-import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{CustomerDetailsService, DeleteAllStoredAnswersService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil.logWarn
 import views.html.DeregistrationConfirmation
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,8 +37,7 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
                                                      val serviceErrorHandler: ServiceErrorHandler,
                                                      val customerDetailsService: CustomerDetailsService)
                                                     (implicit val ec: ExecutionContext,
-                                                     val appConfig: AppConfig) extends FrontendController(mcc)
-                                                     with Logging with I18nSupport {
+                                                     val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
 
@@ -58,7 +58,7 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
             }
 
           case Left(_) =>
-            logger.warn("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
+            logWarn("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
             Future.successful(serviceErrorHandler.showInternalServerError)
         }
       case _ => Future.successful(Redirect(controllers.routes.DeregisterForVATController.redirect()))

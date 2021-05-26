@@ -17,7 +17,6 @@
 package connectors
 
 import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
 import connectors.httpParsers.DeregisterVatHttpParser
 import models.{DeregisterVatResponse, ErrorModel}
@@ -25,26 +24,27 @@ import play.api.Logging
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
+import utils.LoggerUtil.logDebug
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
 @Singleton
 class DeregisterVatConnector @Inject()(val http: HttpClient,
-                                       val config: AppConfig) extends Logging {
+                                       val config: AppConfig) {
 
   def url(vrn: String, key: String): String = s"${config.deregisterVatUrl}/deregister-vat/data/$vrn/$key"
   def url(vrn: String): String = s"${config.deregisterVatUrl}/deregister-vat/data/$vrn"
 
   def getAnswers[T](vrn: String, key: String)(implicit fmt: Format[T], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, Option[T]]] = {
-    logger.debug(s"[DeregisterVatConnector][getAnswers] Getting answer for key: $key and vrn: $vrn")
+    logDebug(s"[DeregisterVatConnector][getAnswers] Getting answer for key: $key and vrn: $vrn")
     http.GET(url(vrn, key))(DeregisterVatHttpParser.getReads[T], hc, ec)
   }
 
   def putAnswers[T](vrn: String, key: String, model: T)(implicit fmt: Format[T], hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, DeregisterVatResponse]] = {
-    logger.debug(s"[DeregisterVatConnector][putAnswers] Calling PUT method to store data for URL: ${url(vrn, key)}")
+    logDebug(s"[DeregisterVatConnector][putAnswers] Calling PUT method to store data for URL: ${url(vrn, key)}")
     http.PUT[T, Either[ErrorModel, DeregisterVatResponse]](url(vrn, key), model)(fmt, DeregisterVatHttpParser.updateReads, hc, ec)
   }
 

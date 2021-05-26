@@ -19,14 +19,15 @@ package controllers.zeroRated
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.SicCodeForm
+
 import javax.inject.{Inject, Singleton}
 import models._
-import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.{BusinessActivityAnswerService, SicCodeAnswerService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggerUtil.logWarn
 import views.html.SicCode
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,8 +41,7 @@ class SicCodeController @Inject()(sicCode: SicCode,
                                   val businessActivityAnswerService: BusinessActivityAnswerService,
                                   val sicCodeAnswerService: SicCodeAnswerService,
                                   implicit val ec: ExecutionContext,
-                                  implicit val appConfig: AppConfig) extends FrontendController(mcc)
-                                  with Logging with I18nSupport {
+                                  implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   private def renderView(form: Form[String] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = sicCode(form)
 
@@ -55,7 +55,7 @@ class SicCodeController @Inject()(sicCode: SicCode,
         case (Right(Some(No)), Right(_)) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
         case (Right(None), Right(_)) => Redirect(controllers.zeroRated.routes.BusinessActivityController.show())
         case _ =>
-          logger.warn("[SicCodeController][show] - storedAnswerService returned an error retrieving answers")
+          logWarn("[SicCodeController][show] - storedAnswerService returned an error retrieving answers")
           serviceErrorHandler.showInternalServerError
       }
   }
@@ -66,7 +66,7 @@ class SicCodeController @Inject()(sicCode: SicCode,
         data => sicCodeAnswerService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
           case Left(error) =>
-            logger.warn("[SicCodeController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            logWarn("[SicCodeController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError
         }
       )

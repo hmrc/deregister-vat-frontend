@@ -19,6 +19,7 @@ package controllers
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.VATAccountsForm
+
 import javax.inject.{Inject, Singleton}
 import models._
 import play.api.data.Form
@@ -28,7 +29,7 @@ import services.{AccountingMethodAnswerService, DeregReasonAnswerService, Taxabl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import cats.data.EitherT
 import cats.instances.future._
-import play.api.Logging
+import utils.LoggerUtil.logWarn
 import views.html.VatAccounts
 
 import scala.concurrent.ExecutionContext
@@ -43,8 +44,7 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
                                       val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                       val serviceErrorHandler: ServiceErrorHandler,
                                       implicit val ec: ExecutionContext,
-                                      implicit val appConfig: AppConfig) extends FrontendController(mcc)
-                                      with Logging with I18nSupport {
+                                      implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   private def renderView(backLink: String, form: Form[VATAccountsModel] = VATAccountsForm.vatAccountsForm)
                         (implicit user: User[_]) = vatAccounts(backLink, form)
@@ -60,7 +60,7 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
       case (Right(optionLTB), Right(Some(deregReason)),Right(_)) =>
         Ok(renderView(backLink(optionLTB, deregReason)))
       case (_,_,_) =>
-        logger.warn("[VATAccountsController][show] - failed to retrieve one or more answers from answer service")
+        logWarn("[VATAccountsController][show] - failed to retrieve one or more answers from answer service")
         serviceErrorHandler.showInternalServerError
     }
   }
@@ -74,13 +74,13 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
         case Right((optionLTB, Some(reason))) =>
           BadRequest(vatAccounts(backLink(optionLTB, reason), error))
         case _ =>
-          logger.warn("[VATAccountsController][submit] - failed to retrieve one or more answers from answer service")
+          logWarn("[VATAccountsController][submit] - failed to retrieve one or more answers from answer service")
           serviceErrorHandler.showInternalServerError
       },
       data => accountingMethodAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.OptionTaxController.show())
         case Left(error) =>
-          logger.warn("[VATAccountsController][submit] - failed to store accountingMethod in answer service: " + error.message)
+          logWarn("[VATAccountsController][submit] - failed to store accountingMethod in answer service: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )
