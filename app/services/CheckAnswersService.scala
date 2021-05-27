@@ -19,11 +19,11 @@ package services
 import cats.data.EitherT
 import cats.instances.future._
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
 import models._
 import play.api.i18n.Messages
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

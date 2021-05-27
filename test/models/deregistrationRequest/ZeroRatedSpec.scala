@@ -17,10 +17,12 @@
 package models.deregistrationRequest
 
 import assets.constants.ZeroRatedTestConstants._
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.OptionValues
 import play.api.libs.json.Json
 
-class ZeroRatedSpec extends WordSpecLike with Matchers with OptionValues {
+class ZeroRatedSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   "ZeroRated" when {
 

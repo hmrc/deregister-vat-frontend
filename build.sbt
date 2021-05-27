@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
+import play.core.PlayVersion
+import play.sbt.routes.RoutesKeys
+import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
-import play.core.PlayVersion
-import play.sbt.routes.RoutesKeys
-import sbt.Tests.{Group, SubProcess}
 
 val appName: String = "deregister-vat-frontend"
 
@@ -71,14 +71,14 @@ val compile: Seq[ModuleID] = Seq(
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "org.scalatest"           %% "scalatest"                    % "3.0.9"             % scope,
+  "org.scalatest"           %% "scalatest"                    % "3.1.4"             % scope,
   "org.pegdown"             %  "pegdown"                      % "1.6.0"             % scope,
   "org.jsoup"               %  "jsoup"                        % "1.13.1"            % scope,
   "com.typesafe.play"       %% "play-test"                    % PlayVersion.current % scope,
-  "org.scalatestplus.play"  %% "scalatestplus-play"           % "5.0.0"             % scope,
+  "org.scalatestplus.play"  %% "scalatestplus-play"           % "5.1.0"             % scope,
   "org.scalamock"           %% "scalamock-scalatest-support"  % "3.6.0"             % scope,
   "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.26.3"            % scope,
-  "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.62.2"            % scope
+  "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.36.8"            % scope
 )
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {

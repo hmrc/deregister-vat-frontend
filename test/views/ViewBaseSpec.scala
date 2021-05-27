@@ -19,7 +19,7 @@ package views
 import _root_.utils.TestUtil
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
-import org.scalatest.Matchers
+import  org.scalatest.matchers.should.Matchers
 
 import scala.collection.JavaConverters._
 

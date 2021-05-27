@@ -18,10 +18,12 @@ package views.utils
 
 import forms.DateForm
 import models.{CeasedTradingDate, DateModel, DeregistrationDate}
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatest.OptionValues
+import  org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.data.Form
 
-class DateErrorHelperSpec extends WordSpecLike with Matchers with OptionValues {
+class DateErrorHelperSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   val form: Form[DateModel] = DateForm.dateForm
 

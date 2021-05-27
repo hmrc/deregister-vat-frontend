@@ -19,16 +19,16 @@ package controllers
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoAmountForm
-import javax.inject.Inject
 import models.{User, YesNoAmountModel}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.StocksAnswerService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.OptionStocksToSell
 import utils.LoggerUtil.logWarn
+import views.html.OptionStocksToSell
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class OptionStocksToSellController @Inject()(optionStocksToSell: OptionStocksToSell,

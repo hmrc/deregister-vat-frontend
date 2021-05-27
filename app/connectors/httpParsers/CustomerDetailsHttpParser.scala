@@ -16,11 +16,10 @@
 
 package connectors.httpParsers
 
-import models.CustomerDetails
-import models.ErrorModel
-import utils.LoggerUtil.{logDebug, logWarn}
+import models.{CustomerDetails, ErrorModel}
 import play.api.http.Status
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
+import utils.LoggerUtil.{logDebug, logWarn}
 
 
 object CustomerDetailsHttpParser {

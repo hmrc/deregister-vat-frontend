@@ -17,9 +17,11 @@
 package forms
 
 import models.WhyTurnoverBelowModel
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.OptionValues
+import org.scalatest.matchers.should.Matchers
 
-class WhyTurnoverBelowFormSpec extends WordSpecLike with Matchers with OptionValues {
+class WhyTurnoverBelowFormSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   "Binding a form with valid data" should {
 

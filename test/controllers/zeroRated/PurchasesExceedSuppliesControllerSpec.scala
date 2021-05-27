@@ -23,9 +23,8 @@ import models.{DeregisterVatSuccess, No, Yes}
 import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{charset, contentType}
+import play.api.test.Helpers.{charset, contentType, _}
 import services.mocks.MockPurchasesExceedSuppliesAnswerService
-import play.api.test.Helpers._
 import views.html.PurchasesExceedSupplies
 
 class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with MockPurchasesExceedSuppliesAnswerService {

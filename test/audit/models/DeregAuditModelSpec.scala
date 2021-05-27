@@ -16,9 +16,9 @@
 
 package audit.models
 
-import utils.TestUtil
 import assets.constants.DeregistrationInfoTestConstants._
 import play.api.libs.json.Json
+import utils.TestUtil
 
 class DeregAuditModelSpec extends TestUtil{
 

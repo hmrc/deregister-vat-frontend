@@ -20,9 +20,8 @@ package mocks
 import models.{DeregisterVatResponse, ErrorModel}
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Writes
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 import utils.TestUtil
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
-import uk.gov.hmrc.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 

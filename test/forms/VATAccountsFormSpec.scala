@@ -16,10 +16,10 @@
 
 package forms
 
+import _root_.utils.TestUtil
 import assets.messages.VATAccountsMessages
 import models.{CashAccounting, StandardAccounting, VATAccountsModel}
 import play.api.i18n.Messages
-import _root_.utils.TestUtil
 
 class VATAccountsFormSpec extends TestUtil {
 

@@ -16,7 +16,6 @@
 
 package controllers
 
-import java.time.LocalDate
 import assets.constants.BaseTestConstants._
 import forms.DateForm._
 import models._
@@ -27,6 +26,8 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockDeregDateAnswerService
 import views.html.DeregistrationDate
+
+import java.time.LocalDate
 
 
 class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDeregDateAnswerService {

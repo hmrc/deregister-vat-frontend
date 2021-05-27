@@ -16,9 +16,9 @@
 
 package assets.constants
 
-import java.time.LocalDate
-
 import models.DateModel
+
+import java.time.LocalDate
 
 object DateModelTestConstants {
 

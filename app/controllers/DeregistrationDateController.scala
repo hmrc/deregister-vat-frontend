@@ -19,8 +19,6 @@ package controllers
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.DeregistrationDateForm
-
-import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.DeregDateAnswerService
@@ -28,6 +26,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil.logWarn
 import views.html.DeregistrationDate
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeregistrationDateController@Inject()(deregistrationDate: DeregistrationDate,

@@ -17,10 +17,9 @@
 package controllers.predicates
 
 import common.Constants
+import common.Constants.vatGroup
 import common.SessionKeys.registrationStatusKey
 import config.{AppConfig, ServiceErrorHandler}
-
-import javax.inject.Inject
 import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results.Redirect
@@ -28,9 +27,9 @@ import play.api.mvc.{ActionRefiner, MessagesControllerComponents, Result}
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
-import common.Constants.vatGroup
 import utils.LoggerUtil.{logDebug, logWarn}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsService,

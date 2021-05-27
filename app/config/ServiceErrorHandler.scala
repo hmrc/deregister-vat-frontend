@@ -16,13 +16,14 @@
 
 package config
 
-import javax.inject.Inject
 import play.api.i18n.MessagesApi
-import play.api.mvc.{Request, Result}
 import play.api.mvc.Results.{BadRequest, InternalServerError}
+import play.api.mvc.{Request, Result}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.errors.StandardError
+
+import javax.inject.Inject
 
 class ServiceErrorHandler @Inject()(standardError: StandardError,
                                     val messagesApi: MessagesApi,

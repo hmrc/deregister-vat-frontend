@@ -18,8 +18,6 @@ package controllers
 
 import cats.data.EitherT
 import cats.instances.future._
-
-import javax.inject.{Inject, Singleton}
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.DeregistrationReasonForm
@@ -32,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil.logWarn
 import views.html.DeregistrationReason
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

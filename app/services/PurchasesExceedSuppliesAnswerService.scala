@@ -17,8 +17,9 @@
 package services
 
 import connectors.DeregisterVatConnector
-import javax.inject.{Inject, Singleton}
 import models.YesNo
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton()
 class PurchasesExceedSuppliesAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[YesNo]{

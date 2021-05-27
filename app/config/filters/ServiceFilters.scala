@@ -16,8 +16,9 @@
 
 package config.filters
 
-import javax.inject.Inject
 import play.api.http.{DefaultHttpFilters, EnabledFilters}
+
+import javax.inject.Inject
 
 class ServiceFilters @Inject()(defaultFilters: EnabledFilters)
   extends DefaultHttpFilters(defaultFilters.filters: _*)

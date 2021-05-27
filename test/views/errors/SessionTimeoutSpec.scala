@@ -17,9 +17,9 @@
 package views.errors
 
 import assets.messages.TimeoutMessages
-import views.ViewBaseSpec
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import views.ViewBaseSpec
 import views.html.errors.SessionTimeout
 
 class SessionTimeoutSpec extends ViewBaseSpec {

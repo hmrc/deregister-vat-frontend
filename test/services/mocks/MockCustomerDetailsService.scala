@@ -18,13 +18,15 @@ package services.mocks
 
 import models.{CustomerDetails, ErrorModel}
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatest.OptionValues
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockCustomerDetailsService extends WordSpecLike with Matchers with OptionValues with MockFactory {
+trait MockCustomerDetailsService extends AnyWordSpecLike with Matchers with OptionValues with MockFactory {
 
   val mockCustomerDetailsService: CustomerDetailsService = mock[CustomerDetailsService]
 

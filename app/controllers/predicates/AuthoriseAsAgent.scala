@@ -18,8 +18,6 @@ package controllers.predicates
 
 import common.{EnrolmentKeys, SessionKeys}
 import config.{AppConfig, ServiceErrorHandler}
-
-import javax.inject.{Inject, Singleton}
 import models.User
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -29,6 +27,7 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil.{logDebug, logInfo}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

@@ -18,13 +18,12 @@ package connectors
 
 import _root_.mocks.MockHttp
 import assets.constants.BaseTestConstants.{vrn, _}
-import models._
-import utils.TestUtil
 import assets.constants.CustomerDetailsTestConstants.customerDetailsJsonMin
-import models.CustomerDetails
-import models.deregistrationRequest.DeregistrationInfo
 import assets.constants.DateModelTestConstants._
+import models.{CustomerDetails, _}
+import models.deregistrationRequest.DeregistrationInfo
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import utils.TestUtil
 
 import scala.concurrent.Future
 

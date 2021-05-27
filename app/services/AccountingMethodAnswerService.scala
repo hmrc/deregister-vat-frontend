@@ -17,8 +17,9 @@
 package services
 
 import connectors.DeregisterVatConnector
-import javax.inject.{Inject, Singleton}
 import models.VATAccountsModel
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton()
 class AccountingMethodAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[VATAccountsModel] {

@@ -16,17 +16,17 @@
 
 package controllers
 
-import models.{DeregisterVatSuccess, ErrorModel}
-import play.api.http.Status
-import play.api.test.Helpers._
-import services.mocks.{MockAuditService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
-import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
 import assets.constants.BaseTestConstants.vrn
+import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
 import assets.messages.{DeregistrationConfirmationMessages => Messages}
 import common.SessionKeys
+import models.{DeregisterVatSuccess, ErrorModel}
 import org.jsoup.Jsoup
+import play.api.http.Status
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
+import services.mocks.{MockAuditService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
 import views.html.DeregistrationConfirmation
 
 

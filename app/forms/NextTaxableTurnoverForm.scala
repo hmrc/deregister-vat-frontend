@@ -16,11 +16,11 @@
 
 package forms
 
+import common.Constants._
 import forms.utils.FormValidation
 import models.NumberInputModel
 import play.api.data.Form
 import play.api.data.Forms._
-import common.Constants._
 
 object NextTaxableTurnoverForm extends FormValidation {
 

@@ -16,12 +16,13 @@
 
 package assets.constants
 
-import assets.constants.YesNoAmountTestConstants._
 import assets.constants.NextTaxableTurnoverTestConstants._
+import assets.constants.YesNoAmountTestConstants._
 import assets.messages.{CheckYourAnswersMessages, CommonMessages, WhyTurnoverBelowMessages}
 import models._
 import play.twirl.api.Html
-import utils.{MoneyFormatter, TestUtil}
+import utils.MoneyFormatter
+import _root_.utils.TestUtil
 
 
 object CheckYourAnswersTestConstants extends TestUtil {

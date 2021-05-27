@@ -17,9 +17,11 @@
 package models
 
 import assets.constants.CustomerDetailsTestConstants._
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.OptionValues
 
-class CustomerDetailsModelSpec extends WordSpecLike with Matchers with OptionValues {
+class CustomerDetailsModelSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   "Deserializing from JSON" when {
 

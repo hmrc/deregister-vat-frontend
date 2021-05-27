@@ -16,16 +16,14 @@
 
 package connectors
 
-import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import connectors.httpParsers.DeregisterVatHttpParser
 import models.{DeregisterVatResponse, ErrorModel}
-import play.api.Logging
 import play.api.libs.json.Format
-import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import utils.LoggerUtil.logDebug
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 

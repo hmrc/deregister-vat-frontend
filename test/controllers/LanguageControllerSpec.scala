@@ -35,14 +35,14 @@ class LanguageControllerSpec extends ControllerBaseSpec {
         lazy val result = controller.switchLanguage("english")(fRequest)
 
         status(result) shouldBe SEE_OTHER
-        cookies(result).get(Play.langCookieName(messagesApi)).get.value shouldBe "en"
+        cookies(result).get(messagesApi.langCookieName).get.value shouldBe "en"
         redirectLocation(result) shouldBe Some("thisIsMyNextLocation")
       }
       "Welsh is passed in" in {
         lazy val result = controller.switchLanguage("cymraeg")(fRequest)
 
         status(result) shouldBe SEE_OTHER
-        cookies(result).get(Play.langCookieName(messagesApi)).get.value shouldBe "cy"
+        cookies(result).get(messagesApi.langCookieName).get.value shouldBe "cy"
         redirectLocation(result) shouldBe Some("thisIsMyNextLocation")
       }
     }
@@ -51,7 +51,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
         lazy val result = controller.switchLanguage("dovahtongue")(fRequest)
 
         status(result) shouldBe SEE_OTHER
-        cookies(result).get(Play.langCookieName(messagesApi)).get.value shouldBe "en"
+        cookies(result).get(messagesApi.langCookieName).get.value shouldBe "en"
         redirectLocation(result) shouldBe Some("thisIsMyNextLocation")
       }
     }
@@ -62,7 +62,7 @@ class LanguageControllerSpec extends ControllerBaseSpec {
         val expectedResponse = mockConfig.languageFallbackUrl
 
         status(result) shouldBe SEE_OTHER
-        cookies(result).get(Play.langCookieName(messagesApi)).get.value shouldBe "en"
+        cookies(result).get(messagesApi.langCookieName).get.value shouldBe "en"
         redirectLocation(result) shouldBe Some(expectedResponse)
       }
     }

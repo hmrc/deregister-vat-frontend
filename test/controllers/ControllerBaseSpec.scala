@@ -18,10 +18,10 @@ package controllers
 
 import mocks.{MockAuth, MockDeniedAccessPredicate}
 import org.jsoup.Jsoup
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 import uk.gov.hmrc.auth.core.{InsufficientEnrolments, MissingBearerToken}
 import utils.TestUtil
 

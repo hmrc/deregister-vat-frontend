@@ -21,8 +21,6 @@ import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoForm
-
-import javax.inject.{Inject, Singleton}
 import models.{User, YesNo}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
@@ -33,6 +31,7 @@ import utils.LoggerUtil.logWarn
 import utils.MoneyFormatter
 import views.html.TaxableTurnover
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

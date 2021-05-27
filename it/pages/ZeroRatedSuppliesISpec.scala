@@ -22,8 +22,8 @@ import helpers.IntegrationBaseSpec
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import stubs.DeregisterVatStub
 import services._
+import stubs.DeregisterVatStub
 
 class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 

@@ -19,8 +19,6 @@ package controllers
 import common.{Constants, SessionKeys}
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
-
-import javax.inject.{Inject, Singleton}
 import models.VatSubscriptionSuccess
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -29,6 +27,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil.logWarn
 import views.html.CheckYourAnswers
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
 @Singleton

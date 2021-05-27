@@ -20,18 +20,17 @@ import cats.data.EitherT
 import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
-
-import javax.inject.{Inject, Singleton}
+import forms.YesNoForm
 import models.{No, User, Yes, YesNo}
+import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.BusinessActivity
-import play.api.data.Form
-import forms.YesNoForm
 import utils.LoggerUtil.logWarn
+import views.html.BusinessActivity
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

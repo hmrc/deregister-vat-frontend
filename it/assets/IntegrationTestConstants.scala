@@ -16,10 +16,10 @@
 
 package assets
 
-import java.time.LocalDate
-
 import models._
 import play.api.libs.json.{JsObject, JsValue, Json}
+
+import java.time.LocalDate
 
 object IntegrationTestConstants {
 

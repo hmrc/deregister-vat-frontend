@@ -21,8 +21,6 @@ import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoForm
-
-import javax.inject.Inject
 import models._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
@@ -32,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil.logWarn
 import views.html.OutstandingInvoices
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingInvoices,

@@ -18,19 +18,18 @@ package controllers.predicates
 
 import common.{EnrolmentKeys, SessionKeys}
 import config.{AppConfig, ServiceErrorHandler}
-
-import javax.inject.Inject
 import models.User
 import play.api.i18n.I18nSupport
-import play.api.mvc.{ActionBuilder, ActionFunction, AnyContent, BodyParser, MessagesControllerComponents, Request, Result}
+import play.api.mvc._
 import services.{CustomerDetailsService, EnrolmentsAuthService}
-import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil.{logDebug, logWarn}
 import views.html.errors.client.Unauthorised
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthPredicate @Inject()(unauthorised: Unauthorised,

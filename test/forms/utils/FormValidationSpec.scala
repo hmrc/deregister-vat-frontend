@@ -16,10 +16,12 @@
 
 package forms.utils
 
-import org.scalatest.{Matchers, OptionValues, WordSpecLike}
+import org.scalatest.wordspec.AnyWordSpecLike
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.OptionValues
 import play.api.data.validation.{Invalid, Valid}
 
-class FormValidationSpec extends WordSpecLike with Matchers with OptionValues with FormValidation {
+class FormValidationSpec extends AnyWordSpecLike with Matchers with OptionValues with FormValidation {
 
   val errMsg = "error"
 

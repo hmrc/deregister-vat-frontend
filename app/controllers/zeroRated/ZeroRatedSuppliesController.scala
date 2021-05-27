@@ -19,8 +19,6 @@ package controllers.zeroRated
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.ZeroRatedSuppliesForm
-
-import javax.inject.{Inject, Singleton}
 import models.{NumberInputModel, User}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
@@ -30,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil.logWarn
 import views.html.ZeroRatedSupplies
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

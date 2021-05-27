@@ -17,8 +17,9 @@
 package services
 
 import connectors.DeregisterVatConnector
-import javax.inject.{Inject, Singleton}
 import models.DeregistrationReason
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton()
 class DeregReasonAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[DeregistrationReason] {

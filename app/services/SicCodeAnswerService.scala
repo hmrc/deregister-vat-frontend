@@ -17,6 +17,7 @@
 package services
 
 import connectors.DeregisterVatConnector
+
 import javax.inject.{Inject, Singleton}
 
 @Singleton()

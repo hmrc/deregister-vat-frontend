@@ -16,8 +16,6 @@
 
 package pages
 
-import java.time.LocalDate
-
 import assets.IntegrationTestConstants._
 import common.Constants
 import helpers.IntegrationBaseSpec
@@ -27,6 +25,8 @@ import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 import services._
 import stubs.{DeregisterVatStub, VatSubscriptionStub}
+
+import java.time.LocalDate
 
 class CheckYourAnswersISpec extends IntegrationBaseSpec {
 

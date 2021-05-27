@@ -16,8 +16,11 @@
 
 package controllers.predicates
 
+import assets.constants.BaseTestConstants.vrn
+import assets.constants.CustomerDetailsTestConstants._
 import common.SessionKeys
 import mocks.MockAuth
+import models.ErrorModel
 import play.api.http.Status
 import play.api.mvc.Results.Ok
 import play.api.mvc.{Action, AnyContent}
@@ -25,9 +28,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.MissingBearerToken
 import views.html.errors.client.Unauthorised
-import assets.constants.CustomerDetailsTestConstants._
-import assets.constants.BaseTestConstants.vrn
-import models.ErrorModel
 
 import scala.concurrent.Future
 

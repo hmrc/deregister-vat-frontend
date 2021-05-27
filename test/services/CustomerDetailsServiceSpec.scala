@@ -16,13 +16,12 @@
 
 package services
 
-import models.CustomerDetails
-import models.ErrorModel
-import utils.TestUtil
+import assets.constants.BaseTestConstants.{errorModel, vrn}
 import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
 import connectors.mocks.MockVatSubscriptionConnector
-import assets.constants.BaseTestConstants.{errorModel, vrn}
+import models.{CustomerDetails, ErrorModel}
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import utils.TestUtil
 
 import scala.concurrent.Future
 

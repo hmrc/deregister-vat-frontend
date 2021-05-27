@@ -19,7 +19,7 @@ package stubs
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WireMockMethods
 import models.ErrorModel
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, NO_CONTENT, OK, NOT_FOUND}
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, NOT_FOUND, NO_CONTENT, OK}
 import play.api.libs.json.JsValue
 
 object DeregisterVatStub extends WireMockMethods {

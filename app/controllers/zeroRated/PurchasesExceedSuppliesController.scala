@@ -18,11 +18,9 @@ package controllers.zeroRated
 
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
-
-import javax.inject.{Inject, Singleton}
+import forms.PurchasesExceedSuppliesForm
 import models.{User, YesNo}
 import play.api.data.Form
-import forms.PurchasesExceedSuppliesForm
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.PurchasesExceedSuppliesAnswerService
@@ -30,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggerUtil.logWarn
 import views.html.PurchasesExceedSupplies
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

@@ -16,10 +16,10 @@
 
 package config.features
 
-import javax.inject.{Inject, Singleton}
-
 import config.ConfigKeys
 import play.api.Configuration
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class Features @Inject()(implicit config: Configuration) {

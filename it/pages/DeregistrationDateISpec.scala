@@ -16,8 +16,6 @@
 
 package pages
 
-import java.time.LocalDate
-
 import assets.IntegrationTestConstants._
 import common.Constants
 import forms.DeregistrationDateForm
@@ -28,6 +26,8 @@ import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 import services.DeregDateAnswerService
 import stubs.DeregisterVatStub
+
+import java.time.LocalDate
 
 class DeregistrationDateISpec extends IntegrationBaseSpec {
 

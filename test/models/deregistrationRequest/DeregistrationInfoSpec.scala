@@ -16,20 +16,19 @@
 
 package models.deregistrationRequest
 
-import java.time.LocalDate
-
+import assets.constants.BaseTestConstants.agentEmail
 import assets.constants.DateModelTestConstants._
-import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.DeregistrationInfoTestConstants._
-import assets.constants.{TurnoverBelowThresholdTestConstants, ZeroRatedTestConstants}
+import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants.whyTurnoverBelowOne
 import assets.constants.YesNoAmountTestConstants._
-import assets.constants.BaseTestConstants.agentEmail
-import models._
-import models.{ZeroRated => ZeroRatedDeregReason}
+import assets.constants.{TurnoverBelowThresholdTestConstants, ZeroRatedTestConstants}
 import models.deregistrationRequest.DeregistrationInfo._
+import models.{ZeroRated => ZeroRatedDeregReason, _}
 import play.api.libs.json.Json
 import utils.TestUtil
+
+import java.time.LocalDate
 
 class DeregistrationInfoSpec extends TestUtil {
 

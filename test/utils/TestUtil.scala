@@ -22,7 +22,9 @@ import common.SessionKeys
 import config.ServiceErrorHandler
 import mocks.MockAppConfig
 import models.User
-import org.scalatest.{BeforeAndAfterEach, Matchers, OptionValues, WordSpecLike}
+import org.scalatest.{BeforeAndAfterEach, OptionValues}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.i18n.{Lang, Messages, MessagesApi, MessagesImpl}
@@ -34,7 +36,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
 
-trait TestUtil extends WordSpecLike
+trait TestUtil extends AnyWordSpecLike
   with Matchers
   with OptionValues
   with GuiceOneAppPerSuite

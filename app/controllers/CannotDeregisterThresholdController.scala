@@ -16,7 +16,6 @@
 
 package controllers
 
-import javax.inject.{Inject, Singleton}
 import config.AppConfig
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import play.api.i18n.I18nSupport
@@ -24,6 +23,7 @@ import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.CannotDeregisterThreshold
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton

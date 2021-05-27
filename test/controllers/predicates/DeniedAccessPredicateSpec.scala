@@ -17,14 +17,14 @@
 package controllers.predicates
 
 import assets.constants.BaseTestConstants.vrn
+import assets.constants.CustomerDetailsTestConstants._
 import common.{Constants, SessionKeys}
 import mocks.MockAuth
 import models.{ErrorModel, User}
-import play.api.test.FakeRequest
-import services.mocks.MockCustomerDetailsService
-import play.api.test.Helpers._
-import assets.constants.CustomerDetailsTestConstants._
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import play.api.test.FakeRequest
+import play.api.test.Helpers._
+import services.mocks.MockCustomerDetailsService
 
 import scala.concurrent.Future
 
