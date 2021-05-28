@@ -73,6 +73,6 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
 
   private val arn: Enrolments => String = enrolments =>
     enrolments.enrolments.collectFirst {
-      case Enrolment(EnrolmentKeys.agentEnrolmentId, EnrolmentIdentifier(_, arnValue) :: _,_,_) => arnValue
+      case Enrolment(EnrolmentKeys.agentEnrolmentId, Seq(EnrolmentIdentifier(_, arnValue)), _, _) => arnValue
     } getOrElse(throw InternalError("Agent Service Enrolment missing"))
 }
