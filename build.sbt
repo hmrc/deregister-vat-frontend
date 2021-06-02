@@ -61,12 +61,10 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"   %% "bootstrap-frontend-play-28"      % "5.3.0",
-  "uk.gov.hmrc"   %% "govuk-template"                  % "5.66.0-play-26",
-  "uk.gov.hmrc"   %% "play-ui"                         % "9.4.0-play-26",
-  "uk.gov.hmrc"   %% "play-partials"                   % "7.1.0-play-26",
-  "uk.gov.hmrc"   %% "play-language"                   % "5.0.0-play-26",
-  "uk.gov.hmrc"   %% "play-frontend-govuk"             % "0.73.0-play-26",
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "0.67.0-play-26",
+  "uk.gov.hmrc"   %% "play-ui"                         % "9.4.0-play-28",
+  "uk.gov.hmrc"   %% "play-language"                   % "5.0.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-govuk"             % "0.73.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "0.67.0-play-28",
   "org.typelevel" %% "cats"                            % "0.9.0"
 )
 
@@ -106,7 +104,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.12.11",
+    scalaVersion := "2.12.12",
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
@@ -120,6 +118,5 @@ lazy val microservice: Project = Project(appName, file("."))
     testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
     parallelExecution in IntegrationTest := false)
   .settings(resolvers ++= Seq(
-    Resolver.bintrayRepo("hmrc", "releases"),
     Resolver.jcenterRepo
   ))
