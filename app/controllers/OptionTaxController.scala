@@ -25,10 +25,10 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.OptionTaxAnswerService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.LoggerUtil.logWarn
 import views.html.OptionTax
-
 import javax.inject.{Inject, Singleton}
+import utils.LoggerUtil
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -39,7 +39,7 @@ class OptionTaxController @Inject()(optionTax: OptionTax,
                                     val optionTaxAnswerService: OptionTaxAnswerService,
                                     val serviceErrorHandler: ServiceErrorHandler,
                                     implicit val ec: ExecutionContext,
-                                    implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                    implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil{
 
   val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm("optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry")
 
@@ -59,7 +59,7 @@ class OptionTaxController @Inject()(optionTax: OptionTax,
       data => optionTaxAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show())
         case Left(error) =>
-          logWarn("[OptionTaxController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+          logger.warn("[OptionTaxController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

@@ -27,10 +27,10 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.{CapitalAssetsAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.LoggerUtil.logWarn
 import views.html.CapitalAssets
-
 import javax.inject.{Inject, Singleton}
+import utils.LoggerUtil
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -42,7 +42,7 @@ class  CapitalAssetsController @Inject()(capitalAssets: CapitalAssets,
                                          val wipeRedundantDataService: WipeRedundantDataService,
                                          val serviceErrorHandler: ServiceErrorHandler,
                                          implicit val ec: ExecutionContext,
-                                         implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                         implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm("capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry")
 
@@ -65,7 +65,7 @@ class  CapitalAssetsController @Inject()(capitalAssets: CapitalAssets,
       } yield result).value.map {
         case Right(_) => Redirect(controllers.routes.OptionStocksToSellController.show())
         case Left(error) =>
-          logWarn("[CapitalAssetsController][submit] - storedAnswerService returned an error: " + error.message)
+          logger.warn("[CapitalAssetsController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

@@ -25,10 +25,10 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.CeasedTradingDateAnswerService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.LoggerUtil.logWarn
 import views.html.CeasedTradingDate
-
 import javax.inject.{Inject, Singleton}
+import utils.LoggerUtil
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -39,7 +39,7 @@ class CeasedTradingDateController @Inject()(ceasedTradingDate: CeasedTradingDate
                                             val ceasedTradingDateAnswerService: CeasedTradingDateAnswerService,
                                             val serviceErrorHandler: ServiceErrorHandler,
                                             implicit val ec: ExecutionContext,
-                                            implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                            implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   private def renderView(form: Form[DateModel] = DateForm.dateForm)(implicit user: User[_]) = ceasedTradingDate(form)
 
@@ -56,7 +56,7 @@ class CeasedTradingDateController @Inject()(ceasedTradingDate: CeasedTradingDate
       data => ceasedTradingDateAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.VATAccountsController.show())
         case Left(error) =>
-          logWarn("[CeasedTradingDateController][submit] - storedAnswerService returned an error: " + error.message)
+          logger.warn("[CeasedTradingDateController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

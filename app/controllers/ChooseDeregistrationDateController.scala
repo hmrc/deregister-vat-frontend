@@ -27,10 +27,10 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.LoggerUtil.logWarn
 import views.html.ChooseDeregistrationDate
-
 import javax.inject.{Inject, Singleton}
+import utils.LoggerUtil
+
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -43,7 +43,7 @@ class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: Cho
                                                    val wipeRedundantDataService: WipeRedundantDataService,
                                                    val serviceErrorHandler: ServiceErrorHandler,
                                                    implicit val ec: ExecutionContext,
-                                                   implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                                   implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption")
 
@@ -60,7 +60,7 @@ class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: Cho
       case (Right(outstanding), Right(None)) =>
         Ok(renderView(outstanding,form))
       case (_,_) =>
-        logWarn("[ChooseDeregistrationDateController][show] - storedAnswerService returned an error retrieving answers")
+        logger.warn("[ChooseDeregistrationDateController][show] - storedAnswerService returned an error retrieving answers")
         serviceErrorHandler.showInternalServerError
     }
   }
@@ -70,7 +70,7 @@ class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: Cho
       error => outstandingInvoicesAnswerService.getAnswer map {
         case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error))
         case Left(err) =>
-          logWarn("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
+          logger.warn("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
           serviceErrorHandler.showInternalServerError
       },
       data => (for {
@@ -80,7 +80,7 @@ class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: Cho
       } yield result).value.map {
         case Right(redirect) => redirect
         case Left(error) =>
-          logWarn("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + error.message)
+          logger.warn("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

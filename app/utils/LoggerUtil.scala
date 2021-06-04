@@ -16,16 +16,22 @@
 
 package utils
 
-import play.api.Logging
+import org.slf4j.{Logger, LoggerFactory}
+import play.api.{LoggerLike, MarkerContext}
 
-// $COVERAGE-OFF$
+trait LoggerUtil {
 
-object LoggerUtil extends Logging {
+  lazy val className: String = this.getClass.getSimpleName.stripSuffix("$")
 
-  def logInfo(content: String): Unit = logger.info(content)
-  def logDebug(content: String): Unit = logger.debug(content)
-  def logWarn(content: String): Unit = logger.warn(content)
+  val logger = new LoggerLike {
 
+    override val logger: Logger = LoggerFactory.getLogger(s"application.$className")
+
+    override def debug(message: => String)(implicit mc: MarkerContext): Unit = super.debug(message)
+
+    override def info(message: => String)(implicit mc: MarkerContext): Unit = super.info(message)
+
+    override def warn(message: => String)(implicit mc: MarkerContext): Unit = super.warn(message)
+
+  }
 }
-
-// $COVERAGE-ON$

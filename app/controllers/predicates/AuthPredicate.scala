@@ -26,10 +26,10 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.LoggerUtil.{logDebug, logWarn}
 import views.html.errors.client.Unauthorised
-
 import javax.inject.Inject
+import utils.LoggerUtil
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthPredicate @Inject()(unauthorised: Unauthorised,
@@ -41,7 +41,7 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
                              (implicit val appConfig: AppConfig)
 
   extends FrontendController(mcc)
-  with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with AuthBasePredicate {
+  with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with AuthBasePredicate with LoggerUtil{
 
   override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
   override implicit protected val executionContext: ExecutionContext = mcc.executionContext
@@ -60,14 +60,14 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
             checkVatEnrolment(enrolments, block)
           }
         case _ =>
-          logWarn("[AuthPredicate][invokeBlock] - Missing affinity group")
+          logger.warn("[AuthPredicate][invokeBlock] - Missing affinity group")
           Future.successful(serviceErrorHandler.showInternalServerError)
       } recover {
       case _: NoActiveSession =>
-        logDebug("[AuthPredicate][invokeBlock] - No active session, redirect to GG Sign In")
+        logger.debug("[AuthPredicate][invokeBlock] - No active session, redirect to GG Sign In")
         Redirect(appConfig.signInUrl)
       case _: AuthorisationException =>
-        logDebug("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
+        logger.debug("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
         Forbidden(unauthorised())
     }
   }
@@ -81,20 +81,20 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
         case _ =>
           customerDetailsService.getCustomerDetails(user.vrn).flatMap {
             case Right(details) if details.isInsolventWithoutAccess =>
-              logDebug("[AuthPredicate][checkVatEnrolment] - User is insolvent and not continuing to trade")
+              logger.debug("[AuthPredicate][checkVatEnrolment] - User is insolvent and not continuing to trade")
               Future.successful(Forbidden(unauthorised()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
             case Right(_) =>
-              logDebug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
+              logger.debug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
               block(user).map(result => result.addingToSession(SessionKeys.insolventWithoutAccessKey -> "false"))
             case _ =>
-              logWarn("[AuthPredicate][checkVatEnrolment] - Failure obtaining insolvency status from Customer Info API")
+              logger.warn("[AuthPredicate][checkVatEnrolment] - Failure obtaining insolvency status from Customer Info API")
               Future.successful(serviceErrorHandler.showInternalServerError)
           }
       }
 
     }
     else {
-      logDebug(s"[AuthPredicate][checkVatEnrolment] - Individual without HMRC-MTD-VAT enrolment. $enrolments")
+      logger.debug(s"[AuthPredicate][checkVatEnrolment] - Individual without HMRC-MTD-VAT enrolment. $enrolments")
       Future.successful(Forbidden(unauthorised()))
     }
 

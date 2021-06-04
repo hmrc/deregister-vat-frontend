@@ -24,10 +24,10 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.LoggerUtil.logWarn
 import views.html.CheckYourAnswers
-
 import javax.inject.{Inject, Singleton}
+import utils.LoggerUtil
+
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -39,7 +39,7 @@ class CheckAnswersController @Inject()(checkYourAnswers: CheckYourAnswers,
                                        updateDeregistrationService: UpdateDeregistrationService,
                                        val serviceErrorHandler: ServiceErrorHandler,
                                        implicit val appConfig: AppConfig,
-                                       implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
+                                       implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     checkAnswersService.checkYourAnswersModel() map {
@@ -50,7 +50,7 @@ class CheckAnswersController @Inject()(checkYourAnswers: CheckYourAnswers,
           case _ => Ok(checkYourAnswers(answers.seqAnswers))
         }
       case Left(error) =>
-        logWarn("[CheckAnswersController][show] - storedAnswerService returned an error retrieving answers: " + error.message)
+        logger.warn("[CheckAnswersController][show] - storedAnswerService returned an error retrieving answers: " + error.message)
         serviceErrorHandler.showInternalServerError
     }
   }
@@ -61,7 +61,7 @@ class CheckAnswersController @Inject()(checkYourAnswers: CheckYourAnswers,
           .addingToSession(SessionKeys.deregSuccessful -> "true", SessionKeys.registrationStatusKey -> Constants.pending)
 
       case Left(error) =>
-        logWarn("[CheckAnswersController][submit] - error returned from vat subscription when updating dereg: " + error.message)
+        logger.warn("[CheckAnswersController][submit] - error returned from vat subscription when updating dereg: " + error.message)
         serviceErrorHandler.showInternalServerError
     }
   }

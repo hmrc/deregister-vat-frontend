@@ -22,8 +22,9 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.DeregisterForVAT
-
 import javax.inject.{Inject, Singleton}
+import utils.LoggerUtil
+
 import scala.concurrent.Future
 
 @Singleton
@@ -31,7 +32,7 @@ class DeregisterForVATController @Inject()(deregisterForVAT: DeregisterForVAT,
                                             val mcc: MessagesControllerComponents,
                                            val authenticate: AuthPredicate,
                                            val regStatusCheck: DeniedAccessPredicate,
-                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   val redirect: Action[AnyContent] = (authenticate andThen regStatusCheck) { implicit user =>
     val userType: String = if (user.isAgent) "agent" else "non-agent"
