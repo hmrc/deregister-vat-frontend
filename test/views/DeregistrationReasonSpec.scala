@@ -17,9 +17,9 @@
 package views
 
 import assets.messages.{CommonMessages, DeregistrationReasonMessages}
+import forms.DeregistrationReasonForm
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import forms.DeregistrationReasonForm
 import views.html.DeregistrationReason
 
 

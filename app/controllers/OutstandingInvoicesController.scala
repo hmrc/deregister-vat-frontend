@@ -21,15 +21,15 @@ import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoForm
-import javax.inject.Inject
 import models._
-import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OutstandingInvoicesAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.OutstandingInvoices
+import javax.inject.Inject
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,7 +43,7 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
                                               val wipeRedundantDataService: WipeRedundantDataService,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val ec: ExecutionContext,
-                                              implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                              implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil{
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption")
 
@@ -66,7 +66,7 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
       } yield result).value.map {
         case Right(redirect) => redirect
         case Left(error) =>
-          Logger.warn("[OutstandingInvoicesController][submit] - failed to retrieve one or more answers from answer service: " + error.message)
+          logger.warn("[OutstandingInvoicesController][submit] - failed to retrieve one or more answers from answer service: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )
@@ -83,7 +83,7 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
         case Some(ExemptOnly) => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
         case Some(Ceased) => ceasedTradingJourneyLogic(capitalAssets)
         case _ =>
-          Logger.warn("[OutstandingInvoicesController][redirect] - answer for deregReason doesn't exist or wasn't expected")
+          logger.warn("[OutstandingInvoicesController][redirect] - answer for deregReason doesn't exist or wasn't expected")
           serviceErrorHandler.showInternalServerError
       }
     }
@@ -94,7 +94,7 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
       case Some(assets) if assets.yesNo == Yes => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
       case Some(_) => Redirect(controllers.routes.CheckAnswersController.show())
       case _ =>
-        Logger.warn("[OutstandingInvoicesController][ceasedTradingJourneyLogic] - answer for capitalAssets doesn't exist or wasn't expected")
+        logger.warn("[OutstandingInvoicesController][ceasedTradingJourneyLogic] - answer for capitalAssets doesn't exist or wasn't expected")
         serviceErrorHandler.showInternalServerError
     }
   }

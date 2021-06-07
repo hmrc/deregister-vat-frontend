@@ -16,9 +16,8 @@
 
 package models.deregistrationRequest
 
-import play.api.libs.json.Writes
 import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.json.{Writes, _}
 
 case class ZeroRated(purchasesExceedSupplies: Boolean,
                      sicCode: Option[String],

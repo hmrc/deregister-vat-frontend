@@ -25,9 +25,6 @@ import play.api.test.Helpers._
 import services.mocks.MockStocksAnswerService
 import views.html.OptionStocksToSell
 
-import scala.concurrent.Future
-
-
 class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStocksAnswerService {
 
   lazy val optionStocksToSell: OptionStocksToSell = injector.instanceOf[OptionStocksToSell]
@@ -57,7 +54,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
 
         "return 200 (OK)" in {
           setupMockGetStocks(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -73,7 +70,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
 
         "return 200 (OK)" in {
           setupMockGetStocks(Right(Some(testYesStocksModel)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -107,7 +104,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreStocks(testYesStocksModel)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -124,7 +121,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreStocks(testNoStocksModel)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -141,7 +138,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
 
         "return 500 (ISE)" in {
           setupMockStoreStocks(testNoStocksModel)(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -153,7 +150,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
         lazy val result = TestOptionStocksToSellController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 

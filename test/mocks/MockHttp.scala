@@ -20,31 +20,30 @@ package mocks
 import models.{DeregisterVatResponse, ErrorModel}
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Writes
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 import utils.TestUtil
-import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
-import uk.gov.hmrc.http.HttpClient
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockHttp extends TestUtil with MockFactory {
 
   val mockHttp: HttpClient = mock[HttpClient]
 
-  def setupMockHttpGet[T](url: String)(response: Either[ErrorModel, T]): Unit = {
+  def setupMockHttpGet[T](url: String)(response: Future[Either[ErrorModel, T]]): Unit = {
     (mockHttp.GET(_: String, _: Seq[(String, String)], _: Seq[(String, String)])
                  (_: HttpReads[Either[ErrorModel, T]], _: HeaderCarrier, _: ExecutionContext))
       .expects(url, *, *, *, *, *)
       .returns(response)
   }
 
-  def setupMockHttpPut[T](url: String, model: T)(response: Either[ErrorModel, DeregisterVatResponse]): Unit = {
+  def setupMockHttpPut[T](url: String, model: T)(response: Future[Either[ErrorModel, DeregisterVatResponse]]): Unit = {
     (mockHttp.PUT(_: String, _: T, _: Seq[(String, String)])
     (_: Writes[T], _: HttpReads[Either[ErrorModel, DeregisterVatResponse]], _: HeaderCarrier, _: ExecutionContext))
       .expects(url, model, *, *, *, *, *)
       .returns(response)
   }
 
-  def setupMockHttpDelete[T](url: String)(response: Either[ErrorModel, DeregisterVatResponse]): Unit = {
+  def setupMockHttpDelete[T](url: String)(response: Future[Either[ErrorModel, DeregisterVatResponse]]): Unit = {
     (mockHttp.DELETE(_: String, _: Seq[(String, String)])(_: HttpReads[Either[ErrorModel, DeregisterVatResponse]], _: HeaderCarrier, _: ExecutionContext))
       .expects(url, *, *, *, *)
       .returns(response)

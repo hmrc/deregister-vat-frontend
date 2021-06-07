@@ -25,8 +25,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockWhyTurnoverBelowAnswerService
 import views.html.WhyTurnoverBelow
 
-import scala.concurrent.Future
-
 class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurnoverBelowAnswerService {
 
   lazy val whyTurnoverBelow: WhyTurnoverBelow = injector.instanceOf[WhyTurnoverBelow]
@@ -52,7 +50,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
 
         "return 200 (OK)" in {
           setupMockGetWhyTurnoverBelow(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -68,7 +66,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
 
         "return 200 (OK)" in {
           setupMockGetWhyTurnoverBelow(Right(Some(WhyTurnoverBelowModel(true,true,true,true,true,true,true))))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -78,13 +76,13 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         }
 
         "have the boxes displayed as selected" in {
-          Jsoup.parse(bodyOf(result)).select("#lostContract").hasAttr("checked") shouldBe true
-          Jsoup.parse(bodyOf(result)).select("#semiRetiring").hasAttr("checked") shouldBe true
-          Jsoup.parse(bodyOf(result)).select("#moreCompetitors").hasAttr("checked") shouldBe true
-          Jsoup.parse(bodyOf(result)).select("#reducedTradingHours").hasAttr("checked") shouldBe true
-          Jsoup.parse(bodyOf(result)).select("#seasonalBusiness").hasAttr("checked") shouldBe true
-          Jsoup.parse(bodyOf(result)).select("#closedPlacesOfBusiness").hasAttr("checked") shouldBe true
-          Jsoup.parse(bodyOf(result)).select("#turnoverLowerThanExpected").hasAttr("checked") shouldBe true
+          Jsoup.parse(contentAsString(result)).select("#lostContract").hasAttr("checked") shouldBe true
+          Jsoup.parse(contentAsString(result)).select("#semiRetiring").hasAttr("checked") shouldBe true
+          Jsoup.parse(contentAsString(result)).select("#moreCompetitors").hasAttr("checked") shouldBe true
+          Jsoup.parse(contentAsString(result)).select("#reducedTradingHours").hasAttr("checked") shouldBe true
+          Jsoup.parse(contentAsString(result)).select("#seasonalBusiness").hasAttr("checked") shouldBe true
+          Jsoup.parse(contentAsString(result)).select("#closedPlacesOfBusiness").hasAttr("checked") shouldBe true
+          Jsoup.parse(contentAsString(result)).select("#turnoverLowerThanExpected").hasAttr("checked") shouldBe true
         }
       }
 
@@ -112,7 +110,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreWhyTurnoverBelow(model)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -128,7 +126,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         lazy val result = TestWhyTurnoverBelowController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 
@@ -147,7 +145,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         "return Internal Server Error" in {
 
           setupMockStoreWhyTurnoverBelow(model)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "")))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe INTERNAL_SERVER_ERROR
         }
       }

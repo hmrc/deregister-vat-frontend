@@ -18,15 +18,15 @@ package controllers.predicates
 
 import common.{EnrolmentKeys, SessionKeys}
 import config.{AppConfig, ServiceErrorHandler}
-import javax.inject.{Inject, Singleton}
 import models.User
-import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.EnrolmentsAuthService
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import javax.inject.{Inject, Singleton}
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -35,7 +35,7 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
                                  val serviceErrorHandler: ServiceErrorHandler,
                                  val mcc: MessagesControllerComponents,
                                  implicit val appConfig: AppConfig)
-  extends FrontendController(mcc) with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] {
+  extends FrontendController(mcc) with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with LoggerUtil {
 
   override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
   override implicit protected val executionContext: ExecutionContext = mcc.executionContext
@@ -46,22 +46,22 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
 
     request.session.get(SessionKeys.CLIENT_VRN) match {
       case Some(vrn) =>
-        Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Client VRN from Session: $vrn")
+        logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Client VRN from Session: $vrn")
         enrolmentsAuthService
           .authorised(delegatedAuthorityRule(vrn))
           .retrieve(allEnrolments) {
-            Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Authenticated as Agent")
+            logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Authenticated as Agent")
             allEnrolments => block(User(vrn, active = true, Some(arn(allEnrolments))))
           } recover {
           case _: NoActiveSession =>
-            Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have an active session, redirect to GG Sign In")
+            logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have an active session, redirect to GG Sign In")
             Redirect(appConfig.signInUrl)
           case _ =>
-            Logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have delegated authority for Client")
+            logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Agent does not have delegated authority for Client")
             Redirect(appConfig.agentClientUnauthorisedUrl)
         }
       case _ =>
-        Logger.info("[AuthoriseAsAgent][invokeBlock] - No Client VRN in session")
+        logger.info("[AuthoriseAsAgent][invokeBlock] - No Client VRN in session")
         Future.successful(Redirect(appConfig.agentClientLookupUrl))
     }
   }
@@ -73,6 +73,6 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
 
   private val arn: Enrolments => String = enrolments =>
     enrolments.enrolments.collectFirst {
-      case Enrolment(EnrolmentKeys.agentEnrolmentId, EnrolmentIdentifier(_, arnValue) :: _,_,_) => arnValue
+      case Enrolment(EnrolmentKeys.agentEnrolmentId, Seq(EnrolmentIdentifier(_, arnValue)), _, _) => arnValue
     } getOrElse(throw InternalError("Agent Service Enrolment missing"))
 }

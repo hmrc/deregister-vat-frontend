@@ -25,7 +25,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockCeasedTradingDateAnswerService
 import views.html.CeasedTradingDate
 
-import scala.concurrent.Future
 
 class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeasedTradingDateAnswerService {
   lazy val ceasedTradingDate: CeasedTradingDate = injector.instanceOf[CeasedTradingDate]
@@ -56,7 +55,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
 
         "return 200 (OK)" in {
           setupMockGetCeasedTradingDate(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -72,7 +71,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
 
         "return 200 (OK)" in {
           setupMockGetCeasedTradingDate(Right(Some(testDateModel)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -111,7 +110,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreCeasedTradingDate(testDateModel)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -132,7 +131,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
 
         "return 500 (ISE)" in {
           setupMockStoreCeasedTradingDate(testDateModel)(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -148,7 +147,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
         lazy val result = TestCeasedTradingDateController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 

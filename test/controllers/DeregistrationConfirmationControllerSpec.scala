@@ -16,20 +16,19 @@
 
 package controllers
 
-import models.{DeregisterVatSuccess, ErrorModel}
-import play.api.http.Status
-import play.api.test.Helpers._
-import services.mocks.{MockAuditService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
-import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
 import assets.constants.BaseTestConstants.vrn
+import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
 import assets.messages.{DeregistrationConfirmationMessages => Messages}
 import common.SessionKeys
+import models.{DeregisterVatSuccess, ErrorModel}
 import org.jsoup.Jsoup
+import play.api.http.Status
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
+import services.mocks.{MockAuditService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
 import views.html.DeregistrationConfirmation
 
-import scala.concurrent.Future
 
 class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
   with MockCustomerDetailsService with MockAuditService {
@@ -56,11 +55,11 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
         lazy val result = {
           setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
           TestDeregistrationConfirmationController.show()(requestWithSession)
         }
-        lazy val document = Jsoup.parse(bodyOf(result))
+        lazy val document = Jsoup.parse(contentAsString(result))
 
         "return 200 (OK)" in {
           status(result) shouldBe Status.OK
@@ -78,7 +77,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
 
       "user does not have session key" should {
         lazy val result = {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           TestDeregistrationConfirmationController.show()(request)
         }
 
@@ -95,11 +94,11 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     "answers are deleted successfully and an error is received for CustomerDetails call" should {
 
       lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
-      lazy val document = Jsoup.parse(bodyOf(result))
+      lazy val document = Jsoup.parse(contentAsString(result))
 
       "return 200 (OK)" in {
         setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
         status(result) shouldBe Status.OK
       }
@@ -117,7 +116,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     "answers are not deleted successfully should return internal server error" in {
       lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
       setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
-      mockAuthResult(Future.successful(mockAuthorisedIndividual))
+      mockAuthResult(mockAuthorisedIndividual)
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
     }
   }

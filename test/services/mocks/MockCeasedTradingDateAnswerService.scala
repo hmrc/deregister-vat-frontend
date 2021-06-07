@@ -19,18 +19,20 @@ package services.mocks
 import models._
 import services.CeasedTradingDateAnswerService
 
+import scala.concurrent.Future
+
 trait MockCeasedTradingDateAnswerService extends MockStoredAnswersService {
 
   val mockCeasedTradingDateAnswerService: CeasedTradingDateAnswerService = mock[CeasedTradingDateAnswerService]
 
   def setupMockGetCeasedTradingDate(response: Either[ErrorModel, Option[DateModel]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockCeasedTradingDateAnswerService)(response)
+    setupMockGetAnswers(mockCeasedTradingDateAnswerService)(Future.successful(response))
 
   def setupMockStoreCeasedTradingDate(data: DateModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockCeasedTradingDateAnswerService)(data)(response)
+    setupMockStoreAnswers(mockCeasedTradingDateAnswerService)(data)(Future.successful(response))
 
   def setupMockDeleteCeasedTradingDate(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockCeasedTradingDateAnswerService)(response)
+    setupMockDeleteAnswer(mockCeasedTradingDateAnswerService)(Future.successful(response))
 
   def setupMockDeleteCeasedTradingDateNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockCeasedTradingDateAnswerService)

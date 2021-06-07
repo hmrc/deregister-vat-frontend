@@ -27,10 +27,13 @@ import audit.mocks.MockAuditConnector
 import audit.models.DeregAuditModel
 import connectors.mocks.MockVatSubscriptionConnector
 import models._
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.mvc.AnyContentAsEmpty
 import services.mocks._
 import utils.TestUtil
+
+import scala.concurrent.Future
 
 class UpdateDeregistrationServiceSpec     extends TestUtil
   with MockVatSubscriptionConnector       with MockDeregReasonAnswerService
@@ -89,10 +92,10 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
           setupMockGetSicCode(Right(Some(sicCodeValue)))
           setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
-          setupMockSubmit(vrn, deregistrationInfoMaxModel)(Right(VatSubscriptionSuccess))
+          setupMockSubmit(vrn, deregistrationInfoMaxModel)(Future.successful(Right(VatSubscriptionSuccess)))
           setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))
 
-          await(TestUpdateDeregistrationService.updateDereg) shouldBe Right(VatSubscriptionSuccess)
+          TestUpdateDeregistrationService.updateDereg.futureValue shouldBe Right(VatSubscriptionSuccess)
         }
       }
 
@@ -116,17 +119,17 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
         setupMockGetSicCode(Right(Some(sicCodeValue)))
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
-        setupMockSubmit(vrn, deregistrationInfoMaxModel)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
+        setupMockSubmit(vrn, deregistrationInfoMaxModel)(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))))
         setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))
 
-        await(TestUpdateDeregistrationService.updateDereg) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
+        TestUpdateDeregistrationService.updateDereg.futureValue shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
 
       }
 
 
       "an error is returned from one of the AnswerServices" in {
         setupMockGetDeregReason(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
-        await(TestUpdateDeregistrationService.updateDereg) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
+        TestUpdateDeregistrationService.updateDereg.futureValue shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
       }
     }
   }

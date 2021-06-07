@@ -22,7 +22,7 @@ import services.WipeRedundantDataService
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockWipeRedundantDataService extends TestUtil with MockFactory {
 
@@ -31,6 +31,6 @@ trait MockWipeRedundantDataService extends TestUtil with MockFactory {
   def setupMockWipeRedundantData(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit = {
     (mockWipeRedundantDataService.wipeRedundantData(_: User[_], _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *)
-      .returns(response)
+      .returns(Future.successful(response))
   }
 }

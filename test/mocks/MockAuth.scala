@@ -36,6 +36,27 @@ trait MockAuth extends TestUtil with MockFactory with MockCustomerDetailsService
   lazy val mockAuthConnector: AuthConnector = mock[AuthConnector]
   lazy val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
 
+  lazy val authorisedAgentEnrolment: Enrolments = Enrolments(
+    Set(
+      Enrolment(
+        "HMRC-AS-AGENT",
+        Seq(EnrolmentIdentifier("AgentReferenceNumber", arn)),
+        "Activated",
+        Some("mtd-vat-auth")
+      )
+    )
+  )
+
+  lazy val unauthorisedAgentEnrolment: Enrolments = Enrolments(
+    Set(
+      Enrolment(
+        "OTHER-ENROLMENT",
+        Seq(EnrolmentIdentifier("", "")),
+        "Activated"
+      )
+    )
+  )
+
   lazy val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
   lazy val mockAuthoriseAsAgent: AuthoriseAsAgent = new AuthoriseAsAgent(mockEnrolmentsAuthService, serviceErrorHandler, mcc, mockConfig)
   lazy val mockAuthPredicate: AuthPredicate = new AuthPredicate(unauthorised,
@@ -46,18 +67,30 @@ trait MockAuth extends TestUtil with MockFactory with MockCustomerDetailsService
                                                                 mcc)(
                                                                 mockConfig)
 
-  def mockAuthResult(authResponse: AuthResponse, isAgent: Boolean = false): Unit = {
+  def mockAuthResult(authResponse: AuthResponse, isAgent: Boolean = false, isUnauthorisedAgent: Boolean = false): Unit = {
 
     (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *, *)
       .returns(authResponse)
 
     if (isAgent) {
-      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
-        .expects(*, *, *, *)
-        .returns(authResponse.b)
+      isUnauthorisedAgent match {
+        case true => {
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(Future.successful(unauthorisedAgentEnrolment))
+        }
+        case false => {
+          (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+            .expects(*, *, *, *)
+            .returns(Future.successful(authorisedAgentEnrolment))
+        }
+      }
+
     }
   }
+
+
 
   val mockAuthorisedIndividual: AuthResponse = Future.successful(
     new ~(Some(AffinityGroup.Individual),
@@ -70,16 +103,7 @@ trait MockAuth extends TestUtil with MockFactory with MockCustomerDetailsService
 
   val mockAuthorisedAgent: AuthResponse = Future.successful(
     new ~(Some(AffinityGroup.Agent),
-      Enrolments(
-        Set(
-          Enrolment(
-            "HMRC-AS-AGENT",
-            Seq(EnrolmentIdentifier("AgentReferenceNumber", arn)),
-            "Activated",
-            Some("mtd-vat-auth")
-          )
-        )
-      )
+      authorisedAgentEnrolment
     )
   )
 
@@ -99,15 +123,7 @@ trait MockAuth extends TestUtil with MockFactory with MockCustomerDetailsService
 
   val mockUnauthorisedAgent: AuthResponse = Future.successful(
     new ~(Some(AffinityGroup.Agent),
-      Enrolments(
-        Set(
-          Enrolment(
-            "OTHER-ENROLMENT",
-            Seq(EnrolmentIdentifier("", "")),
-            "Activated"
-          )
-        )
-      )
+      unauthorisedAgentEnrolment
     )
   )
 

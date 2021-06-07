@@ -26,8 +26,6 @@ import play.api.test.Helpers._
 import services.mocks.MockZeroRatedSuppliesValueService
 import views.html.ZeroRatedSupplies
 
-import scala.concurrent.Future
-
 class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRatedSuppliesValueService {
 
   lazy val zeroRatedSupplies: ZeroRatedSupplies = injector.instanceOf[ZeroRatedSupplies]
@@ -57,7 +55,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
 
             "return 200 (OK)" in {
               setupMockGetZeroRatedSupplies(Right(None))
-              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              mockAuthResult(mockAuthorisedIndividual)
               status(result) shouldBe Status.OK
             }
 
@@ -73,7 +71,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
 
           "return 200 (OK)" in {
             setupMockGetZeroRatedSupplies(Right(Some(testZeroRatedSuppliesModel)))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.OK
           }
 
@@ -98,7 +96,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
 
             "return 303 (SEE_OTHER)" in {
               setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Right(DeregisterVatSuccess))
-              mockAuthResult(Future.successful(mockAuthorisedIndividual))
+              mockAuthResult(mockAuthorisedIndividual)
               status(result) shouldBe Status.SEE_OTHER
             }
 
@@ -115,7 +113,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
           lazy val result = TestZeroRatedSuppliesController.submit()(request)
 
           "return a 400" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.BAD_REQUEST
           }
         }
@@ -128,7 +126,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
 
           "return a 500" in {
             setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Left(errorModel))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }

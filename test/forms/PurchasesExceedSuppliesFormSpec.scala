@@ -18,10 +18,12 @@ package forms
 
 import forms.PurchasesExceedSuppliesForm._
 import models.{No, Yes}
+import org.scalatest.OptionValues
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.data.FormError
-import uk.gov.hmrc.play.test.UnitSpec
 
-class PurchasesExceedSuppliesFormSpec extends UnitSpec {
+class PurchasesExceedSuppliesFormSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   "PurchasesExceedSuppliesForm" should {
 

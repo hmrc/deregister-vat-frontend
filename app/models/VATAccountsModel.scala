@@ -42,8 +42,10 @@ object VATAccountsModel {
 
 object StandardAccounting extends VATAccountsModel {
   override val value = "standard"
+  implicit val writes: Writes[StandardAccounting.type] = Writes { _ => Json.obj("accountingMethod" -> value)}
 }
 
 object CashAccounting extends VATAccountsModel {
   override val value = "cash"
+  implicit val writes: Writes[CashAccounting.type] = Writes { _ => Json.obj("accountingMethod" -> value)}
 }

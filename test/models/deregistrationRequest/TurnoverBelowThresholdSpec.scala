@@ -17,10 +17,12 @@
 package models.deregistrationRequest
 
 import assets.constants.TurnoverBelowThresholdTestConstants._
+import org.scalatest.OptionValues
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 import play.api.libs.json.Json
-import uk.gov.hmrc.play.test.UnitSpec
 
-class TurnoverBelowThresholdSpec extends UnitSpec {
+class TurnoverBelowThresholdSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   "TurnoverBelowThreshold" when {
 

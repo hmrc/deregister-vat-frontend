@@ -16,13 +16,13 @@
 
 package connectors.httpParsers
 
+import assets.constants.CustomerDetailsTestConstants.{customerDetailsJsonMin, customerDetailsMin}
 import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads
 import models.ErrorModel
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
 import utils.TestUtil
-import assets.constants.CustomerDetailsTestConstants.{customerDetailsJsonMin, customerDetailsMin}
 
 class CustomerDetailsHttpParserSpec extends TestUtil {
 

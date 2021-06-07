@@ -19,18 +19,20 @@ package services.mocks
 import models._
 import services.StocksAnswerService
 
+import scala.concurrent.Future
+
 trait MockStocksAnswerService extends MockStoredAnswersService {
 
   val mockStocksAnswerService: StocksAnswerService = mock[StocksAnswerService]
 
   def setupMockGetStocks(response: Either[ErrorModel, Option[YesNoAmountModel]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockStocksAnswerService)(response)
+    setupMockGetAnswers(mockStocksAnswerService)(Future.successful(response))
 
   def setupMockStoreStocks(data: YesNoAmountModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockStocksAnswerService)(data)(response)
+    setupMockStoreAnswers(mockStocksAnswerService)(data)(Future.successful(response))
 
   def setupMockDeleteStocks(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockStocksAnswerService)(response)
+    setupMockDeleteAnswer(mockStocksAnswerService)(Future.successful(response))
 
   def setupMockDeleteStocksNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockStocksAnswerService)

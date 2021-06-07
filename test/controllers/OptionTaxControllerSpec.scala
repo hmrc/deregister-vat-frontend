@@ -27,7 +27,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.MockOptionTaxAnswerService
 import views.html.OptionTax
 
-import scala.concurrent.Future
 
 class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswerService {
 
@@ -58,7 +57,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
 
         "return 200 (OK)" in {
           setupMockGetOptionTax(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -74,7 +73,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
 
         "return 200 (OK)" in {
           setupMockGetOptionTax(Right(Some(testYesModel)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -108,7 +107,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreOptionTax(testYesModel)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -125,7 +124,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreOptionTax(testNoModel)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -142,7 +141,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
 
         "return 500 (ISE)" in {
           setupMockStoreOptionTax(testNoModel)(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -154,7 +153,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 

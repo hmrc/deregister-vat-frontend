@@ -17,8 +17,9 @@
 package services
 
 import connectors.DeregisterVatConnector
-import javax.inject.{Inject, Singleton}
 import models.WhyTurnoverBelowModel
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton()
 class WhyTurnoverBelowAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[WhyTurnoverBelowModel] {

@@ -23,7 +23,7 @@ import services.CheckAnswersService
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockCheckAnswersService extends TestUtil with MockFactory {
 
@@ -32,6 +32,6 @@ trait MockCheckAnswersService extends TestUtil with MockFactory {
   def setupMockCheckYourAnswersModel(response: Either[ErrorModel, CheckYourAnswersModel])(implicit user: User[_]): Unit = {
     (mockCheckAnswersService.checkYourAnswersModel()(_: User[_], _: Messages, _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *, *)
-      .returns(response)
+      .returns(Future.successful(response))
   }
 }

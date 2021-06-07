@@ -26,7 +26,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks._
 import views.html.IssueNewInvoices
 
-import scala.concurrent.Future
 
 class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockIssueNewInvoicesAnswerService {
 
@@ -54,7 +53,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
 
         "return 200 (OK)" in {
           setupMockGetIssueNewInvoices(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -70,7 +69,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
 
         "return 200 (OK)" in {
           setupMockGetIssueNewInvoices(Right(Some(Yes)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -101,7 +100,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
             setupMockStoreIssueNewInvoices(Yes)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -119,7 +118,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
             setupMockStoreIssueNewInvoices(No)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -138,7 +137,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
           setupMockStoreIssueNewInvoices(Yes)(Right(DeregisterVatSuccess))
           setupMockWipeRedundantData(Left(errorModel))
 
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -151,7 +150,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
 
         "return 500 (ISE)" in {
           setupMockStoreIssueNewInvoices(No)(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -163,7 +162,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         lazy val result = TestIssueNewInvoicesController.submit()(request)
 
         "return 400 (BAD REQUEST)" in {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 

@@ -26,7 +26,6 @@ import play.api.test.Helpers._
 import services.mocks.{MockTaxableTurnoverAnswerService, MockWipeRedundantDataService}
 import views.html.TaxableTurnover
 
-import scala.concurrent.Future
 
 class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockTaxableTurnoverAnswerService {
 
@@ -54,7 +53,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
         "return 200 (OK)" in {
           setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -70,7 +69,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
         "return 200 (OK)" in {
           setupMockGetTaxableTurnover(Right(Some(No)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -103,7 +102,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
             setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -124,7 +123,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
             setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -145,7 +144,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
             setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
 
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -162,7 +161,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
           "return 500 (ISE)" in {
             setupMockStoreTaxableTurnover(No)(Left(errorModel))
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
@@ -174,7 +173,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
           lazy val result = TestTaxableTurnoverController.submit()(request)
 
           "return 400 (BAD REQUEST)" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.BAD_REQUEST
           }
 
@@ -195,7 +194,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
           setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
           setupMockWipeRedundantData(Left(errorModel))
 
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }

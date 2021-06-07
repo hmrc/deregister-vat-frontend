@@ -17,8 +17,9 @@
 package services
 
 import connectors.DeregisterVatConnector
-import javax.inject.Inject
 import models.YesNo
+
+import javax.inject.Inject
 
 class OutstandingInvoicesAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector)
   extends StoredAnswersService[YesNo] {

@@ -17,10 +17,11 @@
 package controllers
 
 import config.AppConfig
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
+import javax.inject.Inject
 
 
 

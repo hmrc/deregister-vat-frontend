@@ -18,28 +18,25 @@ package helpers
 
 import common.SessionKeys
 import config.AppConfig
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, GivenWhenThen, TestSuite}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.data.Form
 import play.api.http.HeaderNames
 import play.api.i18n.{Lang, Messages, MessagesApi}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.{Application, Environment, Mode}
 import stubs.{AuthStub, VatSubscriptionStub}
-import uk.gov.hmrc.play.test.UnitSpec
 
-trait IntegrationBaseSpec extends UnitSpec
+trait IntegrationBaseSpec extends CustomMatchers
   with WireMockHelper
   with GuiceOneServerPerSuite
-  with TestSuite
   with BeforeAndAfterEach
-  with BeforeAndAfterAll
-  with GivenWhenThen
-  with CustomMatchers {
+  with BeforeAndAfterAll {
 
-  val mockHost: String = WireMockHelper.host
-  val mockPort: String = WireMockHelper.wmPort.toString
+  val mockHost: String = host
+  val mockPort: String = wmPort.toString
   val appRouteContext: String = "/vat-through-software/account/cancel-vat"
 
   implicit lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]

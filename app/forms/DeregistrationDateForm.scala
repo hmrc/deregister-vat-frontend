@@ -16,13 +16,13 @@
 
 package forms
 
-import java.time.LocalDate
-
 import forms.DateForm.{day, formatter, month, year}
 import models.DateModel
 import play.api.data.Form
 import play.api.data.Forms.{mapping, of}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationResult}
+
+import java.time.LocalDate
 
 object DeregistrationDateForm {
 

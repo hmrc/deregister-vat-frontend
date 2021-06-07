@@ -19,18 +19,20 @@ package services.mocks
 import models._
 import services.DeregReasonAnswerService
 
+import scala.concurrent.Future
+
 trait MockDeregReasonAnswerService extends MockStoredAnswersService {
 
   val mockDeregReasonAnswerService: DeregReasonAnswerService = mock[DeregReasonAnswerService]
 
   def setupMockGetDeregReason(response: Either[ErrorModel, Option[DeregistrationReason]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockDeregReasonAnswerService)(response)
+    setupMockGetAnswers(mockDeregReasonAnswerService)(Future.successful(response))
 
   def setupMockStoreDeregReason(data: DeregistrationReason)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockDeregReasonAnswerService)(data)(response)
+    setupMockStoreAnswers(mockDeregReasonAnswerService)(data)(Future.successful(response))
 
   def setupMockDeleteDeregReason(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockDeregReasonAnswerService)(response)
+    setupMockDeleteAnswer(mockDeregReasonAnswerService)(Future.successful(response))
 
   def setupMockDeleteDeregReasonNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockDeregReasonAnswerService)

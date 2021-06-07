@@ -18,12 +18,12 @@ package connectors
 
 import _root_.mocks.MockHttp
 import assets.constants.BaseTestConstants.{vrn, _}
-import models._
-import utils.TestUtil
 import assets.constants.CustomerDetailsTestConstants.customerDetailsJsonMin
-import models.CustomerDetails
-import models.deregistrationRequest.DeregistrationInfo
 import assets.constants.DateModelTestConstants._
+import models.{CustomerDetails, _}
+import models.deregistrationRequest.DeregistrationInfo
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import utils.TestUtil
 
 import scala.concurrent.Future
 
@@ -54,13 +54,13 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
       "A valid response is parsed" should {
 
         "return a DeregisterVatSuccess object if a valid response is parsed" in {
-          setupMockHttpPut[DeregistrationInfo](TestVatSubscriptionConnector.url(vrn), deregInfoModel)(Right(DeregisterVatSuccess))
-          await(TestVatSubscriptionConnector.submit(vrn, deregInfoModel)) shouldBe Right(DeregisterVatSuccess)
+          setupMockHttpPut[DeregistrationInfo](TestVatSubscriptionConnector.url(vrn), deregInfoModel)(Future.successful(Right(DeregisterVatSuccess)))
+          TestVatSubscriptionConnector.submit(vrn, deregInfoModel).futureValue shouldBe Right(DeregisterVatSuccess)
         }
 
         "return an error model if an invalid response is parsed" in {
-          setupMockHttpPut[DeregistrationInfo](TestVatSubscriptionConnector.url(vrn), deregInfoModel)(Left(errorModel))
-          await(TestVatSubscriptionConnector.submit(vrn, deregInfoModel)) shouldBe Left(errorModel)
+          setupMockHttpPut[DeregistrationInfo](TestVatSubscriptionConnector.url(vrn), deregInfoModel)(Future.successful(Left(errorModel)))
+          TestVatSubscriptionConnector.submit(vrn, deregInfoModel).futureValue shouldBe Left(errorModel)
         }
       }
 
@@ -71,16 +71,16 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
         "called for a Right with CustomerDetails" should {
 
           "return a CustomerDetailsModel" in {
-            setupMockHttpGet(TestVatSubscriptionConnector.getFullDetailsUrl(vrn))(Right(customerDetailsJsonMin))
-            await(result) shouldBe Right(customerDetailsJsonMin)
+            setupMockHttpGet(TestVatSubscriptionConnector.getFullDetailsUrl(vrn))(Future.successful(Right(customerDetailsJsonMin)))
+            result.futureValue shouldBe Right(customerDetailsJsonMin)
           }
         }
 
         "given an error should" should {
 
           "return a Left with an ErrorModel" in {
-            setupMockHttpGet(TestVatSubscriptionConnector.getFullDetailsUrl(vrn))(Left(errorModel))
-            await(result) shouldBe Left(errorModel)
+            setupMockHttpGet(TestVatSubscriptionConnector.getFullDetailsUrl(vrn))(Future.successful(Left(errorModel)))
+            result.futureValue shouldBe Left(errorModel)
           }
         }
       }

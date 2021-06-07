@@ -21,6 +21,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.http.Status
 import play.api.mvc.{Action, AnyContent, Request, Result}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
 import uk.gov.hmrc.auth.core.{InsufficientEnrolments, MissingBearerToken}
 import utils.TestUtil
 
@@ -56,5 +57,5 @@ trait ControllerBaseSpec extends TestUtil with MockAuth with MockDeniedAccessPre
     }
   }
 
-  def document(result: Future[Result]): Document = Jsoup.parse(bodyOf(result))
+  def document(result: Future[Result]): Document = Jsoup.parse(contentAsString(result))
 }

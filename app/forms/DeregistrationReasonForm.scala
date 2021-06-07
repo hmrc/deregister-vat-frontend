@@ -17,9 +17,9 @@
 package forms
 
 import models._
-import play.api.data.{Form, FormError}
 import play.api.data.Forms._
 import play.api.data.format.Formatter
+import play.api.data.{Form, FormError}
 
 object DeregistrationReasonForm {
 

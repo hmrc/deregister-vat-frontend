@@ -17,10 +17,10 @@
 package services
 
 import connectors.VatSubscriptionConnector
-import javax.inject.{Inject, Singleton}
 import models.{CustomerDetails, ErrorModel}
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

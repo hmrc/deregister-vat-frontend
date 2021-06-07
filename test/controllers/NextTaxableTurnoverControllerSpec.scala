@@ -25,7 +25,6 @@ import play.api.test.Helpers._
 import services.mocks.{MockBusinessActivityAnswerService, MockDeregReasonAnswerService, MockNextTaxableTurnoverAnswerService, MockTaxableTurnoverAnswerService}
 import views.html.NextTaxableTurnover
 
-import scala.concurrent.Future
 
 class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
   with MockTaxableTurnoverAnswerService
@@ -63,7 +62,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
           setupMockGetBusinessActivityAnswer(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -80,7 +79,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
           setupMockGetBusinessActivityAnswer(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -101,7 +100,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
           setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -125,7 +124,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
           setupMockGetBusinessActivityAnswer(Right(Some(No)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -149,7 +148,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
           setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -173,7 +172,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "return 500 (ISE)" in {
           setupMockGetNextTaxableTurnover(Left(errorModel))
           setupMockGetBusinessActivityAnswer(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
 
@@ -202,7 +201,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
           setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
 
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -224,7 +223,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
 
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -245,7 +244,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           setupMockGetTaxableTurnover(Right(Some(Yes)))
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -266,7 +265,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockGetTaxableTurnover(Right(Some(No)))
           setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -287,7 +286,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           setupMockGetDeregReason(Right(Some(ZeroRated)))
           setupMockGetTaxableTurnover(Right(Some(No)))
           setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -308,7 +307,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           setupMockGetTaxableTurnover(Right(None))
           setupMockGetDeregReason(Right(Some(ZeroRated)))
           setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -325,7 +324,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 500 (ISE)" in {
           setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -339,7 +338,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetBusinessActivityAnswer(Right(Some(No)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 
@@ -362,7 +361,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 
@@ -384,7 +383,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 500 (ISE)" in {
           setupMockGetBusinessActivityAnswer(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
 
@@ -403,7 +402,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "return 500 (ISE)" in {
           setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }

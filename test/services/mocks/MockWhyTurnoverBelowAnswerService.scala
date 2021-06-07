@@ -19,18 +19,20 @@ package services.mocks
 import models._
 import services.WhyTurnoverBelowAnswerService
 
+import scala.concurrent.Future
+
 trait MockWhyTurnoverBelowAnswerService extends MockStoredAnswersService {
 
   val mockWhyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService = mock[WhyTurnoverBelowAnswerService]
 
   def setupMockGetWhyTurnoverBelow(response: Either[ErrorModel, Option[WhyTurnoverBelowModel]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockWhyTurnoverBelowAnswerService)(response)
+    setupMockGetAnswers(mockWhyTurnoverBelowAnswerService)(Future.successful(response))
 
   def setupMockStoreWhyTurnoverBelow(data: WhyTurnoverBelowModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockWhyTurnoverBelowAnswerService)(data)(response)
+    setupMockStoreAnswers(mockWhyTurnoverBelowAnswerService)(data)(Future.successful(response))
 
   def setupMockDeleteWhyTurnoverBelow(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockWhyTurnoverBelowAnswerService)(response)
+    setupMockDeleteAnswer(mockWhyTurnoverBelowAnswerService)(Future.successful(response))
 
   def setupMockDeleteWhyTurnoverBelowNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockWhyTurnoverBelowAnswerService)

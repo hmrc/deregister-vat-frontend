@@ -18,9 +18,11 @@ package forms
 
 import forms.YesNoForm._
 import models.{No, Yes}
-import uk.gov.hmrc.play.test.UnitSpec
+import org.scalatest.OptionValues
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpecLike
 
-class YesNoFormSpec extends UnitSpec {
+class YesNoFormSpec extends AnyWordSpecLike with Matchers with OptionValues {
 
   "YesNoForm" should {
 

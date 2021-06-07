@@ -27,8 +27,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockBusinessActivityAnswerService, MockDeleteAllStoredAnswersService, MockWipeRedundantDataService}
 import views.html.BusinessActivity
 
-import scala.concurrent.Future
-
 class BusinessActivityControllerSpec extends ControllerBaseSpec
   with MockDeleteAllStoredAnswersService
   with MockBusinessActivityAnswerService
@@ -58,7 +56,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       "return a 200" in {
 
         setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.OK
       }
 
@@ -75,7 +73,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       "return a 200" in {
 
         setupMockGetBusinessActivityAnswer(Right(Some(No)))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.OK
       }
 
@@ -92,7 +90,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       "return a 200" in {
 
         setupMockGetBusinessActivityAnswer(Right(None))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.OK
       }
 
@@ -107,7 +105,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       "return a 303" in {
         lazy val result = TestController.show()(request)
-        mockAuthResult(Future.successful(mockUnauthorisedIndividual))
+        mockAuthResult(mockUnauthorisedIndividual)
         status(result) shouldBe Status.FORBIDDEN
       }
     }
@@ -121,7 +119,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       "return 303 " in {
         setupMockStoreBusinessActivityAnswer(Yes)(Right(DeregisterVatSuccess))
         setupMockWipeRedundantData(Right(DeregisterVatSuccess))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.SEE_OTHER
       }
 
@@ -139,7 +137,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       "return 303 " in {
         setupMockStoreBusinessActivityAnswer(No)(Right(DeregisterVatSuccess))
         setupMockWipeRedundantData(Right(DeregisterVatSuccess))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.SEE_OTHER
       }
 
@@ -156,7 +154,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       lazy val result = TestController.submit()(request)
 
       "return a 400" in {
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.BAD_REQUEST
       }
     }
@@ -169,7 +167,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       "return a 500" in {
         setupMockStoreBusinessActivityAnswer(No)(Left(errorModel))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }

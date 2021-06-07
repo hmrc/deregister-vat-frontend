@@ -19,17 +19,16 @@ package services
 import audit.models.DeregAuditModel
 import cats.data.EitherT
 import cats.instances.future._
+import common.SessionKeys
 import config.AppConfig
 import connectors.VatSubscriptionConnector
-import javax.inject.Inject
-
-import common.SessionKeys
 import models._
 import models.deregistrationRequest.DeregistrationInfo
 import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregReasonAnswerService,

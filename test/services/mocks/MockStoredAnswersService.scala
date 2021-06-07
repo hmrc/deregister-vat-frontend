@@ -23,12 +23,12 @@ import services.StoredAnswersService
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockStoredAnswersService extends TestUtil with MockFactory {
 
   def setupMockGetAnswers[T](mockStoredAnswersService: StoredAnswersService[T])
-                         (response: Either[ErrorModel, Option[T]])
+                         (response: Future[Either[ErrorModel, Option[T]]])
                          (implicit user: User[_]): Unit = {
     (mockStoredAnswersService.getAnswer(_: User[_], _: Format[T], _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *, *)
@@ -37,7 +37,7 @@ trait MockStoredAnswersService extends TestUtil with MockFactory {
 
   def setupMockStoreAnswers[T](mockStoredAnswersService: StoredAnswersService[T])
                            (data: T)
-                           (response: Either[ErrorModel, DeregisterVatResponse])
+                           (response: Future[Either[ErrorModel, DeregisterVatResponse]])
                            (implicit user: User[_]): Unit = {
     (mockStoredAnswersService.storeAnswer(_: T)(_: User[_], _: Format[T], _: HeaderCarrier, _: ExecutionContext))
       .expects(data, user, *, *, *)
@@ -45,7 +45,7 @@ trait MockStoredAnswersService extends TestUtil with MockFactory {
   }
 
   def setupMockDeleteAnswer[T](mockStoredAnswersService: StoredAnswersService[T])
-                           (response: Either[ErrorModel, DeregisterVatResponse])
+                           (response: Future[Either[ErrorModel, DeregisterVatResponse]])
                            (implicit user: User[_]): Unit = {
     (mockStoredAnswersService.deleteAnswer(_: User[_], _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *)

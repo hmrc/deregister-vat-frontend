@@ -17,9 +17,9 @@
 package forms
 
 import models.{No, Yes, YesNo}
-import play.api.data.{Form, FormError}
 import play.api.data.Forms.{of, single}
 import play.api.data.format.Formatter
+import play.api.data.{Form, FormError}
 
 object PurchasesExceedSuppliesForm {
 

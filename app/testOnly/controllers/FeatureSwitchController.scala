@@ -17,13 +17,14 @@
 package testOnly.controllers
 
 import config.AppConfig
-import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import testOnly.forms.FeatureSwitchForm
 import testOnly.models.FeatureSwitchModel
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import testOnly.views.html.FeatureSwitch
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
+import javax.inject.Inject
 
 class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
                                         val mcc: MessagesControllerComponents,

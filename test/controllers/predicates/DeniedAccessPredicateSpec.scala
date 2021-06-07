@@ -17,13 +17,16 @@
 package controllers.predicates
 
 import assets.constants.BaseTestConstants.vrn
+import assets.constants.CustomerDetailsTestConstants._
 import common.{Constants, SessionKeys}
 import mocks.MockAuth
 import models.{ErrorModel, User}
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import play.api.test.FakeRequest
-import services.mocks.MockCustomerDetailsService
 import play.api.test.Helpers._
-import assets.constants.CustomerDetailsTestConstants._
+import services.mocks.MockCustomerDetailsService
+
+import scala.concurrent.Future
 
 class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService {
 
@@ -48,7 +51,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
         "the user is a principal entity" should {
           lazy val result = {
-            await(mockRegStatusPredicate.refine(User(vrn)(fakeRequest))).left.get
+            Future.successful(mockRegStatusPredicate.refine(User(vrn)(fakeRequest)).futureValue.left.get)
           }
 
           "return SEE_OTHER" in {
@@ -62,7 +65,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
         "the user is an agent" should {
           lazy val result = {
-            await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(fakeRequest))).left.get
+            Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(fakeRequest)).futureValue.left.get)
           }
 
           "return SEE_OTHER" in {
@@ -84,7 +87,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
         "the user is a principal entity" should {
 
           lazy val result = {
-            await(mockRegStatusPredicate.refine(User(vrn)(fakeRequest))).left.get
+            Future.successful(mockRegStatusPredicate.refine(User(vrn)(fakeRequest)).futureValue.left.get)
           }
 
           "return SEE_OTHER" in {
@@ -98,7 +101,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
         "the user is an agent" should {
           lazy val result = {
-            await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(fakeRequest))).left.get
+            Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(fakeRequest)).futureValue.left.get)
           }
 
           "return SEE_OTHER" in {
@@ -118,7 +121,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
         )
 
         lazy val result = {
-          await(mockRegStatusPredicate.refine(User(vrn)(fakeRequest)))
+          mockRegStatusPredicate.refine(User(vrn)(fakeRequest)).futureValue
         }
 
         "allow the request through" in {
@@ -137,7 +140,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsVatGroup))
-              await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
+              Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.left.get)
             }
 
             "return SEE_OTHER" in {
@@ -153,7 +156,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsVatGroup))
-              await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request))).left.get
+              Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request)).futureValue.left.get)
             }
 
             "return SEE_OTHER" in {
@@ -173,7 +176,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsPendingDereg))
-              await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
+              Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.left.get)
             }
 
             "add 'registrationStatus' = pending to session" in {
@@ -193,7 +196,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsPendingDereg))
-              await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request))).left.get
+              Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request)).futureValue.left.get)
             }
 
             "add 'registrationStatus' = pending to session" in {
@@ -216,7 +219,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsAlreadyDeregistered))
-              await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
+              Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.left.get)
             }
 
             "add 'registrationStatus' = deregistered to session" in {
@@ -236,7 +239,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsAlreadyDeregistered))
-              await(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request))).left.get
+              Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request)).futureValue.left.get)
             }
 
             "add 'registrationStatus' = deregistered to session" in {
@@ -257,7 +260,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
           lazy val result = {
             setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-            await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
+            Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.left.get)
           }
 
           "add 'registrationStatus' = registered to session" in {
@@ -278,7 +281,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
         lazy val result = {
           setupMockCustomerDetails(vrn)(Left(ErrorModel(1, "")))
-          await(mockRegStatusPredicate.refine(User(vrn)(request))).left.get
+          Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.left.get)
         }
 
         "return INTERNAL_SERVER_ERROR" in {

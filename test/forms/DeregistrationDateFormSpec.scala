@@ -16,12 +16,12 @@
 
 package forms
 
-import java.time.LocalDate
-
 import _root_.utils.TestUtil
 import assets.messages.CommonMessages
 import models.DateModel
 import play.api.i18n.Messages
+
+import java.time.LocalDate
 
 class DeregistrationDateFormSpec extends TestUtil {
 

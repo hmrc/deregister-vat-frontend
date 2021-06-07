@@ -16,8 +16,22 @@
 
 package utils
 
-import akka.actor.ActorSystem
+import org.slf4j.{Logger, LoggerFactory}
+import play.api.{LoggerLike, MarkerContext}
 
-trait MaterializerSupport {
-  implicit val system = ActorSystem("Sys")
+trait LoggerUtil {
+
+  lazy val className: String = this.getClass.getSimpleName.stripSuffix("$")
+
+  val logger = new LoggerLike {
+
+    override val logger: Logger = LoggerFactory.getLogger(s"application.$className")
+
+    override def debug(message: => String)(implicit mc: MarkerContext): Unit = super.debug(message)
+
+    override def info(message: => String)(implicit mc: MarkerContext): Unit = super.info(message)
+
+    override def warn(message: => String)(implicit mc: MarkerContext): Unit = super.warn(message)
+
+  }
 }

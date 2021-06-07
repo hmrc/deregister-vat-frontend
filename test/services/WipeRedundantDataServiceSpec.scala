@@ -18,6 +18,7 @@ package services
 
 import models._
 import org.scalamock.scalatest.MockFactory
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import services.mocks._
 import utils.TestUtil
 
@@ -63,7 +64,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteChooseDeregDate(Right(DeregisterVatSuccess))
           setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
           val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
-          await(result) shouldBe Right(DeregisterVatSuccess)
+          result.futureValue shouldBe Right(DeregisterVatSuccess)
         }
       }
 
@@ -76,7 +77,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         "Not delete deregistration date answer" in {
           setupMockDeleteChooseDeregDateNotCalled()
           val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
-          await(result) shouldBe Right(DeregisterVatSuccess)
+          result.futureValue shouldBe Right(DeregisterVatSuccess)
         }
       }
 
@@ -90,7 +91,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteChooseDeregDateNotCalled()
 
           val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
-          await(result) shouldBe Right(DeregisterVatSuccess)
+          result.futureValue shouldBe Right(DeregisterVatSuccess)
         }
       }
 
@@ -104,7 +105,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteChooseDeregDateNotCalled()
 
           val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
-          await(result) shouldBe Right(DeregisterVatSuccess)
+          result.futureValue shouldBe Right(DeregisterVatSuccess)
         }
       }
     }
@@ -120,7 +121,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         setupMockDeleteChooseDeregDateNotCalled()
 
         val result = TestWipeRedundantDataService.wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices)
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
   }
@@ -135,7 +136,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         setupMockDeleteOutstandingInvoices(Right(DeregisterVatSuccess))
 
         val result = TestWipeRedundantDataService.wipeOutstandingInvoices(issueInvoices)
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
 
@@ -147,7 +148,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         setupMockDeleteOutstandingInvoicesNotCalled()
 
         val result = TestWipeRedundantDataService.wipeOutstandingInvoices(issueInvoices)
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
   }
@@ -162,7 +163,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         setupMockDeleteSicCodeAnswerServiceNotCalled()
 
         val result = TestWipeRedundantDataService.wipeSicCode(businessActivity)
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
 
@@ -174,7 +175,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
 
         val result = TestWipeRedundantDataService.wipeSicCode(businessActivity)
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
   }
@@ -198,7 +199,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
 
       }
 
@@ -221,7 +222,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
 
@@ -242,7 +243,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
     "Third deletion is unsuccessful" should {
@@ -262,7 +263,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
     "Fourth deletion is unsuccessful" should {
@@ -282,7 +283,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
     "Fifth deletion is unsuccessful" should {
@@ -302,7 +303,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
     "Sixth deletion is unsuccessful" should {
@@ -322,7 +323,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
     "Seventh deletion is unsuccessful" should {
@@ -342,7 +343,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForCeasedTradingJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
   }
@@ -363,7 +364,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
 
@@ -382,7 +383,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
 
@@ -400,7 +401,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
 
@@ -418,7 +419,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
 
@@ -436,7 +437,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
 
@@ -454,7 +455,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeDataReadyForBelowThresholdJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
   }
@@ -471,7 +472,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
 
@@ -485,7 +486,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteTaxableTurnoverNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
 
@@ -499,7 +500,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteTaxableTurnoverNotCalled()
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
 
@@ -514,7 +515,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           setupMockDeleteTaxableTurnover(Left(errorModel))
         }
         val result = TestWipeRedundantDataService.wipeDataReadyForZeroRatedJourney
-        await(result) shouldBe Left(errorModel)
+        result.futureValue shouldBe Left(errorModel)
       }
     }
 
@@ -542,7 +543,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
 
@@ -562,7 +563,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
 
@@ -579,7 +580,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
         }
 
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
 
@@ -588,7 +589,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
       "Perform no deletions" in {
         val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(None)
-        await(result) shouldBe Right(DeregisterVatSuccess)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
       }
     }
   }
@@ -623,7 +624,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
-            await(result) shouldBe Right(DeregisterVatSuccess)
+            result.futureValue shouldBe Right(DeregisterVatSuccess)
           }
         }
 
@@ -647,7 +648,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
-            await(result) shouldBe Right(DeregisterVatSuccess)
+            result.futureValue shouldBe Right(DeregisterVatSuccess)
           }
 
         }
@@ -670,7 +671,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
-            await(result) shouldBe Right(DeregisterVatSuccess)
+            result.futureValue shouldBe Right(DeregisterVatSuccess)
           }
 
         }
@@ -694,7 +695,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
-            await(result) shouldBe Right(DeregisterVatSuccess)
+            result.futureValue shouldBe Right(DeregisterVatSuccess)
           }
 
         }
@@ -719,7 +720,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
-            await(result) shouldBe Left(errorModel)
+            result.futureValue shouldBe Left(errorModel)
           }
         }
       "a data deletion for Dereg Date is unsuccessful" should {
@@ -746,7 +747,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
-          await(result) shouldBe Left(errorModel)
+          result.futureValue shouldBe Left(errorModel)
         }
       }
 
@@ -761,7 +762,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
-          await(result) shouldBe Left(errorModel)
+          result.futureValue shouldBe Left(errorModel)
         }
       }
       "reason is Capital Assets" should {
@@ -773,7 +774,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
-          await(result) shouldBe Left(errorModel)
+          result.futureValue shouldBe Left(errorModel)
         }
       }
       "reason is Issue Invoices" should {
@@ -786,7 +787,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
-          await(result) shouldBe Left(errorModel)
+          result.futureValue shouldBe Left(errorModel)
         }
       }
       "reason is Outstanding Invoices" should {
@@ -800,7 +801,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
-          await(result) shouldBe Left(errorModel)
+          result.futureValue shouldBe Left(errorModel)
         }
       }
       "reason is business activity" should {
@@ -815,7 +816,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
           }
 
           val result = TestWipeRedundantDataService.wipeRedundantData
-          await(result) shouldBe Left(errorModel)
+          result.futureValue shouldBe Left(errorModel)
         }
       }
     }

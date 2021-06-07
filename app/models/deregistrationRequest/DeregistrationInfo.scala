@@ -16,11 +16,11 @@
 
 package models.deregistrationRequest
 
-import java.time.LocalDate
-
 import models.{ZeroRated => ZeroRatedDeregReason, _}
 import play.api.libs.functional.syntax._
 import play.api.libs.json._
+
+import java.time.LocalDate
 
 case class DeregistrationInfo(deregReason: DeregistrationReason,
                               deregDate: LocalDate,

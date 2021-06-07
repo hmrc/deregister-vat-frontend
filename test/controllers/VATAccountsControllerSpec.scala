@@ -26,7 +26,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockAccountingMethodAnswerService, MockDeregReasonAnswerService, MockTaxableTurnoverAnswerService}
 import views.html.VatAccounts
 
-import scala.concurrent.Future
 
 class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMethodAnswerService
                                 with MockDeregReasonAnswerService with MockTaxableTurnoverAnswerService {
@@ -58,7 +57,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
           setupMockGetDeregReason(Right(Some(Ceased)))
           setupMockGetAccountingMethod(Right(None))
           setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -76,7 +75,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
           setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -86,7 +85,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         }
 
         "have the correct value 'standard' for the accounting method" in {
-          Jsoup.parse(bodyOf(result)).select("#accountingMethod").hasAttr("checked") shouldBe true
+          Jsoup.parse(contentAsString(result)).select("#accountingMethod").hasAttr("checked") shouldBe true
         }
       }
 
@@ -98,7 +97,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
           setupMockGetDeregReason(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
           setupMockGetAccountingMethod(Right(Some(StandardAccounting)))
           setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -111,7 +110,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
           setupMockGetDeregReason(Right(Some(Ceased)))
           setupMockGetAccountingMethod(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
           setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -127,7 +126,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreAccountingMethod(StandardAccounting)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -144,7 +143,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreAccountingMethod(CashAccounting)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
@@ -162,7 +161,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         "return 400 (BAD REQUEST)" in {
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
           setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 
@@ -181,7 +180,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
         "return 400 (BAD REQUEST)" in {
           setupMockGetDeregReason(Left(ErrorModel(INTERNAL_SERVER_ERROR,"error")))
           setupMockGetTaxableTurnover(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -195,7 +194,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
       "return ISE (INTERNAL SERVER ERROR)" in {
         setupMockStoreAccountingMethod(CashAccounting)(Left(errorModel))
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }

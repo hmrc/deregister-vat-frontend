@@ -18,12 +18,13 @@ package config
 
 import config.features.Features
 import config.{ConfigKeys => Keys}
-import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.Call
 import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+
+import javax.inject.{Inject, Singleton}
 
 trait AppConfig {
   val reportAProblemPartialUrl: String

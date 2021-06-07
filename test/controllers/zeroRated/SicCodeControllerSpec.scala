@@ -25,8 +25,6 @@ import play.api.test.Helpers._
 import services.mocks.{MockBusinessActivityAnswerService, MockDeleteAllStoredAnswersService, MockSicCodeAnswerService}
 import views.html.SicCode
 
-import scala.concurrent.Future
-
 class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
                             with MockSicCodeAnswerService with MockBusinessActivityAnswerService {
 
@@ -52,7 +50,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.show()(request)
 
           "return a 200" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
             setupMockGetSicCode(Right(Some("12345")))
             status(result) shouldBe Status.OK
@@ -72,7 +70,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.show()(request)
 
           "return a 200" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
             setupMockGetSicCode(Right(None))
             status(result) shouldBe Status.OK
@@ -88,7 +86,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.show()(request)
 
           "return a 303" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             setupMockGetBusinessActivityAnswer(Right(None))
             setupMockGetSicCode(Right(None))
             status(result) shouldBe Status.SEE_OTHER
@@ -103,7 +101,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.show()(request)
 
           "return a 303" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             setupMockGetBusinessActivityAnswer(Right(Some(No)))
             setupMockGetSicCode(Right(None))
             status(result) shouldBe Status.SEE_OTHER
@@ -118,7 +116,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
 
         "return a 303" in {
           lazy val result = TestController.show()(request)
-          mockAuthResult(Future.successful(mockUnauthorisedIndividual))
+          mockAuthResult(mockUnauthorisedIndividual)
           status(result) shouldBe Status.FORBIDDEN
         }
       }
@@ -131,7 +129,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.submit()(request)
 
           "return a 303" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             setupMockStoreSicCode("12345")(Right(DeregisterVatSuccess))
             status(result) shouldBe Status.SEE_OTHER
           }
@@ -146,7 +144,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           lazy val result = TestController.submit()(request)
 
           "return a 303" in {
-            mockAuthResult(Future.successful(mockAuthorisedIndividual))
+            mockAuthResult(mockAuthorisedIndividual)
             status(result) shouldBe Status.BAD_REQUEST
           }
 

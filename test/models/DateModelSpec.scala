@@ -16,9 +16,9 @@
 
 package models
 
-import java.time.LocalDate
-
 import utils.TestUtil
+
+import java.time.LocalDate
 
 class DateModelSpec extends TestUtil {
 

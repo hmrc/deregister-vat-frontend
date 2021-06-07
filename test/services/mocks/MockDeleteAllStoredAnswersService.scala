@@ -22,7 +22,7 @@ import services.DeleteAllStoredAnswersService
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockDeleteAllStoredAnswersService extends TestUtil with MockFactory {
 
@@ -31,7 +31,7 @@ trait MockDeleteAllStoredAnswersService extends TestUtil with MockFactory {
   def setupMockDeleteAllStoredAnswers(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit = {
     (mockDeleteAllStoredAnswersService.deleteAllAnswers(_: User[_], _: HeaderCarrier, _: ExecutionContext))
       .expects(user, *, *)
-      .returns(response)
+      .returns(Future.successful(response))
   }
 
 }

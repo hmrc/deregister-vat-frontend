@@ -19,7 +19,10 @@ package connectors
 import _root_.mocks.MockHttp
 import assets.constants.BaseTestConstants.{vrn, _}
 import models._
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import utils.TestUtil
+
+import scala.concurrent.Future
 
 
 class DeregisterVatConnectorSpec extends TestUtil with MockHttp {
@@ -47,16 +50,16 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp {
       "A valid response is parsed" should {
 
         "return a valid model" in {
-          setupMockHttpGet[TestModel](TestDeregisterVatConnector.url(vrn, testKey))(Right(testModel))
-          await(TestDeregisterVatConnector.getAnswers[TestModel](vrn, testKey)) shouldBe Right(testModel)
+          setupMockHttpGet[TestModel](TestDeregisterVatConnector.url(vrn, testKey))(Future.successful(Right(testModel)))
+          TestDeregisterVatConnector.getAnswers[TestModel](vrn, testKey).futureValue shouldBe Right(testModel)
         }
       }
 
       "An error response is parsed" should {
 
         "return an error model" in {
-          setupMockHttpGet[TestModel](TestDeregisterVatConnector.url(vrn, testKey))(Left(errorModel))
-          await(TestDeregisterVatConnector.getAnswers[TestModel](vrn, testKey)) shouldBe Left(errorModel)
+          setupMockHttpGet[TestModel](TestDeregisterVatConnector.url(vrn, testKey))(Future.successful(Left(errorModel)))
+          TestDeregisterVatConnector.getAnswers[TestModel](vrn, testKey).futureValue shouldBe Left(errorModel)
         }
       }
     }
@@ -66,16 +69,16 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp {
       "A valid response is parsed" should {
 
         "return a DeregisterVatSuccess object" in {
-          setupMockHttpPut[TestModel](TestDeregisterVatConnector.url(vrn, testKey), testModel)(Right(DeregisterVatSuccess))
-          await(TestDeregisterVatConnector.putAnswers[TestModel](vrn, testKey, testModel)) shouldBe Right(DeregisterVatSuccess)
+          setupMockHttpPut[TestModel](TestDeregisterVatConnector.url(vrn, testKey), testModel)(Future.successful(Right(DeregisterVatSuccess)))
+          TestDeregisterVatConnector.putAnswers[TestModel](vrn, testKey, testModel).futureValue shouldBe Right(DeregisterVatSuccess)
         }
       }
 
       "An invalid response is parsed" should {
 
         "return an error model" in {
-          setupMockHttpPut[TestModel](TestDeregisterVatConnector.url(vrn, testKey), testModel)(Left(errorModel))
-          await(TestDeregisterVatConnector.putAnswers[TestModel](vrn, testKey, testModel)) shouldBe Left(errorModel)
+          setupMockHttpPut[TestModel](TestDeregisterVatConnector.url(vrn, testKey), testModel)(Future.successful(Left(errorModel)))
+          TestDeregisterVatConnector.putAnswers[TestModel](vrn, testKey, testModel).futureValue shouldBe Left(errorModel)
         }
       }
     }
@@ -85,16 +88,16 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp {
       "A valid response is parsed" should {
 
         "return a DeregisterVatSuccess object" in {
-          setupMockHttpDelete[TestModel](TestDeregisterVatConnector.url(vrn, testKey))(Right(DeregisterVatSuccess))
-          await(TestDeregisterVatConnector.deleteAnswer(vrn, testKey)) shouldBe Right(DeregisterVatSuccess)
+          setupMockHttpDelete[TestModel](TestDeregisterVatConnector.url(vrn, testKey))(Future.successful(Right(DeregisterVatSuccess)))
+          TestDeregisterVatConnector.deleteAnswer(vrn, testKey).futureValue shouldBe Right(DeregisterVatSuccess)
         }
       }
 
       "An invalid response is parsed" should {
 
         "return an error model" in {
-          setupMockHttpDelete[TestModel](TestDeregisterVatConnector.url(vrn, testKey))(Left(errorModel))
-          await(TestDeregisterVatConnector.deleteAnswer(vrn, testKey)) shouldBe Left(errorModel)
+          setupMockHttpDelete[TestModel](TestDeregisterVatConnector.url(vrn, testKey))(Future.successful(Left(errorModel)))
+          TestDeregisterVatConnector.deleteAnswer(vrn, testKey).futureValue shouldBe Left(errorModel)
         }
       }
     }
@@ -104,16 +107,16 @@ class DeregisterVatConnectorSpec extends TestUtil with MockHttp {
       "A valid response is parsed" should {
 
         "return a DeregisterVatSuccess object" in {
-          setupMockHttpDelete[TestModel](TestDeregisterVatConnector.url(vrn))(Right(DeregisterVatSuccess))
-          await(TestDeregisterVatConnector.deleteAllAnswers(vrn)) shouldBe Right(DeregisterVatSuccess)
+          setupMockHttpDelete[TestModel](TestDeregisterVatConnector.url(vrn))(Future.successful(Right(DeregisterVatSuccess)))
+          TestDeregisterVatConnector.deleteAllAnswers(vrn).futureValue shouldBe Right(DeregisterVatSuccess)
         }
       }
 
       "An invalid response is parsed" should {
 
         "return an error model" in {
-          setupMockHttpDelete[TestModel](TestDeregisterVatConnector.url(vrn))(Left(errorModel))
-          await(TestDeregisterVatConnector.deleteAllAnswers(vrn)) shouldBe Left(errorModel)
+          setupMockHttpDelete[TestModel](TestDeregisterVatConnector.url(vrn))(Future.successful(Left(errorModel)))
+          TestDeregisterVatConnector.deleteAllAnswers(vrn).futureValue shouldBe Left(errorModel)
         }
       }
     }

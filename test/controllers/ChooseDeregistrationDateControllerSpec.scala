@@ -29,7 +29,6 @@ import play.api.test.Helpers.{contentType, _}
 import services.mocks.{MockChooseDeregDateAnswerService, MockOutstandingInvoicesService, MockWipeRedundantDataService}
 import views.html.ChooseDeregistrationDate
 
-import scala.concurrent.Future
 
 class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with MockChooseDeregDateAnswerService
   with MockOutstandingInvoicesService with MockWipeRedundantDataService {
@@ -60,7 +59,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         "return 200 (OK)" in {
           setupMockGetChooseDeregDate(Right(None))
           setupMockGetOutstandingInvoices(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -77,7 +76,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         "return 200 (OK)" in {
           setupMockGetChooseDeregDate(Right(Some(Yes)))
           setupMockGetOutstandingInvoices(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
 
@@ -99,7 +98,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         "return Internal Server Error" in {
           setupMockGetChooseDeregDate(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
           setupMockGetOutstandingInvoices(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
 
@@ -121,7 +120,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreChooseDeregDate(Yes)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           setupMockWipeRedundantData(Right(DeregisterVatSuccess))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -139,7 +138,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreChooseDeregDate(No)(Right(DeregisterVatSuccess))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           setupMockWipeRedundantData(Right(DeregisterVatSuccess))
           status(result) shouldBe Status.SEE_OTHER
         }
@@ -157,7 +156,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
         "return 500 (ISE)" in {
           setupMockStoreChooseDeregDate(No)(Left(errorModel))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -172,7 +171,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetOutstandingInvoices(Right(None))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.BAD_REQUEST
         }
 
@@ -192,7 +191,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
         "return Internal Server Error" in {
           setupMockGetOutstandingInvoices(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
 

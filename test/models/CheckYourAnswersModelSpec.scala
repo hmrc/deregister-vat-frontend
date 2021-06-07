@@ -16,8 +16,8 @@
 
 package models
 
-import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.CheckYourAnswersTestConstants._
+import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
 import utils.TestUtil

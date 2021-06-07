@@ -21,16 +21,15 @@ import cats.instances.future._
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoForm
-import javax.inject.{Inject, Singleton}
 import models.{User, YesNo}
-import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{TaxableTurnoverAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.MoneyFormatter
+import utils.{LoggerUtil, MoneyFormatter}
 import views.html.TaxableTurnover
+import javax.inject.{Inject, Singleton}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,7 +42,7 @@ class TaxableTurnoverController @Inject()(taxableTurnover: TaxableTurnover,
                                           val wipeRedundantDataService: WipeRedundantDataService,
                                           val serviceErrorHandler: ServiceErrorHandler,
                                           implicit val ec: ExecutionContext,
-                                          implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                          implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("taxableTurnover.error.mandatoryRadioOption", MoneyFormatter.formatStringAmount(appConfig.deregThreshold))
 
@@ -66,7 +65,7 @@ class TaxableTurnoverController @Inject()(taxableTurnover: TaxableTurnover,
       } yield result).value.map {
         case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
         case Left(error) =>
-          Logger.warn("[TaxableTurnoverController][submit] - storedAnswerService returned an error: " + error.message)
+          logger.warn("[TaxableTurnoverController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

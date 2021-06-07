@@ -16,12 +16,11 @@
 
 package models
 
-import java.time.LocalDate
-import java.time.format.{DateTimeFormatter, ResolverStyle}
-
 import play.api.i18n.Messages
 import play.api.libs.json.{Json, OFormat}
 
+import java.time.LocalDate
+import java.time.format.{DateTimeFormatter, ResolverStyle}
 import scala.util.{Failure, Success, Try}
 
 

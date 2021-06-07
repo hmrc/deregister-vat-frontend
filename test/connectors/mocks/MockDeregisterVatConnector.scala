@@ -23,31 +23,31 @@ import play.api.libs.json.Format
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 trait MockDeregisterVatConnector extends TestUtil with MockFactory {
 
   val mockDeregisterVatConnector: DeregisterVatConnector = mock[DeregisterVatConnector]
 
-  def setupMockGetAnswers[T](vrn: String, key: String)(response: Either[ErrorModel, Option[T]]): Unit = {
+  def setupMockGetAnswers[T](vrn: String, key: String)(response: Future[Either[ErrorModel, Option[T]]]): Unit = {
     (mockDeregisterVatConnector.getAnswers(_: String, _: String)(_: Format[T], _: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, key, *, *, *)
       .returns(response)
   }
 
-  def setupMockStoreAnswers[T](vrn: String, key: String, data: T)(response: Either[ErrorModel, DeregisterVatResponse]): Unit = {
+  def setupMockStoreAnswers[T](vrn: String, key: String, data: T)(response: Future[Either[ErrorModel, DeregisterVatResponse]]): Unit = {
     (mockDeregisterVatConnector.putAnswers(_: String, _: String, _: T)(_: Format[T], _: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, key, data, *, *, *)
       .returns(response)
   }
 
-  def setupMockDeleteAnswer(vrn: String, key: String)(response: Either[ErrorModel, DeregisterVatResponse]): Unit = {
+  def setupMockDeleteAnswer(vrn: String, key: String)(response: Future[Either[ErrorModel, DeregisterVatResponse]]): Unit = {
     (mockDeregisterVatConnector.deleteAnswer(_: String, _: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, key, *, *)
       .returns(response)
   }
 
-  def setupMockDeleteAllAnswers(vrn: String)(response: Either[ErrorModel, DeregisterVatResponse]): Unit = {
+  def setupMockDeleteAllAnswers(vrn: String)(response: Future[Either[ErrorModel, DeregisterVatResponse]]): Unit = {
     (mockDeregisterVatConnector.deleteAllAnswers(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(vrn, *, *)
       .returns(response)

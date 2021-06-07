@@ -16,12 +16,12 @@
 
 package services
 
-import models.CustomerDetails
-import models.ErrorModel
-import utils.TestUtil
+import assets.constants.BaseTestConstants.{errorModel, vrn}
 import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
 import connectors.mocks.MockVatSubscriptionConnector
-import assets.constants.BaseTestConstants.{errorModel, vrn}
+import models.{CustomerDetails, ErrorModel}
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import utils.TestUtil
 
 import scala.concurrent.Future
 
@@ -38,16 +38,16 @@ class CustomerDetailsServiceSpec extends TestUtil with MockVatSubscriptionConnec
       "called for a Right with CustomerDetails" should {
 
         "return a CustomerDetailsModel" in {
-          setupMockGetCustomerCircumstanceDetails(vrn)(Right(customerDetailsMax))
-          await(result) shouldBe Right(customerDetailsMax)
+          setupMockGetCustomerCircumstanceDetails(vrn)(Future.successful(Right(customerDetailsMax)))
+          result.futureValue shouldBe Right(customerDetailsMax)
         }
       }
 
       "given an error should" should {
 
         "return a Left with an ErrorModel" in {
-          setupMockGetCustomerCircumstanceDetails(vrn)(Left(errorModel))
-          await(result) shouldBe Left(errorModel)
+          setupMockGetCustomerCircumstanceDetails(vrn)(Future.successful(Left(errorModel)))
+          result.futureValue shouldBe Left(errorModel)
         }
       }
     }

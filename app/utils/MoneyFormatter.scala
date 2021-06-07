@@ -16,9 +16,9 @@
 
 package utils
 
-import java.text.DecimalFormat
-
 import play.twirl.api.Html
+
+import java.text.DecimalFormat
 
 object MoneyFormatter {
 

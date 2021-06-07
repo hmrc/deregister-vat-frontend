@@ -21,6 +21,7 @@ import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
 import models._
+import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import services.mocks._
 import utils.TestUtil
 
@@ -79,7 +80,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
         setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
 
-        await(TestCheckAnswersService.checkYourAnswersModel()) shouldBe Right(
+        TestCheckAnswersService.checkYourAnswersModel().futureValue shouldBe Right(
           CheckYourAnswersModel(
             Some(Ceased),
             Some(dateModel),
@@ -109,7 +110,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
 
         setupMockGetDeregReason(Left(errorModel))
 
-        await(TestCheckAnswersService.checkYourAnswersModel()) shouldBe Left(errorModel)
+        TestCheckAnswersService.checkYourAnswersModel().futureValue shouldBe Left(errorModel)
       }
     }
 
@@ -135,7 +136,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
         setupMockGetPurchasesExceedSuppliesAnswer(Left(errorModel))
 
-        await(TestCheckAnswersService.checkYourAnswersModel()) shouldBe Left(errorModel)
+        TestCheckAnswersService.checkYourAnswersModel().futureValue shouldBe Left(errorModel)
       }
     }
   }

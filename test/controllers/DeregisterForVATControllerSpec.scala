@@ -24,8 +24,6 @@ import play.api.test.Helpers._
 import services.CustomerDetailsService
 import views.html.DeregisterForVAT
 
-import scala.concurrent.Future
-
 class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
 
@@ -52,7 +50,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
     "Calling the .redirect action with an agent" should {
       "redirect to .../agent" should {
         lazy val result = {
-          mockAuthResult(Future.successful(mockAuthorisedAgent), isAgent = true)
+          mockAuthResult(mockAuthorisedAgent, isAgent = true)
           TestDeregisterForVATController.redirect()(request.withSession(
             SessionKeys.registrationStatusKey -> Constants.registered,
             SessionKeys.CLIENT_VRN -> vrn
@@ -72,7 +70,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
     "Calling the .redirect action with a user" should {
       "redirect to .../non-agent" should {
         lazy val result = {
-          mockAuthResult(Future.successful(mockAuthorisedIndividual))
+          mockAuthResult(mockAuthorisedIndividual)
           TestDeregisterForVATController.redirect()(request.withSession(
             SessionKeys.registrationStatusKey -> Constants.registered
           ))
@@ -95,7 +93,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
       ))
 
       "return 200 (OK)" in {
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.OK
       }
 
@@ -113,7 +111,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
       ))
 
       "return 200 (OK)" in {
-        mockAuthResult(Future.successful(mockAuthorisedIndividual))
+        mockAuthResult(mockAuthorisedIndividual)
         status(result) shouldBe Status.OK
       }
 

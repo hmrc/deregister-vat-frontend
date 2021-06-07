@@ -19,18 +19,20 @@ package services.mocks
 import models._
 import services.OptionTaxAnswerService
 
+import scala.concurrent.Future
+
 trait MockOptionTaxAnswerService extends MockStoredAnswersService {
 
   val mockOptionTaxAnswerService: OptionTaxAnswerService = mock[OptionTaxAnswerService]
 
   def setupMockGetOptionTax(response: Either[ErrorModel, Option[YesNoAmountModel]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockOptionTaxAnswerService)(response)
+    setupMockGetAnswers(mockOptionTaxAnswerService)(Future.successful(response))
 
   def setupMockStoreOptionTax(data: YesNoAmountModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockOptionTaxAnswerService)(data)(response)
+    setupMockStoreAnswers(mockOptionTaxAnswerService)(data)(Future.successful(response))
 
   def setupMockDeleteOptionTax(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockOptionTaxAnswerService)(response)
+    setupMockDeleteAnswer(mockOptionTaxAnswerService)(Future.successful(response))
 
   def setupMockOptionTaxNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockOptionTaxAnswerService)

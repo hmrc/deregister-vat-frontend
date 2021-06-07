@@ -18,17 +18,17 @@ package controllers.predicates
 
 import common.{EnrolmentKeys, SessionKeys}
 import config.{AppConfig, ServiceErrorHandler}
-import javax.inject.Inject
 import models.User
-import play.api.Logger
 import play.api.i18n.I18nSupport
-import play.api.mvc.{ActionBuilder, ActionFunction, AnyContent, BodyParser, MessagesControllerComponents, Request, Result}
+import play.api.mvc._
 import services.{CustomerDetailsService, EnrolmentsAuthService}
-import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.errors.client.Unauthorised
+import javax.inject.Inject
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -40,12 +40,11 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
                               val mcc: MessagesControllerComponents)
                              (implicit val appConfig: AppConfig)
 
-  extends FrontendController(mcc) with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with AuthBasePredicate {
+  extends FrontendController(mcc)
+  with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with AuthBasePredicate with LoggerUtil{
 
   override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
   override implicit protected val executionContext: ExecutionContext = mcc.executionContext
-
-  val logger: Logger = Logger("authPredicateLogger")
 
   override def invokeBlock[A](request: Request[A], block: User[A] => Future[Result]): Future[Result] = {
 
@@ -82,13 +81,13 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
         case _ =>
           customerDetailsService.getCustomerDetails(user.vrn).flatMap {
             case Right(details) if details.isInsolventWithoutAccess =>
-              Logger.debug("[AuthPredicate][checkVatEnrolment] - User is insolvent and not continuing to trade")
+              logger.debug("[AuthPredicate][checkVatEnrolment] - User is insolvent and not continuing to trade")
               Future.successful(Forbidden(unauthorised()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
             case Right(_) =>
               logger.debug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
               block(user).map(result => result.addingToSession(SessionKeys.insolventWithoutAccessKey -> "false"))
             case _ =>
-              Logger.warn("[AuthPredicate][checkVatEnrolment] - Failure obtaining insolvency status from Customer Info API")
+              logger.warn("[AuthPredicate][checkVatEnrolment] - Failure obtaining insolvency status from Customer Info API")
               Future.successful(serviceErrorHandler.showInternalServerError)
           }
       }

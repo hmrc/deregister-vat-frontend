@@ -19,15 +19,15 @@ package controllers
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.YesNoAmountForm
-import javax.inject.Inject
 import models.{User, YesNoAmountModel}
-import play.api.Logger
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.StocksAnswerService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.OptionStocksToSell
+import javax.inject.Inject
+import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,7 +38,8 @@ class OptionStocksToSellController @Inject()(optionStocksToSell: OptionStocksToS
                                              val stocksAnswerService: StocksAnswerService,
                                              val serviceErrorHandler: ServiceErrorHandler,
                                              implicit val ec: ExecutionContext,
-                                             implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+                                             implicit val appConfig: AppConfig) extends FrontendController(mcc)
+                                             with I18nSupport with LoggerUtil {
 
   val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm(
     "optionOwnsStockToSell.error.mandatoryRadioOption","optionOwnsStockToSell.error.amount.noEntry")
@@ -59,7 +60,7 @@ class OptionStocksToSellController @Inject()(optionStocksToSell: OptionStocksToS
       data => stocksAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())
         case Left(error) =>
-          Logger.warn("[OptionStocksToSellController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+          logger.warn("[OptionStocksToSellController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

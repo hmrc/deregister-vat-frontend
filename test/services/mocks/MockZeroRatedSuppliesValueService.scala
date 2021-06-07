@@ -19,18 +19,20 @@ package services.mocks
 import models._
 import services.ZeroRatedSuppliesValueService
 
+import scala.concurrent.Future
+
 trait MockZeroRatedSuppliesValueService extends MockStoredAnswersService {
 
   val mockZeroRatedSuppliesValueService: ZeroRatedSuppliesValueService = mock[ZeroRatedSuppliesValueService]
 
   def setupMockGetZeroRatedSupplies(response: Either[ErrorModel, Option[NumberInputModel]])(implicit user: User[_]): Unit =
-    setupMockGetAnswers(mockZeroRatedSuppliesValueService)(response)
+    setupMockGetAnswers(mockZeroRatedSuppliesValueService)(Future.successful(response))
 
   def setupMockStoreZeroRatedSupplies(data: NumberInputModel)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockStoreAnswers(mockZeroRatedSuppliesValueService)(data)(response)
+    setupMockStoreAnswers(mockZeroRatedSuppliesValueService)(data)(Future.successful(response))
 
   def setupMockDeleteZeroRatedSuppliesValueAnswer(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
-    setupMockDeleteAnswer(mockZeroRatedSuppliesValueService)(response)
+    setupMockDeleteAnswer(mockZeroRatedSuppliesValueService)(Future.successful(response))
 
   def setupMockDeleteZeroRatedSuppliesValueAnswerNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockZeroRatedSuppliesValueService)

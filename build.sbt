@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
+import play.core.PlayVersion
+import play.sbt.routes.RoutesKeys
+import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
-import play.core.PlayVersion
-import play.sbt.routes.RoutesKeys
-import sbt.Tests.{Group, SubProcess}
 
 val appName: String = "deregister-vat-frontend"
 
@@ -41,7 +41,6 @@ lazy val coverageSettings: Seq[Setting[_]] = {
     "controllers.zeroRated.javascript",
     "controllers.javascript",
     ".*standardError*.*",
-    ".*govuk_wrapper*.*",
     ".*main_template*.*",
     "uk.gov.hmrc.BuildInfo",
     "app.*",
@@ -61,26 +60,23 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"   %% "bootstrap-frontend-play-26"      % "5.0.0",
-  "uk.gov.hmrc"   %% "govuk-template"                  % "5.66.0-play-26",
-  "uk.gov.hmrc"   %% "play-ui"                         % "9.2.0-play-26",
-  "uk.gov.hmrc"   %% "play-partials"                   % "7.1.0-play-26",
-  "uk.gov.hmrc"   %% "play-language"                   % "4.12.0-play-26",
-  "uk.gov.hmrc"   %% "play-frontend-govuk"             % "0.71.0-play-26",
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "0.57.0-play-26",
+  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28"      % "5.3.0",
+  "uk.gov.hmrc"   %% "play-ui"                         % "9.4.0-play-28",
+  "uk.gov.hmrc"   %% "play-language"                   % "5.0.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-govuk"             % "0.73.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "0.67.0-play-28",
   "org.typelevel" %% "cats"                            % "0.9.0"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"             %% "hmrctest"                     % "3.10.0-play-26"    % scope,
-  "org.scalatest"           %% "scalatest"                    % "3.0.9"             % scope,
+  "org.scalatest"           %% "scalatest"                    % "3.1.4"             % scope,
   "org.pegdown"             %  "pegdown"                      % "1.6.0"             % scope,
   "org.jsoup"               %  "jsoup"                        % "1.13.1"            % scope,
   "com.typesafe.play"       %% "play-test"                    % PlayVersion.current % scope,
-  "org.scalatestplus.play"  %% "scalatestplus-play"           % "3.1.3"             % scope,
+  "org.scalatestplus.play"  %% "scalatestplus-play"           % "5.1.0"             % scope,
   "org.scalamock"           %% "scalamock-scalatest-support"  % "3.6.0"             % scope,
-  "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.27.2"            % scope,
-  "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.62.2"            % scope
+  "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.26.3"            % scope,
+  "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.36.8"            % scope
 )
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
@@ -108,7 +104,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.12.11",
+    scalaVersion := "2.12.12",
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
@@ -122,6 +118,5 @@ lazy val microservice: Project = Project(appName, file("."))
     testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
     parallelExecution in IntegrationTest := false)
   .settings(resolvers ++= Seq(
-    Resolver.bintrayRepo("hmrc", "releases"),
     Resolver.jcenterRepo
   ))
