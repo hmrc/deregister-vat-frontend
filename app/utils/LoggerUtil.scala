@@ -17,21 +17,8 @@
 package utils
 
 import org.slf4j.{Logger, LoggerFactory}
-import play.api.{LoggerLike, MarkerContext}
+import play.api.LoggerLike
 
-trait LoggerUtil {
-
-  lazy val className: String = this.getClass.getSimpleName.stripSuffix("$")
-
-  val logger = new LoggerLike {
-
-    override val logger: Logger = LoggerFactory.getLogger(s"application.$className")
-
-    override def debug(message: => String)(implicit mc: MarkerContext): Unit = super.debug(message)
-
-    override def info(message: => String)(implicit mc: MarkerContext): Unit = super.info(message)
-
-    override def warn(message: => String)(implicit mc: MarkerContext): Unit = super.warn(message)
-
-  }
+trait LoggerUtil extends LoggerLike {
+  override val logger: Logger = LoggerFactory.getLogger("application")
 }
