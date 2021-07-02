@@ -18,9 +18,7 @@ import play.core.PlayVersion
 import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.SbtAutoBuildPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
-import uk.gov.hmrc.versioning.SbtGitVersioning
 
 val appName: String = "deregister-vat-frontend"
 
@@ -60,11 +58,11 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28"      % "5.3.0",
+  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28"      % "5.6.0",
   "uk.gov.hmrc"   %% "play-ui"                         % "9.4.0-play-28",
   "uk.gov.hmrc"   %% "play-language"                   % "5.0.0-play-28",
-  "uk.gov.hmrc"   %% "play-frontend-govuk"             % "0.73.0-play-28",
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "0.67.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-govuk"             % "0.79.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "0.79.0-play-28",
   "org.typelevel" %% "cats"                            % "0.9.0"
 )
 
@@ -94,7 +92,7 @@ TwirlKeys.templateImports ++= Seq(
 )
 
 lazy val microservice: Project = Project(appName, file("."))
-  .enablePlugins(Seq(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin) ++ plugins: _*)
+  .enablePlugins(Seq(PlayScala, SbtDistributablesPlugin) ++ plugins: _*)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(PlayKeys.playDefaultPort := 9153)
   .settings(coverageSettings: _*)
@@ -117,6 +115,3 @@ lazy val microservice: Project = Project(appName, file("."))
     addTestReportOption(IntegrationTest, "int-test-reports"),
     testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
     parallelExecution in IntegrationTest := false)
-  .settings(resolvers ++= Seq(
-    Resolver.jcenterRepo
-  ))
