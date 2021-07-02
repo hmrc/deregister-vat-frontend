@@ -26,6 +26,13 @@
 
 @(form: Form[String])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
+@backLink = {
+    @govukBackLink(BackLink(
+        href = controllers.zeroRated.routes.BusinessActivityController.show().url,
+        content = Text(messages("common.back"))
+    ))
+}
+
 @questionContent = {
   <p class="govuk-body">@messages("sicCode.explanation")</p>
   <p class="govuk-body"><a class="govuk-link" id="find-sic-code" href="@{appConfig.govUkFindSicCode}" target="_blank">
@@ -33,12 +40,7 @@
   </a></p>
 }
 
-@mainTemplate(pageTitle = title(messages("sicCode.title"), form)) {
-
-  @govukBackLink(BackLink(
-    href = controllers.zeroRated.routes.BusinessActivityController.show().url,
-    content = Text(messages("common.back"))
-  ))
+@mainTemplate(pageTitle = title(messages("sicCode.title"), form), backLinkContent = Some(backLink)) {
 
   @errorSummaryHelper(form)
 

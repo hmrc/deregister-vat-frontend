@@ -57,7 +57,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     }
 
     "have the correct paragraph" in {
-      elementText(Selectors.para(3)) shouldBe DeregisterForVATMessages.p1
+      elementText(Selectors.para(2)) shouldBe DeregisterForVATMessages.p1
     }
 
     "have the correct bullet points" in {
@@ -66,7 +66,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     }
 
     "have the correct second paragraph" in {
-      elementText(Selectors.para(5)) shouldBe DeregisterForVATMessages.p2
+      elementText(Selectors.para(4)) shouldBe DeregisterForVATMessages.p2
     }
 
   }

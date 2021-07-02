@@ -18,12 +18,14 @@
 
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(pageTitle = messages("deregisterForVAT.title")) {
+@backLink = {
+    @govukBackLink(BackLink(
+        href = if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl,
+        content = Text(messages("common.back"))
+    ))
+}
 
-  @govukBackLink(BackLink(
-    href = if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl,
-    content = Text(messages("common.back"))
-  ))
+@mainTemplate(pageTitle = messages("deregisterForVAT.title"), backLinkContent = Some(backLink)) {
 
   <h1 class="govuk-heading-l">@messages("deregisterForVAT.title")</h1>
   <p class="govuk-body">@messages("deregisterForVAT.p1")</p>

@@ -26,12 +26,14 @@
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(pageTitle = title(messages("taxableTurnover.title", appConfig.deregThreshold), form)) {
+@backLink = {
+    @govukBackLink(BackLink(
+        href = controllers.routes.DeregistrationReasonController.show().url,
+        content = Text(messages("common.back"))
+    ))
+}
 
-  @govukBackLink(BackLink(
-    href = controllers.routes.DeregistrationReasonController.show().url,
-    content = Text(messages("common.back"))
-  ))
+@mainTemplate(pageTitle = title(messages("taxableTurnover.title", appConfig.deregThreshold), form), backLinkContent = Some(backLink)) {
 
   @if(form.hasErrors) {
     @govukErrorSummary(ErrorSummary(
