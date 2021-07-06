@@ -27,12 +27,14 @@
 
 @(form: Form[NumberInputModel], backLinkUrl: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(pageTitle = title(messages("nextTaxableTurnover.title"), form)) {
+@backLink = {
+    @govukBackLink(BackLink(
+        href = backLinkUrl,
+        content = Text(messages("common.back"))
+    ))
+}
 
-  @govukBackLink(BackLink(
-    href = backLinkUrl,
-    content = Text(messages("common.back"))
-  ))
+@mainTemplate(pageTitle = title(messages("nextTaxableTurnover.title"), form), backLinkContent = Some(backLink)) {
 
   @errorSummaryHelper(form)
 

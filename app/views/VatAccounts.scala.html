@@ -24,7 +24,14 @@
       govukButton: GovukButton,
       govukRadios: GovukRadios)
 
-@(backLink: String, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(backLinkURL: String, form: Form[VATAccountsModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+
+@backLink = {
+    @govukBackLink(BackLink(
+        href = backLinkURL,
+        content = Text(messages("common.back"))
+    ))
+}
 
 @questionContent = {
   <div id="vat-accounts-hint" class="govuk-hint">
@@ -36,12 +43,7 @@
   </div>
 }
 
-@mainTemplate(pageTitle = title(messages("vatAccounts.title"), form)) {
-
-  @govukBackLink(BackLink(
-    href = backLink,
-    content = Text(messages("common.back"))
-  ))
+@mainTemplate(pageTitle = title(messages("vatAccounts.title"), form), backLinkContent = Some(backLink)) {
 
   @errorSummaryHelper(form)
 

@@ -27,18 +27,20 @@
 
 @(form: Form[DateModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
+@backLink = {
+    @govukBackLink(BackLink(
+        href = controllers.routes.ChooseDeregistrationDateController.show().url,
+        content = Text(messages("common.back"))
+    ))
+}
+
 @questionContent = {
   <p class="govuk-body">@messages("deregistrationDate.p1")</p>
   <p class="govuk-body">@messages("deregistrationDate.p2")</p>
   <div>@messages("deregistrationDate.hint")</div>
 }
 
-@mainTemplate(pageTitle = title(messages("deregistrationDate.title"), form)) {
-
-  @govukBackLink(BackLink(
-    href = controllers.routes.ChooseDeregistrationDateController.show().url,
-    content = Text(messages("common.back"))
-  ))
+@mainTemplate(pageTitle = title(messages("deregistrationDate.title"), form), backLinkContent = Some(backLink)) {
 
   @if(form.hasErrors) {
     @govukErrorSummary(ErrorSummary(

@@ -27,11 +27,18 @@
 
 @(outstanding: Option[YesNo], form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@backLink = @{if(outstanding.isDefined) {
-  controllers.routes.OutstandingInvoicesController.show().url
+@backLinkURL = @{if(outstanding.isDefined) {
+controllers.routes.OutstandingInvoicesController.show().url
 } else {
-  controllers.routes.IssueNewInvoicesController.show().url
+controllers.routes.IssueNewInvoicesController.show().url
 }}
+
+@backLink = {
+    @govukBackLink(BackLink(
+        href = backLinkURL,
+        content = Text(messages("common.back"))
+    ))
+}
 
 @questionContent = {
   <div id="choose-deregistration-date-hint" class="govuk-hint">
@@ -40,12 +47,7 @@
   </div>
 }
 
-@mainTemplate(pageTitle = title(messages("chooseDeregistrationDate.title"), form)) {
-
-  @govukBackLink(BackLink(
-    href = backLink,
-    content = Text(messages("common.back"))
-  ))
+@mainTemplate(pageTitle = title(messages("chooseDeregistrationDate.title"), form), backLinkContent = Some(backLink)) {
 
   @errorSummaryHelper(form)
 

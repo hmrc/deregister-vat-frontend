@@ -29,7 +29,8 @@
 @(pageTitle: String,
   serviceName: Option[String] = None,
   showSignOut: Boolean = true,
-  feedbackOnSignOut: Boolean = true
+  feedbackOnSignOut: Boolean = true,
+  backLinkContent: Option[Html] = None
 )(mainContent: Html)(implicit request : Request[_], messages: Messages, appConfig: config.AppConfig)
 
 @navTitle = @{
@@ -64,6 +65,7 @@
             En -> appConfig.routeToSwitchLanguage("english").url,
             Cy -> appConfig.routeToSwitchLanguage("cymraeg").url
     ))
+    @backLinkContent
 }
 
 @head = {

@@ -27,12 +27,14 @@
 
 @(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(pageTitle = title(messages("optionTax.title"), form)) {
+@backLink = {
+    @govukBackLink(BackLink(
+        href = controllers.routes.VATAccountsController.show().url,
+        content = Text(messages("common.back"))
+    ))
+}
 
-  @govukBackLink(BackLink(
-    href = controllers.routes.VATAccountsController.show().url,
-    content = Text(messages("common.back"))
-  ))
+@mainTemplate(pageTitle = title(messages("optionTax.title"), form), backLinkContent = Some(backLink)) {
 
   @errorSummaryHelper(form)
 

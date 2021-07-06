@@ -18,12 +18,15 @@
 
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(pageTitle = messages("cannotDeregister.title")) {
+@backLink = {
+    @govukBackLink(BackLink(
+        href = controllers.routes.NextTaxableTurnoverController.show().url,
+        content = Text(messages("common.back"))
+    ))
 
-  @govukBackLink(BackLink(
-    href = controllers.routes.NextTaxableTurnoverController.show().url,
-    content = Text(messages("common.back"))
-  ))
+}
+
+@mainTemplate(pageTitle = messages("cannotDeregister.title"), backLinkContent = Some(backLink)) {
 
   <h1 class="govuk-heading-l">@messages("cannotDeregister.title")</h1>
   <p class="govuk-body">@messages("cannotDeregister.text", appConfig.deregThreshold)</p>

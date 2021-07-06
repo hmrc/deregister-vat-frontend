@@ -27,12 +27,14 @@
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@mainTemplate(pageTitle = title(messages("purchasesExceedSupplies.title"), form)) {
+@backLink = {
+    @govukBackLink(BackLink(
+        href = controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url,
+        content = Text(messages("common.back"))
+    ))
+}
 
-  @govukBackLink(BackLink(
-    href = controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url,
-    content = Text(messages("common.back"))
-  ))
+@mainTemplate(pageTitle = title(messages("purchasesExceedSupplies.title"), form), backLinkContent = Some(backLink)) {
 
   @errorSummaryHelper(form)
 
