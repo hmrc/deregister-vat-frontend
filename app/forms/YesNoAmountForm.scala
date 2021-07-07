@@ -40,7 +40,7 @@ object YesNoAmountForm extends FormValidation {
       (data.get(yesNo), data.get(key)) match {
         case (Some(a), Some(x)) if a == yes && (x.trim == "") => Left(Seq(FormError(key, emptyAmount)))
         case (Some(a), Some(x)) if a == yes && (!isNumeric(x)) => Left(Seq(FormError(key, "common.error.mandatoryAmount")))
-        case (Some(a), Some(x)) if a == yes => validateAmount(key)(BigDecimal(x))
+        case (Some(a), Some(x)) if a == yes => validateAmount(key)(BigDecimal(x.stripPrefix("£")))
         case _ => Right(None)
       }
     }

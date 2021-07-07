@@ -28,7 +28,7 @@ class YesNoAmountFormSpec extends TestUtil {
 
     val data = Map(
       "yes_no" -> "yes",
-      "amount" -> "1000.01"
+      "amount" -> "£1000.01"
     )
     val form = YesNoAmountForm.yesNoAmountForm("yesNoError", "emptyAmount").bind(data)
 
@@ -36,7 +36,7 @@ class YesNoAmountFormSpec extends TestUtil {
       form.hasErrors shouldBe false
     }
 
-    "generate a YesNoAmountModel" in {
+    "strip the pound sign and generate a YesNoAmountModel" in {
       form.value shouldBe Some(YesNoAmountModel(Yes,Some(BigDecimal(1000.01))))
     }
   }
