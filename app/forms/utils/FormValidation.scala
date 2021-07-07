@@ -24,7 +24,7 @@ import scala.util.{Failure, Success, Try}
 
 trait FormValidation {
 
-  val isNumeric: String => Boolean = amt => Try(BigDecimal(amt)) match {
+  val isNumeric: String => Boolean = amt => Try(BigDecimal(amt.stripPrefix("£"))) match {
     case Success(_) => true
     case _ => false
   }

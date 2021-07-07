@@ -30,7 +30,7 @@ object NextTaxableTurnoverForm extends FormValidation {
         .verifying("taxableTurnover.error.mandatory", _.isDefined)
         .transform[String](x => x.get, x => Some(x))
         .verifying(isNumericConstraint("taxableTurnover.error.nonNumeric"), hasMaxTwoDecimalsConstraint("common.error.tooManyDecimals"))
-        .transform[BigDecimal](x => BigDecimal(x), x => x.toString)
+        .transform[BigDecimal](x => BigDecimal(x.stripPrefix("£")), x => x.toString)
         .verifying(isPositive("common.error.negative"), doesNotExceed(maxAmount, "common.error.tooManyDigitsBeforeDecimal"))
     )(NumberInputModel.apply)(NumberInputModel.unapply)
   )

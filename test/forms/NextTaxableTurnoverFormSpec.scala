@@ -26,14 +26,14 @@ class NextTaxableTurnoverFormSpec extends TestUtil {
 
   "Binding a form with valid data" should {
 
-    val data = Map("amount" -> "1000.01")
+    val data = Map("amount" -> "£1000.01")
     val form = NextTaxableTurnoverForm.taxableTurnoverForm.bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors shouldBe false
     }
 
-    "generate the correct model" in {
+    "strip the pound sign and generate the correct model" in {
       form.value shouldBe Some(NumberInputModel(BigDecimal(1000.01)))
     }
   }

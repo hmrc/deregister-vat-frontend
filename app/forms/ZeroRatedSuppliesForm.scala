@@ -30,7 +30,7 @@ object ZeroRatedSuppliesForm extends FormValidation {
         .verifying("zeroRatedSupplies.error.mandatory", _.isDefined)
         .transform[String](x => x.get, x => Some(x))
         .verifying(isNumericConstraint("zeroRatedSupplies.error.nonNumeric"), hasMaxTwoDecimalsConstraint("common.error.tooManyDecimals"))
-        .transform[BigDecimal](x => BigDecimal(x), x => x.toString)
+        .transform[BigDecimal](x => BigDecimal(x.stripPrefix("£")), x => x.toString)
         .verifying(isPositive("common.error.negative"), doesNotExceed(maxAmount, "common.error.tooManyDigitsBeforeDecimal"))
     )(NumberInputModel.apply)(NumberInputModel.unapply)
   )
