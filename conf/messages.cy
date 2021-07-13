@@ -63,12 +63,6 @@ error.date.day = Nodwch y diwrnod yn y fformat cywir
 error.date.month = Nodwch y mis yn y fformat cywir
 error.date.year = Nodwch y flwyddyn yn y fformat cywir
 
-#Feedback
-feedback.phaseName = BETA
-feedback.before = Gwasanaeth newydd yw hwn – bydd eich
-feedback.link = adborth
-feedback.after = yn ein helpu i’w wella.
-
 deregisterForVAT.title = Canslo cofrestriad TAW
 deregisterForVAT.p1 = I ganslo’ch cofrestriad, mae angen i chi wybod gwerth unrhyw rai o’r canlynol:
 deregisterForVAT.p2 = Hefyd, mae angen i chi wybod sut mae cyfrifon TAW y busnes yn cael eu paratoi (cyfrifyddu safonol neu gyfrifyddu arian parod).
