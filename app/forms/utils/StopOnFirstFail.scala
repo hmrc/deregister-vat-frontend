@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package forms.utils
 
-import forms.utils.StopOnFirstFail
-import forms.utils.StopOnFirstFail.constraint
-import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
 
-object SicCodeForm {
+object StopOnFirstFail {
 
-  val sicCodeRegex = "[0-9]+"
+  def apply[T](constraints: Constraint[T]*) = Constraint { field: T =>
+    constraints.toList dropWhile (_(field) == Valid) match {
+      case Nil             => Valid
+      case constraint :: _ => constraint(field)
+    }
+  }
 
-  val sicCodeForm: Form[String] = Form(
-    "value" -> text.verifying(
-      StopOnFirstFail(
-        constraint[String]("sicCode.error.invalid", _.matches(sicCodeRegex)),
-        constraint[String]("sicCode.error.tooFew", _.length > 4),
-        constraint[String]("sicCode.error.tooMany", _.length < 6)
-      )
-    )
-  )
+  def constraint[T](message: String, validator: (T) => Boolean) =
+    Constraint((data: T) => if (validator(data)) Valid else Invalid(Seq(ValidationError(message))))
 }
