@@ -58,7 +58,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28"      % "5.7.0",
+  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28"      % "5.12.0",
   "uk.gov.hmrc"   %% "play-language"                   % "5.1.0-play-28",
   "uk.gov.hmrc"   %% "play-frontend-govuk"             % "0.80.0-play-28",
   "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "0.83.0-play-28",
@@ -101,7 +101,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.12.12",
+    scalaVersion := "2.12.14",
     libraryDependencies ++= appDependencies,
     retrieveManaged := true,
     evictionWarningOptions in update := EvictionWarningOptions.default.withWarnScalaVersionEviction(false)
