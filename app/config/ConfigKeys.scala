@@ -59,6 +59,9 @@ object ConfigKeys {
 
   val platformHost: String = "platform.host"
 
+  val businessTaxAccountHost: String = "business-tax-account.host"
+  val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
+
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountdown: String = "timeout.countdown"
 

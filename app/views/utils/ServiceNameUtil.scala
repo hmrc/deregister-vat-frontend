@@ -16,6 +16,7 @@
 
 package views.utils
 
+import config.AppConfig
 import models.User
 import play.api.i18n.Messages
 import play.api.mvc.Request
@@ -28,5 +29,11 @@ object ServiceNameUtil{
       case _ => messages("common.vat")
     }
   }
+
+  def generateServiceUrl(implicit request: Request[_], appConfig: AppConfig): Option[String] =
+    request match {
+      case user: User[_] => if (user.isAgent) Some(appConfig.agentClientLookupAgentHubPath) else Some(appConfig.btaHomeUrl)
+      case _ => None
+    }
 
 }
