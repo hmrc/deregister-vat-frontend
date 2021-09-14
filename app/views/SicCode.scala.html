@@ -35,9 +35,15 @@
 
 @questionContent = {
   <p class="govuk-body">@messages("sicCode.explanation")</p>
-  <p class="govuk-body"><a class="govuk-link" id="find-sic-code" href="@{appConfig.govUkFindSicCode}" target="_blank">
-    @messages("sicCode.find")
-  </a></p>
+  <p class="govuk-body">
+    <a class="govuk-link"
+       id="find-sic-code"
+       href="@{appConfig.govUkFindSicCode}"
+       rel="noopener noreferrer"
+       target="_blank">
+      @messages("sicCode.find")
+    </a>
+  </p>
 }
 
 @mainTemplate(pageTitle = title(messages("sicCode.title"), form), backLinkContent = Some(backLink)) {
