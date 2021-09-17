@@ -47,7 +47,6 @@ GET         /cannot-cancel-vat                         controllers.CannotDeregis
 
 GET         /assets/*file                              controllers.Assets.at(path="/public", file)
 
-->          /govuk-frontend                            govuk.Routes
 ->          /hmrc-frontend                             hmrcfrontend.Routes
 
 GET         /outstanding-invoices                      controllers.OutstandingInvoicesController.show
