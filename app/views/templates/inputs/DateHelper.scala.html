@@ -40,21 +40,21 @@
   items = Seq(
     InputItem(
       id = "dateDay",
-      classes = "govuk-input--width-2",
+      classes = if(form.hasErrors) {"govuk-input--width-2 govuk-input--error"} else {"govuk-input--width-2"},
       name = "dateDay",
       label = Some(messages("common.day")),
       value = form("dateDay").value
     ),
     InputItem(
       id = "dateMonth",
-      classes = "govuk-input--width-2",
+      classes = if(form.hasErrors) {"govuk-input--width-2 govuk-input--error"} else {"govuk-input--width-2"},
       name = "dateMonth",
       label = Some(messages("common.month")),
       value = form("dateMonth").value
     ),
     InputItem(
       id = "dateYear",
-      classes = "govuk-input--width-4",
+      classes = if(form.hasErrors) {"govuk-input--width-2 govuk-input--error"} else {"govuk-input--width-4"},
       name = "dateYear",
       label = Some(messages("common.year")),
       value = form("dateYear").value
