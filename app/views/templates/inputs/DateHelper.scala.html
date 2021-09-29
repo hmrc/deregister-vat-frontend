@@ -40,21 +40,39 @@
   items = Seq(
     InputItem(
       id = "dateDay",
-      classes = if(form.hasErrors) {"govuk-input--width-2 govuk-input--error"} else {"govuk-input--width-2"},
+      classes = if(form.hasErrors) {
+        (form.errors.length > 1, form("dateDay").hasErrors) match {
+            case (true, _) => "govuk-input--width-2 govuk-input--error"
+            case (false, true) => "govuk-input--width-2 govuk-input--error"
+            case _ => "govuk-input--width-2"
+        }
+      } else {"govuk-input--width-2"},
       name = "dateDay",
       label = Some(messages("common.day")),
       value = form("dateDay").value
     ),
     InputItem(
       id = "dateMonth",
-      classes = if(form.hasErrors) {"govuk-input--width-2 govuk-input--error"} else {"govuk-input--width-2"},
+      classes = if(form.hasErrors) {
+        (form.errors.length > 1, form("dateMonth").hasErrors) match {
+            case (true, _) => "govuk-input--width-2 govuk-input--error"
+            case (false, true) => "govuk-input--width-2 govuk-input--error"
+            case _ => "govuk-input--width-2"
+        }
+      } else {"govuk-input--width-2"},
       name = "dateMonth",
       label = Some(messages("common.month")),
       value = form("dateMonth").value
     ),
     InputItem(
       id = "dateYear",
-      classes = if(form.hasErrors) {"govuk-input--width-2 govuk-input--error"} else {"govuk-input--width-4"},
+      classes = if(form.hasErrors) {
+        (form.errors.length > 1, form("dateYear").hasErrors) match {
+            case (true, _) => "govuk-input--width-4 govuk-input--error"
+            case (false, true) => "govuk-input--width-4 govuk-input--error"
+            case _ => "govuk-input--width-4"
+        }
+      } else {"govuk-input--width-4"},
       name = "dateYear",
       label = Some(messages("common.year")),
       value = form("dateYear").value

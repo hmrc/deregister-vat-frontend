@@ -46,7 +46,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |</div>
        """.stripMargin
 
-  val inputMarkup: String =
+  val inputMarkupNoErrors: String =
     s"""
        |<div class="govuk-date-input" id="$id">
        |  <div class="govuk-date-input__item">
@@ -79,6 +79,138 @@ class DateHelperSpec extends TemplateBaseSpec {
        |</div>
        """.stripMargin
 
+  val inputMarkupSeveralErrors: String =
+    s"""
+       |<div class="govuk-date-input" id="$id">
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateDay">
+       |        Day
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
+       |             id="dateDay" name="dateDay" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateMonth">
+       |        Month
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
+       |             id="dateMonth" name="dateMonth" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateYear">
+       |        Year
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error"
+       |             id="dateYear" name="dateYear" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |</div>
+       """.stripMargin
+
+  val inputMarkupOnlyDayError: String =
+    s"""
+       |<div class="govuk-date-input" id="$id">
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateDay">
+       |        Day
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
+       |             id="dateDay" name="dateDay" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateMonth">
+       |        Month
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+       |             id="dateMonth" name="dateMonth" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateYear">
+       |        Year
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+       |             id="dateYear" name="dateYear" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |</div>
+       """.stripMargin
+
+  val inputMarkupOnlyMonthError: String =
+    s"""
+       |<div class="govuk-date-input" id="$id">
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateDay">
+       |        Day
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+       |             id="dateDay" name="dateDay" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateMonth">
+       |        Month
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
+       |             id="dateMonth" name="dateMonth" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateYear">
+       |        Year
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-4"
+       |             id="dateYear" name="dateYear" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |</div>
+       """.stripMargin
+
+  val inputMarkupOnlyYearError: String =
+    s"""
+       |<div class="govuk-date-input" id="$id">
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateDay">
+       |        Day
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+       |             id="dateDay" name="dateDay" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateMonth">
+       |        Month
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-2"
+       |             id="dateMonth" name="dateMonth" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |  <div class="govuk-date-input__item">
+       |    <div class="govuk-form-group">
+       |      <label class="govuk-label govuk-date-input__label" for="dateYear">
+       |        Year
+       |      </label>
+       |      <input class="govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error"
+       |             id="dateYear" name="dateYear" type="text" pattern="[0-9]*" inputmode="numeric">
+       |    </div>
+       |  </div>
+       |</div>
+       """.stripMargin
+
 
   "Generating a Date helper" when {
 
@@ -91,7 +223,7 @@ class DateHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" role="group" aria-describedby="$id-hint">
              |    $legendMarkup
              |    $hintMarkup
-             |    $inputMarkup
+             |    $inputMarkupNoErrors
              |  </fieldset>
              |</div>
              """.stripMargin
@@ -101,7 +233,7 @@ class DateHelperSpec extends TemplateBaseSpec {
       }
     }
 
-    "there are errors" should {
+    "there are several errors" should {
 
       "render the appropriate date component with an error message" in {
         val expectedMarkup: Html = Html(
@@ -114,13 +246,41 @@ class DateHelperSpec extends TemplateBaseSpec {
              |      <span class="govuk-visually-hidden">Error:</span>
              |      Enter the date the business stopped or will stop trading
              |    </span>
-             |    $inputMarkup
+             |    $inputMarkupSeveralErrors
              |  </fieldset>
              |</div>
              """.stripMargin
         )
         val markup = dateHelper(
           form.bind(Map("dateDay" -> "", "dateMonth" -> "", "dateYear" -> "")),
+          title,
+          id,
+          CeasedTradingDate,
+          hintContent)
+        formatHtml(markup) shouldBe formatHtml(expectedMarkup)
+      }
+    }
+
+    "only the day field errors" should {
+
+      "render the appropriate date component with an error message" in {
+        val expectedMarkup: Html = Html(
+          s"""
+             |<div class="govuk-form-group govuk-form-group--error">
+             |  <fieldset class="govuk-fieldset" role="group" aria-describedby="$id-hint $id-error">
+             |    $legendMarkup
+             |    $hintMarkup
+             |    <span id="$id-error" class="govuk-error-message">
+             |      <span class="govuk-visually-hidden">Error:</span>
+             |      Enter the day in the correct format
+             |    </span>
+             |    $inputMarkupOnlyDayError
+             |  </fieldset>
+             |</div>
+             """.stripMargin
+        )
+        val markup = dateHelper(
+          form.bind(Map("dateDay" -> "", "dateMonth" -> "5", "dateYear" -> "2020")),
           title,
           id,
           CeasedTradingDate,
