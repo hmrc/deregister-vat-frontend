@@ -38,4 +38,12 @@ object DateErrorHelper {
       case _ => "#dateDay"
     }
   }
+
+  def applyInputItemClass(form: Form[DateModel], formType: String, inputItemClass: String): String = {
+    (form.errors.length > 1, form(formType).hasErrors) match {
+      case (true, _) => s"$inputItemClass govuk-input--error"
+      case (false, true) => s"$inputItemClass govuk-input--error"
+      case _ => inputItemClass
+    }
+  }
 }

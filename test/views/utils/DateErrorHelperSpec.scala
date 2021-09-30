@@ -96,4 +96,52 @@ class DateErrorHelperSpec extends AnyWordSpecLike with Matchers with OptionValue
       }
     }
   }
+
+  "The .applyInputItemClass function" when {
+
+    "the form has more than one error and the given formType has an error" should {
+
+      "return an error class" in {
+
+        val errorForm = form.bind(Map("dateDay" -> "", "dateMonth" -> "", "dateYear" -> "z"))
+        DateErrorHelper.applyInputItemClass(errorForm, "dateDay", "exampleClass") shouldBe "exampleClass govuk-input--error"
+      }
+    }
+
+    "the form has more than one error and the given formType does not have an error" should {
+
+      "return an error class" in {
+
+        val errorForm = form.bind(Map("dateDay" -> "1", "dateMonth" -> "", "dateYear" -> "z"))
+        DateErrorHelper.applyInputItemClass(errorForm, "dateDay", "exampleClass") shouldBe "exampleClass govuk-input--error"
+      }
+    }
+
+    "the form has one error and the given formType does have an error" should {
+
+      "return an error class" in {
+
+        val errorForm = form.bind(Map("dateDay" -> "", "dateMonth" -> "4", "dateYear" -> "2020"))
+        DateErrorHelper.applyInputItemClass(errorForm, "dateDay", "exampleClass") shouldBe "exampleClass govuk-input--error"
+      }
+    }
+
+    "the form has one error and the given formType does not have an error" should {
+
+      "return an error class" in {
+
+        val errorForm = form.bind(Map("dateDay" -> "1", "dateMonth" -> "4", "dateYear" -> "z"))
+        DateErrorHelper.applyInputItemClass(errorForm, "dateDay", "exampleClass") shouldBe "exampleClass"
+      }
+    }
+
+    "the form has no errors" should {
+
+      "return an error class" in {
+
+        val errorForm = form.bind(Map("dateDay" -> "1", "dateMonth" -> "4", "dateYear" -> "2020"))
+        DateErrorHelper.applyInputItemClass(errorForm, "dateDay", "exampleClass") shouldBe "exampleClass"
+      }
+    }
+  }
 }
