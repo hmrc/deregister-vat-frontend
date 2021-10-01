@@ -18,13 +18,12 @@ package forms.utils
 
 import models.DateModel
 import play.api.data.validation.{Constraint, Invalid, Valid}
-
 import java.time.LocalDate
 import scala.util.{Failure, Success, Try}
 
 trait FormValidation {
 
-  val isNumeric: String => Boolean = amt => Try(BigDecimal(amt.stripPrefix("£"))) match {
+  val isNumeric: String => Boolean = amt => Try(BigDecimal(amt.trim.replaceAll(",","").stripPrefix("£").stripSuffix("."))) match {
     case Success(_) => true
     case _ => false
   }
@@ -70,5 +69,9 @@ trait FormValidation {
       case Success(_) => true
       case Failure(_) => false
     }
+  }
+
+  def stripChar(text: String): String = {
+    text.trim.replace(",","").stripPrefix("£").stripSuffix(".")
   }
 }

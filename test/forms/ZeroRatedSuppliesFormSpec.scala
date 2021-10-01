@@ -33,7 +33,7 @@ class ZeroRatedSuppliesFormSpec  extends TestUtil{
       form.hasErrors shouldBe false
     }
 
-    "strip the pound sign and generate the correct model" in {
+    "strip the generic formatting and generate the correct model" in {
       form.value shouldBe Some(NumberInputModel(BigDecimal(1000.01)))
     }
   }
