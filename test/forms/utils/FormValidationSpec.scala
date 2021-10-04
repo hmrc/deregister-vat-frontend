@@ -147,4 +147,40 @@ class FormValidationSpec extends AnyWordSpecLike with Matchers with OptionValues
       }
     }
   }
+
+  "Calling the .stripChar method" should {
+
+    "return the expected string with no pound sign included" in {
+      stripChar("£1000") shouldBe "1000"
+    }
+
+    "return the expected string with no commas included" in {
+      stripChar("£100,000,000") shouldBe "100000000"
+    }
+
+    "return the expected string if there is a full stop at the end" in {
+      stripChar("£10.50.") shouldBe "10.50"
+    }
+
+    "return the expected string if a white space is included at the start" in {
+      stripChar(" £100") shouldBe "100"
+    }
+
+    "return the expected string if a white space is included at the end" in {
+      stripChar("£100 ") shouldBe "100"
+    }
+
+    "return the expected string if there is a pound sign and comma present, and a full stop at the end" in {
+      stripChar("£100.,50") shouldBe "100.50"
+    }
+
+    "return the expected string if there is a whitespace at the start, pound sign and comma present and a full stop at the end" in {
+      stripChar(" £100.,50") shouldBe "100.50"
+    }
+
+    "return the expected string if there is pound sign and comma present, and a full stop and white space at the end" in {
+      stripChar("£100.,50 ") shouldBe "100.50"
+    }
+
+  }
 }

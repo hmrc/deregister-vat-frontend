@@ -36,7 +36,7 @@ class YesNoAmountFormSpec extends TestUtil {
       form.hasErrors shouldBe false
     }
 
-    "strip the pound sign and generate a YesNoAmountModel" in {
+    "strip the generic format and generate a YesNoAmountModel" in {
       form.value shouldBe Some(YesNoAmountModel(Yes,Some(BigDecimal(1000.01))))
     }
   }
