@@ -58,7 +58,7 @@ class ServiceNameUtilSpec extends TestUtil {
     "given a User who is not an Agent" should {
 
       "return the BTA home URL" in {
-        ServiceNameUtil.generateServiceUrl(user, mockConfig) shouldBe Some(mockConfig.btaHomeUrl)
+        ServiceNameUtil.generateServiceUrl(user, mockConfig) shouldBe Some(mockConfig.vatSummaryFrontendUrl)
       }
     }
 

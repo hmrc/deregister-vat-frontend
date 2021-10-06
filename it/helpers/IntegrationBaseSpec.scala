@@ -43,7 +43,7 @@ trait IntegrationBaseSpec extends CustomMatchers
   lazy val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
   implicit lazy val messages: Messages = messagesApi.preferred(Seq(Lang("en-GB")))
 
-  val titleSuffix = " - Business tax account - GOV.UK"
+  val titleSuffix = " - Manage your VAT account - GOV.UK"
   val titleSuffixOther = " - VAT - GOV.UK"
 
   class PreconditionBuilder {
