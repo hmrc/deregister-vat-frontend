@@ -60,8 +60,6 @@ trait AppConfig {
   val features: Features
   val feedbackUrl: String
   val platformHost: String
-  val btaBaseUrl: String
-  val btaHomeUrl: String
   val timeoutPeriod: Int
   val timeoutCountdown: Int
   val contactFormServiceIdentifier: String
@@ -166,9 +164,6 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override val features = new Features
 
   override lazy val platformHost: String = servicesConfig.getString(Keys.platformHost)
-
-  override lazy val btaBaseUrl: String = servicesConfig.getString(Keys.businessTaxAccountHost)
-  override lazy val btaHomeUrl: String = btaBaseUrl + servicesConfig.getString(Keys.businessTaxAccountUrl)
 
   override lazy val timeoutCountdown: Int = servicesConfig.getInt(Keys.timeoutCountdown)
   override lazy val timeoutPeriod: Int = servicesConfig.getInt(Keys.timeoutPeriod)
