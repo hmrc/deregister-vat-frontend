@@ -30,7 +30,7 @@ object CommonMessages {
   val finish = "Finish"
   val errorPrefix = "Error:"
   val agentServiceName = "Your client’s VAT details"
-  val clientServiceName = "Business tax account"
+  val clientServiceName = "Manage your VAT account"
   val otherServiceName = "VAT"
   val day = "Day"
   val month = "Month"
