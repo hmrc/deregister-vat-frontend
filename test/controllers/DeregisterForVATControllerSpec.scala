@@ -47,8 +47,8 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
   "the user is authorised" when {
 
-    "Calling the .redirect action with an agent" should {
-      "redirect to .../agent" should {
+    "Calling the .show action with an agent" should {
+      "redirect to the dereg VAT controller" should {
         lazy val result = {
           mockAuthResult(mockAuthorisedAgent, isAgent = true)
           TestDeregisterForVATController.show()(request.withSession(
@@ -63,8 +63,8 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
       }
     }
 
-    "Calling the .redirect action with a user" should {
-      "redirect to .../non-agent" should {
+    "Calling the .show action with a user" should {
+      "redirect to the dereg VAT controller" should {
         lazy val result = {
           mockAuthResult(mockAuthorisedIndividual)
           TestDeregisterForVATController.show()(request.withSession(
