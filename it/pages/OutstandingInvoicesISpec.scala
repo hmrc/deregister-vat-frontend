@@ -110,7 +110,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.redirect().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show().url)
         )
       }
     }
@@ -140,7 +140,7 @@ class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.redirect().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show().url)
         )
       }
     }

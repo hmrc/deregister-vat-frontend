@@ -51,18 +51,14 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
       "redirect to .../agent" should {
         lazy val result = {
           mockAuthResult(mockAuthorisedAgent, isAgent = true)
-          TestDeregisterForVATController.redirect()(request.withSession(
+          TestDeregisterForVATController.show()(request.withSession(
             SessionKeys.registrationStatusKey -> Constants.registered,
             SessionKeys.CLIENT_VRN -> vrn
           ))
         }
 
-        "return a 303" in {
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        "redirect to the correct URL" in {
-          redirectLocation(result) shouldBe Some("/vat-through-software/account/cancel-vat/agent")
+        "return a 200" in {
+          status(result) shouldBe Status.OK
         }
       }
     }
@@ -71,24 +67,20 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
       "redirect to .../non-agent" should {
         lazy val result = {
           mockAuthResult(mockAuthorisedIndividual)
-          TestDeregisterForVATController.redirect()(request.withSession(
+          TestDeregisterForVATController.show()(request.withSession(
             SessionKeys.registrationStatusKey -> Constants.registered
           ))
         }
 
-        "return a 303" in {
-          status(result) shouldBe Status.SEE_OTHER
-        }
-
-        "redirect to the correct url" in {
-          redirectLocation(result) shouldBe Some("/vat-through-software/account/cancel-vat/non-agent")
+        "return a 200" in {
+          status(result) shouldBe Status.OK
         }
       }
     }
 
     "Calling the .show action with agent" should {
 
-      lazy val result = TestDeregisterForVATController.show("agent")(request.withSession(
+      lazy val result = TestDeregisterForVATController.show()(request.withSession(
         SessionKeys.registrationStatusKey -> Constants.registered
       ))
 
@@ -106,7 +98,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
 
     "Calling the .show action with non-agent" should {
 
-      lazy val result = TestDeregisterForVATController.show("non-agent")(request.withSession(
+      lazy val result = TestDeregisterForVATController.show()(request.withSession(
         SessionKeys.registrationStatusKey -> Constants.registered
       ))
 

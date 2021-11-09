@@ -86,7 +86,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
         }
 
         "redirect to Deregister for VAT controller" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.DeregisterForVATController.redirect().url)
+          redirectLocation(result) shouldBe Some(controllers.routes.DeregisterForVATController.show().url)
         }
       }
     }

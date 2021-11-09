@@ -34,15 +34,7 @@ class DeregisterForVATController @Inject()(deregisterForVAT: DeregisterForVAT,
                                            val regStatusCheck: DeniedAccessPredicate,
                                            implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
-  val redirect: Action[AnyContent] = (authenticate andThen regStatusCheck) { implicit user =>
-    val userType: String = if (user.isAgent) "agent" else "non-agent"
-
-    Redirect(
-      controllers.routes.DeregisterForVATController.show(userType)
-    )
-  }
-
-  val show: String => Action[AnyContent] = _ => (authenticate andThen regStatusCheck).async { implicit user =>
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     Future.successful(Ok(deregisterForVAT()))
   }
 
