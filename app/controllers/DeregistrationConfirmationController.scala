@@ -60,7 +60,7 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
             logger.warn("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
             Future.successful(serviceErrorHandler.showInternalServerError)
         }
-      case _ => Future.successful(Redirect(controllers.routes.DeregisterForVATController.redirect()))
+      case _ => Future.successful(Redirect(controllers.routes.DeregisterForVATController.show()))
     }
   }
 }
