@@ -36,7 +36,7 @@ class AuthPredicateSpec extends MockAuth {
   override lazy val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
 
   object TestAuthPredicate extends AuthPredicate(
-    unauthorised, mockEnrolmentsAuthService, mockCustomerDetailsService, serviceErrorHandler, mockAuthoriseAsAgent, mcc)(mockConfig)
+    unauthorised, insolventError, mockEnrolmentsAuthService, mockCustomerDetailsService, serviceErrorHandler, mockAuthoriseAsAgent, mcc)(mockConfig)
 
   def target: Action[AnyContent] = {
     TestAuthPredicate.async {

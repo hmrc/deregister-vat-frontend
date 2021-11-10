@@ -258,3 +258,7 @@ sicCode.error.tooMany = Rydych wedi nodi gormod o rifau
 purchasesExceedSupplies.title = A ydych yn disgwyl i’r TAW ar bryniannau fynd y tu hwnt i’r TAW ar gyflenwadau yn rheolaidd?
 purchasesExceedSupplies.explanation = Mae hyn yn golygu y byddai’r busnes yn hawlio TAW ar y rhan fwyaf o Ffurflenni TAW.
 purchasesExceedSupplies.error = Dewiswch ‘Iawn’ os ydych yn disgwyl i’r TAW ar bryniannau fod yn fwy na’r TAW ar gyflenwadau
+
+insolventError.title = Mae’n ddrwg gennym - ni allwch gael mynediad at y gwasanaeth hwn.
+insolventError.message = Mae’ch busnes wedi’i ddatgan yn ansolfent.
+insolventError.button = Ewch i’ch cyfrif treth busnes

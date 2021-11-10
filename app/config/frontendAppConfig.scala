@@ -69,6 +69,7 @@ trait AppConfig {
   val routeToSwitchLanguage: String => Call
 
   val gtmContainer: String
+  val btaHomeUrl: String
 }
 
 @Singleton
@@ -180,4 +181,7 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
     accessibilityStatementHost + servicesConfig.getString(Keys.accessibilityStatementUrl)
 
   override val gtmContainer: String = servicesConfig.getString(Keys.gtmContainer)
+
+  override lazy val btaHomeUrl: String = servicesConfig.getString(Keys.businessTaxAccountHost) +
+    servicesConfig.getString(Keys.businessTaxAccountUrl)
 }

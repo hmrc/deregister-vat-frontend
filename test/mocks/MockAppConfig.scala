@@ -66,5 +66,6 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
   override val changeClientUrl: String = "/changeClient"
   override val accessibilityStatementUrl: String = "http://localhost:9152/vat-through-software/accessibility"
   override val gtmContainer: String = "x"
+  override val btaHomeUrl: String = "http://localhost:9020/business-account"
 }
 

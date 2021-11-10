@@ -27,12 +27,14 @@ import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.errors.client.Unauthorised
+import views.html.errors.client.InsolventError
 import javax.inject.Inject
 import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthPredicate @Inject()(unauthorised: Unauthorised,
+                              insolvent: InsolventError,
                               enrolmentsAuthService: EnrolmentsAuthService,
                               customerDetailsService: CustomerDetailsService,
                               val serviceErrorHandler: ServiceErrorHandler,
@@ -76,13 +78,14 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
     if (enrolments.enrolments.exists(_.key == EnrolmentKeys.vatEnrolmentId)) {
       val user = User(enrolments)
       request.session.get(SessionKeys.insolventWithoutAccessKey) match {
-        case Some("true") => Future.successful(Forbidden(unauthorised()))
+        case Some("true") => Future.successful(Forbidden(insolvent()(user, request2Messages, appConfig)))
         case Some("false") => block(user)
         case _ =>
           customerDetailsService.getCustomerDetails(user.vrn).flatMap {
             case Right(details) if details.isInsolventWithoutAccess =>
               logger.debug("[AuthPredicate][checkVatEnrolment] - User is insolvent and not continuing to trade")
-              Future.successful(Forbidden(unauthorised()).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
+              Future.successful(Forbidden(insolvent()
+              (user, request2Messages, appConfig)).addingToSession(SessionKeys.insolventWithoutAccessKey -> "true"))
             case Right(_) =>
               logger.debug("[AuthPredicate][checkVatEnrolment] - Authenticated as principle")
               block(user).map(result => result.addingToSession(SessionKeys.insolventWithoutAccessKey -> "false"))

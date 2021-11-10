@@ -26,8 +26,7 @@ import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
-import views.html.errors.client.Unauthorised
-
+import views.html.errors.client.{InsolventError, Unauthorised}
 import scala.concurrent.{ExecutionContext, Future}
 
 trait MockAuth extends TestUtil with MockFactory with MockCustomerDetailsService{
@@ -35,6 +34,7 @@ trait MockAuth extends TestUtil with MockFactory with MockCustomerDetailsService
   type AuthResponse = Future[~[Option[AffinityGroup], Enrolments]]
   lazy val mockAuthConnector: AuthConnector = mock[AuthConnector]
   lazy val unauthorised: Unauthorised = injector.instanceOf[Unauthorised]
+  lazy val insolventError: InsolventError = injector.instanceOf[InsolventError]
 
   lazy val authorisedAgentEnrolment: Enrolments = Enrolments(
     Set(
@@ -60,6 +60,7 @@ trait MockAuth extends TestUtil with MockFactory with MockCustomerDetailsService
   lazy val mockEnrolmentsAuthService: EnrolmentsAuthService = new EnrolmentsAuthService(mockAuthConnector)
   lazy val mockAuthoriseAsAgent: AuthoriseAsAgent = new AuthoriseAsAgent(mockEnrolmentsAuthService, serviceErrorHandler, mcc, mockConfig)
   lazy val mockAuthPredicate: AuthPredicate = new AuthPredicate(unauthorised,
+                                                                insolventError,
                                                                 mockEnrolmentsAuthService,
                                                                 mockCustomerDetailsService,
                                                                 serviceErrorHandler,
