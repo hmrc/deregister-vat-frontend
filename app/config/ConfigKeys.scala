@@ -66,4 +66,7 @@ object ConfigKeys {
   val accessibilityStatementUrl: String = "accessibility-statement.url"
 
   val gtmContainer: String = "tracking-consent-frontend.gtm.container"
+
+  val businessTaxAccountHost: String = "business-tax-account.host"
+  val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
 }

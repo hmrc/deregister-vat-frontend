@@ -16,7 +16,6 @@
 
 package controllers
 
-import assets.constants.BaseTestConstants.vrn
 import common.{Constants, SessionKeys}
 import controllers.predicates.DeniedAccessPredicate
 import play.api.http.Status

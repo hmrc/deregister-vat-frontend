@@ -228,3 +228,7 @@ sicCode.error.tooMany = You have entered too many numbers
 purchasesExceedSupplies.title = Do you expect the VAT on purchases to regularly exceed the VAT on supplies?
 purchasesExceedSupplies.explanation = This means the business would claim the VAT on most VAT Returns.
 purchasesExceedSupplies.error = Select yes if you expect VAT on purchases to be more than VAT on supplies
+
+insolventError.title = Sorry, you cannot access this service.
+insolventError.message = Your business has been declared insolvent.
+insolventError.button = Go to your business tax account
