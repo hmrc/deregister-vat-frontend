@@ -209,13 +209,18 @@ class DeregistrationInfoSpec extends TestUtil {
     ".taxInvoices" should {
 
       "return true when either issueNewInvoices or outstandingInvoices are Yes" in {
-        taxInvoices(Yes,Option(Yes)) shouldBe true
-        taxInvoices(Yes,Option(No)) shouldBe true
-        taxInvoices(No,Option(Yes)) shouldBe true
+        taxInvoices(Yes, Option(Yes)) shouldBe true
+        taxInvoices(Yes, Option(No)) shouldBe true
+        taxInvoices(No, Option(Yes)) shouldBe true
+        taxInvoices(Yes, None) shouldBe true
       }
 
       "return false when both are No" in {
         taxInvoices(No,Option(No)) shouldBe false
+      }
+
+      "return false when issueNewInvoices is No and outstandingInvoices is None" in {
+        taxInvoices(No, None) shouldBe false
       }
     }
 

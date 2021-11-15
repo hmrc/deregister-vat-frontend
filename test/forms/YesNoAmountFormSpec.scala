@@ -180,6 +180,23 @@ class YesNoAmountFormSpec extends TestUtil {
     }
   }
 
+  "Unbinding the form with a value" should {
+
+    "generate the corresponding mapping" in {
+      val testKey = "test key"
+      YesNoAmountForm.formatter("emptyAmount").unbind(testKey, Some(BigDecimal(10))) shouldBe Map(testKey -> "10")
+    }
+  }
+
+  "Unbinding the form without a value" should {
+
+    "generate the corresponding mapping" in {
+      val testKey = "test key"
+      val testBigDecimal = None
+      YesNoAmountForm.formatter("emptyAmount").unbind(testKey, testBigDecimal) shouldBe Map(testKey -> "")
+    }
+  }
+
   "A form built from a valid model" should {
 
     "generate the correct mapping" in {

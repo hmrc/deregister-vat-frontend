@@ -16,7 +16,7 @@
 
 package forms
 
-import models.Other
+import models.{BelowThreshold, Ceased, ExemptOnly, Other, ZeroRated}
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -54,11 +54,46 @@ class DeregistrationReasonFormSpec extends AnyWordSpecLike with Matchers with Op
     }
   }
 
-  "A form built from a valid model" should {
+  "A form built from a valid model" when {
 
-    "generate the correct mapping" in {
-      val form = DeregistrationReasonForm.deregistrationReasonForm.fill(Other)
-      form.data shouldBe Map(DeregistrationReasonForm.reason -> DeregistrationReasonForm.other)
+    "the deregistration reason is ceased trading" should {
+
+      "generate the correct mapping" in {
+        val form = DeregistrationReasonForm.deregistrationReasonForm.fill(Ceased)
+        form.data shouldBe Map(DeregistrationReasonForm.reason -> DeregistrationReasonForm.ceased)
+      }
+    }
+
+    "the deregistration reason is below threshold" should {
+
+      "generate the correct mapping" in {
+        val form = DeregistrationReasonForm.deregistrationReasonForm.fill(BelowThreshold)
+        form.data shouldBe Map(DeregistrationReasonForm.reason -> DeregistrationReasonForm.belowThreshold)
+      }
+    }
+
+    "the deregistration reason is zero rated" should {
+
+      "generate the correct mapping" in {
+        val form = DeregistrationReasonForm.deregistrationReasonForm.fill(ZeroRated)
+        form.data shouldBe Map(DeregistrationReasonForm.reason -> DeregistrationReasonForm.zeroRated)
+      }
+    }
+
+    "the deregistration reason is exempt only" should {
+
+      "generate the correct mapping" in {
+        val form = DeregistrationReasonForm.deregistrationReasonForm.fill(ExemptOnly)
+        form.data shouldBe Map(DeregistrationReasonForm.reason -> DeregistrationReasonForm.exemptOnly)
+      }
+    }
+
+    "the deregistration reason is other" should {
+
+      "generate the correct mapping" in {
+        val form = DeregistrationReasonForm.deregistrationReasonForm.fill(Other)
+        form.data shouldBe Map(DeregistrationReasonForm.reason -> DeregistrationReasonForm.other)
+      }
     }
   }
 
