@@ -78,12 +78,12 @@ object CustomerDetails {
     tradingName <- tradingNamePath.readNullable[String]
     partyType <- partyTypePath.readNullable[String]
     emailVerified <- emailPath.readNullable[Boolean]
-    deregChangeIndicator <- pendingDeregPath.readNullable[Boolean].orElse(Reads.pure(None))
-    deregDate <- effectDateOfCancellationPath.readNullable[String].orElse(Reads.pure(None))
-    commsPreference <- commsPreferencePath.readNullable[String].orElse(Reads.pure(None))
+    deregChangeIndicator <- pendingDeregPath.readNullable[Boolean]
+    deregDate <- effectDateOfCancellationPath.readNullable[String]
+    commsPreference <- commsPreferencePath.readNullable[String]
     isInsolvent <- isInsolventPath.read[Boolean]
     continueToTrade <- continueToTradePath.readNullable[Boolean]
-    insolvencyType <- insolvencyTypePath.readNullable[String].orElse(Reads.pure(None))
+    insolvencyType <- insolvencyTypePath.readNullable[String]
   } yield {
 
     val pendingDereg = deregChangeIndicator.getOrElse(false)
