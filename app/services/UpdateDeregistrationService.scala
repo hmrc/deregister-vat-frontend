@@ -106,7 +106,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
       } yield model).value
   }
 
-  private def mandatoryCheck[T](field: Option[T], fieldName: String)
+  private[services] def mandatoryCheck[T](field: Option[T], fieldName: String)
   : Future[Either[ErrorModel, T]] = {
    Future.successful(field.fold[Either[ErrorModel, T]](
      Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, s"Mandatory field of $fieldName was not retrieved from Mongo Store"))

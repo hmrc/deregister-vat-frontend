@@ -30,6 +30,7 @@ import models._
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import play.api.http.Status.INTERNAL_SERVER_ERROR
 import play.api.mvc.AnyContentAsEmpty
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import services.mocks._
 import utils.TestUtil
 
@@ -130,6 +131,27 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
       "an error is returned from one of the AnswerServices" in {
         setupMockGetDeregReason(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
         TestUpdateDeregistrationService.updateDereg.futureValue shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
+      }
+    }
+
+    "Calling the mandatoryCheck method on a mandatory field" when {
+
+      "that mandatory field is not provided" should {
+
+        "return an internal server error" in {
+
+          val result = TestUpdateDeregistrationService.mandatoryCheck(None, "deregReason")
+          await(result) shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "Mandatory field of deregReason was not retrieved from Mongo Store"))
+        }
+      }
+
+      "that mandatory field is provided" should {
+
+        "return a Right" in {
+
+          val result = TestUpdateDeregistrationService.mandatoryCheck(Some("DeregistrationReason"), "deregReason")
+          await(result) shouldBe Right("DeregistrationReason")
+        }
       }
     }
   }

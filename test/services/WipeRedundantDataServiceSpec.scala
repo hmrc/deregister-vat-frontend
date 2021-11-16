@@ -521,7 +521,6 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
 
   }
 
-
   "Calling .wipeRedundantDeregReasonJourneyData" when {
 
     "Deregistration reason is Ceased" should {
@@ -584,6 +583,27 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       }
     }
 
+    "Deregistration reason is Exempt Only" should {
+
+      val deregReason: Option[DeregistrationReason] = Some(ExemptOnly)
+
+      "call .wipeDataReadyForExemptOnlyJourney" in {
+
+        inSequence {
+          setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+          setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
+          setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
+          setupMockDeleteNextTaxableTurnover(Right(DeregisterVatSuccess))
+          setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
+          setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+          setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
+          setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
+        }
+
+        val result = TestWipeRedundantDataService.wipeRedundantDeregReasonJourneyData(deregReason)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
+      }
+    }
 
     "Deregistration reason is not supplied" should {
 
@@ -821,5 +841,44 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       }
     }
 
+  }
+
+  "Calling .wipeChosenData" when {
+
+    "the user did select to not choose a deregistration date" should {
+
+      val dateChosen: Option[YesNo] = Some(No)
+
+      "delete the answer" in {
+
+        setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
+        val result = TestWipeRedundantDataService.wipeChosenDate(dateChosen)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
+      }
+    }
+
+    "the user chose a deregistration date" should {
+
+      val dateChosen: Option[YesNo] = Some(Yes)
+
+      "delete the answer" in {
+
+        setupMockDeleteDeregDateNotCalled()
+        val result = TestWipeRedundantDataService.wipeChosenDate(dateChosen)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
+      }
+    }
+
+    "the user didn't select whether to choose a deregistration date" should {
+
+      val dateChosen: Option[YesNo] = None
+
+      "delete the answer" in {
+
+        setupMockDeleteDeregDateNotCalled()
+        val result = TestWipeRedundantDataService.wipeChosenDate(dateChosen)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
+      }
+    }
   }
 }
