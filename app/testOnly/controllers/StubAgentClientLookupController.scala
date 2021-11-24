@@ -44,7 +44,7 @@ class StubAgentClientLookupController @Inject()(stubAgentClientLookup: StubAgent
     StubAgentClientLookupForm.form.bindFromRequest().fold(
       err => InternalServerError(s"Failed to bind model:\n\nError: $err"),
       success => Redirect(success.redirectUrl)
-        .addingToSession(SessionKeys.CLIENT_VRN -> success.vrn)
+        .addingToSession(SessionKeys.clientVRN -> success.vrn)
     )
   }
 }

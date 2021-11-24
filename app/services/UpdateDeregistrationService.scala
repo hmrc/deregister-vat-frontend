@@ -101,7 +101,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
           purchasesExceedSupplies,
           sicCode,
           zeroRatedSuppliesValue,
-          user.session.get(SessionKeys.verifiedAgentEmail)
+          user.session.get(SessionKeys.verifiedEmail)
         )
       } yield model).value
   }

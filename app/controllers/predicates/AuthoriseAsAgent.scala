@@ -44,7 +44,7 @@ class AuthoriseAsAgent @Inject()(enrolmentsAuthService: EnrolmentsAuthService,
 
     implicit val req: Request[A] = request
 
-    request.session.get(SessionKeys.CLIENT_VRN) match {
+    request.session.get(SessionKeys.clientVRN) match {
       case Some(vrn) =>
         logger.debug(s"[AuthoriseAsAgent][invokeBlock] - Client VRN from Session: $vrn")
         enrolmentsAuthService
