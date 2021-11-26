@@ -49,7 +49,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
     "Calling the .show action with agent" should {
 
       lazy val result = TestDeregisterForVATController.show()(request.withSession(
-        SessionKeys.registrationStatusKey -> Constants.registered
+        SessionKeys.registrationStatus -> Constants.registered
       ))
 
       "return 200 (OK)" in {
@@ -67,7 +67,7 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec {
     "Calling the .show action with non-agent" should {
 
       lazy val result = TestDeregisterForVATController.show()(request.withSession(
-        SessionKeys.registrationStatusKey -> Constants.registered
+        SessionKeys.registrationStatus -> Constants.registered
       ))
 
       "return 200 (OK)" in {

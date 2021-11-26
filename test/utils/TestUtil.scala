@@ -68,7 +68,7 @@ trait TestUtil extends AnyWordSpecLike
   lazy implicit val mockConfig: MockAppConfig = new MockAppConfig
   lazy implicit val request: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest().withSession(SessionKeys.insolventWithoutAccessKey -> "false")
-  lazy val requestWithVRN: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.CLIENT_VRN -> vrn)
+  lazy val requestWithVRN: FakeRequest[AnyContentAsEmpty.type] = FakeRequest().withSession(SessionKeys.clientVRN -> vrn)
   lazy val requestPost: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest("POST", "/").withSession(SessionKeys.insolventWithoutAccessKey -> "false")
   lazy val insolventRequest: FakeRequest[AnyContentAsEmpty.type] =
@@ -78,7 +78,7 @@ trait TestUtil extends AnyWordSpecLike
   implicit lazy val messages: Messages = MessagesImpl(Lang("en-GB"), messagesApi)
   implicit lazy val user: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn,active = true)(request)
   lazy val agentUserPrefYes: User[AnyContentAsEmpty.type] =
-    User[AnyContentAsEmpty.type](vrn,active = true, Some(arn))(request.withSession(SessionKeys.verifiedAgentEmail -> agentEmail))
+    User[AnyContentAsEmpty.type](vrn,active = true, Some(arn))(request.withSession(SessionKeys.verifiedEmail -> agentEmail))
   lazy val agentUserPrefNo: User[AnyContentAsEmpty.type] = User[AnyContentAsEmpty.type](vrn,active = true, Some(arn))(request)
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
   implicit lazy val ec: ExecutionContext = injector.instanceOf[ExecutionContext]

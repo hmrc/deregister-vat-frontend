@@ -18,7 +18,7 @@ package controllers.predicates
 
 import common.Constants
 import common.Constants.vatGroup
-import common.SessionKeys.registrationStatusKey
+import common.SessionKeys.registrationStatus
 import config.{AppConfig, ServiceErrorHandler}
 import models.User
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -45,7 +45,7 @@ class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsSer
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
     implicit val req: User[A] = request
 
-    req.session.get(registrationStatusKey) match {
+    req.session.get(registrationStatus) match {
       case Some(Constants.pending) | Some(Constants.deregistered) => Future.successful(Left(Redirect(redirectPage)))
       case Some(Constants.registered) => Future.successful(Right(req))
       case _ => getCustomerInfoCall(req.vrn)
@@ -64,15 +64,15 @@ class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsSer
           case (true, _, _) =>
             logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "Deregistration pending. Redirecting to user hub/overview page.")
-            Left(Redirect(redirectPage).addingToSession(registrationStatusKey -> Constants.pending))
+            Left(Redirect(redirectPage).addingToSession(registrationStatus -> Constants.pending))
           case (_, true, _) =>
             logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "User has already deregistered. Redirecting to user hub/overview page.")
-            Left(Redirect(redirectPage).addingToSession(registrationStatusKey -> Constants.deregistered))
+            Left(Redirect(redirectPage).addingToSession(registrationStatus -> Constants.deregistered))
           case _ =>
             logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - Redirecting user to start of journey")
             Left(Redirect(controllers.routes.DeregisterForVATController.show().url)
-              .addingToSession(registrationStatusKey -> Constants.registered))
+              .addingToSession(registrationStatus -> Constants.registered))
         }
       case Left(error) =>
         logger.warn(s"[InflightPPOBPredicate][getCustomerInfoCall] - " +

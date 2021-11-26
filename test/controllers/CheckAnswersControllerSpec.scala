@@ -190,7 +190,7 @@ class CheckAnswersControllerSpec
           redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationConfirmationController.show().url)
         }
         "add the pending dereg value to the session" in {
-          session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.pending)
+          session(result).get(SessionKeys.registrationStatus) shouldBe Some(Constants.pending)
         }
 
         "add the successful dereg value to the session" in {

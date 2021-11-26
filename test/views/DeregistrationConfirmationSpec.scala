@@ -171,7 +171,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
   "Rendering the deregistration confirmation page for an agent" when {
 
-    "the user has verifiedAgentEmail (Yes pref inferred) and a business name" should {
+    "the user has verifiedEmail (Yes pref inferred) and a business name" should {
       val businessName: Option[String] = Some("Fake Business Name Limited")
       lazy val view = {
         deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
@@ -196,7 +196,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
     }
 
-    "the user has verifiedAgentEmail (Yes pref inferred) and no business name" should {
+    "the user has verifiedEmail (Yes pref inferred) and no business name" should {
       lazy val view = {
         deregistrationConfirmation()(agentUserPrefYes, messages, mockConfig)
       }
@@ -220,7 +220,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
     }
 
-    "the user is without a verifiedAgentEmail (No pref inferred) and no business name" should {
+    "the user is without a verifiedEmail (No pref inferred) and no business name" should {
       lazy val view = {
         deregistrationConfirmation()(agentUserPrefNo, messages, mockConfig)
       }
@@ -239,7 +239,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
       }
     }
 
-    "the user is without a verifiedAgentEmail (No pref inferred) and has a business name" should {
+    "the user is without a verifiedEmail (No pref inferred) and has a business name" should {
       val businessName: Option[String] = Some("Fake Business Name Limited")
       lazy val view: Html = {
         deregistrationConfirmation(businessName)(agentUserPrefNo, messages, mockConfig)

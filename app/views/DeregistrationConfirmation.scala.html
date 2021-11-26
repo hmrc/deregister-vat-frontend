@@ -40,7 +40,7 @@
 
   @{
     if(user.isAgent){
-      (user.session.get(SessionKeys.verifiedAgentEmail), businessName) match {
+      (user.session.get(SessionKeys.verifiedEmail), businessName) match {
 
         case (Some(verifiedEmail), Some(businessName)) =>
           <p class="govuk-body">{messages("deregistrationConfirmation.bpOffEmailP1")}

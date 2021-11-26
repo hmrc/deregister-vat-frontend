@@ -18,9 +18,9 @@ package common
 
 object SessionKeys {
 
-  val CLIENT_VRN: String = "CLIENT_VRN"
-  val verifiedAgentEmail: String = "verifiedAgentEmail"
-  val registrationStatusKey: String = "mtdVatRegistrationStatus"
-  val deregSuccessful: String = "successfulDeregistration"
+  val clientVRN: String = "mtdVatvcClientVrn"
+  val verifiedEmail: String = "mtdVatvcVerifiedAgentEmail"
+  val registrationStatus: String = "mtdVatvcRegistrationStatus"
+  val deregSuccessful: String = "mtdVatvcSuccessfulDeregistration"
   val insolventWithoutAccessKey: String = "insolventWithoutAccess"
 }

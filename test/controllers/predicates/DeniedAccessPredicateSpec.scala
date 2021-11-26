@@ -46,7 +46,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
       "session key is set to pending" when {
 
         lazy val fakeRequest = FakeRequest().withSession(
-          SessionKeys.registrationStatusKey -> Constants.pending
+          SessionKeys.registrationStatus -> Constants.pending
         )
 
         "the user is a principal entity" should {
@@ -81,7 +81,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
       "session key is set to deregistered" when {
 
         lazy val fakeRequest = FakeRequest().withSession(
-          SessionKeys.registrationStatusKey -> Constants.deregistered
+          SessionKeys.registrationStatus -> Constants.deregistered
         )
 
         "the user is a principal entity" should {
@@ -117,7 +117,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
       "session key is set to registered" should {
 
         lazy val fakeRequest = FakeRequest().withSession(
-          SessionKeys.registrationStatusKey -> Constants.registered
+          SessionKeys.registrationStatus -> Constants.registered
         )
 
         lazy val result = {
@@ -180,7 +180,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
             }
 
             "add 'registrationStatus' = pending to session" in {
-              session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.pending)
+              session(result).get(SessionKeys.registrationStatus) shouldBe Some(Constants.pending)
             }
 
             "return SEE_OTHER" in {
@@ -200,7 +200,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
             }
 
             "add 'registrationStatus' = pending to session" in {
-              session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.pending)
+              session(result).get(SessionKeys.registrationStatus) shouldBe Some(Constants.pending)
             }
 
             "return SEE_OTHER" in {
@@ -223,7 +223,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
             }
 
             "add 'registrationStatus' = deregistered to session" in {
-              session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.deregistered)
+              session(result).get(SessionKeys.registrationStatus) shouldBe Some(Constants.deregistered)
             }
 
             "return SEE_OTHER" in {
@@ -243,7 +243,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
             }
 
             "add 'registrationStatus' = deregistered to session" in {
-              session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.deregistered)
+              session(result).get(SessionKeys.registrationStatus) shouldBe Some(Constants.deregistered)
             }
 
             "return SEE_OTHER" in {
@@ -264,7 +264,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
           }
 
           "add 'registrationStatus' = registered to session" in {
-            session(result).get(SessionKeys.registrationStatusKey) shouldBe Some(Constants.registered)
+            session(result).get(SessionKeys.registrationStatus) shouldBe Some(Constants.registered)
           }
 
           "return SEE_OTHER" in {
