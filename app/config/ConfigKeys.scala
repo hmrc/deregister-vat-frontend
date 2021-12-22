@@ -62,8 +62,6 @@ object ConfigKeys {
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountdown: String = "timeout.countdown"
 
-  val accessibilityReportUrl: String = "accessibility-statement.service-path"
-
   val gtmContainer: String = "tracking-consent-frontend.gtm.container"
 
   val businessTaxAccountHost: String = "business-tax-account.host"
