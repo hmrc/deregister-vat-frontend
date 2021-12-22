@@ -62,8 +62,7 @@ object ConfigKeys {
   val timeoutPeriod: String = "timeout.period"
   val timeoutCountdown: String = "timeout.countdown"
 
-  val accessibilityStatementHost: String = "accessibility-statement.host"
-  val accessibilityStatementUrl: String = "accessibility-statement.url"
+  val accessibilityReportUrl: String = "accessibility-statement.service-path"
 
   val gtmContainer: String = "tracking-consent-frontend.gtm.container"
 
