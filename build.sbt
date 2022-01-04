@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,20 +33,13 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
   val excludedPackages = Seq(
     "<empty>",
-    "Reverse.*",
-    "controllers..*Reverse.*",
-    "com.kenshoo.play.metrics.*",
-    "controllers.zeroRated.javascript",
-    "controllers.javascript",
-    ".*standardError*.*",
-    ".*main_template*.*",
-    "uk.gov.hmrc.BuildInfo",
+    ".*Reverse.*",
     "app.*",
     "prod.*",
     "config.*",
-    "testOnlyDoNotUseInAppConf.*",
     "testOnly.*",
-    "views.*")
+    "views.*"
+  )
 
   Seq(
     ScoverageKeys.coverageExcludedPackages := excludedPackages.mkString(";"),
@@ -58,9 +51,9 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28"      % "5.16.0",
+  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28"      % "5.18.0",
   "uk.gov.hmrc"   %% "play-language"                   % "5.1.0-play-28",
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "1.25.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "1.31.0-play-28",
   "org.typelevel" %% "cats"                            % "0.9.0"
 )
 
