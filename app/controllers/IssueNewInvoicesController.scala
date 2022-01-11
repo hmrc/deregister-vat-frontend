@@ -49,8 +49,8 @@ class IssueNewInvoicesController @Inject()(issueNewInvoices: IssueNewInvoices,
   private def renderView(form: Form[YesNo])(implicit user: User[_]) = issueNewInvoices(form)
 
   private def redirect: YesNo => Result = {
-    case Yes => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
-    case No => Redirect(controllers.routes.OutstandingInvoicesController.show())
+    case Yes => Redirect(controllers.routes.ChooseDeregistrationDateController.show)
+    case No => Redirect(controllers.routes.OutstandingInvoicesController.show)
   }
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>

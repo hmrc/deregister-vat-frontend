@@ -53,7 +53,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestOptionTaxController.show()(request)
+        lazy val result = TestOptionTaxController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetOptionTax(Right(None))
@@ -69,7 +69,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
 
       "the user has a pre selected option" should {
 
-        lazy val result = TestOptionTaxController.show()(request)
+        lazy val result = TestOptionTaxController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetOptionTax(Right(Some(testYesModel)))
@@ -91,7 +91,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         }
       }
 
-      authChecks(".show", TestOptionTaxController.show(), request)
+      authChecks(".show", TestOptionTaxController.show, request)
     }
 
     "Calling the .submit action" when {
@@ -103,7 +103,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
             (yesNo, "yes"),
             (amount, testAmt.toString)
           )
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestOptionTaxController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreOptionTax(testYesModel)(Right(DeregisterVatSuccess))
@@ -111,8 +111,8 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.CapitalAssetsController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show().url)
+        s"redirect to '${controllers.routes.CapitalAssetsController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show.url)
         }
       }
 
@@ -120,7 +120,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((yesNo, "no"))
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestOptionTaxController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreOptionTax(testNoModel)(Right(DeregisterVatSuccess))
@@ -128,8 +128,8 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.CapitalAssetsController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show().url)
+        s"redirect to '${controllers.routes.CapitalAssetsController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show.url)
         }
       }
 
@@ -137,7 +137,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((yesNo, "no"))
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestOptionTaxController.submit(request)
 
         "return 500 (ISE)" in {
           setupMockStoreOptionTax(testNoModel)(Left(errorModel))
@@ -150,7 +150,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("yes_no", ""))
-        lazy val result = TestOptionTaxController.submit()(request)
+        lazy val result = TestOptionTaxController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -164,6 +164,6 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
       }
     }
 
-    authChecks(".submit", TestOptionTaxController.submit(), requestPost.withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestOptionTaxController.submit, requestPost.withFormUrlEncodedBody(("yes_no", "no")))
   }
 }

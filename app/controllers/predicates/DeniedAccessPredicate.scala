@@ -71,7 +71,7 @@ class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsSer
             Left(Redirect(redirectPage).addingToSession(registrationStatus -> Constants.deregistered))
           case _ =>
             logger.debug("[PendingChangesPredicate][getCustomerInfoCall] - Redirecting user to start of journey")
-            Left(Redirect(controllers.routes.DeregisterForVATController.show().url)
+            Left(Redirect(controllers.routes.DeregisterForVATController.show.url)
               .addingToSession(registrationStatus -> Constants.registered))
         }
       case Left(error) =>

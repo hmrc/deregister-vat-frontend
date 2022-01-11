@@ -36,7 +36,7 @@
   <p class="govuk-body">@messages("deregisterForVAT.p2")</p>
 
   @govukButton(Button(
-    href = Some(routes.DeregistrationReasonController.show().url),
+    href = Some(routes.DeregistrationReasonController.show.url),
     content = Text(messages("common.continue"))
   ))
 }

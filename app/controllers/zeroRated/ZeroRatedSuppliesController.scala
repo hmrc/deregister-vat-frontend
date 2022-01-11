@@ -55,7 +55,7 @@ class ZeroRatedSuppliesController @Inject()(zeroRatedSupplies: ZeroRatedSupplies
       ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(zeroRatedSupplies(error))),
         data => zeroRatedSuppliesValueService.storeAnswer(data) map {
-          case Right(_) => Redirect(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show())
+          case Right(_) => Redirect(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show)
           case Left(error) =>
             logger.warn("[ZeroRatedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError

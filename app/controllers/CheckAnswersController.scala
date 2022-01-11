@@ -57,7 +57,7 @@ class CheckAnswersController @Inject()(checkYourAnswers: CheckYourAnswers,
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     updateDeregistrationService.updateDereg.map {
-      case Right(VatSubscriptionSuccess) => Redirect(controllers.routes.DeregistrationConfirmationController.show().url)
+      case Right(VatSubscriptionSuccess) => Redirect(controllers.routes.DeregistrationConfirmationController.show.url)
           .addingToSession(SessionKeys.deregSuccessful -> "true", SessionKeys.registrationStatus -> Constants.pending)
 
       case Left(error) =>

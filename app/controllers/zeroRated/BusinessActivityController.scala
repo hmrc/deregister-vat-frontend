@@ -49,8 +49,8 @@ class BusinessActivityController @Inject()(businessActivity: BusinessActivity,
   private def renderView(form: Form[YesNo])(implicit user: User[_]) = businessActivity(form)
 
   private def redirect (yesNo: YesNo) : Result = yesNo match {
-    case Yes => Redirect(controllers.zeroRated.routes.SicCodeController.show())
-    case No => Redirect(controllers.routes.NextTaxableTurnoverController.show())
+    case Yes => Redirect(controllers.zeroRated.routes.SicCodeController.show)
+    case No => Redirect(controllers.routes.NextTaxableTurnoverController.show)
   }
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>

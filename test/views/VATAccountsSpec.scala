@@ -39,7 +39,7 @@ class VATAccountsSpec extends ViewBaseSpec {
   "Rendering the VAT Accounts page with no errors from the ceased journey" should {
 
     lazy val view = vatAccounts(
-      controllers.routes.CeasedTradingDateController.show().url,
+      controllers.routes.CeasedTradingDateController.show.url,
       VATAccountsForm.vatAccountsForm
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -50,7 +50,7 @@ class VATAccountsSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.CeasedTradingDateController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.CeasedTradingDateController.show.url
     }
 
     "have the correct page heading" in {
@@ -87,7 +87,7 @@ class VATAccountsSpec extends ViewBaseSpec {
   "Rendering the VAT Accounts page from the BelowThreshold journey with errors" should {
 
     lazy val view = vatAccounts(
-      controllers.routes.WhyTurnoverBelowController.show().url,
+      controllers.routes.WhyTurnoverBelowController.show.url,
       VATAccountsForm.vatAccountsForm.bind(Map("accountingMethod" -> ""))
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -98,7 +98,7 @@ class VATAccountsSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.WhyTurnoverBelowController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.WhyTurnoverBelowController.show.url
     }
 
     "have the correct page heading" in {

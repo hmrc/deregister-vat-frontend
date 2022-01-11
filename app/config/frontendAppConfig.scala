@@ -83,12 +83,12 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   override lazy val feedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
-    s"&backUrl=${SafeRedirectUrl(platformHost + controllers.routes.DeregisterForVATController.show().url).encodedUrl}"
+    s"&backUrl=${SafeRedirectUrl(platformHost + controllers.routes.DeregisterForVATController.show.url).encodedUrl}"
 
   private lazy val signInBaseUrl: String = servicesConfig.getString(Keys.signInBaseUrl)
   private lazy val signInContinueBaseUrl: String = servicesConfig.getString(Keys.signInContinueBaseUrl)
   private lazy val signInContinueUrl: String = SafeRedirectUrl(signInContinueBaseUrl + controllers.routes
-                                               .DeregisterForVATController.show().url).encodedUrl
+                                               .DeregisterForVATController.show.url).encodedUrl
   private lazy val signInOrigin: String = servicesConfig.getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
 
@@ -121,16 +121,16 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
 
   override def agentClientUnauthorisedUrl: String =
     if (features.stubAgentClientLookup()) {
-      testOnly.controllers.routes.StubAgentClientLookupController.unauth(controllers.routes.DeregisterForVATController.show().url).url
+      testOnly.controllers.routes.StubAgentClientLookupController.unauth(controllers.routes.DeregisterForVATController.show.url).url
     } else {
-      vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show().url)
+      vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show.url)
     }
 
   override def agentClientLookupUrl: String =
     if (features.stubAgentClientLookup()) {
-      testOnly.controllers.routes.StubAgentClientLookupController.show(controllers.routes.DeregisterForVATController.show().url).url
+      testOnly.controllers.routes.StubAgentClientLookupController.show(controllers.routes.DeregisterForVATController.show.url).url
     } else {
-      vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show().url)
+      vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show.url)
     }
 
   override lazy val vatSubscriptionUrl: String = servicesConfig.baseUrl(Keys.vatSubscriptionService)

@@ -54,7 +54,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestChooseDeregistrationDateController$.show()(request)
+        lazy val result = TestChooseDeregistrationDateController$.show(request)
 
         "return 200 (OK)" in {
           setupMockGetChooseDeregDate(Right(None))
@@ -71,7 +71,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
       "the has a pre selected option" should {
 
-        lazy val result = TestChooseDeregistrationDateController$.show()(request)
+        lazy val result = TestChooseDeregistrationDateController$.show(request)
 
         "return 200 (OK)" in {
           setupMockGetChooseDeregDate(Right(Some(Yes)))
@@ -93,7 +93,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
       "the retrieval of submitted data fails" should {
 
-        lazy val result = TestChooseDeregistrationDateController$.show()(request)
+        lazy val result = TestChooseDeregistrationDateController$.show(request)
 
         "return Internal Server Error" in {
           setupMockGetChooseDeregDate(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
@@ -116,7 +116,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
           requestPost.withFormUrlEncodedBody(
             (yesNo, yes)
           )
-        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreChooseDeregDate(Yes)(Right(DeregisterVatSuccess))
@@ -126,7 +126,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         }
 
         "redirect to the deregDateController" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationDateController.show.url)
         }
       }
 
@@ -134,7 +134,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((yesNo, YesNoForm.no))
-        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreChooseDeregDate(No)(Right(DeregisterVatSuccess))
@@ -144,7 +144,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
         }
 
         "redirect to the check your answers controller" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CheckAnswersController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.routes.CheckAnswersController.show.url)
         }
       }
 
@@ -152,7 +152,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((yesNo, YesNoForm.no))
-        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit(request)
 
         "return 500 (ISE)" in {
           setupMockStoreChooseDeregDate(No)(Left(errorModel))
@@ -167,7 +167,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
           requestPost.withFormUrlEncodedBody(
             (yesNo, "")
           )
-        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetOutstandingInvoices(Right(None))
@@ -187,7 +187,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
           requestPost.withFormUrlEncodedBody(
             (yesNo, "")
           )
-        lazy val result = TestChooseDeregistrationDateController$.submit()(request)
+        lazy val result = TestChooseDeregistrationDateController$.submit(request)
 
         "return Internal Server Error" in {
           setupMockGetOutstandingInvoices(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))

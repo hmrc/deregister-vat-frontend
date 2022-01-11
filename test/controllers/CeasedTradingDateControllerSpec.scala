@@ -51,7 +51,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestCeasedTradingDateController.show()(request)
+        lazy val result = TestCeasedTradingDateController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetCeasedTradingDate(Right(None))
@@ -67,7 +67,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
 
       "the user is has previously entered values" should {
 
-        lazy val result = TestCeasedTradingDateController.show()(request)
+        lazy val result = TestCeasedTradingDateController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetCeasedTradingDate(Right(Some(testDateModel)))
@@ -93,7 +93,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
         }
       }
 
-      authChecks(".show", TestCeasedTradingDateController.show(), request)
+      authChecks(".show", TestCeasedTradingDateController.show, request)
     }
 
     "Calling the .submit action" when {
@@ -106,7 +106,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
             ("dateMonth", testMonth.toString),
             ("dateYear", testYear.toString)
           )
-        lazy val result = TestCeasedTradingDateController.submit()(request)
+        lazy val result = TestCeasedTradingDateController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreCeasedTradingDate(testDateModel)(Right(DeregisterVatSuccess))
@@ -114,8 +114,8 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to the ${controllers.routes.VATAccountsController.show().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
+        s"redirect to the ${controllers.routes.VATAccountsController.show.url}" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show.url)
         }
       }
 
@@ -127,7 +127,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
             ("dateMonth", testMonth.toString),
             ("dateYear", testYear.toString)
           )
-        lazy val result = TestCeasedTradingDateController.submit()(request)
+        lazy val result = TestCeasedTradingDateController.submit(request)
 
         "return 500 (ISE)" in {
           setupMockStoreCeasedTradingDate(testDateModel)(Left(errorModel))
@@ -144,7 +144,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
             ("dateMonth", ""),
             ("dateYear", "")
           )
-        lazy val result = TestCeasedTradingDateController.submit()(request)
+        lazy val result = TestCeasedTradingDateController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -158,7 +158,7 @@ class CeasedTradingDateControllerSpec extends ControllerBaseSpec with MockCeased
       }
     }
 
-    authChecks(".submit", TestCeasedTradingDateController.submit(), requestPost.withFormUrlEncodedBody(
+    authChecks(".submit", TestCeasedTradingDateController.submit, requestPost.withFormUrlEncodedBody(
       ("dateDay", "1"),
       ("dateMonth", "1"),
       ("dateYear", "2018")

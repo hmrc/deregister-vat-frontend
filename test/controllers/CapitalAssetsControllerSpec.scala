@@ -52,7 +52,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestCapitalAssetsController.show()(request)
+        lazy val result = TestCapitalAssetsController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetCapitalAssets(Right(None))
@@ -68,7 +68,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
       "the user is has pre selected option" should {
 
-        lazy val result = TestCapitalAssetsController.show()(request)
+        lazy val result = TestCapitalAssetsController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(Yes,Some(amount)))))
@@ -87,7 +87,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         }
       }
 
-      authChecks(".show", TestCapitalAssetsController.show(), request)
+      authChecks(".show", TestCapitalAssetsController.show, request)
 
     }
 
@@ -99,7 +99,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((yesNoField, yesChecked), (amountField, amount.toString))
-          lazy val result = TestCapitalAssetsController.submit()(request)
+          lazy val result = TestCapitalAssetsController.submit(request)
 
 
           "return 303 (SEE_OTHER)" in {
@@ -109,8 +109,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to '${controllers.routes.OptionStocksToSellController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show().url)
+          s"redirect to '${controllers.routes.OptionStocksToSellController.show.url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show.url)
           }
         }
 
@@ -118,7 +118,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((yesNoField, noChecked))
-          lazy val result = TestCapitalAssetsController.submit()(request)
+          lazy val result = TestCapitalAssetsController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
@@ -127,8 +127,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to '${controllers.routes.OptionStocksToSellController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show().url)
+          s"redirect to '${controllers.routes.OptionStocksToSellController.show.url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show.url)
           }
         }
 
@@ -136,7 +136,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((yesNoField, noChecked))
-          lazy val result = TestCapitalAssetsController.submit()(request)
+          lazy val result = TestCapitalAssetsController.submit(request)
 
           "return 500 (ISE)" in {
             setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Left(errorModel))
@@ -150,7 +150,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((yesNoField, noChecked))
-        lazy val result = TestCapitalAssetsController.submit()(request)
+        lazy val result = TestCapitalAssetsController.submit(request)
 
         "return 500 (ISE)" in {
           setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
@@ -164,7 +164,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((yesNoField, yesChecked),(amountField, ""))
-        lazy val result = TestCapitalAssetsController.submit()(request)
+        lazy val result = TestCapitalAssetsController.submit(request)
 
 
         "return 400 (BAD_REQUEST)" in {
@@ -177,7 +177,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((yesNoField, ""))
-        lazy val result = TestCapitalAssetsController.submit()(request)
+        lazy val result = TestCapitalAssetsController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -191,7 +191,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
       }
     }
 
-    authChecks(".submit", TestCapitalAssetsController.submit(), requestPost.withFormUrlEncodedBody((yesNoField, yesChecked)))
+    authChecks(".submit", TestCapitalAssetsController.submit, requestPost.withFormUrlEncodedBody((yesNoField, yesChecked)))
 
   }
 }

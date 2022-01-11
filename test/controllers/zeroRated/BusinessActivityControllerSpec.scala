@@ -51,7 +51,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
     "calling .show with existing data of yes" should {
 
-      lazy val result = TestController.show()(request)
+      lazy val result = TestController.show(request)
 
       "return a 200" in {
 
@@ -68,7 +68,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
     "calling .show with existing data of no" should {
 
-      lazy val result = TestController.show()(request)
+      lazy val result = TestController.show(request)
 
       "return a 200" in {
 
@@ -85,7 +85,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
     "calling .show  with no existing data" should {
 
-      lazy val result = TestController.show()(request)
+      lazy val result = TestController.show(request)
 
       "return a 200" in {
 
@@ -104,7 +104,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
     "calling .show with an unauthorised user" should {
 
       "return a 303" in {
-        lazy val result = TestController.show()(request)
+        lazy val result = TestController.show(request)
         mockAuthResult(mockUnauthorisedIndividual)
         status(result) shouldBe Status.FORBIDDEN
       }
@@ -114,7 +114,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
         requestPost.withFormUrlEncodedBody((yesNo, "yes"))
-      lazy val result = TestController.submit()(request)
+      lazy val result = TestController.submit(request)
 
       "return 303 " in {
         setupMockStoreBusinessActivityAnswer(Yes)(Right(DeregisterVatSuccess))
@@ -123,8 +123,8 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
         status(result) shouldBe Status.SEE_OTHER
       }
 
-      s"Redirect to the '${controllers.zeroRated.routes.SicCodeController.show().url}'" in {
-        redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.SicCodeController.show().url)
+      s"Redirect to the '${controllers.zeroRated.routes.SicCodeController.show.url}'" in {
+        redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.SicCodeController.show.url)
       }
     }
 
@@ -132,7 +132,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
         requestPost.withFormUrlEncodedBody((yesNo, "no"))
-      lazy val result = TestController.submit()(request)
+      lazy val result = TestController.submit(request)
 
       "return 303 " in {
         setupMockStoreBusinessActivityAnswer(No)(Right(DeregisterVatSuccess))
@@ -142,7 +142,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
       }
 
       s"Redirect to the '${controllers.routes.NextTaxableTurnoverController.show.url}'" in {
-        redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
+        redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show.url)
       }
     }
 
@@ -151,7 +151,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
         requestPost.withFormUrlEncodedBody((yesNo, ""))
-      lazy val result = TestController.submit()(request)
+      lazy val result = TestController.submit(request)
 
       "return a 400" in {
         mockAuthResult(mockAuthorisedIndividual)
@@ -163,7 +163,7 @@ class BusinessActivityControllerSpec extends ControllerBaseSpec
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
         requestPost.withFormUrlEncodedBody((yesNo, "no"))
-      lazy val result = TestController.submit()(request)
+      lazy val result = TestController.submit(request)
 
       "return a 500" in {
         setupMockStoreBusinessActivityAnswer(No)(Left(errorModel))

@@ -46,7 +46,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
 
       "the user does not have any checkboxes pre selected" should {
 
-        lazy val result = TestWhyTurnoverBelowController.show()(request)
+        lazy val result = TestWhyTurnoverBelowController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetWhyTurnoverBelow(Right(None))
@@ -62,7 +62,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
 
       "the user is has checkboxes pre-selected" should {
 
-        lazy val result = TestWhyTurnoverBelowController.show()(request)
+        lazy val result = TestWhyTurnoverBelowController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetWhyTurnoverBelow(Right(Some(WhyTurnoverBelowModel(true,true,true,true,true,true,true))))
@@ -86,7 +86,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
         }
       }
 
-      authChecks(".show", TestWhyTurnoverBelowController.show(), request)
+      authChecks(".show", TestWhyTurnoverBelowController.show, request)
 
     }
 
@@ -106,7 +106,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((WhyTurnoverBelowModel.lostContract, "true"))
-        lazy val result = TestWhyTurnoverBelowController.submit()(request)
+        lazy val result = TestWhyTurnoverBelowController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreWhyTurnoverBelow(model)(Right(DeregisterVatSuccess))
@@ -114,8 +114,8 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to ${controllers.routes.VATAccountsController.show().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
+        s"redirect to ${controllers.routes.VATAccountsController.show.url}" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show.url)
         }
       }
 
@@ -123,7 +123,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("", ""))
-        lazy val result = TestWhyTurnoverBelowController.submit()(request)
+        lazy val result = TestWhyTurnoverBelowController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -140,7 +140,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((WhyTurnoverBelowModel.lostContract, "true"))
-        lazy val result = TestWhyTurnoverBelowController.submit()(request)
+        lazy val result = TestWhyTurnoverBelowController.submit(request)
 
         "return Internal Server Error" in {
 
@@ -151,7 +151,7 @@ class WhyTurnoverBelowControllerSpec extends ControllerBaseSpec with MockWhyTurn
       }
     }
 
-    authChecks(".submit", TestWhyTurnoverBelowController.submit(), requestPost
+    authChecks(".submit", TestWhyTurnoverBelowController.submit, requestPost
       .withFormUrlEncodedBody((WhyTurnoverBelowModel.lostContract, "true")))
   }
 }

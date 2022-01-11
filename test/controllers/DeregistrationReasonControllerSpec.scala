@@ -50,7 +50,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestDeregistrationReasonController.show()(user)
+        lazy val result = TestDeregistrationReasonController.show(user)
 
         "return 200 (OK)" in {
           setupMockGetDeregReason(Right(None))
@@ -66,7 +66,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
       "the user does have a pre selected option" should {
 
-        lazy val result = TestDeregistrationReasonController.show()(user)
+        lazy val result = TestDeregistrationReasonController.show(user)
 
         "return 200 (OK)" in {
           setupMockGetDeregReason(Right(Some(Ceased)))
@@ -84,7 +84,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
         }
       }
 
-      authChecks(".show", TestDeregistrationReasonController.show(), user)
+      authChecks(".show", TestDeregistrationReasonController.show, user)
     }
 
     "Calling the .submit action" when {
@@ -95,7 +95,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((reason, ceased)).withSession()
-          lazy val result = TestDeregistrationReasonController.submit()(request)
+          lazy val result = TestDeregistrationReasonController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockStoreDeregReason(Ceased)(Right(DeregisterVatSuccess))
@@ -105,8 +105,8 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.CeasedTradingDateController.show().url}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.CeasedTradingDateController.show().url)
+          s"redirect to ${controllers.routes.CeasedTradingDateController.show.url}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.CeasedTradingDateController.show.url)
           }
         }
 
@@ -114,7 +114,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((reason, belowThreshold))
-          lazy val result = TestDeregistrationReasonController.submit()(request)
+          lazy val result = TestDeregistrationReasonController.submit(request)
 
 
           "return 303 (SEE OTHER)" in {
@@ -125,8 +125,8 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.TaxableTurnoverController.show().url}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.TaxableTurnoverController.show().url)
+          s"redirect to ${controllers.routes.TaxableTurnoverController.show.url}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.TaxableTurnoverController.show.url)
           }
         }
 
@@ -134,7 +134,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((reason, exemptOnly))
-          lazy val result = TestDeregistrationReasonController.submit()(request)
+          lazy val result = TestDeregistrationReasonController.submit(request)
 
 
           "return 303 (SEE OTHER)" in {
@@ -145,8 +145,8 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.VATAccountsController.show().url}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
+          s"redirect to ${controllers.routes.VATAccountsController.show.url}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show.url)
           }
         }
 
@@ -154,7 +154,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((reason, other))
-          lazy val result = TestDeregistrationReasonController.submit()(request)
+          lazy val result = TestDeregistrationReasonController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockStoreDeregReason(Other)(Right(DeregisterVatSuccess))
@@ -173,7 +173,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((reason, ""))
-          lazy val result = TestDeregistrationReasonController.submit()(request)
+          lazy val result = TestDeregistrationReasonController.submit(request)
 
           "return 400 (BAD REQUEST)" in {
             mockAuthResult(mockAuthorisedIndividual)
@@ -190,7 +190,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((reason, other))
-          lazy val result = TestDeregistrationReasonController.submit()(request)
+          lazy val result = TestDeregistrationReasonController.submit(request)
 
           "return ISE (INTERNAL SERVER ERROR)" in {
             setupMockStoreDeregReason(Other)(Left(errorModel))
@@ -204,7 +204,7 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((reason, ceased))
-        lazy val result = TestDeregistrationReasonController.submit()(request)
+        lazy val result = TestDeregistrationReasonController.submit(request)
 
         "return ISE (INTERNAL SERVER ERROR)" in {
           setupMockStoreDeregReason(Ceased)(Right(DeregisterVatSuccess))
@@ -216,6 +216,6 @@ class DeregistrationReasonControllerSpec extends ControllerBaseSpec with MockWip
       }
     }
 
-    authChecks(".submit", TestDeregistrationReasonController.submit(), requestPost.withFormUrlEncodedBody((reason, other)))
+    authChecks(".submit", TestDeregistrationReasonController.submit, requestPost.withFormUrlEncodedBody((reason, other)))
   }
 }

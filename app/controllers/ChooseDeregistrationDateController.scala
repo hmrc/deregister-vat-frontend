@@ -87,7 +87,7 @@ class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: Cho
   }
 
   private def redirect (yesNo: YesNo) : Result = yesNo match {
-    case Yes => Redirect(controllers.routes.DeregistrationDateController.show())
-    case No => Redirect(controllers.routes.CheckAnswersController.show())
+    case Yes => Redirect(controllers.routes.DeregistrationDateController.show)
+    case No => Redirect(controllers.routes.CheckAnswersController.show)
   }
 }

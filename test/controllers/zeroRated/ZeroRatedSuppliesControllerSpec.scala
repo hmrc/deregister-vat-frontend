@@ -51,7 +51,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
 
           "the user does not have a pre selected amount" should {
 
-           lazy val result = TestZeroRatedSuppliesController.show()(request)
+           lazy val result = TestZeroRatedSuppliesController.show(request)
 
             "return 200 (OK)" in {
               setupMockGetZeroRatedSupplies(Right(None))
@@ -67,7 +67,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
 
         "the user has a pre selected amount" should {
 
-          lazy val result = TestZeroRatedSuppliesController.show()(request)
+          lazy val result = TestZeroRatedSuppliesController.show(request)
 
           "return 200 (OK)" in {
             setupMockGetZeroRatedSupplies(Right(Some(testZeroRatedSuppliesModel)))
@@ -92,7 +92,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
 
             lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
               requestPost.withFormUrlEncodedBody(("amount",testZeroRatedSuppliesAmtAsString))
-            lazy val result = TestZeroRatedSuppliesController.submit()(request)
+            lazy val result = TestZeroRatedSuppliesController.submit(request)
 
             "return 303 (SEE_OTHER)" in {
               setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Right(DeregisterVatSuccess))
@@ -100,8 +100,8 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
               status(result) shouldBe Status.SEE_OTHER
             }
 
-            s"Redirect to the '${controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url}'" in {
-              redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url)
+            s"Redirect to the '${controllers.zeroRated.routes.PurchasesExceedSuppliesController.show.url}'" in {
+              redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show.url)
             }
 
           }
@@ -110,7 +110,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody(("amount",""))
-          lazy val result = TestZeroRatedSuppliesController.submit()(request)
+          lazy val result = TestZeroRatedSuppliesController.submit(request)
 
           "return a 400" in {
             mockAuthResult(mockAuthorisedIndividual)
@@ -122,7 +122,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody(("amount",testZeroRatedSuppliesAmtAsString))
-          lazy val result = TestZeroRatedSuppliesController.submit()(request)
+          lazy val result = TestZeroRatedSuppliesController.submit(request)
 
           "return a 500" in {
             setupMockStoreZeroRatedSupplies(testZeroRatedSuppliesModel)(Left(errorModel))
@@ -134,7 +134,7 @@ class ZeroRatedSuppliesControllerSpec extends ControllerBaseSpec with MockZeroRa
     }
 
     "The user is unauthorised" when {
-      authChecks(".show", TestZeroRatedSuppliesController.show(), request)
+      authChecks(".show", TestZeroRatedSuppliesController.show, request)
     }
 }
 

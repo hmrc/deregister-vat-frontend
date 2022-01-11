@@ -57,7 +57,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-          TestDeregistrationConfirmationController.show()(requestWithSession)
+          TestDeregistrationConfirmationController.show(requestWithSession)
         }
         lazy val document = Jsoup.parse(contentAsString(result))
 
@@ -78,7 +78,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       "user does not have session key" should {
         lazy val result = {
           mockAuthResult(mockAuthorisedIndividual)
-          TestDeregistrationConfirmationController.show()(request)
+          TestDeregistrationConfirmationController.show(request)
         }
 
         "return 303" in {
@@ -86,14 +86,14 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
         }
 
         "redirect to Deregister for VAT controller" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.DeregisterForVATController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.routes.DeregisterForVATController.show.url)
         }
       }
     }
 
     "answers are deleted successfully and an error is received for CustomerDetails call" should {
 
-      lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
+      lazy val result = TestDeregistrationConfirmationController.show(requestWithSession)
       lazy val document = Jsoup.parse(contentAsString(result))
 
       "return 200 (OK)" in {
@@ -114,7 +114,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
     }
 
     "answers are not deleted successfully should return internal server error" in {
-      lazy val result = TestDeregistrationConfirmationController.show()(requestWithSession)
+      lazy val result = TestDeregistrationConfirmationController.show(requestWithSession)
       setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
       mockAuthResult(mockAuthorisedIndividual)
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR

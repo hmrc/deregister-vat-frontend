@@ -54,7 +54,7 @@ class CheckAnswersControllerSpec
 
       "a Right(CheckYourAnswersModel) is returned" should {
 
-        lazy val result = TestCheckAnswersController.show()(request)
+        lazy val result = TestCheckAnswersController.show(request)
 
         "return 200 (OK)" in {
           setupMockCheckYourAnswersModel(Right(
@@ -90,7 +90,7 @@ class CheckAnswersControllerSpec
 
       "No deregistration date for DeregDateAnswerService is returned" should {
 
-        lazy val result = TestCheckAnswersController.show()(request)
+        lazy val result = TestCheckAnswersController.show(request)
 
         "return 200 (OK)" in {
           setupMockCheckYourAnswersModel(Right(
@@ -126,7 +126,7 @@ class CheckAnswersControllerSpec
 
       "No option for ChooseDeregDateAnswerService is returned" should {
 
-        lazy val result = TestCheckAnswersController.show()(request)
+        lazy val result = TestCheckAnswersController.show(request)
 
         "return 200 (OK)" in {
           setupMockCheckYourAnswersModel(Right(
@@ -162,7 +162,7 @@ class CheckAnswersControllerSpec
 
       "a Left(ErrorModel) is returned" should {
 
-        lazy val result = TestCheckAnswersController.show()(request)
+        lazy val result = TestCheckAnswersController.show(request)
 
         "return 500 (INTERNAL SERVER ERROR)" in {
           setupMockCheckYourAnswersModel(Left(ErrorModel(INTERNAL_SERVER_ERROR,"Error")))
@@ -171,14 +171,14 @@ class CheckAnswersControllerSpec
         }
       }
 
-      authChecks(".show", TestCheckAnswersController.show(), request)
+      authChecks(".show", TestCheckAnswersController.show, request)
     }
 
     "calling the submit action" when {
 
       "a Right(VatSubscriptionSuccess) is returned from updateDeregistrationService" should {
 
-        lazy val result = TestCheckAnswersController.submit()(request)
+        lazy val result = TestCheckAnswersController.submit(request)
 
         "return 303 (see other)" in {
           setupUpdateDeregistration(Right(VatSubscriptionSuccess))
@@ -187,7 +187,7 @@ class CheckAnswersControllerSpec
         }
 
         "redirect to the correct page" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationConfirmationController.show().url)
+          redirectLocation(result) shouldBe Some(controllers.routes.DeregistrationConfirmationController.show.url)
         }
         "add the pending dereg value to the session" in {
           session(result).get(SessionKeys.registrationStatus) shouldBe Some(Constants.pending)
@@ -200,7 +200,7 @@ class CheckAnswersControllerSpec
 
       "a Left(ErrorModel) is returned from updateDeregistrationService" should {
 
-        lazy val result = TestCheckAnswersController.submit()(request)
+        lazy val result = TestCheckAnswersController.submit(request)
 
         "return 200 (OK)" in {
           setupUpdateDeregistration(Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,"error message")))

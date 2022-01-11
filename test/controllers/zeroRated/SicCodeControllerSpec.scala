@@ -47,7 +47,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
     "calling .show method" when {
 
       "the user has a Yes value saved for business activity and has a SIC code value saved" should {
-        lazy val result = TestController.show()(request)
+        lazy val result = TestController.show(request)
 
         "return a 200" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -67,7 +67,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
       }
 
       "the user has Yes value saved for business activity and no SIC code value saved" should {
-        lazy val result = TestController.show()(request)
+        lazy val result = TestController.show(request)
 
         "return a 200" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -83,7 +83,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
       }
 
       "the user doesn't have a value saved for businessActivity or SIC code" should {
-        lazy val result = TestController.show()(request)
+        lazy val result = TestController.show(request)
 
         "return a 303" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -92,13 +92,13 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to ${controllers.zeroRated.routes.BusinessActivityController.show().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.BusinessActivityController.show().url)
+        s"redirect to ${controllers.zeroRated.routes.BusinessActivityController.show.url}" in {
+          redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.BusinessActivityController.show.url)
         }
       }
 
       "the user doesn't have a value saved for businessActivity but for a SIC code" should {
-        lazy val result = TestController.show()(request)
+        lazy val result = TestController.show(request)
 
         "return a 303" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -107,13 +107,13 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to ${controllers.zeroRated.routes.BusinessActivityController.show().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.BusinessActivityController.show().url)
+        s"redirect to ${controllers.zeroRated.routes.BusinessActivityController.show.url}" in {
+          redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.BusinessActivityController.show.url)
         }
       }
 
       "the user has 'No' saved for businessActivity and a SIC code value" should {
-        lazy val result = TestController.show()(request)
+        lazy val result = TestController.show(request)
 
         "return a 303" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -122,13 +122,13 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to ${controllers.routes.NextTaxableTurnoverController.show().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
+        s"redirect to ${controllers.routes.NextTaxableTurnoverController.show.url}" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show.url)
         }
       }
 
       "the user has 'No' saved for businessActivity and no SIC code value" should {
-        lazy val result = TestController.show()(request)
+        lazy val result = TestController.show(request)
 
         "return a 303" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -137,13 +137,13 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to ${controllers.routes.NextTaxableTurnoverController.show().url}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
+        s"redirect to ${controllers.routes.NextTaxableTurnoverController.show.url}" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show.url)
         }
       }
 
       "the business activity answer service returns an error" should {
-        lazy val result = TestController.show()(request)
+        lazy val result = TestController.show(request)
 
         "return an internal server error" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -154,7 +154,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
       }
 
       "the SIC code answer service returns an error" should {
-        lazy val result = TestController.show()(request)
+        lazy val result = TestController.show(request)
 
         "return an internal server error" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -167,7 +167,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
       "the user is unauthorised" should {
 
         "return a 303" in {
-          lazy val result = TestController.show()(request)
+          lazy val result = TestController.show(request)
           mockAuthResult(mockUnauthorisedIndividual)
           status(result) shouldBe Status.FORBIDDEN
         }
@@ -178,7 +178,7 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
 
         "the form is filled correctly" should {
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody(("value", "12345"))
-          lazy val result = TestController.submit()(request)
+          lazy val result = TestController.submit(request)
 
           "return a 303" in {
             mockAuthResult(mockAuthorisedIndividual)
@@ -186,14 +186,14 @@ class SicCodeControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredA
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.NextTaxableTurnoverController.show().url}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
+          s"redirect to ${controllers.routes.NextTaxableTurnoverController.show.url}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show.url)
           }
         }
 
         "the form contains errors" should {
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody(("value", "7"))
-          lazy val result = TestController.submit()(request)
+          lazy val result = TestController.submit(request)
 
           "return a 303" in {
             mockAuthResult(mockAuthorisedIndividual)

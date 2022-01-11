@@ -51,7 +51,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestVATAccountsController.show()(request)
+        lazy val result = TestVATAccountsController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetDeregReason(Right(Some(Ceased)))
@@ -69,7 +69,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
       "the user is has previously entered values" should {
 
-        lazy val result = TestVATAccountsController.show()(request)
+        lazy val result = TestVATAccountsController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
@@ -91,7 +91,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
       "an error is returned from the DeregReasonAnswerService" should {
 
-        lazy val result = TestVATAccountsController.show()(request)
+        lazy val result = TestVATAccountsController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetDeregReason(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error")))
@@ -104,7 +104,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
       "an error is returned from the AccountingMethodAnswerService" should {
 
-        lazy val result = TestVATAccountsController.show()(request)
+        lazy val result = TestVATAccountsController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetDeregReason(Right(Some(Ceased)))
@@ -122,7 +122,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("accountingMethod", "standard"))
-        lazy val result = TestVATAccountsController.submit()(request)
+        lazy val result = TestVATAccountsController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreAccountingMethod(StandardAccounting)(Right(DeregisterVatSuccess))
@@ -130,8 +130,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.routes.OptionTaxController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.OptionTaxController.show().url)
+        s"Redirect to the '${controllers.routes.OptionTaxController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.OptionTaxController.show.url)
         }
       }
 
@@ -139,7 +139,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("accountingMethod", "cash"))
-        lazy val result = TestVATAccountsController.submit()(request)
+        lazy val result = TestVATAccountsController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreAccountingMethod(CashAccounting)(Right(DeregisterVatSuccess))
@@ -147,8 +147,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.routes.OptionTaxController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.OptionTaxController.show().url)
+        s"Redirect to the '${controllers.routes.OptionTaxController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.OptionTaxController.show.url)
         }
       }
 
@@ -156,7 +156,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("accountingMethod", ""))
-        lazy val result = TestVATAccountsController.submit()(request)
+        lazy val result = TestVATAccountsController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
@@ -175,7 +175,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("accountingMethod", ""))
-        lazy val result = TestVATAccountsController.submit()(request)
+        lazy val result = TestVATAccountsController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetDeregReason(Left(ErrorModel(INTERNAL_SERVER_ERROR,"error")))
@@ -190,7 +190,7 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
         requestPost.withFormUrlEncodedBody(("accountingMethod", "cash"))
-      lazy val result = TestVATAccountsController.submit()(request)
+      lazy val result = TestVATAccountsController.submit(request)
 
       "return ISE (INTERNAL SERVER ERROR)" in {
         setupMockStoreAccountingMethod(CashAccounting)(Left(errorModel))
@@ -206,8 +206,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
       val result = TestVATAccountsController.backLink(None, Ceased)
 
-      s"return ${controllers.routes.CeasedTradingDateController.show().url}" in {
-        result shouldBe controllers.routes.CeasedTradingDateController.show().url
+      s"return ${controllers.routes.CeasedTradingDateController.show.url}" in {
+        result shouldBe controllers.routes.CeasedTradingDateController.show.url
       }
     }
 
@@ -215,8 +215,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
       val result = TestVATAccountsController.backLink(None, ZeroRated)
 
-      s"return ${controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url}" in {
-        result shouldBe controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url
+      s"return ${controllers.zeroRated.routes.PurchasesExceedSuppliesController.show.url}" in {
+        result shouldBe controllers.zeroRated.routes.PurchasesExceedSuppliesController.show.url
       }
     }
 
@@ -224,8 +224,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
       val result = TestVATAccountsController.backLink(None, ExemptOnly)
 
-      s"return ${controllers.routes.DeregistrationReasonController.show().url}" in {
-        result shouldBe controllers.routes.DeregistrationReasonController.show().url
+      s"return ${controllers.routes.DeregistrationReasonController.show.url}" in {
+        result shouldBe controllers.routes.DeregistrationReasonController.show.url
       }
     }
 
@@ -235,8 +235,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
         val result = TestVATAccountsController.backLink(Some(Yes), BelowThreshold)
 
-        s"return ${controllers.routes.NextTaxableTurnoverController.show().url}" in {
-          result shouldBe controllers.routes.NextTaxableTurnoverController.show().url
+        s"return ${controllers.routes.NextTaxableTurnoverController.show.url}" in {
+          result shouldBe controllers.routes.NextTaxableTurnoverController.show.url
         }
       }
 
@@ -244,8 +244,8 @@ class VATAccountsControllerSpec extends ControllerBaseSpec with MockAccountingMe
 
         val result = TestVATAccountsController.backLink(Some(No), BelowThreshold)
 
-        s"return ${controllers.routes.WhyTurnoverBelowController.show().url}" in {
-          result shouldBe controllers.routes.WhyTurnoverBelowController.show().url
+        s"return ${controllers.routes.WhyTurnoverBelowController.show.url}" in {
+          result shouldBe controllers.routes.WhyTurnoverBelowController.show.url
         }
       }
     }

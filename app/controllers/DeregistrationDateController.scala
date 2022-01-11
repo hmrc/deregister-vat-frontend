@@ -54,7 +54,7 @@ class DeregistrationDateController@Inject()(deregistrationDate: DeregistrationDa
     DeregistrationDateForm.form.bindFromRequest().fold(
       error => Future(BadRequest(deregistrationDate(error))),
       data => answerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.CheckAnswersController.show())
+        case Right(_) => Redirect(controllers.routes.CheckAnswersController.show)
         case Left(err) =>
           logger.warn("[DeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + err.message)
           serviceErrorHandler.showInternalServerError

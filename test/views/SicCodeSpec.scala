@@ -47,7 +47,7 @@ class SicCodeSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show.url
     }
 
     "have the correct page heading" in {
@@ -87,7 +87,7 @@ class SicCodeSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show.url
     }
 
     "have the correct page heading" in {

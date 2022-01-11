@@ -58,7 +58,7 @@ class OptionStocksToSellController @Inject()(optionStocksToSell: OptionStocksToS
     form.bindFromRequest().fold(
       error => Future.successful(BadRequest(optionStocksToSell(error))),
       data => stocksAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show())
+        case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show)
         case Left(error) =>
           logger.warn("[OptionStocksToSellController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError

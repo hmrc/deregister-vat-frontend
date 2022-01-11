@@ -50,7 +50,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
 
           lazy val result = {
             mockAuthResult(mockAuthorisedIndividual)
-            TestController.show()(request)
+            TestController.show(request)
           }
 
           "return a 200" in {
@@ -71,7 +71,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
         "the user has no stored information for the page" should {
           lazy val result = {
             mockAuthResult(mockAuthorisedIndividual)
-            TestController.show()(request)
+            TestController.show(request)
           }
 
           "return a 200" in {
@@ -89,7 +89,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
 
           lazy val result = {
             mockAuthResult(mockAuthorisedIndividual)
-            TestController.show()(request)
+            TestController.show(request)
           }
 
           "return a 500" in {
@@ -98,7 +98,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
           }
         }
 
-      authChecks(".show", TestController.show(), request)
+      authChecks(".show", TestController.show, request)
     }
 
     "calling .submit" when {
@@ -111,7 +111,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
           lazy val result = {
             setupMockStorePurchasesExceedSuppliesAnswer(Yes)(Right(DeregisterVatSuccess))
             mockAuthResult(mockAuthorisedIndividual)
-            TestController.submit()(request)
+            TestController.submit(request)
           }
 
           "return a 303" in {
@@ -131,7 +131,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
           lazy val result = {
             setupMockStorePurchasesExceedSuppliesAnswer(No)(Right(DeregisterVatSuccess))
             mockAuthResult(mockAuthorisedIndividual)
-            TestController.submit()(request)
+            TestController.submit(request)
           }
 
           "return a 303" in {
@@ -150,7 +150,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
 
           lazy val result = {
             mockAuthResult(mockAuthorisedIndividual)
-            TestController.submit()(request)
+            TestController.submit(request)
           }
 
           "return a 400" in {
@@ -166,7 +166,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
           lazy val result = {
             mockAuthResult(mockAuthorisedIndividual)
             setupMockStorePurchasesExceedSuppliesAnswer(Yes)(Left(errorModel))
-            TestController.submit()(request)
+            TestController.submit(request)
           }
 
           "return a 500" in {
@@ -174,7 +174,7 @@ class PurchasesExceedSuppliesControllerSpec extends ControllerBaseSpec with Mock
           }
         }
 
-      authChecks(".submit", TestController.submit(), request)
+      authChecks(".submit", TestController.submit, request)
     }
   }
 }
