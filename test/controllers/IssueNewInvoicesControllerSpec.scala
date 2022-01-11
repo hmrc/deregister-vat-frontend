@@ -49,7 +49,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestIssueNewInvoicesController.show()(request)
+        lazy val result = TestIssueNewInvoicesController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetIssueNewInvoices(Right(None))
@@ -65,7 +65,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
 
       "the user is has pre selected option" should {
 
-        lazy val result = TestIssueNewInvoicesController.show()(request)
+        lazy val result = TestIssueNewInvoicesController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetIssueNewInvoices(Right(Some(Yes)))
@@ -83,7 +83,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
         }
       }
 
-      authChecks(".show", TestIssueNewInvoicesController.show(), request)
+      authChecks(".show", TestIssueNewInvoicesController.show, request)
     }
 
     "Calling the .submit action" when {
@@ -94,7 +94,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((yesNo, "yes"))
-          lazy val result = TestIssueNewInvoicesController.submit()(request)
+          lazy val result = TestIssueNewInvoicesController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockStoreIssueNewInvoices(Yes)(Right(DeregisterVatSuccess))
@@ -104,15 +104,15 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"Redirect to the '${controllers.routes.ChooseDeregistrationDateController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
+          s"Redirect to the '${controllers.routes.ChooseDeregistrationDateController.show.url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show.url)
           }
         }
 
         "the user submits after selecting the 'No' option" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestIssueNewInvoicesController.submit()(request)
+          lazy val result = TestIssueNewInvoicesController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockStoreIssueNewInvoices(No)(Right(DeregisterVatSuccess))
@@ -122,8 +122,8 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"Redirect to the '${controllers.routes.OutstandingInvoicesController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.OutstandingInvoicesController.show().url)
+          s"Redirect to the '${controllers.routes.OutstandingInvoicesController.show.url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.OutstandingInvoicesController.show.url)
           }
         }
       }
@@ -131,7 +131,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
       "an error response is returned from the wipe redundant data service" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "yes"))
-        lazy val result = TestIssueNewInvoicesController.submit()(request)
+        lazy val result = TestIssueNewInvoicesController.submit(request)
 
         "return 500 (ISE)" in {
           setupMockStoreIssueNewInvoices(Yes)(Right(DeregisterVatSuccess))
@@ -146,7 +146,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((yesNo, "no"))
-        lazy val result = TestIssueNewInvoicesController.submit()(request)
+        lazy val result = TestIssueNewInvoicesController.submit(request)
 
         "return 500 (ISE)" in {
           setupMockStoreIssueNewInvoices(No)(Left(errorModel))
@@ -159,7 +159,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("yes_no", ""))
-        lazy val result = TestIssueNewInvoicesController.submit()(request)
+        lazy val result = TestIssueNewInvoicesController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -173,6 +173,6 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
       }
     }
 
-    authChecks(".submit", TestIssueNewInvoicesController.submit(), requestPost.withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestIssueNewInvoicesController.submit, requestPost.withFormUrlEncodedBody(("yes_no", "no")))
   }
 }

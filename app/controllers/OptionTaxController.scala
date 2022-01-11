@@ -57,7 +57,7 @@ class OptionTaxController @Inject()(optionTax: OptionTax,
     form.bindFromRequest().fold(
       error => Future.successful(BadRequest(optionTax(error))),
       data => optionTaxAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show())
+        case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show)
         case Left(error) =>
           logger.warn("[OptionTaxController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError

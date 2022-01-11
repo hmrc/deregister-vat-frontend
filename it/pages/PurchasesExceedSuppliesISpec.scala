@@ -109,7 +109,7 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -139,7 +139,7 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -169,7 +169,7 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.VATAccountsController.show().url)
+            redirectURI(controllers.routes.VATAccountsController.show.url)
           )
         }
       }
@@ -189,7 +189,7 @@ class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.VATAccountsController.show().url)
+            redirectURI(controllers.routes.VATAccountsController.show.url)
           )
         }
       }

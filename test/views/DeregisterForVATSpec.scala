@@ -53,7 +53,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
 
     "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CommonMessages.continue
-      element(Selectors.button).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show().url
+      element(Selectors.button).attr("href") shouldBe controllers.routes.DeregistrationReasonController.show.url
     }
 
     "have the correct paragraph" in {

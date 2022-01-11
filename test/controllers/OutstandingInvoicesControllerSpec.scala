@@ -52,7 +52,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestOutstandingInvoicesController.show()(request)
+        lazy val result = TestOutstandingInvoicesController.show(request)
 
         "return 200 (OK)" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -68,7 +68,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
       "the user is has pre selected option" should {
 
-        lazy val result = TestOutstandingInvoicesController.show()(request)
+        lazy val result = TestOutstandingInvoicesController.show(request)
 
         "return 200 (OK)" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -86,7 +86,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
         }
       }
 
-      authChecks(".show", TestOutstandingInvoicesController.show(), request)
+      authChecks(".show", TestOutstandingInvoicesController.show, request)
     }
   }
 
@@ -97,7 +97,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
       "user selects 'Yes'" should {
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "yes"))
-        lazy val result = TestOutstandingInvoicesController.submit()(request)
+        lazy val result = TestOutstandingInvoicesController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreOutstandingInvoices(Yes)(Right(DeregisterVatSuccess))
@@ -109,8 +109,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show()}" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
+        s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show}" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show.url)
         }
       }
 
@@ -119,7 +119,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
         "user is on 'below threshold' journey" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestOutstandingInvoicesController.submit()(request)
+          lazy val result = TestOutstandingInvoicesController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockGetDeregReason(Right(Some(BelowThreshold)))
@@ -131,15 +131,15 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show()}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
+          s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show.url)
           }
         }
 
         "user is on 'zero rated' journey" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestOutstandingInvoicesController.submit()(request)
+          lazy val result = TestOutstandingInvoicesController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockGetDeregReason(Right(Some(ZeroRated)))
@@ -151,15 +151,15 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show()}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
+          s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show.url)
           }
         }
 
         "user is on 'exemptOnly' journey" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestOutstandingInvoicesController.submit()(request)
+          lazy val result = TestOutstandingInvoicesController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockGetDeregReason(Right(Some(ExemptOnly)))
@@ -171,8 +171,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show()}" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
+          s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show}" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show.url)
           }
         }
 
@@ -181,7 +181,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
           "user answered 'Yes' to having capital assets" should {
 
             lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
-            lazy val result = TestOutstandingInvoicesController.submit()(request)
+            lazy val result = TestOutstandingInvoicesController.submit(request)
 
             val capitalAssetsAmount: Int = 1000
 
@@ -195,8 +195,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
               status(result) shouldBe Status.SEE_OTHER
             }
 
-            s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show()}" in {
-              redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show().url)
+            s"redirect to ${controllers.routes.ChooseDeregistrationDateController.show}" in {
+              redirectLocation(result) shouldBe Some(controllers.routes.ChooseDeregistrationDateController.show.url)
             }
           }
 
@@ -204,7 +204,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
             lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
               requestPost.withFormUrlEncodedBody((yesNo, "no"))
-            lazy val result = TestOutstandingInvoicesController.submit()(request)
+            lazy val result = TestOutstandingInvoicesController.submit(request)
 
             "return 303 (SEE OTHER)" in {
               setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
@@ -216,8 +216,8 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
               status(result) shouldBe Status.SEE_OTHER
             }
 
-            s"redirect to ${controllers.routes.CheckAnswersController.show()}" in {
-              redirectLocation(result) shouldBe Some(controllers.routes.CheckAnswersController.show().url)
+            s"redirect to ${controllers.routes.CheckAnswersController.show}" in {
+              redirectLocation(result) shouldBe Some(controllers.routes.CheckAnswersController.show.url)
             }
           }
 
@@ -225,7 +225,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
             lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
               requestPost.withFormUrlEncodedBody((yesNo, "no"))
-            lazy val result = TestOutstandingInvoicesController.submit()(request)
+            lazy val result = TestOutstandingInvoicesController.submit(request)
 
             "return 500 (ISE)" in {
               setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
@@ -242,7 +242,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
 
             lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
               requestPost.withFormUrlEncodedBody((yesNo, "no"))
-            lazy val result = TestOutstandingInvoicesController.submit()(request)
+            lazy val result = TestOutstandingInvoicesController.submit(request)
 
             "return 500 (ISE)" in {
               setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
@@ -258,7 +258,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
         "no answer is returned for 'deregistration reason'" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestOutstandingInvoicesController.submit()(request)
+          lazy val result = TestOutstandingInvoicesController.submit(request)
 
 
           "return 500 (ISE)" in {
@@ -276,7 +276,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
         "an error is returned for 'deregistration reason'" should {
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestOutstandingInvoicesController.submit()(request)
+          lazy val result = TestOutstandingInvoicesController.submit(request)
 
 
           "return 500 (ISE)" in {
@@ -295,7 +295,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
     "an error response is returned from the Wipe Redundant Data service" should {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
-      lazy val result = TestOutstandingInvoicesController.submit()(request)
+      lazy val result = TestOutstandingInvoicesController.submit(request)
 
       "return 500 (ISE)" in {
         setupMockStoreOutstandingInvoices(No)(Right(DeregisterVatSuccess))
@@ -310,7 +310,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
     "an error is returned when storing the answer" should {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody((yesNo, "no"))
-      lazy val result = TestOutstandingInvoicesController.submit()(request)
+      lazy val result = TestOutstandingInvoicesController.submit(request)
 
       "return 500 (ISE)" in {
         setupMockStoreOutstandingInvoices(No)(Left(errorModel))
@@ -322,7 +322,7 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
     "the user submits without selecting an option" should {
 
       lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody(("yes_no", ""))
-      lazy val result = TestOutstandingInvoicesController.submit()(request)
+      lazy val result = TestOutstandingInvoicesController.submit(request)
 
       "return 400 (BAD REQUEST)" in {
         mockAuthResult(mockAuthorisedIndividual)
@@ -335,6 +335,6 @@ class OutstandingInvoicesControllerSpec extends ControllerBaseSpec
       }
     }
 
-    authChecks(".submit", TestOutstandingInvoicesController.submit(), requestPost.withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestOutstandingInvoicesController.submit, requestPost.withFormUrlEncodedBody(("yes_no", "no")))
   }
 }

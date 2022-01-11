@@ -24,10 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import testOnly.views.html.FeatureSwitch
 
-
 class FeatureSwitchControllerSpec extends ControllerBaseSpec {
-
-
 
   lazy val featureSwitch: FeatureSwitch = injector.instanceOf[FeatureSwitch]
 
@@ -47,7 +44,6 @@ class FeatureSwitchControllerSpec extends ControllerBaseSpec {
       contentType(result) shouldBe Some("text/html")
       charset(result) shouldBe Some("utf-8")
     }
-
   }
 
   "Calling the .submitFeatureSwitch action" should {
@@ -57,15 +53,11 @@ class FeatureSwitchControllerSpec extends ControllerBaseSpec {
     lazy val result = target.submitFeatureSwitch(fakeRequest.withCSRFToken)
 
     "return 303" in {
-
       await(result.map(_.header.status)) shouldBe Status.SEE_OTHER
-
     }
 
     "redirect the user to the feature switch page" in {
-      redirectLocation(result) shouldBe Some(testOnly.controllers.routes.FeatureSwitchController.featureSwitch().url)
+      redirectLocation(result) shouldBe Some(testOnly.controllers.routes.FeatureSwitchController.featureSwitch.url)
     }
-
   }
-
 }

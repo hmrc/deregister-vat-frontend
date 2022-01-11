@@ -109,7 +109,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -139,7 +139,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -185,7 +185,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.CeasedTradingDateController.show().url)
+            redirectURI(controllers.routes.CeasedTradingDateController.show.url)
           )
         }
       }
@@ -213,7 +213,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.TaxableTurnoverController.show().url)
+            redirectURI(controllers.routes.TaxableTurnoverController.show.url)
           )
         }
       }
@@ -239,7 +239,7 @@ class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.zeroRated.routes.BusinessActivityController.show().url)
+            redirectURI(controllers.zeroRated.routes.BusinessActivityController.show.url)
           )
         }
       }

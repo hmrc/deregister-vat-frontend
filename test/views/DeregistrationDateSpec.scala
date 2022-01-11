@@ -63,8 +63,8 @@ class DeregistrationDateSpec extends ViewBaseSpec {
           elementText(Selectors.back) shouldBe CommonMessages.back
         }
 
-        s"has a link to ${controllers.routes.ChooseDeregistrationDateController.show().url}" in {
-          element(Selectors.back).attr("href") shouldBe controllers.routes.ChooseDeregistrationDateController.show().url
+        s"has a link to ${controllers.routes.ChooseDeregistrationDateController.show.url}" in {
+          element(Selectors.back).attr("href") shouldBe controllers.routes.ChooseDeregistrationDateController.show.url
         }
       }
 
@@ -83,8 +83,8 @@ class DeregistrationDateSpec extends ViewBaseSpec {
 
       "have a date form" which {
 
-        s"POSTs to ${controllers.routes.DeregistrationDateController.submit().url}" in {
-          element(Selectors.form).attr("action") shouldBe controllers.routes.DeregistrationDateController.submit().url
+        s"POSTs to ${controllers.routes.DeregistrationDateController.submit.url}" in {
+          element(Selectors.form).attr("action") shouldBe controllers.routes.DeregistrationDateController.submit.url
         }
 
         "contains the correct inputs" in {

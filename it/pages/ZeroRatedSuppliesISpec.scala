@@ -108,7 +108,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -138,7 +138,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -165,7 +165,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url)
+            redirectURI(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show.url)
           )
         }
       }

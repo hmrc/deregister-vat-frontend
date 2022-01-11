@@ -34,7 +34,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
     val error = ".govuk-error-message"
   }
 
-  val backLink: String = controllers.routes.TaxableTurnoverController.show().url
+  val backLink: String = controllers.routes.TaxableTurnoverController.show.url
 
   "Rendering the option to tax page with no errors" should {
 
@@ -47,7 +47,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.TaxableTurnoverController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.TaxableTurnoverController.show.url
     }
 
     "have the correct page heading" in {
@@ -70,7 +70,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
   "Rendering the option to tax page with no errors when the user selected no on the business activity page" should {
 
     lazy val view = nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,
-      controllers.zeroRated.routes.BusinessActivityController.show().url)
+      controllers.zeroRated.routes.BusinessActivityController.show.url)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -79,14 +79,14 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show.url
     }
   }
 
   "Rendering the option to tax page with no errors when the user selected yes on the business activity page" should {
 
     lazy val view = nextTaxableTurnover(NextTaxableTurnoverForm.taxableTurnoverForm,
-      controllers.zeroRated.routes.SicCodeController.show().url)
+      controllers.zeroRated.routes.SicCodeController.show.url)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -95,7 +95,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show.url
     }
   }
 
@@ -110,7 +110,7 @@ class NextTaxableTurnoverSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.TaxableTurnoverController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.TaxableTurnoverController.show.url
     }
 
     "have the correct page heading" in {

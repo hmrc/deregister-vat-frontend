@@ -75,12 +75,12 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
   private def redirect(outstandingInvoices: YesNo, capitalAssets: Option[YesNoAmountModel], deregReason: Option[DeregistrationReason])
                       (implicit user: User[_]) = {
     if (outstandingInvoices == Yes) {
-      Redirect(controllers.routes.ChooseDeregistrationDateController.show())
+      Redirect(controllers.routes.ChooseDeregistrationDateController.show)
     } else {
       deregReason match {
-        case Some(BelowThreshold) => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
-        case Some(ZeroRated) => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
-        case Some(ExemptOnly) => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
+        case Some(BelowThreshold) => Redirect(controllers.routes.ChooseDeregistrationDateController.show)
+        case Some(ZeroRated) => Redirect(controllers.routes.ChooseDeregistrationDateController.show)
+        case Some(ExemptOnly) => Redirect(controllers.routes.ChooseDeregistrationDateController.show)
         case Some(Ceased) => ceasedTradingJourneyLogic(capitalAssets)
         case _ =>
           logger.warn("[OutstandingInvoicesController][redirect] - answer for deregReason doesn't exist or wasn't expected")
@@ -91,8 +91,8 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
 
   private def ceasedTradingJourneyLogic(capitalAssets: Option[YesNoAmountModel])(implicit user: User[_]): Result = {
     capitalAssets match {
-      case Some(assets) if assets.yesNo == Yes => Redirect(controllers.routes.ChooseDeregistrationDateController.show())
-      case Some(_) => Redirect(controllers.routes.CheckAnswersController.show())
+      case Some(assets) if assets.yesNo == Yes => Redirect(controllers.routes.ChooseDeregistrationDateController.show)
+      case Some(_) => Redirect(controllers.routes.CheckAnswersController.show)
       case _ =>
         logger.warn("[OutstandingInvoicesController][ceasedTradingJourneyLogic] - answer for capitalAssets doesn't exist or wasn't expected")
         serviceErrorHandler.showInternalServerError

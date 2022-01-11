@@ -109,7 +109,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -139,7 +139,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -181,7 +181,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.ChooseDeregistrationDateController.show().url)
+            redirectURI(controllers.routes.ChooseDeregistrationDateController.show.url)
           )
         }
       }
@@ -214,7 +214,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.OutstandingInvoicesController.show().url)
+            redirectURI(controllers.routes.OutstandingInvoicesController.show.url)
           )
         }
       }

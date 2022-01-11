@@ -48,7 +48,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.ZeroRatedSuppliesController.show.url
     }
 
     "have the correct page heading" in {
@@ -88,7 +88,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.zeroRated.routes.ZeroRatedSuppliesController.show.url
     }
 
     "have the correct page heading" in {

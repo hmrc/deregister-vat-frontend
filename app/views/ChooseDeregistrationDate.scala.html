@@ -28,9 +28,9 @@
 @(outstanding: Option[YesNo], form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @backLinkURL = @{if(outstanding.isDefined) {
-controllers.routes.OutstandingInvoicesController.show().url
+controllers.routes.OutstandingInvoicesController.show.url
 } else {
-controllers.routes.IssueNewInvoicesController.show().url
+controllers.routes.IssueNewInvoicesController.show.url
 }}
 
 @backLink = {

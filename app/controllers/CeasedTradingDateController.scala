@@ -54,7 +54,7 @@ class CeasedTradingDateController @Inject()(ceasedTradingDate: CeasedTradingDate
     DateForm.dateForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(ceasedTradingDate(error))),
       data => ceasedTradingDateAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.VATAccountsController.show())
+        case Right(_) => Redirect(controllers.routes.VATAccountsController.show)
         case Left(error) =>
           logger.warn("[CeasedTradingDateController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError

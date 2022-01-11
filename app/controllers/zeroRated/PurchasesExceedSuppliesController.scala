@@ -61,7 +61,7 @@ class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: Purch
       PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(purchasesExceedSupplies(error))),
         data => purchasesExceedSuppliesAnswerService.storeAnswer(data) map {
-          case Right(_) => Redirect(controllers.routes.VATAccountsController.show().url)
+          case Right(_) => Redirect(controllers.routes.VATAccountsController.show.url)
           case Left(error) =>
             logger.warn("[PurchasesExceedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError

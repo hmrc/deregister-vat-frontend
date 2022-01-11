@@ -57,7 +57,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       "the user does not have a pre selected amount" should {
 
-        lazy val result = TestNextTaxableTurnoverController.show()(request)
+        lazy val result = TestNextTaxableTurnoverController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
@@ -74,7 +74,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       "the user has a pre selected amount" should {
 
-        lazy val result = TestNextTaxableTurnoverController.show()(request)
+        lazy val result = TestNextTaxableTurnoverController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
@@ -95,7 +95,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       "the user has pre selected amount and the use also has a value saved for the business activity page of yes" should {
 
-        lazy val result = TestNextTaxableTurnoverController.show()(request)
+        lazy val result = TestNextTaxableTurnoverController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(Some(testTurnoverModel)))
@@ -112,14 +112,14 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "have the amount pre-populate in the field" in {
           document(result).select("#amount").attr("value") shouldBe testTurnoverAmt.toString
         }
-        s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
-          document(result).select(".govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+        s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show.url}" in {
+          document(result).select(".govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show.url
         }
       }
 
       "the user has a value saved for the business activity page of no" should {
 
-        lazy val result = TestNextTaxableTurnoverController.show()(request)
+        lazy val result = TestNextTaxableTurnoverController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
@@ -136,14 +136,14 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "not have an amount pre-populate in the field" in {
           document(result).select("#turnover").attr("value") shouldBe ""
         }
-        s"have the correct back link of ${controllers.zeroRated.routes.BusinessActivityController.show().url}" in {
-          document(result).select(".govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+        s"have the correct back link of ${controllers.zeroRated.routes.BusinessActivityController.show.url}" in {
+          document(result).select(".govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.BusinessActivityController.show.url
         }
       }
 
       "the user has a value saved for the business activity page of yes" should {
 
-        lazy val result = TestNextTaxableTurnoverController.show()(request)
+        lazy val result = TestNextTaxableTurnoverController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetNextTaxableTurnover(Right(None))
@@ -160,14 +160,14 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         "not have an amount pre-populate in the field" in {
           document(result).select("#turnover").attr("value") shouldBe ""
         }
-        s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
-          document(result).select(".govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+        s"have the correct back link of ${controllers.zeroRated.routes.SicCodeController.show.url}" in {
+          document(result).select(".govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show.url
         }
       }
 
       "the call to the service returns a error model" should {
 
-        lazy val result = TestNextTaxableTurnoverController.show()(request)
+        lazy val result = TestNextTaxableTurnoverController.show(request)
 
         "return 500 (ISE)" in {
           setupMockGetNextTaxableTurnover(Left(errorModel))
@@ -181,7 +181,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
       }
 
-      authChecks(".show", TestNextTaxableTurnoverController.show(), request)
+      authChecks(".show", TestNextTaxableTurnoverController.show, request)
     }
 
     "Calling the .submit action" when {
@@ -192,7 +192,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(No)))
@@ -205,8 +205,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.routes.WhyTurnoverBelowController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.WhyTurnoverBelowController.show().url)
+        s"Redirect to the '${controllers.routes.WhyTurnoverBelowController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.WhyTurnoverBelowController.show.url)
         }
       }
 
@@ -216,7 +216,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(Yes)))
@@ -227,8 +227,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.routes.CannotDeregisterThresholdController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CannotDeregisterThresholdController.show().url)
+        s"Redirect to the '${controllers.routes.CannotDeregisterThresholdController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CannotDeregisterThresholdController.show.url)
         }
       }
 
@@ -238,7 +238,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(Some(Yes)))
@@ -248,8 +248,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.routes.WhyTurnoverBelowController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show().url)
+        s"Redirect to the '${controllers.routes.WhyTurnoverBelowController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.VATAccountsController.show.url)
         }
       }
 
@@ -259,7 +259,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockGetDeregReason(Right(Some(BelowThreshold)))
@@ -269,8 +269,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.routes.WhyTurnoverBelowController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.WhyTurnoverBelowController.show().url)
+        s"Redirect to the '${controllers.routes.WhyTurnoverBelowController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.WhyTurnoverBelowController.show.url)
         }
       }
 
@@ -280,7 +280,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockGetDeregReason(Right(Some(ZeroRated)))
@@ -290,8 +290,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url)
+        s"Redirect to the '${controllers.zeroRated.routes.ZeroRatedSuppliesController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.ZeroRatedSuppliesController.show.url)
         }
       }
 
@@ -301,7 +301,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockGetTaxableTurnover(Right(None))
@@ -311,8 +311,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"Redirect to the '${controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.ZeroRatedSuppliesController.show().url)
+        s"Redirect to the '${controllers.zeroRated.routes.ZeroRatedSuppliesController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.zeroRated.routes.ZeroRatedSuppliesController.show.url)
         }
       }
 
@@ -320,7 +320,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 500 (ISE)" in {
           setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Left(errorModel))
@@ -334,7 +334,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", ""))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetBusinessActivityAnswer(Right(Some(No)))
@@ -349,7 +349,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         "display the back url" in {
           document(result).getElementsByClass("govuk-back-link").attr("href") shouldBe
-            controllers.zeroRated.routes.BusinessActivityController.show().url
+            controllers.zeroRated.routes.BusinessActivityController.show.url
         }
       }
 
@@ -357,7 +357,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", ""))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
@@ -371,7 +371,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
         }
 
         "display the back url" in {
-          document(result).getElementsByClass("govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+          document(result).getElementsByClass("govuk-back-link").attr("href") shouldBe controllers.zeroRated.routes.SicCodeController.show.url
         }
       }
 
@@ -379,7 +379,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", ""))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 500 (ISE)" in {
           setupMockGetBusinessActivityAnswer(Left(errorModel))
@@ -398,7 +398,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
-        lazy val result = TestNextTaxableTurnoverController.submit()(request)
+        lazy val result = TestNextTaxableTurnoverController.submit(request)
 
         "return 500 (ISE)" in {
           setupMockStoreNextTaxableTurnover(NumberInputModel(testTurnoverAmt))(Left(errorModel))
@@ -412,8 +412,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       lazy val result = TestNextTaxableTurnoverController.backLink(Some(Yes))
 
-      s"return the correct back link of ${controllers.zeroRated.routes.SicCodeController.show().url}" in {
-        result shouldBe controllers.zeroRated.routes.SicCodeController.show().url
+      s"return the correct back link of ${controllers.zeroRated.routes.SicCodeController.show.url}" in {
+        result shouldBe controllers.zeroRated.routes.SicCodeController.show.url
       }
     }
 
@@ -421,8 +421,8 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       lazy val result = TestNextTaxableTurnoverController.backLink(Some(No))
 
-      s"return the correct back link of ${controllers.zeroRated.routes.BusinessActivityController.show().url}" in {
-        result shouldBe controllers.zeroRated.routes.BusinessActivityController.show().url
+      s"return the correct back link of ${controllers.zeroRated.routes.BusinessActivityController.show.url}" in {
+        result shouldBe controllers.zeroRated.routes.BusinessActivityController.show.url
       }
     }
 
@@ -430,13 +430,13 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       lazy val result = TestNextTaxableTurnoverController.backLink(None)
 
-      s"return the correct back link of ${controllers.routes.TaxableTurnoverController.show().url}" in {
-        result shouldBe controllers.routes.TaxableTurnoverController.show().url
+      s"return the correct back link of ${controllers.routes.TaxableTurnoverController.show.url}" in {
+        result shouldBe controllers.routes.TaxableTurnoverController.show.url
       }
     }
 
 
-    authChecks(".submit", TestNextTaxableTurnoverController.submit(), requestPost.withFormUrlEncodedBody(("value", "1000.01")))
+    authChecks(".submit", TestNextTaxableTurnoverController.submit, requestPost.withFormUrlEncodedBody(("value", "1000.01")))
   }
 
 }

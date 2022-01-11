@@ -50,7 +50,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestOptionStocksToSellController.show()(request)
+        lazy val result = TestOptionStocksToSellController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetStocks(Right(None))
@@ -66,7 +66,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
 
       "the user has a pre selected option" should {
 
-        lazy val result = TestOptionStocksToSellController.show()(request)
+        lazy val result = TestOptionStocksToSellController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetStocks(Right(Some(testYesStocksModel)))
@@ -88,7 +88,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
         }
       }
 
-      authChecks(".show", TestOptionStocksToSellController.show(), request)
+      authChecks(".show", TestOptionStocksToSellController.show, request)
     }
 
     "Calling the .submit action" when {
@@ -100,7 +100,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
             ("yes_no", "yes"),
             ("amount", testAmt.toString)
           )
-        lazy val result = TestOptionStocksToSellController.submit()(request)
+        lazy val result = TestOptionStocksToSellController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreStocks(testYesStocksModel)(Right(DeregisterVatSuccess))
@@ -108,8 +108,8 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
+        s"redirect to '${controllers.routes.IssueNewInvoicesController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show.url)
         }
       }
 
@@ -117,7 +117,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("yes_no", "no"))
-        lazy val result = TestOptionStocksToSellController.submit()(request)
+        lazy val result = TestOptionStocksToSellController.submit(request)
 
         "return 303 (SEE OTHER)" in {
           setupMockStoreStocks(testNoStocksModel)(Right(DeregisterVatSuccess))
@@ -125,8 +125,8 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.IssueNewInvoicesController.show().url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show().url)
+        s"redirect to '${controllers.routes.IssueNewInvoicesController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.IssueNewInvoicesController.show.url)
         }
       }
 
@@ -134,7 +134,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("yes_no", "no"))
-        lazy val result = TestOptionStocksToSellController.submit()(request)
+        lazy val result = TestOptionStocksToSellController.submit(request)
 
         "return 500 (ISE)" in {
           setupMockStoreStocks(testNoStocksModel)(Left(errorModel))
@@ -147,7 +147,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("yes_no", ""))
-        lazy val result = TestOptionStocksToSellController.submit()(request)
+        lazy val result = TestOptionStocksToSellController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -161,7 +161,7 @@ class OptionStocksToSellControllerSpec extends ControllerBaseSpec with MockStock
       }
     }
 
-    authChecks(".submit", TestOptionStocksToSellController.submit(), requestPost.withFormUrlEncodedBody(("yes_no", "no")))
+    authChecks(".submit", TestOptionStocksToSellController.submit, requestPost.withFormUrlEncodedBody(("yes_no", "no")))
   }
 
 }

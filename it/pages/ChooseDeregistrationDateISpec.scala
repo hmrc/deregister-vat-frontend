@@ -110,7 +110,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -140,7 +140,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -164,7 +164,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.DeregistrationDateController.show().url)
+            redirectURI(controllers.routes.DeregistrationDateController.show.url)
           )
         }
       }
@@ -179,7 +179,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.CheckAnswersController.show().url)
+            redirectURI(controllers.routes.CheckAnswersController.show.url)
           )
         }
       }

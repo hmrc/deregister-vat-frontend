@@ -77,7 +77,7 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
           serviceErrorHandler.showInternalServerError
       },
       data => accountingMethodAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.OptionTaxController.show())
+        case Right(_) => Redirect(controllers.routes.OptionTaxController.show)
         case Left(error) =>
           logger.warn("[VATAccountsController][submit] - failed to store accountingMethod in answer service: " + error.message)
           serviceErrorHandler.showInternalServerError
@@ -87,11 +87,11 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
 
   def backLink(lastTurnoverBelowThreshold: Option[YesNo], deregReason: DeregistrationReason): String = {
     (deregReason, lastTurnoverBelowThreshold) match {
-      case (Ceased, _) => controllers.routes.CeasedTradingDateController.show().url
-      case (ExemptOnly, _) => controllers.routes.DeregistrationReasonController.show().url
-      case (ZeroRated, _) => controllers.zeroRated.routes.PurchasesExceedSuppliesController.show().url
-      case (_, Some(below)) if below.value.equals(true) => controllers.routes.NextTaxableTurnoverController.show().url
-      case _ => controllers.routes.WhyTurnoverBelowController.show().url
+      case (Ceased, _) => controllers.routes.CeasedTradingDateController.show.url
+      case (ExemptOnly, _) => controllers.routes.DeregistrationReasonController.show.url
+      case (ZeroRated, _) => controllers.zeroRated.routes.PurchasesExceedSuppliesController.show.url
+      case (_, Some(below)) if below.value.equals(true) => controllers.routes.NextTaxableTurnoverController.show.url
+      case _ => controllers.routes.WhyTurnoverBelowController.show.url
     }
   }
 }

@@ -38,7 +38,7 @@ class CannotDeregisterThresholdControllerSpec extends ControllerBaseSpec {
 
       "the user does not have a pre selected option" should {
 
-        lazy val result = TestCannotDeregisterThresholdController.show()(request)
+        lazy val result = TestCannotDeregisterThresholdController.show(request)
 
         "return 200 (OK)" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -51,7 +51,7 @@ class CannotDeregisterThresholdControllerSpec extends ControllerBaseSpec {
         }
       }
 
-      authChecks(".show", TestCannotDeregisterThresholdController.show(), request)
+      authChecks(".show", TestCannotDeregisterThresholdController.show, request)
     }
   }
 }

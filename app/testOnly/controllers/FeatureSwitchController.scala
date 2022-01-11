@@ -41,13 +41,13 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
 
   def submitFeatureSwitch: Action[AnyContent] = Action { implicit request =>
     FeatureSwitchForm.form.bindFromRequest().fold(
-      _ => Redirect(routes.FeatureSwitchController.featureSwitch()),
+      _ => Redirect(routes.FeatureSwitchController.featureSwitch),
       success = handleSuccess
     )
   }
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.stubAgentClientLookup(model.stubAgentClientLookup)
-    Redirect(routes.FeatureSwitchController.featureSwitch())
+    Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }

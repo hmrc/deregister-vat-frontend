@@ -56,7 +56,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
       "the user does not have pre entered data" should {
 
-        lazy val result = TestDeregistrationDateController.show()(request)
+        lazy val result = TestDeregistrationDateController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetDeregDate(Right(None))
@@ -72,7 +72,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
       "the user has pre entered data" should {
 
-        lazy val result = TestDeregistrationDateController.show()(request)
+        lazy val result = TestDeregistrationDateController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetDeregDate(Right(Some(testDateModel)))
@@ -100,7 +100,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
 
       "the retrieval of pre entered data fails" should {
 
-        lazy val result = TestDeregistrationDateController.show()(request)
+        lazy val result = TestDeregistrationDateController.show(request)
 
         "return Internal Server Error" in {
           setupMockGetDeregDate(Left(ErrorModel(INTERNAL_SERVER_ERROR, message = "")))
@@ -113,7 +113,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         }
       }
 
-      authChecks(".show", TestDeregistrationDateController.show(), request)
+      authChecks(".show", TestDeregistrationDateController.show, request)
     }
 
     "Calling the .submit action" when {
@@ -128,7 +128,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
               (month, testMonth.toString),
               (year, testYear.toString)
             )
-          lazy val result = TestDeregistrationDateController.submit()(request)
+          lazy val result = TestDeregistrationDateController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             mockAuthResult(mockAuthorisedIndividual)
@@ -137,7 +137,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
           }
 
           "redirect to the check your answers controller" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.CheckAnswersController.show().url)
+            redirectLocation(result) shouldBe Some(controllers.routes.CheckAnswersController.show.url)
           }
         }
 
@@ -147,7 +147,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
             (month, testMonth.toString),
             (year, testYear.toString)
           )
-          lazy val result = TestDeregistrationDateController.submit()(request)
+          lazy val result = TestDeregistrationDateController.submit(request)
 
           "return 500 (ISE)" in {
             mockAuthResult(mockAuthorisedIndividual)
@@ -165,7 +165,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
             (month, ""),
             (year, "")
           )
-        lazy val result = TestDeregistrationDateController.submit()(request)
+        lazy val result = TestDeregistrationDateController.submit(request)
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(mockAuthorisedIndividual)
@@ -178,7 +178,7 @@ class DeregistrationDateControllerSpec extends ControllerBaseSpec with MockDereg
         }
       }
 
-      authChecks(".submit", TestDeregistrationDateController.submit(), requestPost.withFormUrlEncodedBody(
+      authChecks(".submit", TestDeregistrationDateController.submit, requestPost.withFormUrlEncodedBody(
         ("dateDay", "1"),
         ("dateMonth", "1"),
         ("dateYear", "2018")

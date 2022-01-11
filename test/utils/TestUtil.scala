@@ -40,8 +40,7 @@ trait TestUtil extends AnyWordSpecLike
   with Matchers
   with OptionValues
   with GuiceOneAppPerSuite
-  with BeforeAndAfterEach
-  with MaterializerSupport {
+  with BeforeAndAfterEach {
 
   override def beforeEach() {
     super.beforeEach()

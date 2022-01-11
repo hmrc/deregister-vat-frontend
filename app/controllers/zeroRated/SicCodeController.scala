@@ -51,8 +51,8 @@ class SicCodeController @Inject()(sicCode: SicCode,
       } yield (ba, sc) match {
         case (Right(Some(Yes)), Right(Some(sicCode))) => Ok(renderView(SicCodeForm.sicCodeForm.fill(sicCode)))
         case (Right(Some(Yes)), Right(_)) => Ok(renderView())
-        case (Right(Some(No)), Right(_)) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
-        case (Right(None), Right(_)) => Redirect(controllers.zeroRated.routes.BusinessActivityController.show())
+        case (Right(Some(No)), Right(_)) => Redirect(controllers.routes.NextTaxableTurnoverController.show)
+        case (Right(None), Right(_)) => Redirect(controllers.zeroRated.routes.BusinessActivityController.show)
         case _ =>
           logger.warn("[SicCodeController][show] - storedAnswerService returned an error retrieving answers")
           serviceErrorHandler.showInternalServerError
@@ -63,7 +63,7 @@ class SicCodeController @Inject()(sicCode: SicCode,
       SicCodeForm.sicCodeForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(sicCode(error))),
         data => sicCodeAnswerService.storeAnswer(data) map {
-          case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show())
+          case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show)
           case Left(error) =>
             logger.warn("[SicCodeController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError

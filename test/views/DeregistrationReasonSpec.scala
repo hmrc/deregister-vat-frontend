@@ -47,7 +47,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.show.url
     }
 
     "have the correct page heading" in {
@@ -86,7 +86,7 @@ class DeregistrationReasonSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.DeregisterForVATController.show.url
     }
 
     "have the correct page heading" in {

@@ -48,9 +48,9 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
 
   def backLink(businessActivityAnswer: Option[YesNo]): String = {
     businessActivityAnswer match {
-      case Some(Yes) => controllers.zeroRated.routes.SicCodeController.show().url
-      case Some(No) => controllers.zeroRated.routes.BusinessActivityController.show().url
-      case _ => controllers.routes.TaxableTurnoverController.show().url
+      case Some(Yes) => controllers.zeroRated.routes.SicCodeController.show.url
+      case Some(No) => controllers.zeroRated.routes.BusinessActivityController.show.url
+      case _ => controllers.routes.TaxableTurnoverController.show.url
     }
   }
 
@@ -89,10 +89,10 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
         deregReason <- EitherT(deregReasonAnswerService.getAnswer)
       } yield (taxableTurnover, deregReason))
         .value.map {
-        case Right((_ ,Some(ZeroRated))) => Redirect(controllers.zeroRated.routes.ZeroRatedSuppliesController.show())
-        case Right((Some(_), Some(_))) if data.value > appConfig.deregThreshold => Redirect(controllers.routes.CannotDeregisterThresholdController.show())
-        case Right((Some(Yes), Some(_))) => Redirect(controllers.routes.VATAccountsController.show())
-        case Right((Some(No), Some(_))) => Redirect(controllers.routes.WhyTurnoverBelowController.show())
+        case Right((_ ,Some(ZeroRated))) => Redirect(controllers.zeroRated.routes.ZeroRatedSuppliesController.show)
+        case Right((Some(_), Some(_))) if data.value > appConfig.deregThreshold => Redirect(controllers.routes.CannotDeregisterThresholdController.show)
+        case Right((Some(Yes), Some(_))) => Redirect(controllers.routes.VATAccountsController.show)
+        case Right((Some(No), Some(_))) => Redirect(controllers.routes.WhyTurnoverBelowController.show)
         case _ =>
           logger.warn("[NextTaxableTurnoverController][submit] - storedAnswerService returned an error")
           serviceErrorHandler.showInternalServerError

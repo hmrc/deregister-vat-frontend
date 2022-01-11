@@ -45,7 +45,7 @@ class CannotDeregisterThresholdSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.NextTaxableTurnoverController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.NextTaxableTurnoverController.show.url
     }
 
     "have the correct page heading" in {

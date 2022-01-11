@@ -65,7 +65,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
     "have a back link to the Issue New Invoices page" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.IssueNewInvoicesController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.IssueNewInvoicesController.show.url
     }
 
     "have no error heading message being displayed" in {
@@ -96,7 +96,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
     "have a back link to the Outstanding Invoices page" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.OutstandingInvoicesController.show().url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.OutstandingInvoicesController.show.url
     }
   }
 

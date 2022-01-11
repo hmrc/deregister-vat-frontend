@@ -112,7 +112,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -142,7 +142,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(SEE_OTHER),
-          redirectURI(controllers.routes.DeregisterForVATController.show().url)
+          redirectURI(controllers.routes.DeregisterForVATController.show.url)
         )
       }
     }
@@ -184,7 +184,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.zeroRated.routes.SicCodeController.show().url)
+            redirectURI(controllers.zeroRated.routes.SicCodeController.show.url)
           )
         }
       }
@@ -216,7 +216,7 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.NextTaxableTurnoverController.show().url)
+            redirectURI(controllers.routes.NextTaxableTurnoverController.show.url)
           )
         }
       }

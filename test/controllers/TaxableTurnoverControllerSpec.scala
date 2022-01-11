@@ -49,7 +49,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
       "the user does not have a pre selected amount" should {
 
-        lazy val result = TestTaxableTurnoverController.show()(request)
+        lazy val result = TestTaxableTurnoverController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetTaxableTurnover(Right(None))
@@ -65,7 +65,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
       "the user is has pre selected amount" should {
 
-        lazy val result = TestTaxableTurnoverController.show()(request)
+        lazy val result = TestTaxableTurnoverController.show(request)
 
         "return 200 (OK)" in {
           setupMockGetTaxableTurnover(Right(Some(No)))
@@ -83,7 +83,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
         }
       }
 
-      authChecks(".show", TestTaxableTurnoverController.show(), request)
+      authChecks(".show", TestTaxableTurnoverController.show, request)
     }
 
     "Calling the .submit action" when {
@@ -96,7 +96,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestTaxableTurnoverController.submit()(request)
+          lazy val result = TestTaxableTurnoverController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
@@ -106,8 +106,8 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"Redirect to the '${controllers.routes.VATAccountsController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
+          s"Redirect to the '${controllers.routes.VATAccountsController.show.url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show.url)
           }
         }
 
@@ -117,7 +117,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestTaxableTurnoverController.submit()(request)
+          lazy val result = TestTaxableTurnoverController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
@@ -127,8 +127,8 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"Redirect to the '${controllers.routes.NextTaxableTurnoverController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
+          s"Redirect to the '${controllers.routes.NextTaxableTurnoverController.show.url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show.url)
           }
         }
 
@@ -138,7 +138,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestTaxableTurnoverController.submit()(request)
+          lazy val result = TestTaxableTurnoverController.submit(request)
 
           "return 303 (SEE OTHER)" in {
             setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
@@ -148,8 +148,8 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
             status(result) shouldBe Status.SEE_OTHER
           }
 
-          s"Redirect to the '${controllers.routes.VATAccountsController.show().url}'" in {
-            redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show().url)
+          s"Redirect to the '${controllers.routes.VATAccountsController.show.url}'" in {
+            redirectLocation(result) shouldBe Some(controllers.routes.NextTaxableTurnoverController.show.url)
           }
         }
 
@@ -157,7 +157,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody((yesNo, "no"))
-          lazy val result = TestTaxableTurnoverController.submit()(request)
+          lazy val result = TestTaxableTurnoverController.submit(request)
 
           "return 500 (ISE)" in {
             setupMockStoreTaxableTurnover(No)(Left(errorModel))
@@ -170,7 +170,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
           lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
             requestPost.withFormUrlEncodedBody(("yesNo", ""))
-          lazy val result = TestTaxableTurnoverController.submit()(request)
+          lazy val result = TestTaxableTurnoverController.submit(request)
 
           "return 400 (BAD REQUEST)" in {
             mockAuthResult(mockAuthorisedIndividual)
@@ -188,7 +188,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody((yesNo, "no"))
-        lazy val result = TestTaxableTurnoverController.submit()(request)
+        lazy val result = TestTaxableTurnoverController.submit(request)
 
         "return 500 (ISE)" in {
           setupMockStoreTaxableTurnover(No)(Right(DeregisterVatSuccess))
@@ -200,7 +200,7 @@ class TaxableTurnoverControllerSpec extends ControllerBaseSpec with MockWipeRedu
       }
     }
 
-    authChecks(".submit", TestTaxableTurnoverController.submit(), requestPost.withFormUrlEncodedBody((yesNo, "yes")))
+    authChecks(".submit", TestTaxableTurnoverController.submit, requestPost.withFormUrlEncodedBody((yesNo, "yes")))
   }
 
 }

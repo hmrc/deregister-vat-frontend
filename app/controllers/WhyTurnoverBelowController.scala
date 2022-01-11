@@ -52,7 +52,7 @@ class WhyTurnoverBelowController @Inject()(whyTurnoverBelow: WhyTurnoverBelow,
       error => Future.successful(BadRequest(whyTurnoverBelow(error))),
       data => {
         whyTurnoverBelowAnswerService.storeAnswer(data).map {
-          case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show())
+          case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show)
           case Left(error) =>
             logger.warn("[WhyTurnoverBelowController][submit] - storedAnswerService returned an error storing answers: " + error.message)
             serviceErrorHandler.showInternalServerError
