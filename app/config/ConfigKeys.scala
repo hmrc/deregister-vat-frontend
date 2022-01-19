@@ -19,6 +19,7 @@ package config
 object ConfigKeys {
 
   val contactFrontendService: String = "contact-frontend.host"
+  val contactFrontendIdentifier: String = "contact-frontend.serviceId"
 
   val signInBaseUrl: String = "signIn.url"
   val signInContinueBaseUrl: String = "signIn.continueBaseUrl"

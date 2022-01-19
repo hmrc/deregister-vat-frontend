@@ -60,7 +60,6 @@ trait AppConfig {
   val platformHost: String
   val timeoutPeriod: Int
   val timeoutCountdown: Int
-  val contactFormServiceIdentifier: String
 
   val languageFallbackUrl: String
   val languageMap: Map[String, Lang]
@@ -76,8 +75,8 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
 
   lazy val appName: String = servicesConfig.getString("appName")
 
-  private val contactHost = servicesConfig.getString(Keys.contactFrontendService)
-  override lazy val contactFormServiceIdentifier = "VATC"
+  private lazy val contactHost = servicesConfig.getString(Keys.contactFrontendService)
+  private lazy val contactFormServiceIdentifier = servicesConfig.getString(Keys.contactFrontendIdentifier)
 
   override lazy val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
