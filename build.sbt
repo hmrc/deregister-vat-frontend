@@ -53,19 +53,19 @@ val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"   %% "bootstrap-frontend-play-28"      % "5.19.0",
   "uk.gov.hmrc"   %% "play-language"                   % "5.1.0-play-28",
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "1.31.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "2.0.0-play-28",
   "org.typelevel" %% "cats"                            % "0.9.0"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "org.scalatest"           %% "scalatest"                    % "3.1.4"             % scope,
+  "org.scalatest"           %% "scalatest"                    % "3.2.10"             % scope,
   "org.pegdown"             %  "pegdown"                      % "1.6.0"             % scope,
   "org.jsoup"               %  "jsoup"                        % "1.13.1"            % scope,
   "com.typesafe.play"       %% "play-test"                    % PlayVersion.current % scope,
   "org.scalatestplus.play"  %% "scalatestplus-play"           % "5.1.0"             % scope,
   "org.scalamock"           %% "scalamock-scalatest-support"  % "3.6.0"             % scope,
   "com.github.tomakehurst"  %  "wiremock-jre8"                % "2.26.3"            % scope,
-  "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.36.8"            % scope
+  "com.vladsch.flexmark"    %  "flexmark-all"                 % "0.62.2"            % scope
 )
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
