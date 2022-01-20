@@ -108,5 +108,9 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
     "have the correct continue button text and url" in {
       elementText(Selectors.button) shouldBe CheckYourAnswersMessages.confirm
     }
+
+    "have the prevent double click attribute on the button" in {
+      element(Selectors.button).hasAttr("data-prevent-double-click")
+    }
   }
 }
