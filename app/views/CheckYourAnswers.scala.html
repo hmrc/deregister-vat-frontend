@@ -48,6 +48,7 @@
 
   @formWithCSRF(action = controllers.routes.CheckAnswersController.submit) {
     @govukButton(Button(
+      preventDoubleClick = true,
       content = Text(messages("checkYourAnswers.confirm"))
     ))
   }
