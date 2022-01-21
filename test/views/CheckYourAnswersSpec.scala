@@ -110,7 +110,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
     }
 
     "have the prevent double click attribute on the button" in {
-      element(Selectors.button).hasAttr("data-prevent-double-click")
+      element(Selectors.button).attr("data-prevent-double-click") shouldBe true
     }
   }
 }
