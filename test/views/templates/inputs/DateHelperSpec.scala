@@ -341,10 +341,10 @@ class DateHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" role="group" aria-describedby="$id-hint $id-error">
              |    $legendMarkup
              |    $hintMarkup
-             |    <p id="$id-error" class="govuk-error-message">
+             |    <span id="$id-error" class="govuk-error-message">
              |      <span class="govuk-visually-hidden">Error:</span>
              |      Enter the date the business stopped or will stop trading
-             |    </p>
+             |    </span>
              |    $inputMarkupAllDateFieldsError
              |  </fieldset>
              |</div>
@@ -369,10 +369,10 @@ class DateHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" role="group" aria-describedby="$id-hint $id-error">
              |    $legendMarkup
              |    $hintMarkup
-             |    <p id="$id-error" class="govuk-error-message">
+             |    <span id="$id-error" class="govuk-error-message">
              |      <span class="govuk-visually-hidden">Error:</span>
              |      Enter the date the business stopped or will stop trading
-             |    </p>
+             |    </span>
              |    $inputMarkupDayAndMonthFieldsError
              |  </fieldset>
              |</div>
@@ -397,10 +397,10 @@ class DateHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" role="group" aria-describedby="$id-hint $id-error">
              |    $legendMarkup
              |    $hintMarkup
-             |    <p id="$id-error" class="govuk-error-message">
+             |    <span id="$id-error" class="govuk-error-message">
              |      <span class="govuk-visually-hidden">Error:</span>
              |      Enter the date the business stopped or will stop trading
-             |    </p>
+             |    </span>
              |    $inputMarkupDayAndYearFieldsError
              |  </fieldset>
              |</div>
@@ -425,10 +425,10 @@ class DateHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" role="group" aria-describedby="$id-hint $id-error">
              |    $legendMarkup
              |    $hintMarkup
-             |    <p id="$id-error" class="govuk-error-message">
+             |    <span id="$id-error" class="govuk-error-message">
              |      <span class="govuk-visually-hidden">Error:</span>
              |      Enter the date the business stopped or will stop trading
-             |    </p>
+             |    </span>
              |    $inputMarkupMonthAndYearFieldsError
              |  </fieldset>
              |</div>
@@ -453,10 +453,10 @@ class DateHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" role="group" aria-describedby="$id-hint $id-error">
              |    $legendMarkup
              |    $hintMarkup
-             |    <p id="$id-error" class="govuk-error-message">
+             |    <span id="$id-error" class="govuk-error-message">
              |      <span class="govuk-visually-hidden">Error:</span>
              |      Enter the day in the correct format
-             |    </p>
+             |    </span>
              |    $inputMarkupOnlyDayError
              |  </fieldset>
              |</div>
@@ -481,10 +481,10 @@ class DateHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" role="group" aria-describedby="$id-hint $id-error">
              |    $legendMarkup
              |    $hintMarkup
-             |    <p id="$id-error" class="govuk-error-message">
+             |    <span id="$id-error" class="govuk-error-message">
              |      <span class="govuk-visually-hidden">Error:</span>
              |      Enter the month in the correct format
-             |    </p>
+             |    </span>
              |    $inputMarkupOnlyMonthError
              |  </fieldset>
              |</div>
@@ -509,10 +509,10 @@ class DateHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" role="group" aria-describedby="$id-hint $id-error">
              |    $legendMarkup
              |    $hintMarkup
-             |    <p id="$id-error" class="govuk-error-message">
+             |    <span id="$id-error" class="govuk-error-message">
              |      <span class="govuk-visually-hidden">Error:</span>
              |      Enter the year in the correct format
-             |    </p>
+             |    </span>
              |    $inputMarkupOnlyYearError
              |  </fieldset>
              |</div>

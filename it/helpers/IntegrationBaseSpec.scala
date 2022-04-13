@@ -38,7 +38,6 @@ trait IntegrationBaseSpec extends CustomMatchers
   val mockHost: String = host
   val mockPort: String = wmPort.toString
   val appRouteContext: String = "/vat-through-software/account/cancel-vat"
-  val authToken : String = "authToken"
 
   implicit lazy val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
   lazy val messagesApi: MessagesApi = app.injector.instanceOf[MessagesApi]
@@ -53,16 +52,12 @@ trait IntegrationBaseSpec extends CustomMatchers
     def user: User = new User()
   }
 
-  def isNotInsolvent: Map[String, String] = Map(SessionKeys.insolventWithoutAccessKey -> "false")
-
-  def authSession: Map[String, String] = Map(authToken -> "mock-bearer-token")
+  def isNotInsolvent:  Map[String, String] = Map(SessionKeys.insolventWithoutAccessKey -> "false")
 
   def formatPendingDereg: Option[String] => Map[String, String] =
     _.fold(Map.empty[String, String])(x => Map(SessionKeys.registrationStatus -> x))
 
-
   def given: PreconditionBuilder = new PreconditionBuilder
-
 
   class User()(implicit builder: PreconditionBuilder) {
 
@@ -131,11 +126,11 @@ trait IntegrationBaseSpec extends CustomMatchers
   }
 
   def get(path: String, additionalCookies: Map[String, String] = Map.empty): WSResponse = await(
-    buildRequest(path, additionalCookies ++ authSession).get()
+    buildRequest(path, additionalCookies).get()
   )
 
   def post(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse = await(
-    buildRequest(path, additionalCookies ++ authSession).post(body)
+    buildRequest(path, additionalCookies).post(body)
   )
 
   def put(path: String, additionalCookies: Map[String, String] = Map.empty)(body: Map[String, Seq[String]]): WSResponse = await(
