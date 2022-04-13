@@ -27,7 +27,8 @@ import stubs.{DeregisterVatStub, VatSubscriptionStub}
 
 class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
 
-  val session: Map[String, String] = Map(SessionKeys.clientVRN -> vrn, SessionKeys.deregSuccessful -> "true")
+  val session: Map[String, String] = Map(SessionKeys.clientVRN -> vrn, SessionKeys.deregSuccessful -> "true", authToken -> "mock-bearer-token")
+
   lazy val mockAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   override def beforeEach() {
