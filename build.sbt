@@ -53,7 +53,7 @@ val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"   %% "bootstrap-frontend-play-28"      % "5.21.0",
   "uk.gov.hmrc"   %% "play-language"                   % "5.1.0-play-28",
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "3.13.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"              % "2.0.0-play-28",
   "org.typelevel" %% "cats"                            % "0.9.0"
 )
 
