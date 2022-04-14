@@ -40,7 +40,7 @@ class YesNoHelperSpec extends TemplateBaseSpec {
 
   val inputMarkup: String =
     s"""
-       |<div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+       |<div class="govuk-radios govuk-radios--inline">
        |  <div class="govuk-radios__item">
        |    <input class="govuk-radios__input" id="yes_no" name="yes_no" type="radio" value="yes">
        |      <label class="govuk-label govuk-radios__label" for="yes_no">
@@ -106,10 +106,10 @@ class YesNoHelperSpec extends TemplateBaseSpec {
              |<div class="govuk-form-group govuk-form-group--error">
              |  <fieldset class="govuk-fieldset" aria-describedby="yes_no-error">
              |    $legendMarkup
-             |    <p id="yes_no-error" class="govuk-error-message">
+             |    <span id="yes_no-error" class="govuk-error-message">
              |      <span class="govuk-visually-hidden">Error:</span>
              |      This is the error message
-             |    </p>
+             |    </span>
              |    $inputMarkup
              |  </fieldset>
              |</div>
