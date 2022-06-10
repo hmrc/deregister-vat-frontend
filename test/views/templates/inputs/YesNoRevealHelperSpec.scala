@@ -49,7 +49,7 @@ class YesNoRevealHelperSpec extends TemplateBaseSpec {
 
   val inputMarkup: String =
     s"""
-       |<div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+       |<div class="govuk-radios" data-module="govuk-radios">
        |  <div class="govuk-radios__item">
        |    <input class="govuk-radios__input" id="yes_no" name="yes_no" type="radio" value="yes" data-aria-controls="conditional-yes_no">
        |      <label class="govuk-label govuk-radios__label" for="yes_no">
@@ -103,10 +103,10 @@ class YesNoRevealHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" aria-describedby="yes_no-hint yes_no-error">
              |    $legendMarkup
              |    $hintMarkup
-             |    <span id="yes_no-error" class="govuk-error-message">
+             |    <p id="yes_no-error" class="govuk-error-message">
              |      <span class="govuk-visually-hidden">Error:</span>
              |      This is the error message
-             |    </span>
+             |    </p>
              |    $inputMarkup
              |  </fieldset>
              |</div>
@@ -126,10 +126,10 @@ class YesNoRevealHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" aria-describedby="yes_no-hint yes_no-error">
              |    $legendMarkup
              |    $hintMarkup
-             |    <span id="yes_no-error" class="govuk-error-message">
+             |    <p id="yes_no-error" class="govuk-error-message">
              |      <span class="govuk-visually-hidden">Error:</span>
              |      This is the error message
-             |    </span>
+             |    </p>
              |    $inputMarkup
              |  </fieldset>
              |</div>
