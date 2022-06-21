@@ -37,14 +37,13 @@ common.error.tooManyDigitsBeforeDecimal = Enter a maximum of 13 decimal places f
 common.dateRangeSeparator = to
 common.pageTitle = {0} - {1} - GOV.UK
 
-global.error.InternalServerError500.title = There is a problem with the service - VAT - GOV.UK
+global.error.InternalServerError500.title = There is a problem with the service
 global.error.InternalServerError500.heading = Sorry, there is a problem with the service
 global.error.InternalServerError500.message = Try again later.
 
 error.date.day = Enter the day in the correct format
 error.date.month = Enter the month in the correct format
 error.date.year = Enter the year in the correct format
-
 
 deregisterForVAT.title = Cancel VAT registration
 deregisterForVAT.p1 = To cancel the registration, you need to know the value of any:
@@ -220,8 +219,6 @@ sessionTimeout.helpThree = using your Government Gateway ID.
 unauthorised.client.title = You can’t use this service yet
 unauthorised.client.useThisService = You need to
 unauthorised.client.signUp = sign up to use software to submit your VAT Returns
-
-featureSwitch.title = Feature switches
 
 outstandingInvoice.title = Will the business receive payment for outstanding invoices after you cancel the registration?
 outstandingInvoice.error.mandatoryRadioOption = Select yes if the business is expecting to receive payment for outstanding invoices after you cancel the registration

@@ -35,16 +35,11 @@ common.error.negative = Nodwch swm positif
 common.error.tooManyDecimals = Nodwch uchafswm o 2 bwynt degol ar gyfer ceiniogau
 common.error.tooManyDigitsBeforeDecimal = Nodwch uchafswm o 13 lle degol ar gyfer punnoedd
 common.dateRangeSeparator = i
+common.pageTitle = {0} - {1} - GOV.UK
 
-global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth – TAW - GOV.UK
+global.error.InternalServerError500.title = Mae problem gyda’r gwasanaeth
 global.error.InternalServerError500.heading = Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
 global.error.InternalServerError500.message = Rhowch gynnig arall arni yn nes ymlaen.
-global.error.badRequest400.title = Cais drwg – 400
-global.error.badRequest400.heading = Cais drwg
-global.error.badRequest400.message = Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
-global.error.pageNotFound404.title = Heb ddod o hyd i’r dudalen – 404
-global.error.pageNotFound404.heading = Ni ellir dod o hyd i’r dudalen hon
-global.error.pageNotFound404.message = Gwiriwch eich bod wedi nodi’r cyfeiriad gwe cywir.
 
 error.date.day = Nodwch y diwrnod yn y fformat cywir
 error.date.month = Nodwch y mis yn y fformat cywir
@@ -224,8 +219,6 @@ sessionTimeout.helpThree = gan ddefnyddio’ch Dynodydd Defnyddiwr (ID) ar gyfer
 unauthorised.client.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.client.useThisService = Mae’n rhaid i chi
 unauthorised.client.signUp = gofrestru i ddefnyddio meddalwedd er mwyn cyflwyno’ch Ffurflenni TAW
-
-featureSwitch.title = Feature switches
 
 outstandingInvoice.title = A fydd y busnes yn cael taliad am anfonebau heb eu setlo ar ôl i chi ganslo’r cofrestriad?
 outstandingInvoice.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes yn disgwyl cael taliad am anfonebau heb eu setlo ar ôl i chi ganslo’r cofrestriad
