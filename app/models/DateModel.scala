@@ -34,11 +34,7 @@ case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int) {
 
   def longDate()(implicit messages: Messages): String = {
     date.fold(""){ datum => datum.format(DateTimeFormatter.ofPattern(
-        if(messages.lang.language =="cy"){
-          s"""d '${messages(s"month.${datum.getMonthValue}")}' uuuu"""
-        } else {
-          "d MMMM uuuu"
-        }
+      s"""d '${messages(s"month.${datum.getMonthValue}")}' uuuu"""
     ).withResolverStyle(ResolverStyle.STRICT))}
   }
 }
