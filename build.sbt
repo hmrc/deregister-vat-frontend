@@ -52,7 +52,7 @@ val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"   %% "bootstrap-frontend-play-28" % "7.3.0",
   "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "3.27.0-play-28",
-  "org.typelevel" %% "cats"                       % "0.9.0" % "compile"
+  "org.typelevel" %% "cats"                       % "0.9.0"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
@@ -92,8 +92,8 @@ lazy val microservice: Project = Project(appName, file("."))
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
   .settings(
-    Keys.fork in IntegrationTest := false,
-    unmanagedSourceDirectories in IntegrationTest := (baseDirectory in IntegrationTest)(base => Seq(base / "it")).value,
+    IntegrationTest / Keys.fork := false,
+    IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory)(base => Seq(base / "it")).value,
     addTestReportOption(IntegrationTest, "int-test-reports"),
-    testGrouping in IntegrationTest := oneForkedJvmPerTest((definedTests in IntegrationTest).value),
-    parallelExecution in IntegrationTest := false)
+    IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
+    IntegrationTest / parallelExecution := false)
