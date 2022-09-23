@@ -50,13 +50,13 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28" % "5.24.0",
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "3.21.0-play-28",
+  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28" % "7.3.0",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "3.27.0-play-28",
   "org.typelevel" %% "cats"                       % "0.9.0"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"   %% "bootstrap-test-play-28"      % "5.24.0" % scope,
+  "uk.gov.hmrc"   %% "bootstrap-test-play-28"      % "7.3.0" % scope,
   "org.jsoup"     %  "jsoup"                       % "1.13.1" % scope,
   "org.scalamock" %% "scalamock-scalatest-support" % "3.6.0"  % scope
 )
@@ -85,7 +85,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.12.15",
+    scalaVersion := "2.12.16",
     libraryDependencies ++= appDependencies,
     retrieveManaged := true
   )
