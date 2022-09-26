@@ -58,10 +58,8 @@ class YesNoRevealHelperSpec extends TemplateBaseSpec {
        |  </div>
        |  <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-yes_no">
        |    <div class="govuk-form-group"> <label class="govuk-label" for="amount"> What is the amount? </label>
-       |     <div class="govuk-input__wrapper">
-       |      <div class="govuk-input__prefix" aria-hidden="true">£</div>
-       |      <input class="govuk-input govuk-input--width-10" id="amount" name="amount" type="text">
-       |     </div>
+       |     <div class="govuk-input__wrapper"><div class="govuk-input__prefix" aria-hidden="true">£</div>
+       |      <input class="govuk-input govuk-input--width-10" id="amount" name="amount" type="text"></div>
        |    </div>
        |  </div>
        |  <div class="govuk-radios__item">
