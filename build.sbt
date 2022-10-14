@@ -20,7 +20,7 @@ import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
 val appName: String = "deregister-vat-frontend"
-val bootstrapPlayVersion = "7.4.0"
+val bootstrapPlayVersion = "7.8.0"
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 lazy val plugins: Seq[Plugins] = Seq.empty
@@ -52,13 +52,13 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"   %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "3.28.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "3.32.0-play-28",
   "org.typelevel" %% "cats"                       % "0.9.0"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "uk.gov.hmrc"   %% "bootstrap-test-play-28"      % bootstrapPlayVersion % scope,
-  "org.jsoup"     %  "jsoup"                       % "1.13.1"             % scope,
+  "org.jsoup"     %  "jsoup"                       % "1.15.3"             % scope,
   "org.scalamock" %% "scalamock-scalatest-support" % "3.6.0"              % scope
 )
 
