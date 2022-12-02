@@ -44,14 +44,14 @@ class DateModelSpec extends TestUtil {
     "output a long date" when {
 
       "called on a valid DateModel " in {
-        DateModel(12,12,2019).longDate() shouldBe "12 December 2019"
+        DateModel(12,12,2019).longDate shouldBe "12 December 2019"
       }
     }
 
     "return an empty string" when {
 
       "called on a DateModel with an incorrect date" in {
-        DateModel(13,13,2019).longDate() shouldBe ""
+        DateModel(13,13,2019).longDate shouldBe ""
       }
     }
   }

@@ -32,7 +32,7 @@ case class DateModel(dateDay: Int, dateMonth: Int, dateYear: Int) {
       case Failure(_) => None
     }
 
-  def longDate()(implicit messages: Messages): String = {
+  def longDate(implicit messages: Messages): String = {
     date.fold(""){ datum => datum.format(DateTimeFormatter.ofPattern(
       s"""d '${messages(s"month.${datum.getMonthValue}")}' uuuu"""
     ).withResolverStyle(ResolverStyle.STRICT))}

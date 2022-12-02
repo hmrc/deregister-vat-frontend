@@ -61,7 +61,7 @@ trait IntegrationBaseSpec extends CustomMatchers
     _.fold(Map.empty[String, String])(x => Map(SessionKeys.registrationStatus -> x))
 
 
-  def given: PreconditionBuilder = new PreconditionBuilder
+  def `given`: PreconditionBuilder = new PreconditionBuilder
 
 
   class User()(implicit builder: PreconditionBuilder) {

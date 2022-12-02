@@ -22,6 +22,7 @@ import common.{Constants, SessionKeys}
 import mocks.MockAuth
 import models.{ErrorModel, User}
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import play.api.mvc.Results.BadRequest
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.mocks.MockCustomerDetailsService
@@ -51,7 +52,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
         "the user is a principal entity" should {
           lazy val result = {
-            Future.successful(mockRegStatusPredicate.refine(User(vrn)(fakeRequest)).futureValue.left.get)
+            Future.successful(mockRegStatusPredicate.refine(User(vrn)(fakeRequest)).futureValue.swap.getOrElse(BadRequest))
           }
 
           "return SEE_OTHER" in {
@@ -65,7 +66,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
         "the user is an agent" should {
           lazy val result = {
-            Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(fakeRequest)).futureValue.left.get)
+            Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(fakeRequest)).futureValue.swap.getOrElse(BadRequest))
           }
 
           "return SEE_OTHER" in {
@@ -87,7 +88,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
         "the user is a principal entity" should {
 
           lazy val result = {
-            Future.successful(mockRegStatusPredicate.refine(User(vrn)(fakeRequest)).futureValue.left.get)
+            Future.successful(mockRegStatusPredicate.refine(User(vrn)(fakeRequest)).futureValue.swap.getOrElse(BadRequest))
           }
 
           "return SEE_OTHER" in {
@@ -101,7 +102,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
         "the user is an agent" should {
           lazy val result = {
-            Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(fakeRequest)).futureValue.left.get)
+            Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(fakeRequest)).futureValue.swap.getOrElse(BadRequest))
           }
 
           "return SEE_OTHER" in {
@@ -140,7 +141,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsVatGroup))
-              Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.left.get)
+              Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.swap.getOrElse(BadRequest))
             }
 
             "return SEE_OTHER" in {
@@ -156,7 +157,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsVatGroup))
-              Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request)).futureValue.left.get)
+              Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request)).futureValue.swap.getOrElse(BadRequest))
             }
 
             "return SEE_OTHER" in {
@@ -176,7 +177,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsPendingDereg))
-              Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.left.get)
+              Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.swap.getOrElse(BadRequest))
             }
 
             "add 'registrationStatus' = pending to session" in {
@@ -196,7 +197,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsPendingDereg))
-              Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request)).futureValue.left.get)
+              Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request)).futureValue.swap.getOrElse(BadRequest))
             }
 
             "add 'registrationStatus' = pending to session" in {
@@ -219,7 +220,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsAlreadyDeregistered))
-              Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.left.get)
+              Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.swap.getOrElse(BadRequest))
             }
 
             "add 'registrationStatus' = deregistered to session" in {
@@ -239,7 +240,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
             lazy val result = {
               setupMockCustomerDetails(vrn)(Right(customerDetailsAlreadyDeregistered))
-              Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request)).futureValue.left.get)
+              Future.successful(mockRegStatusPredicate.refine(User(vrn, arn = Some("arn"))(request)).futureValue.swap.getOrElse(BadRequest))
             }
 
             "add 'registrationStatus' = deregistered to session" in {
@@ -260,7 +261,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
           lazy val result = {
             setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
-            Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.left.get)
+            Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.swap.getOrElse(BadRequest))
           }
 
           "add 'registrationStatus' = registered to session" in {
@@ -281,7 +282,7 @@ class DeniedAccessPredicateSpec extends MockAuth with MockCustomerDetailsService
 
         lazy val result = {
           setupMockCustomerDetails(vrn)(Left(ErrorModel(1, "")))
-          Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.left.get)
+          Future.successful(mockRegStatusPredicate.refine(User(vrn)(request)).futureValue.swap.getOrElse(BadRequest))
         }
 
         "return INTERNAL_SERVER_ERROR" in {

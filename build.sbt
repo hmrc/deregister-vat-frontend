@@ -20,7 +20,7 @@ import uk.gov.hmrc.DefaultBuildSettings._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
 val appName: String = "deregister-vat-frontend"
-val bootstrapPlayVersion = "7.8.0"
+val bootstrapPlayVersion = "7.12.0"
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 lazy val plugins: Seq[Plugins] = Seq.empty
@@ -53,13 +53,13 @@ val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"   %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
   "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "3.32.0-play-28",
-  "org.typelevel" %% "cats"                       % "0.9.0"
+  "org.typelevel" %% "cats-core"                  % "2.9.0"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "uk.gov.hmrc"   %% "bootstrap-test-play-28"      % bootstrapPlayVersion % scope,
   "org.jsoup"     %  "jsoup"                       % "1.15.3"             % scope,
-  "org.scalamock" %% "scalamock-scalatest-support" % "3.6.0"              % scope
+  "org.scalamock" %% "scalamock"                   % "5.2.0"              % scope
 )
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
@@ -86,7 +86,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.12.16",
+    scalaVersion := "2.13.8",
     libraryDependencies ++= appDependencies,
     retrieveManaged := true
   )
