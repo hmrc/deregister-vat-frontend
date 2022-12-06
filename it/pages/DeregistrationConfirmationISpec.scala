@@ -31,11 +31,11 @@ class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
 
   lazy val mockAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
-  override def beforeEach() {
+  override def beforeEach(): Unit = {
     super.beforeEach()
   }
 
-  override def afterEach() {
+  override def afterEach(): Unit = {
     super.afterEach()
   }
 

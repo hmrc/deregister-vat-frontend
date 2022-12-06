@@ -42,7 +42,7 @@ trait TestUtil extends AnyWordSpecLike
   with GuiceOneAppPerSuite
   with BeforeAndAfterEach {
 
-  override def beforeEach() {
+  override def beforeEach(): Unit = {
     super.beforeEach()
     mockConfig.features.stubAgentClientLookup(true)
     SharedMetricRegistries.clear()
@@ -57,7 +57,7 @@ trait TestUtil extends AnyWordSpecLike
     messagesActionBuilder,
     DefaultActionBuilder(stubBodyParser[AnyContent]()),
     cc.parsers,
-    fakeApplication.injector.instanceOf[MessagesApi],
+    fakeApplication().injector.instanceOf[MessagesApi],
     cc.langs,
     cc.fileMimeTypes,
     ExecutionContext.global

@@ -21,7 +21,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import  org.scalatest.matchers.should.Matchers
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait ViewBaseSpec extends TestUtil with Matchers {
 
