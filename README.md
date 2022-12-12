@@ -13,7 +13,10 @@ This service provides end users with a mechanism to De-register for VAT.
 This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), so needs at least a [JRE] to run.
 
 ## Running
-`sbt "run 9153 -Dapplication.router=testOnlyDoNotUseInAppConf.Routes"`
+
+In order to run this microservice, you must have SBT installed. You should then be able to start the application using:
+
+`./run.sh`
 
 ## Testing
 `sbt clean coverage test it:test coverageReport`
