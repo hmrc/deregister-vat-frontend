@@ -34,15 +34,16 @@ class ErrorSummaryHelperSpec extends TemplateBaseSpec {
       "render the appropriate error summary component, with the error link set to the default value of the field name" in {
         val expectedMarkup: Html = Html(
           s"""
-             |<div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert"
-             |     data-module="govuk-error-summary">
-             |  <h2 class="govuk-error-summary__title" id="error-summary-title"> There is a problem </h2>
-             |  <div class="govuk-error-summary__body">
-             |    <ul class="govuk-list govuk-error-summary__list">
-             |      <li>
-             |        <a href="#value">This field is required</a>
-             |      </li>
-             |    </ul>
+             |<div class="govuk-error-summary" data-disable-auto-focus="false" data-module="govuk-error-summary">
+             |  <div role="alert">
+             |    <h2 class="govuk-error-summary__title"> There is a problem </h2>
+             |    <div class="govuk-error-summary__body">
+             |      <ul class="govuk-list govuk-error-summary__list">
+             |        <li>
+             |          <a href="#value">This field is required</a>
+             |        </li>
+             |      </ul>
+             |    </div>
              |  </div>
              |</div>
            """.stripMargin
@@ -57,21 +58,31 @@ class ErrorSummaryHelperSpec extends TemplateBaseSpec {
       "render the appropriate error summary component, with the error link going to the href specified" in {
         val expectedMarkup: Html = Html(
           s"""
-             |<div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert"
-             |     data-module="govuk-error-summary">
-             |  <h2 class="govuk-error-summary__title" id="error-summary-title"> There is a problem </h2>
-             |  <div class="govuk-error-summary__body">
-             |    <ul class="govuk-list govuk-error-summary__list">
-             |      <li>
-             |        <a href="#customInput">This field is required</a>
-             |      </li>
-             |    </ul>
+             |<div class="govuk-error-summary" data-disable-auto-focus="false" data-module="govuk-error-summary">
+             |  <div role="alert">
+             |    <h2 class="govuk-error-summary__title"> There is a problem </h2>
+             |    <div class="govuk-error-summary__body">
+             |      <ul class="govuk-list govuk-error-summary__list">
+             |        <li>
+             |          <a href="#customInput">This field is required</a>
+             |        </li>
+             |      </ul>
+             |    </div>
              |  </div>
              |</div>
            """.stripMargin
         )
         val markup = errorSummaryHelper(exampleForm.bind(Map("value" -> "")), hrefId = Some("#customInput"))
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
+      }
+    }
+
+    "there is no error in the form" should {
+
+      "not render an error summary" in {
+        val emptyMarkup: Html = Html("""<html><head></head><body></body></html>""")
+        val markup = errorSummaryHelper(exampleForm)
+        formatHtml(markup) shouldBe formatHtml(emptyMarkup)
       }
     }
   }
