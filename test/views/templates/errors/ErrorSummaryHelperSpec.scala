@@ -34,7 +34,7 @@ class ErrorSummaryHelperSpec extends TemplateBaseSpec {
       "render the appropriate error summary component, with the error link set to the default value of the field name" in {
         val expectedMarkup: Html = Html(
           s"""
-             |<div class="govuk-error-summary" data-disable-auto-focus="false" data-module="govuk-error-summary">
+             |<div class="govuk-error-summary" data-module="govuk-error-summary">
              |  <div role="alert">
              |    <h2 class="govuk-error-summary__title"> There is a problem </h2>
              |    <div class="govuk-error-summary__body">
@@ -58,7 +58,7 @@ class ErrorSummaryHelperSpec extends TemplateBaseSpec {
       "render the appropriate error summary component, with the error link going to the href specified" in {
         val expectedMarkup: Html = Html(
           s"""
-             |<div class="govuk-error-summary" data-disable-auto-focus="false" data-module="govuk-error-summary">
+             |<div class="govuk-error-summary" data-module="govuk-error-summary">
              |  <div role="alert">
              |    <h2 class="govuk-error-summary__title"> There is a problem </h2>
              |    <div class="govuk-error-summary__body">
