@@ -17,10 +17,9 @@
 import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
 val appName: String = "deregister-vat-frontend"
-val bootstrapPlayVersion = "7.12.0"
+val bootstrapPlayVersion = "7.13.0"
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 lazy val plugins: Seq[Plugins] = Seq.empty
@@ -82,7 +81,6 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(coverageSettings: _*)
   .settings(playSettings: _*)
   .settings(scalaSettings: _*)
-  .settings(publishingSettings: _*)
   .settings(defaultSettings(): _*)
   .settings(
     majorVersion := 0,
