@@ -17,7 +17,6 @@
 import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 
 val appName: String = "deregister-vat-frontend"
 val bootstrapPlayVersion = "7.13.0"
