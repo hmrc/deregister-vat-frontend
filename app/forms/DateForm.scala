@@ -16,7 +16,8 @@
 
 package forms
 
-import forms.utils.FormValidation
+import utils.FormValidation
+import _root_.utils.LoggerUtil
 import models.DateModel
 import play.api.data.Forms._
 import play.api.data.format.Formatter
@@ -25,7 +26,7 @@ import play.api.data.{Form, FormError}
 import scala.util.{Failure, Success, Try}
 
 
-object DateForm extends FormValidation {
+object DateForm extends FormValidation with LoggerUtil {
 
   val day = "dateDay"
   val month = "dateMonth"
@@ -36,12 +37,18 @@ object DateForm extends FormValidation {
         case `day` => FormError(key, "error.date.day")
         case `month` => FormError(key, "error.date.month")
         case `year` => FormError(key, "error.date.year")
+        case _ =>
+          logger.warn("[DateForm][invalidDateError] - date field not recognised")
+          FormError(key, "")
   }
 
   def isValidDate(key: String, value: Int): Boolean = key match {
     case `day` => 1 to 31 contains value
     case `month` => 1 to 12 contains value
     case `year` => value.toString.length == 4
+    case _ =>
+      logger.warn("[DateForm][isValidDate] - date field not recognised")
+      false
   }
 
   val formatter: Formatter[Int] = new Formatter[Int] {
