@@ -20,8 +20,9 @@ import models._
 import play.api.data.Forms._
 import play.api.data.format.Formatter
 import play.api.data.{Form, FormError}
+import _root_.utils.LoggerUtil
 
-object VATAccountsForm {
+object VATAccountsForm extends LoggerUtil {
 
   private val formatter: Formatter[VATAccountsModel] = new Formatter[VATAccountsModel] {
 
@@ -37,6 +38,9 @@ object VATAccountsForm {
       val stringValue = value match {
         case StandardAccounting => StandardAccounting.value
         case CashAccounting => CashAccounting.value
+        case _ =>
+          logger.warn("[VATAccountsForm][unbind] - Accounting type not recognised")
+          ""
       }
       Map(key -> stringValue)
     }
