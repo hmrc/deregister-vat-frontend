@@ -19,7 +19,7 @@ import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
 
 val appName: String = "deregister-vat-frontend"
-val bootstrapPlayVersion = "7.13.0"
+val bootstrapPlayVersion = "7.15.0"
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 lazy val plugins: Seq[Plugins] = Seq.empty
@@ -52,7 +52,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"   %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "5.3.0-play-28",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "7.1.0-play-28",
   "org.typelevel" %% "cats-core"                  % "2.9.0"
 )
 
