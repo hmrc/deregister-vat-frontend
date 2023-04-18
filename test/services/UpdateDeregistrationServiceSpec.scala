@@ -23,8 +23,7 @@ import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
 import assets.constants.ZeroRatedTestConstants.zeroRatedSuppliesValue
-import audit.mocks.MockAuditConnector
-import audit.models.DeregAuditModel
+import audit.models.DeregSuccessAuditModel
 import connectors.mocks.MockVatSubscriptionConnector
 import models._
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -45,7 +44,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
   with MockStocksAnswerService            with MockOptionTaxAnswerService
   with MockAccountingMethodAnswerService  with MockPurchasesExceedSuppliesAnswerService
   with MockSicCodeAnswerService           with MockZeroRatedSuppliesValueService
-  with MockAuditConnector {
+  with MockAuditService {
 
   object TestUpdateDeregistrationService extends UpdateDeregistrationService(
     mockDeregReasonAnswerService,
@@ -63,7 +62,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
     mockPurchasesExceedSuppliesAnswerService,
     mockSicCodeAnswerService,
     mockZeroRatedSuppliesValueService,
-    mockAuditConnector,
+    mockAuditService,
     mockVatSubscriptionConnector
   )
 
@@ -94,7 +93,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
           setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
           setupMockSubmit(vrn, deregistrationInfoMaxModel)(Future.successful(Right(VatSubscriptionSuccess)))
-          setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))
+          setupMockSendExplicitAudit(DeregSuccessAuditModel(user, deregistrationInfoMaxModel))
 
           TestUpdateDeregistrationService.updateDereg.futureValue shouldBe Right(VatSubscriptionSuccess)
         }
@@ -121,7 +120,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
         setupMockSubmit(vrn, deregistrationInfoMaxModel)(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))))
-        setupMockSendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregistrationInfoMaxModel))
+        setupMockSendExplicitAudit(DeregSuccessAuditModel(user, deregistrationInfoMaxModel))
 
         TestUpdateDeregistrationService.updateDereg.futureValue shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
 

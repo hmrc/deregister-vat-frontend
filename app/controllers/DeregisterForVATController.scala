@@ -16,26 +16,31 @@
 
 package controllers
 
+import audit.models.DeregStartAuditModel
 import config.AppConfig
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.DeregisterForVAT
+
 import javax.inject.{Inject, Singleton}
 import utils.LoggerUtil
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class DeregisterForVATController @Inject()(deregisterForVAT: DeregisterForVAT,
                                             val mcc: MessagesControllerComponents,
                                            val authenticate: AuthPredicate,
                                            val regStatusCheck: DeniedAccessPredicate,
+                                           val auditConnector: AuditConnector,
+                                           implicit val ec: ExecutionContext,
                                            implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
+    auditConnector.sendExplicitAudit(DeregStartAuditModel.auditType, DeregStartAuditModel(user))
     Future.successful(Ok(deregisterForVAT()))
   }
-
 }

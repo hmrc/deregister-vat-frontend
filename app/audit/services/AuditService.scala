@@ -17,18 +17,53 @@
 package audit.services
 
 import audit.models.ExtendedAuditModel
+import config.FrontendAppConfig
+import play.api.http.HeaderNames
 import play.api.libs.json.{Json, Writes}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.audit.AuditExtensions
+import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
+import uk.gov.hmrc.play.audit.http.connector.AuditResult.{Disabled, Failure, Success}
+import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
+import utils.LoggerUtil
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuditService @Inject()(val auditConnector: AuditConnector) {
+class AuditService @Inject()(appConfig: FrontendAppConfig, val auditConnector: AuditConnector) extends LoggerUtil {
+
+  val referrer: HeaderCarrier => String = _.extraHeaders.find(_._1 == HeaderNames.REFERER).map(_._2).getOrElse("-")
 
   def auditExtendedEvent[T <: ExtendedAuditModel](auditModel: T)
                                                  (implicit hc: HeaderCarrier, ec: ExecutionContext, writes: Writes[T]): Unit = {
     auditConnector.sendExplicitAudit(auditModel.auditType, Json.toJson(auditModel))
+  }
+
+  def extendedAudit(auditModel: ExtendedAuditModel, path: Option[String] = None)(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
+    val extendedDataEvent = toExtendedDataEvent(appConfig.appName, auditModel, path.fold(referrer(hc))(x => x))
+    logger.debug(s"Splunk Audit Event:\n\n$extendedDataEvent")
+    handleAuditResult(auditConnector.sendExtendedEvent(extendedDataEvent))
+  }
+
+  def toExtendedDataEvent(appName: String, auditModel: ExtendedAuditModel, path: String)(implicit hc: HeaderCarrier): ExtendedDataEvent = {
+
+    ExtendedDataEvent(
+      auditSource = appName,
+      auditType = auditModel.auditType,
+      tags = AuditExtensions.auditHeaderCarrier(hc).toAuditTags(auditModel.transactionName, path),
+      detail = auditModel.detail
+    )
+  }
+
+  private def handleAuditResult(auditResult: Future[AuditResult])(implicit ec: ExecutionContext): Unit = auditResult.map {
+    //$COVERAGE-OFF$ Disabling scoverage as returns Unit, only used for Debug messages
+    case Success =>
+      logger.debug("Splunk Audit Successful")
+    case Failure(err, _) =>
+      logger.debug(s"Splunk Audit Error, message: $err")
+    case Disabled =>
+      logger.debug(s"Auditing Disabled")
+    //$COVERAGE-ON$
   }
 }

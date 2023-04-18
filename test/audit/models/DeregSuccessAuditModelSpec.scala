@@ -20,18 +20,14 @@ import assets.constants.DeregistrationInfoTestConstants._
 import play.api.libs.json.Json
 import utils.TestUtil
 
-class DeregAuditModelSpec extends TestUtil{
+class DeregSuccessAuditModelSpec extends TestUtil{
 
-  val auditType: String = "SubmitVatDeregistrationRequest"
+  val auditType: String = "SubmitVatDeregistrationRequestEnd"
 
-  lazy val agentHandOff = DeregAuditModel(agentUserPrefYes, deregistrationInfoMaxModel)
-  lazy val userHandOff = DeregAuditModel(user, deregistrationInfoMaxModel)
+  lazy val agentHandOff = DeregSuccessAuditModel(agentUserPrefYes, deregistrationInfoMaxModel)
+  lazy val userHandOff = DeregSuccessAuditModel(user, deregistrationInfoMaxModel)
 
   "DeregAuditModel" should {
-
-    s"have the correct audit type $auditType" in {
-      DeregAuditModel.auditType shouldBe auditType
-    }
 
     "user is an Agent" should {
 

@@ -18,10 +18,13 @@ package audit.services
 
 import audit.mocks.MockAuditConnector
 import audit.models.ExtendedAuditModel
+import config.FrontendAppConfig
 import play.api.libs.json.{JsValue, Json, Writes}
 import utils.TestUtil
 
 class AuditServiceSpec extends TestUtil with MockAuditConnector {
+
+  lazy val mockAppConfig: FrontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
 
   "Calling .auditExtendedEvent" should {
 
@@ -36,7 +39,7 @@ class AuditServiceSpec extends TestUtil with MockAuditConnector {
     }
 
     val model = ExampleAuditModel(1)
-    lazy val auditService = new AuditService(mockAuditConnector)
+    lazy val auditService = new AuditService(mockAppConfig, mockAuditConnector)
 
     "audit an event" in {
       setupMockSendExplicitAudit[JsValue](model.auditType, Json.toJson(model))
