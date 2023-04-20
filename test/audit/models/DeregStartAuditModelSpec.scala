@@ -16,18 +16,17 @@
 
 package audit.models
 
-import assets.constants.DeregistrationInfoTestConstants._
 import play.api.libs.json.Json
 import utils.TestUtil
 
-class DeregSuccessAuditModelSpec extends TestUtil{
+class DeregStartAuditModelSpec extends TestUtil {
 
-  val auditType: String = "SubmitVatDeregistrationRequestEnd"
+  val auditType: String = "SubmitVatDeregistrationRequestStart"
 
-  lazy val agentHandOff = DeregSuccessAuditModel(agentUserPrefYes, deregistrationInfoMaxModel)
-  lazy val userHandOff = DeregSuccessAuditModel(user, deregistrationInfoMaxModel)
+  lazy val agentHandOff = DeregStartAuditModel(agentUserPrefYes)
+  lazy val userHandOff = DeregStartAuditModel(user)
 
-  "DeregSuccessAuditModel" should {
+  "DeregStartAuditModel" should {
 
     "user is an Agent" should {
 
@@ -39,8 +38,7 @@ class DeregSuccessAuditModelSpec extends TestUtil{
         Json.toJson(agentHandOff) shouldBe Json.obj(
           "isAgent" -> true,
           "agentReferenceNumber" -> agentUserPrefYes.arn.get,
-          "vrn" -> agentUserPrefYes.vrn,
-          "deregistrationInfo" -> deregistrationInfoMaxModel
+          "vrn" -> agentUserPrefYes.vrn
         )
       }
     }
@@ -54,8 +52,7 @@ class DeregSuccessAuditModelSpec extends TestUtil{
       "have the correct details for the audit event" in {
         Json.toJson(userHandOff) shouldBe Json.obj(
           "isAgent" -> false,
-          "vrn" -> user.vrn,
-          "deregistrationInfo" -> deregistrationInfoMaxModel
+          "vrn" -> user.vrn
         )
       }
     }

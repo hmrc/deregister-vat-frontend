@@ -41,7 +41,7 @@ class DeregisterForVATController @Inject()(deregisterForVAT: DeregisterForVAT,
                                            implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    auditService.extendedAudit(DeregStartAuditModel(user))
+    auditService.extendedAudit(DeregStartAuditModel(user), Some(controllers.routes.DeregisterForVATController.show.url))
     Future.successful(Ok(deregisterForVAT()))
   }
 }

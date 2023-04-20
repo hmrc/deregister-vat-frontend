@@ -17,7 +17,6 @@
 package controllers
 
 import audit.mocks.MockAuditConnector
-import audit.models.DeregStartAuditModel
 import common.{Constants, SessionKeys}
 import controllers.predicates.DeniedAccessPredicate
 import play.api.http.Status
@@ -53,12 +52,12 @@ class DeregisterForVATControllerSpec extends ControllerBaseSpec with MockAuditCo
 
     "Calling the .show action with agent" should {
 
-      lazy val result = TestDeregisterForVATController.show(request.withSession(
+      lazy val result = TestDeregisterForVATController.show(requestWithVRN.withSession(
         SessionKeys.registrationStatus -> Constants.registered
       ))
 
       "return 200 (OK)" in {
-        mockAuthResult(mockAuthorisedAgent)
+        mockAuthResult(mockAuthorisedAgent, true)
         mockAudit()
         status(result) shouldBe Status.OK
       }
