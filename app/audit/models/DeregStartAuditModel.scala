@@ -17,14 +17,16 @@
 package audit.models
 
 import models.User
-import play.api.libs.json.Writes
+import play.api.libs.json.{JsValue, Json, Writes}
 import utils.JsonObjectSugar
 
-case class DeregStartAuditModel(user: User[_])
+case class DeregStartAuditModel(user: User[_]) extends ExtendedAuditModel {
+  override val auditType: String = "SubmitVatDeregistrationRequestStart"
+  override val transactionName: String = "deregister-for-vat-start"
+  override val detail: JsValue = Json.toJson(this)
+}
 
 object DeregStartAuditModel extends JsonObjectSugar {
-
-  val auditType: String = "SubmitVatDeregistrationRequestStart"
 
   implicit val writes: Writes[DeregStartAuditModel] = Writes { model =>
     jsonObjNoNulls(

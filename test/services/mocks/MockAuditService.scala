@@ -19,7 +19,6 @@ package services.mocks
 import audit.models.ExtendedAuditModel
 import audit.services.AuditService
 import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext

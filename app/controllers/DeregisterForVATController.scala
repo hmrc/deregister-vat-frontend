@@ -17,6 +17,7 @@
 package controllers
 
 import audit.models.DeregStartAuditModel
+import audit.services.AuditService
 import config.AppConfig
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import play.api.i18n.I18nSupport
@@ -35,12 +36,12 @@ class DeregisterForVATController @Inject()(deregisterForVAT: DeregisterForVAT,
                                             val mcc: MessagesControllerComponents,
                                            val authenticate: AuthPredicate,
                                            val regStatusCheck: DeniedAccessPredicate,
-                                           val auditConnector: AuditConnector,
+                                           val auditService: AuditService,
                                            implicit val ec: ExecutionContext,
                                            implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    auditConnector.sendExplicitAudit(DeregStartAuditModel.auditType, DeregStartAuditModel(user))
+    auditService.extendedAudit(DeregStartAuditModel(user))
     Future.successful(Ok(deregisterForVAT()))
   }
 }
