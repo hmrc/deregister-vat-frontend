@@ -22,7 +22,6 @@ import config.AppConfig
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.DeregisterForVAT
 
