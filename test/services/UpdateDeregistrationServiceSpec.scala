@@ -23,7 +23,6 @@ import assets.constants.NextTaxableTurnoverTestConstants._
 import assets.constants.WhyTurnoverBelowTestConstants._
 import assets.constants.YesNoAmountTestConstants._
 import assets.constants.ZeroRatedTestConstants.zeroRatedSuppliesValue
-import audit.models.DeregSuccessAuditModel
 import connectors.mocks.MockVatSubscriptionConnector
 import models._
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -93,7 +92,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
           setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
           setupMockSubmit(vrn, deregistrationInfoMaxModel)(Future.successful(Right(VatSubscriptionSuccess)))
-          setupMockSendExplicitAudit(DeregSuccessAuditModel(user, deregistrationInfoMaxModel))
+          mockAudit()
 
           TestUpdateDeregistrationService.updateDereg.futureValue shouldBe Right(VatSubscriptionSuccess)
         }
@@ -120,7 +119,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
 
         setupMockSubmit(vrn, deregistrationInfoMaxModel)(Future.successful(Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))))
-        setupMockSendExplicitAudit(DeregSuccessAuditModel(user, deregistrationInfoMaxModel))
+        mockAudit()
 
         TestUpdateDeregistrationService.updateDereg.futureValue shouldBe Left(ErrorModel(INTERNAL_SERVER_ERROR, "error"))
 

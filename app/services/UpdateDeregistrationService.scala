@@ -54,7 +54,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
     : Future[Either[ErrorModel, VatSubscriptionResponse]] = {
     buildDeregInfoModel.flatMap{
       case Right(deregInfo) =>
-        auditService.extendedAudit(DeregSuccessAuditModel(user, deregInfo), Some("controllers.routes.DeregistrationConfirmationController.show"))
+        auditService.extendedAudit(DeregSuccessAuditModel(user, deregInfo), Some(controllers.routes.DeregistrationConfirmationController.show.url))
         vatSubscriptionConnector.submit(user.vrn, deregInfo)
       case Left(errorModel) => Future.successful(Left(errorModel))
     }
