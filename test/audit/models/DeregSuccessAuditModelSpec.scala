@@ -20,20 +20,25 @@ import assets.constants.DeregistrationInfoTestConstants._
 import play.api.libs.json.Json
 import utils.TestUtil
 
-class DeregAuditModelSpec extends TestUtil{
+class DeregSuccessAuditModelSpec extends TestUtil{
 
-  val auditType: String = "SubmitVatDeregistrationRequest"
+  val auditType: String = "SubmitVatDeregistrationRequestEnd"
+  val transactionName: String = "deregister-for-vat"
 
-  lazy val agentHandOff = DeregAuditModel(agentUserPrefYes, deregistrationInfoMaxModel)
-  lazy val userHandOff = DeregAuditModel(user, deregistrationInfoMaxModel)
+  lazy val agentHandOff = DeregSuccessAuditModel(agentUserPrefYes, deregistrationInfoMaxModel)
+  lazy val userHandOff = DeregSuccessAuditModel(user, deregistrationInfoMaxModel)
 
-  "DeregAuditModel" should {
-
-    s"have the correct audit type $auditType" in {
-      DeregAuditModel.auditType shouldBe auditType
-    }
+  "DeregSuccessAuditModel" should {
 
     "user is an Agent" should {
+
+      "have the correct auditType" in {
+        agentHandOff.auditType shouldBe auditType
+      }
+
+      "have the correct transaction name" in {
+        agentHandOff.transactionName shouldBe transactionName
+      }
 
       "have the correct details for the audit event" in {
         Json.toJson(agentHandOff) shouldBe Json.obj(
@@ -47,6 +52,14 @@ class DeregAuditModelSpec extends TestUtil{
 
     "user is a non-Agent" should {
 
+      "have the correct auditType" in {
+        userHandOff.auditType shouldBe auditType
+      }
+
+      "have the correct transaction name" in {
+        userHandOff.transactionName shouldBe transactionName
+      }
+
       "have the correct details for the audit event" in {
         Json.toJson(userHandOff) shouldBe Json.obj(
           "isAgent" -> false,
@@ -56,5 +69,4 @@ class DeregAuditModelSpec extends TestUtil{
       }
     }
   }
-
 }

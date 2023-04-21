@@ -16,7 +16,8 @@
 
 package services
 
-import audit.models.DeregAuditModel
+import audit.models.DeregSuccessAuditModel
+import audit.services.AuditService
 import cats.data.EitherT
 import cats.instances.future._
 import common.SessionKeys
@@ -26,7 +27,6 @@ import models._
 import models.deregistrationRequest.DeregistrationInfo
 import play.api.http.Status
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -46,7 +46,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
                                             val purchasesExceedSuppliesAnswerService: PurchasesExceedSuppliesAnswerService,
                                             val sicCodeAnswerService: SicCodeAnswerService,
                                             val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
-                                            val auditConnector: AuditConnector,
+                                            val auditService: AuditService,
                                             val vatSubscriptionConnector: VatSubscriptionConnector)(implicit val appConfig: AppConfig) {
 
 
@@ -54,7 +54,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
     : Future[Either[ErrorModel, VatSubscriptionResponse]] = {
     buildDeregInfoModel.flatMap{
       case Right(deregInfo) =>
-        auditConnector.sendExplicitAudit(DeregAuditModel.auditType, DeregAuditModel(user, deregInfo))
+        auditService.extendedAudit(DeregSuccessAuditModel(user, deregInfo), Some(controllers.routes.DeregistrationConfirmationController.show.url))
         vatSubscriptionConnector.submit(user.vrn, deregInfo)
       case Left(errorModel) => Future.successful(Left(errorModel))
     }

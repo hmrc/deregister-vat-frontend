@@ -21,13 +21,16 @@ import models.deregistrationRequest.DeregistrationInfo
 import play.api.libs.json._
 import utils.JsonObjectSugar
 
-case class DeregAuditModel(user: User[_], deregistrationInfo: DeregistrationInfo)
+case class DeregSuccessAuditModel(user: User[_], deregistrationInfo: DeregistrationInfo) extends ExtendedAuditModel {
 
-object DeregAuditModel extends JsonObjectSugar {
+  override val auditType: String = "SubmitVatDeregistrationRequestEnd"
+  override val transactionName: String = "deregister-for-vat"
+  override val detail: JsValue = Json.toJson(this)
+}
 
-  val auditType: String = "SubmitVatDeregistrationRequest"
+object DeregSuccessAuditModel extends JsonObjectSugar {
 
-  implicit val writes: Writes[DeregAuditModel] = Writes { model =>
+  implicit val writes: Writes[DeregSuccessAuditModel] = Writes { model =>
     jsonObjNoNulls(
       "isAgent" -> model.user.arn.isDefined,
       "agentReferenceNumber" -> model.user.arn,

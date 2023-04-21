@@ -19,7 +19,6 @@ package services.mocks
 import audit.models.ExtendedAuditModel
 import audit.services.AuditService
 import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.Writes
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
@@ -28,8 +27,9 @@ trait MockAuditService extends MockFactory {
 
   val mockAuditService: AuditService = mock[AuditService]
 
-  def setupAuditExtendedEvent[T <: ExtendedAuditModel](): Unit = {
-    (mockAuditService.auditExtendedEvent(_: T)(_: HeaderCarrier, _: ExecutionContext, _: Writes[T]))
-      .expects(*, *, *, *)
+  def mockAudit(): Any = {
+    (mockAuditService.extendedAudit(_: ExtendedAuditModel, _: Option[String])(_: HeaderCarrier, _: ExecutionContext))
+      .stubs(*, *, *, *)
+      .returns({})
   }
 }
