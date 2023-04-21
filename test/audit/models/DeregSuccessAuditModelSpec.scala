@@ -23,6 +23,7 @@ import utils.TestUtil
 class DeregSuccessAuditModelSpec extends TestUtil{
 
   val auditType: String = "SubmitVatDeregistrationRequestEnd"
+  val transactionName: String = "deregister-for-vat"
 
   lazy val agentHandOff = DeregSuccessAuditModel(agentUserPrefYes, deregistrationInfoMaxModel)
   lazy val userHandOff = DeregSuccessAuditModel(user, deregistrationInfoMaxModel)
@@ -33,6 +34,10 @@ class DeregSuccessAuditModelSpec extends TestUtil{
 
       "have the correct auditType" in {
         agentHandOff.auditType shouldBe auditType
+      }
+
+      "have the correct transaction name" in {
+        agentHandOff.transactionName shouldBe transactionName
       }
 
       "have the correct details for the audit event" in {
@@ -49,6 +54,10 @@ class DeregSuccessAuditModelSpec extends TestUtil{
 
       "have the correct auditType" in {
         userHandOff.auditType shouldBe auditType
+      }
+
+      "have the correct transaction name" in {
+        userHandOff.transactionName shouldBe transactionName
       }
 
       "have the correct details for the audit event" in {

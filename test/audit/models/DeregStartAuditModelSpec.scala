@@ -22,6 +22,7 @@ import utils.TestUtil
 class DeregStartAuditModelSpec extends TestUtil {
 
   val auditType: String = "SubmitVatDeregistrationRequestStart"
+  val transactionName: String = "deregister-for-vat-start"
 
   lazy val agentHandOff = DeregStartAuditModel(agentUserPrefYes)
   lazy val userHandOff = DeregStartAuditModel(user)
@@ -32,6 +33,10 @@ class DeregStartAuditModelSpec extends TestUtil {
 
       "have the correct auditType" in {
         agentHandOff.auditType shouldBe auditType
+      }
+
+      "have the correct transaction name" in {
+        agentHandOff.transactionName shouldBe transactionName
       }
 
       "have the correct details for the audit event" in {
@@ -47,6 +52,10 @@ class DeregStartAuditModelSpec extends TestUtil {
 
       "have the correct auditType" in {
         userHandOff.auditType shouldBe auditType
+      }
+
+      "have the correct transaction name" in {
+        userHandOff.transactionName shouldBe transactionName
       }
 
       "have the correct details for the audit event" in {
