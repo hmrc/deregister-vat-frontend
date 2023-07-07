@@ -21,6 +21,8 @@ import assets.constants.CustomerDetailsTestConstants.customerDetailsMax
 import connectors.mocks.MockVatSubscriptionConnector
 import models.{CustomerDetails, ErrorModel}
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import play.api.mvc.Request
+import play.api.test.FakeRequest
 import utils.TestUtil
 
 import scala.concurrent.Future
@@ -30,7 +32,7 @@ class CustomerDetailsServiceSpec extends TestUtil with MockVatSubscriptionConnec
   object TestCustomerCircumstanceDetailsService extends CustomerDetailsService(mockVatSubscriptionConnector)
 
   "CustomerDetailsService" should {
-
+    implicit val request: Request[_] = FakeRequest()
     def result: Future[Either[ErrorModel, CustomerDetails]] = TestCustomerCircumstanceDetailsService.getCustomerDetails(vrn)
 
     "for getCustomerDetails method" when {

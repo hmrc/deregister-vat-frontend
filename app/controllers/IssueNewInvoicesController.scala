@@ -28,8 +28,9 @@ import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.IssueNewInvoices
+
 import javax.inject.{Inject, Singleton}
-import utils.LoggerUtil
+import utils.LoggingUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -42,7 +43,7 @@ class IssueNewInvoicesController @Inject()(issueNewInvoices: IssueNewInvoices,
                                            val wipeRedundantDataService: WipeRedundantDataService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val ec: ExecutionContext,
-                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption")
 
@@ -70,7 +71,7 @@ class IssueNewInvoicesController @Inject()(issueNewInvoices: IssueNewInvoices,
       } yield result).value.map {
         case Right(redirect) => redirect
         case Left(error) =>
-          logger.warn("[IssueNewInvoicesController][submit] - storedAnswerService returned an error: " + error.message)
+          warnLog("[IssueNewInvoicesController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

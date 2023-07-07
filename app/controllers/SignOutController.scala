@@ -24,7 +24,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import services.DeleteAllStoredAnswersService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.LoggerUtil
+import utils.LoggingUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -34,7 +34,7 @@ class SignOutController @Inject()(val mcc: MessagesControllerComponents,
                                   val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                   implicit val ec: ExecutionContext,
                                   val serviceErrorHandler: ServiceErrorHandler)
-                                 (implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
+                                 (implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   def signOut(authorised: Boolean): Action[AnyContent] = {
     if(authorised){
@@ -60,7 +60,7 @@ class SignOutController @Inject()(val mcc: MessagesControllerComponents,
     deleteAllStoredAnswersService.deleteAllAnswers map {
       case Right(_) => Redirect(redirectUrl)
       case Left(error) =>
-        logger.warn("[SignOutController][deleteDataAndRedirect] - storedAnswerService returned an error deleting answers: " + error.message)
+        warnLog("[SignOutController][deleteDataAndRedirect] - storedAnswerService returned an error deleting answers: " + error.message)
         serviceErrorHandler.showInternalServerError
     }
 

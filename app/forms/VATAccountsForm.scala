@@ -16,13 +16,13 @@
 
 package forms
 
+import _root_.utils.LoggingUtil
 import models._
 import play.api.data.Forms._
 import play.api.data.format.Formatter
 import play.api.data.{Form, FormError}
-import _root_.utils.LoggerUtil
 
-object VATAccountsForm extends LoggerUtil {
+object VATAccountsForm extends LoggingUtil {
 
   private val formatter: Formatter[VATAccountsModel] = new Formatter[VATAccountsModel] {
 

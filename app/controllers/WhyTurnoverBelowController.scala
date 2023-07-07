@@ -26,7 +26,7 @@ import services.WhyTurnoverBelowAnswerService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.WhyTurnoverBelow
 import javax.inject.{Inject, Singleton}
-import utils.LoggerUtil
+import utils.LoggingUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -38,7 +38,7 @@ class WhyTurnoverBelowController @Inject()(whyTurnoverBelow: WhyTurnoverBelow,
                                            val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val ec: ExecutionContext,
-                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil{
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     whyTurnoverBelowAnswerService.getAnswer.map {
@@ -54,7 +54,7 @@ class WhyTurnoverBelowController @Inject()(whyTurnoverBelow: WhyTurnoverBelow,
         whyTurnoverBelowAnswerService.storeAnswer(data).map {
           case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show)
           case Left(error) =>
-            logger.warn("[WhyTurnoverBelowController][submit] - storedAnswerService returned an error storing answers: " + error.message)
+            warnLog("[WhyTurnoverBelowController][submit] - storedAnswerService returned an error storing answers: " + error.message)
             serviceErrorHandler.showInternalServerError
         }
       }

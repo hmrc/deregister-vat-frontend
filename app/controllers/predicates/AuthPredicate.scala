@@ -26,11 +26,11 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core.{AuthorisationException, Enrolments, NoActiveSession}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggingUtil
 import views.html.errors.client.Unauthorised
 import views.html.errors.client.InsolventError
-import javax.inject.Inject
-import utils.LoggerUtil
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthPredicate @Inject()(unauthorised: Unauthorised,
@@ -43,7 +43,7 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
                              (implicit val appConfig: AppConfig)
 
   extends FrontendController(mcc)
-  with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with AuthBasePredicate with LoggerUtil{
+  with I18nSupport with ActionBuilder[User, AnyContent] with ActionFunction[Request, User] with AuthBasePredicate with LoggingUtil{
 
   override val parser: BodyParser[AnyContent] = mcc.parsers.defaultBodyParser
   override implicit protected val executionContext: ExecutionContext = mcc.executionContext
@@ -62,14 +62,14 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
             checkVatEnrolment(enrolments, block)
           }
         case _ =>
-          logger.warn("[AuthPredicate][invokeBlock] - Missing affinity group")
+          warnLog("[AuthPredicate][invokeBlock] - Missing affinity group")
           Future.successful(serviceErrorHandler.showInternalServerError)
       } recover {
       case _: NoActiveSession =>
-        logger.debug("[AuthPredicate][invokeBlock] - No active session, redirect to GG Sign In")
+        debug("[AuthPredicate][invokeBlock] - No active session, redirect to GG Sign In")
         Redirect(appConfig.signInUrl)
       case _: AuthorisationException =>
-        logger.debug("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
+        debug("[AuthPredicate][invokeBlock] - Unauthorised exception, rendering Unauthorised view")
         Forbidden(unauthorised())
     }
   }

@@ -18,6 +18,7 @@ package services
 
 import connectors.VatSubscriptionConnector
 import models.{CustomerDetails, ErrorModel}
+import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.{Inject, Singleton}
@@ -26,7 +27,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class CustomerDetailsService @Inject()(val subscriptionConnector: VatSubscriptionConnector) {
 
-  def getCustomerDetails(vrn: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext)
+  def getCustomerDetails(vrn: String)(implicit headerCarrier: HeaderCarrier, ec: ExecutionContext, request: Request[_])
   : Future[Either[ErrorModel, CustomerDetails]] =
     subscriptionConnector.getCustomerDetails(vrn)
 }

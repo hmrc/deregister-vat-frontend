@@ -20,6 +20,7 @@ import connectors.VatSubscriptionConnector
 import models.deregistrationRequest.DeregistrationInfo
 import models.{CustomerDetails, ErrorModel, VatSubscriptionResponse}
 import org.scalamock.scalatest.MockFactory
+import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
@@ -36,8 +37,8 @@ trait MockVatSubscriptionConnector extends TestUtil with MockFactory {
   }
 
   def setupMockGetCustomerCircumstanceDetails(vrn: String)(response: Future[Either[ErrorModel, CustomerDetails]]): Unit = {
-    (mockVatSubscriptionConnector.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
-      .expects(vrn, *, *)
+    (mockVatSubscriptionConnector.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext, _: Request[_]))
+      .expects(vrn, *, *, *)
       .returns(response)
   }
 }

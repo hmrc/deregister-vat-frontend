@@ -25,13 +25,13 @@ import uk.gov.hmrc.play.audit.AuditExtensions
 import uk.gov.hmrc.play.audit.http.connector.{AuditConnector, AuditResult}
 import uk.gov.hmrc.play.audit.http.connector.AuditResult.{Disabled, Failure, Success}
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
-import utils.LoggerUtil
+import utils.LoggingUtil
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AuditService @Inject()(appConfig: FrontendAppConfig, val auditConnector: AuditConnector) extends LoggerUtil {
+class AuditService @Inject()(appConfig: FrontendAppConfig, val auditConnector: AuditConnector) extends LoggingUtil {
 
   val referrer: HeaderCarrier => String = _.extraHeaders.find(_._1 == HeaderNames.REFERER).map(_._2).getOrElse("-")
 
@@ -42,7 +42,7 @@ class AuditService @Inject()(appConfig: FrontendAppConfig, val auditConnector: A
 
   def extendedAudit(auditModel: ExtendedAuditModel, path: Option[String] = None)(implicit hc: HeaderCarrier, ec: ExecutionContext): Unit = {
     val extendedDataEvent = toExtendedDataEvent(appConfig.appName, auditModel, path.fold(referrer(hc))(x => x))
-    logger.debug(s"Splunk Audit Event:\n\n$extendedDataEvent")
+    debug(s"Splunk Audit Event:\n\n$extendedDataEvent")
     handleAuditResult(auditConnector.sendExtendedEvent(extendedDataEvent))
   }
 
@@ -59,11 +59,11 @@ class AuditService @Inject()(appConfig: FrontendAppConfig, val auditConnector: A
   private def handleAuditResult(auditResult: Future[AuditResult])(implicit ec: ExecutionContext): Unit = auditResult.map {
     //$COVERAGE-OFF$ Disabling scoverage as returns Unit, only used for Debug messages
     case Success =>
-      logger.debug("Splunk Audit Successful")
+      debug("Splunk Audit Successful")
     case Failure(err, _) =>
-      logger.debug(s"Splunk Audit Error, message: $err")
+      debug(s"Splunk Audit Error, message: $err")
     case Disabled =>
-      logger.debug(s"Auditing Disabled")
+      debug(s"Auditing Disabled")
     //$COVERAGE-ON$
   }
 }

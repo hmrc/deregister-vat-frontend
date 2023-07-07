@@ -21,15 +21,16 @@ import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads
 import connectors.httpParsers.VatSubscriptionHttpParser
 import models.deregistrationRequest.DeregistrationInfo
 import models.{CustomerDetails, ErrorModel, VatSubscriptionResponse}
+import play.api.mvc.Request
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import javax.inject.{Inject, Singleton}
-import utils.LoggerUtil
+import utils.LoggingUtil
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class VatSubscriptionConnector @Inject()(val http: HttpClient,
-                                         val config: AppConfig) extends LoggerUtil{
+                                         val config: AppConfig) extends LoggingUtil{
 
   def url(vrn: String): String = s"${config.vatSubscriptionUrl}/vat-subscription/$vrn/deregister"
 
@@ -42,9 +43,9 @@ class VatSubscriptionConnector @Inject()(val http: HttpClient,
   }
 
   def getCustomerDetails(id: String)(implicit headerCarrier: HeaderCarrier,
-                                     ec: ExecutionContext): Future[Either[ErrorModel, CustomerDetails]] = {
+                                     ec: ExecutionContext, request: Request[_]): Future[Either[ErrorModel, CustomerDetails]] = {
     val url = getFullDetailsUrl(id)
-    logger.debug(s"[VatSubscriptionConnector][getCustomerInfo]: Calling getCustomerInfo with URL - $url")
+    debug(s"[VatSubscriptionConnector][getCustomerInfo]: Calling getCustomerInfo with URL - $url")
     http.GET(url)(CustomerDetailsReads, headerCarrier, ec)
   }
 }

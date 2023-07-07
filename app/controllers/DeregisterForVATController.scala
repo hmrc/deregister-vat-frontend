@@ -26,7 +26,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.DeregisterForVAT
 
 import javax.inject.{Inject, Singleton}
-import utils.LoggerUtil
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -37,7 +36,7 @@ class DeregisterForVATController @Inject()(deregisterForVAT: DeregisterForVAT,
                                            val regStatusCheck: DeniedAccessPredicate,
                                            val auditService: AuditService,
                                            implicit val ec: ExecutionContext,
-                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     auditService.extendedAudit(DeregStartAuditModel(user), Some(controllers.routes.DeregisterForVATController.show.url))
