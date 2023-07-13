@@ -21,6 +21,7 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
+import play.api.mvc.Request
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -31,8 +32,8 @@ trait MockCustomerDetailsService extends AnyWordSpecLike with Matchers with Opti
   val mockCustomerDetailsService: CustomerDetailsService = mock[CustomerDetailsService]
 
   def setupMockCustomerDetails(vrn: String)(response: Either[ErrorModel, CustomerDetails]): Unit = {
-    (mockCustomerDetailsService.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
-      .expects(vrn, *, *)
+    (mockCustomerDetailsService.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext, _: Request[_]))
+      .expects(vrn, *, *, *)
       .returns(Future.successful(response))
   }
 }

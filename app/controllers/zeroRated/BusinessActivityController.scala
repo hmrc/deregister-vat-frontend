@@ -27,10 +27,10 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggingUtil
 import views.html.BusinessActivity
-import javax.inject.{Inject, Singleton}
-import utils.LoggerUtil
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -42,7 +42,7 @@ class BusinessActivityController @Inject()(businessActivity: BusinessActivity,
                                            val wipeRedundantDataService: WipeRedundantDataService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val ec: ExecutionContext,
-                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil {
+                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption")
 
@@ -70,7 +70,7 @@ class BusinessActivityController @Inject()(businessActivity: BusinessActivity,
         } yield result).value.map {
           case Right(redirect) => redirect
           case Left(error) =>
-            logger.warn("[BusinessActivityController][submit] - storedAnswerService returned an error: " + error.message)
+            warnLog("[BusinessActivityController][submit] - storedAnswerService returned an error: " + error.message)
             serviceErrorHandler.showInternalServerError
         }
       )

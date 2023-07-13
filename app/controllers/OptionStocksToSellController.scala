@@ -25,10 +25,9 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.StocksAnswerService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggingUtil
 import views.html.OptionStocksToSell
 import javax.inject.Inject
-import utils.LoggerUtil
-
 import scala.concurrent.{ExecutionContext, Future}
 
 class OptionStocksToSellController @Inject()(optionStocksToSell: OptionStocksToSell,
@@ -39,7 +38,7 @@ class OptionStocksToSellController @Inject()(optionStocksToSell: OptionStocksToS
                                              val serviceErrorHandler: ServiceErrorHandler,
                                              implicit val ec: ExecutionContext,
                                              implicit val appConfig: AppConfig) extends FrontendController(mcc)
-                                             with I18nSupport with LoggerUtil {
+                                             with I18nSupport with LoggingUtil {
 
   val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm(
     "optionOwnsStockToSell.error.mandatoryRadioOption","optionOwnsStockToSell.error.amount.noEntry")
@@ -60,7 +59,7 @@ class OptionStocksToSellController @Inject()(optionStocksToSell: OptionStocksToS
       data => stocksAnswerService.storeAnswer(data) map {
         case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show)
         case Left(error) =>
-          logger.warn("[OptionStocksToSellController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+          warnLog("[OptionStocksToSellController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

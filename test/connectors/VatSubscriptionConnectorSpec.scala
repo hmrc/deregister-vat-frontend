@@ -23,6 +23,8 @@ import assets.constants.DateModelTestConstants._
 import models.{CustomerDetails, _}
 import models.deregistrationRequest.DeregistrationInfo
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
+import play.api.mvc.Request
+import play.api.test.FakeRequest
 import utils.TestUtil
 
 import scala.concurrent.Future
@@ -65,7 +67,7 @@ class VatSubscriptionConnectorSpec extends TestUtil with MockHttp {
       }
 
       "calling .getCustomerDetails" when {
-
+        implicit val request: Request[_] = FakeRequest()
         def result: Future[Either[ErrorModel, CustomerDetails]] = TestVatSubscriptionConnector.getCustomerDetails(vrn)
 
         "called for a Right with CustomerDetails" should {

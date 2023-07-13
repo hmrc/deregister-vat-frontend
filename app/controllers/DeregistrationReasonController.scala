@@ -27,10 +27,10 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggingUtil
 import views.html.DeregistrationReason
-import javax.inject.{Inject, Singleton}
-import utils.LoggerUtil
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -42,7 +42,7 @@ class DeregistrationReasonController @Inject()(deregistrationReason: Deregistrat
                                                val wipeRedundantDataService: WipeRedundantDataService,
                                                val serviceErrorHandler: ServiceErrorHandler,
                                                implicit val ec: ExecutionContext,
-                                               implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggerUtil{
+                                               implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil{
 
   private def renderView(data: Form[models.DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
     deregistrationReason(data)
@@ -64,7 +64,7 @@ class DeregistrationReasonController @Inject()(deregistrationReason: Deregistrat
       } yield route).value.map {
         case Right(result) => result
         case Left(error) =>
-          logger.warn("[DeregistrationReasonController][submit] - storedAnswerService returned an error: " + error.message)
+          warnLog("[DeregistrationReasonController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError
       }
     )

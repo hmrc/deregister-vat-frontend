@@ -16,8 +16,8 @@
 
 package forms
 
-import utils.FormValidation
-import _root_.utils.LoggerUtil
+import _root_.utils.LoggingUtil
+import forms.utils.FormValidation
 import models.DateModel
 import play.api.data.Forms._
 import play.api.data.format.Formatter
@@ -26,7 +26,7 @@ import play.api.data.{Form, FormError}
 import scala.util.{Failure, Success, Try}
 
 
-object DateForm extends FormValidation with LoggerUtil {
+object DateForm extends FormValidation with LoggingUtil {
 
   val day = "dateDay"
   val month = "dateMonth"

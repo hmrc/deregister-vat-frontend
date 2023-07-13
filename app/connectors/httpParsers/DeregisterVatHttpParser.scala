@@ -20,19 +20,20 @@ import models.{DeregisterVatResponse, DeregisterVatSuccess, ErrorModel}
 import play.api.http.Status
 import play.api.libs.json.Format
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
-import utils.LoggerUtil
+import utils.LoggingUtil
 
-object DeregisterVatHttpParser extends LoggerUtil{
+object DeregisterVatHttpParser extends LoggingUtil{
 
   def getReads[T](implicit fmt: Format[T]): HttpReads[Either[ErrorModel, Option[T]]] = new HttpReads[Either[ErrorModel, Option[T]]] {
     override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, Option[T]] = {
+      implicit val res: HttpResponse = response
       response.status match {
         case Status.OK => {
-          logger.debug("[DeregisterVatHttpParser][getReads]: Status OK")
+          debug("[DeregisterVatHttpParser][getReads]: Status OK")
           response.json.validate[T].fold(
             invalid => {
-              logger.debug(s"[DeregisterVatHttpParser][getReads]: Invalid Json $invalid")
-              logger.warn(s"[DeregisterVatHttpParser][getReads]: Invalid Json from deregister-vat")
+              debug(s"[DeregisterVatHttpParser][getReads]: Invalid Json $invalid")
+              warnLogRes(s"[DeregisterVatHttpParser][getReads]: Invalid Json from deregister-vat")
               Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from deregister-vat"))
             },
             valid => Right(Some(valid))
@@ -40,18 +41,19 @@ object DeregisterVatHttpParser extends LoggerUtil{
         }
         case Status.NOT_FOUND => Right(None)
         case status =>
-          logger.warn(s"[DeregisterVatHttpParser][getReads]: Unexpected Response, Status $status returned")
+          warnLogRes(s"[DeregisterVatHttpParser][getReads]: Unexpected Response, Status $status returned")
           Left(ErrorModel(status, s"Downstream error returned when retrieving Model from Deregister Vat"))
       }
     }
   }
 
-  def updateReads: HttpReads[Either[ErrorModel, DeregisterVatResponse]] = new HttpReads[Either[ErrorModel, DeregisterVatResponse]] {
+  def updateReads(): HttpReads[Either[ErrorModel, DeregisterVatResponse]] = new HttpReads[Either[ErrorModel, DeregisterVatResponse]] {
     override def read(method: String, url: String, response: HttpResponse): Either[ErrorModel, DeregisterVatResponse] = {
+      implicit val res:HttpResponse = response
       response.status match {
         case Status.NO_CONTENT => Right(DeregisterVatSuccess)
         case status =>
-          logger.warn(s"[DeregisterVatHttpParser][updateReads]: Unexpected Response, Status $status returned")
+          warnLogRes(s"[DeregisterVatHttpParser][updateReads]: Unexpected Response, Status $status returned")
           Left(ErrorModel(status, s"Downstream error returned when updating Deregister Vat"))
       }
     }

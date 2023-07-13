@@ -25,10 +25,10 @@ import play.api.i18n.I18nSupport
 import play.api.mvc._
 import services.ZeroRatedSuppliesValueService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggingUtil
 import views.html.ZeroRatedSupplies
-import javax.inject.{Inject, Singleton}
-import utils.LoggerUtil
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -39,7 +39,7 @@ class ZeroRatedSuppliesController @Inject()(zeroRatedSupplies: ZeroRatedSupplies
                                             val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
                                             val serviceErrorHandler: ServiceErrorHandler,
                                             implicit val appConfig: AppConfig,
-                                            implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport with LoggerUtil{
+                                            implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport with LoggingUtil{
 
   private def renderView(form: Form[NumberInputModel] = ZeroRatedSuppliesForm.zeroRatedSuppliesForm)(implicit user: User[_]) =
     zeroRatedSupplies(form)
@@ -57,7 +57,7 @@ class ZeroRatedSuppliesController @Inject()(zeroRatedSupplies: ZeroRatedSupplies
         data => zeroRatedSuppliesValueService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show)
           case Left(error) =>
-            logger.warn("[ZeroRatedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            warnLog("[ZeroRatedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError
         }
       )
