@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import play.api.inject.Injector
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{stubBodyParser, stubControllerComponents, stubMessagesApi}
+import services.ThresholdService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
@@ -83,4 +84,5 @@ trait TestUtil extends AnyWordSpecLike
   implicit lazy val ec: ExecutionContext = injector.instanceOf[ExecutionContext]
   lazy val serviceErrorHandler: ServiceErrorHandler = injector.instanceOf[ServiceErrorHandler]
   lazy val defaultActionBuilder: DefaultActionBuilder = injector.instanceOf[DefaultActionBuilder]
+  lazy val thresholdService: ThresholdService = injector.instanceOf[ThresholdService]
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,10 @@ import forms.WhyTurnoverBelowForm
 import models.DeregisterVatSuccess
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.WhyTurnoverBelowAnswerService
+import services.{ThresholdService, WhyTurnoverBelowAnswerService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.WhyTurnoverBelow
+
 import javax.inject.{Inject, Singleton}
 import utils.LoggingUtil
 
@@ -36,20 +37,21 @@ class WhyTurnoverBelowController @Inject()(whyTurnoverBelow: WhyTurnoverBelow,
                                            val authenticate: AuthPredicate,
                                            val regStatusCheck: DeniedAccessPredicate,
                                            val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
+                                           val thresholdService: ThresholdService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val ec: ExecutionContext,
                                            implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     whyTurnoverBelowAnswerService.getAnswer.map {
-      case Right(Some(data)) => Ok(whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm.fill(data)))
-      case _ => Ok(whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm))
+      case Right(Some(data)) => Ok(whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm.fill(data), thresholdService.formattedVatThreshold()))
+      case _ => Ok(whyTurnoverBelow(WhyTurnoverBelowForm.whyTurnoverBelowForm, thresholdService.formattedVatThreshold()))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     WhyTurnoverBelowForm.whyTurnoverBelowForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(whyTurnoverBelow(error))),
+      error => Future.successful(BadRequest(whyTurnoverBelow(error, thresholdService.formattedVatThreshold()))),
       data => {
         whyTurnoverBelowAnswerService.storeAnswer(data).map {
           case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show)

@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
       yesNoHelper: YesNoHelper,
       govukButton: GovukButton)
 
-@(outstanding: Option[YesNo], form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(outstanding: Option[YesNo], form: Form[YesNo], vatThreshold: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @backLinkURL = @{if(outstanding.isDefined) {
 controllers.routes.OutstandingInvoicesController.show.url
@@ -53,7 +53,7 @@ controllers.routes.IssueNewInvoicesController.show.url
 
   @formWithCSRF(action = controllers.routes.ChooseDeregistrationDateController.submit) {
 
-    @yesNoHelper(form = form, title = messages("chooseDeregistrationDate.title"), additionalContent = Some(questionContent))
+    @yesNoHelper(form = form, title = messages("chooseDeregistrationDate.title"), additionalContent = Some(questionContent), vatThreshold = vatThreshold)
 
     @govukButton(Button(
       content = Text(messages("common.continue"))

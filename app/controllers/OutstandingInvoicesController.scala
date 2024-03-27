@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,10 @@ import models._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OutstandingInvoicesAnswerService, WipeRedundantDataService}
+import services.{CapitalAssetsAnswerService, DeregReasonAnswerService, OutstandingInvoicesAnswerService, ThresholdService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.OutstandingInvoices
+
 import javax.inject.Inject
 import utils.LoggingUtil
 
@@ -41,6 +42,7 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
                                               val deregReasonAnswerService: DeregReasonAnswerService,
                                               val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                               val wipeRedundantDataService: WipeRedundantDataService,
+                                              val thresholdService: ThresholdService,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val ec: ExecutionContext,
                                               implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
@@ -49,14 +51,14 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     outstandingInvoicesAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(outstandingInvoices(form.fill(data)))
-      case _ => Ok(outstandingInvoices(form))
+      case Right(Some(data)) => Ok(outstandingInvoices(form.fill(data), thresholdService.formattedVatThreshold()))
+      case _ => Ok(outstandingInvoices(form, thresholdService.formattedVatThreshold()))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
-      error => Future.successful(BadRequest(outstandingInvoices(error))),
+      error => Future.successful(BadRequest(outstandingInvoices(error, thresholdService.formattedVatThreshold()))),
       data => (for {
         _ <- EitherT(outstandingInvoicesAnswerService.storeAnswer(data))
         _ <- EitherT(wipeRedundantDataService.wipeRedundantData)

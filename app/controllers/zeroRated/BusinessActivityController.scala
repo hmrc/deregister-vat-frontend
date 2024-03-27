@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,13 +40,14 @@ class BusinessActivityController @Inject()(businessActivity: BusinessActivity,
                                            val regStatusCheck: DeniedAccessPredicate,
                                            val businessActivityAnswerService: BusinessActivityAnswerService,
                                            val wipeRedundantDataService: WipeRedundantDataService,
+                                           val thresholdService: ThresholdService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val ec: ExecutionContext,
                                            implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption")
 
-  private def renderView(form: Form[YesNo])(implicit user: User[_]) = businessActivity(form)
+  private def renderView(form: Form[YesNo], vatThreshold: String)(implicit user: User[_]) = businessActivity(form, vatThreshold)
 
   private def redirect (yesNo: YesNo) : Result = yesNo match {
     case Yes => Redirect(controllers.zeroRated.routes.SicCodeController.show)
@@ -55,14 +56,14 @@ class BusinessActivityController @Inject()(businessActivity: BusinessActivity,
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
       businessActivityAnswerService.getAnswer map {
-        case Right(Some(data)) => Ok(renderView(form.fill(data)))
-        case _ => Ok(renderView(form))
+        case Right(Some(data)) => Ok(renderView(form.fill(data), thresholdService.formattedVatThreshold()))
+        case _ => Ok(renderView(form, thresholdService.formattedVatThreshold()))
       }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
       form.bindFromRequest().fold(
-        error => Future.successful(BadRequest(businessActivity(error))),
+        error => Future.successful(BadRequest(businessActivity(error, thresholdService.formattedVatThreshold()))),
         data => (for {
           _ <- EitherT(businessActivityAnswerService.storeAnswer(data))
           _ <- EitherT(wipeRedundantDataService.wipeRedundantData)

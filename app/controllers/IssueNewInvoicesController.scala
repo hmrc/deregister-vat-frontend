@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,13 +41,14 @@ class IssueNewInvoicesController @Inject()(issueNewInvoices: IssueNewInvoices,
                                            val regStatusCheck: DeniedAccessPredicate,
                                            val issueNewInvoiceAnswerService: IssueNewInvoicesAnswerService,
                                            val wipeRedundantDataService: WipeRedundantDataService,
+                                           val thresholdService: ThresholdService,
                                            val serviceErrorHandler: ServiceErrorHandler,
                                            implicit val ec: ExecutionContext,
                                            implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("issueNewInvoices.error.mandatoryRadioOption")
 
-  private def renderView(form: Form[YesNo])(implicit user: User[_]) = issueNewInvoices(form)
+  private def renderView(form: Form[YesNo], vatThreshold: String)(implicit user: User[_]) = issueNewInvoices(form, vatThreshold)
 
   private def redirect: YesNo => Result = {
     case Yes => Redirect(controllers.routes.ChooseDeregistrationDateController.show)
@@ -56,14 +57,14 @@ class IssueNewInvoicesController @Inject()(issueNewInvoices: IssueNewInvoices,
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     issueNewInvoiceAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(form.fill(data)))
-      case _ => Ok(renderView(form))
+      case Right(Some(data)) => Ok(renderView(form.fill(data), thresholdService.formattedVatThreshold()))
+      case _ => Ok(renderView(form, thresholdService.formattedVatThreshold()))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
-      error => Future.successful(BadRequest(issueNewInvoices(error))),
+      error => Future.successful(BadRequest(issueNewInvoices(error, thresholdService.formattedVatThreshold()))),
       data => (for {
         _ <- EitherT(issueNewInvoiceAnswerService.storeAnswer(data))
         _ <- EitherT(wipeRedundantDataService.wipeRedundantData)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,16 @@
 
 package config
 
+import com.typesafe.config.{ConfigList, ConfigRenderOptions}
 import config.features.Features
 import config.{ConfigKeys => Keys}
+import models.VatThreshold
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.Call
 import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import play.api.libs.json.Json
 
 import javax.inject.{Inject, Singleton}
 
@@ -54,6 +57,8 @@ trait AppConfig {
 
   val vatSubscriptionUrl: String
   val deregisterVatUrl: String
+  val thresholdString: String
+  val thresholds: Seq[VatThreshold]
   val deregThreshold: Int
   val features: Features
   val feedbackUrl: String
@@ -156,6 +161,9 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override lazy val govUkVatRatesInfo: String = servicesConfig.getString(Keys.govUkVatRatesInfo)
 
   override lazy val govUkFindSicCode: String = servicesConfig.getString(Keys.govUkFindSicCode)
+
+  override lazy val thresholdString: String = runModeConfiguration.get[ConfigList]("vat-threshold").render(ConfigRenderOptions.concise())
+  override lazy val thresholds: Seq[VatThreshold] = Json.parse(thresholdString).as[List[VatThreshold]]
 
   override lazy val deregThreshold: Int = servicesConfig.getInt(Keys.deregThreshold)
 

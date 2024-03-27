@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
 
   "Rendering the Business Activity page with no errors" should {
 
-    lazy val view = businessActivity(YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption"))
+    lazy val view = businessActivity(YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption"), "")
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -85,7 +85,7 @@ class BusinessActivitySpec extends ViewBaseSpec {
 
   "Rendering the Business Activity page with errors" should {
 
-    lazy val view = businessActivity(YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
+    lazy val view = businessActivity(YesNoForm.yesNoForm("businessActivity.error.mandatoryRadioOption").bind(Map("yes_no" -> "")),"")
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

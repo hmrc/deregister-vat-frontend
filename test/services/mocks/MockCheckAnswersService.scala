@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,10 @@ trait MockCheckAnswersService extends TestUtil with MockFactory {
 
   val mockCheckAnswersService: CheckAnswersService = mock[CheckAnswersService]
 
-  def setupMockCheckYourAnswersModel(response: Either[ErrorModel, CheckYourAnswersModel])(implicit user: User[_]): Unit = {
-    (mockCheckAnswersService.checkYourAnswersModel()(_: User[_], _: Messages, _: HeaderCarrier, _: ExecutionContext))
-      .expects(user, *, *, *)
+  def setupMockCheckYourAnswersModel(response: Either[ErrorModel, CheckYourAnswersModel], vatThreshold: String)(implicit user: User[_]): Unit = {
+
+    (mockCheckAnswersService.checkYourAnswersModel(_: String)(_: User[_], _: Messages, _: HeaderCarrier, _: ExecutionContext))
+      .expects(*, user, *, *, *)
       .returns(Future.successful(response))
   }
 }

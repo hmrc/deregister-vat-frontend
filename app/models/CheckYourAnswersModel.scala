@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package models
 import config.AppConfig
 import play.api.i18n.Messages
 import play.twirl.api.Html
+import services.ThresholdService
 import utils.MoneyFormatter
 
 case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReason],
@@ -37,7 +38,8 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  businessActivityChanged: Option[YesNo],
                                  sicCode: Option[String],
                                  zeroRatedSupplies: Option[NumberInputModel],
-                                 purchasesExceedSupplies: Option[YesNo])
+                                 purchasesExceedSupplies: Option[YesNo],
+                                 vatThreshold: String)
                                 (implicit messages: Messages, appConfig: AppConfig) {
 
   def seqAnswers: Seq[CheckYourAnswersRowModel] = deregistrationReason match {
@@ -47,7 +49,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
 
   private val deregReasonAnswer = deregistrationReason.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.reason"),
-    Html(messages(s"checkYourAnswers.answer.reason.${answer.value}", appConfig.deregThreshold)),
+    Html(messages(s"checkYourAnswers.answer.reason.${answer.value}", vatThreshold)),
     controllers.routes.DeregistrationReasonController.show.url,
     messages("checkYourAnswers.hidden.reason")
   ))
@@ -60,7 +62,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
   ))
 
   private val turnoverAnswer = turnover.map(answer => CheckYourAnswersRowModel(
-    messages("checkYourAnswers.question.taxableTurnover", appConfig.deregThreshold),
+    messages("checkYourAnswers.question.taxableTurnover", vatThreshold),
     Html(messages(s"common.${answer.toString}")),
     controllers.routes.TaxableTurnoverController.show.url,
     messages("checkYourAnswers.hidden.taxableTurnover")

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,11 +39,12 @@ class CheckAnswersController @Inject()(checkYourAnswers: CheckYourAnswers,
                                        checkAnswersService: CheckAnswersService,
                                        updateDeregistrationService: UpdateDeregistrationService,
                                        val serviceErrorHandler: ServiceErrorHandler,
+                                       val thresholdService: ThresholdService,
                                        implicit val appConfig: AppConfig,
                                        implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    checkAnswersService.checkYourAnswersModel() map {
+    checkAnswersService.checkYourAnswersModel(thresholdService.formattedVatThreshold()) map {
       case Right(answers) =>
         (answers.chooseDeregDate, answers.deregDate) match {
           case (Some(_), Some(_)) => Ok(checkYourAnswers(answers.seqAnswers))

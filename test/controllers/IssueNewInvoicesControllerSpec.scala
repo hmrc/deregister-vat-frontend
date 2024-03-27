@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ class IssueNewInvoicesControllerSpec extends ControllerBaseSpec with MockWipeRed
     mockRegistrationStatusPredicate,
     mockIssueNewInvoicesAnswerService,
     mockWipeRedundantDataService,
+    thresholdService,
     serviceErrorHandler,
     ec,
     mockConfig

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,4 +27,5 @@ object MoneyFormatter {
   val formatHtmlAmount: BigDecimal => Html = x => Html(s"&pound;${removeZeroDecimals(formatter.format(x))}")
   val formatStringAmount: Int => String = x => s"${removeZeroDecimals(formatter.format(x))}"
 
+  def currencyFormat(amt: BigDecimal): String = f"$amt%,1.2f".replace(".00","")
 }

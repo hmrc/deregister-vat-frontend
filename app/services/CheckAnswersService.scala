@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
                                     implicit val appConfig: AppConfig) {
 
 
-  def checkYourAnswersModel()(implicit user: User[_], messages: Messages, hc: HeaderCarrier, ec: ExecutionContext)
+  def checkYourAnswersModel(vatThreshold: String)(implicit user: User[_], messages: Messages, hc: HeaderCarrier, ec: ExecutionContext)
   : Future[Either[ErrorModel, CheckYourAnswersModel]] = {
     val answers = for {
       deregReason <- EitherT(deregReasonAnswerService.getAnswer)
@@ -85,7 +85,8 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
         businessActivity,
         sicCode,
         zeroRatedSupplies,
-        purchasesExceedSupplies
+        purchasesExceedSupplies,
+        vatThreshold
       )
     }
     answers.value

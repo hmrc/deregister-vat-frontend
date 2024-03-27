@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,12 @@ import models.{User, YesNo}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{TaxableTurnoverAnswerService, WipeRedundantDataService}
+import services.{TaxableTurnoverAnswerService, ThresholdService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import utils.{LoggingUtil, MoneyFormatter}
+import utils.LoggingUtil
 import views.html.TaxableTurnover
-import javax.inject.{Inject, Singleton}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -40,25 +40,26 @@ class TaxableTurnoverController @Inject()(taxableTurnover: TaxableTurnover,
                                           val regStatusCheck: DeniedAccessPredicate,
                                           val taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
                                           val wipeRedundantDataService: WipeRedundantDataService,
+                                          val thresholdService: ThresholdService,
                                           val serviceErrorHandler: ServiceErrorHandler,
                                           implicit val ec: ExecutionContext,
                                           implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
-  val form: Form[YesNo] = YesNoForm.yesNoForm("taxableTurnover.error.mandatoryRadioOption", MoneyFormatter.formatStringAmount(appConfig.deregThreshold))
+  val form: Form[YesNo] = YesNoForm.yesNoForm("taxableTurnover.error.mandatoryRadioOption", thresholdService.formattedVatThresholdVal())
 
-  private def renderView(form: Form[YesNo])(implicit user: User[_]) =
-    taxableTurnover(form)
+  private def renderView(form: Form[YesNo], vatThreshold: String)(implicit user: User[_]) =
+    taxableTurnover(form, vatThreshold)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     taxableTurnoverAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(form.fill(data)))
-      case _ => Ok(renderView(form))
+      case Right(Some(data)) => Ok(renderView(form.fill(data), thresholdService.formattedVatThreshold()))
+      case _ => Ok(renderView(form, thresholdService.formattedVatThreshold()))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
-      error => Future.successful(BadRequest(taxableTurnover(error))),
+      error => Future.successful(BadRequest(taxableTurnover(error, thresholdService.formattedVatThreshold()))),
       data => (for {
         _ <- EitherT(taxableTurnoverAnswerService.storeAnswer(data))
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)

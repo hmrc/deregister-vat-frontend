@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +25,12 @@ import models._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{BusinessActivityAnswerService, DeregReasonAnswerService, NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService}
+import services.{BusinessActivityAnswerService, DeregReasonAnswerService, NextTaxableTurnoverAnswerService, TaxableTurnoverAnswerService, ThresholdService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.NextTaxableTurnover
+
 import javax.inject.{Inject, Singleton}
 import utils.LoggingUtil
-
 
 import scala.concurrent.ExecutionContext
 
@@ -43,6 +43,7 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
                                               val businessActivityAnswerService: BusinessActivityAnswerService,
                                               val nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
                                               val deregReasonAnswerService: DeregReasonAnswerService,
+                                              val thresholdService: ThresholdService,
                                               val serviceErrorHandler: ServiceErrorHandler,
                                               implicit val ec: ExecutionContext,
                                               implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
@@ -91,7 +92,7 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
       } yield (taxableTurnover, deregReason))
         .value.map {
         case Right((_ ,Some(ZeroRated))) => Redirect(controllers.zeroRated.routes.ZeroRatedSuppliesController.show)
-        case Right((Some(_), Some(_))) if data.value > appConfig.deregThreshold => Redirect(controllers.routes.CannotDeregisterThresholdController.show)
+        case Right((Some(_), Some(_))) if data.value > getVatThresholdForDeregister() => Redirect(controllers.routes.CannotDeregisterThresholdController.show)
         case Right((Some(Yes), Some(_))) => Redirect(controllers.routes.VATAccountsController.show)
         case Right((Some(No), Some(_))) => Redirect(controllers.routes.WhyTurnoverBelowController.show)
         case _ =>
@@ -101,4 +102,10 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
     )
   }
 
+  private def getVatThresholdForDeregister(): Int = {
+    thresholdService.getVatThreshold() match {
+      case Some(vatThreshold: VatThreshold) => vatThreshold.amount.toInt
+      case _ => throw new Exception("[NextTaxableTurnoverController] - Couldn't find Vat Threshold amount")
+    }
+  }
 }

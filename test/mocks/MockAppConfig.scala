@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,12 @@ package mocks
 
 import config.AppConfig
 import config.features.Features
+import models.VatThreshold
 import play.api.i18n.Lang
 import play.api.mvc.Call
 import play.api.{Configuration, Mode}
+
+import java.time.LocalDateTime
 
 class MockAppConfig(implicit val runModeConfiguration: Configuration) extends AppConfig {
   val mode: Mode = Mode.Test
@@ -65,5 +68,10 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
   override val changeClientUrl: String = "/changeClient"
   override val gtmContainer: String = "x"
   override val btaHomeUrl: String = "http://localhost:9020/business-account"
+  val dateTime: LocalDateTime = LocalDateTime.of(2024, 4, 1, 0, 0, 0)
+  val amount: BigDecimal = BigDecimal(90000)
+
+  val model: VatThreshold = VatThreshold(dateTime, amount)
+  override val thresholds: Seq[VatThreshold] = Seq(model)
 }
 

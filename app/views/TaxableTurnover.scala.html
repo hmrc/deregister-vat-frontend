@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
       govukButton: GovukButton,
       yesNoHelper: YesNoHelper)
 
-@(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[YesNo], vatThreshold: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @backLink = {
     @govukBackLink(BackLink(
@@ -33,7 +33,7 @@
     ))
 }
 
-@mainTemplate(pageTitle = title(messages("taxableTurnover.title", appConfig.deregThreshold), form), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = title(messages("taxableTurnover.title", vatThreshold), form), backLinkContent = Some(backLink)) {
 
   @if(form.hasErrors) {
     @govukErrorSummary(ErrorSummary(
@@ -41,7 +41,7 @@
       errorList = form.errors.map { error =>
         ErrorLink(
           href = Some(s"#${error.key}"),
-          content = Text(messages(error.message, appConfig.deregThreshold))
+          content = Text(messages(error.message, vatThreshold))
         )
       }
     ))
@@ -49,7 +49,7 @@
 
   @formWithCSRF(action = controllers.routes.TaxableTurnoverController.submit) {
 
-    @yesNoHelper(form = form, title = messages("taxableTurnover.title", appConfig.deregThreshold))
+    @yesNoHelper(form = form, title = messages("taxableTurnover.title", vatThreshold), vatThreshold = vatThreshold)
 
     @govukButton(Button(
       content = Text(messages("common.continue"))

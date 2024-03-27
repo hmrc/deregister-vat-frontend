@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 @this(mainTemplate: MainTemplate, govukBackLink: GovukBackLink)
 
-@()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(vatThreshold: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @backLink = {
     @govukBackLink(BackLink(
@@ -29,7 +29,7 @@
 @mainTemplate(pageTitle = messages("cannotDeregister.title"), backLinkContent = Some(backLink)) {
 
   <h1 class="govuk-heading-l">@messages("cannotDeregister.title")</h1>
-  <p class="govuk-body">@messages("cannotDeregister.text", appConfig.deregThreshold)</p>
+  <p class="govuk-body">@messages("cannotDeregister.text", vatThreshold)</p>
   <p class="govuk-body">
     @messages("cannotDeregister.link.text")
     <a href="@appConfig.manageVatSubscriptionFrontendUrl" class="govuk-link">@messages("cannotDeregister.link")</a>
