@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ class YesNoHelperSpec extends TemplateBaseSpec {
              |</div>
              """.stripMargin
         )
-        val markup = yesNoHelper(form, title)
+        val markup = yesNoHelper(form, title, vatThreshold = "")
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
       }
     }
@@ -93,7 +93,7 @@ class YesNoHelperSpec extends TemplateBaseSpec {
              """.stripMargin
         )
         val hintContent = Some(Html("Hint text"))
-        val markup = yesNoHelper(form, title, hintContent)
+        val markup = yesNoHelper(form, title, hintContent, vatThreshold = "")
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
       }
     }
@@ -115,7 +115,7 @@ class YesNoHelperSpec extends TemplateBaseSpec {
              |</div>
              """.stripMargin
         )
-        val markup = yesNoHelper(form.bind(Map("yes_no" -> "")), title)
+        val markup = yesNoHelper(form.bind(Map("yes_no" -> "")), title, vatThreshold = "")
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
       }
     }

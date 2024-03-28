@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
       yesNoHelper: YesNoHelper,
       errorSummaryHelper: ErrorSummaryHelper)
 
-@(form: Form[YesNo])(implicit user: User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[YesNo], vatThreshold: String)(implicit user: User[_], messages: Messages, appConfig: config.AppConfig)
 
 @backLink = {
     @govukBackLink(BackLink(
@@ -40,7 +40,7 @@
 
   @formWithCSRF(action = controllers.routes.IssueNewInvoicesController.submit) {
 
-    @yesNoHelper(form = form, title = messages("issueNewInvoices.title"))
+    @yesNoHelper(form = form, title = messages("issueNewInvoices.title"), vatThreshold = vatThreshold)
 
     @govukButton(Button(
       content = Text(messages("common.continue"))

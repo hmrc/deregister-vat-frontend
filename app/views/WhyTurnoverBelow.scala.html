@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
       govukCheckboxes: GovukCheckboxes,
       errorSummaryHelper: ErrorSummaryHelper)
 
-@(form: Form[WhyTurnoverBelowModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(form: Form[WhyTurnoverBelowModel], vatThreshold: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @backLink = {
     @govukBackLink(BackLink(
@@ -33,7 +33,7 @@
     ))
 }
 
-@mainTemplate(pageTitle = title(messages("whyTurnoverBelow.title", appConfig.deregThreshold), form), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = title(messages("whyTurnoverBelow.title", vatThreshold), form), backLinkContent = Some(backLink)) {
 
   @errorSummaryHelper(form, Some(s"#${WhyTurnoverBelowModel.lostContract}"))
 
@@ -42,7 +42,7 @@
     @govukCheckboxes(Checkboxes(
       fieldset = Some(Fieldset(
         legend = Some(Legend(
-          content = Text(messages("whyTurnoverBelow.title", appConfig.deregThreshold)),
+          content = Text(messages("whyTurnoverBelow.title", vatThreshold)),
           classes = "govuk-fieldset__legend--l",
           isPageHeading = true
         ))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import models.{No, User, Yes, YesNo}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService, WipeRedundantDataService}
+import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService, ThresholdService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggingUtil
 import views.html.ChooseDeregistrationDate
@@ -41,14 +41,15 @@ class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: Cho
                                                    val chooseDateAnswerService: ChooseDeregDateAnswerService,
                                                    val outstandingInvoicesAnswerService: OutstandingInvoicesAnswerService,
                                                    val wipeRedundantDataService: WipeRedundantDataService,
+                                                   val thresholdService: ThresholdService,
                                                    val serviceErrorHandler: ServiceErrorHandler,
                                                    implicit val ec: ExecutionContext,
                                                    implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   val form: Form[YesNo] = YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption")
 
-  private def renderView(outstanding: Option[YesNo], form: Form[YesNo])
-                        (implicit user: User[_]) = chooseDeregistrationDate(outstanding, form)
+  private def renderView(outstanding: Option[YesNo], form: Form[YesNo], vatThreshold: String)
+                        (implicit user: User[_]) = chooseDeregistrationDate(outstanding, form, vatThreshold)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     for {
@@ -56,9 +57,9 @@ class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: Cho
       outstandingInvoicesResult <- outstandingInvoicesAnswerService.getAnswer
     } yield (outstandingInvoicesResult, chooseDateResult) match {
       case (Right(outstandingInvoices), Right(Some(deregDate))) =>
-        Ok(renderView(outstandingInvoices,form.fill(deregDate)))
+        Ok(renderView(outstandingInvoices,form.fill(deregDate), thresholdService.formattedVatThreshold()))
       case (Right(outstanding), Right(None)) =>
-        Ok(renderView(outstanding,form))
+        Ok(renderView(outstanding,form, thresholdService.formattedVatThreshold()))
       case (_,_) =>
         warnLog("[ChooseDeregistrationDateController][show] - storedAnswerService returned an error retrieving answers")
         serviceErrorHandler.showInternalServerError
@@ -68,7 +69,7 @@ class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: Cho
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
       error => outstandingInvoicesAnswerService.getAnswer map {
-        case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error))
+        case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error, thresholdService.formattedVatThreshold()))
         case Left(err) =>
           warnLog("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
           serviceErrorHandler.showInternalServerError

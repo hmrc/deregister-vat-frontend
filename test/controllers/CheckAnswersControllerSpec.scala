@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ class CheckAnswersControllerSpec
     mockCheckAnswersService,
     mockUpdateDeregistrationService,
     serviceErrorHandler,
+    thresholdService,
     mockConfig,
     ec
   )
@@ -75,9 +76,10 @@ class CheckAnswersControllerSpec
               Some(Yes),
               Some(sicCodeValue),
               Some(zeroRatedSuppliesValue),
-              Some(Yes)
+              Some(Yes),
+              thresholdValue
             )
-          ))
+          ),thresholdValue)
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -111,9 +113,10 @@ class CheckAnswersControllerSpec
               Some(Yes),
               Some(sicCodeValue),
               Some(zeroRatedSuppliesValue),
-              Some(Yes)
+              Some(Yes),
+              thresholdValue
             )
-          ))
+          ),thresholdValue)
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -147,9 +150,10 @@ class CheckAnswersControllerSpec
               Some(Yes),
               Some(sicCodeValue),
               Some(zeroRatedSuppliesValue),
-              Some(Yes)
+              Some(Yes),
+              thresholdValue
             )
-          ))
+          ),thresholdValue)
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
         }
@@ -165,7 +169,7 @@ class CheckAnswersControllerSpec
         lazy val result = TestCheckAnswersController.show(request)
 
         "return 500 (INTERNAL SERVER ERROR)" in {
-          setupMockCheckYourAnswersModel(Left(ErrorModel(INTERNAL_SERVER_ERROR,"Error")))
+          setupMockCheckYourAnswersModel(Left(ErrorModel(INTERNAL_SERVER_ERROR,"Error")),thresholdValue)
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

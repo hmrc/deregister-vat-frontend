@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,22 +41,24 @@ class DeregistrationReasonController @Inject()(deregistrationReason: Deregistrat
                                                val deregReasonAnswerService: DeregReasonAnswerService,
                                                val wipeRedundantDataService: WipeRedundantDataService,
                                                val serviceErrorHandler: ServiceErrorHandler,
+                                               val thresholdService: ThresholdService,
                                                implicit val ec: ExecutionContext,
                                                implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil{
 
-  private def renderView(data: Form[models.DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm)(implicit user: User[_]) =
-    deregistrationReason(data)
+  private def renderView(data: Form[models.DeregistrationReason] = DeregistrationReasonForm.deregistrationReasonForm,
+                         vatThreshold: String)(implicit user: User[_]) =
+    deregistrationReason(data, vatThreshold)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
     deregReasonAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(DeregistrationReasonForm.deregistrationReasonForm.fill(data)))
-      case _ => Ok(renderView())
+      case Right(Some(data)) => Ok(renderView(DeregistrationReasonForm.deregistrationReasonForm.fill(data), thresholdService.formattedVatThreshold()))
+      case _ => Ok(renderView(vatThreshold = thresholdService.formattedVatThreshold()))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     DeregistrationReasonForm.deregistrationReasonForm.bindFromRequest().fold(
-      error => Future.successful(BadRequest(renderView(error))),
+      error => Future.successful(BadRequest(renderView(error, thresholdService.formattedVatThreshold()))),
       data => (for {
         _ <- EitherT(deregReasonAnswerService.storeAnswer(data))
         _ <- EitherT(wipeRedundantDataService.wipeRedundantData)

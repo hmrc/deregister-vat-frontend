@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
         setupMockGetPurchasesExceedSuppliesAnswer(Right(Some(Yes)))
 
-        TestCheckAnswersService.checkYourAnswersModel().futureValue shouldBe Right(
+        TestCheckAnswersService.checkYourAnswersModel(thresholdValue).futureValue shouldBe Right(
           CheckYourAnswersModel(
             Some(Ceased),
             Some(dateModel),
@@ -98,7 +98,8 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
             Some(Yes),
             Some(sicCodeValue),
             Some(zeroRatedSuppliesValue),
-            Some(Yes)
+            Some(Yes),
+            thresholdValue
           )
         )
       }
@@ -110,7 +111,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
 
         setupMockGetDeregReason(Left(errorModel))
 
-        TestCheckAnswersService.checkYourAnswersModel().futureValue shouldBe Left(errorModel)
+        TestCheckAnswersService.checkYourAnswersModel(thresholdValue).futureValue shouldBe Left(errorModel)
       }
     }
 
@@ -136,7 +137,7 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetZeroRatedSupplies(Right(Some(zeroRatedSuppliesValue)))
         setupMockGetPurchasesExceedSuppliesAnswer(Left(errorModel))
 
-        TestCheckAnswersService.checkYourAnswersModel().futureValue shouldBe Left(errorModel)
+        TestCheckAnswersService.checkYourAnswersModel(thresholdValue).futureValue shouldBe Left(errorModel)
       }
     }
   }

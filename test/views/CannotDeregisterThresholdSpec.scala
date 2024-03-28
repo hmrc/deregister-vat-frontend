@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class CannotDeregisterThresholdSpec extends ViewBaseSpec {
       val link = "#content .govuk-link"
     }
 
-    lazy val view = cannotDeregisterThreshold()
+    lazy val view = cannotDeregisterThreshold("83,000")
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

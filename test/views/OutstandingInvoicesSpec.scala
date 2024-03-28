@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with no errors" should {
 
-    lazy val view = outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption"))
+    lazy val view = outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption"),"")
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -74,7 +74,7 @@ class OutstandingInvoicesSpec extends ViewBaseSpec {
 
   "Rendering the option to tax page with errors" should {
 
-    lazy val view = outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption").bind(Map("yes_no" -> "")))
+    lazy val view = outstandingInvoices(YesNoForm.yesNoForm("outstandingInvoice.error.mandatoryRadioOption").bind(Map("yes_no" -> "")),"")
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import config.AppConfig
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
+import services.ThresholdService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.CannotDeregisterThreshold
 
@@ -31,9 +32,10 @@ class CannotDeregisterThresholdController @Inject()(cannotDeregisterThreshold: C
                                                      val mcc: MessagesControllerComponents,
                                                     val authenticate: AuthPredicate,
                                                     val regStatusCheck: DeniedAccessPredicate,
+                                                    val thresholdService: ThresholdService,
                                                     implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    Future.successful(Ok(cannotDeregisterThreshold()))
+    Future.successful(Ok(cannotDeregisterThreshold(thresholdService.formattedVatThreshold())))
   }
 }

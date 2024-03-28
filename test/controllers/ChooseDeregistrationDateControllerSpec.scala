@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ class ChooseDeregistrationDateControllerSpec extends ControllerBaseSpec with Moc
     mockChooseDeregDateAnswerService,
     mockOutstandingInvoicesService,
     mockWipeRedundantDataService,
+    thresholdService,
     serviceErrorHandler,
     ec,
     mockConfig

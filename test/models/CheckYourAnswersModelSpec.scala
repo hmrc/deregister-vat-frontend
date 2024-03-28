@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,8 @@ class CheckYourAnswersModelSpec extends TestUtil {
     Some(Yes),
     Some(sicCodeValue),
     Some(zeroRatedSuppliesValue),
-    Some(Yes)
+    Some(Yes),
+    thresholdValue
   )
 
   "CheckYourAnswersModel.seqAnswers" when {
@@ -231,7 +232,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
 
       "return an empty sequence" in {
         CheckYourAnswersModel(
-          None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None
+          None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,""
         ).seqAnswers shouldBe Seq.empty[CheckYourAnswersRowModel]
       }
     }

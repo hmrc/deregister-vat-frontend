@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with a No for outstanding invoices" should {
 
-    lazy val view = chooseDeregistrationDate(None, YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption"))
+    lazy val view = chooseDeregistrationDate(None, YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption"),"")
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -87,7 +87,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
   "Rendering the Deregistration date page with a Yes for outstanding invoices" should {
 
-    lazy val view = chooseDeregistrationDate(outstanding = Some(Yes), YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption"))
+    lazy val view = chooseDeregistrationDate(outstanding = Some(Yes), YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption"),"")
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -103,7 +103,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
   "Rendering the Deregistration date page with no already selected" should {
 
     lazy val view = chooseDeregistrationDate(None, YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption")
-      .bind(Map("yes_no" -> "no"))
+      .bind(Map("yes_no" -> "no")),""
     )
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -124,7 +124,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
 
     lazy val view = chooseDeregistrationDate(None, YesNoForm.yesNoForm("chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map(
       YesNoForm.yesNo -> YesNoForm.yes
-    )))
+    )),"")
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {
@@ -143,7 +143,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
   "Rendering the deregistration date page with missing field" should {
 
     lazy val view = chooseDeregistrationDate(None, YesNoForm.yesNoForm(
-      "chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map.empty[String,String]))
+      "chooseDeregistrationDate.error.mandatoryRadioOption").bind(Map.empty[String,String]), "")
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct document title" in {

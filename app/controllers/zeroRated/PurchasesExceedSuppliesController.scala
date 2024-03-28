@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import models.{User, YesNo}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.PurchasesExceedSuppliesAnswerService
+import services.{PurchasesExceedSuppliesAnswerService, ThresholdService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.PurchasesExceedSupplies
 
@@ -38,19 +38,20 @@ class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: Purch
                                                   val authenticate: AuthPredicate,
                                                   val regStatusCheck: DeniedAccessPredicate,
                                                   val purchasesExceedSuppliesAnswerService: PurchasesExceedSuppliesAnswerService,
+                                                  val thresholdService: ThresholdService,
                                                   val serviceErrorHandler: ServiceErrorHandler,
                                                   implicit val ec: ExecutionContext,
                                                   implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil{
 
-  private def renderView(form: Form[YesNo] = PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm)
-                        (implicit user: User[_]) = purchasesExceedSupplies(form)
+  private def renderView(form: Form[YesNo] = PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm, vatThreshold: String)
+                        (implicit user: User[_]) = purchasesExceedSupplies(form, vatThreshold)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
       for {
         pxs <- purchasesExceedSuppliesAnswerService.getAnswer
       } yield pxs match {
-        case Right(Some(data)) => Ok(renderView(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.fill(data)))
-        case Right(None) => Ok(renderView())
+        case Right(Some(data)) => Ok(renderView(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.fill(data), thresholdService.formattedVatThreshold()))
+        case Right(None) => Ok(renderView(vatThreshold = thresholdService.formattedVatThreshold()))
         case Left(error) =>
           warnLog("[PurchasesExceedSuppliesController][show] - storedAnswerService returned an error retrieving answer: " + error.message)
 
@@ -60,7 +61,7 @@ class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: Purch
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
       PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.bindFromRequest().fold(
-        error => Future.successful(BadRequest(purchasesExceedSupplies(error))),
+        error => Future.successful(BadRequest(purchasesExceedSupplies(error, thresholdService.formattedVatThreshold()))),
         data => purchasesExceedSuppliesAnswerService.storeAnswer(data) map {
           case Right(_) => Redirect(controllers.routes.VATAccountsController.show.url)
           case Left(error) =>

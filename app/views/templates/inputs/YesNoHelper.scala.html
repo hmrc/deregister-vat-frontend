@@ -1,5 +1,5 @@
 @*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 
 @this(govukRadios: GovukRadios)
 
-@(form: Form[YesNo], title: String, additionalContent: Option[Html] = None)(implicit messages: Messages, appConfig: AppConfig)
+@(form: Form[YesNo], title: String, additionalContent: Option[Html] = None, vatThreshold: String)(implicit messages: Messages, appConfig: AppConfig)
 
 @govukRadios(Radios(
   idPrefix = Some(form("yes_no").id),
@@ -45,6 +45,6 @@
     )
   ),
   errorMessage = form("yes_no").error.map { err =>
-    ErrorMessage(content = Text(messages(err.message, appConfig.deregThreshold)))
+    ErrorMessage(content = Text(messages(err.message, vatThreshold)))
   }
 ))

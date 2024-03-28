@@ -58,6 +58,8 @@ val compile: Seq[ModuleID] = Seq(
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
   "uk.gov.hmrc"   %% "bootstrap-test-play-28"      % bootstrapPlayVersion % scope,
+  "org.scalatestplus" %% "mockito-3-12" % "3.2.10.0" % scope,
+  "com.vladsch.flexmark" % "flexmark-all" % "0.64.8" % scope,
   "org.jsoup"     %  "jsoup"                       % "1.15.3"             % scope,
   "org.scalamock" %% "scalamock"                   % "5.2.0"              % scope
 )
