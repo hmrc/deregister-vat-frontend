@@ -41,6 +41,13 @@
           content = Text(messages("Stub Agent Client Lookup")),
           value = "true",
           checked = appConfig.features.stubAgentClientLookup()
+        ),
+        CheckboxItem(
+          id = Some(ConfigKeys.webchatEnabled),
+          name = Some(ConfigKeys.webchatEnabled),
+          content = Text(messages("Enable the web chat link")),
+          value = "true",
+          checked = appConfig.features.webchatEnabled()
         )
       )
     ))

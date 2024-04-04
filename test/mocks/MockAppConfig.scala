@@ -73,5 +73,6 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
 
   val model: VatThreshold = VatThreshold(dateTime, amount)
   override val thresholds: Seq[VatThreshold] = Seq(model)
+  override val webchatUrl: String = "/ask-hmrc/chat/vat-online?ds"
 }
 

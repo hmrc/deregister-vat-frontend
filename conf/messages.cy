@@ -51,6 +51,8 @@ deregisterForVAT.p2 = Hefyd, mae angen i chi wybod sut mae cyfrifon TAW y busnes
 deregisterForVAT.bullet1 = tir neu eiddo masnachol y mae’r busnes yn berchen arno
 deregisterForVAT.bullet2 = stoc neu asedion sydd gan y busnes neu y mae’r busnes yn bwriadu eu cadw
 
+webchat.askHMRC = Gofyn i CThEF (yn agor tab newydd)
+
 deregistrationReason.title = Pam fod y busnes yn canslo’i gofrestriad TAW?
 deregistrationReason.reason.ceased = Mae’r busnes wedi rhoi’r gorau i fasnachu
 deregistrationReason.reason.belowThreshold = Bydd trosiant blynyddol yn is nag £{0}

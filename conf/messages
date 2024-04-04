@@ -51,6 +51,8 @@ deregisterForVAT.p2 = You also need to know how the business’s VAT accounts ar
 deregisterForVAT.bullet1 = land or commercial property the business owns
 deregisterForVAT.bullet2 = stock or assets the business has or plans to keep
 
+webchat.askHMRC = Ask HMRC (opens in a new tab)
+
 deregistrationReason.title = Why is the business cancelling its VAT registration?
 deregistrationReason.reason.ceased = The business has stopped trading
 deregistrationReason.reason.belowThreshold = Annual turnover will be below £{0}

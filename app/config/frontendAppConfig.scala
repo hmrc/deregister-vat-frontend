@@ -72,6 +72,7 @@ trait AppConfig {
 
   val gtmContainer: String
   val btaHomeUrl: String
+  val webchatUrl: String
 }
 
 @Singleton
@@ -185,4 +186,6 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
 
   override lazy val btaHomeUrl: String = servicesConfig.getString(Keys.businessTaxAccountHost) +
     servicesConfig.getString(Keys.businessTaxAccountUrl)
+
+  override val webchatUrl: String = servicesConfig.getString("digital-engagement-platform-frontend.host") + servicesConfig.getString("webchat.endpoint")
 }
