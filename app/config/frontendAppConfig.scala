@@ -187,5 +187,5 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override lazy val btaHomeUrl: String = servicesConfig.getString(Keys.businessTaxAccountHost) +
     servicesConfig.getString(Keys.businessTaxAccountUrl)
 
-  override val webchatUrl: String = servicesConfig.baseUrl("self-lookup") + servicesConfig.getString("webchat.endpoint")
+  override val webchatUrl: String = servicesConfig.baseUrl("deregister-vat") + servicesConfig.getString("webchat.endpoint")
 }
