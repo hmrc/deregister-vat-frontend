@@ -45,7 +45,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(OK),
-          pageTitle("Why do you expect the business’s taxable turnover to be below £83,000?" + titleSuffix)
+          pageTitle("Why do you expect the business’s taxable turnover to be below £88,000?" + titleSuffix)
         )
       }
     }
@@ -199,7 +199,7 @@ class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
           response should have(
             httpStatus(BAD_REQUEST),
-            pageTitle("Error: Why do you expect the business’s taxable turnover to be below £83,000?" + titleSuffix),
+            pageTitle("Error: Why do you expect the business’s taxable turnover to be below £88,000?" + titleSuffix),
             elementText(".govuk-error-message")("Error: Select a reason for cancelling the VAT registration")
           )
         }

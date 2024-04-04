@@ -189,7 +189,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       "the user submits after inputting an amount that is equal to the threshold" should {
 
-        val testTurnoverAmt = mockConfig.deregThreshold
+        val testTurnoverAmt = thresholdService.getVatThreshold.get.amount.toInt
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
@@ -213,7 +213,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       "the user submits after inputting an amount that is greater than the threshold" should {
 
-        val testTurnoverAmt = mockConfig.deregThreshold + 0.01
+        val testTurnoverAmt = thresholdService.getVatThreshold.get.amount.toInt + 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
@@ -235,7 +235,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       "the user submits after inputting an amount that is less than the threshold and their last turnover is less than the threshold" should {
 
-        val testTurnoverAmt = mockConfig.deregThreshold - 0.01
+        val testTurnoverAmt = thresholdService.getVatThreshold.get.amount.toInt - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
@@ -256,7 +256,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       "the user submits after inputting an amount that is less than the threshold and their last turnover is more than the threshold" should {
 
-        val testTurnoverAmt = mockConfig.deregThreshold - 0.01
+        val testTurnoverAmt = thresholdService.getVatThreshold.get.amount.toInt - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
@@ -277,7 +277,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       "the user submits after selecting zero rated for the deregistration reason" should {
 
-        val testTurnoverAmt = mockConfig.deregThreshold - 0.01
+        val testTurnoverAmt = thresholdService.getVatThreshold.get.amount.toInt - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))
@@ -298,7 +298,7 @@ class NextTaxableTurnoverControllerSpec extends ControllerBaseSpec
 
       "the user submits after selecting zero rated for the deregistration reason and taxable turnover value is missing" should {
 
-        val testTurnoverAmt = mockConfig.deregThreshold - 0.01
+        val testTurnoverAmt = thresholdService.getVatThreshold.get.amount.toInt - 0.01
 
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", testTurnoverAmt.toString))

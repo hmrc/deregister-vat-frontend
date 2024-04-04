@@ -34,7 +34,8 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
   def featureSwitch: Action[AnyContent] = Action { implicit request =>
     Ok(featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
-        stubAgentClientLookup = appConfig.features.stubAgentClientLookup()
+        stubAgentClientLookup = appConfig.features.stubAgentClientLookup(),
+        webchatEnabled = appConfig.features.webchatEnabled()
       )
     )))
   }
@@ -48,6 +49,7 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
 
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.stubAgentClientLookup(model.stubAgentClientLookup)
+    appConfig.features.webchatEnabled(model.webchatEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }

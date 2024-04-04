@@ -24,4 +24,5 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class Features @Inject()(implicit config: Configuration) {
   val stubAgentClientLookup = new Feature(ConfigKeys.stubAgentClientLookupFeature)
+  val webchatEnabled = new Feature(ConfigKeys.webchatEnabled)
 }

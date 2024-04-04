@@ -55,6 +55,7 @@ object ConfigKeys {
   val vatSubscriptionService: String = "vat-subscription"
 
   val deregisterVatService: String = "deregister-vat"
+  val webchatEnabled: String = "features.webchat.enabled"
 
   val deregThreshold: String = "thresholds.deregistrationThreshold"
 

@@ -25,6 +25,12 @@
     ))
 }
 
+@webchatLink = {
+    <p class="govuk-body govuk-!-margin-top-5 govuk-!-margin-bottom-8">
+        <a class="govuk-link" href="@{appConfig.webchatUrl}" target="_blank" id="webchatLink-id">@messages("webchat.askHMRC")</a>
+    </p>
+}
+
 @mainTemplate(pageTitle = messages("deregisterForVAT.title"), backLinkContent = Some(backLink)) {
 
   <h1 class="govuk-heading-l">@messages("deregisterForVAT.title")</h1>
@@ -39,4 +45,6 @@
     href = Some(routes.DeregistrationReasonController.show.url),
     content = Text(messages("common.continue"))
   ))
+
+  @if(appConfig.features.webchatEnabled()){ @webchatLink }
 }
