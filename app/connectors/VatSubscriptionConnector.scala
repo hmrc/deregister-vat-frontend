@@ -39,7 +39,7 @@ class VatSubscriptionConnector @Inject()(val http: HttpClient,
   def submit(vrn: String, deregistrationInfoModel: DeregistrationInfo)
             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, VatSubscriptionResponse]] = {
     http.PUT[DeregistrationInfo, Either[ErrorModel, VatSubscriptionResponse]](url(vrn), deregistrationInfoModel)(
-      DeregistrationInfo.writes, VatSubscriptionHttpParser.updateReads, hc, ec)
+      DeregistrationInfo.writes, VatSubscriptionHttpParser.updateReads(), hc, ec)
   }
 
   def getCustomerDetails(id: String)(implicit headerCarrier: HeaderCarrier,

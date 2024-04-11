@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package stubs
+package test.stubs
 
-import assets.IntegrationTestConstants._
+import test.assets.IntegrationTestConstants._
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import helpers.WireMockMethods
 import play.api.http.Status.{OK, UNAUTHORIZED}
 import play.api.libs.json.{JsObject, Json}
+import test.helpers.WireMockMethods
 import uk.gov.hmrc.auth.core.AffinityGroup
 
 object AuthStub extends WireMockMethods {

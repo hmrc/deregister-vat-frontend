@@ -14,24 +14,32 @@
  * limitations under the License.
  */
 
-package pages
+package test.pages
 
-import assets.IntegrationTestConstants._
+import test.assets.IntegrationTestConstants._
 import common.Constants
-import helpers.IntegrationBaseSpec
-import models._
+import forms.DeregistrationDateForm
+import models.DateModel
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import services._
-import stubs.DeregisterVatStub
+import services.DeregDateAnswerService
+import test.helpers.IntegrationBaseSpec
+import test.stubs.DeregisterVatStub
 
+import java.time.LocalDate
 
-class VATAccountsISpec extends IntegrationBaseSpec {
+class DeregistrationDateISpec extends IntegrationBaseSpec {
 
-  "Calling the GET VatAccounts" when {
+  val testDay: Int = LocalDate.now().getDayOfMonth
+  val testMonth: Int = LocalDate.now().getMonthValue
+  val testYear: Int = LocalDate.now().getYear
+  val testDateModel: DateModel = DateModel(testDay, testMonth, testYear)
 
-    def getRequest: WSResponse = get("/accounting-method", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
+  "Calling the GET Deregistration Date endpoint" when {
+
+    def getRequest(pendingDereg: Option[String] = Some(Constants.registered)): WSResponse =
+      get("/enter-cancel-vat-date", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -39,15 +47,13 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
-        DeregisterVatStub.successfulGetAnswer(vrn, AccountingMethodAnswerService.key)(Json.toJson(StandardAccounting))
-        DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
+        DeregisterVatStub.successfulGetAnswer(vrn, DeregDateAnswerService.key)(Json.toJson(testDateModel))
 
-        val response: WSResponse = getRequest
+        val response: WSResponse = getRequest()
 
         response should have(
           httpStatus(OK),
-          pageTitle("How are the business’s VAT accounts prepared?" + titleSuffix)
+          pageTitle("What is the cancellation date?" + titleSuffix)
         )
       }
     }
@@ -58,7 +64,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = getRequest
+        val response: WSResponse = getRequest()
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -73,7 +79,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = getRequest
+        val response: WSResponse = getRequest()
 
         response should have(
           httpStatus(FORBIDDEN),
@@ -81,14 +87,9 @@ class VATAccountsISpec extends IntegrationBaseSpec {
         )
       }
     }
-  }
 
+    "user has a pending deregistration request" should {
 
-  "Calling the GET VAT Accounts endpoint" when {
-
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/accounting-method", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
-
-    "user has a pending dereg request" should {
 
       "redirect the user" in {
         given.user.isAuthorised
@@ -102,7 +103,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
       }
     }
 
-    "no pending dereg data in session and vat-subscription returns 'no pending dereg'" should {
+    "no pending deregistration data in session and vat-subscription returns 'no pending deregistration'" should {
 
       "redirect user to the start of the journey" in {
         given.user.isAuthorised
@@ -117,7 +118,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
       }
     }
 
-    "no pending dereg data in session and vat-subscription returns 'pending dereg'" should {
+    "no pending deregistration data in session and vat-subscription returns 'pending deregistration'" should {
 
       "redirect the user" in {
         given.user.isAuthorised
@@ -132,7 +133,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
       }
     }
 
-    "no pending dereg data in session and vat-subscription returns 'None'" should {
+    "no pending deregistration data in session and vat-subscription returns 'None'" should {
 
       "redirect user to the start of the journey" in {
         given.user.isAuthorised
@@ -148,15 +149,12 @@ class VATAccountsISpec extends IntegrationBaseSpec {
     }
   }
 
+  "Calling the POST Deregistration Date endpoint" when {
 
-  "Calling the POST VatAccounts" when {
-
-    def postRequest(data: Map[String, Seq[String]]): WSResponse =
-      post("/accounting-method", isNotInsolvent)(data)
-
-    val standard = Map("accountingMethod" -> Seq("standard"))
-    val invalidModel = Map("accountingMethod" -> Seq(""))
-
+    def postRequest(data: DateModel): WSResponse =
+      post("/enter-cancel-vat-date", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)(
+        toFormData(DeregistrationDateForm.form, data)
+      )
 
     "the user is authorised" when {
 
@@ -165,30 +163,29 @@ class VATAccountsISpec extends IntegrationBaseSpec {
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
+          DeregisterVatStub.successfulPutAnswer(vrn, DeregDateAnswerService.key)
 
-          DeregisterVatStub.successfulPutAnswer(vrn,AccountingMethodAnswerService.key)
-
-          val response: WSResponse = postRequest(standard)
+          val response: WSResponse = postRequest(testDateModel)
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.OptionTaxController.show.url)
+            redirectURI(controllers.routes.CheckAnswersController.show.url)
           )
         }
       }
 
-      "the post returns an error" should {
+      "the post request includes invalid data" should {
 
-        "return 500 INTERNAL_SERVER_ERROR" in {
+        "return 400 BAD_REQUEST" in {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.putAnswerError(vrn,AccountingMethodAnswerService.key)
-
-          val response: WSResponse = postRequest(standard)
+          val response: WSResponse = postRequest(DateModel(0, 0, 0))
 
           response should have(
-            httpStatus(INTERNAL_SERVER_ERROR)
+            httpStatus(BAD_REQUEST),
+            pageTitle("Error: What is the cancellation date?" + titleSuffix),
+            elementText(".govuk-error-message")("Error: Enter a valid cancellation date")
           )
         }
       }
@@ -200,7 +197,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(standard)
+        val response: WSResponse = postRequest(testDateModel)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -215,7 +212,7 @@ class VATAccountsISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(standard)
+        val response: WSResponse = postRequest(testDateModel)
 
         response should have(
           httpStatus(FORBIDDEN),
@@ -223,22 +220,5 @@ class VATAccountsISpec extends IntegrationBaseSpec {
         )
       }
     }
-
-    "the post request includes invalid data" should {
-
-      "return 400 BAD_REQUEST" in {
-
-        given.user.isAuthorised
-
-        val response: WSResponse = postRequest(invalidModel)
-
-        response should have(
-          httpStatus(BAD_REQUEST),
-          pageTitle("Error: How are the business’s VAT accounts prepared?" + titleSuffix),
-          elementText(".govuk-error-message")("Error: Select how the business’s VAT accounts are prepared")
-        )
-      }
-    }
-
   }
 }

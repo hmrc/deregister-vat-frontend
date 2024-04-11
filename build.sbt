@@ -16,12 +16,13 @@
 
 import play.sbt.routes.RoutesKeys
 import sbt.Tests.{Group, SubProcess}
-import uk.gov.hmrc.DefaultBuildSettings._
+import uk.gov.hmrc.DefaultBuildSettings
+import uk.gov.hmrc.DefaultBuildSettings.*
 
 val appName: String = "deregister-vat-frontend"
-val bootstrapPlayVersion = "7.15.0"
+val bootstrapPlayVersion = "8.5.0"
 
-lazy val appDependencies: Seq[ModuleID] = compile ++ test()
+lazy val appDependencies: Seq[ModuleID] = compile ++ test
 lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
@@ -51,18 +52,18 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "7.7.0-play-28",
-  "org.typelevel" %% "cats-core"                  % "2.9.0"
+  "uk.gov.hmrc"   %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
+  "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30"         % "8.5.0",
+  "org.typelevel" %% "cats-core"                  % "2.10.0"
 )
 
-def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"   %% "bootstrap-test-play-28"      % bootstrapPlayVersion % scope,
-  "org.scalatestplus" %% "mockito-3-12" % "3.2.10.0" % scope,
-  "com.vladsch.flexmark" % "flexmark-all" % "0.64.8" % scope,
-  "org.jsoup"     %  "jsoup"                       % "1.15.3"             % scope,
-  "org.scalamock" %% "scalamock"                   % "5.2.0"              % scope
-)
+def test: Seq[ModuleID] = Seq(
+  "uk.gov.hmrc"   %% "bootstrap-test-play-30"      % bootstrapPlayVersion,
+  "org.scalatestplus" %% "mockito-3-12" % "3.2.10.0",
+  "com.vladsch.flexmark" % "flexmark-all" % "0.64.8",
+  "org.jsoup"     %  "jsoup"                       % "1.17.2",
+  "org.scalamock" %% "scalamock"                   % "6.0.0"
+).map(_ % Test)
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
   test =>
@@ -77,6 +78,9 @@ TwirlKeys.templateImports ++= Seq(
   "uk.gov.hmrc.hmrcfrontend.views.html.helpers._"
 )
 
+ThisBuild / majorVersion := 0
+ThisBuild / scalaVersion := "2.13.13"
+
 lazy val microservice: Project = Project(appName, file("."))
   .enablePlugins(Seq(PlayScala, SbtDistributablesPlugin) ++ plugins: _*)
   .disablePlugins(JUnitXmlReportPlugin)
@@ -86,16 +90,12 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(scalaSettings: _*)
   .settings(defaultSettings(): _*)
   .settings(
-    majorVersion := 0,
-    scalaVersion := "2.13.8",
     libraryDependencies ++= appDependencies,
     retrieveManaged := true
   )
-  .configs(IntegrationTest)
-  .settings(inConfig(IntegrationTest)(Defaults.itSettings): _*)
-  .settings(
-    IntegrationTest / Keys.fork := false,
-    IntegrationTest / unmanagedSourceDirectories := (IntegrationTest / baseDirectory)(base => Seq(base / "it")).value,
-    addTestReportOption(IntegrationTest, "int-test-reports"),
-    IntegrationTest / testGrouping := oneForkedJvmPerTest((IntegrationTest / definedTests).value),
-    IntegrationTest / parallelExecution := false)
+
+lazy val it = project
+  .enablePlugins(PlayScala)
+  .dependsOn(microservice % "test->test") // the "test->test" allows reusing test code and test dependencies
+  .settings(DefaultBuildSettings.itSettings())
+  .settings(libraryDependencies ++= test)

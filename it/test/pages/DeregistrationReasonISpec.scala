@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package pages
+package test.pages
 
-import assets.IntegrationTestConstants._
+import test.assets.IntegrationTestConstants._
 import common.Constants
-import helpers.IntegrationBaseSpec
-import models.{Ceased, No, Yes}
+import models._
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 import services._
-import stubs.DeregisterVatStub
+import test.helpers.IntegrationBaseSpec
+import test.stubs.DeregisterVatStub
 
-class IssueNewInvoicesISpec extends IntegrationBaseSpec {
+class DeregistrationReasonISpec extends IntegrationBaseSpec {
 
-  "Calling the GET IssueNewInvoices" when {
+  "Calling the GET Deregistration reason endpoint" when {
 
-    def getRequest: WSResponse = get("/new-invoices", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
+    def getRequest: WSResponse = get("/cancel-vat-reason?isAgent=false", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -38,13 +38,13 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn,IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetAnswer(vrn,DeregReasonAnswerService.key)(Json.toJson(Ceased))
 
         val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
-          pageTitle("Is the business going to issue any new invoices after you cancel the registration?" + titleSuffix)
+          pageTitle("Why is the business cancelling its VAT registration?" + titleSuffix)
         )
       }
     }
@@ -81,9 +81,9 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
   }
 
 
-  "Calling the GET IssueNewInvoices" when {
+  "Calling the GET Deregistration reason endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/new-invoices", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/cancel-vat-reason?isAgent=false", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -146,96 +146,32 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
   }
 
 
-  "Calling the POST IssueNewInvoices" when {
+  "Calling the POST Deregister Reason endpoint" when {
 
-    def postRequest(data: Map[String, Seq[String]]): WSResponse = post("/new-invoices", isNotInsolvent)(data)
+    def postRequest(data: Map[String, Seq[String]]): WSResponse =
+      post("/cancel-vat-reason", isNotInsolvent)(data)
 
-    val yes = Map("yes_no" -> Seq("yes"))
-    val no = Map("yes_no" -> Seq("no"))
-    val invalidModel = Map("yes_no" -> Seq(""))
+    val ceased = Map("reason" -> Seq("stoppedTrading"))
+    val belowThreshold = Map("reason" -> Seq("turnoverBelowThreshold"))
+    val zeroRated = Map("reason" -> Seq("zeroRated"))
+    val invalidModel = Map("reason" -> Seq(""))
 
     "the user is authorised" when {
 
-      "posting 'Yes' data" should {
+      "the post request includes valid ceased journey data" should {
 
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
-          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
-          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
-          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
-          DeregisterVatStub.successfulGetAnswer(vrn, BusinessActivityAnswerService.key)(Json.toJson(Yes))
-
-          DeregisterVatStub.successfulPutAnswer(vrn,IssueNewInvoicesAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
-
-          val response: WSResponse = postRequest(yes)
-
-          response should have(
-            httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.ChooseDeregistrationDateController.show.url)
-          )
-        }
-      }
-    }
-
-    "the user is authorised" when {
-
-      "posting 'No' data" should {
-
-        "return 303 SEE_OTHER" in {
-
-          given.user.isAuthorised
-
-          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
-          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
-          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
-          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
-          DeregisterVatStub.successfulGetAnswer(vrn, BusinessActivityAnswerService.key)(Json.toJson(Yes))
-
-          DeregisterVatStub.successfulPutAnswer(vrn,IssueNewInvoicesAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
-
-          val response: WSResponse = postRequest(no)
-
-          response should have(
-            httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.OutstandingInvoicesController.show.url)
-          )
-        }
-      }
-    }
-
-    "the user is authorised" when {
-
-      "posting 'Yes' data and an error is returned when deleting redundant data" should {
-
-        "return 303 SEE_OTHER" in {
-
-          given.user.isAuthorised
-
-          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
           DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
           DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
-          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
           DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
-          DeregisterVatStub.successfulGetAnswer(vrn, BusinessActivityAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, BusinessActivityAnswerService.key)
 
-          DeregisterVatStub.successfulPutAnswer(vrn,IssueNewInvoicesAnswerService.key)
+          DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
+
           DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
@@ -243,9 +179,95 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
           DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
           DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
-          DeregisterVatStub.deleteAnswerError(vrn,OutstandingInvoicesAnswerService.key)
 
-          val response: WSResponse = postRequest(yes)
+
+          val response: WSResponse = postRequest(ceased)
+
+          response should have(
+            httpStatus(SEE_OTHER),
+            redirectURI(controllers.routes.CeasedTradingDateController.show.url)
+          )
+        }
+      }
+
+      "the post request includes valid below threshold journey data" should {
+
+        "return 303 SEE_OTHER" in {
+
+          given.user.isAuthorised
+
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, BusinessActivityAnswerService.key)
+
+          DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)
+
+          val response: WSResponse = postRequest(belowThreshold)
+
+          response should have(
+            httpStatus(SEE_OTHER),
+            redirectURI(controllers.routes.TaxableTurnoverController.show.url)
+          )
+        }
+      }
+
+      "the post request includes valid Zero Rated journey data" should {
+
+        "return 303 SEE_OTHER" in {
+
+          given.user.isAuthorised
+
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetAnswer(vrn, BusinessActivityAnswerService.key)(Json.toJson(Yes))
+
+          DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,CeasedTradingDateAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
+
+          val response: WSResponse = postRequest(zeroRated)
+
+          response should have(
+            httpStatus(SEE_OTHER),
+            redirectURI(controllers.zeroRated.routes.BusinessActivityController.show.url)
+          )
+        }
+      }
+
+      "the post request fails to delete data" should {
+
+        "return 303 SEE_OTHER" in {
+
+          given.user.isAuthorised
+
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(capitalAssetsYesJson)
+          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(No))
+          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+          DeregisterVatStub.successfulGetNoDataAnswer(vrn, BusinessActivityAnswerService.key)
+
+          DeregisterVatStub.successfulPutAnswer(vrn,DeregReasonAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,TaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,WhyTurnoverBelowAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,NextTaxableTurnoverAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,SicCodeAnswerService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulDeleteAnswer(vrn,BusinessActivityAnswerService.key)
+          DeregisterVatStub.deleteAnswerError(vrn,PurchasesExceedSuppliesAnswerService.key)
+
+
+          val response: WSResponse = postRequest(ceased)
 
           response should have(
             httpStatus(INTERNAL_SERVER_ERROR)
@@ -256,11 +278,11 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
     "the user is not authenticated" should {
 
-      "return 303 Redirect" in {
+      "return 303 SEE_OTHER" in {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(yes)
+        val response: WSResponse = postRequest(ceased)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -275,7 +297,7 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(no)
+        val response: WSResponse = postRequest(ceased)
 
         response should have(
           httpStatus(FORBIDDEN),
@@ -294,10 +316,11 @@ class IssueNewInvoicesISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(BAD_REQUEST),
-          pageTitle("Error: Is the business going to issue any new invoices after you cancel the registration?" + titleSuffix),
-          elementText(".govuk-error-message")("Error: Select yes if the business is expecting to issue any new invoices after you cancel the registration")
+          pageTitle("Error: Why is the business cancelling its VAT registration?" + titleSuffix),
+          elementText(".govuk-error-message")("Error: Select a VAT cancellation reason")
         )
       }
     }
+
   }
 }

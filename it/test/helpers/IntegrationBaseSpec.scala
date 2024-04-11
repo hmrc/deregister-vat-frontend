@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package helpers
+package test.helpers
 
 import common.SessionKeys
 import config.AppConfig
@@ -27,7 +27,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.{Application, Environment, Mode}
-import stubs.{AuthStub, VatSubscriptionStub}
+import test.stubs.{AuthStub, VatSubscriptionStub}
 
 trait IntegrationBaseSpec extends CustomMatchers
   with WireMockHelper

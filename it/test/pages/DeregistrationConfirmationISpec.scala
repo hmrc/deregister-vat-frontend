@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package test.pages
 
-import assets.IntegrationTestConstants.vrn
+import test.assets.IntegrationTestConstants.vrn
 import common.SessionKeys
 import config.FrontendAppConfig
-import helpers.IntegrationBaseSpec
 import play.api.i18n.Messages
 import play.api.libs.ws.WSResponse
 import play.api.test.Helpers.OK
-import stubs.{DeregisterVatStub, VatSubscriptionStub}
+import test.helpers.IntegrationBaseSpec
+import test.stubs.{DeregisterVatStub, VatSubscriptionStub}
 
 class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
 

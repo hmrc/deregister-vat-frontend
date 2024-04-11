@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
-package pages
+package test.pages
 
-import assets.IntegrationTestConstants._
+import test.assets.IntegrationTestConstants._
 import common.Constants
-import helpers.IntegrationBaseSpec
+import forms.WhyTurnoverBelowForm
+import models.WhyTurnoverBelowModel
 import play.api.http.Status._
-import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import services._
-import stubs.DeregisterVatStub
+import services.WhyTurnoverBelowAnswerService
+import test.helpers.IntegrationBaseSpec
+import test.stubs.DeregisterVatStub
 
-class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
-  "Calling the GET ZeroRatedSupplies" when {
+class WhyTurnoverBelowISpec extends IntegrationBaseSpec {
 
-    def getRequest: WSResponse = get("/expected-value-zero-rated-supplies", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
+  "Calling the GET Why Turnover Below endpoint" when {
+
+    def getRequest: WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -37,13 +39,13 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn, ZeroRatedSuppliesValueService.key)(Json.toJson(zeroRatedSuppliesModel))
+        DeregisterVatStub.successfulGetAnswer(vrn,WhyTurnoverBelowAnswerService.key)(whyTurnoverBelowJson)
 
         val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
-          pageTitle("What is the expected value of zero-rated supplies for the next 12 months?" + titleSuffix)
+          pageTitle("Why do you expect the business’s taxable turnover to be below £88,000?" + titleSuffix)
         )
       }
     }
@@ -79,10 +81,9 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
     }
   }
 
-  "Calling the GET ZeroRatedSupplies" when {
+  "Calling the GET Why Turnover Below endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse =
-      get("/expected-value-zero-rated-supplies", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/reasons-for-low-turnover", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -145,27 +146,61 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
   }
 
 
+  "Calling the POST Why Turnover Below endpoint" when {
 
-  "Calling the POST ZeroRatedSupplies" when {
+    def postRequest(data: WhyTurnoverBelowModel): WSResponse =
+      post("/reasons-for-low-turnover", isNotInsolvent)(toFormData(WhyTurnoverBelowForm.whyTurnoverBelowForm, data))
 
-    def postRequest(data:  Map[String, Seq[String]]): WSResponse =
-      post("/expected-value-zero-rated-supplies", isNotInsolvent)(data)
+    val validModel = WhyTurnoverBelowModel(
+      lostContract = true,
+      semiRetiring = true,
+      moreCompetitors = true,
+      reducedTradingHours = true,
+      seasonalBusiness = true,
+      closedPlacesOfBusiness = true,
+      turnoverLowerThanExpected = true
+    )
+    val invalidModel = WhyTurnoverBelowModel(
+      lostContract = false,
+      semiRetiring = false,
+      moreCompetitors = false,
+      reducedTradingHours = false,
+      seasonalBusiness = false,
+      closedPlacesOfBusiness = false,
+      turnoverLowerThanExpected = false
+    )
 
     "the user is authorised" when {
 
-      "posting numeric data" should {
+      "the post request includes valid data" should {
 
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.successfulPutAnswer(vrn, ZeroRatedSuppliesValueService.key)
+          DeregisterVatStub.successfulPutAnswer(vrn,WhyTurnoverBelowAnswerService.key)
 
-          val response: WSResponse = postRequest(Map("amount" -> Seq("12345.67")))
+          val response: WSResponse = postRequest(validModel)
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show.url)
+            redirectURI(controllers.routes.VATAccountsController.show.url)
+          )
+        }
+      }
+
+      "the post request includes invalid data" should {
+
+        "return 400 BAD_REQUEST" in {
+
+          given.user.isAuthorised
+
+          val response: WSResponse = postRequest(invalidModel)
+
+          response should have(
+            httpStatus(BAD_REQUEST),
+            pageTitle("Error: Why do you expect the business’s taxable turnover to be below £88,000?" + titleSuffix),
+            elementText(".govuk-error-message")("Error: Select a reason for cancelling the VAT registration")
           )
         }
       }
@@ -173,11 +208,11 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
     "the user is not authenticated" should {
 
-      "return 303 Redirect" in {
+      "return 303 SEE_OTHER" in {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(Map("amount" -> Seq("12345.67")))
+        val response: WSResponse = postRequest(validModel)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -192,7 +227,7 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(Map("amount" -> Seq("12345.67")))
+        val response: WSResponse = postRequest(validModel)
 
         response should have(
           httpStatus(FORBIDDEN),
@@ -200,22 +235,5 @@ class ZeroRatedSuppliesISpec extends IntegrationBaseSpec {
         )
       }
     }
-
-    "the post request includes invalid data" should {
-
-      "return 400 BAD_REQUEST" in {
-
-        given.user.isAuthorised
-
-        val response: WSResponse = postRequest(Map("amount" -> Seq("")))
-
-        response should have(
-          httpStatus(BAD_REQUEST),
-          pageTitle("Error: What is the expected value of zero-rated supplies for the next 12 months?" + titleSuffix),
-          elementText(".govuk-error-message")("Error: Enter the value of zero-rated supplies for the next 12 months")
-        )
-      }
-    }
   }
-
 }

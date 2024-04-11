@@ -14,25 +14,23 @@
  * limitations under the License.
  */
 
-package pages
+package test.pages
 
-import assets.IntegrationTestConstants._
+import test.assets.IntegrationTestConstants._
 import common.Constants
-import helpers.IntegrationBaseSpec
-import models.{BelowThreshold, Yes, YesNoAmountModel}
+import models.Yes
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import services._
-import stubs.DeregisterVatStub
+import services.PurchasesExceedSuppliesAnswerService
+import test.helpers.IntegrationBaseSpec
+import test.stubs.DeregisterVatStub
 
-class BusinessActivityISpec extends IntegrationBaseSpec {
+class PurchasesExceedSuppliesISpec extends IntegrationBaseSpec {
 
-  val yesNoAmountYes: YesNoAmountModel = YesNoAmountModel(Yes, Some(BigDecimal(1000)))
+  "Calling the GET PurchasesExceedSupplies" when {
 
-  "Calling the GET BusinessActivity" when {
-
-    def getRequest: WSResponse = get("/has-the-business-activity-changed", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
+    def getRequest: WSResponse = get("/expected-value-vat-purchases", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -40,13 +38,13 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn, BusinessActivityAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetAnswer(vrn,PurchasesExceedSuppliesAnswerService.key)(Json.toJson(Yes))
 
         val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
-          pageTitle("Has the business activity changed?" + titleSuffix)
+          pageTitle("Do you expect the VAT on purchases to regularly exceed the VAT on supplies?" + titleSuffix)
         )
       }
     }
@@ -83,10 +81,9 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
   }
 
 
-  "Calling the GET BusinessActivity" when {
+  "Calling the GET PurchasesExceedSupplies" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse =
-      get("/has-the-business-activity-changed", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/expected-value-vat-purchases", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -149,10 +146,10 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
   }
 
 
-  "Calling the POST BusinessActivity" when {
+  "Calling the POST PurchasesExceedSupplies" when {
 
     def postRequest(data: Map[String, Seq[String]]): WSResponse =
-      post("/has-the-business-activity-changed", isNotInsolvent)(data)
+      post("/expected-value-vat-purchases", isNotInsolvent)(data)
 
     val yes = Map("yes_no" -> Seq("yes"))
     val no = Map("yes_no" -> Seq("no"))
@@ -166,25 +163,13 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.successfulPutAnswer(vrn, BusinessActivityAnswerService.key)
-
-          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
-          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
-          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
-          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
-          DeregisterVatStub.successfulDeleteAnswer(vrn, CeasedTradingDateAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, OutstandingInvoicesAnswerService.key)
+          DeregisterVatStub.successfulPutAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
           val response: WSResponse = postRequest(yes)
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.zeroRated.routes.SicCodeController.show.url)
+            redirectURI(controllers.routes.VATAccountsController.show.url)
           )
         }
       }
@@ -198,25 +183,13 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.successfulPutAnswer(vrn, BusinessActivityAnswerService.key)
-
-          DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(BelowThreshold))
-          DeregisterVatStub.successfulGetAnswer(vrn, CapitalAssetsAnswerService.key)(Json.toJson(yesNoAmountYes))
-          DeregisterVatStub.successfulGetAnswer(vrn, IssueNewInvoicesAnswerService.key)(Json.toJson(Yes))
-          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
-          DeregisterVatStub.successfulDeleteAnswer(vrn, CeasedTradingDateAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, BusinessActivityAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, SicCodeAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, ZeroRatedSuppliesValueService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, NextTaxableTurnoverAnswerService.key)
-          DeregisterVatStub.successfulDeleteAnswer(vrn, OutstandingInvoicesAnswerService.key)
+          DeregisterVatStub.successfulPutAnswer(vrn, PurchasesExceedSuppliesAnswerService.key)
 
           val response: WSResponse = postRequest(no)
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.NextTaxableTurnoverController.show.url)
+            redirectURI(controllers.routes.VATAccountsController.show.url)
           )
         }
       }
@@ -226,11 +199,11 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
       "posting 'Yes' data and an error is returned when deleting redundant data" should {
 
-        "return 303 SEE_OTHER" in {
+        "return 500 INTERNAL_SERVER_ERROR" in {
 
           given.user.isAuthorised
 
-          DeregisterVatStub.putAnswerError(vrn, BusinessActivityAnswerService.key)
+          DeregisterVatStub.putAnswerError(vrn ,PurchasesExceedSuppliesAnswerService.key)
 
           val response: WSResponse = postRequest(yes)
 
@@ -281,8 +254,8 @@ class BusinessActivityISpec extends IntegrationBaseSpec {
 
         response should have(
           httpStatus(BAD_REQUEST),
-          pageTitle("Error: Has the business activity changed?" + titleSuffix),
-          elementText(".govuk-error-message")("Error: Select yes if your business activity has changed")
+          pageTitle("Error: Do you expect the VAT on purchases to regularly exceed the VAT on supplies?" + titleSuffix),
+          elementText(".govuk-error-message")("Error: Select yes if you expect VAT on purchases to be more than VAT on supplies")
         )
       }
     }

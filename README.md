@@ -19,7 +19,7 @@ In order to run this microservice, you must have SBT installed. You should then 
 `./run.sh`
 
 ## Testing
-`sbt clean coverage test it:test coverageReport`
+`sbt clean coverage test it/test coverageReport`
 
 ## License
 

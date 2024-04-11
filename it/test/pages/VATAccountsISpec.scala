@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package pages
+package test.pages
 
-import assets.IntegrationTestConstants._
+import test.assets.IntegrationTestConstants._
 import common.Constants
-import forms.YesNoForm
-import helpers.IntegrationBaseSpec
 import models._
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
-import services.{ChooseDeregDateAnswerService, OutstandingInvoicesAnswerService}
-import stubs.DeregisterVatStub
+import services._
+import test.helpers.IntegrationBaseSpec
+import test.stubs.DeregisterVatStub
 
-class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
-  "Calling the GET Choose Deregistration Date endpoint" when {
+class VATAccountsISpec extends IntegrationBaseSpec {
 
-    def getRequest: WSResponse = get("/choose-cancel-vat-date", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
+  "Calling the GET VatAccounts" when {
+
+    def getRequest: WSResponse = get("/accounting-method", formatPendingDereg(Some(Constants.registered)) ++ isNotInsolvent)
 
     "the user is authorised" should {
 
@@ -39,14 +39,15 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isAuthorised
 
-        DeregisterVatStub.successfulGetAnswer(vrn, ChooseDeregDateAnswerService.key)(Json.toJson(Yes))
-        DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
+        DeregisterVatStub.successfulGetNoDataAnswer(vrn, TaxableTurnoverAnswerService.key)
+        DeregisterVatStub.successfulGetAnswer(vrn, AccountingMethodAnswerService.key)(Json.toJson(StandardAccounting))
+        DeregisterVatStub.successfulGetAnswer(vrn, DeregReasonAnswerService.key)(Json.toJson(Ceased))
 
         val response: WSResponse = getRequest
 
         response should have(
           httpStatus(OK),
-          pageTitle("Do you want to choose the cancellation date?" + titleSuffix)
+          pageTitle("How are the business’s VAT accounts prepared?" + titleSuffix)
         )
       }
     }
@@ -82,9 +83,10 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
     }
   }
 
-  "Calling the GET Deregistration date endpoint" when {
 
-    def getRequest(pendingDereg: Option[String]): WSResponse = get("/choose-cancel-vat-date", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
+  "Calling the GET VAT Accounts endpoint" when {
+
+    def getRequest(pendingDereg: Option[String]): WSResponse = get("/accounting-method", formatPendingDereg(pendingDereg) ++ isNotInsolvent)
 
     "user has a pending dereg request" should {
 
@@ -146,55 +148,47 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
     }
   }
 
-  "Calling the POST Choose Deregistration Date endpoint" when {
 
-    def postRequest(data: YesNo): WSResponse =
-      post("/choose-cancel-vat-date", isNotInsolvent)(toFormData(YesNoForm.yesNoForm("yesNoError"), data))
+  "Calling the POST VatAccounts" when {
+
+    def postRequest(data: Map[String, Seq[String]]): WSResponse =
+      post("/accounting-method", isNotInsolvent)(data)
+
+    val standard = Map("accountingMethod" -> Seq("standard"))
+    val invalidModel = Map("accountingMethod" -> Seq(""))
+
 
     "the user is authorised" when {
 
-      "the post request includes valid Yes data" should {
-
-        "return 303 SEE_OTHER" in {
-
-          given.user.isAuthorised
-          DeregisterVatStub.successfulPutAnswer(vrn, ChooseDeregDateAnswerService.key)
-
-          val response: WSResponse = postRequest(Yes)
-
-          response should have(
-            httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.DeregistrationDateController.show.url)
-          )
-        }
-      }
-
-      "the post request includes valid No data" should {
+      "the post request includes valid data" should {
 
         "return 303 SEE_OTHER" in {
 
           given.user.isAuthorised
 
-          val response: WSResponse = postRequest(No)
+          DeregisterVatStub.successfulPutAnswer(vrn,AccountingMethodAnswerService.key)
+
+          val response: WSResponse = postRequest(standard)
 
           response should have(
             httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.CheckAnswersController.show.url)
+            redirectURI(controllers.routes.OptionTaxController.show.url)
           )
         }
       }
 
-      "the post request includes invalid Yes data" should {
+      "the post returns an error" should {
 
-        "return 400 BAD_REQUEST" in {
+        "return 500 INTERNAL_SERVER_ERROR" in {
 
-          DeregisterVatStub.successfulGetAnswer(vrn, OutstandingInvoicesAnswerService.key)(Json.toJson(Yes))
           given.user.isAuthorised
 
-          post("/choose-cancel-vat-date")(Map("yes_no" -> Seq(""))) should have(
-            httpStatus(BAD_REQUEST),
-            pageTitle("Error: Do you want to choose the cancellation date?" + titleSuffix),
-            elementText(".govuk-error-message")("Error: Select yes if the business wants to choose the cancellation date")
+          DeregisterVatStub.putAnswerError(vrn,AccountingMethodAnswerService.key)
+
+          val response: WSResponse = postRequest(standard)
+
+          response should have(
+            httpStatus(INTERNAL_SERVER_ERROR)
           )
         }
       }
@@ -206,7 +200,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthenticated
 
-        val response: WSResponse = postRequest(Yes)
+        val response: WSResponse = postRequest(standard)
 
         response should have(
           httpStatus(SEE_OTHER),
@@ -221,7 +215,7 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
 
         given.user.isNotAuthorised
 
-        val response: WSResponse = postRequest(Yes)
+        val response: WSResponse = postRequest(standard)
 
         response should have(
           httpStatus(FORBIDDEN),
@@ -229,5 +223,22 @@ class ChooseDeregistrationDateISpec extends IntegrationBaseSpec {
         )
       }
     }
+
+    "the post request includes invalid data" should {
+
+      "return 400 BAD_REQUEST" in {
+
+        given.user.isAuthorised
+
+        val response: WSResponse = postRequest(invalidModel)
+
+        response should have(
+          httpStatus(BAD_REQUEST),
+          pageTitle("Error: How are the business’s VAT accounts prepared?" + titleSuffix),
+          elementText(".govuk-error-message")("Error: Select how the business’s VAT accounts are prepared")
+        )
+      }
+    }
+
   }
 }

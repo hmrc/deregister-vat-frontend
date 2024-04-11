@@ -23,7 +23,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.ExecutionContext
 
-trait MockAuditService extends MockFactory {
+trait MockAuditService  {
+  this:MockFactory =>
 
   val mockAuditService: AuditService = mock[AuditService]
 

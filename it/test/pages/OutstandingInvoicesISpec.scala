@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package test.pages
 
-import assets.IntegrationTestConstants._
+import test.assets.IntegrationTestConstants._
 import common.Constants
-import helpers.IntegrationBaseSpec
 import models._
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSResponse
 import services._
-import stubs.DeregisterVatStub
+import test.helpers.IntegrationBaseSpec
+import test.stubs.DeregisterVatStub
 
 class OutstandingInvoicesISpec extends IntegrationBaseSpec {
 
