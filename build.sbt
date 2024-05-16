@@ -19,7 +19,7 @@ import sbt.Tests.{Group, SubProcess}
 import uk.gov.hmrc.DefaultBuildSettings._
 
 val appName: String = "deregister-vat-frontend"
-val bootstrapPlayVersion = "7.15.0"
+val bootstrapPlayVersion = "8.6.0"
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 lazy val plugins: Seq[Plugins] = Seq.empty
@@ -51,17 +51,17 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 
 val compile: Seq[ModuleID] = Seq(
   ws,
-  "uk.gov.hmrc"   %% "bootstrap-frontend-play-28" % bootstrapPlayVersion,
-  "uk.gov.hmrc"   %% "play-frontend-hmrc"         % "7.7.0-play-28",
-  "org.typelevel" %% "cats-core"                  % "2.9.0"
+  "uk.gov.hmrc"   %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
+  "uk.gov.hmrc" %% "play-frontend-hmrc-play-30" % "8.0.0",
+  "org.typelevel" %% "cats-core"                  % "2.10.0"
 )
 
 def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
-  "uk.gov.hmrc"   %% "bootstrap-test-play-28"      % bootstrapPlayVersion % scope,
-  "org.scalatestplus" %% "mockito-3-12" % "3.2.10.0" % scope,
+  "uk.gov.hmrc"   %% "bootstrap-test-play-30"      % bootstrapPlayVersion % scope,
+  "org.scalatestplus" %% "mockito-5-10" % "3.2.18.0" % scope,
   "com.vladsch.flexmark" % "flexmark-all" % "0.64.8" % scope,
-  "org.jsoup"     %  "jsoup"                       % "1.15.3"             % scope,
-  "org.scalamock" %% "scalamock"                   % "5.2.0"              % scope
+  "org.jsoup"     %  "jsoup"                       % "1.17.2"             % scope,
+  "org.scalamock" %% "scalamock"                   % "6.0.0"              % scope
 )
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]): Seq[Group] = tests map {
@@ -87,7 +87,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.13.8",
+    scalaVersion := "2.13.12",
     libraryDependencies ++= appDependencies,
     retrieveManaged := true
   )
