@@ -45,7 +45,7 @@ GET         /cancel-vat-request-received               controllers.Deregistratio
 
 GET         /cannot-cancel-vat                         controllers.CannotDeregisterThresholdController.show
 
-GET         /assets/*file                              controllers.Assets.at(path="/public", file)
+GET         /assets/*file                              controllers.Assets.versioned(path="/public", file)
 
 ->          /hmrc-frontend                             hmrcfrontend.Routes
 

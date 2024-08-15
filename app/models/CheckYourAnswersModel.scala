@@ -16,10 +16,8 @@
 
 package models
 
-import config.AppConfig
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import services.ThresholdService
 import utils.MoneyFormatter
 
 case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReason],
@@ -40,7 +38,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  zeroRatedSupplies: Option[NumberInputModel],
                                  purchasesExceedSupplies: Option[YesNo],
                                  vatThreshold: String)
-                                (implicit messages: Messages, appConfig: AppConfig) {
+                                (implicit messages: Messages) {
 
   def seqAnswers: Seq[CheckYourAnswersRowModel] = deregistrationReason match {
     case Some(ZeroRated) => zeroRatedAnswerSequence.flatten

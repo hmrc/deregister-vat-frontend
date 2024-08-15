@@ -29,7 +29,7 @@ class InsolventErrorViewSpec extends ViewBaseSpec {
   "Rendering the InsolventError page" should {
 
     object Selectors {
-      val serviceName = ".hmrc-header__service-name"
+      val serviceName = ".govuk-header__service-name"
       val pageHeading = "#content h1"
       val insolventMessage = "#insolvent-message"
       val signoutLink = ".govuk-link"

@@ -14,11 +14,9 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
-
 @this(govukRadios: GovukRadios)
 
-@(form: Form[YesNo], title: String, additionalContent: Option[Html] = None, vatThreshold: String)(implicit messages: Messages, appConfig: AppConfig)
+@(form: Form[YesNo], title: String, additionalContent: Option[Html] = None, vatThreshold: String)(implicit messages: Messages)
 
 @govukRadios(Radios(
   idPrefix = Some(form("yes_no").id),

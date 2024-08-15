@@ -21,7 +21,6 @@ import connectors.httpParsers.CustomerDetailsHttpParser.CustomerDetailsReads
 import connectors.httpParsers.VatSubscriptionHttpParser
 import models.deregistrationRequest.DeregistrationInfo
 import models.{CustomerDetails, ErrorModel, VatSubscriptionResponse}
-import play.api.mvc.Request
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import utils.LoggingUtil
 
@@ -39,11 +38,11 @@ class VatSubscriptionConnector @Inject()(val http: HttpClient,
   def submit(vrn: String, deregistrationInfoModel: DeregistrationInfo)
             (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, VatSubscriptionResponse]] = {
     http.PUT[DeregistrationInfo, Either[ErrorModel, VatSubscriptionResponse]](url(vrn), deregistrationInfoModel)(
-      DeregistrationInfo.writes, VatSubscriptionHttpParser.updateReads, hc, ec)
+      DeregistrationInfo.writes, VatSubscriptionHttpParser.updateReads(), hc, ec)
   }
 
   def getCustomerDetails(id: String)(implicit headerCarrier: HeaderCarrier,
-                                     ec: ExecutionContext, request: Request[_]): Future[Either[ErrorModel, CustomerDetails]] = {
+                                     ec: ExecutionContext): Future[Either[ErrorModel, CustomerDetails]] = {
     val url = getFullDetailsUrl(id)
     debug(s"[VatSubscriptionConnector][getCustomerInfo]: Calling getCustomerInfo with URL - $url")
     http.GET(url)(CustomerDetailsReads, headerCarrier, ec)

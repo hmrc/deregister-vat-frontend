@@ -17,7 +17,7 @@
 package services
 
 
-import config.{AppConfig, FrontendAppConfig}
+import config.FrontendAppConfig
 import models.VatThreshold
 import org.mockito.Mockito.{reset, when}
 import org.scalatestplus.mockito.MockitoSugar.mock
@@ -63,7 +63,7 @@ class ThresholdServiceSpec extends TestUtil with BeforeAndAfterEach {
         when(mockConf.thresholds).thenReturn(Seq(testThreshold))
 
         val expectedResult = Some(testThreshold)
-        val actualResult = service().getVatThreshold
+        val actualResult = service().getVatThreshold()
 
         expectedResult shouldBe actualResult
       }
@@ -76,7 +76,7 @@ class ThresholdServiceSpec extends TestUtil with BeforeAndAfterEach {
         when(mockConf.thresholds).thenReturn(Seq(testThreshold, testThreshold2))
 
         val expectedResult = Some(testThreshold2)
-        val actualResult = service(dateTime2.plusDays(1)).getVatThreshold
+        val actualResult = service(dateTime2.plusDays(1)).getVatThreshold()
 
         expectedResult shouldBe actualResult
       }
@@ -89,7 +89,7 @@ class ThresholdServiceSpec extends TestUtil with BeforeAndAfterEach {
         when(mockConf.thresholds).thenReturn(Seq(testThreshold, testThreshold2))
 
         val expectedResult = Some(testThreshold)
-        val actualResult = service(dateTime2.minusDays(1)).getVatThreshold
+        val actualResult = service(dateTime2.minusDays(1)).getVatThreshold()
 
         expectedResult shouldBe actualResult
       }
@@ -102,7 +102,7 @@ class ThresholdServiceSpec extends TestUtil with BeforeAndAfterEach {
         when(mockConf.thresholds).thenReturn(Seq(testThreshold, testThreshold2))
 
         val expectedResult = None
-        val actualResult = service(dateTime.minusDays(1)).getVatThreshold
+        val actualResult = service(dateTime.minusDays(1)).getVatThreshold()
 
         expectedResult shouldBe actualResult
       }
@@ -115,7 +115,7 @@ class ThresholdServiceSpec extends TestUtil with BeforeAndAfterEach {
         when(mockConf.thresholds).thenReturn(Seq())
 
         val expectedResult = None
-        val actualResult = service().getVatThreshold
+        val actualResult = service().getVatThreshold()
 
         expectedResult shouldBe actualResult
       }

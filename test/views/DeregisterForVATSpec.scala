@@ -17,14 +17,12 @@
 package views
 
 import assets.messages.{CommonMessages, DeregisterForVATMessages}
-import config.ConfigKeys
 import config.features.{Feature, Features}
 import mocks.MockAppConfig
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.Configuration
 import views.html.DeregisterForVAT
-import play.twirl.api.Html
 
 class DeregisterForVATSpec extends ViewBaseSpec {
 

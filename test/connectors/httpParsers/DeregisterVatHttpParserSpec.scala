@@ -64,14 +64,14 @@ class DeregisterVatHttpParserSpec extends TestUtil {
     "the http response status is NO_CONTENT" should {
 
       "return the expected model" in {
-        DeregisterVatHttpParser.updateReads.read("", "", HttpResponse(Status.NO_CONTENT, "")) shouldBe Right(DeregisterVatSuccess)
+        DeregisterVatHttpParser.updateReads().read("", "", HttpResponse(Status.NO_CONTENT, "")) shouldBe Right(DeregisterVatSuccess)
       }
     }
 
     "the http response status is NOT OK" should {
 
       "return an ErrorModel" in {
-        DeregisterVatHttpParser.updateReads.read("", "", HttpResponse(Status.BAD_REQUEST, "")) shouldBe
+        DeregisterVatHttpParser.updateReads().read("", "", HttpResponse(Status.BAD_REQUEST, "")) shouldBe
           Left(ErrorModel(Status.BAD_REQUEST, "Downstream error returned when updating Deregister Vat"))
       }
     }

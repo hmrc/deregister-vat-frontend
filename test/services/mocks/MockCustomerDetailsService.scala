@@ -32,8 +32,8 @@ trait MockCustomerDetailsService extends AnyWordSpecLike with Matchers with Opti
   val mockCustomerDetailsService: CustomerDetailsService = mock[CustomerDetailsService]
 
   def setupMockCustomerDetails(vrn: String)(response: Either[ErrorModel, CustomerDetails]): Unit = {
-    (mockCustomerDetailsService.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext, _: Request[_]))
-      .expects(vrn, *, *, *)
+    (mockCustomerDetailsService.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(vrn, *, *)
       .returns(Future.successful(response))
   }
 }
