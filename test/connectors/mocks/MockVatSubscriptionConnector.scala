@@ -37,8 +37,8 @@ trait MockVatSubscriptionConnector extends TestUtil with MockFactory {
   }
 
   def setupMockGetCustomerCircumstanceDetails(vrn: String)(response: Future[Either[ErrorModel, CustomerDetails]]): Unit = {
-    (mockVatSubscriptionConnector.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext, _: Request[_]))
-      .expects(vrn, *, *, *)
+    (mockVatSubscriptionConnector.getCustomerDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(vrn, *, *)
       .returns(response)
   }
 }

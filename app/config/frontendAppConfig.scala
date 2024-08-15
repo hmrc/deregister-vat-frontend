@@ -23,10 +23,10 @@ import models.VatThreshold
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.Call
-import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import play.api.libs.json.Json
 
+import java.net.URLEncoder
 import javax.inject.{Inject, Singleton}
 
 trait AppConfig {
@@ -88,12 +88,12 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override lazy val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   override lazy val feedbackUrl: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier" +
-    s"&backUrl=${SafeRedirectUrl(platformHost + controllers.routes.DeregisterForVATController.show.url).encodedUrl}"
+    s"&backUrl=${URLEncoder.encode(platformHost + controllers.routes.DeregisterForVATController.show.url, "UTF-8")}"
 
   private lazy val signInBaseUrl: String = servicesConfig.getString(Keys.signInBaseUrl)
   private lazy val signInContinueBaseUrl: String = servicesConfig.getString(Keys.signInContinueBaseUrl)
-  private lazy val signInContinueUrl: String = SafeRedirectUrl(signInContinueBaseUrl + controllers.routes
-                                               .DeregisterForVATController.show.url).encodedUrl
+  private lazy val signInContinueUrl: String = URLEncoder.encode(signInContinueBaseUrl + controllers.routes
+                                               .DeregisterForVATController.show.url, "UTF-8")
   private lazy val signInOrigin: String = servicesConfig.getString("appName")
   override lazy val signInUrl: String = s"$signInBaseUrl?continue=$signInContinueUrl&origin=$signInOrigin"
 
@@ -106,8 +106,8 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
 
   override lazy val changeClientUrl: String =
     servicesConfig.getString(Keys.vatAgentClientLookupFrontendHost) + servicesConfig.getString(Keys.changeClientUrl) +
-      s"?redirectUrl=${SafeRedirectUrl(servicesConfig.getString(ConfigKeys.platformHost) +
-      "/vat-through-software/account/deregister/").encodedUrl}"
+      s"?redirectUrl=${URLEncoder.encode(servicesConfig.getString(ConfigKeys.platformHost) +
+      "/vat-through-software/account/deregister/", "UTF-8")}"
 
   override lazy val vatAgentClientLookupFrontendUrl: String =
     servicesConfig.getString(Keys.vatAgentClientLookupFrontendHost) +
@@ -117,12 +117,12 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
     vatAgentClientLookupFrontendUrl + servicesConfig.getString(Keys.agentClientLookupAgentHub)
 
   override def vatAgentClientLookupHandoff(redirectUrl: String): String =
-    vatAgentClientLookupFrontendUrl + s"/client-vat-number?redirectUrl=${SafeRedirectUrl(servicesConfig.getString(Keys.platformHost) +
-    redirectUrl).encodedUrl}"
+    vatAgentClientLookupFrontendUrl + s"/client-vat-number?redirectUrl=${URLEncoder.encode(servicesConfig.getString(Keys.platformHost) +
+    redirectUrl, "UTF-8")}"
 
   override def vatAgentClientLookupUnauthorised(redirectUrl: String): String =
-    vatAgentClientLookupFrontendUrl + s"/unauthorised-for-client?redirectUrl=${SafeRedirectUrl(servicesConfig.getString(Keys.platformHost) +
-    redirectUrl).encodedUrl}"
+    vatAgentClientLookupFrontendUrl + s"/unauthorised-for-client?redirectUrl=${URLEncoder.encode(servicesConfig.getString(Keys.platformHost) +
+    redirectUrl, "UTF-8")}"
 
   override def agentClientUnauthorisedUrl: String =
     if (features.stubAgentClientLookup()) {
