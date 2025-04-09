@@ -21,7 +21,6 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.OptionValues
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
-import play.api.mvc.Request
 import services.CustomerDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 

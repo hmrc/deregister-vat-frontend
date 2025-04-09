@@ -20,7 +20,6 @@ import connectors.VatSubscriptionConnector
 import models.deregistrationRequest.DeregistrationInfo
 import models.{CustomerDetails, ErrorModel, VatSubscriptionResponse}
 import org.scalamock.scalatest.MockFactory
-import play.api.mvc.Request
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.TestUtil
 
