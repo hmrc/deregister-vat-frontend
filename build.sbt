@@ -52,7 +52,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"   %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
-  "uk.gov.hmrc" %% "play-frontend-hmrc-play-30" % "9.4.0",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "9.11.0",
   "org.typelevel" %% "cats-core"                  % "2.12.0"
 )
 
@@ -77,7 +77,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(defaultSettings(): _*)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.13.12",
+    scalaVersion := "2.13.16",
     libraryDependencies ++= appDependencies,
     scalacOptions ++= Seq("-Wconf:cat=unused-imports&src=html/.*:s", "-Wconf:cat=unused-imports&src=routes/.*:s"),
     retrieveManaged := true
