@@ -88,7 +88,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Day
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
-       |             id="dateDay" name="dateDay" type="text" inputmode="numeric">
+       |             id="dateDay" name="dateDay" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |  <div class="govuk-date-input__item">
@@ -97,7 +97,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Month
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
-       |             id="dateMonth" name="dateMonth" type="text" inputmode="numeric">
+       |             id="dateMonth" name="dateMonth" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |  <div class="govuk-date-input__item">
@@ -106,7 +106,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Year
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error"
-       |             id="dateYear" name="dateYear" type="text" inputmode="numeric">
+       |             id="dateYear" name="dateYear" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |</div>
@@ -121,7 +121,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Day
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
-       |             id="dateDay" name="dateDay" type="text" inputmode="numeric">
+       |             id="dateDay" name="dateDay" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |  <div class="govuk-date-input__item">
@@ -130,7 +130,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Month
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
-       |             id="dateMonth" name="dateMonth" type="text" inputmode="numeric">
+       |             id="dateMonth" name="dateMonth" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |  <div class="govuk-date-input__item">
@@ -154,7 +154,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Day
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
-       |             id="dateDay" name="dateDay" type="text" inputmode="numeric">
+       |             id="dateDay" name="dateDay" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |  <div class="govuk-date-input__item">
@@ -172,7 +172,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Year
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error"
-       |             id="dateYear" name="dateYear" type="text" inputmode="numeric">
+       |             id="dateYear" name="dateYear" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |</div>
@@ -196,7 +196,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Month
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
-       |             id="dateMonth" name="dateMonth" type="text" inputmode="numeric">
+       |             id="dateMonth" name="dateMonth" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |  <div class="govuk-date-input__item">
@@ -205,7 +205,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Year
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error"
-       |             id="dateYear" name="dateYear" type="text" inputmode="numeric">
+       |             id="dateYear" name="dateYear" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |</div>
@@ -220,7 +220,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Day
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
-       |             id="dateDay" name="dateDay" type="text" inputmode="numeric">
+       |             id="dateDay" name="dateDay" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |  <div class="govuk-date-input__item">
@@ -262,7 +262,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Month
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-2 govuk-input--error"
-       |             id="dateMonth" name="dateMonth" type="text" inputmode="numeric">
+       |             id="dateMonth" name="dateMonth" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |  <div class="govuk-date-input__item">
@@ -304,7 +304,7 @@ class DateHelperSpec extends TemplateBaseSpec {
        |        Year
        |      </label>
        |      <input class="govuk-input govuk-date-input__input govuk-input--width-4 govuk-input--error"
-       |             id="dateYear" name="dateYear" type="text" inputmode="numeric">
+       |             id="dateYear" name="dateYear" type="text" value="" inputmode="numeric">
        |    </div>
        |  </div>
        |</div>
@@ -356,6 +356,7 @@ class DateHelperSpec extends TemplateBaseSpec {
           id,
           CeasedTradingDate,
           hintContent)
+
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
       }
     }
@@ -384,6 +385,7 @@ class DateHelperSpec extends TemplateBaseSpec {
           id,
           CeasedTradingDate,
           hintContent)
+
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
       }
     }
@@ -412,6 +414,7 @@ class DateHelperSpec extends TemplateBaseSpec {
           id,
           CeasedTradingDate,
           hintContent)
+
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
       }
     }
@@ -440,6 +443,7 @@ class DateHelperSpec extends TemplateBaseSpec {
           id,
           CeasedTradingDate,
           hintContent)
+
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
       }
     }
@@ -468,6 +472,7 @@ class DateHelperSpec extends TemplateBaseSpec {
           id,
           CeasedTradingDate,
           hintContent)
+
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
       }
     }
@@ -496,6 +501,7 @@ class DateHelperSpec extends TemplateBaseSpec {
           id,
           CeasedTradingDate,
           hintContent)
+
         formatHtml(markup) shouldBe formatHtml(expectedMarkup)
       }
     }
