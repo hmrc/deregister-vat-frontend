@@ -15,8 +15,7 @@
  */
 
 import play.sbt.routes.RoutesKeys
-import sbt.Tests.{Group, SubProcess}
-import uk.gov.hmrc.DefaultBuildSettings._
+import uk.gov.hmrc.DefaultBuildSettings.*
 
 val appName: String = "deregister-vat-frontend"
 val bootstrapPlayVersion = "8.6.0"
@@ -52,7 +51,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"   %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
-  "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "9.11.0",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "12.11.0",
   "org.typelevel" %% "cats-core"                  % "2.12.0"
 )
 
@@ -68,13 +67,13 @@ TwirlKeys.templateImports ++= Seq(
 )
 
 lazy val microservice: Project = Project(appName, file("."))
-  .enablePlugins(Seq(PlayScala, SbtDistributablesPlugin) ++ plugins: _*)
+  .enablePlugins((Seq(PlayScala, SbtDistributablesPlugin) ++ plugins) *)
   .disablePlugins(JUnitXmlReportPlugin)
   .settings(PlayKeys.playDefaultPort := 9153)
-  .settings(coverageSettings: _*)
-  .settings(playSettings: _*)
-  .settings(scalaSettings: _*)
-  .settings(defaultSettings(): _*)
+  .settings(coverageSettings *)
+  .settings(playSettings *)
+  .settings(scalaSettings *)
+  .settings(defaultSettings() *)
   .settings(
     majorVersion := 0,
     scalaVersion := "2.13.16",

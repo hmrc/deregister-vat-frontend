@@ -47,7 +47,7 @@ class YesNoRevealHelperSpec extends TemplateBaseSpec {
        |</div>
        """.stripMargin
 
-  val inputMarkup: String =
+  val inputMarkupInitial: String =
     s"""
        |<div class="govuk-radios" data-module="govuk-radios">
        |  <div class="govuk-radios__item">
@@ -71,6 +71,30 @@ class YesNoRevealHelperSpec extends TemplateBaseSpec {
        |</div>
         """.stripMargin
 
+  val inputMarkupWithValue: String =
+    s"""
+       |<div class="govuk-radios" data-module="govuk-radios">
+       |  <div class="govuk-radios__item">
+       |    <input class="govuk-radios__input" id="yes_no" name="yes_no" type="radio" value="yes" data-aria-controls="conditional-yes_no">
+       |      <label class="govuk-label govuk-radios__label" for="yes_no">
+       |        Yes
+       |      </label>
+       |  </div>
+       |  <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-yes_no">
+       |    <div class="govuk-form-group"> <label class="govuk-label" for="amount"> What is the amount? </label>
+       |     <div class="govuk-input__wrapper"><div class="govuk-input__prefix" aria-hidden="true">£</div>
+       |      <input class="govuk-input govuk-input--width-10" id="amount" name="amount" type="text" value=""></div>
+       |    </div>
+       |  </div>
+       |  <div class="govuk-radios__item">
+       |    <input class="govuk-radios__input" id="yes_no-2" name="yes_no" type="radio" value="no">
+       |      <label class="govuk-label govuk-radios__label" for="yes_no-2">
+       |        No
+       |      </label>
+       |  </div>
+       |</div>
+        """.stripMargin
+
   "Generating a YesNoReveal helper" when {
 
     "there are no errors" should {
@@ -82,7 +106,7 @@ class YesNoRevealHelperSpec extends TemplateBaseSpec {
              |  <fieldset class="govuk-fieldset" aria-describedby="yes_no-hint">
              |    $legendMarkup
              |    $hintMarkup
-             |    $inputMarkup
+             |    $inputMarkupInitial
              |  </fieldset>
              |</div>
              """.stripMargin
@@ -105,7 +129,7 @@ class YesNoRevealHelperSpec extends TemplateBaseSpec {
              |      <span class="govuk-visually-hidden">Error:</span>
              |      This is the error message
              |    </p>
-             |    $inputMarkup
+             |    $inputMarkupInitial
              |  </fieldset>
              |</div>
              """.stripMargin
@@ -128,7 +152,7 @@ class YesNoRevealHelperSpec extends TemplateBaseSpec {
              |      <span class="govuk-visually-hidden">Error:</span>
              |      This is the error message
              |    </p>
-             |    $inputMarkup
+             |    $inputMarkupWithValue
              |  </fieldset>
              |</div>
              """.stripMargin
