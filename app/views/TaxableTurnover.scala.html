@@ -33,7 +33,10 @@
     ))
 }
 
-@mainTemplate(pageTitle = title(messages("taxableTurnover.title", vatThreshold), form), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = title(messages("taxableTurnover.title", vatThreshold), form),
+    backLinkContent = Some(backLink),
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl))
+) {
 
   @if(form.hasErrors) {
     @govukErrorSummary(ErrorSummary(

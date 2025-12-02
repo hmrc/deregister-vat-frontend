@@ -33,7 +33,7 @@ class InsolventErrorViewSpec extends ViewBaseSpec {
       val pageHeading = "#content h1"
       val insolventMessage = "#insolvent-message"
       val signoutLink = ".govuk-link"
-      val btaButton = ".govuk-button"
+      val btaButton = "#main-content .govuk-button"
     }
 
     lazy val view = insolventError()(user, messages, mockConfig)

@@ -26,7 +26,10 @@
 
 }
 
-@mainTemplate(pageTitle = messages("cannotDeregister.title"), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = messages("cannotDeregister.title"),
+    backLinkContent = Some(backLink),
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true))
+) {
 
   <h1 class="govuk-heading-l">@messages("cannotDeregister.title")</h1>
   <p class="govuk-body">@messages("cannotDeregister.text", vatThreshold)</p>

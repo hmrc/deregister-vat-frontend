@@ -33,7 +33,7 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
       val pageHeading = "#content h1"
       val clientInstructions = "#content .govuk-body"
       val instructionsLink = "#content .govuk-link"
-      val button = ".govuk-button"
+      val button = "#main-content .govuk-button"
     }
 
     lazy val view = unauthorised()(request, messages, mockConfig)

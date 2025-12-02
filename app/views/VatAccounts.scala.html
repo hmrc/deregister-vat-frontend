@@ -43,7 +43,10 @@
   </div>
 }
 
-@mainTemplate(pageTitle = title(messages("vatAccounts.title"), form), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = title(messages("vatAccounts.title"), form),
+    backLinkContent = Some(backLink),
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl))
+) {
 
   @errorSummaryHelper(form)
 

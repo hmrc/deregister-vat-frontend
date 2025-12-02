@@ -31,7 +31,7 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
     val subheading = "#content h2"
     val text = "#content .govuk-body:nth-child(3)"
     val text2 = "#content .govuk-body:nth-child(4)"
-    val button = ".govuk-button"
+    val button = "#main-content .govuk-button"
     val link = "#content .govuk-link[href*=\"change-business-details\"]"
     val changeClientLink = "#content .govuk-body:nth-child(5) > a"
   }

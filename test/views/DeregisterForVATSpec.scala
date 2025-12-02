@@ -31,7 +31,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
   object Selectors {
     val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val button = ".govuk-button"
+    val button = "#main-content .govuk-button"
     val para:  Int => String = n => s"#content .govuk-body:nth-child($n)"
     val bullets: Int => String = n => s"#content ul > li:nth-child($n)"
     val webchatLink = "#webchatLink-id"

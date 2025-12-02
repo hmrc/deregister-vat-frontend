@@ -29,7 +29,7 @@ class TaxableTurnoverSpec extends ViewBaseSpec {
   object Selectors {
     val back = ".govuk-back-link"
     val pageHeading = "#content h1"
-    val button = ".govuk-button"
+    val button = "#main-content .govuk-button"
     val errorHeading = ".govuk-error-summary"
     val error = ".govuk-error-message"
   }

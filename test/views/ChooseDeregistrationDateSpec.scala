@@ -31,7 +31,7 @@ class ChooseDeregistrationDateSpec extends ViewBaseSpec {
     val back = ".govuk-back-link"
     val pageHeading = "#content h1"
     val hint = ".form-hint"
-    val button = ".govuk-button"
+    val button = "#main-content .govuk-button"
     val yesNoRadio = "#yes_no"
     val yesOption = "#yes_no-yes"
     val noOption = "#yes_no-no"

@@ -46,7 +46,10 @@
   </p>
 }
 
-@mainTemplate(pageTitle = title(messages("sicCode.title"), form), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = title(messages("sicCode.title"), form),
+    backLinkContent = Some(backLink),
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl))
+) {
 
   @errorSummaryHelper(form)
 

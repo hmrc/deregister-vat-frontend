@@ -34,7 +34,10 @@
     ))
 }
 
-@mainTemplate(pageTitle = title(messages("ceasedTrading.title"), form), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = title(messages("ceasedTrading.title"), form),
+    backLinkContent = Some(backLink),
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl))
+) {
 
   @if(form.hasErrors) {
     @govukErrorSummary(ErrorSummary(

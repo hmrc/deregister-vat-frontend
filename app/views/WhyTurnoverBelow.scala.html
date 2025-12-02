@@ -33,7 +33,10 @@
     ))
 }
 
-@mainTemplate(pageTitle = title(messages("whyTurnoverBelow.title", vatThreshold), form), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = title(messages("whyTurnoverBelow.title", vatThreshold), form),
+    backLinkContent = Some(backLink),
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl))
+) {
 
   @errorSummaryHelper(form, Some(s"#${WhyTurnoverBelowModel.lostContract}"))
 

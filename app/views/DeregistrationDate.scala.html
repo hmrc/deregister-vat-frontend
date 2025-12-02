@@ -40,7 +40,10 @@
   <div>@messages("deregistrationDate.hint")</div>
 }
 
-@mainTemplate(pageTitle = title(messages("deregistrationDate.title"), form), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = title(messages("deregistrationDate.title"), form),
+    backLinkContent = Some(backLink),
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl))
+) {
 
   @if(form.hasErrors) {
     @govukErrorSummary(ErrorSummary(
