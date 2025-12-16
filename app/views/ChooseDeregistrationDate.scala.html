@@ -49,7 +49,7 @@ controllers.routes.IssueNewInvoicesController.show.url
 
 @mainTemplate(pageTitle = title(messages("chooseDeregistrationDate.title"), form),
     backLinkContent = Some(backLink),
-    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl))
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, language = if(messages.lang.code == "en") En else Cy))
 ) {
 
   @errorSummaryHelper(form)

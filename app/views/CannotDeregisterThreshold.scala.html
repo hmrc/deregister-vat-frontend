@@ -28,7 +28,7 @@
 
 @mainTemplate(pageTitle = messages("cannotDeregister.title"),
     backLinkContent = Some(backLink),
-    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true))
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
 ) {
 
   <h1 class="govuk-heading-l">@messages("cannotDeregister.title")</h1>

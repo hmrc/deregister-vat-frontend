@@ -35,7 +35,7 @@
 
 @mainTemplate(pageTitle = title(messages("taxableTurnover.title", vatThreshold), form),
     backLinkContent = Some(backLink),
-    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl))
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, language = if(messages.lang.code == "en") En else Cy))
 ) {
 
   @if(form.hasErrors) {
