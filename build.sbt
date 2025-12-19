@@ -25,7 +25,9 @@ lazy val plugins: Seq[Plugins] = Seq.empty
 lazy val playSettings: Seq[Setting[_]] = Seq.empty
 
 scalacOptions ++= Seq("-Wconf:cat=unused-imports&site=.*views.html.*:s")
-RoutesKeys.routesImport := Seq.empty
+RoutesKeys.routesImport ++= Seq(
+  "uk.gov.hmrc.play.bootstrap.binders.RedirectUrl"
+)
 
 lazy val coverageSettings: Seq[Setting[_]] = {
   import scoverage.ScoverageKeys

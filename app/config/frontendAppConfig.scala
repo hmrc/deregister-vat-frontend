@@ -25,6 +25,7 @@ import play.api.i18n.Lang
 import play.api.mvc.Call
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import play.api.libs.json.Json
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 
 import java.net.URLEncoder
 import javax.inject.{Inject, Singleton}
@@ -126,14 +127,14 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
 
   override def agentClientUnauthorisedUrl: String =
     if (features.stubAgentClientLookup()) {
-      testOnly.controllers.routes.StubAgentClientLookupController.unauth(controllers.routes.DeregisterForVATController.show.url).url
+      testOnly.controllers.routes.StubAgentClientLookupController.unauth(RedirectUrl(controllers.routes.DeregisterForVATController.show.url)).url
     } else {
       vatAgentClientLookupUnauthorised(controllers.routes.DeregisterForVATController.show.url)
     }
 
   override def agentClientLookupUrl: String =
     if (features.stubAgentClientLookup()) {
-      testOnly.controllers.routes.StubAgentClientLookupController.show(controllers.routes.DeregisterForVATController.show.url).url
+      testOnly.controllers.routes.StubAgentClientLookupController.show(RedirectUrl(controllers.routes.DeregisterForVATController.show.url)).url
     } else {
       vatAgentClientLookupHandoff(controllers.routes.DeregisterForVATController.show.url)
     }

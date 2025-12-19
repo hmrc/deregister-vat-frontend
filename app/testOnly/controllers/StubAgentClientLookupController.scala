@@ -22,6 +22,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import testOnly.forms.StubAgentClientLookupForm
 import testOnly.views.html.{StubAgentClientLookup, StubAgentClientUnauth}
+import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
@@ -32,12 +33,12 @@ class StubAgentClientLookupController @Inject()(stubAgentClientLookup: StubAgent
                                                 implicit val appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
 
-  def show(redirectUrl: String): Action[AnyContent] = Action { implicit request =>
-    Ok(stubAgentClientLookup(StubAgentClientLookupForm.form, redirectUrl))
+  def show(redirectUrl: RedirectUrl): Action[AnyContent] = Action { implicit request =>
+    Ok(stubAgentClientLookup(StubAgentClientLookupForm.form, redirectUrl.unsafeValue))
   }
 
-  def unauth(redirectUrl: String): Action[AnyContent] = Action { implicit request =>
-    Ok(stubAgentClientUnauth(redirectUrl))
+  def unauth(redirectUrl: RedirectUrl): Action[AnyContent] = Action { implicit request =>
+    Ok(stubAgentClientUnauth(redirectUrl.unsafeValue))
   }
 
   def post: Action[AnyContent] = Action { implicit request =>
