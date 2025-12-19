@@ -28,10 +28,11 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{AccountingMethodAnswerService, DeregReasonAnswerService, TaxableTurnoverAnswerService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.VatAccounts
+
 import javax.inject.{Inject, Singleton}
 import utils.LoggingUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class VATAccountsController @Inject()(vatAccounts: VatAccounts,
@@ -53,15 +54,17 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
       lastTurnoverBelow <- taxableTurnoverAnswerService.getAnswer
       reasonResult <- deregReasonAnswerService.getAnswer
       accountingResult <- accountingMethodAnswerService.getAnswer
-    } yield (lastTurnoverBelow, reasonResult, accountingResult) match {
-      case (Right(optionLTB), Right(Some(deregReason)),Right(Some(accountingMethod))) =>
-        Ok(renderView(backLink(optionLTB, deregReason), VATAccountsForm.vatAccountsForm.fill(accountingMethod)))
-      case (Right(optionLTB), Right(Some(deregReason)),Right(_)) =>
-        Ok(renderView(backLink(optionLTB, deregReason)))
-      case (_,_,_) =>
-        warnLog("[VATAccountsController][show] - failed to retrieve one or more answers from answer service")
-        serviceErrorHandler.showInternalServerError
-    }
+      result <- (lastTurnoverBelow, reasonResult, accountingResult) match {
+
+        case (Right(optionLTB), Right(Some(deregReason)), Right(Some(accountingMethod))) => Future.successful(
+          Ok(renderView(backLink(optionLTB, deregReason), VATAccountsForm.vatAccountsForm.fill(accountingMethod))))
+        case (Right(optionLTB), Right(Some(deregReason)), Right(_)) => Future.successful(
+          Ok(renderView(backLink(optionLTB, deregReason))))
+        case (_, _, _) =>
+          warnLog("[VATAccountsController][show] - failed to retrieve one or more answers from answer service")
+          serviceErrorHandler.showInternalServerError
+      }
+    } yield result
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
@@ -69,15 +72,15 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
       error => (for {
         lastTurnoverBelow <- EitherT(taxableTurnoverAnswerService.getAnswer)
         reason <- EitherT(deregReasonAnswerService.getAnswer)
-      } yield (lastTurnoverBelow, reason)).value.map {
-        case Right((optionLTB, Some(reason))) =>
-          BadRequest(vatAccounts(backLink(optionLTB, reason), error))
+      } yield (lastTurnoverBelow, reason)).value.flatMap {
+        case Right((optionLTB, Some(reason))) => Future.successful(
+          BadRequest(vatAccounts(backLink(optionLTB, reason), error)))
         case _ =>
           warnLog("[VATAccountsController][submit] - failed to retrieve one or more answers from answer service")
           serviceErrorHandler.showInternalServerError
       },
-      data => accountingMethodAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.OptionTaxController.show)
+      data => accountingMethodAnswerService.storeAnswer(data).flatMap {
+        case Right(_) => Future.successful(Redirect(controllers.routes.OptionTaxController.show))
         case Left(error) =>
           warnLog("[VATAccountsController][submit] - failed to store accountingMethod in answer service: " + error.message)
           serviceErrorHandler.showInternalServerError

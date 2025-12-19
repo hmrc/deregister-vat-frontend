@@ -18,7 +18,7 @@ import play.sbt.routes.RoutesKeys
 import uk.gov.hmrc.DefaultBuildSettings.*
 
 val appName: String = "deregister-vat-frontend"
-val bootstrapPlayVersion = "8.6.0"
+val bootstrapPlayVersion = "10.5.0"
 
 lazy val appDependencies: Seq[ModuleID] = compile ++ test()
 lazy val plugins: Seq[Plugins] = Seq.empty
@@ -51,7 +51,7 @@ lazy val coverageSettings: Seq[Setting[_]] = {
 val compile: Seq[ModuleID] = Seq(
   ws,
   "uk.gov.hmrc"   %% "bootstrap-frontend-play-30" % bootstrapPlayVersion,
-  "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "12.11.0",
+  "uk.gov.hmrc"   %% "play-frontend-hmrc-play-30" % "12.25.0",
   "org.typelevel" %% "cats-core"                  % "2.12.0"
 )
 
@@ -76,7 +76,7 @@ lazy val microservice: Project = Project(appName, file("."))
   .settings(defaultSettings() *)
   .settings(
     majorVersion := 0,
-    scalaVersion := "2.13.16",
+    scalaVersion := "2.13.17",
     libraryDependencies ++= appDependencies,
     scalacOptions ++= Seq("-Wconf:cat=unused-imports&src=html/.*:s", "-Wconf:cat=unused-imports&src=routes/.*:s"),
     retrieveManaged := true

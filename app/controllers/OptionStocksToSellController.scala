@@ -56,8 +56,8 @@ class OptionStocksToSellController @Inject()(optionStocksToSell: OptionStocksToS
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
       error => Future.successful(BadRequest(optionStocksToSell(error))),
-      data => stocksAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.IssueNewInvoicesController.show)
+      data => stocksAnswerService.storeAnswer(data).flatMap {
+        case Right(_) => Future.successful(Redirect(controllers.routes.IssueNewInvoicesController.show))
         case Left(error) =>
           warnLog("[OptionStocksToSellController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError

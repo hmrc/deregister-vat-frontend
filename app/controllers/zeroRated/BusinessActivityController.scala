@@ -68,8 +68,8 @@ class BusinessActivityController @Inject()(businessActivity: BusinessActivity,
           _ <- EitherT(businessActivityAnswerService.storeAnswer(data))
           _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
           result = redirect(data)
-        } yield result).value.map {
-          case Right(redirect) => redirect
+        } yield result).value.flatMap {
+          case Right(redirect) => Future.successful(redirect)
           case Left(error) =>
             warnLog("[BusinessActivityController][submit] - storedAnswerService returned an error: " + error.message)
             serviceErrorHandler.showInternalServerError

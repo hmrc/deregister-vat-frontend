@@ -39,11 +39,11 @@ class DeregistrationDateController@Inject()(deregistrationDate: DeregistrationDa
                                             implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit request =>
-    answerService.getAnswer.map {
-      case Right(Some(deregDate)) =>
-        Ok(deregistrationDate(DeregistrationDateForm.form.fill(deregDate)))
-      case Right(None) =>
-        Ok(deregistrationDate(DeregistrationDateForm.form))
+    answerService.getAnswer.flatMap {
+      case Right(Some(deregDate)) => Future.successful(
+        Ok(deregistrationDate(DeregistrationDateForm.form.fill(deregDate))))
+      case Right(None) => Future.successful(
+        Ok(deregistrationDate(DeregistrationDateForm.form)))
       case _ =>
         warnLog("[DeregistrationDateController][show] - storedAnswerService returned an error retrieving answer")
         serviceErrorHandler.showInternalServerError
@@ -52,9 +52,9 @@ class DeregistrationDateController@Inject()(deregistrationDate: DeregistrationDa
 
   val submit: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit request =>
     DeregistrationDateForm.form.bindFromRequest().fold(
-      error => Future(BadRequest(deregistrationDate(error))),
-      data => answerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.CheckAnswersController.show)
+      error => Future.successful(BadRequest(deregistrationDate(error))),
+      data => answerService.storeAnswer(data).flatMap {
+        case Right(_) => Future.successful(Redirect(controllers.routes.CheckAnswersController.show))
         case Left(err) =>
           warnLog("[DeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + err.message)
           serviceErrorHandler.showInternalServerError

@@ -32,7 +32,7 @@ import views.html.NextTaxableTurnover
 import javax.inject.{Inject, Singleton}
 import utils.LoggingUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTurnover,
@@ -63,24 +63,25 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
     for {
       data <- nextTaxableTurnoverAnswerService.getAnswer
       businessActivity <- businessActivityAnswerService.getAnswer
-    } yield (data, businessActivity) match {
-      case (Right(Some(nextTaxableTurnoverAnswer)), Right(businessActivityAnswer)) =>
-        Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm.fill(nextTaxableTurnoverAnswer), backLink(businessActivityAnswer)))
-      case (_, Right(businessActivityAnswer)) =>
-        Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm, backLink(businessActivityAnswer)))
-      case _ =>
-        warnLog("[NextTaxableTurnoverController][show] - storedAnswerService returned an error retrieving answers")
-        serviceErrorHandler.showInternalServerError
-    }
+      result <- (data, businessActivity) match {
+
+        case (Right(Some(nextTaxableTurnoverAnswer)), Right(businessActivityAnswer)) => Future.successful(
+          Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm.fill(nextTaxableTurnoverAnswer), backLink(businessActivityAnswer))))
+        case (_, Right(businessActivityAnswer)) => Future.successful(
+          Ok(renderView(NextTaxableTurnoverForm.taxableTurnoverForm, backLink(businessActivityAnswer))))
+        case _ =>
+          warnLog("[NextTaxableTurnoverController][show] - storedAnswerService returned an error retrieving answers")
+          serviceErrorHandler.showInternalServerError
+      }
+    } yield result
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     NextTaxableTurnoverForm.taxableTurnoverForm.bindFromRequest().fold(
-      error => for {
-        businessActivity <- businessActivityAnswerService.getAnswer
-      } yield businessActivity match {
-        case Right(businessActivity) =>
-          BadRequest(renderView(error, backLink(businessActivity)))
+      error =>
+        businessActivityAnswerService.getAnswer.flatMap {
+        case Right(businessActivity) => Future.successful(
+          BadRequest(renderView(error, backLink(businessActivity))))
         case Left(err) =>
           warnLog("[NextTaxableTurnoverController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
           serviceErrorHandler.showInternalServerError
@@ -90,11 +91,11 @@ class NextTaxableTurnoverController @Inject()(nextTaxableTurnover: NextTaxableTu
         taxableTurnover <- EitherT(taxableTurnoverAnswerService.getAnswer)
         deregReason <- EitherT(deregReasonAnswerService.getAnswer)
       } yield (taxableTurnover, deregReason))
-        .value.map {
-        case Right((_ ,Some(ZeroRated))) => Redirect(controllers.zeroRated.routes.ZeroRatedSuppliesController.show)
-        case Right((Some(_), Some(_))) if data.value > getVatThresholdForDeregister() => Redirect(controllers.routes.CannotDeregisterThresholdController.show)
-        case Right((Some(Yes), Some(_))) => Redirect(controllers.routes.VATAccountsController.show)
-        case Right((Some(No), Some(_))) => Redirect(controllers.routes.WhyTurnoverBelowController.show)
+        .value.flatMap {
+        case Right((_ ,Some(ZeroRated))) => Future.successful(Redirect(controllers.zeroRated.routes.ZeroRatedSuppliesController.show))
+        case Right((Some(_), Some(_))) if data.value > getVatThresholdForDeregister() => Future.successful(Redirect(controllers.routes.CannotDeregisterThresholdController.show))
+        case Right((Some(Yes), Some(_))) => Future.successful(Redirect(controllers.routes.VATAccountsController.show))
+        case Right((Some(No), Some(_))) => Future.successful(Redirect(controllers.routes.WhyTurnoverBelowController.show))
         case _ =>
           warnLog("[NextTaxableTurnoverController][submit] - storedAnswerService returned an error")
           serviceErrorHandler.showInternalServerError
