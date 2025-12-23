@@ -14,8 +14,8 @@
 GET        /vat-through-software/account/cancel-vat/test-only/feature-switch    testOnly.controllers.FeatureSwitchController.featureSwitch
 POST       /vat-through-software/account/cancel-vat/test-only/feature-switch    testOnly.controllers.FeatureSwitchController.submitFeatureSwitch
 
-GET        /vat-through-software/account/cancel-vat/test-only/vaclf-stub        testOnly.controllers.StubAgentClientLookupController.show(redirectUrl: String)
-GET        /vat-through-software/account/cancel-vat/test-only/vaclf-stub-unauth testOnly.controllers.StubAgentClientLookupController.unauth(redirectUrl: String)
+GET        /vat-through-software/account/cancel-vat/test-only/vaclf-stub        testOnly.controllers.StubAgentClientLookupController.show(redirectUrl: RedirectUrl)
+GET        /vat-through-software/account/cancel-vat/test-only/vaclf-stub-unauth testOnly.controllers.StubAgentClientLookupController.unauth(redirectUrl: RedirectUrl)
 POST       /vat-through-software/account/cancel-vat/test-only/vaclf-stub        testOnly.controllers.StubAgentClientLookupController.post
 
 

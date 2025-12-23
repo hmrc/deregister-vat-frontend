@@ -52,8 +52,8 @@ class CeasedTradingDateController @Inject()(ceasedTradingDate: CeasedTradingDate
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     DateForm.dateForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(ceasedTradingDate(error))),
-      data => ceasedTradingDateAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.VATAccountsController.show)
+      data => ceasedTradingDateAnswerService.storeAnswer(data).flatMap {
+        case Right(_) => Future.successful(Redirect(controllers.routes.VATAccountsController.show))
         case Left(error) =>
           warnLog("[CeasedTradingDateController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError

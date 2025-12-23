@@ -47,23 +47,24 @@ class PurchasesExceedSuppliesController @Inject()(purchasesExceedSupplies: Purch
                         (implicit user: User[_]) = purchasesExceedSupplies(form, vatThreshold)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-      for {
-        pxs <- purchasesExceedSuppliesAnswerService.getAnswer
-      } yield pxs match {
-        case Right(Some(data)) => Ok(renderView(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.fill(data), thresholdService.formattedVatThreshold()))
-        case Right(None) => Ok(renderView(vatThreshold = thresholdService.formattedVatThreshold()))
+    for {
+      pxs <- purchasesExceedSuppliesAnswerService.getAnswer
+      result <- pxs match {
+        case Right(Some(data)) => Future.successful(Ok(renderView(PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.fill(data), thresholdService.formattedVatThreshold())))
+        case Right(None) => Future.successful(Ok(renderView(vatThreshold = thresholdService.formattedVatThreshold())))
         case Left(error) =>
           warnLog("[PurchasesExceedSuppliesController][show] - storedAnswerService returned an error retrieving answer: " + error.message)
 
           serviceErrorHandler.showInternalServerError
       }
+    } yield result
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
       PurchasesExceedSuppliesForm.purchasesExceedSuppliesForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(purchasesExceedSupplies(error, thresholdService.formattedVatThreshold()))),
-        data => purchasesExceedSuppliesAnswerService.storeAnswer(data) map {
-          case Right(_) => Redirect(controllers.routes.VATAccountsController.show.url)
+        data => purchasesExceedSuppliesAnswerService.storeAnswer(data).flatMap {
+          case Right(_) => Future.successful(Redirect(controllers.routes.VATAccountsController.show.url))
           case Left(error) =>
             warnLog("[PurchasesExceedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError

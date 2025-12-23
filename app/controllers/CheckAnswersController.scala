@@ -29,7 +29,7 @@ import views.html.CheckYourAnswers
 import javax.inject.{Inject, Singleton}
 import utils.LoggingUtil
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CheckAnswersController @Inject()(checkYourAnswers: CheckYourAnswers,
@@ -44,12 +44,14 @@ class CheckAnswersController @Inject()(checkYourAnswers: CheckYourAnswers,
                                        implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport with LoggingUtil {
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    checkAnswersService.checkYourAnswersModel(thresholdService.formattedVatThreshold()) map {
+    checkAnswersService.checkYourAnswersModel(thresholdService.formattedVatThreshold()).flatMap {
       case Right(answers) =>
-        (answers.chooseDeregDate, answers.deregDate) match {
-          case (Some(_), Some(_)) => Ok(checkYourAnswers(answers.seqAnswers))
-          case (Some(_), _) => Ok(checkYourAnswers(answers.seqAnswers))
-          case _ => Ok(checkYourAnswers(answers.seqAnswers))
+        Future.successful {
+          (answers.chooseDeregDate, answers.deregDate) match {
+            case (Some(_), Some(_)) => Ok(checkYourAnswers(answers.seqAnswers))
+            case (Some(_), _) => Ok(checkYourAnswers(answers.seqAnswers))
+            case _ => Ok(checkYourAnswers(answers.seqAnswers))
+          }
         }
       case Left(error) =>
         warnLog("[CheckAnswersController][show] - storedAnswerService returned an error retrieving answers: " + error.message)
@@ -58,9 +60,10 @@ class CheckAnswersController @Inject()(checkYourAnswers: CheckYourAnswers,
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    updateDeregistrationService.updateDereg.map {
-      case Right(VatSubscriptionSuccess) => Redirect(controllers.routes.DeregistrationConfirmationController.show.url)
-          .addingToSession(SessionKeys.deregSuccessful -> "true", SessionKeys.registrationStatus -> Constants.pending)
+    updateDeregistrationService.updateDereg.flatMap {
+      case Right(VatSubscriptionSuccess) =>
+        Future.successful(Redirect(controllers.routes.DeregistrationConfirmationController.show.url)
+          .addingToSession(SessionKeys.deregSuccessful -> "true", SessionKeys.registrationStatus -> Constants.pending))
 
       case Left(error) =>
         warnLog("[CheckAnswersController][submit] - error returned from vat subscription when updating dereg: " + error.message)

@@ -45,25 +45,26 @@ class SicCodeController @Inject()(sicCode: SicCode,
   private def renderView(form: Form[String] = SicCodeForm.sicCodeForm)(implicit user: User[_]) = sicCode(form)
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-      for {
-        ba <- businessActivityAnswerService.getAnswer
-        sc <- sicCodeAnswerService.getAnswer
-      } yield (ba, sc) match {
-        case (Right(Some(Yes)), Right(Some(sicCode))) => Ok(renderView(SicCodeForm.sicCodeForm.fill(sicCode)))
-        case (Right(Some(Yes)), Right(_)) => Ok(renderView())
-        case (Right(Some(No)), Right(_)) => Redirect(controllers.routes.NextTaxableTurnoverController.show)
-        case (Right(None), Right(_)) => Redirect(controllers.zeroRated.routes.BusinessActivityController.show)
+    for {
+      ba <- businessActivityAnswerService.getAnswer
+      sc <- sicCodeAnswerService.getAnswer
+      result <- (ba, sc) match {
+        case (Right(Some(Yes)), Right(Some(sicCode))) => Future.successful(Ok(renderView(SicCodeForm.sicCodeForm.fill(sicCode))))
+        case (Right(Some(Yes)), Right(_)) => Future.successful(Ok(renderView()))
+        case (Right(Some(No)), Right(_)) => Future.successful(Redirect(controllers.routes.NextTaxableTurnoverController.show))
+        case (Right(None), Right(_)) => Future.successful(Redirect(controllers.zeroRated.routes.BusinessActivityController.show))
         case _ =>
           warnLog("[SicCodeController][show] - storedAnswerService returned an error retrieving answers")
           serviceErrorHandler.showInternalServerError
       }
+    } yield result
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
       SicCodeForm.sicCodeForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(sicCode(error))),
-        data => sicCodeAnswerService.storeAnswer(data) map {
-          case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show)
+        data => sicCodeAnswerService.storeAnswer(data).flatMap {
+          case Right(_) => Future.successful(Redirect(controllers.routes.NextTaxableTurnoverController.show))
           case Left(error) =>
             warnLog("[SicCodeController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError

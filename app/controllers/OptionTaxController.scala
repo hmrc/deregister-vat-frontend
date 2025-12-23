@@ -56,8 +56,8 @@ class OptionTaxController @Inject()(optionTax: OptionTax,
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
       error => Future.successful(BadRequest(optionTax(error))),
-      data => optionTaxAnswerService.storeAnswer(data) map {
-        case Right(_) => Redirect(controllers.routes.CapitalAssetsController.show)
+      data => optionTaxAnswerService.storeAnswer(data).flatMap {
+        case Right(_) => Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))
         case Left(error) =>
           warnLog("[OptionTaxController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError

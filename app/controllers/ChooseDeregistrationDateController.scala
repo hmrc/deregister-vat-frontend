@@ -31,7 +31,7 @@ import utils.LoggingUtil
 import views.html.ChooseDeregistrationDate
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: ChooseDeregistrationDate,
@@ -55,21 +55,22 @@ class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: Cho
     for {
       chooseDateResult <- chooseDateAnswerService.getAnswer
       outstandingInvoicesResult <- outstandingInvoicesAnswerService.getAnswer
-    } yield (outstandingInvoicesResult, chooseDateResult) match {
-      case (Right(outstandingInvoices), Right(Some(deregDate))) =>
-        Ok(renderView(outstandingInvoices,form.fill(deregDate), thresholdService.formattedVatThreshold()))
-      case (Right(outstanding), Right(None)) =>
-        Ok(renderView(outstanding,form, thresholdService.formattedVatThreshold()))
-      case (_,_) =>
-        warnLog("[ChooseDeregistrationDateController][show] - storedAnswerService returned an error retrieving answers")
-        serviceErrorHandler.showInternalServerError
-    }
+      result <- (outstandingInvoicesResult, chooseDateResult) match {
+        case (Right(outstandingInvoices), Right(Some(deregDate))) => Future.successful(
+          Ok(renderView(outstandingInvoices, form.fill(deregDate), thresholdService.formattedVatThreshold())))
+        case (Right(outstanding), Right(None)) => Future.successful(
+          Ok(renderView(outstanding, form, thresholdService.formattedVatThreshold())))
+        case (_, _) =>
+          warnLog("[ChooseDeregistrationDateController][show] - storedAnswerService returned an error retrieving answers")
+          serviceErrorHandler.showInternalServerError
+      }
+    } yield result
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
-      error => outstandingInvoicesAnswerService.getAnswer map {
-        case Right(outstandingInvoices) => BadRequest(renderView(outstandingInvoices, error, thresholdService.formattedVatThreshold()))
+      error => outstandingInvoicesAnswerService.getAnswer.flatMap {
+        case Right(outstandingInvoices) => Future.successful(BadRequest(renderView(outstandingInvoices, error, thresholdService.formattedVatThreshold())))
         case Left(err) =>
           warnLog("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error retrieving answers: " + err.message)
           serviceErrorHandler.showInternalServerError
@@ -78,8 +79,8 @@ class ChooseDeregistrationDateController @Inject()(chooseDeregistrationDate: Cho
         _ <- EitherT(chooseDateAnswerService.storeAnswer(data))
         _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
         result = redirect(data)
-      } yield result).value.map {
-        case Right(redirect) => redirect
+      } yield result).value.flatMap {
+        case Right(redirect) => Future.successful(redirect)
         case Left(error) =>
           warnLog("[ChooseDeregistrationDateController][submit] - storedAnswerService returned an error storing answers: " + error.message)
           serviceErrorHandler.showInternalServerError

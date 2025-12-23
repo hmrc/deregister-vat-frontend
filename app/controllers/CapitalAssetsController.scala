@@ -62,8 +62,10 @@ class  CapitalAssetsController @Inject()(capitalAssets: CapitalAssets,
       data => (for {
         _ <- EitherT(capitalAssetsAnswerService.storeAnswer(data))
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)
-      } yield result).value.map {
-        case Right(_) => Redirect(controllers.routes.OptionStocksToSellController.show)
+      } yield result).value.flatMap {
+        case Right(_) =>
+          Future.successful(
+            Redirect(controllers.routes.OptionStocksToSellController.show))
         case Left(error) =>
           warnLog("[CapitalAssetsController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError

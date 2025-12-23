@@ -54,30 +54,30 @@ class DeniedAccessPredicate @Inject()(customerDetailsService: CustomerDetailsSer
 
   private def getCustomerInfoCall[A](vrn: String)(implicit hc: HeaderCarrier,
                                                   request: User[A]): Future[Either[Result, User[A]]] =
-    customerDetailsService.getCustomerDetails(vrn).map {
+    customerDetailsService.getCustomerDetails(vrn).flatMap {
       case Right(details) =>
         (details.pendingDereg, details.alreadyDeregistered, details.partyType) match {
           case (_, _, Some(partyType)) if partyType == vatGroup =>
             debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "PartyType is VAT Group. Redirecting to appropriate hub/overview page.")
-            Left(Redirect(redirectPage))
+           Future.successful(Left(Redirect(redirectPage)))
           case (true, _, _) =>
              debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "Deregistration pending. Redirecting to user hub/overview page.")
-            Left(Redirect(redirectPage).addingToSession(registrationStatus -> Constants.pending))
+            Future.successful(Left(Redirect(redirectPage).addingToSession(registrationStatus -> Constants.pending)))
           case (_, true, _) =>
              debug("[PendingChangesPredicate][getCustomerInfoCall] - " +
               "User has already deregistered. Redirecting to user hub/overview page.")
-            Left(Redirect(redirectPage).addingToSession(registrationStatus -> Constants.deregistered))
+            Future.successful(Left(Redirect(redirectPage).addingToSession(registrationStatus -> Constants.deregistered)))
           case _ =>
              debug("[PendingChangesPredicate][getCustomerInfoCall] - Redirecting user to start of journey")
-            Left(Redirect(controllers.routes.DeregisterForVATController.show.url)
-              .addingToSession(registrationStatus -> Constants.registered))
+            Future.successful(Left(Redirect(controllers.routes.DeregisterForVATController.show.url)
+              .addingToSession(registrationStatus -> Constants.registered)))
         }
       case Left(error) =>
         warnLog(s"[InflightPPOBPredicate][getCustomerInfoCall] - " +
           s"The call to the GetCustomerInfo API failed. Error: ${error.message}")
-        Left(serviceErrorHandler.showInternalServerError)
+        serviceErrorHandler.showInternalServerError.map(Left(_))
     }
 
   private def redirectPage[A](implicit request: User[A]) =
