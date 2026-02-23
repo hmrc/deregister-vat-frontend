@@ -67,6 +67,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     "have the correct bullet points" in {
       elementText(Selectors.bullets(1)) shouldBe DeregisterForVATMessages.bullet1
       elementText(Selectors.bullets(2)) shouldBe DeregisterForVATMessages.bullet2
+      elementText(Selectors.bullets(3)) shouldBe DeregisterForVATMessages.bullet3
     }
 
     "have the correct second paragraph" in {
