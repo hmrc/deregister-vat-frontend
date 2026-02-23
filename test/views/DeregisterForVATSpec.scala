@@ -71,9 +71,9 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     }
 
     "have the correct bullet points if the OTT Journey Feature switch is disabled" in {
-      lazy implicit val mockConf = mockAppConfigWithFeatures(ottJourneyOn = false)
-      lazy val view = deregisterForVAT()(user,messages,mockConf)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+      val mockConf = mockAppConfigWithFeatures(ottJourneyOn = false)
+      val view = deregisterForVAT()(user,messages,mockConf)
+      implicit val document: Document = Jsoup.parse(view.body)
 
       elementText(Selectors.bullets(1)) shouldBe DeregisterForVATMessages.bullet1
       elementText(Selectors.bullets(2)) shouldBe DeregisterForVATMessages.bullet3
