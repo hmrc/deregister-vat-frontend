@@ -16,4 +16,4 @@
 
 package testOnly.models
 
-case class FeatureSwitchModel(stubAgentClientLookup: Boolean, webchatEnabled: Boolean)
+case class FeatureSwitchModel(stubAgentClientLookup: Boolean, webchatEnabled: Boolean, ottJourneyEnabled: Boolean)

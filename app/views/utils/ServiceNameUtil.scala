@@ -19,7 +19,7 @@ package views.utils
 import config.AppConfig
 import models.User
 import play.api.i18n.Messages
-import play.api.mvc.{Request, RequestHeader}
+import play.api.mvc.RequestHeader
 
 object ServiceNameUtil{
 

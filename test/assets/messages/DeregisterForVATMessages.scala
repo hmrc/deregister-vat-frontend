@@ -23,7 +23,8 @@ object DeregisterForVATMessages extends BaseMessages {
   val p1 = "To cancel the registration, you need to know the value of any:"
   val p2 = "You also need to know how the business’s VAT accounts are prepared (standard accounting or cash accounting)."
   val bullet1 = "land or commercial property the business owns"
-  val bullet2 = "stock or assets the business has or plans to keep"
+  val bullet2 = "opted to tax land or commercial property that you will continue to own after deregistration"
+  val bullet3 = "stock or assets the business has or plans to keep"
 
 }
 

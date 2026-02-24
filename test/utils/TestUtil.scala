@@ -46,6 +46,7 @@ trait TestUtil extends AnyWordSpecLike
   override def beforeEach(): Unit = {
     super.beforeEach()
     mockConfig.features.stubAgentClientLookup(true)
+    mockConfig.features.ottJourneyEnabled(true)
     SharedMetricRegistries.clear()
   }
 
