@@ -48,6 +48,13 @@
           content = Text(messages("Enable the web chat link")),
           value = "true",
           checked = appConfig.features.webchatEnabled()
+        ),
+        CheckboxItem(
+          id = Some(ConfigKeys.ottJourneyEnabled),
+          name = Some(ConfigKeys.ottJourneyEnabled),
+          content = Text(messages("Enable the new OTT Journey")),
+          value = "true",
+          checked = appConfig.features.ottJourneyEnabled()
         )
       )
     ))

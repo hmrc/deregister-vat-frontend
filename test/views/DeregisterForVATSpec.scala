@@ -67,6 +67,18 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     "have the correct bullet points" in {
       elementText(Selectors.bullets(1)) shouldBe DeregisterForVATMessages.bullet1
       elementText(Selectors.bullets(2)) shouldBe DeregisterForVATMessages.bullet2
+      elementText(Selectors.bullets(3)) shouldBe DeregisterForVATMessages.bullet3
+    }
+
+    "have the correct bullet points if the OTT Journey Feature switch is disabled" in {
+      val mockConf = mockAppConfigWithFeatures(ottJourneyOn = false)
+      val view = deregisterForVAT()(user,messages,mockConf)
+      implicit val document: Document = Jsoup.parse(view.body)
+
+      elementText(Selectors.bullets(1)) shouldBe DeregisterForVATMessages.bullet1
+      elementText(Selectors.bullets(2)) shouldBe DeregisterForVATMessages.bullet3
+
+      document.select(".govuk-list--bullet>li").size shouldBe 2
     }
 
     "have the correct second paragraph" in {
@@ -87,7 +99,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
 
   "The webchat link is displayed" when {
     "the webchatEnabled feature switch is switched on for principal user" in {
-      lazy implicit val mockConf = mockAppConfigForWebChat("true")
+      lazy implicit val mockConf = mockAppConfigWithFeatures()
       lazy val view = deregisterForVAT()(user,messages,mockConf)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -96,7 +108,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     }
 
     "the webchatEnabled feature switch is switched on for an agent" in {
-      lazy implicit val mockConf = mockAppConfigForWebChat("true")
+      lazy implicit val mockConf = mockAppConfigWithFeatures()
       lazy val view = deregisterForVAT()(user,messages,mockConf)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -107,7 +119,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
 
   "The webchat link is not displayed" when {
     "the webchatEnabled feature switch is switched off for principal user" in {
-      lazy implicit val mockConf = mockAppConfigForWebChat("false")
+      lazy implicit val mockConf = mockAppConfigWithFeatures(webchatOn = false)
       lazy val view = deregisterForVAT()(user,messages,mockConf)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -115,7 +127,7 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     }
 
     "the webchatEnabled feature switch is switched off for an agent" in {
-      lazy implicit val mockConf = mockAppConfigForWebChat("false")
+      lazy implicit val mockConf = mockAppConfigWithFeatures(webchatOn = false)
       lazy val view = deregisterForVAT()(user,messages,mockConf)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -123,13 +135,17 @@ class DeregisterForVATSpec extends ViewBaseSpec {
     }
   }
 
-  private def mockAppConfigForWebChat(webchatLinkEnabled: String): MockAppConfig = {
-    new MockAppConfig() {
-      lazy implicit val config: Configuration = app.configuration
-      override val features: Features = new Features() {
-        override val webchatEnabled = new Feature("") {
-          override def apply(): Boolean = webchatLinkEnabled.toBoolean
-        }
+  private def mockAppConfigWithFeatures(
+     webchatOn:Boolean = true,
+     ottJourneyOn:Boolean = true
+   ): MockAppConfig = new MockAppConfig() {
+    lazy implicit val config: Configuration = app.configuration
+    override val features: Features = new Features() {
+      override val webchatEnabled: Feature = new Feature("") {
+        override def apply(): Boolean = webchatOn
+      }
+      override val ottJourneyEnabled: Feature = new Feature("") {
+        override def apply(): Boolean = ottJourneyOn
       }
     }
   }

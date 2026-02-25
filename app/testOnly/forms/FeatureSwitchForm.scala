@@ -26,7 +26,8 @@ object FeatureSwitchForm {
   val form: Form[FeatureSwitchModel] = Form(
     mapping(
       ConfigKeys.stubAgentClientLookupFeature -> boolean,
-      ConfigKeys.webchatEnabled -> boolean
+      ConfigKeys.webchatEnabled -> boolean,
+      ConfigKeys.ottJourneyEnabled -> boolean
     )(FeatureSwitchModel.apply)(FeatureSwitchModel.unapply)
   )
 }

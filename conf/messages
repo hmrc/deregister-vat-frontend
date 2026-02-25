@@ -49,7 +49,8 @@ deregisterForVAT.title = Cancel VAT registration
 deregisterForVAT.p1 = To cancel the registration, you need to know the value of any:
 deregisterForVAT.p2 = You also need to know how the business’s VAT accounts are prepared (standard accounting or cash accounting).
 deregisterForVAT.bullet1 = land or commercial property the business owns
-deregisterForVAT.bullet2 = stock or assets the business has or plans to keep
+deregisterForVAT.bullet2 = opted to tax land or commercial property that you will continue to own after deregistration
+deregisterForVAT.bullet3 = stock or assets the business has or plans to keep
 
 webchat.askHMRC = Ask HMRC (opens in a new tab)
 

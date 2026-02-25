@@ -63,8 +63,8 @@ class DeregistrationReasonController @Inject()(deregistrationReason: Deregistrat
         _ <- EitherT(deregReasonAnswerService.storeAnswer(data))
         _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
         route = redirect(data)
-      } yield route).value.map {
-        case Right(result) => result
+      } yield route).value.flatMap {
+        case Right(result) => Future.successful(result)
         case Left(error) =>
           warnLog("[DeregistrationReasonController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError

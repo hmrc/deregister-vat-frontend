@@ -53,8 +53,8 @@ class WhyTurnoverBelowController @Inject()(whyTurnoverBelow: WhyTurnoverBelow,
     WhyTurnoverBelowForm.whyTurnoverBelowForm.bindFromRequest().fold(
       error => Future.successful(BadRequest(whyTurnoverBelow(error, thresholdService.formattedVatThreshold()))),
       data => {
-        whyTurnoverBelowAnswerService.storeAnswer(data).map {
-          case Right(DeregisterVatSuccess) => Redirect(controllers.routes.VATAccountsController.show)
+        whyTurnoverBelowAnswerService.storeAnswer(data).flatMap {
+          case Right(DeregisterVatSuccess) => Future.successful(Redirect(controllers.routes.VATAccountsController.show))
           case Left(error) =>
             warnLog("[WhyTurnoverBelowController][submit] - storedAnswerService returned an error storing answers: " + error.message)
             serviceErrorHandler.showInternalServerError

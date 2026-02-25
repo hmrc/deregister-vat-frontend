@@ -16,9 +16,9 @@
 
 package config
 
-import play.api.i18n.{Messages, MessagesApi}
+import play.api.i18n.MessagesApi
 import play.api.mvc.Results.{BadRequest, InternalServerError}
-import play.api.mvc.{Request, RequestHeader, Result}
+import play.api.mvc.{RequestHeader, Result}
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
 import views.html.errors.StandardError
@@ -28,24 +28,17 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ServiceErrorHandler @Inject()(standardError: StandardError,
                                     val messagesApi: MessagesApi,
-                                    implicit val appConfig: AppConfig,
-                                    implicit val ec:ExecutionContext) extends FrontendErrorHandler {
+                                    implicit val appConfig: AppConfig)
+                                   (implicit val ec: ExecutionContext) extends FrontendErrorHandler {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)
                                     (implicit request: RequestHeader): Future[Html] = {
     Future.successful(standardError(pageTitle, heading, message))
   }
 
-  def showInternalServerError(implicit request: Request[_]): Result = InternalServerError(standardError(
-    Messages("global.error.InternalServerError500.title"),
-    Messages("global.error.InternalServerError500.heading"),
-    Messages("global.error.InternalServerError500.message")
-  ))
+  def showInternalServerError(implicit request: RequestHeader): Future[Result] = internalServerErrorTemplate.map(InternalServerError(_))(ec)
 
-  def showBadRequestError(implicit request: Request[_]): Result = BadRequest(standardError(
-    Messages("global.error.badRequest400.title"),
-    Messages("global.error.badRequest400.heading"),
-    Messages("global.error.badRequest400.message")
-  ))
+  def showBadRequestError(implicit request: RequestHeader): Future[Result] = badRequestTemplate.map(BadRequest(_))(ec)
+
 
 }

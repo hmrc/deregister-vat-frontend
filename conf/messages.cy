@@ -49,7 +49,8 @@ deregisterForVAT.title = Canslo cofrestriad TAW
 deregisterForVAT.p1 = I ganslo’ch cofrestriad, mae angen i chi wybod gwerth unrhyw rai o’r canlynol:
 deregisterForVAT.p2 = Hefyd, mae angen i chi wybod sut mae cyfrifon TAW y busnes yn cael eu paratoi (cyfrifyddu safonol neu gyfrifyddu arian parod).
 deregisterForVAT.bullet1 = tir neu eiddo masnachol y mae’r busnes yn berchen arno
-deregisterForVAT.bullet2 = stoc neu asedion sydd gan y busnes neu y mae’r busnes yn bwriadu eu cadw
+deregisterForVAT.bullet2 = wedi optio i drethu tir neu eiddo masnachol y byddwch yn parhau i fod yn berchen arno ar ôl ei ddatgofrestru
+deregisterForVAT.bullet3 = stoc neu asedion sydd gan y busnes neu y mae’r busnes yn bwriadu eu cadw
 
 webchat.askHMRC = Gofyn i CThEF (yn agor tab newydd)
 

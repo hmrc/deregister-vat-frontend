@@ -35,7 +35,8 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
     Ok(featureSwitch(FeatureSwitchForm.form.fill(
       FeatureSwitchModel(
         stubAgentClientLookup = appConfig.features.stubAgentClientLookup(),
-        webchatEnabled = appConfig.features.webchatEnabled()
+        webchatEnabled = appConfig.features.webchatEnabled(),
+        ottJourneyEnabled = appConfig.features.ottJourneyEnabled()
       )
     )))
   }
@@ -50,6 +51,7 @@ class FeatureSwitchController @Inject()(featureSwitch: FeatureSwitch,
   def handleSuccess(model: FeatureSwitchModel): Result = {
     appConfig.features.stubAgentClientLookup(model.stubAgentClientLookup)
     appConfig.features.webchatEnabled(model.webchatEnabled)
+    appConfig.features.ottJourneyEnabled(model.ottJourneyEnabled)
     Redirect(routes.FeatureSwitchController.featureSwitch)
   }
 }

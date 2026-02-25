@@ -43,7 +43,7 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
     user.session.get(SessionKeys.deregSuccessful) match {
       case Some("true") =>
 
-        deleteAllStoredAnswersService.deleteAllAnswers flatMap {
+        deleteAllStoredAnswersService.deleteAllAnswers.flatMap {
 
           case Right(_) =>
 
@@ -58,7 +58,7 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
 
           case Left(_) =>
             warnLog("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
-            Future.successful(serviceErrorHandler.showInternalServerError)
+            serviceErrorHandler.showInternalServerError
         }
       case _ => Future.successful(Redirect(controllers.routes.DeregisterForVATController.show))
     }

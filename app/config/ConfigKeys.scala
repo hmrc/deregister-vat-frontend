@@ -70,4 +70,6 @@ object ConfigKeys {
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
 
   val showUserResearchBannerEnabled: String = "features.showUserResearchBanner.enabled"
+
+  val ottJourneyEnabled: String = "features.ottJourney.enabled"
 }

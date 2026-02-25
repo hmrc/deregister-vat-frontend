@@ -63,8 +63,8 @@ class TaxableTurnoverController @Inject()(taxableTurnover: TaxableTurnover,
       data => (for {
         _ <- EitherT(taxableTurnoverAnswerService.storeAnswer(data))
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)
-      } yield result).value.map {
-        case Right(_) => Redirect(controllers.routes.NextTaxableTurnoverController.show)
+      } yield result).value.flatMap {
+        case Right(_) => Future.successful(Redirect(controllers.routes.NextTaxableTurnoverController.show))
         case Left(error) =>
           warnLog("[TaxableTurnoverController][submit] - storedAnswerService returned an error: " + error.message)
           serviceErrorHandler.showInternalServerError

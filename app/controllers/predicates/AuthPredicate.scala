@@ -63,7 +63,7 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
           }
         case _ =>
           warnLog("[AuthPredicate][invokeBlock] - Missing affinity group")
-          Future.successful(serviceErrorHandler.showInternalServerError)
+          serviceErrorHandler.showInternalServerError
       } recover {
       case _: NoActiveSession =>
         debug("[AuthPredicate][invokeBlock] - No active session, redirect to GG Sign In")
@@ -74,7 +74,7 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
     }
   }
 
-  private[AuthPredicate] def checkVatEnrolment[A](enrolments: Enrolments, block: User[A] => Future[Result])(implicit request: Request[A]) =
+  private[AuthPredicate] def checkVatEnrolment[A](enrolments: Enrolments, block: User[A] => Future[Result])(implicit request: Request[A]):Future[Result] =
     if (enrolments.enrolments.exists(_.key == EnrolmentKeys.vatEnrolmentId)) {
       val user = User(enrolments)
       request.session.get(SessionKeys.insolventWithoutAccessKey) match {
@@ -91,7 +91,7 @@ class AuthPredicate @Inject()(unauthorised: Unauthorised,
               block(user).map(result => result.addingToSession(SessionKeys.insolventWithoutAccessKey -> "false"))
             case _ =>
               logger.warn("[AuthPredicate][checkVatEnrolment] - Failure obtaining insolvency status from Customer Info API")
-              Future.successful(serviceErrorHandler.showInternalServerError)
+              serviceErrorHandler.showInternalServerError
           }
       }
 

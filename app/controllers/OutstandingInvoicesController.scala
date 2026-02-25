@@ -65,7 +65,7 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
         capitalAssets <- EitherT(capitalAssetsAnswerService.getAnswer)
         deregReason <- EitherT(deregReasonAnswerService.getAnswer)
         result = redirect(data, capitalAssets, deregReason)
-      } yield result).value.map {
+      } yield result).value.flatMap {
         case Right(redirect) => redirect
         case Left(error) =>
           warnLog("[OutstandingInvoicesController][submit] - failed to retrieve one or more answers from answer service: " + error.message)
@@ -75,14 +75,14 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
   }
 
   private def redirect(outstandingInvoices: YesNo, capitalAssets: Option[YesNoAmountModel], deregReason: Option[DeregistrationReason])
-                      (implicit user: User[_]) = {
+                      (implicit user: User[_]):Future[Result] = {
     if (outstandingInvoices == Yes) {
-      Redirect(controllers.routes.ChooseDeregistrationDateController.show)
+      Future.successful(Redirect(controllers.routes.ChooseDeregistrationDateController.show))
     } else {
       deregReason match {
-        case Some(BelowThreshold) => Redirect(controllers.routes.ChooseDeregistrationDateController.show)
-        case Some(ZeroRated) => Redirect(controllers.routes.ChooseDeregistrationDateController.show)
-        case Some(ExemptOnly) => Redirect(controllers.routes.ChooseDeregistrationDateController.show)
+        case Some(BelowThreshold) => Future.successful(Redirect(controllers.routes.ChooseDeregistrationDateController.show))
+        case Some(ZeroRated) =>Future.successful(Redirect(controllers.routes.ChooseDeregistrationDateController.show))
+        case Some(ExemptOnly) => Future.successful(Redirect(controllers.routes.ChooseDeregistrationDateController.show))
         case Some(Ceased) => ceasedTradingJourneyLogic(capitalAssets)
         case _ =>
           warnLog("[OutstandingInvoicesController][redirect] - answer for deregReason doesn't exist or wasn't expected")
@@ -91,10 +91,10 @@ class OutstandingInvoicesController @Inject()(outstandingInvoices: OutstandingIn
     }
   }
 
-  private def ceasedTradingJourneyLogic(capitalAssets: Option[YesNoAmountModel])(implicit user: User[_]): Result = {
+  private def ceasedTradingJourneyLogic(capitalAssets: Option[YesNoAmountModel])(implicit user: User[_]): Future[Result] = {
     capitalAssets match {
-      case Some(assets) if assets.yesNo == Yes => Redirect(controllers.routes.ChooseDeregistrationDateController.show)
-      case Some(_) => Redirect(controllers.routes.CheckAnswersController.show)
+      case Some(assets) if assets.yesNo == Yes => Future.successful(Redirect(controllers.routes.ChooseDeregistrationDateController.show))
+      case Some(_) => Future.successful(Redirect(controllers.routes.CheckAnswersController.show))
       case _ =>
         warnLog("[OutstandingInvoicesController][ceasedTradingJourneyLogic] - answer for capitalAssets doesn't exist or wasn't expected")
         serviceErrorHandler.showInternalServerError

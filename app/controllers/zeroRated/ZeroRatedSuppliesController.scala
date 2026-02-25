@@ -54,8 +54,8 @@ class ZeroRatedSuppliesController @Inject()(zeroRatedSupplies: ZeroRatedSupplies
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
       ZeroRatedSuppliesForm.zeroRatedSuppliesForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(zeroRatedSupplies(error))),
-        data => zeroRatedSuppliesValueService.storeAnswer(data) map {
-          case Right(_) => Redirect(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show)
+        data => zeroRatedSuppliesValueService.storeAnswer(data).flatMap {
+          case Right(_) => Future.successful(Redirect(controllers.zeroRated.routes.PurchasesExceedSuppliesController.show))
           case Left(error) =>
             warnLog("[ZeroRatedSuppliesController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError

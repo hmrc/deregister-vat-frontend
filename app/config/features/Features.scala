@@ -26,4 +26,5 @@ class Features @Inject()(implicit config: Configuration) {
   val stubAgentClientLookup = new Feature(ConfigKeys.stubAgentClientLookupFeature)
   val webchatEnabled = new Feature(ConfigKeys.webchatEnabled)
   val showUserResearchBannerEnabled = new Feature(ConfigKeys.showUserResearchBannerEnabled)
+  val ottJourneyEnabled = new Feature(ConfigKeys.ottJourneyEnabled)
 }
