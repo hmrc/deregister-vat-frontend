@@ -11,6 +11,9 @@ POST        /accounting-method                         controllers.VATAccountsCo
 GET         /date-ceased-trading                       controllers.CeasedTradingDateController.show
 POST        /date-ceased-trading                       controllers.CeasedTradingDateController.submit
 
+GET         /notified-option-to-tax                    controllers.OTTNotificationController.show
+POST        /notified-option-to-tax                    controllers.OTTNotificationController.submit
+
 GET         /option-to-tax                             controllers.OptionTaxController.show
 POST        /option-to-tax                             controllers.OptionTaxController.submit
 

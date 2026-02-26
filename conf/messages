@@ -127,6 +127,12 @@ optionOwnsStockToSell.hint = What is the total value?
 optionOwnsStockToSell.error.mandatoryRadioOption = Select yes if the business is going to keep any stock
 optionOwnsStockToSell.error.amount.noEntry = Enter the total value of stock
 
+ottNotification.title = Has HMRC been notified about an option to tax land and buildings?
+ottNotification.text = A notification to opt to tax is usually completed on a VAT 1614A. This concerns a business choosing to charge VAT on its supplies of land and buildings.
+ottNotification.inset.1 = If disposing of property, any VAT recovered in relation to its costs and overheads may be repayable to HMRC. At point of deregistration, all properties must be in a Nil VAT position.
+ottNotification.inset.2 = For example, if a rental property you own has been unoccupied for 2 years then VAT exemption no longer applies. VAT is recoverable for that 2-year period, despite it not generating income.
+ottNotification.error.mandatoryRadioOption = Select yes if HMRC has been notified about an option to tax land and buildings
+
 whyTurnoverBelow.title = Why do you expect the business’s taxable turnover to be below £{0}?
 whyTurnoverBelow.text.1 = Select all that apply
 whyTurnoverBelow.reason.lostContract = Lost a contract
