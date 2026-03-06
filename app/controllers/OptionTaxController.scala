@@ -58,7 +58,7 @@ class OptionTaxController @Inject()(optionTax: OptionTax,
       error => Future.successful(BadRequest(optionTax(error))),
       data => optionTaxAnswerService.storeAnswer(data).flatMap {
         case Right(_) =>
-          if(appConfig.features.ottJourneyEnabled()) {
+          if(appConfig.features.ottJourneyEnabled() && data.yesNo.value) {
             Future.successful(Redirect(controllers.routes.OTTNotificationController.show))
           } else {
             Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))

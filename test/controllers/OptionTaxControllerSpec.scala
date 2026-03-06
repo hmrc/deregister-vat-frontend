@@ -128,8 +128,8 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.OTTNotificationController.show.url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.OTTNotificationController.show.url)
+        s"redirect to '${controllers.routes.CapitalAssetsController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show.url)
         }
       }
 
