@@ -133,7 +133,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         }
       }
 
-      "the user submits after selecting the 'Yes' option" should {
+      "the user submits after selecting the 'No' option" should {
         s"redirect to '${controllers.routes.CapitalAssetsController.show.url}' if the OTTJourney feature switch is off" in {
           mockConfig.features.ottJourneyEnabled(false)
 

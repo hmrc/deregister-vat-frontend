@@ -50,6 +50,8 @@ class OTTNotificationControllerSpec extends ControllerBaseSpec with MockOTTNotif
         status(result) shouldBe Status.OK
         contentType(result) shouldBe Some("text/html")
         charset(result) shouldBe Some("utf-8")
+        document(result).select(s"#$yesNo").hasAttr("checked") shouldBe false
+        document(result).select(s"#$yesNo-2").hasAttr("checked") shouldBe false
       }
 
       "the user has pre-selected 'yes' option" in {
@@ -60,6 +62,7 @@ class OTTNotificationControllerSpec extends ControllerBaseSpec with MockOTTNotif
         contentType(result) shouldBe Some("text/html")
         charset(result) shouldBe Some("utf-8")
         document(result).select(s"#$yesNo").hasAttr("checked") shouldBe true
+        document(result).select(s"#$yesNo-2").hasAttr("checked") shouldBe false
       }
 
       "the user has pre-selected 'no' option" in {
@@ -69,6 +72,7 @@ class OTTNotificationControllerSpec extends ControllerBaseSpec with MockOTTNotif
         status(result) shouldBe Status.OK
         contentType(result) shouldBe Some("text/html")
         charset(result) shouldBe Some("utf-8")
+        document(result).select(s"#$yesNo").hasAttr("checked") shouldBe false
         document(result).select(s"#$yesNo-2").hasAttr("checked") shouldBe true
       }
     }
