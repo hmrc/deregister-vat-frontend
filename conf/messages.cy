@@ -96,6 +96,12 @@ optionTax.hint = Beth yw cyfanswm y gwerth?
 optionTax.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes wedi codi neu hawlio TAW ar dir neu eiddo masnachol
 optionTax.error.amount.noEntry = Nodwch gyfanswm gwerth y tir neu’r eiddo masnachol
 
+ottNotification.title = A yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau?
+ottNotification.text = Fel arfer, byddwch yn cwblhau hysbysiad o optio i drethu ar ffurflen VAT1614A. Mae hyn yn berthnasol i fusnes sy’n penderfynu codi TAW ar y tir ac adeiladu y mae’n eu cyflenwi.
+ottNotification.inset.1 = Os yw’n cael gwared ar eiddo, efallai y bydd unrhyw dreth sy’n cael ei hadennill mewn perthynas â chostau a gorbenion fod yn ad-daladwy i CThEF. Yn ystod datgofrestru, mae’n rhaid i’r holl eiddo fod â ‘DIM’ TAW i’w thalu.
+ottNotification.inset.2 =  Er enghraifft, os ydych yn berchen ar eiddo rhent, a bod yr eiddo heb gael ei feddiannu am 2 flynedd, yna nid yw esemptiad rhag TAW yn berthnasol bellach. Gallwch adennill TAW ar gyfer y 2 flynedd honno, er gwaethaf y ffaith nad yw’n cynhyrchu incwm.
+ottNotification.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau
+
 capitalAssets.title = A yw’r busnes yn mynd i gadw unrhyw asedion cyfalaf?
 capitalAssets.text.1 = Er enghraifft dodrefn, cyfrifiaduron ac offer.
 capitalAssets.totalSaleValue = Beth yw cyfanswm y gwerth?
@@ -126,12 +132,6 @@ optionOwnsStockToSell.text.1 = Er enghraifft, nwyddau a brynir neu a gynhyrchir 
 optionOwnsStockToSell.hint = Beth yw cyfanswm y gwerth?
 optionOwnsStockToSell.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes yn mynd i gadw unrhyw stoc
 optionOwnsStockToSell.error.amount.noEntry = Nodwch gyfanswm gwerth y stoc
-
-ottNotification.title = A yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau?
-ottNotification.text = Fel arfer, byddwch yn cwblhau hysbysiad o optio i drethu ar ffurflen VAT1614A. Mae hyn yn berthnasol i fusnes sy’n penderfynu codi TAW ar y tir ac adeiladu y mae’n eu cyflenwi.
-ottNotification.inset.1 = Os yw’n cael gwared ar eiddo, efallai y bydd unrhyw dreth sy’n cael ei hadennill mewn perthynas â chostau a gorbenion fod yn ad-daladwy i CThEF. Yn ystod datgofrestru, mae’n rhaid i’r holl eiddo fod â ‘DIM’ TAW i’w thalu.
-ottNotification.inset.2 =  Er enghraifft, os ydych yn berchen ar eiddo rhent, a bod yr eiddo heb gael ei feddiannu am 2 flynedd, yna nid yw esemptiad rhag TAW yn berthnasol bellach. Gallwch adennill TAW ar gyfer y 2 flynedd honno, er gwaethaf y ffaith nad yw’n cynhyrchu incwm.
-ottNotification.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau
 
 whyTurnoverBelow.title = Pam ydych yn disgwyl i drosiant blynyddol y busnes fod yn is nag £{0}?
 whyTurnoverBelow.text.1 = Dewiswch bob un sy’n gymwys

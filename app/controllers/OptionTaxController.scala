@@ -57,7 +57,12 @@ class OptionTaxController @Inject()(optionTax: OptionTax,
     form.bindFromRequest().fold(
       error => Future.successful(BadRequest(optionTax(error))),
       data => optionTaxAnswerService.storeAnswer(data).flatMap {
-        case Right(_) => Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))
+        case Right(_) =>
+          if(appConfig.features.ottJourneyEnabled()) {
+            Future.successful(Redirect(controllers.routes.OTTNotificationController.show))
+          } else {
+            Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))
+          }
         case Left(error) =>
           warnLog("[OptionTaxController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError

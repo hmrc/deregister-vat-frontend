@@ -23,10 +23,5 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class OTTNotificationAnswerService @Inject()(val deregisterVatConnector: DeregisterVatConnector) extends StoredAnswersService[YesNo] {
-  override val answerKey: String = OTTNotificationAnswerService.key
+  override val answerKey: String = "ottNotification"
 }
-
-object OTTNotificationAnswerService {
-  val key: String = "ottNotification"
-}
-

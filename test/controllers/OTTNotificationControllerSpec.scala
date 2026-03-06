@@ -52,7 +52,7 @@ class OTTNotificationControllerSpec extends ControllerBaseSpec with MockOTTNotif
         charset(result) shouldBe Some("utf-8")
       }
 
-      "the user has pre-selected option" in {
+      "the user has pre-selected 'yes' option" in {
         lazy val result = TestOTTNotificationController.show(request)
         mockAuthResult(mockAuthorisedIndividual)
         setupMockGetOTTNotification(Right(Some(Yes)))
@@ -60,6 +60,16 @@ class OTTNotificationControllerSpec extends ControllerBaseSpec with MockOTTNotif
         contentType(result) shouldBe Some("text/html")
         charset(result) shouldBe Some("utf-8")
         document(result).select(s"#$yesNo").hasAttr("checked") shouldBe true
+      }
+
+      "the user has pre-selected 'no' option" in {
+        lazy val result = TestOTTNotificationController.show(request)
+        mockAuthResult(mockAuthorisedIndividual)
+        setupMockGetOTTNotification(Right(Some(No)))
+        status(result) shouldBe Status.OK
+        contentType(result) shouldBe Some("text/html")
+        charset(result) shouldBe Some("utf-8")
+        document(result).select(s"#$yesNo-2").hasAttr("checked") shouldBe true
       }
     }
   }
