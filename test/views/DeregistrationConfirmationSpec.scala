@@ -40,41 +40,40 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     "contactPreference is 'DIGITAL'" when {
 
-      "verifiedEmail is true" should {
+      "isEmailVerified is true" should {
 
-      lazy val view = deregistrationConfirmation(preference = Some("DIGITAL"), verifiedEmail = Some(true))(user, messages, mockConfig)
-      lazy implicit val document: Document = Jsoup.parse(view.body)
+          lazy val view = deregistrationConfirmation(preference = Some("DIGITAL"), isEmailVerified = Some(true))(user, messages, mockConfig)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      "have the correct document title" in {
-        document.title shouldBe DeregistrationConfirmationMessages.title
+          "have the correct document title" in {
+            document.title shouldBe DeregistrationConfirmationMessages.title
+          }
+
+          "have the correct page heading" in {
+            elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
+          }
+
+          "have the correct page subheading" in {
+            elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+          }
+
+          "have the correct first paragraph" in {
+            elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.emailPreference
+          }
+
+          "have the correct second paragraph" in {
+            elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.contactDetails
+          }
+
+          "have the correct finish button text and url" in {
+            elementText(Selectors.button) shouldBe CommonMessages.finish
+            element(Selectors.button).attr("href") shouldBe mockConfig.vatSummaryFrontendUrl
+          }
       }
 
-      "have the correct page heading" in {
-        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.heading
-      }
+      "isEmailVerified is false" should {
 
-      "have the correct page subheading" in {
-        elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
-      }
-
-      "have the correct first paragraph" in {
-        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.emailPreference
-      }
-
-      "have the correct second paragraph" in {
-        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.contactDetails
-      }
-
-      "have the correct finish button text and url" in {
-        elementText(Selectors.button) shouldBe CommonMessages.finish
-        element(Selectors.button).attr("href") shouldBe mockConfig.vatSummaryFrontendUrl
-      }
-
-    }
-
-      "verifiedEmail is false" should {
-
-        lazy val view = deregistrationConfirmation(preference = Some("DIGITAL"), verifiedEmail = Some(false))(user, messages, mockConfig)
+        lazy val view = deregistrationConfirmation(preference = Some("DIGITAL"), isEmailVerified = Some(false))(user, messages, mockConfig)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
         "have the correct document title" in {
@@ -104,6 +103,36 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
       }
 
+       "ottJourneyFlag is true" should {
+
+         lazy val view = deregistrationConfirmation(ottJourneyFlag = true, preference = Some("DIGITAL"), isEmailVerified = Some(true))(user, messages, mockConfig)
+         lazy implicit val document: Document = Jsoup.parse(view.body)
+
+         "have the correct document title" in {
+           document.title shouldBe DeregistrationConfirmationMessages.newTitle
+         }
+
+         "have the correct page heading" in {
+           elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.newHeading
+         }
+
+         "have the correct page subheading" in {
+           elementText(Selectors.subheading) shouldBe DeregistrationConfirmationMessages.subheading
+         }
+
+         "have the correct first paragraph" in {
+           elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.emailPreferenceNew
+         }
+
+         "have the correct second paragraph" in {
+           elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.contactDetails
+         }
+
+         "have the correct finish button text and url" in {
+           elementText(Selectors.button) shouldBe CommonMessages.finish
+           element(Selectors.button).attr("href") shouldBe mockConfig.vatSummaryFrontendUrl
+         }
+       }
     }
 
     "contactPreference is 'PAPER'" should {
@@ -173,8 +202,9 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     "the user has verifiedEmail (Yes pref inferred) and a business name" should {
       val businessName: Option[String] = Some("Fake Business Name Limited")
+      val ottJourneyFlag: Boolean = false
       lazy val view = {
-        deregistrationConfirmation(businessName)(agentUserPrefYes, messages, mockConfig)
+        deregistrationConfirmation(ottJourneyFlag, businessName)(agentUserPrefYes, messages, mockConfig)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -241,8 +271,9 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
     "the user is without a verifiedEmail (No pref inferred) and has a business name" should {
       val businessName: Option[String] = Some("Fake Business Name Limited")
+      val ottJourneyFlag: Boolean = false
       lazy val view: Html = {
-        deregistrationConfirmation(businessName)(agentUserPrefNo, messages, mockConfig)
+        deregistrationConfirmation(ottJourneyFlag, businessName)(agentUserPrefNo, messages, mockConfig)
       }
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -256,6 +287,31 @@ class DeregistrationConfirmationSpec extends ViewBaseSpec {
 
       "have the correct paragraph" in {
         elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.agentWithBName
+      }
+    }
+
+    "the user has ottJourneyFlag enabled verifiedEmail (Yes pref inferred) and a business name" should {
+      val businessName: Option[String] = Some("Fake Business Name Limited")
+      val ottJourneyFlag: Boolean = true
+      lazy val view = {
+        deregistrationConfirmation(ottJourneyFlag, businessName)(agentUserPrefYes, messages, mockConfig)
+      }
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "have the correct document title" in {
+        document.title shouldBe DeregistrationConfirmationMessages.agentTitleNew
+      }
+
+      "have the correct page heading" in {
+        elementText(Selectors.pageHeading) shouldBe DeregistrationConfirmationMessages.newHeading
+      }
+
+      "have the correct first paragraph" in {
+        elementText(Selectors.text) shouldBe DeregistrationConfirmationMessages.bpOffAgentYesPrefNew
+      }
+
+      "have the correct text for the second paragraph (including business name)" in {
+        elementText(Selectors.text2) shouldBe DeregistrationConfirmationMessages.agentWithBNameNew
       }
     }
   }
