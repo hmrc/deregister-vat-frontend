@@ -80,15 +80,13 @@ class OTTNotificationControllerSpec extends ControllerBaseSpec with MockOTTNotif
 
   "submit" should {
     "return 303 (SEE OTHER) and redirect to the correct URL" when {
-      // TODO: This should point to the new page created as part of DL-18244
-
       "the user selected yes" in {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] = requestPost.withFormUrlEncodedBody(("yes_no", "yes"))
         lazy val result = TestOTTNotificationController.submit(request)
         mockAuthResult(mockAuthorisedIndividual)
         setupMockStoreOTTNotification(Yes)(Right(DeregisterVatSuccess))
         status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show.url)
+        redirectLocation(result) shouldBe Some(controllers.routes.OptionTaxValueController.show.url)
       }
 
       "the user selected no" in {
@@ -97,7 +95,7 @@ class OTTNotificationControllerSpec extends ControllerBaseSpec with MockOTTNotif
         mockAuthResult(mockAuthorisedIndividual)
         setupMockStoreOTTNotification(No)(Right(DeregisterVatSuccess))
         status(result) shouldBe Status.SEE_OTHER
-        redirectLocation(result) shouldBe Some(controllers.routes.OptionStocksToSellController.show.url)
+        redirectLocation(result) shouldBe Some(controllers.routes.OptionTaxValueController.show.url)
       }
     }
 

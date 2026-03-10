@@ -55,8 +55,7 @@ class OTTNotificationController @Inject()(ottNotification: OTTNotification,
     form.bindFromRequest().fold (
       error => Future.successful(BadRequest(ottNotification(error))),
       answer => ottNotificationAnswerService.storeAnswer(answer).flatMap {
-        // TODO: This should point to the new page created as part of DL-18244
-        case Right(_) => Future.successful(Redirect(routes.OptionStocksToSellController.show))
+        case Right(_) => Future.successful(Redirect(routes.OptionTaxValueController.show))
         case Left(error) =>
           warnLog("[OTTNotificationController][submit] - storedAnswerService returned an error storing answer: " + error.message)
           serviceErrorHandler.showInternalServerError

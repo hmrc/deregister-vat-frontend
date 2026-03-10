@@ -102,6 +102,12 @@ ottNotification.inset.1 = Os yw’n cael gwared ar eiddo, efallai y bydd unrhyw 
 ottNotification.inset.2 =  Er enghraifft, os ydych yn berchen ar eiddo rhent, a bod yr eiddo heb gael ei feddiannu am 2 flynedd, yna nid yw esemptiad rhag TAW yn berthnasol bellach. Gallwch adennill TAW ar gyfer y 2 flynedd honno, er gwaethaf y ffaith nad yw’n cynhyrchu incwm.
 ottNotification.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau
 
+optionTaxValue.title = Beth yw gwerth y tir ac eiddo rydych yn parhau i berchen arno ar ôl datgofrestru ar gyfer TAW?
+optionTaxValue.text = Os yw’r holl dir ac eiddo wedi’u gwerthu, nodwch y gwerth yn sero.
+optionTaxValue.error.mandatory = Enter the value of the land and buildings in pounds and pence
+optionTaxValue.error.nonNumeric = The value of the land and buildings must only contain numbers
+optionTaxValue.error.negative = The value of the land and buildings cannot be a minus value
+
 capitalAssets.title = A yw’r busnes yn mynd i gadw unrhyw asedion cyfalaf?
 capitalAssets.text.1 = Er enghraifft dodrefn, cyfrifiaduron ac offer.
 capitalAssets.totalSaleValue = Beth yw cyfanswm y gwerth?
