@@ -18,10 +18,10 @@
 
 @this(mainTemplate: MainTemplate, govukPanel: GovukPanel, govukButton: GovukButton)
 
-@(ottJourneyFlag: Boolean = false,
-    businessName: Option[String] = None,
-    preference: Option[String]= None,
-    isEmailVerified: Option[Boolean] = None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(ottJourneyFlag: Boolean,
+    businessName: Option[String],
+    preference: Option[String],
+    isEmailVerified: Option[Boolean])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @finishLink = @{
   if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
