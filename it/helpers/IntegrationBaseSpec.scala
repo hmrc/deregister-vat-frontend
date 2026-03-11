@@ -112,7 +112,8 @@ trait IntegrationBaseSpec extends CustomMatchers
     "microservice.services.vat-subscription.port" -> mockPort,
     "microservice.services.vat-subscription.host" -> mockHost,
     "microservice.services.vat-subscription-dynamic-stub.port" -> mockPort,
-    "microservice.services.vat-subscription-dynamic-stub.host" -> mockHost
+    "microservice.services.vat-subscription-dynamic-stub.host" -> mockHost,
+    "features.ottJourney.enabled" -> "false"
   )
 
   override implicit lazy val app: Application = new GuiceApplicationBuilder()
