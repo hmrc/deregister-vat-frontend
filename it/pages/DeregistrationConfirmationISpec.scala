@@ -56,9 +56,10 @@ class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
 
         res should have(
           httpStatus(OK),
-          elementText("#preference-message")(Messages("deregistrationConfirmation.digitalPreference"))
+          elementText("#preference-message")(Messages("deregistrationConfirmation.digitalPreference.new"))
         )
       }
     }
   }
+  
 }
