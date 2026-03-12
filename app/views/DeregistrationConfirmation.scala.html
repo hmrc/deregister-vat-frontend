@@ -18,9 +18,10 @@
 
 @this(mainTemplate: MainTemplate, govukPanel: GovukPanel, govukButton: GovukButton)
 
-@(businessName: Option[String] = None,
-  preference: Option[String]= None,
-  verifiedEmail: Option[Boolean] = None)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(ottJourneyFlag: Boolean,
+    businessName: Option[String],
+    preference: Option[String],
+    isEmailVerified: Option[Boolean])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @finishLink = @{
   if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
@@ -30,10 +31,10 @@
   if(user.isAgent) "deregistrationConfirmation.backToClient" else "common.finish"
 }
 
-@mainTemplate(pageTitle = messages("deregistrationConfirmation.title")) {
+@mainTemplate(pageTitle = messages(s"deregistrationConfirmation.title$suffix")) {
 
   @govukPanel(Panel(
-    title = Text(messages("deregistrationConfirmation.title"))
+    title = Text(messages(s"deregistrationConfirmation.title$suffix"))
   ))
 
   <h2 class="govuk-heading-m">@messages("deregistrationConfirmation.heading")</h2>
@@ -43,54 +44,54 @@
       (user.session.get(SessionKeys.verifiedEmail), businessName) match {
 
         case (Some(verifiedEmail), Some(businessName)) =>
-          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffEmailP1")}
+          <p class="govuk-body">{messages(s"deregistrationConfirmation.bpOffEmailP1$suffix")}
               <strong class="bold">{verifiedEmail}</strong>
-              {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
-          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+              {messages(s"deregistrationConfirmation.bpOffEmailP2$suffix")}</p>
+          <p class="govuk-body">{messages(s"deregistrationConfirmation.bpOffNotifyBusiness$suffix")}
               <strong class="bold">{businessName}</strong>
           {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
         case (Some(verifiedEmail), None) =>
-          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffEmailP1")}
+          <p class="govuk-body">{messages(s"deregistrationConfirmation.bpOffEmailP1$suffix")}
               <strong class="bold">{verifiedEmail}</strong>
-              {messages("deregistrationConfirmation.bpOffEmailP2")}</p>
-          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+              {messages(s"deregistrationConfirmation.bpOffEmailP2$suffix")}</p>
+          <p class="govuk-body">{messages(s"deregistrationConfirmation.bpOffNotifyBusiness$suffix")}
           {messages("deregistrationConfirmation.yourClient")}
           {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
         case (None, Some(businessName)) =>
-          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+          <p class="govuk-body">{messages(s"deregistrationConfirmation.bpOffNotifyBusiness$suffix")}
           <strong class="bold">{businessName}</strong>
           {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
 
         case (None, None) =>
-          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+          <p class="govuk-body">{messages(s"deregistrationConfirmation.bpOffNotifyBusiness$suffix")}
           {messages("deregistrationConfirmation.yourClient")}
           {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
         case _ =>
-          <p class="govuk-body">{messages("deregistrationConfirmation.textAgentPrefNo")}</p>
-          <p class="govuk-body">{messages("deregistrationConfirmation.bpOffNotifyBusiness")}
+          <p class="govuk-body">{messages(s"deregistrationConfirmation.textAgentPrefNo$suffix")}</p>
+          <p class="govuk-body">{messages(s"deregistrationConfirmation.bpOffNotifyBusiness$suffix")}
               {messages("deregistrationConfirmation.yourClient")}
               {messages("deregistrationConfirmation.bpOffUpdateBusiness")}</p>
       }
     } else {
 
-      (preference, verifiedEmail) match {
+      (preference, isEmailVerified) match {
 
         case (Some("DIGITAL"), Some(true)) =>
-          <p class="govuk-body" id="preference-message">{messages("deregistrationConfirmation.emailPreference")}</p>
+          <p class="govuk-body" id="preference-message">{messages(s"deregistrationConfirmation.emailPreference$suffix")}</p>
           <p class="govuk-body">{messages("deregistrationConfirmation.contactDetails")}</p>
 
         case (Some("DIGITAL"), _) =>
-          <p class="govuk-body" id="preference-message">{messages("deregistrationConfirmation.digitalPreference")}</p>
+          <p class="govuk-body" id="preference-message">{messages(s"deregistrationConfirmation.digitalPreference$suffix")}</p>
           <p class="govuk-body">{messages("deregistrationConfirmation.contactDetails")}</p>
 
         case (Some("PAPER"), _) =>
-          <p class="govuk-body" id="preference-message">{messages("deregistrationConfirmation.paperPreference")}</p>
+          <p class="govuk-body" id="preference-message">{messages(s"deregistrationConfirmation.paperPreference$suffix")}</p>
           <p class="govuk-body">{messages("deregistrationConfirmation.contactDetails")}</p>
 
         case _ =>
-          <p class="govuk-body">{messages("deregistrationConfirmation.contactPrefError")}</p>
+          <p class="govuk-body">{messages(s"deregistrationConfirmation.contactPrefError$suffix")}</p>
           <p class="govuk-body">{messages("deregistrationConfirmation.contactDetails")}</p>
       }
     }
@@ -100,4 +101,8 @@
     href = Some(finishLink),
     content = Text(messages(buttonMessage))
   ))
+}
+
+@suffix  = @{
+    if(ottJourneyFlag) ".new" else ""
 }

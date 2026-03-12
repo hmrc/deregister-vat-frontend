@@ -200,20 +200,30 @@ checkYourAnswers.answer.no = Na
 checkYourAnswers.confirm = Cadarnhau a chanslo cofrestriad TAW
 
 deregistrationConfirmation.title = Rydych wedi gofyn i ganslo’r cofrestriad TAW
+deregistrationConfirmation.title.new = Mae’ch cais i ganslo cofrestriad TAW wedi dod i law
 deregistrationConfirmation.heading = Yr hyn sy’n digwydd nesaf
 deregistrationConfirmation.yourClient = eich cleient
 deregistrationConfirmation.textAgentPrefNo = Byddwn yn anfon llythyr o gadarnhad i gyfeiriad yr asiantaeth sydd wedi’i gofrestru gyda CThEF cyn pen 15 diwrnod gwaith.
+deregistrationConfirmation.textAgentPrefNo.new = Byddwn yn anfon llythyr o gadarnhad i gyfeiriad yr asiantaeth sydd wedi’i gofrestru gyda CThEF cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.emailPreference = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith gyda diweddariad, neu gallwch wirio’ch negeseuon diogel oddi wrth CThEF.
+deregistrationConfirmation.emailPreference.new = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith gyda diweddariad, neu gallwch wirio’ch negeseuon diogel oddi wrth CThEF.
 deregistrationConfirmation.digitalPreference = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith i roi diweddariad, wedi’i ddilyn gan lythyr i’ch prif fan busnes. Gallwch hefyd wirio’ch negeseuon diogel oddi wrth CThEF i gael diweddariad.
+deregistrationConfirmation.digitalPreference.new = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith i roi diweddariad, wedi’i ddilyn gan lythyr i’ch prif fan busnes. Gallwch hefyd wirio’ch negeseuon diogel oddi wrth CThEF i gael diweddariad.
+
 deregistrationConfirmation.paperPreference = Byddwn yn anfon llythyr i’ch prif fan busnes i roi diweddariad cyn pen 15 diwrnod gwaith.
+deregistrationConfirmation.paperPreference.new = Byddwn yn anfon llythyr i’ch prif fan busnes i roi diweddariad cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.contactPrefError = Byddwn yn anfon diweddariad atoch cyn pen 15 diwrnod gwaith.
+deregistrationConfirmation.contactPrefError.new = Byddwn yn anfon diweddariad atoch cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.contactDetails = Sicrhewch fod eich manylion cyswllt wedi’u diweddaru.
 deregistrationConfirmation.backToClient = Yn ôl i fanylion y cleient
 
 ## Dereg Confirmation when Bulk Paper is off
 deregistrationConfirmation.bpOffEmailP1 = Byddwn yn anfon e-bost i
+deregistrationConfirmation.bpOffEmailP1.new = Byddwn yn anfon diweddariad ynglŷn â’ch cais i
 deregistrationConfirmation.bpOffEmailP2 = cyn pen 2 ddiwrnod gwaith i roi gwybod i chi a allwn dderbyn eich cais ai peidio.
+deregistrationConfirmation.bpOffEmailP2.new = cyn pen 2 diwrnod gwaith.
 deregistrationConfirmation.bpOffNotifyBusiness = Byddwn yn cysylltu â
+deregistrationConfirmation.bpOffNotifyBusiness.new = Byddwn yn cysylltu â
 deregistrationConfirmation.bpOffUpdateBusiness = gyda diweddariad.
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
