@@ -47,7 +47,10 @@
     ))
 }
 
-@mainTemplate(pageTitle = title(messages("ottNotification.title"), form), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = title(messages("ottNotification.title"), form),
+    backLinkContent = Some(backLink),
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, language = if(messages.lang.code == "en") En else Cy))
+) {
 
     @errorSummaryHelper(form)
 
