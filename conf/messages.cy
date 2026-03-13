@@ -96,6 +96,12 @@ optionTax.hint = Beth yw cyfanswm y gwerth?
 optionTax.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw’r busnes wedi codi neu hawlio TAW ar dir neu eiddo masnachol
 optionTax.error.amount.noEntry = Nodwch gyfanswm gwerth y tir neu’r eiddo masnachol
 
+ottNotification.title = A yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau?
+ottNotification.text = Fel arfer, byddwch yn cwblhau hysbysiad o optio i drethu ar ffurflen VAT1614A. Mae hyn yn berthnasol i fusnes sy’n penderfynu codi TAW ar y tir ac adeiladu y mae’n eu cyflenwi.
+ottNotification.inset.1 = Os yw’n cael gwared ar eiddo, efallai y bydd unrhyw dreth sy’n cael ei hadennill mewn perthynas â chostau a gorbenion fod yn ad-daladwy i CThEF. Yn ystod datgofrestru, mae’n rhaid i’r holl eiddo fod â ‘DIM’ TAW i’w thalu.
+ottNotification.inset.2 =  Er enghraifft, os ydych yn berchen ar eiddo rhent, a bod yr eiddo heb gael ei feddiannu am 2 flynedd, yna nid yw esemptiad rhag TAW yn berthnasol bellach. Gallwch adennill TAW ar gyfer y 2 flynedd honno, er gwaethaf y ffaith nad yw’n cynhyrchu incwm.
+ottNotification.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau
+
 capitalAssets.title = A yw’r busnes yn mynd i gadw unrhyw asedion cyfalaf?
 capitalAssets.text.1 = Er enghraifft dodrefn, cyfrifiaduron ac offer.
 capitalAssets.totalSaleValue = Beth yw cyfanswm y gwerth?
@@ -194,20 +200,30 @@ checkYourAnswers.answer.no = Na
 checkYourAnswers.confirm = Cadarnhau a chanslo cofrestriad TAW
 
 deregistrationConfirmation.title = Rydych wedi gofyn i ganslo’r cofrestriad TAW
+deregistrationConfirmation.title.new = Mae’ch cais i ganslo cofrestriad TAW wedi dod i law
 deregistrationConfirmation.heading = Yr hyn sy’n digwydd nesaf
 deregistrationConfirmation.yourClient = eich cleient
 deregistrationConfirmation.textAgentPrefNo = Byddwn yn anfon llythyr o gadarnhad i gyfeiriad yr asiantaeth sydd wedi’i gofrestru gyda CThEF cyn pen 15 diwrnod gwaith.
+deregistrationConfirmation.textAgentPrefNo.new = Byddwn yn anfon llythyr o gadarnhad i gyfeiriad yr asiantaeth sydd wedi’i gofrestru gyda CThEF cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.emailPreference = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith gyda diweddariad, neu gallwch wirio’ch negeseuon diogel oddi wrth CThEF.
+deregistrationConfirmation.emailPreference.new = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith gyda diweddariad, neu gallwch wirio’ch negeseuon diogel oddi wrth CThEF.
 deregistrationConfirmation.digitalPreference = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith i roi diweddariad, wedi’i ddilyn gan lythyr i’ch prif fan busnes. Gallwch hefyd wirio’ch negeseuon diogel oddi wrth CThEF i gael diweddariad.
+deregistrationConfirmation.digitalPreference.new = Byddwn yn anfon e-bost atoch cyn pen 2 ddiwrnod gwaith i roi diweddariad, wedi’i ddilyn gan lythyr i’ch prif fan busnes. Gallwch hefyd wirio’ch negeseuon diogel oddi wrth CThEF i gael diweddariad.
+
 deregistrationConfirmation.paperPreference = Byddwn yn anfon llythyr i’ch prif fan busnes i roi diweddariad cyn pen 15 diwrnod gwaith.
+deregistrationConfirmation.paperPreference.new = Byddwn yn anfon llythyr i’ch prif fan busnes i roi diweddariad cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.contactPrefError = Byddwn yn anfon diweddariad atoch cyn pen 15 diwrnod gwaith.
+deregistrationConfirmation.contactPrefError.new = Byddwn yn anfon diweddariad atoch cyn pen 15 diwrnod gwaith.
 deregistrationConfirmation.contactDetails = Sicrhewch fod eich manylion cyswllt wedi’u diweddaru.
 deregistrationConfirmation.backToClient = Yn ôl i fanylion y cleient
 
 ## Dereg Confirmation when Bulk Paper is off
 deregistrationConfirmation.bpOffEmailP1 = Byddwn yn anfon e-bost i
+deregistrationConfirmation.bpOffEmailP1.new = Byddwn yn anfon diweddariad ynglŷn â’ch cais i
 deregistrationConfirmation.bpOffEmailP2 = cyn pen 2 ddiwrnod gwaith i roi gwybod i chi a allwn dderbyn eich cais ai peidio.
+deregistrationConfirmation.bpOffEmailP2.new = cyn pen 2 diwrnod gwaith.
 deregistrationConfirmation.bpOffNotifyBusiness = Byddwn yn cysylltu â
+deregistrationConfirmation.bpOffNotifyBusiness.new = Byddwn yn cysylltu â
 deregistrationConfirmation.bpOffUpdateBusiness = gyda diweddariad.
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto

@@ -20,6 +20,11 @@ object DeregistrationConfirmationMessages extends BaseMessages {
 
   val heading = "You have asked to cancel the VAT registration"
   val title: String = heading + titleSuffix
+
+  val newHeading: String = "We have received your request to cancel VAT registration"
+  val newTitle: String = newHeading + titleSuffix
+  val agentTitleNew: String = newHeading + titleSuffixAgent
+
   val agentTitle: String = heading + titleSuffixAgent
   val subheading = "What happens next"
 
@@ -31,6 +36,9 @@ object DeregistrationConfirmationMessages extends BaseMessages {
     "letter to your principal place of business. You can also check your HMRC secure messages for an update."
 
   val emailPreference: String = "We’ll send you an email within 2 working days with an update " +
+    "or you can check your HMRC secure messages."
+
+  val emailPreferenceNew: String = "We will send you an email within 2 working days with an update " +
     "or you can check your HMRC secure messages."
 
   val paperPreference = "We’ll send a letter to your principal place of business with an update within 15 working days."
@@ -45,8 +53,10 @@ object DeregistrationConfirmationMessages extends BaseMessages {
   val checkContactDetails = "Check your contact details are up to date."
 
   val bpOffAgentYesPref = "We’ll send an email to agentEmail@test.com within 2 working days telling you whether we can accept your request."
+  val bpOffAgentYesPrefNew = "We will send an update about your request to agentEmail@test.com within 2 working days."
 
   val agentWithBName = "We’ll contact Fake Business Name Limited with an update."
+  val agentWithBNameNew = "We will contact Fake Business Name Limited with an update."
 
   val agentNoBName = "We’ll contact your client with an update."
 

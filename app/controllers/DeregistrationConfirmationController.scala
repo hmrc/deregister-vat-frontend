@@ -42,20 +42,15 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
 
     user.session.get(SessionKeys.deregSuccessful) match {
       case Some("true") =>
-
         deleteAllStoredAnswersService.deleteAllAnswers.flatMap {
-
           case Right(_) =>
-
             customerDetailsService.getCustomerDetails(user.vrn).map { result =>
-
               val businessName: Option[String] = result.fold(_ => None, _.businessName)
               val contactPreference: Option[String] = result.fold(_ => None, _.commsPreference)
-              val verifiedEmail = result.fold(_ => None, _.emailVerified)
+              val isEmailVerified = result.fold(_ => None, _.emailVerified)
 
-              Ok(deregistrationConfirmation(businessName, contactPreference, verifiedEmail))
+              Ok(deregistrationConfirmation(appConfig.ottJourneyFlag, businessName, contactPreference, isEmailVerified))
             }
-
           case Left(_) =>
             warnLog("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
             serviceErrorHandler.showInternalServerError

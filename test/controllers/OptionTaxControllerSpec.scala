@@ -111,8 +111,8 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.CapitalAssetsController.show.url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show.url)
+        s"redirect to '${controllers.routes.OTTNotificationController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.OTTNotificationController.show.url)
         }
       }
 
@@ -129,6 +129,21 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         }
 
         s"redirect to '${controllers.routes.CapitalAssetsController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show.url)
+        }
+      }
+
+      "the user submits after selecting the 'No' option" should {
+        s"redirect to '${controllers.routes.CapitalAssetsController.show.url}' if the OTTJourney feature switch is off" in {
+          mockConfig.features.ottJourneyEnabled(false)
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            requestPost.withFormUrlEncodedBody((yesNo, "no"))
+          lazy val result = TestOptionTaxController.submit(request)
+
+          setupMockStoreOptionTax(testNoModel)(Right(DeregisterVatSuccess))
+          mockAuthResult(mockAuthorisedIndividual)
+          status(result) shouldBe Status.SEE_OTHER
           redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show.url)
         }
       }
