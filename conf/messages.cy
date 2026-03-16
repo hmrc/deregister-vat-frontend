@@ -104,9 +104,9 @@ ottNotification.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw CThEF wed
 
 optionTaxValue.title = Beth yw gwerth y tir ac eiddo rydych yn parhau i berchen arno ar ôl datgofrestru ar gyfer TAW?
 optionTaxValue.text = Os yw’r holl dir ac eiddo wedi’u gwerthu, nodwch y gwerth yn sero.
-optionTaxValue.error.mandatory = Enter the value of the land and buildings in pounds and pence
-optionTaxValue.error.nonNumeric = The value of the land and buildings must only contain numbers
-optionTaxValue.error.negative = The value of the land and buildings cannot be a minus value
+optionTaxValue.error.mandatory = Nodwch werth y tir ac adeiladau mewn punnoedd a cheiniogau
+optionTaxValue.error.nonNumeric = Mae’n rhaid i werth y tir ac adeiladau gynnwys rhifau yn unig
+optionTaxValue.error.negative = Ni all gwerth y tir ac adeiladau fod yn werth negyddol
 
 capitalAssets.title = A yw’r busnes yn mynd i gadw unrhyw asedion cyfalaf?
 capitalAssets.text.1 = Er enghraifft dodrefn, cyfrifiaduron ac offer.
