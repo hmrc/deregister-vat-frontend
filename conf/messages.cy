@@ -233,16 +233,16 @@ deregistrationConfirmation.bpOffNotifyBusiness.new = Byddwn yn cysylltu â
 deregistrationConfirmation.bpOffUpdateBusiness = gyda diweddariad.
 
 ##OTTMessages
-deregistrationOTTConfirmation.title = We have received your request to cancel VAT registration
+deregistrationOTTConfirmation.title = Mae’ch cais i ganslo cofrestriad TAW wedi dod i law
 deregistrationOTTConfirmation.email.p1 = We will send an update about your VAT deregistration to
-deregistrationOTTConfirmation.email.p2 = within 2 working days.
+deregistrationOTTConfirmation.email.p2 = cyn pen 2 diwrnod gwaith.
 deregistrationOTTConfirmation.p1 = We will send an update about your VAT deregistration within 2 working days.
-deregistrationOTTConfirmation.heading = What you need to do next
-deregistrationOTTConfirmation.p2 = You still need to provide information to HMRC on any land or buildings you have had an interest in that are
-deregistrationOTTConfirmation.p3 = opted to tax (opens in a new window).
+deregistrationOTTConfirmation.heading = Yr hyn y mae angen i chi ei wneud nesaf
+deregistrationOTTConfirmation.p2 = Mae’n dal i fod yn rhaid i chi roi gwybodaeth i CThEF am unrhyw dir neu adeiladau mae gennych fuddiant ynddynt sydd
+deregistrationOTTConfirmation.p3 = wedi’u hoptio i drethu (yn agor ffenestr newydd).
 deregistrationOTTConfirmation.p4 = This includes land and buildings that you will continue to own or have an interest in after VAT deregistration.
-deregistrationOTTConfirmation.warningMsg = VAT deregistration could be delayed if you do not provide this information.
-deregistrationOTTConfirmation.ottButton = Complete land and buildings information form
+deregistrationOTTConfirmation.warningMsg = Gall oedi fod wrth ddatgofrestru ar gyfer TAW os nad ydych yn darparu’r wybodaeth hon.
+deregistrationOTTConfirmation.ottButton = Llenwch ffurflen wybodaeth am dir ac adeiladau
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi
