@@ -63,10 +63,6 @@ def test(scope: String = "test, it"): Seq[ModuleID] = Seq(
 )
 
 TwirlKeys.templateImports ++= Seq(
-  "play.twirl.api._",
-  "play.api.i18n._",
-  "play.api.mvc._",
-  "play.api.data._",
   "uk.gov.hmrc.govukfrontend.views.html.components._",
   "uk.gov.hmrc.hmrcfrontend.views.html.components._",
   "uk.gov.hmrc.hmrcfrontend.views.html.helpers._"

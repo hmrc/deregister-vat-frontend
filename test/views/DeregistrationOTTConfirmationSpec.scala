@@ -80,7 +80,7 @@ class DeregistrationOTTConfirmationSpec extends ViewBaseSpec {
 
         "have the correct finish button text and url" in {
           elementText(Selectors.button) shouldBe DeregistrationOTTConfirmationMessages.finishButtonText
-          // element(Selectors.button).attr("href") shouldBe mockConfig.completeLandAndBuildingsInfoFormUrl
+          // element(Selectors.button).attr("href") shouldBe mockConfig.completeLandAndBuildingsInfoFormUrl //to be fixed thru this ticket DL-18688
         }
       }
     }
@@ -126,7 +126,7 @@ class DeregistrationOTTConfirmationSpec extends ViewBaseSpec {
 
         "have the correct finish button text and url" in {
           elementText(Selectors.button) shouldBe DeregistrationOTTConfirmationMessages.finishButtonText
-          // element(Selectors.button).attr("href") shouldBe mockConfig.completeLandAndBuildingsInfoFormUrl
+          // element(Selectors.button).attr("href") shouldBe mockConfig.completeLandAndBuildingsInfoFormUrl //to be fixed thru this ticket DL-18688
         }
 
       }
