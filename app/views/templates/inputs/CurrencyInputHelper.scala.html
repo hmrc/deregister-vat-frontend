@@ -16,7 +16,7 @@
 
 @this(govukInput: GovukInput)
 
-@(form: Form[NumberInputModel], title: String)(implicit messages: Messages)
+@(form: Form[NumberInputModel], title: String, hint: Option[Hint] = None)(implicit messages: Messages)
 
 @govukInput(Input(
   id = "amount",
@@ -28,6 +28,7 @@
     classes = "govuk-label--l",
     content = Text(messages(title))
   ),
+  hint = hint,
   prefix = Some(PrefixOrSuffix(
     content = Text("£")
   )),

@@ -40,10 +40,13 @@
 
     @formWithCSRF(action = controllers.routes.OptionTaxValueController.submit) {
 
-        <h1 class="govuk-heading-l">@messages("optionTaxValue.title")</h1>
-        <p class="govuk-body">@messages("optionTaxValue.text")</p>
-
-        @currencyInputHelper(form = form, "")
+        @currencyInputHelper(
+            form = form, messages("optionTaxValue.title"),
+            hint = Some(Hint(
+                classes = "govuk-body",
+                content = Text(messages("optionTaxValue.text"))
+            ))
+        )
 
         @govukButton(Button(
             content = Text(messages("common.continue"))

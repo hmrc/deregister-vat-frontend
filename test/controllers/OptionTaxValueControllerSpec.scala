@@ -63,6 +63,16 @@ class OptionTaxValueControllerSpec extends ControllerBaseSpec with MockOptionTax
         charset(result) shouldBe Some("utf-8")
         document(result).select("#amount").attr("value") shouldBe testAmt.toString      }
     }
+
+    s"return 300(SEE_OTHER) and redirect to ${routes.OptionTaxController.show.url}" when {
+      "the ottJourney feature switch is disabled" in {
+        mockConfig.features.ottJourneyEnabled(false)
+        lazy val result = TestOptionTaxValueController.show(request)
+        mockAuthResult(mockAuthorisedIndividual)
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.OptionTaxController.show.url)
+      }
+    }
   }
 
   "submit" should {
@@ -89,7 +99,7 @@ class OptionTaxValueControllerSpec extends ControllerBaseSpec with MockOptionTax
         status(result) shouldBe Status.BAD_REQUEST
       }
 
-      "the user did not inserted a negative amount" in {
+      "the user inserted a negative amount" in {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", "-1"))
         lazy val result = TestOptionTaxValueController.submit(request)
@@ -97,7 +107,7 @@ class OptionTaxValueControllerSpec extends ControllerBaseSpec with MockOptionTax
         status(result) shouldBe Status.BAD_REQUEST
       }
 
-      "the user did not inserted a non numeric value" in {
+      "the user inserted a non numeric value" in {
         lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           requestPost.withFormUrlEncodedBody(("amount", "abcd"))
         lazy val result = TestOptionTaxValueController.submit(request)
@@ -114,6 +124,16 @@ class OptionTaxValueControllerSpec extends ControllerBaseSpec with MockOptionTax
         mockAuthResult(mockAuthorisedIndividual)
         setupMockStoreOptionTaxValue(NumberInputModel(testAmt))(Left(errorModel))
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+    }
+
+    s"return 300(SEE_OTHER) and redirect to ${routes.OptionTaxController.show.url}" when {
+      "the ottJourney feature switch is disabled" in {
+        mockConfig.features.ottJourneyEnabled(false)
+        lazy val result = TestOptionTaxValueController.submit(request)
+        mockAuthResult(mockAuthorisedIndividual)
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.OptionTaxController.show.url)
       }
     }
   }
