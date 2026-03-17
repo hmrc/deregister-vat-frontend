@@ -45,22 +45,30 @@ class OptionTaxValueController @Inject()(optionTaxValue: OptionTaxValue,
   val form: Form[NumberInputModel] = OptionTaxValueForm.optionTaxValueForm
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    valueOptionTaxAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(optionTaxValue(form.fill(data)))
-      case _ => Ok(optionTaxValue(form))
+    if(appConfig.features.ottJourneyEnabled()) {
+      valueOptionTaxAnswerService.getAnswer map {
+        case Right(Some(data)) => Ok(optionTaxValue(form.fill(data)))
+        case _ => Ok(optionTaxValue(form))
+      }
+    } else {
+      Future.successful(Redirect(routes.OptionTaxController.show))
     }
   }
 
   val submit: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    form.bindFromRequest().fold(
-      error => Future.successful(BadRequest(optionTaxValue(error))),
-      data => valueOptionTaxAnswerService.storeAnswer(data).flatMap {
-        case Right(_) => Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))
-        case Left(error) =>
-          warnLog("[OptionTaxValueController][submit] - storedAnswerService returned an error storing answer: " + error.message)
-          serviceErrorHandler.showInternalServerError
-      }
-    )
+    if(appConfig.features.ottJourneyEnabled()) {
+      form.bindFromRequest().fold(
+        error => Future.successful(BadRequest(optionTaxValue(error))),
+        data => valueOptionTaxAnswerService.storeAnswer(data).flatMap {
+          case Right(_) => Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))
+          case Left(error) =>
+            warnLog("[OptionTaxValueController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            serviceErrorHandler.showInternalServerError
+        }
+      )
+    } else {
+      Future.successful(Redirect(routes.OptionTaxController.show))
+    }
 
   }
 

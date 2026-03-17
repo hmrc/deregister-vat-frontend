@@ -76,6 +76,15 @@ class OTTNotificationControllerSpec extends ControllerBaseSpec with MockOTTNotif
         document(result).select(s"#$yesNo-2").hasAttr("checked") shouldBe true
       }
     }
+    s"return 300(SEE_OTHER) and redirect to ${routes.OptionTaxController.show.url}" when {
+      "the ottJourney feature switch is disabled" in {
+        mockConfig.features.ottJourneyEnabled(false)
+        lazy val result = TestOTTNotificationController.show(request)
+        mockAuthResult(mockAuthorisedIndividual)
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.OptionTaxController.show.url)
+      }
+    }
   }
 
   "submit" should {
@@ -115,6 +124,16 @@ class OTTNotificationControllerSpec extends ControllerBaseSpec with MockOTTNotif
         mockAuthResult(mockAuthorisedIndividual)
         setupMockStoreOTTNotification(Yes)(Left(errorModel))
         status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+      }
+    }
+
+    s"return 300(SEE_OTHER) and redirect to ${routes.OptionTaxController.show.url}" when {
+      "the ottJourney feature switch is disabled" in {
+        mockConfig.features.ottJourneyEnabled(false)
+        lazy val result = TestOTTNotificationController.submit(request)
+        mockAuthResult(mockAuthorisedIndividual)
+        status(result) shouldBe Status.SEE_OTHER
+        redirectLocation(result) shouldBe Some(routes.OptionTaxController.show.url)
       }
     }
 
