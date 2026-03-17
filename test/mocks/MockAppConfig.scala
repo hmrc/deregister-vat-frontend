@@ -75,5 +75,6 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
   override val thresholds: Seq[VatThreshold] = Seq(model)
   override val webchatUrl: String = "/ask-hmrc/chat/vat-online?ds"
   override val ottJourneyFlag: Boolean = false
+  override val govUkOTTUrl: String = "https://www.gov.uk/guidance/opting-to-tax-land-and-buildings-notice-742a"
 }
 

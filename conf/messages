@@ -232,6 +232,18 @@ deregistrationConfirmation.bpOffNotifyBusiness = We’ll contact
 deregistrationConfirmation.bpOffNotifyBusiness.new = We will contact
 deregistrationConfirmation.bpOffUpdateBusiness = with an update.
 
+##OTTMessages
+deregistrationOTTConfirmation.title = We have received your request to cancel VAT registration
+deregistrationOTTConfirmation.email.p1 = We will send an update about your VAT deregistration to
+deregistrationOTTConfirmation.email.p2 = within 2 working days.
+deregistrationOTTConfirmation.p1 = We will send an update about your VAT deregistration within 2 working days.
+deregistrationOTTConfirmation.heading = What you need to do next
+deregistrationOTTConfirmation.p2 = You still need to provide information to HMRC on any land or buildings you have had an interest in that are
+deregistrationOTTConfirmation.p3 = opted to tax (opens in a new window).
+deregistrationOTTConfirmation.p4 = This includes land and buildings that you will continue to own or have an interest in after VAT deregistration.
+deregistrationOTTConfirmation.warningMsg = VAT deregistration could be delayed if you do not provide this information.
+deregistrationOTTConfirmation.ottButton = Complete land and buildings information form
+
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to
 unauthorised.agent.setUpAccount = set up an agent services account

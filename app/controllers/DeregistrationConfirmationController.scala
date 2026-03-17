@@ -21,17 +21,19 @@ import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{CustomerDetailsService, DeleteAllStoredAnswersService}
+import services.{CustomerDetailsService, DeleteAllStoredAnswersService, OptionTaxAnswerService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggingUtil
-import views.html.DeregistrationConfirmation
+import views.html.{DeregistrationConfirmation, DeregistrationOTTConfirmation}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeregistrationConfirmationController @Inject()(deregistrationConfirmation: DeregistrationConfirmation,
+                                                     deRegistrationOTTConfirmation: DeregistrationOTTConfirmation,
                                                      val mcc: MessagesControllerComponents,
                                                      val authentication: AuthPredicate,
+                                                     val ottAnswerService: OptionTaxAnswerService,
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
                                                      val customerDetailsService: CustomerDetailsService)
@@ -44,12 +46,21 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
       case Some("true") =>
         deleteAllStoredAnswersService.deleteAllAnswers.flatMap {
           case Right(_) =>
-            customerDetailsService.getCustomerDetails(user.vrn).map { result =>
+            customerDetailsService.getCustomerDetails(user.vrn).flatMap { result =>
               val businessName: Option[String] = result.fold(_ => None, _.businessName)
               val contactPreference: Option[String] = result.fold(_ => None, _.commsPreference)
               val isEmailVerified = result.fold(_ => None, _.emailVerified)
 
-              Ok(deregistrationConfirmation(appConfig.ottJourneyFlag, businessName, contactPreference, isEmailVerified))
+              ottAnswerService.getAnswer.flatMap {
+                case Right(Some(data)) =>
+                  if (appConfig.ottJourneyFlag && data.yesNo.value) {
+                    Future.successful(Ok(deRegistrationOTTConfirmation()))
+                  } else {
+                    Future.successful(Ok(deregistrationConfirmation(appConfig.ottJourneyFlag, businessName, contactPreference, isEmailVerified)))
+                  }
+                case _ =>
+                  Future.successful(Ok(deregistrationConfirmation(appConfig.ottJourneyFlag, businessName, contactPreference, isEmailVerified)))
+              }
             }
           case Left(_) =>
             warnLog("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")

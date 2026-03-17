@@ -70,4 +70,5 @@ object ConfigKeys {
   val businessTaxAccountUrl: String = "business-tax-account.homeUrl"
 
   val ottJourneyEnabled: String = "features.ottJourney.enabled"
+  val govUkOTTUrl: String = "gov-uk.ott.url"
 }
