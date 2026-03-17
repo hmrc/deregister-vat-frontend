@@ -36,7 +36,7 @@
 
 @mainTemplate(pageTitle = title(messages("optionOwnsStockToSell.title"), form),
     backLinkContent = Some(backLink),
-    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, language = if(messages.lang.code == "en") En else Cy))
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
 ) {
 
   @errorSummaryHelper(form)
