@@ -26,20 +26,23 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.mocks.{MockAuditService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
-import views.html.DeregistrationConfirmation
+import services.mocks.{MockAuditService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService, MockOptionTaxAnswerService}
+import views.html.{DeregistrationConfirmation, DeregistrationOTTConfirmation}
 
 
 class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
-  with MockCustomerDetailsService with MockAuditService {
+  with MockCustomerDetailsService with MockAuditService with MockOptionTaxAnswerService {
 
   lazy val deregistrationConfirmation: DeregistrationConfirmation = injector.instanceOf[DeregistrationConfirmation]
+  lazy val deregistrationOTTConfirmation: DeregistrationOTTConfirmation = injector.instanceOf[DeregistrationOTTConfirmation]
 
   object TestDeregistrationConfirmationController
     extends DeregistrationConfirmationController(
       deregistrationConfirmation,
+      deregistrationOTTConfirmation,
       mcc,
       mockAuthPredicate,
+      mockOptionTaxAnswerService,
       mockDeleteAllStoredAnswersService,
       serviceErrorHandler,
       mockCustomerDetailsService
@@ -57,6 +60,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+          setupMockGetOptionTax(Right(None))
           TestDeregistrationConfirmationController.show(requestWithSession)
         }
         lazy val document = Jsoup.parse(contentAsString(result))
@@ -99,6 +103,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       "return 200 (OK)" in {
         setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
         mockAuthResult(mockAuthorisedIndividual)
+        setupMockGetOptionTax(Right(None))
         setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
         status(result) shouldBe Status.OK
       }

@@ -27,7 +27,6 @@ import views.html.DeregisterForVAT
 
 class DeregisterForVATControllerSpec extends ControllerBaseSpec with MockAuditConnector with MockAuditService {
 
-
   lazy val deregisterForVAT: DeregisterForVAT = injector.instanceOf[DeregisterForVAT]
 
   val mockPendingDereg = new DeniedAccessPredicate(
