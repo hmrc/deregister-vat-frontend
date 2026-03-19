@@ -46,20 +46,21 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
       case Some("true") =>
         deleteAllStoredAnswersService.deleteAllAnswers.flatMap {
           case Right(_) =>
-            customerDetailsService.getCustomerDetails(user.vrn).flatMap { result =>
-              val businessName: Option[String] = result.fold(_ => None, _.businessName)
-              val contactPreference: Option[String] = result.fold(_ => None, _.commsPreference)
-              val isEmailVerified = result.fold(_ => None, _.emailVerified)
 
-              ottAnswerService.getAnswer.flatMap {
+            customerDetailsService.getCustomerDetails(user.vrn).flatMap { result =>
+              val businessName: Option[String]      = result.fold(_ => None, _.businessName)
+              val contactPreference: Option[String] = result.fold(_ => None, _.commsPreference)
+              val isEmailVerified: Option[Boolean]  = result.fold(_ => None, _.emailVerified)
+
+              ottAnswerService.getAnswer.map {
                 case Right(Some(data)) =>
-                  if (appConfig.ottJourneyFlag && data.yesNo.value) {
-                    Future.successful(Ok(deRegistrationOTTConfirmation()))
+                  if (appConfig.ottJourneyFlag && data.yesNo.value) { // DL-18688 : Check the ottjourney, ottFlag & notificationFlag
+                    Ok(deRegistrationOTTConfirmation())
                   } else {
-                    Future.successful(Ok(deregistrationConfirmation(appConfig.ottJourneyFlag, businessName, contactPreference, isEmailVerified)))
+                    Ok(deregistrationConfirmation(appConfig.ottJourneyFlag, businessName, contactPreference, isEmailVerified))
                   }
                 case _ =>
-                  Future.successful(Ok(deregistrationConfirmation(appConfig.ottJourneyFlag, businessName, contactPreference, isEmailVerified)))
+                  Ok(deregistrationConfirmation(appConfig.ottJourneyFlag, businessName, contactPreference, isEmailVerified))
               }
             }
           case Left(_) =>
