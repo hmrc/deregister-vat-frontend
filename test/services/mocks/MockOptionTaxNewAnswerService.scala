@@ -25,16 +25,16 @@ trait MockOptionTaxNewAnswerService extends MockStoredAnswersService {
 
   val mockOptionTaxNewAnswerService: OptionTaxNewAnswerService = mock[OptionTaxNewAnswerService]
 
-  def setupMockGetOptionTax(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
+  def setupMockGetOptionTaxNew(response: Either[ErrorModel, Option[YesNo]])(implicit user: User[_]): Unit =
     setupMockGetAnswers(mockOptionTaxNewAnswerService)(Future.successful(response))
 
-  def setupMockStoreOptionTax(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockStoreOptionTaxNew(data: YesNo)(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockStoreAnswers(mockOptionTaxNewAnswerService)(data)(Future.successful(response))
 
-  def setupMockDeleteOptionTax(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
+  def setupMockDeleteOptionTaxNew(response: Either[ErrorModel, DeregisterVatResponse])(implicit user: User[_]): Unit =
     setupMockDeleteAnswer(mockOptionTaxNewAnswerService)(Future.successful(response))
 
-  def setupMockOptionTaxNotCalled()(implicit user: User[_]): Unit =
+  def setupMockOptionTaxNewNotCalled()(implicit user: User[_]): Unit =
     setupMockDeleteAnswerNotCalled(mockOptionTaxNewAnswerService)
 
 }

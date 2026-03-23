@@ -170,7 +170,6 @@ class VATAccountsISpec extends IntegrationBaseSpec  {
 
             response should have(
               httpStatus(SEE_OTHER),
-//              redirectURI(controllers.routes.OptionTaxNewController.show.url) //enable it after ott cya page changes  enable it after CYA DL-18246
               redirectURI(controllers.routes.OptionTaxController.show.url)
             )
         }

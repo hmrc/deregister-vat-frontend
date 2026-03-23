@@ -29,7 +29,7 @@
 
 @backLink = {
     @govukBackLink(BackLink(
-        href = if(appConfig.ottJourneyFlag) { controllers.routes.OptionTaxNewController.show.url } else { controllers.routes.OptionTaxController.show.url },
+        href = controllers.routes.OptionTaxController.show.url,
         content = Text(messages("common.back"))
     ))
 }

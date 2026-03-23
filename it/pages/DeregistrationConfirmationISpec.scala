@@ -56,9 +56,7 @@ class DeregistrationConfirmationISpec extends IntegrationBaseSpec {
 
         res should have(
           httpStatus(OK),
-//          elementText("#preference-message")(Messages("deregistrationConfirmation.digitalPreference.new")) // enable it after CYA DL-18246
-          elementText("#preference-message")(Messages("deregistrationConfirmation.digitalPreference"))
-
+          elementText("#preference-message")(Messages("deregistrationConfirmation.digitalPreference.new"))
         )
       }
     }

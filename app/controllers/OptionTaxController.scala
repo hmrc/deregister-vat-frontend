@@ -18,14 +18,15 @@ package controllers
 
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
-import forms.YesNoAmountForm
-import models.{User, YesNoAmountModel}
+import forms.{YesNoAmountForm, YesNoForm}
+import models.{User, Yes, YesNo, YesNoAmountModel}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.OptionTaxAnswerService
+import services.{OptionTaxAnswerService, OptionTaxNewAnswerService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.OptionTax
+import views.html.{OptionTax, OptionTaxNew}
+
 import javax.inject.{Inject, Singleton}
 import utils.LoggingUtil
 
@@ -33,40 +34,72 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class OptionTaxController @Inject()(optionTax: OptionTax,
+                                    optionTaxNew: OptionTaxNew,
                                     val mcc: MessagesControllerComponents,
                                     val authenticate: AuthPredicate,
                                     val regStatusCheck: DeniedAccessPredicate,
                                     val optionTaxAnswerService: OptionTaxAnswerService,
+                                    val optionTaxNewAnswerService: OptionTaxNewAnswerService,
                                     val serviceErrorHandler: ServiceErrorHandler,
                                     implicit val ec: ExecutionContext,
                                     implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil{
 
+
   val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm("optionTax.error.mandatoryRadioOption","optionTax.error.amount.noEntry")
+  val ottForm: Form[YesNo] = YesNoForm.yesNoForm("optionTax.error.mandatoryRadioOption")
 
   private def renderView(form: Form[YesNoAmountModel])(implicit user: User[_]) =
     optionTax(form)
 
+  private def renderNewView(form: Form[YesNo])(implicit  user:User[_]) =
+    optionTaxNew(form)
+
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    optionTaxAnswerService.getAnswer map {
-      case Right(Some(data)) => Ok(renderView(form.fill(data)))
-      case _ => Ok(renderView(form))
+    if (appConfig.features.ottJourneyEnabled()) {
+      optionTaxNewAnswerService.getAnswer map {
+        case Right(Some(data)) => Ok(renderNewView(ottForm.fill(data)))
+        case _ => Ok(renderNewView(ottForm))
+      }
+    } else {
+      optionTaxAnswerService.getAnswer map {
+        case Right(Some(data)) => Ok(renderView(form.fill(data)))
+        case _ => Ok(renderView(form))
+      }
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    form.bindFromRequest().fold(
-      error => Future.successful(BadRequest(optionTax(error))),
-      data => optionTaxAnswerService.storeAnswer(data).flatMap {
-        case Right(_) =>
-          if(appConfig.features.ottJourneyEnabled() && data.yesNo.value) {
-            Future.successful(Redirect(controllers.routes.OTTNotificationController.show))
-          } else {
-            Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))
-          }
-        case Left(error) =>
-          warnLog("[OptionTaxController][submit] - storedAnswerService returned an error storing answer: " + error.message)
-          serviceErrorHandler.showInternalServerError
-      }
-    )
+    if (appConfig.features.ottJourneyEnabled()) {
+      ottForm.bindFromRequest().fold(
+        error => Future.successful(BadRequest(optionTaxNew(error))),
+        answer => optionTaxNewAnswerService.storeAnswer(answer).flatMap {
+          case Right(_) =>
+            if(appConfig.features.ottJourneyEnabled() && answer == Yes) {
+              Future.successful(Redirect(controllers.routes.OTTNotificationController.show))
+            } else {
+              Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))
+            }
+          case Left(error) =>
+            warnLog("[OptionTaxNewController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            serviceErrorHandler.showInternalServerError
+        }
+      )
+    } else {
+      form.bindFromRequest().fold(
+        error => Future.successful(BadRequest(optionTax(error))),
+        data => optionTaxAnswerService.storeAnswer(data).flatMap {
+          case Right(_) =>
+            if (appConfig.features.ottJourneyEnabled() && data.yesNo.value) {
+              Future.successful(Redirect(controllers.routes.OTTNotificationController.show))
+            } else {
+              Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))
+            }
+          case Left(error) =>
+            warnLog("[OptionTaxController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            serviceErrorHandler.showInternalServerError
+        }
+      )
+    }
   }
 }
+

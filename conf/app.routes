@@ -19,9 +19,6 @@ POST        /accounting-method                                    controllers.VA
 GET         /option-to-tax                                        controllers.OptionTaxController.show
 POST        /option-to-tax                                        controllers.OptionTaxController.submit
 
-GET         /option-to-tax-new                                    controllers.OptionTaxNewController.show
-POST        /option-to-tax-new                                    controllers.OptionTaxNewController.submit
-
 GET         /notified-hmrc-about-option-to-tax                    controllers.OTTNotificationController.show
 POST        /notified-hmrc-about-option-to-tax                    controllers.OTTNotificationController.submit
 

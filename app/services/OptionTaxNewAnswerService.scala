@@ -27,5 +27,5 @@ class OptionTaxNewAnswerService @Inject()(val deregisterVatConnector: Deregister
 }
 
 object OptionTaxNewAnswerService {
-  val key: String = "optionTax"
+  val key: String = "optionTaxNew"
 }

@@ -79,11 +79,7 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
       },
       data => accountingMethodAnswerService.storeAnswer(data).flatMap {
         case Right(_) =>
-            if(appConfig.ottJourneyFlag){
-              Future.successful(Redirect(controllers.routes.OptionTaxNewController.show))
-            } else {
-              Future.successful(Redirect(controllers.routes.OptionTaxController.show))
-            }
+          Future.successful(Redirect(controllers.routes.OptionTaxController.show))
         case Left(error) =>
           warnLog("[VATAccountsController][submit] - failed to store accountingMethod in answer service: " + error.message)
           serviceErrorHandler.showInternalServerError
