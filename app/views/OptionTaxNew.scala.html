@@ -19,43 +19,35 @@
 @import views.utils.TitleUtil.title
 
 @this(mainTemplate: MainTemplate,
-        formWithCSRF: FormWithCSRF,
-        govukBackLink: GovukBackLink,
-        govukInsetText : GovukInsetText,
-        errorSummaryHelper: ErrorSummaryHelper,
-        yesNoHelper: YesNoHelper,
-        govukButton: GovukButton)
+formWithCSRF: FormWithCSRF,
+govukBackLink: GovukBackLink,
+govukInsetText : GovukInsetText,
+errorSummaryHelper: ErrorSummaryHelper,
+govukButton: GovukButton,
+yesNoHelper: YesNoHelper)
 
 @(form: Form[YesNo])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @backLink = {
-@govukBackLink(BackLink(
-    href = if(appConfig.ottJourneyFlag) { controllers.routes.OptionTaxNewController.show.url } else { controllers.routes.OptionTaxController.show.url},
-    content = Text(messages("common.back"))
-))
-}
-
-@inset = {
-    <p class="govuk-body">@messages("ottNotification.inset.1")</p>
-    <p class="govuk-body">@messages("ottNotification.inset.2")</p>
-}
-
-@content = {
-    <p class="govuk-body">@messages("ottNotification.text")</p>
-    @govukInsetText(InsetText(
-        content = HtmlContent(inset)
+    @govukBackLink(BackLink(
+        href = controllers.routes.VATAccountsController.show.url,
+        content = Text(messages("common.back"))
     ))
 }
 
-@mainTemplate(pageTitle = title(messages("ottNotification.title"), form), backLinkContent = Some(backLink)) {
+@content = {
+    <p class="govuk-body">@messages("optionTax.text")</p>
+}
+
+@mainTemplate(pageTitle = title(messages("optionTax.title"), form), backLinkContent = Some(backLink)) {
 
     @errorSummaryHelper(form)
 
-    @formWithCSRF(action = controllers.routes.OTTNotificationController.submit) {
+    @formWithCSRF(action = controllers.routes.OptionTaxNewController.submit) {
 
         @yesNoHelper(
             form = form,
-            title = messages("ottNotification.title"),
+            title = messages("optionTax.title"),
             additionalContent = Some(content),
             vatThreshold = ""
         )

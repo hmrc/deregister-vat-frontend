@@ -74,4 +74,5 @@ object VatSubscriptionStub extends WireMockMethods {
     verify(putRequestedFor(urlEqualTo("/vat-subscription/968501689/deregister"))
       .withRequestBody(equalToJson(body.toString()))
     )
+
 }

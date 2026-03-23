@@ -27,7 +27,7 @@ import services._
 import stubs.DeregisterVatStub
 
 
-class VATAccountsISpec extends IntegrationBaseSpec {
+class VATAccountsISpec extends IntegrationBaseSpec  {
 
   "Calling the GET VatAccounts" when {
 
@@ -161,19 +161,18 @@ class VATAccountsISpec extends IntegrationBaseSpec {
     "the user is authorised" when {
 
       "the post request includes valid data" should {
-
         "return 303 SEE_OTHER" in {
+            given.user.isAuthorised
 
-          given.user.isAuthorised
+            DeregisterVatStub.successfulPutAnswer(vrn, AccountingMethodAnswerService.key)
 
-          DeregisterVatStub.successfulPutAnswer(vrn,AccountingMethodAnswerService.key)
+            val response: WSResponse = postRequest(standard)
 
-          val response: WSResponse = postRequest(standard)
-
-          response should have(
-            httpStatus(SEE_OTHER),
-            redirectURI(controllers.routes.OptionTaxController.show.url)
-          )
+            response should have(
+              httpStatus(SEE_OTHER),
+//              redirectURI(controllers.routes.OptionTaxNewController.show.url) //enable it after ott cya page changes  enable it after CYA DL-18246
+              redirectURI(controllers.routes.OptionTaxController.show.url)
+            )
         }
       }
 
