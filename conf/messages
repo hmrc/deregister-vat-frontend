@@ -172,6 +172,7 @@ checkYourAnswers.question.businessActivityChanged = Has the business activity ch
 checkYourAnswers.question.sicCode = Standard Industrial Classification (SIC) Code
 checkYourAnswers.question.zeroRatedSupplies = Value of zero-rated supplies for next 12 months
 checkYourAnswers.question.purchasesExceedSupplies = Will VAT on purchases exceed VAT on supplies?
+checkYourAnswers.question.ottNotification = Notified HMRC about an option to tax
 
 checkYourAnswers.hidden.reason = Change the reason why the business is cancelling its VAT registration
 checkYourAnswers.hidden.ceasedTrading = Change the date your business stopped or will stop trading
@@ -193,6 +194,7 @@ checkYourAnswers.hidden.businessActivityChanged = Change whether the business ac
 checkYourAnswers.hidden.sicCode = Change the business’s Standard Industrial Classification (SIC) Code
 checkYourAnswers.hidden.zeroRatedSupplies = Change the value of zero-rated supplies for the next 12 months
 checkYourAnswers.hidden.purchasesExceedSupplies = Change whether the VAT on purchases will exceed the VAT on supplies
+checkYourAnswers.hidden.ottNotification = Change whether the business notified HMRC about an option to tax
 
 checkYourAnswers.answer.noDate = Not Specified
 checkYourAnswers.answer.standard = Standard accounting

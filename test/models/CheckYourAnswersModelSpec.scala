@@ -32,6 +32,9 @@ class CheckYourAnswersModelSpec extends TestUtil {
     None,
     Some(StandardAccounting),
     Some(ottModel),
+    None,
+    None,
+    None,
     Some(assetsModel),
     Some(stocksModel),
     Some(Yes),
@@ -232,7 +235,7 @@ class CheckYourAnswersModelSpec extends TestUtil {
 
       "return an empty sequence" in {
         CheckYourAnswersModel(
-          None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,""
+          None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,""
         ).seqAnswers shouldBe Seq.empty[CheckYourAnswersRowModel]
       }
     }

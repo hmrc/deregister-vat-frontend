@@ -24,11 +24,11 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.{MockOptionTaxAnswerService, MockOptionTaxNewAnswerService}
+import services.mocks.{MockOptionTaxAnswerService, MockOptionTaxNewAnswerService, MockWipeRedundantDataService}
 import views.html.{OptionTax, OptionTaxNew}
 
 
-class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswerService with MockOptionTaxNewAnswerService {
+class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswerService with MockOptionTaxNewAnswerService with MockWipeRedundantDataService {
 
   lazy val optionTax: OptionTax = injector.instanceOf[OptionTax]
 
@@ -42,14 +42,15 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
     mockRegistrationStatusPredicate,
     mockOptionTaxAnswerService,
     mockOptionTaxNewAnswerService,
+    mockWipeRedundantDataService,
     serviceErrorHandler,
     ec,
     mockConfig
   )
 
   val testAmt = 500
-  val testYesModel = YesNoAmountModel(Yes, Some(testAmt))
-  val testNoModel = YesNoAmountModel(No, None)
+  val testYesModel: YesNoAmountModel = YesNoAmountModel(Yes, Some(testAmt))
+  val testNoModel: YesNoAmountModel = YesNoAmountModel(No, None)
 
   "the user is authorised" when {
 

@@ -20,7 +20,7 @@ import play.twirl.api.Html
 
 import java.text.DecimalFormat
 
-object MoneyFormatter {
+object  MoneyFormatter {
 
   private val formatter = new DecimalFormat("#,##0.00")
   private val removeZeroDecimals: String => String = _.replace(".00","")

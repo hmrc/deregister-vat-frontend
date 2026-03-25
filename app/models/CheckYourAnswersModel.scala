@@ -16,6 +16,7 @@
 
 package models
 
+import config.AppConfig
 import play.api.i18n.Messages
 import play.twirl.api.Html
 import utils.MoneyFormatter
@@ -27,6 +28,9 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                                  accounting: Option[VATAccountsModel],
                                  optionTax: Option[YesNoAmountModel],
+                                 optionTaxNewFlag: Option[YesNo],
+                                 ottNotificationFlag: Option[YesNo],
+                                 optionTaxValue: Option[NumberInputModel],
                                  capitalAssets: Option[YesNoAmountModel],
                                  stocks: Option[YesNoAmountModel],
                                  newInvoices: Option[YesNo],
@@ -38,7 +42,7 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
                                  zeroRatedSupplies: Option[NumberInputModel],
                                  purchasesExceedSupplies: Option[YesNo],
                                  vatThreshold: String)
-                                (implicit messages: Messages) {
+                                (implicit messages: Messages, appConfig: AppConfig) {
 
   def seqAnswers: Seq[CheckYourAnswersRowModel] = deregistrationReason match {
     case Some(ZeroRated) => zeroRatedAnswerSequence.flatten
@@ -103,6 +107,27 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     controllers.routes.OptionTaxController.show.url,
     messages("checkYourAnswers.hidden.optionTaxValue")
   )))
+
+  private val optionTaxNewAnswer = optionTaxNewFlag.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.optionTax"),
+    Html(messages(s"common.${answer.toString}")),
+    controllers.routes.OptionTaxController.show.url,
+    messages("checkYourAnswers.hidden.optionTax")
+  ))
+
+  private val ottNotificationAnswer = ottNotificationFlag.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.ottNotification"),
+    Html(messages(s"common.${answer.toString}")),
+    controllers.routes.OTTNotificationController.show.url,
+    messages("checkYourAnswers.hidden.ottNotification")
+  ))
+
+  private val optionTaxNewValueAnswer = optionTaxValue.map(answer => CheckYourAnswersRowModel(
+    messages("checkYourAnswers.question.optionTaxValue"),
+    MoneyFormatter.formatHtmlAmount(answer.value),
+    controllers.routes.OptionTaxValueController.show.url,
+    messages("checkYourAnswers.hidden.optionTaxValue")
+  ))
 
   private val capitalAssetsAnswer = capitalAssets.map(answer => CheckYourAnswersRowModel(
     messages("checkYourAnswers.question.capitalAssets"),
@@ -191,19 +216,37 @@ case class CheckYourAnswersModel(deregistrationReason: Option[DeregistrationReas
     messages("checkYourAnswers.hidden.purchasesExceedSupplies")
   ))
 
-  private val commonAnswers: Seq[Option[CheckYourAnswersRowModel]] = Seq(
-    accountingAnswer,
-    optionTaxAnswer,
-    optionTaxValueAnswer,
-    capitalAssetsAnswer,
-    capitalAssetsValueAnswer,
-    stocksAnswer,
-    stocksValueAnswer,
-    newInvoicesAnswer,
-    outstandingInvoicesAnswer,
-    chooseDeregDateAnswer,
-    deregDateAnswer
-  )
+  private val commonAnswers: Seq[Option[CheckYourAnswersRowModel]] = appConfig.ottJourneyFlag match {
+    case false =>
+      Seq(
+        accountingAnswer,
+        optionTaxAnswer,
+        optionTaxValueAnswer,
+        capitalAssetsAnswer,
+        capitalAssetsValueAnswer,
+        stocksAnswer,
+        stocksValueAnswer,
+        newInvoicesAnswer,
+        outstandingInvoicesAnswer,
+        chooseDeregDateAnswer,
+        deregDateAnswer
+      )
+    case true =>
+      Seq(
+        accountingAnswer,
+        optionTaxNewAnswer,
+        ottNotificationAnswer,
+        optionTaxNewValueAnswer,
+        capitalAssetsAnswer,
+        capitalAssetsValueAnswer,
+        stocksAnswer,
+        stocksValueAnswer,
+        newInvoicesAnswer,
+        outstandingInvoicesAnswer,
+        chooseDeregDateAnswer,
+        deregDateAnswer
+      )
+  }
 
   private val standardAnswerSequence: Seq[Option[CheckYourAnswersRowModel]] = Seq(
     deregReasonAnswer,

@@ -16,7 +16,7 @@ This service is written in [Scala](http://www.scala-lang.org/) and [Play](http:/
 Start required services locally as follows:
 
 ```bash
-sm2 --start VAT_SUBSCRIPTION_DYNAMIC_STUB DIGITAL_COMMS_DYNAMIC_STUB CHANGE_VAT_ALL
+sm2 --start VAT_SUBSCRIPTION_DYNAMIC_STUB DIGITAL_COMMS_DYNAMIC_STUB VAT_AGENT_CLIENT_LOOKUP_FRONTEND FINANCIAL_TRANSACTIONS CHANGE_VAT_ALL
 ```
 
 ### Populating stub data

@@ -43,7 +43,7 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
   with MockStocksAnswerService            with MockOptionTaxAnswerService
   with MockAccountingMethodAnswerService  with MockPurchasesExceedSuppliesAnswerService
   with MockSicCodeAnswerService           with MockZeroRatedSuppliesValueService
-  with MockAuditService {
+  with MockAuditService with MockOptionTaxNewAnswerService with MockOptionTaxValueAnswerService {
 
   object TestUpdateDeregistrationService extends UpdateDeregistrationService(
     mockDeregReasonAnswerService,
@@ -53,6 +53,8 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
     mockWhyTurnoverBelowAnswerService,
     mockAccountingMethodAnswerService,
     mockOptionTaxAnswerService,
+    mockOptionTaxNewAnswerService,
+    mockOptionTaxValueAnswerService,
     mockCapitalAssetsAnswerService,
     mockStocksAnswerService,
     mockIssueNewInvoicesAnswerService,
@@ -81,7 +83,9 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
           setupMockGetTaxableTurnover(Right(Some(Yes)))
           setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
           setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowOne)))
-          setupMockGetOptionTax(Right(Some(ottModel)))
+          setupMockGetOptionTax(Right(None))
+          setupMockGetOptionTaxNew(Right(Some(Yes)))
+          setupMockGetOptionTaxValue(Right(Some(optTaxValue)))
           setupMockGetCapitalAssets(Right(Some(assetsModel)))
           setupMockGetStocks(Right(Some(stocksModel)))
           setupMockGetIssueNewInvoices(Right(Some(Yes)))
@@ -108,7 +112,9 @@ class UpdateDeregistrationServiceSpec     extends TestUtil
         setupMockGetTaxableTurnover(Right(Some(Yes)))
         setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
         setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowOne)))
-        setupMockGetOptionTax(Right(Some(ottModel)))
+        setupMockGetOptionTax(Right(None))
+        setupMockGetOptionTaxNew(Right(Some(Yes)))
+        setupMockGetOptionTaxValue(Right(Some(optTaxValue)))
         setupMockGetCapitalAssets(Right(Some(assetsModel)))
         setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
