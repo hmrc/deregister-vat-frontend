@@ -16,20 +16,20 @@
 
 package controllers
 
+import cats.data.EitherT
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.{AuthPredicate, DeniedAccessPredicate}
 import forms.{YesNoAmountForm, YesNoForm}
-import models.{User, Yes, YesNo, YesNoAmountModel}
+import models._
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.{OptionTaxAnswerService, OptionTaxNewAnswerService}
+import services.{OptionTaxAnswerService, OptionTaxNewAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import utils.LoggingUtil
 import views.html.{OptionTax, OptionTaxNew}
 
 import javax.inject.{Inject, Singleton}
-import utils.LoggingUtil
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -40,6 +40,7 @@ class OptionTaxController @Inject()(optionTax: OptionTax,
                                     val regStatusCheck: DeniedAccessPredicate,
                                     val optionTaxAnswerService: OptionTaxAnswerService,
                                     val optionTaxNewAnswerService: OptionTaxNewAnswerService,
+                                    val wipeRedundantDataService: WipeRedundantDataService,
                                     val serviceErrorHandler: ServiceErrorHandler,
                                     implicit val ec: ExecutionContext,
                                     implicit val appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport with LoggingUtil{
@@ -72,28 +73,24 @@ class OptionTaxController @Inject()(optionTax: OptionTax,
     if (appConfig.features.ottJourneyEnabled()) {
       ottForm.bindFromRequest().fold(
         error => Future.successful(BadRequest(optionTaxNew(error))),
-        answer => optionTaxNewAnswerService.storeAnswer(answer).flatMap {
-          case Right(_) =>
-            if(appConfig.features.ottJourneyEnabled() && answer == Yes) {
-              Future.successful(Redirect(controllers.routes.OTTNotificationController.show))
-            } else {
-              Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))
-            }
-          case Left(error) =>
-            warnLog("[OptionTaxNewController][submit] - storedAnswerService returned an error storing answer: " + error.message)
-            serviceErrorHandler.showInternalServerError
+        data => (for {
+          _ <- EitherT(optionTaxNewAnswerService.storeAnswer(data))
+          result = redirect(appConfig.features.ottJourneyEnabled(), data)
+        } yield result).value.flatMap {
+            case Right(redirect) => Future.successful(redirect)
+            case Left(error) =>
+              warnLog("[OptionTaxNewController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+              serviceErrorHandler.showInternalServerError
         }
       )
     } else {
       form.bindFromRequest().fold(
         error => Future.successful(BadRequest(optionTax(error))),
-        data => optionTaxAnswerService.storeAnswer(data).flatMap {
-          case Right(_) =>
-            if (appConfig.features.ottJourneyEnabled() && data.yesNo.value) {
-              Future.successful(Redirect(controllers.routes.OTTNotificationController.show))
-            } else {
-              Future.successful(Redirect(controllers.routes.CapitalAssetsController.show))
-            }
+        data => (for {
+          _ <- EitherT(optionTaxAnswerService.storeAnswer(data))
+          result = redirect(ottFlag = false, data.yesNo)
+        } yield result).value.flatMap{
+          case Right(redirect) => Future.successful(redirect)
           case Left(error) =>
             warnLog("[OptionTaxController][submit] - storedAnswerService returned an error storing answer: " + error.message)
             serviceErrorHandler.showInternalServerError
@@ -101,5 +98,11 @@ class OptionTaxController @Inject()(optionTax: OptionTax,
       )
     }
   }
+
+  def redirect (ottFlag: Boolean, yesNo: YesNo) : Result = (ottFlag, yesNo) match {
+    case (true, Yes) => Redirect(controllers.routes.OTTNotificationController.show)
+    case (_, _) => Redirect(controllers.routes.CapitalAssetsController.show)
+  }
+
 }
 

@@ -172,6 +172,7 @@ checkYourAnswers.question.businessActivityChanged = A yw’r gweithgaredd busnes
 checkYourAnswers.question.sicCode = Cod Dosbarthiad Diwydiannol Safonol (SIC)
 checkYourAnswers.question.zeroRatedSupplies = Gwerth cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
 checkYourAnswers.question.purchasesExceedSupplies = A fydd TAW ar bryniannau yn fwy na TAW ar gyflenwadau?
+checkYourAnswers.question.ottNotification = Wedi rhoi gwybod i CThEF am yr opsiwn i drethu
 
 checkYourAnswers.hidden.reason = Newid y rheswm pam mae’r busnes yn canslo ei gofrestriad TAW
 checkYourAnswers.hidden.ceasedTrading = Newid y dyddiad y rhoddodd eich busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
@@ -193,6 +194,7 @@ checkYourAnswers.hidden.businessActivityChanged = Newid p’un a yw’r gweithga
 checkYourAnswers.hidden.sicCode = Newid Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes
 checkYourAnswers.hidden.zeroRatedSupplies = Newid gwerth y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
 checkYourAnswers.hidden.purchasesExceedSupplies = Newid p’un a fydd y TAW ar bryniannau yn mynd y tu hwnt i’r TAW ar gyflenwadau
+checkYourAnswers.hidden.ottNotification = Newid yr ateb ynghylch a yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau
 
 checkYourAnswers.answer.noDate = Heb fanylu
 checkYourAnswers.answer.standard = Cyfrifyddu safonol

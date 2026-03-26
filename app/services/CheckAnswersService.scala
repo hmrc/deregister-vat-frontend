@@ -35,6 +35,9 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
                                     deregReasonAnswerService: DeregReasonAnswerService,
                                     nextTaxableTurnoverAnswerService: NextTaxableTurnoverAnswerService,
                                     optionTaxAnswerService: OptionTaxAnswerService,
+                                    optionTaxNewAnswerService: OptionTaxNewAnswerService,
+                                    OTTNotificationAnswerService: OTTNotificationAnswerService,
+                                    optionTaxValueAnswerService: OptionTaxValueAnswerService,
                                     issueNewInvoicesAnswerService: IssueNewInvoicesAnswerService,
                                     stocksAnswerService: StocksAnswerService,
                                     taxableTurnoverAnswerService: TaxableTurnoverAnswerService,
@@ -57,6 +60,9 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
       whyBelow <- EitherT(whyTurnoverBelowAnswerService.getAnswer)
       accounting <- EitherT(accountingMethodAnswerService.getAnswer)
       optionTax <- EitherT(optionTaxAnswerService.getAnswer)
+      optionTaxNew <- EitherT(optionTaxNewAnswerService.getAnswer)
+      ottNotification <- EitherT(OTTNotificationAnswerService.getAnswer)
+      optionTaxValue <- EitherT(optionTaxValueAnswerService.getAnswer)
       capital <- EitherT(capitalAssetsAnswerService.getAnswer)
       stocks <- EitherT(stocksAnswerService.getAnswer)
       issueInvoice <- EitherT(issueNewInvoicesAnswerService.getAnswer)
@@ -76,6 +82,9 @@ class CheckAnswersService @Inject()(accountingMethodAnswerService: AccountingMet
         whyBelow,
         accounting,
         optionTax,
+        optionTaxNew,
+        ottNotification,
+        optionTaxValue,
         capital,
         stocks,
         issueInvoice,

@@ -60,7 +60,7 @@ object DeregistrationInfoTestConstants {
     intendSellCapitalAssets = true,
     additionalTaxInvoices = true,
     cashAccountingScheme = true,
-    optionToTaxValue = Some(ottValue),
+    optionToTaxValue = Some(optTaxValue.value),
     stocksValue = Some(stockValue),
     capitalAssetsValue = Some(assetsValue),
     transactorOrCapacitorEmail = Some(agentEmail)
@@ -75,7 +75,7 @@ object DeregistrationInfoTestConstants {
     "intendSellCapitalAssets" -> true,
     "additionalTaxInvoices" -> true,
     "cashAccountingScheme" -> true,
-    "optionToTaxValue" -> ottValue,
+    "optionToTaxValue" -> optTaxValue.value,
     "stocksValue" -> stockValue,
     "capitalAssetsValue" -> assetsValue,
     "transactorOrCapacitorEmail" -> agentEmail

@@ -46,7 +46,6 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
       case Some("true") =>
         deleteAllStoredAnswersService.deleteAllAnswers.flatMap {
           case Right(_) =>
-
             customerDetailsService.getCustomerDetails(user.vrn).flatMap { result =>
               val businessName: Option[String]      = result.fold(_ => None, _.businessName)
               val contactPreference: Option[String] = result.fold(_ => None, _.commsPreference)

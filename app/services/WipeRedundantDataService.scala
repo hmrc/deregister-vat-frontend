@@ -19,6 +19,7 @@ package services
 import cats.data.EitherT
 import cats.instances.future._
 import com.google.inject.{Inject, Singleton}
+import config.AppConfig
 import models._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -38,7 +39,11 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
                                          val businessActivityAnswer: BusinessActivityAnswerService,
                                          val zeroRatedSuppliesValueService: ZeroRatedSuppliesValueService,
                                          val purchaseVatExceedSupplyVatAnswer: PurchasesExceedSuppliesAnswerService,
-                                         val sicCodeAnswer: SicCodeAnswerService) {
+                                         val sicCodeAnswer: SicCodeAnswerService,
+                                         val optionTaxAnswerService: OptionTaxAnswerService,
+                                         val optionTaxNewAnswerService: OptionTaxNewAnswerService,
+                                         val ottNotificationAnswer: OTTNotificationAnswerService,
+                                         val optionTaxValueAnswer: OptionTaxValueAnswerService)(implicit val appConfig: AppConfig){
 
 
   def wipeRedundantData(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, DeregisterVatResponse]] = {
@@ -49,11 +54,14 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
       outstandingInvoices <- EitherT(outstandingInvoicesAnswer.getAnswer)
       businessActivity <- EitherT(businessActivityAnswer.getAnswer)
       chooseDate <- EitherT(chooseDateAnswer.getAnswer)
+      ottNewFlag <- EitherT(optionTaxNewAnswerService.getAnswer)
+
       _ <- EitherT(wipeRedundantDeregReasonJourneyData(deregReason))
       _ <- EitherT(wipeOutstandingInvoices(issueInvoices))
       _ <- EitherT(wipeDeregDate(deregReason, capitalAssets, issueInvoices, outstandingInvoices))
       _ <- EitherT(wipeSicCode(businessActivity))
       _ <- EitherT(wipeChosenDate(chooseDate))
+      _ <- EitherT(wipeOptionTaxData(ottNewFlag))
     } yield DeregisterVatSuccess).value
   }
 
@@ -157,6 +165,35 @@ class WipeRedundantDataService @Inject()(val deregReasonAnswer: DeregReasonAnswe
     chooseDate match {
       case Some(No) => deregDateAnswer.deleteAnswer
       case _ => Future.successful(Right(DeregisterVatSuccess))
+    }
+  }
+
+  private[services] def wipeOptionTaxData(ottNewFlag: Option[YesNo])
+                                         (implicit user:User[_], hc: HeaderCarrier, ec: ExecutionContext)
+  : Future[Either[ErrorModel, DeregisterVatResponse]] = {
+
+    if(appConfig.features.ottJourneyEnabled()){
+      ottNewFlag match {
+        case Some(Yes) =>
+          (for {
+            _ <- EitherT(optionTaxAnswerService.deleteAnswer)
+          } yield DeregisterVatSuccess).value
+
+        case Some(No) =>
+          (for {
+            _ <- EitherT(optionTaxAnswerService.deleteAnswer)
+            _ <- EitherT(optionTaxValueAnswer.deleteAnswer)
+            _ <- EitherT(ottNotificationAnswer.deleteAnswer)
+          } yield DeregisterVatSuccess).value
+
+        case _ => Future.successful(Right(DeregisterVatSuccess))
+      }
+    } else {
+        (for {
+          _ <- EitherT(optionTaxNewAnswerService.deleteAnswer)
+          _ <- EitherT(ottNotificationAnswer.deleteAnswer)
+          _ <- EitherT(optionTaxValueAnswer.deleteAnswer)
+        } yield DeregisterVatSuccess).value
     }
   }
 

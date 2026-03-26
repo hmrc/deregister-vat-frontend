@@ -29,9 +29,10 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
   with MockCeasedTradingDateAnswerService with MockCapitalAssetsAnswerService with MockTaxableTurnoverAnswerService
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
   with MockChooseDeregDateAnswerService with MockNextTaxableTurnoverAnswerService with MockStocksAnswerService
-  with MockOptionTaxAnswerService with MockAccountingMethodAnswerService with MockBusinessActivityAnswerService
+  with MockAccountingMethodAnswerService with MockBusinessActivityAnswerService
   with MockSicCodeAnswerService with MockZeroRatedSuppliesValueService with MockPurchasesExceedSuppliesAnswerService
-  with MockDeregDateAnswerService {
+  with MockDeregDateAnswerService with MockOptionTaxAnswerService with MockOptionTaxNewAnswerService
+  with MockOTTNotificationAnswerService with MockOptionTaxValueAnswerService {
 
   object TestCheckAnswersService extends CheckAnswersService(
     mockAccountingMethodAnswerService,
@@ -42,6 +43,9 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
     mockDeregReasonAnswerService,
     mockNextTaxableTurnoverAnswerService,
     mockOptionTaxAnswerService,
+    mockOptionTaxNewAnswerService,
+    mockOTTNotificationAnswerService,
+    mockOptionTaxValueAnswerService,
     mockIssueNewInvoicesAnswerService,
     mockStocksAnswerService,
     mockTaxableTurnoverAnswerService,
@@ -68,7 +72,10 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetTaxableTurnover(Right(Some(Yes)))
         setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
         setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
-        setupMockGetOptionTax(Right(Some(ottModel)))
+        setupMockGetOptionTax(Right(None))
+        setupMockGetOptionTaxNew(Right(Some(Yes)))
+        setupMockGetOTTNotification(Right(Some(No)))
+        setupMockGetOptionTaxValue(Right(Some(optTaxValue)))
         setupMockGetCapitalAssets(Right(Some(assetsModel)))
         setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
@@ -88,7 +95,10 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
             Some(nextTaxableTurnoverBelow),
             Some(whyTurnoverBelowAll),
             Some(StandardAccounting),
-            Some(ottModel),
+            None,
+            Some(Yes),
+            Some(No),
+            Some(optTaxValue),
             Some(assetsModel),
             Some(stocksModel),
             Some(Yes),
@@ -125,7 +135,10 @@ class CheckAnswersServiceSpec extends TestUtil with MockDeregReasonAnswerService
         setupMockGetTaxableTurnover(Right(Some(Yes)))
         setupMockGetNextTaxableTurnover(Right(Some(nextTaxableTurnoverBelow)))
         setupMockGetWhyTurnoverBelow(Right(Some(whyTurnoverBelowAll)))
-        setupMockGetOptionTax(Right(Some(ottModel)))
+        setupMockGetOptionTax(Right(None))
+        setupMockGetOptionTaxNew(Right(Some(Yes)))
+        setupMockGetOTTNotification(Right(Some(No)))
+        setupMockGetOptionTaxValue(Right(Some(optTaxValue)))
         setupMockGetCapitalAssets(Right(Some(assetsModel)))
         setupMockGetStocks(Right(Some(stocksModel)))
         setupMockGetIssueNewInvoices(Right(Some(Yes)))
