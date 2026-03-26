@@ -194,8 +194,7 @@ checkYourAnswers.hidden.businessActivityChanged = Newid p’un a yw’r gweithga
 checkYourAnswers.hidden.sicCode = Newid Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes
 checkYourAnswers.hidden.zeroRatedSupplies = Newid gwerth y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
 checkYourAnswers.hidden.purchasesExceedSupplies = Newid p’un a fydd y TAW ar bryniannau yn mynd y tu hwnt i’r TAW ar gyflenwadau
-checkYourAnswers.hidden.ottNotification = Change whether the business notified HMRC about an option to tax
-
+checkYourAnswers.hidden.ottNotification = Newid yr ateb ynghylch a yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau
 
 checkYourAnswers.answer.noDate = Heb fanylu
 checkYourAnswers.answer.standard = Cyfrifyddu safonol
