@@ -20,9 +20,7 @@
 
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
-@finishLink = @{
-    if(user.isAgent) appConfig.agentClientLookupAgentHubPath else appConfig.vatSummaryFrontendUrl
-}
+@finishLink = @{ appConfig.govUkLandBuildingFormUrl }
 
 @buttonMessage = @{"deregistrationOTTConfirmation.ottButton"}
 
