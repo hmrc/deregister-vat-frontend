@@ -18,7 +18,7 @@ package services
 
 import assets.constants.BaseTestConstants.{errorModel, vrn}
 import connectors.mocks.MockDeregisterVatConnector
-import models.{DeregisterVatSuccess, NumberInputModel, Yes}
+import models.{DeregisterVatSuccess, NumberInputModel}
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
 import utils.TestUtil
 

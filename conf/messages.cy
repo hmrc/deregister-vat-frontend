@@ -234,15 +234,15 @@ deregistrationConfirmation.bpOffNotifyBusiness = Byddwn yn cysylltu â
 deregistrationConfirmation.bpOffNotifyBusiness.new = Byddwn yn cysylltu â
 deregistrationConfirmation.bpOffUpdateBusiness = gyda diweddariad.
 
-##OTTMessages
+##OTTConfirmationViewMessages
 deregistrationOTTConfirmation.title = Mae’ch cais i ganslo cofrestriad TAW wedi dod i law
-deregistrationOTTConfirmation.email.p1 = We will send an update about your VAT deregistration to
+deregistrationOTTConfirmation.email.p1 = Byddwn yn anfon diweddariad ynglŷn â’ch datgofrestriad TAW at
 deregistrationOTTConfirmation.email.p2 = cyn pen 2 diwrnod gwaith.
-deregistrationOTTConfirmation.p1 = We will send an update about your VAT deregistration within 2 working days.
+deregistrationOTTConfirmation.p1 = Byddwn yn anfon diweddariad ynglŷn â’ch datgofrestriad TAW cyn pen 2 diwrnod gwaith.
 deregistrationOTTConfirmation.heading = Yr hyn y mae angen i chi ei wneud nesaf
 deregistrationOTTConfirmation.p2 = Mae’n dal i fod yn rhaid i chi roi gwybodaeth i CThEF am unrhyw dir neu adeiladau mae gennych fuddiant ynddynt sydd
 deregistrationOTTConfirmation.p3 = wedi’u hoptio i drethu (yn agor ffenestr newydd).
-deregistrationOTTConfirmation.p4 = This includes land and buildings that you will continue to own or have an interest in after VAT deregistration.
+deregistrationOTTConfirmation.p4 = Mae hyn yn cynnwys tir ac adeiladau y byddwch yn parhau i berchen neu’n cael buddiant ynddynt ar ôl datgofrestru ar gyfer TAW.
 deregistrationOTTConfirmation.warningMsg = Gall oedi fod wrth ddatgofrestru ar gyfer TAW os nad ydych yn darparu’r wybodaeth hon.
 deregistrationOTTConfirmation.ottButton = Llenwch ffurflen wybodaeth am dir ac adeiladau
 

@@ -29,6 +29,7 @@ object DeregistrationConfirmationMessages extends BaseMessages {
   val subheading = "What happens next"
 
   val contactPrefError = "We’ll send you an update within 15 working days."
+  val contactPrefErrorNew = "We will send you an update within 15 working days."
 
   val contactDetails = "Make sure your contact details are up to date."
 
