@@ -25,7 +25,6 @@ import views.html.CapitalAssets
 class CapitalAssetsSpec extends ViewBaseSpec {
 
   lazy val capitalAssets: CapitalAssets = injector.instanceOf[CapitalAssets]
-
   object Selectors {
     val back = ".govuk-back-link"
     val pageHeading = "#content h1"
@@ -39,9 +38,9 @@ class CapitalAssetsSpec extends ViewBaseSpec {
     val error = ".govuk-error-message"
   }
 
-  "Rendering the option to tax page with no errors" should {
+  "Rendering the option to tax page with no errors with the optionTaxValue exists" should {
 
-    lazy val view = capitalAssets(YesNoAmountForm.yesNoAmountForm(
+    lazy val view = capitalAssets(controllers.routes.OptionTaxValueController.show.url, YesNoAmountForm.yesNoAmountForm(
       "capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry"))
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -51,7 +50,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
     "have the correct back text" in {
       elementText(Selectors.back) shouldBe CommonMessages.back
-      element(Selectors.back).attr("href") shouldBe controllers.routes.OptionTaxController.show.url
+      element(Selectors.back).attr("href") shouldBe controllers.routes.OptionTaxValueController.show.url
     }
 
     "have the correct page heading" in {
@@ -85,11 +84,27 @@ class CapitalAssetsSpec extends ViewBaseSpec {
     }
   }
 
+  "Rendering the option to tax page with no errors with the optionTaxValue not exists" should {
+
+    lazy val view = capitalAssets(controllers.routes.OptionTaxController.show.url, YesNoAmountForm.yesNoAmountForm(
+      "capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry"))
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    "have the correct document title" in {
+      document.title shouldBe CapitalAssetsMessages.title
+    }
+
+    "have the correct back text" in {
+      elementText(Selectors.back) shouldBe CommonMessages.back
+      element(Selectors.back).attr("href") shouldBe controllers.routes.OptionTaxController.show.url
+    }
+  }
+
   "Rendering the option to tax page with errors" when {
 
     "nothing was entered" should {
 
-      lazy val view = capitalAssets(YesNoAmountForm.yesNoAmountForm(
+      lazy val view = capitalAssets(controllers.routes.OptionTaxValueController.show.url, YesNoAmountForm.yesNoAmountForm(
         "capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry").bind(Map("yes_no" -> "")))
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -108,7 +123,7 @@ class CapitalAssetsSpec extends ViewBaseSpec {
 
     "Yes was entered but no amount" should {
 
-      lazy val view = capitalAssets(YesNoAmountForm.yesNoAmountForm(
+      lazy val view = capitalAssets(controllers.routes.OptionTaxValueController.show.url, YesNoAmountForm.yesNoAmountForm(
         "capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry").bind(Map(
         "yes_no" -> "yes",
         "amount" -> ""

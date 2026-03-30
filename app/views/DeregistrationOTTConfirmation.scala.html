@@ -26,10 +26,13 @@
 
 @mainTemplate(pageTitle = messages("deregistrationOTTConfirmation.title")) {
 
-  @govukPanel(Panel(
+  @**govukPanel(Panel(
     title = Text(messages("deregistrationOTTConfirmation.title"))
-  ))
+  ))**@
 
+  @{
+    <h1 class="govuk-heading-xl">{messages("deregistrationOTTConfirmation.title")}</h1>
+  }
   @{
     if(user.isAgent){
       (user.session.get(SessionKeys.verifiedEmail)) match {
