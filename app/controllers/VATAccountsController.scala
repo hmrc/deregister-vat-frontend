@@ -52,6 +52,7 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
       lastTurnoverBelow <- taxableTurnoverAnswerService.getAnswer
       reasonResult <- deregReasonAnswerService.getAnswer
       accountingResult <- accountingMethodAnswerService.getAnswer
+
       result <- (lastTurnoverBelow, reasonResult, accountingResult) match {
 
         case (Right(optionLTB), Right(Some(deregReason)), Right(Some(accountingMethod))) => Future.successful(

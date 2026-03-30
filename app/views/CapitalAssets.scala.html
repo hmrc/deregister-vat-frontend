@@ -25,11 +25,11 @@
       govukButton: GovukButton,
       yesNoRevealHelper: YesNoRevealHelper)
 
-@(form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
+@(backLinkURL: String, form: Form[YesNoAmountModel])(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
 
 @backLink = {
     @govukBackLink(BackLink(
-        href = controllers.routes.OptionTaxController.show.url,
+        href = backLinkURL,
         content = Text(messages("common.back"))
     ))
 }
