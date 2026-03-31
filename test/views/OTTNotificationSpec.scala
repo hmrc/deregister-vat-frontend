@@ -35,7 +35,7 @@ class OTTNotificationSpec extends ViewBaseSpec {
     val inset2 = ".govuk-inset-text > p:nth-of-type(2)"
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
     val noOption = "fieldset > div > div:nth-of-type(2) > label"
-    val button = "#main-content .govuk-button"
+    val button = ".govuk-button"
     val errorHeading = ".govuk-error-summary"
     val error = ".govuk-error-message"
   }

@@ -34,7 +34,7 @@ class OptionStocksToSellSpec extends ViewBaseSpec {
     val noOption = "fieldset > div > div:nth-of-type(3) > label"
     val hiddenField = "#conditional-yes_no"
     val hint = "#conditional-yes_no label"
-    val button = "#main-content .govuk-button"
+    val button = ".govuk-button"
     val errorHeading = ".govuk-error-summary"
     val error = ".govuk-error-message"
   }

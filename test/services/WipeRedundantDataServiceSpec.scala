@@ -27,7 +27,8 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
   with MockIssueNewInvoicesAnswerService with MockOutstandingInvoicesService with MockWhyTurnoverBelowAnswerService
   with MockChooseDeregDateAnswerService with MockDeregDateAnswerService with MockNextTaxableTurnoverAnswerService
   with MockBusinessActivityAnswerService with MockZeroRatedSuppliesValueService with MockPurchasesExceedSuppliesAnswerService
-  with MockSicCodeAnswerService {
+  with MockSicCodeAnswerService with MockOptionTaxAnswerService with MockOptionTaxNewAnswerService
+  with MockOptionTaxValueAnswerService with MockOTTNotificationAnswerService {
 
   object TestWipeRedundantDataService extends WipeRedundantDataService(
     mockDeregReasonAnswerService,
@@ -43,7 +44,11 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
     mockBusinessActivityAnswerService,
     mockZeroRatedSuppliesValueService,
     mockPurchasesExceedSuppliesAnswerService,
-    mockSicCodeAnswerService
+    mockSicCodeAnswerService,
+    mockOptionTaxAnswerService,
+    mockOptionTaxNewAnswerService,
+    mockOTTNotificationAnswerService,
+    mockOptionTaxValueAnswerService
   )
 
   val errorModel: ErrorModel = ErrorModel(1, "")
@@ -614,6 +619,45 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
     }
   }
 
+  "Calling .wipeChosenData" when {
+
+    "the user did select to not choose a deregistration date" should {
+
+      val dateChosen: Option[YesNo] = Some(No)
+
+      "delete the answer" in {
+
+        setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
+        val result = TestWipeRedundantDataService.wipeChosenDate(dateChosen)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
+      }
+    }
+
+    "the user chose a deregistration date" should {
+
+      val dateChosen: Option[YesNo] = Some(Yes)
+
+      "delete the answer" in {
+
+        setupMockDeleteDeregDateNotCalled()
+        val result = TestWipeRedundantDataService.wipeChosenDate(dateChosen)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
+      }
+    }
+
+    "the user didn't select whether to choose a deregistration date" should {
+
+      val dateChosen: Option[YesNo] = None
+
+      "delete the answer" in {
+
+        setupMockDeleteDeregDateNotCalled()
+        val result = TestWipeRedundantDataService.wipeChosenDate(dateChosen)
+        result.futureValue shouldBe Right(DeregisterVatSuccess)
+      }
+    }
+  }
+
   "Calling .wipeRedundantData" when {
 
     "all data retrievals are successful" when {
@@ -631,6 +675,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockGetOutstandingInvoices(Right(Some(No)))
               setupMockGetBusinessActivityAnswer(Right(None))
               setupMockGetChooseDeregDate(Right(Some(Yes)))
+              setupMockGetOptionTaxNew(Right(Some(Yes)))
 
               setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
@@ -641,6 +686,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
               setupMockDeleteChooseDeregDate(Right(DeregisterVatSuccess))
               setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
+              setupMockDeleteOptionTax(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -659,12 +705,14 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockGetOutstandingInvoices(Right(Some(No)))
               setupMockGetBusinessActivityAnswer(Right(None))
               setupMockGetChooseDeregDate(Right(Some(Yes)))
+              setupMockGetOptionTaxNew(Right(Some(Yes)))
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteBusinessActivityAnswer(Right(DeregisterVatSuccess))
               setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
               setupMockDeleteZeroRatedSuppliesValueAnswer(Right(DeregisterVatSuccess))
               setupMockDeletePurchasesExceedSuppliesAnswer(Right(DeregisterVatSuccess))
+              setupMockDeleteOptionTax(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -684,10 +732,12 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockGetOutstandingInvoices(Right(Some(No)))
               setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
               setupMockGetChooseDeregDate(Right(Some(Yes)))
+              setupMockGetOptionTaxNew(Right(Some(Yes)))
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
               setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
+              setupMockDeleteOptionTax(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
@@ -707,17 +757,18 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockGetOutstandingInvoices(Right(Some(No)))
               setupMockGetBusinessActivityAnswer(Right(Some(No)))
               setupMockGetChooseDeregDate(Right(Some(Yes)))
+              setupMockGetOptionTaxNew(Right(Some(Yes)))
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
               setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
               setupMockDeleteSicCodeAnswerService(Right(DeregisterVatSuccess))
+              setupMockDeleteOptionTax(Right(DeregisterVatSuccess))
             }
 
             val result = TestWipeRedundantDataService.wipeRedundantData
             result.futureValue shouldBe Right(DeregisterVatSuccess)
           }
-
         }
       }
         "a data deletion for Outstanding Invoices is unsuccessful" should {
@@ -731,11 +782,11 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
               setupMockGetOutstandingInvoices(Right(Some(No)))
               setupMockGetBusinessActivityAnswer(Right(Some(Yes)))
               setupMockGetChooseDeregDate(Right(Some(Yes)))
+              setupMockGetOptionTaxNew(Right(Some(Yes)))
 
               setupMockDeleteCeasedTradingDate(Right(DeregisterVatSuccess))
               setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
               setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
-
               setupMockDeleteOutstandingInvoices(Left(errorModel))
             }
 
@@ -754,6 +805,7 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
             setupMockGetOutstandingInvoices(Right(Some(No)))
             setupMockGetBusinessActivityAnswer(Right(None))
             setupMockGetChooseDeregDate(Right(Some(Yes)))
+            setupMockGetOptionTaxNew(Right(Some(Yes)))
 
             setupMockDeleteTaxableTurnover(Right(DeregisterVatSuccess))
             setupMockDeleteWhyTurnoverBelow(Right(DeregisterVatSuccess))
@@ -841,44 +893,5 @@ class WipeRedundantDataServiceSpec extends TestUtil with MockFactory with MockDe
       }
     }
 
-  }
-
-  "Calling .wipeChosenData" when {
-
-    "the user did select to not choose a deregistration date" should {
-
-      val dateChosen: Option[YesNo] = Some(No)
-
-      "delete the answer" in {
-
-        setupMockDeleteDeregDate(Right(DeregisterVatSuccess))
-        val result = TestWipeRedundantDataService.wipeChosenDate(dateChosen)
-        result.futureValue shouldBe Right(DeregisterVatSuccess)
-      }
-    }
-
-    "the user chose a deregistration date" should {
-
-      val dateChosen: Option[YesNo] = Some(Yes)
-
-      "delete the answer" in {
-
-        setupMockDeleteDeregDateNotCalled()
-        val result = TestWipeRedundantDataService.wipeChosenDate(dateChosen)
-        result.futureValue shouldBe Right(DeregisterVatSuccess)
-      }
-    }
-
-    "the user didn't select whether to choose a deregistration date" should {
-
-      val dateChosen: Option[YesNo] = None
-
-      "delete the answer" in {
-
-        setupMockDeleteDeregDateNotCalled()
-        val result = TestWipeRedundantDataService.wipeChosenDate(dateChosen)
-        result.futureValue shouldBe Right(DeregisterVatSuccess)
-      }
-    }
   }
 }

@@ -28,10 +28,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.{AccountingMethodAnswerService, DeregReasonAnswerService, TaxableTurnoverAnswerService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.VatAccounts
-
 import javax.inject.{Inject, Singleton}
 import utils.LoggingUtil
-
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -54,6 +52,7 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
       lastTurnoverBelow <- taxableTurnoverAnswerService.getAnswer
       reasonResult <- deregReasonAnswerService.getAnswer
       accountingResult <- accountingMethodAnswerService.getAnswer
+
       result <- (lastTurnoverBelow, reasonResult, accountingResult) match {
 
         case (Right(optionLTB), Right(Some(deregReason)), Right(Some(accountingMethod))) => Future.successful(
@@ -80,7 +79,8 @@ class VATAccountsController @Inject()(vatAccounts: VatAccounts,
           serviceErrorHandler.showInternalServerError
       },
       data => accountingMethodAnswerService.storeAnswer(data).flatMap {
-        case Right(_) => Future.successful(Redirect(controllers.routes.OptionTaxController.show))
+        case Right(_) =>
+          Future.successful(Redirect(controllers.routes.OptionTaxController.show))
         case Left(error) =>
           warnLog("[VATAccountsController][submit] - failed to store accountingMethod in answer service: " + error.message)
           serviceErrorHandler.showInternalServerError

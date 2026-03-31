@@ -34,7 +34,7 @@ class CheckYourAnswersSpec extends ViewBaseSpec {
     val answerColumn: Int => String = row => s"div.govuk-summary-list__row:nth-child($row) > dd:nth-child(2)"
     val changeColumn: Int => String = row => s"div.govuk-summary-list__row:nth-child($row) > dd:nth-child(3) > a"
     val text = "#content > article > p"
-    val button = "#main-content .govuk-button"
+    val button = ".govuk-button"
   }
 
   "Rendering the Check your answers page" should {

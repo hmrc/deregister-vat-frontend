@@ -25,11 +25,11 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.{MockCapitalAssetsAnswerService, MockWipeRedundantDataService}
+import services.mocks.{MockCapitalAssetsAnswerService, MockOptionTaxNewAnswerService, MockWipeRedundantDataService}
 import views.html.CapitalAssets
 
 
-class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockCapitalAssetsAnswerService {
+class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedundantDataService with MockCapitalAssetsAnswerService with MockOptionTaxNewAnswerService {
   lazy val capitalAssets: CapitalAssets = injector.instanceOf[CapitalAssets]
 
   object TestCapitalAssetsController extends CapitalAssetsController(
@@ -38,6 +38,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockCapitalAssetsAnswerService,
+    mockOptionTaxNewAnswerService,
     mockWipeRedundantDataService,
     serviceErrorHandler,
     ec,
@@ -57,6 +58,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         "return 200 (OK)" in {
           setupMockGetCapitalAssets(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
+          setupMockGetOptionTaxNew(Right(Some(Yes)))
+
           status(result) shouldBe Status.OK
         }
 
@@ -73,6 +76,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
         "return 200 (OK)" in {
           setupMockGetCapitalAssets(Right(Some(YesNoAmountModel(Yes,Some(amount)))))
           mockAuthResult(mockAuthorisedIndividual)
+          setupMockGetOptionTaxNew(Right(Some(Yes)))
+
           status(result) shouldBe Status.OK
         }
 
@@ -101,7 +106,6 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
             requestPost.withFormUrlEncodedBody((yesNoField, yesChecked), (amountField, amount.toString))
           lazy val result = TestCapitalAssetsController.submit(request)
 
-
           "return 303 (SEE_OTHER)" in {
             setupMockStoreCapitalAssets(YesNoAmountModel(Yes, Some(amount)))(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
@@ -124,6 +128,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
             setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
             setupMockWipeRedundantData(Right(DeregisterVatSuccess))
             mockAuthResult(mockAuthorisedIndividual)
+
             status(result) shouldBe Status.SEE_OTHER
           }
 
@@ -141,6 +146,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
           "return 500 (ISE)" in {
             setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Left(errorModel))
             mockAuthResult(mockAuthorisedIndividual)
+
             status(result) shouldBe Status.INTERNAL_SERVER_ERROR
           }
         }
@@ -156,6 +162,7 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
           setupMockStoreCapitalAssets(YesNoAmountModel(No, None))(Right(DeregisterVatSuccess))
           setupMockWipeRedundantData(Left(errorModel))
           mockAuthResult(mockAuthorisedIndividual)
+
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }
       }
@@ -169,6 +176,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
         "return 400 (BAD_REQUEST)" in {
           mockAuthResult(mockAuthorisedIndividual)
+          setupMockGetOptionTaxNew(Right(Some(Yes)))
+
           status(result) shouldBe Status.BAD_REQUEST
         }
       }
@@ -181,6 +190,8 @@ class CapitalAssetsControllerSpec extends ControllerBaseSpec with MockWipeRedund
 
         "return 400 (BAD REQUEST)" in {
           mockAuthResult(mockAuthorisedIndividual)
+          setupMockGetOptionTaxNew(Right(Some(Yes)))
+
           status(result) shouldBe Status.BAD_REQUEST
         }
 

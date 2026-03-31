@@ -32,7 +32,7 @@ class PurchasesExceedSuppliesSpec extends ViewBaseSpec {
     val forExample = ".govuk-hint"
     val yesOption = "div.govuk-radios__item:nth-child(1) > label:nth-child(2)"
     val noOption = "div.govuk-radios__item:nth-child(2) > label:nth-child(2)"
-    val button = "#main-content .govuk-button"
+    val button = ".govuk-button"
     val errorHeading = ".govuk-error-summary"
     val error = ".govuk-error-message"
   }

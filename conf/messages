@@ -102,6 +102,12 @@ ottNotification.inset.1 = If disposing of property, any VAT recovered in relatio
 ottNotification.inset.2 = For example, if a rental property you own has been unoccupied for 2 years then VAT exemption no longer applies. VAT is recoverable for that 2-year period, despite it not generating income.
 ottNotification.error.mandatoryRadioOption = Select yes if HMRC has been notified about an option to tax land and buildings
 
+optionTaxValue.title = What is the value of the land and buildings you continue to own after VAT registration?
+optionTaxValue.text = If all land and buildings have already been sold, enter a zero value.
+optionTaxValue.error.mandatory = Enter the value of the land and buildings in pounds and pence
+optionTaxValue.error.nonNumeric = The value of the land and buildings must only contain numbers
+optionTaxValue.error.negative = The value of the land and buildings cannot be a minus value
+
 capitalAssets.title = Is the business going to keep any capital assets?
 capitalAssets.text.1 = For example furniture, computers and equipment.
 capitalAssets.totalSaleValue = What is the total value?
@@ -166,6 +172,7 @@ checkYourAnswers.question.businessActivityChanged = Has the business activity ch
 checkYourAnswers.question.sicCode = Standard Industrial Classification (SIC) Code
 checkYourAnswers.question.zeroRatedSupplies = Value of zero-rated supplies for next 12 months
 checkYourAnswers.question.purchasesExceedSupplies = Will VAT on purchases exceed VAT on supplies?
+checkYourAnswers.question.ottNotification = Notified HMRC about an option to tax
 
 checkYourAnswers.hidden.reason = Change the reason why the business is cancelling its VAT registration
 checkYourAnswers.hidden.ceasedTrading = Change the date your business stopped or will stop trading
@@ -187,6 +194,7 @@ checkYourAnswers.hidden.businessActivityChanged = Change whether the business ac
 checkYourAnswers.hidden.sicCode = Change the business’s Standard Industrial Classification (SIC) Code
 checkYourAnswers.hidden.zeroRatedSupplies = Change the value of zero-rated supplies for the next 12 months
 checkYourAnswers.hidden.purchasesExceedSupplies = Change whether the VAT on purchases will exceed the VAT on supplies
+checkYourAnswers.hidden.ottNotification = Change answer for whether HMRC has been told about an option to tax land and buildings
 
 checkYourAnswers.answer.noDate = Not Specified
 checkYourAnswers.answer.standard = Standard accounting
@@ -225,6 +233,18 @@ deregistrationConfirmation.bpOffEmailP2.new = within 2 working days.
 deregistrationConfirmation.bpOffNotifyBusiness = We’ll contact
 deregistrationConfirmation.bpOffNotifyBusiness.new = We will contact
 deregistrationConfirmation.bpOffUpdateBusiness = with an update.
+
+##OTTMessages
+deregistrationOTTConfirmation.title = We have received your request to cancel VAT registration
+deregistrationOTTConfirmation.email.p1 = We will send an update about your VAT deregistration to
+deregistrationOTTConfirmation.email.p2 = within 2 working days.
+deregistrationOTTConfirmation.p1 = We will send an update about your VAT deregistration within 2 working days.
+deregistrationOTTConfirmation.heading = What you need to do next
+deregistrationOTTConfirmation.p2 = You still need to provide information to HMRC on any land or buildings you have had an interest in that are
+deregistrationOTTConfirmation.p3 = opted to tax (opens in a new window).
+deregistrationOTTConfirmation.p4 = This includes land and buildings that you will continue to own or have an interest in after VAT deregistration.
+deregistrationOTTConfirmation.warningMsg = VAT deregistration could be delayed if you do not provide this information.
+deregistrationOTTConfirmation.ottButton = Complete land and buildings information form
 
 unauthorised.agent.title = You can’t use this service yet
 unauthorised.agent.useThisService = To use this service, you need to

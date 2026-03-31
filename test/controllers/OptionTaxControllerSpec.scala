@@ -24,38 +24,44 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsFormUrlEncoded
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentType, _}
-import services.mocks.MockOptionTaxAnswerService
-import views.html.OptionTax
+import services.mocks.{MockOptionTaxAnswerService, MockOptionTaxNewAnswerService, MockWipeRedundantDataService}
+import views.html.{OptionTax, OptionTaxNew}
 
 
-class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswerService {
+class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswerService with MockOptionTaxNewAnswerService with MockWipeRedundantDataService {
 
   lazy val optionTax: OptionTax = injector.instanceOf[OptionTax]
 
+  lazy val optionTaxNew: OptionTaxNew = injector.instanceOf[OptionTaxNew]
+
   object TestOptionTaxController extends OptionTaxController(
     optionTax,
+    optionTaxNew,
     mcc,
     mockAuthPredicate,
     mockRegistrationStatusPredicate,
     mockOptionTaxAnswerService,
+    mockOptionTaxNewAnswerService,
+    mockWipeRedundantDataService,
     serviceErrorHandler,
     ec,
     mockConfig
   )
 
   val testAmt = 500
-  val testYesModel = YesNoAmountModel(Yes, Some(testAmt))
-  val testNoModel = YesNoAmountModel(No, None)
+  val testYesModel: YesNoAmountModel = YesNoAmountModel(Yes, Some(testAmt))
+  val testNoModel: YesNoAmountModel = YesNoAmountModel(No, None)
 
   "the user is authorised" when {
 
-    "Calling the .show action" when {
+    "Calling the .show action with ottFlag disabled" when {
 
       "the user does not have a pre selected option" should {
 
         lazy val result = TestOptionTaxController.show(request)
 
         "return 200 (OK)" in {
+          mockConfig.features.ottJourneyEnabled(false)
           setupMockGetOptionTax(Right(None))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
@@ -72,6 +78,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.show(request)
 
         "return 200 (OK)" in {
+          mockConfig.features.ottJourneyEnabled(false)
           setupMockGetOptionTax(Right(Some(testYesModel)))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.OK
@@ -94,7 +101,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
       authChecks(".show", TestOptionTaxController.show, request)
     }
 
-    "Calling the .submit action" when {
+    "Calling the .submit action with ottFlag disabled" when {
 
       "the user submits after selecting an 'Yes' option" should {
 
@@ -106,13 +113,14 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.submit(request)
 
         "return 303 (SEE OTHER)" in {
+          mockConfig.features.ottJourneyEnabled(false)
           setupMockStoreOptionTax(testYesModel)(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
         }
 
-        s"redirect to '${controllers.routes.OTTNotificationController.show.url}'" in {
-          redirectLocation(result) shouldBe Some(controllers.routes.OTTNotificationController.show.url)
+        s"redirect to '${controllers.routes.CapitalAssetsController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show.url)
         }
       }
 
@@ -123,6 +131,7 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.submit(request)
 
         "return 303 (SEE OTHER)" in {
+          mockConfig.features.ottJourneyEnabled(false)
           setupMockStoreOptionTax(testNoModel)(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.SEE_OTHER
@@ -155,7 +164,99 @@ class OptionTaxControllerSpec extends ControllerBaseSpec with MockOptionTaxAnswe
         lazy val result = TestOptionTaxController.submit(request)
 
         "return 500 (ISE)" in {
+          mockConfig.features.ottJourneyEnabled(false)
           setupMockStoreOptionTax(testNoModel)(Left(errorModel))
+          mockAuthResult(mockAuthorisedIndividual)
+          status(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        }
+      }
+
+      "the user submits without selecting an option" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          requestPost.withFormUrlEncodedBody(("yes_no", ""))
+        lazy val result = TestOptionTaxController.submit(request)
+
+        "return 400 (BAD REQUEST)" in {
+          mockConfig.features.ottJourneyEnabled(false)
+          mockAuthResult(mockAuthorisedIndividual)
+          status(result) shouldBe Status.BAD_REQUEST
+        }
+
+        "return HTML" in {
+          contentType(result) shouldBe Some("text/html")
+          charset(result) shouldBe Some("utf-8")
+        }
+      }
+    }
+
+    "Calling the .submit action with ottFlag enabled" when {
+
+      "the user submits after selecting an 'Yes' option" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          requestPost.withFormUrlEncodedBody(
+            (yesNo, "yes")
+          )
+        lazy val result = TestOptionTaxController.submit(request)
+
+        "return 303 (SEE OTHER)" in {
+          mockConfig.features.ottJourneyEnabled(true)
+
+          setupMockStoreOptionTaxNew(Yes)(Right(DeregisterVatSuccess))
+          mockAuthResult(mockAuthorisedIndividual)
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        s"redirect to '${controllers.routes.OTTNotificationController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.OTTNotificationController.show.url)
+        }
+      }
+
+      "the user submits after selecting the 'No' option" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          requestPost.withFormUrlEncodedBody((yesNo, "no"))
+        lazy val result = TestOptionTaxController.submit(request)
+
+        "return 303 (SEE OTHER)" in {
+          mockConfig.features.ottJourneyEnabled(true)
+
+          setupMockStoreOptionTaxNew(No)(Right(DeregisterVatSuccess))
+          mockAuthResult(mockAuthorisedIndividual)
+          status(result) shouldBe Status.SEE_OTHER
+        }
+
+        s"redirect to '${controllers.routes.CapitalAssetsController.show.url}'" in {
+          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show.url)
+        }
+      }
+
+      "the user submits after selecting the 'No' option" should {
+        s"redirect to '${controllers.routes.CapitalAssetsController.show.url}' if the OTTJourney feature switch is off" in {
+          mockConfig.features.ottJourneyEnabled(true)
+
+          lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+            requestPost.withFormUrlEncodedBody((yesNo, "no"))
+          lazy val result = TestOptionTaxController.submit(request)
+
+          setupMockStoreOptionTaxNew(No)(Right(DeregisterVatSuccess))
+          mockAuthResult(mockAuthorisedIndividual)
+          status(result) shouldBe Status.SEE_OTHER
+          redirectLocation(result) shouldBe Some(controllers.routes.CapitalAssetsController.show.url)
+        }
+      }
+
+      "the user submits after selecting an option but an error is returned when storing answer" should {
+
+        lazy val request: FakeRequest[AnyContentAsFormUrlEncoded] =
+          requestPost.withFormUrlEncodedBody((yesNo, "no"))
+        lazy val result = TestOptionTaxController.submit(request)
+
+        "return 500 (ISE)" in {
+          mockConfig.features.ottJourneyEnabled(true)
+
+          setupMockStoreOptionTaxNew(No)(Left(errorModel))
           mockAuthResult(mockAuthorisedIndividual)
           status(result) shouldBe Status.INTERNAL_SERVER_ERROR
         }

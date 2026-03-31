@@ -75,6 +75,8 @@ trait AppConfig {
   val btaHomeUrl: String
   val webchatUrl: String
   val ottJourneyFlag: Boolean
+  val govUkOTTUrl: String
+  val govUkLandBuildingFormUrl: String
   val urBannerUrl: String
 }
 
@@ -193,6 +195,10 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override val webchatUrl: String = servicesConfig.getString("digital-engagement-platform-frontend.host") + servicesConfig.getString("webchat.endpoint")
 
   override lazy val ottJourneyFlag: Boolean = servicesConfig.getBoolean(ConfigKeys.ottJourneyEnabled)
+
+  override lazy val govUkOTTUrl: String = servicesConfig.getString(Keys.govUkOTTUrl)
+
+  override lazy val govUkLandBuildingFormUrl: String = servicesConfig.getString(Keys.govUkLandBuildingFormUrl)
 
   override val urBannerUrl: String = servicesConfig.getString("urBanner.url")
 }

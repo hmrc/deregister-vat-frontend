@@ -33,10 +33,7 @@
     ))
 }
 
-@mainTemplate(pageTitle = title(messages("taxableTurnover.title", vatThreshold), form),
-    backLinkContent = Some(backLink),
-    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
-) {
+@mainTemplate(pageTitle = title(messages("taxableTurnover.title", vatThreshold), form), backLinkContent = Some(backLink)) {
 
   @if(form.hasErrors) {
     @govukErrorSummary(ErrorSummary(

@@ -34,7 +34,7 @@ class WhyTurnoverBelowSpec extends ViewBaseSpec {
       val pageHeading = "#content h1"
       val text1 = ".govuk-hint"
       val checkboxOption: Int => String = (number: Int) => s".govuk-checkboxes__item:nth-of-type($number) > label"
-      val button = "#main-content .govuk-button"
+      val button = ".govuk-button"
       val errorHeading = ".govuk-error-summary"
       val error = ".govuk-error-message"
     }

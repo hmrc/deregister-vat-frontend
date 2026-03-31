@@ -35,7 +35,7 @@ class DeregistrationDateSpec extends ViewBaseSpec {
     val monthValue = "#dateMonth"
     val year = "div.govuk-date-input__item:nth-child(3) > div:nth-child(1) > label:nth-child(1)"
     val yearValue = "#dateYear"
-    val button = "#main-content .govuk-button"
+    val button = ".govuk-button"
     val form = "form"
     val p1 = "p.govuk-body:nth-child(1)"
     val p2 = "p.govuk-body:nth-child(2)"

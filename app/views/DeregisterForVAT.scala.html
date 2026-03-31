@@ -14,8 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.hmrcfrontend.views.html.components._
-
 @this(mainTemplate: MainTemplate, govukBackLink: GovukBackLink, govukButton: GovukButton)
 
 @()(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
@@ -33,10 +31,7 @@
     </p>
 }
 
-@mainTemplate(pageTitle = messages("deregisterForVAT.title"),
-    backLinkContent = Some(backLink),
-    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
-) {
+@mainTemplate(pageTitle = messages("deregisterForVAT.title"), backLinkContent = Some(backLink)) {
 
   <h1 class="govuk-heading-l">@messages("deregisterForVAT.title")</h1>
   <p class="govuk-body">@messages("deregisterForVAT.p1")</p>

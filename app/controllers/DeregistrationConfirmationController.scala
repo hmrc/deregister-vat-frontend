@@ -16,22 +16,27 @@
 
 package controllers
 
+import cats.data.EitherT
 import common.SessionKeys
 import config.{AppConfig, ServiceErrorHandler}
 import controllers.predicates.AuthPredicate
+import models.{DeregisterVatSuccess, Yes}
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.{CustomerDetailsService, DeleteAllStoredAnswersService}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import services.{CustomerDetailsService, DeleteAllStoredAnswersService, OTTNotificationAnswerService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggingUtil
-import views.html.DeregistrationConfirmation
+import views.html.{DeregistrationConfirmation, DeregistrationOTTConfirmation}
 
 import javax.inject.Inject
+import scala.concurrent.Future.successful
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeregistrationConfirmationController @Inject()(deregistrationConfirmation: DeregistrationConfirmation,
+                                                     deRegistrationOTTConfirmation: DeregistrationOTTConfirmation,
                                                      val mcc: MessagesControllerComponents,
                                                      val authentication: AuthPredicate,
+                                                     val ottAnswerService: OTTNotificationAnswerService,
                                                      val deleteAllStoredAnswersService: DeleteAllStoredAnswersService,
                                                      val serviceErrorHandler: ServiceErrorHandler,
                                                      val customerDetailsService: CustomerDetailsService)
@@ -40,22 +45,40 @@ class DeregistrationConfirmationController @Inject()(deregistrationConfirmation:
 
   val show: Action[AnyContent] = authentication.async { implicit user =>
 
-    user.session.get(SessionKeys.deregSuccessful) match {
-      case Some("true") =>
-        deleteAllStoredAnswersService.deleteAllAnswers.flatMap {
-          case Right(_) =>
-            customerDetailsService.getCustomerDetails(user.vrn).map { result =>
-              val businessName: Option[String] = result.fold(_ => None, _.businessName)
-              val contactPreference: Option[String] = result.fold(_ => None, _.commsPreference)
-              val isEmailVerified = result.fold(_ => None, _.emailVerified)
+    val deRegistrationSuccessful: Boolean = user.session.get(SessionKeys.deregSuccessful).contains("true")
+    def loadOttConfirmationPage: Result = Ok(deRegistrationOTTConfirmation())
 
-              Ok(deregistrationConfirmation(appConfig.ottJourneyFlag, businessName, contactPreference, isEmailVerified))
-            }
-          case Left(_) =>
-            warnLog("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
-            serviceErrorHandler.showInternalServerError
+    def loadDeregConfirmationPage: Future[Result] = customerDetailsService.getCustomerDetails(user.vrn).map { result =>
+      val businessName: Option[String] = result.fold(_ => None, _.businessName)
+      val contactPreference: Option[String] = result.fold(_ => None, _.commsPreference)
+      val isEmailVerified: Option[Boolean] = result.fold(_ => None, _.emailVerified)
+
+      Ok(deregistrationConfirmation(appConfig.features.ottJourneyEnabled(), businessName, contactPreference, isEmailVerified))
+    }
+
+    def logAndReturnErrorPage: Future[Result] = {
+      warnLog("[DeregistrationConfirmationController][show] Error occurred when deleting stored answers. Rendering ISE.")
+      serviceErrorHandler.showInternalServerError
+    }
+
+    if (deRegistrationSuccessful) {
+      (for {
+        ottFlag <- EitherT(ottAnswerService.getAnswer)
+        deleteAllAnswersStatus <- EitherT(deleteAllStoredAnswersService.deleteAllAnswers)
+      } yield (ottFlag, deleteAllAnswersStatus)).foldF(
+        err => Future.successful(InternalServerError(err.message)),
+        {
+          case (Some(Yes), DeregisterVatSuccess) if appConfig.features.ottJourneyEnabled() =>
+            Future.successful(loadOttConfirmationPage.addingToSession("ottFlag" -> "Yes"))
+          case (None, DeregisterVatSuccess) if user.session.get("ottFlag").contains("Yes") =>
+            Future.successful(loadOttConfirmationPage)
+          case (_, DeregisterVatSuccess) => loadDeregConfirmationPage
+
+          case _ => logAndReturnErrorPage
         }
-      case _ => Future.successful(Redirect(controllers.routes.DeregisterForVATController.show))
+      )
+    } else {
+      Future.successful(Redirect(controllers.routes.DeregisterForVATController.show))
     }
   }
 }

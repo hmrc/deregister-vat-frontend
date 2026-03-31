@@ -45,23 +45,31 @@ class OTTNotificationController @Inject()(ottNotification: OTTNotification,
   val form: Form[YesNo] = YesNoForm.yesNoForm("ottNotification.error.mandatoryRadioOption")
 
   val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
-    ottNotificationAnswerService.getAnswer map {
-      case Right(Some(answer)) => Ok(ottNotification(form.fill(answer)))
-      case _ => Ok(ottNotification(form))
+    if(appConfig.features.ottJourneyEnabled()) {
+      ottNotificationAnswerService.getAnswer map {
+        case Right(Some(answer)) => Ok(ottNotification(form.fill(answer)))
+        case _ => Ok(ottNotification(form))
+      }
+    }
+    else {
+      Future.successful(Redirect(routes.OptionTaxController.show))
     }
   }
 
   val submit: Action[AnyContent] = authenticate.async { implicit user =>
-    form.bindFromRequest().fold (
-      error => Future.successful(BadRequest(ottNotification(error))),
-      answer => ottNotificationAnswerService.storeAnswer(answer).flatMap {
-        // TODO: This should point to the new page created as part of DL-18244
-        case Right(_) => Future.successful(Redirect(routes.OptionStocksToSellController.show))
-        case Left(error) =>
-          warnLog("[OTTNotificationController][submit] - storedAnswerService returned an error storing answer: " + error.message)
-          serviceErrorHandler.showInternalServerError
-      }
-    )
+    if(appConfig.features.ottJourneyEnabled()) {
+      form.bindFromRequest().fold(
+        error => Future.successful(BadRequest(ottNotification(error))),
+        answer => ottNotificationAnswerService.storeAnswer(answer).flatMap {
+          case Right(_) => Future.successful(Redirect(routes.OptionTaxValueController.show))
+          case Left(error) =>
+            warnLog("[OTTNotificationController][submit] - storedAnswerService returned an error storing answer: " + error.message)
+            serviceErrorHandler.showInternalServerError
+        }
+      )
+    } else {
+      Future.successful(Redirect(routes.OptionTaxController.show))
+    }
   }
 
 }

@@ -25,7 +25,7 @@ import models.{User, YesNoAmountModel}
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc._
-import services.{CapitalAssetsAnswerService, WipeRedundantDataService}
+import services.{CapitalAssetsAnswerService, OptionTaxNewAnswerService, WipeRedundantDataService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import utils.LoggingUtil
 import views.html.CapitalAssets
@@ -35,10 +35,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class  CapitalAssetsController @Inject()(capitalAssets: CapitalAssets,
-                                          val mcc: MessagesControllerComponents,
-                                         val authentication: AuthPredicate,
+                                         val mcc: MessagesControllerComponents,
+                                         val authenticate: AuthPredicate,
                                          val regStatusCheck: DeniedAccessPredicate,
                                          val capitalAssetsAnswerService: CapitalAssetsAnswerService,
+                                         val optionTaxNewAnswerService: OptionTaxNewAnswerService,
                                          val wipeRedundantDataService: WipeRedundantDataService,
                                          val serviceErrorHandler: ServiceErrorHandler,
                                          implicit val ec: ExecutionContext,
@@ -46,19 +47,43 @@ class  CapitalAssetsController @Inject()(capitalAssets: CapitalAssets,
 
   val form: Form[YesNoAmountModel] = YesNoAmountForm.yesNoAmountForm("capitalAssets.error.mandatoryRadioOption","capitalAssets.error.amount.noEntry")
 
-  private def renderView(data: Form[YesNoAmountModel])(implicit user: User[_]) =
-    capitalAssets(data)
-
-  val show: Action[AnyContent] = (authentication andThen regStatusCheck).async { implicit user =>
-    capitalAssetsAnswerService.getAnswer.map {
-      case Right(Some(data)) => Ok(renderView(form.fill(data)))
-      case _ => Ok(renderView(form))
-    }
+  private def renderView(optTax: Boolean, data: Form[YesNoAmountModel])(implicit user: User[_]) = {
+    capitalAssets(backLink(optTax), data)
   }
 
-  val submit: Action[AnyContent] = authentication.async { implicit user =>
+  private def backLink(flag: Boolean ): String = {
+     (flag, appConfig.features.ottJourneyEnabled()) match{
+       case (true, true) => controllers.routes.OptionTaxValueController.show.url
+       case _ => controllers.routes.OptionTaxController.show.url
+     }
+  }
+
+  val show: Action[AnyContent] = (authenticate andThen regStatusCheck).async { implicit user =>
+    for {
+      capitalData <- capitalAssetsAnswerService.getAnswer
+      optTaxAnswer <- optionTaxNewAnswerService.getAnswer
+
+      result <- (capitalData, optTaxAnswer) match {
+        case (Right(Some(data)), Right(Some(optTax))) => Future.successful(
+          Ok (renderView(optTax.value, form.fill(data))))
+        case (Right(Some(data)), _) => Future.successful(
+          Ok (renderView(false, form.fill(data))))
+        case (_, Right(Some(optTax))) => Future.successful(
+          Ok (renderView(optTax.value, form)))
+        case _ => Future.successful(
+          Ok(renderView(false, form)))
+      }
+    } yield result
+  }
+
+  val submit: Action[AnyContent] = authenticate.async { implicit user =>
     form.bindFromRequest().fold(
-      error => Future.successful(BadRequest(renderView(error))),
+      error => (for {
+                  optTaxAnswer <- EitherT(optionTaxNewAnswerService.getAnswer)
+                } yield optTaxAnswer).value.flatMap {
+                  case Right(Some(optTaxData)) if optTaxData.value => Future.successful(BadRequest(renderView(true, error)))
+                  case _ => Future.successful(BadRequest(renderView(false, error)))
+               },
       data => (for {
         _ <- EitherT(capitalAssetsAnswerService.storeAnswer(data))
         result <- EitherT(wipeRedundantDataService.wipeRedundantData)
@@ -72,4 +97,5 @@ class  CapitalAssetsController @Inject()(capitalAssets: CapitalAssets,
       }
     )
   }
+
 }

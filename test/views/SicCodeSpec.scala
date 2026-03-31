@@ -31,7 +31,7 @@ class SicCodeSpec extends ViewBaseSpec {
     val pageHeading = "#content h1"
     val explanation = "p.govuk-body:nth-child(1)"
     val sicCodeLink = "#find-sic-code"
-    val button = "#main-content .govuk-button"
+    val button = ".govuk-button"
     val errorHeading = ".govuk-error-summary"
     val error = ".govuk-error-message"
   }

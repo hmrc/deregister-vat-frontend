@@ -44,7 +44,9 @@ object DeregistrationInfo {
                   nextTaxableTurnover: Option[NumberInputModel],
                   whyTurnoverBelow: Option[WhyTurnoverBelowModel],
                   accountingMethod: VATAccountsModel,
-                  optionTax: YesNoAmountModel,
+                  optionTax: Option[YesNoAmountModel],
+                  optionTaxNew: Option[YesNo],
+                  optionTaxNewValue: Option[NumberInputModel],
                   capitalAssets: YesNoAmountModel,
                   stocks: YesNoAmountModel,
                   issueNewInvoices: YesNo,
@@ -54,22 +56,38 @@ object DeregistrationInfo {
                   sicCode: Option[String],
                   zeroRatedSuppliesValue: Option[NumberInputModel],
                   transactorOrCapacitorEmail: Option[String]): DeregistrationInfo = {
-
         DeregistrationInfo(
           deregReason,
           deregInfoDate(ceasedTradingDate),
           deregLaterDate(deregDate),
           turnoverBelowThreshold(deregReason, taxableTurnover, nextTaxableTurnover, whyTurnoverBelow),
           zeroRated(deregReason, purchasesExceedSupplies, sicCode, zeroRatedSuppliesValue, nextTaxableTurnover),
-          optionTax.yesNo.value,
+          deregOTTFlag(optionTax, optionTaxNew),
           capitalAssets.yesNo.value,
           taxInvoices(issueNewInvoices, outstandingInvoices),
           isCashAccounting(accountingMethod),
-          optionTax.amount,
+          deregOTTValue(optionTax, optionTaxNewValue),
           capitalAssets.amount,
           stocks.amount,
           transactorOrCapacitorEmail
         )
+  }
+
+  private[deregistrationRequest] def deregOTTFlag(optTax: Option[YesNoAmountModel], optTaxNewFlag: Option[YesNo]): Boolean = {
+    (optTax, optTaxNewFlag) match {
+        case (Some(data), None) => data.yesNo.value
+        case (_, Some(data)) => data.value
+        case (_, _) => false
+    }
+  }
+
+  private[deregistrationRequest] def deregOTTValue(optTax: Option[YesNoAmountModel],
+                                                    optTaxNewAmount: Option[NumberInputModel]) : Option[BigDecimal] = {
+    (optTax, optTaxNewAmount) match {
+      case (Some(_), _) => optTax.get.amount
+      case (_, Some(_)) => optTaxNewAmount.map(_.value)
+      case (_, _) => None
+    }
   }
 
   private[deregistrationRequest] val deregInfoDate: Option[DateModel] => LocalDate = _.fold(LocalDate.now)(_.date.fold(LocalDate.now)(x => x))

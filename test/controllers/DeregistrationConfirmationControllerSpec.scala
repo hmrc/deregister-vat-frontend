@@ -26,20 +26,23 @@ import play.api.http.Status
 import play.api.mvc.AnyContentAsEmpty
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.mocks.{MockAuditService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService}
-import views.html.DeregistrationConfirmation
+import services.mocks.{MockAuditService, MockCustomerDetailsService, MockDeleteAllStoredAnswersService, MockOTTNotificationAnswerService}
+import views.html.{DeregistrationConfirmation, DeregistrationOTTConfirmation}
 
 
 class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with MockDeleteAllStoredAnswersService
-  with MockCustomerDetailsService with MockAuditService {
+  with MockCustomerDetailsService with MockAuditService with MockOTTNotificationAnswerService {
 
   lazy val deregistrationConfirmation: DeregistrationConfirmation = injector.instanceOf[DeregistrationConfirmation]
+  lazy val deregistrationOTTConfirmation: DeregistrationOTTConfirmation = injector.instanceOf[DeregistrationOTTConfirmation]
 
   object TestDeregistrationConfirmationController
     extends DeregistrationConfirmationController(
       deregistrationConfirmation,
+      deregistrationOTTConfirmation,
       mcc,
       mockAuthPredicate,
+      mockOTTNotificationAnswerService,
       mockDeleteAllStoredAnswersService,
       serviceErrorHandler,
       mockCustomerDetailsService
@@ -57,6 +60,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
           setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
           mockAuthResult(mockAuthorisedIndividual)
           setupMockCustomerDetails(vrn)(Right(customerDetailsMax))
+          setupMockGetOTTNotification(Right(None))
           TestDeregistrationConfirmationController.show(requestWithSession)
         }
         lazy val document = Jsoup.parse(contentAsString(result))
@@ -71,7 +75,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
         }
 
         "return the correct first paragraph" in {
-          messages(document.getElementsByClass("govuk-body").first().text()) shouldBe Messages.emailPreference
+          messages(document.getElementsByClass("govuk-body").first().text()) shouldBe Messages.emailPreferenceNew
         }
       }
 
@@ -99,6 +103,7 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       "return 200 (OK)" in {
         setupMockDeleteAllStoredAnswers(Right(DeregisterVatSuccess))
         mockAuthResult(mockAuthorisedIndividual)
+        setupMockGetOTTNotification(Right(None))
         setupMockCustomerDetails(vrn)(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
         status(result) shouldBe Status.OK
       }
@@ -109,13 +114,14 @@ class DeregistrationConfirmationControllerSpec extends ControllerBaseSpec with M
       }
 
       "return the correct first paragraph" in {
-        messages(document.getElementsByClass("govuk-body").first().text()) shouldBe Messages.contactPrefError
+        messages(document.getElementsByClass("govuk-body").first().text()) shouldBe Messages.contactPrefErrorNew
       }
     }
 
     "answers are not deleted successfully should return internal server error" in {
       lazy val result = TestDeregistrationConfirmationController.show(requestWithSession)
       setupMockDeleteAllStoredAnswers(Left(ErrorModel(INTERNAL_SERVER_ERROR, "bad things")))
+      setupMockGetOTTNotification(Right(None))
       mockAuthResult(mockAuthorisedIndividual)
       status(result) shouldBe Status.INTERNAL_SERVER_ERROR
     }

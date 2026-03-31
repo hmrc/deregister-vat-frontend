@@ -31,7 +31,7 @@ class CeasedTradingDateSpec extends ViewBaseSpec {
     val back = ".govuk-back-link"
     val pageHeading = "#content h1"
     val hint = ".govuk-hint"
-    val button = "#main-content .govuk-button"
+    val button = ".govuk-button"
     val dayField = "#dateDay"
     val monthField = "#dateMonth"
     val yearField = "#dateYear"

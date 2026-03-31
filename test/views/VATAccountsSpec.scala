@@ -30,7 +30,7 @@ class VATAccountsSpec extends ViewBaseSpec {
     val back = ".govuk-back-link"
     val pageHeading = "#content h1"
     val methodOption: Int => String = (number: Int) => s".govuk-radios__item:nth-of-type($number)"
-    val button = "#main-content .govuk-button"
+    val button = ".govuk-button"
     val error = ".govuk-error-message"
     val p1 = "#content .govuk-body"
     val bullet: Int => String = i => s".govuk-list > li:nth-of-type($i)"

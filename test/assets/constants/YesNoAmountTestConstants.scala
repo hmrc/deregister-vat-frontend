@@ -26,10 +26,10 @@ object YesNoAmountTestConstants {
   val sicCodeValue = "12345"
   val zeroRatedSuppliesValue = NumberInputModel(4000.00)
   val thresholdValue = "83,000"
+  val optTaxValue = NumberInputModel(15000.00)
 
   val stocksModel: YesNoAmountModel = YesNoAmountModel(Yes,Some(BigDecimal(stockValue)))
   val ottModel: YesNoAmountModel = YesNoAmountModel(Yes,Some(BigDecimal(ottValue)))
   val assetsModel: YesNoAmountModel = YesNoAmountModel(Yes,Some(BigDecimal(assetsValue)))
   val yesNoAmountNo: YesNoAmountModel = YesNoAmountModel(No,None)
-
 }

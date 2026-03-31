@@ -38,6 +38,8 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
                                             val whyTurnoverBelowAnswerService: WhyTurnoverBelowAnswerService,
                                             val accountingMethodAnswerService: AccountingMethodAnswerService,
                                             val optionTaxAnswerService: OptionTaxAnswerService,
+                                            val optionTaxNewAnswerService: OptionTaxNewAnswerService,
+                                            val optionTaxValueAnswerService: OptionTaxValueAnswerService,
                                             val capitalAssetsAnswerService: CapitalAssetsAnswerService,
                                             val stocksAnswerService: StocksAnswerService,
                                             val issueNewInvoicesAnswerService: IssueNewInvoicesAnswerService,
@@ -52,7 +54,8 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
 
   def updateDereg(implicit user: User[_], hc: HeaderCarrier, ec: ExecutionContext)
     : Future[Either[ErrorModel, VatSubscriptionResponse]] = {
-    buildDeregInfoModel.flatMap{
+    val model = buildDeregInfoModel
+    model.flatMap {
       case Right(deregInfo) =>
         auditService.extendedAudit(DeregSuccessAuditModel(user, deregInfo), Some(controllers.routes.DeregistrationConfirmationController.show.url))
         vatSubscriptionConnector.submit(user.vrn, deregInfo)
@@ -71,6 +74,8 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
         whyTurnoverBelow <- EitherT(whyTurnoverBelowAnswerService.getAnswer)
         accountingMethod <- EitherT(accountingMethodAnswerService.getAnswer)
         optionTax <- EitherT(optionTaxAnswerService.getAnswer)
+        optionTaxNewFlag <- EitherT(optionTaxNewAnswerService.getAnswer)
+        optionTaxNewValue <- EitherT(optionTaxValueAnswerService.getAnswer)
         capitalAssets <- EitherT(capitalAssetsAnswerService.getAnswer)
         stocks <- EitherT(stocksAnswerService.getAnswer)
         issueNewInvoices <- EitherT(issueNewInvoicesAnswerService.getAnswer)
@@ -78,7 +83,7 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
         deregDate <- EitherT(deregDateAnswerService.getAnswer)
         deregReasonValue <- EitherT(mandatoryCheck(deregReason, "deregReason"))
         accountingMethodValue <- EitherT(mandatoryCheck(accountingMethod, "accountingMethod"))
-        optionTaxValue <- EitherT(mandatoryCheck(optionTax, "optionTax"))
+       // optionTaxValue <- EitherT(mandatoryCheck(optionTax, "optionTax"))
         capitalAssetsValue <- EitherT(mandatoryCheck(capitalAssets, "capitalAssets"))
         stocksValue <- EitherT(mandatoryCheck(stocks, "stocks"))
         issueNewInvoicesValue <- EitherT(mandatoryCheck(issueNewInvoices, "issueNewInvoices"))
@@ -92,7 +97,9 @@ class UpdateDeregistrationService @Inject()(val deregReasonAnswerService: DeregR
           nextTaxableTurnover,
           whyTurnoverBelow,
           accountingMethodValue,
-          optionTaxValue,
+          optionTax,
+          optionTaxNewFlag,
+          optionTaxNewValue,
           capitalAssetsValue,
           stocksValue,
           issueNewInvoicesValue,

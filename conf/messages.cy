@@ -102,6 +102,12 @@ ottNotification.inset.1 = Os yw’n cael gwared ar eiddo, efallai y bydd unrhyw 
 ottNotification.inset.2 =  Er enghraifft, os ydych yn berchen ar eiddo rhent, a bod yr eiddo heb gael ei feddiannu am 2 flynedd, yna nid yw esemptiad rhag TAW yn berthnasol bellach. Gallwch adennill TAW ar gyfer y 2 flynedd honno, er gwaethaf y ffaith nad yw’n cynhyrchu incwm.
 ottNotification.error.mandatoryRadioOption = Dewiswch ‘Iawn’ os yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau
 
+optionTaxValue.title = Beth yw gwerth y tir ac eiddo rydych yn parhau i berchen arno ar ôl datgofrestru ar gyfer TAW?
+optionTaxValue.text = Os yw’r holl dir ac eiddo wedi’u gwerthu, nodwch y gwerth yn sero.
+optionTaxValue.error.mandatory = Nodwch werth y tir ac adeiladau mewn punnoedd a cheiniogau
+optionTaxValue.error.nonNumeric = Mae’n rhaid i werth y tir ac adeiladau gynnwys rhifau yn unig
+optionTaxValue.error.negative = Ni all gwerth y tir ac adeiladau fod yn werth negyddol
+
 capitalAssets.title = A yw’r busnes yn mynd i gadw unrhyw asedion cyfalaf?
 capitalAssets.text.1 = Er enghraifft dodrefn, cyfrifiaduron ac offer.
 capitalAssets.totalSaleValue = Beth yw cyfanswm y gwerth?
@@ -166,6 +172,7 @@ checkYourAnswers.question.businessActivityChanged = A yw’r gweithgaredd busnes
 checkYourAnswers.question.sicCode = Cod Dosbarthiad Diwydiannol Safonol (SIC)
 checkYourAnswers.question.zeroRatedSupplies = Gwerth cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
 checkYourAnswers.question.purchasesExceedSupplies = A fydd TAW ar bryniannau yn fwy na TAW ar gyflenwadau?
+checkYourAnswers.question.ottNotification = Wedi rhoi gwybod i CThEF am yr opsiwn i drethu
 
 checkYourAnswers.hidden.reason = Newid y rheswm pam mae’r busnes yn canslo ei gofrestriad TAW
 checkYourAnswers.hidden.ceasedTrading = Newid y dyddiad y rhoddodd eich busnes y gorau i fasnachu, neu’r dyddiad y bydd yn gwneud hynny
@@ -187,6 +194,7 @@ checkYourAnswers.hidden.businessActivityChanged = Newid p’un a yw’r gweithga
 checkYourAnswers.hidden.sicCode = Newid Cod Dosbarthiad Diwydiannol Safonol (SIC) y busnes
 checkYourAnswers.hidden.zeroRatedSupplies = Newid gwerth y cyflenwadau cyfradd sero ar gyfer y 12 mis nesaf
 checkYourAnswers.hidden.purchasesExceedSupplies = Newid p’un a fydd y TAW ar bryniannau yn mynd y tu hwnt i’r TAW ar gyflenwadau
+checkYourAnswers.hidden.ottNotification = Newid yr ateb ynghylch a yw CThEF wedi cael gwybod am opsiwn i drethu tir ac adeiladau
 
 checkYourAnswers.answer.noDate = Heb fanylu
 checkYourAnswers.answer.standard = Cyfrifyddu safonol
@@ -225,6 +233,18 @@ deregistrationConfirmation.bpOffEmailP2.new = cyn pen 2 diwrnod gwaith.
 deregistrationConfirmation.bpOffNotifyBusiness = Byddwn yn cysylltu â
 deregistrationConfirmation.bpOffNotifyBusiness.new = Byddwn yn cysylltu â
 deregistrationConfirmation.bpOffUpdateBusiness = gyda diweddariad.
+
+##OTTConfirmationViewMessages
+deregistrationOTTConfirmation.title = Mae’ch cais i ganslo cofrestriad TAW wedi dod i law
+deregistrationOTTConfirmation.email.p1 = Byddwn yn anfon diweddariad ynglŷn â’ch datgofrestriad TAW at
+deregistrationOTTConfirmation.email.p2 = cyn pen 2 diwrnod gwaith.
+deregistrationOTTConfirmation.p1 = Byddwn yn anfon diweddariad ynglŷn â’ch datgofrestriad TAW cyn pen 2 diwrnod gwaith.
+deregistrationOTTConfirmation.heading = Yr hyn y mae angen i chi ei wneud nesaf
+deregistrationOTTConfirmation.p2 = Mae’n dal i fod yn rhaid i chi roi gwybodaeth i CThEF am unrhyw dir neu adeiladau mae gennych fuddiant ynddynt sydd
+deregistrationOTTConfirmation.p3 = wedi’u hoptio i drethu (yn agor ffenestr newydd).
+deregistrationOTTConfirmation.p4 = Mae hyn yn cynnwys tir ac adeiladau y byddwch yn parhau i berchen neu’n cael buddiant ynddynt ar ôl datgofrestru ar gyfer TAW.
+deregistrationOTTConfirmation.warningMsg = Gall oedi fod wrth ddatgofrestru ar gyfer TAW os nad ydych yn darparu’r wybodaeth hon.
+deregistrationOTTConfirmation.ottButton = Llenwch ffurflen wybodaeth am dir ac adeiladau
 
 unauthorised.agent.title = Ni allwch ddefnyddio’r gwasanaeth hwn eto
 unauthorised.agent.useThisService = I ddefnyddio’r gwasanaeth hwn, bydd angen i chi

@@ -36,9 +36,7 @@
   </div>
 }
 
-@mainTemplate(pageTitle = messages("checkYourAnswers.title"),
-    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
-) {
+@mainTemplate(pageTitle = messages("checkYourAnswers.title")) {
 
   <h1 class="govuk-heading-l">@messages("checkYourAnswers.title")</h1>
 
