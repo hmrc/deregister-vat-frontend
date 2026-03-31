@@ -77,5 +77,6 @@ class MockAppConfig(implicit val runModeConfiguration: Configuration) extends Ap
   override val ottJourneyFlag: Boolean = false
   override val govUkOTTUrl: String = "https://www.gov.uk/guidance/opting-to-tax-land-and-buildings-notice-742a"
   override val govUkLandBuildingFormUrl: String = "https://www.gov.uk/guidance/tell-hmrc-about-an-option-to-tax-on-property-as-part-of-cancelling-your-vat-registration"
+  override val urBannerUrl: String = "url-banner-url"
 }
 

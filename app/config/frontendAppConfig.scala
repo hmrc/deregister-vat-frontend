@@ -77,6 +77,7 @@ trait AppConfig {
   val ottJourneyFlag: Boolean
   val govUkOTTUrl: String
   val govUkLandBuildingFormUrl: String
+  val urBannerUrl: String
 }
 
 @Singleton
@@ -199,4 +200,5 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
 
   override lazy val govUkLandBuildingFormUrl: String = servicesConfig.getString(Keys.govUkLandBuildingFormUrl)
 
+  override val urBannerUrl: String = servicesConfig.getString("urBanner.url")
 }

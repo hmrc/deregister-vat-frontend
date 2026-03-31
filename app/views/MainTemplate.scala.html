@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.hmrcfrontend.views.html.components._
+
 @import views.utils.ServiceNameUtil
 @import views.html.helper.CSPNonce
 
@@ -23,13 +25,15 @@
       hmrcTimeoutDialog: HmrcTimeoutDialog,
       hmrcStandardHeader: HmrcStandardHeader,
       hmrcStandardFooter: HmrcStandardFooter,
-      hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet)
+      hmrcTrackingConsentSnippet: HmrcTrackingConsentSnippet,
+      hmrcUserResearchBanner : HmrcUserResearchBanner)
 
 @(pageTitle: String,
   serviceName: Option[String] = None,
   showSignOut: Boolean = true,
   feedbackOnSignOut: Boolean = true,
-  backLinkContent: Option[Html] = None
+  backLinkContent: Option[Html] = None,
+  urBanner: Option[UserResearchBanner] = None
 )(mainContent: Html)(implicit request : RequestHeader, messages: Messages, appConfig: config.AppConfig)
 
 @navTitle = @{
@@ -80,7 +84,8 @@
     serviceName = Some(navTitle),
     serviceUrl = ServiceNameUtil.generateServiceUrl,
     signOutUrl = if(showSignOut) Some(routes.SignOutController.signOut(feedbackOnSignOut).url) else None,
-    displayHmrcBanner = false
+    displayHmrcBanner = false,
+    additionalBannersBlock = if(appConfig.features.showUserResearchBannerEnabled()) urBanner.map(hmrcUserResearchBanner(_)) else None
 )
 }
 

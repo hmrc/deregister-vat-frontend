@@ -31,7 +31,9 @@
   if(user.isAgent) "deregistrationConfirmation.backToClient" else "common.finish"
 }
 
-@mainTemplate(pageTitle = messages(s"deregistrationConfirmation.title$suffix")) {
+@mainTemplate(pageTitle = messages(s"deregistrationConfirmation.title$suffix"),
+    urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
+) {
 
   @govukPanel(Panel(
     title = Text(messages(s"deregistrationConfirmation.title$suffix"))

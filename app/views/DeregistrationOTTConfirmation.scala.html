@@ -24,7 +24,10 @@
 
 @buttonMessage = @{"deregistrationOTTConfirmation.ottButton"}
 
-@mainTemplate(pageTitle = messages("deregistrationOTTConfirmation.title")) {
+@mainTemplate(
+        pageTitle = messages("deregistrationOTTConfirmation.title"),
+        urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
+) {
 
   @**govukPanel(Panel(
     title = Text(messages("deregistrationOTTConfirmation.title"))
