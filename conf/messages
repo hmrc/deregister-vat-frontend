@@ -98,8 +98,7 @@ optionTax.error.amount.noEntry = Enter the total value of the land or commercial
 
 ottNotification.title = Has HMRC been notified about an option to tax land and buildings?
 ottNotification.text = A notification to opt to tax is usually completed on a VAT 1614A. This concerns a business choosing to charge VAT on its supplies of land and buildings.
-ottNotification.inset.1 = If disposing of property, any VAT recovered in relation to its costs and overheads may be repayable to HMRC. At point of deregistration, all properties must be in a Nil VAT position.
-ottNotification.inset.2 = For example, if a rental property you own has been unoccupied for 2 years then VAT exemption no longer applies. VAT is recoverable for that 2-year period, despite it not generating income.
+ottNotification.inset = If disposing of property, any VAT recovered in relation to its costs and overheads may be repayable to HMRC. At point of deregistration, all properties must be in a Nil VAT position.
 ottNotification.error.mandatoryRadioOption = Select yes if HMRC has been notified about an option to tax land and buildings
 
 optionTaxValue.title = What is the value of the land and buildings you continue to own after VAT registration?

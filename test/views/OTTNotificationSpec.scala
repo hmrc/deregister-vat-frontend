@@ -31,8 +31,7 @@ class OTTNotificationSpec extends ViewBaseSpec {
     val back = ".govuk-back-link"
     val pageHeading = "#content h1"
     val text = "p:nth-of-type(1)"
-    val inset1 = ".govuk-inset-text > p:nth-of-type(1)"
-    val inset2 = ".govuk-inset-text > p:nth-of-type(2)"
+    val inset = ".govuk-inset-text > p:nth-of-type(1)"
     val yesOption = "fieldset > div > div:nth-of-type(1) > label"
     val noOption = "fieldset > div > div:nth-of-type(2) > label"
     val button = ".govuk-button"
@@ -61,12 +60,8 @@ class OTTNotificationSpec extends ViewBaseSpec {
       elementText(Selectors.text) shouldBe OTTNotificationMessages.text
     }
 
-    "have the correct first inset paragraph" in {
-      elementText(Selectors.inset1) shouldBe OTTNotificationMessages.inset1
-    }
-
-    "have the correct second inset paragraph" in {
-      elementText(Selectors.inset2) shouldBe OTTNotificationMessages.inset2
+    "have the correct inset paragraph" in {
+      elementText(Selectors.inset) shouldBe OTTNotificationMessages.inset
     }
 
     "have the correct a radio button form with yes/no answers" in {
