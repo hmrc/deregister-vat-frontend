@@ -23,8 +23,7 @@ object OTTNotificationMessages extends BaseMessages {
   val heading = "Has HMRC been notified about an option to tax land and buildings?"
   val title: String = heading + titleSuffix
   val text = "A notification to opt to tax is usually completed on a VAT 1614A. This concerns a business choosing to charge VAT on its supplies of land and buildings."
-  val inset1 = "If disposing of property, any VAT recovered in relation to its costs and overheads may be repayable to HMRC. At point of deregistration, all properties must be in a Nil VAT position."
-  val inset2 = "For example, if a rental property you own has been unoccupied for 2 years then VAT exemption no longer applies. VAT is recoverable for that 2-year period, despite it not generating income."
+  val inset = "If disposing of property, any VAT recovered in relation to its costs and overheads may be repayable to HMRC. At point of deregistration, all properties must be in a Nil VAT position."
   val yesNoError = "Select yes if HMRC has been notified about an option to tax land and buildings"
 
 }
