@@ -60,7 +60,7 @@ class OTTNotificationSpec extends ViewBaseSpec {
       elementText(Selectors.text) shouldBe OTTNotificationMessages.text
     }
 
-    "have the correct first inset paragraph" in {
+    "have the correct inset paragraph" in {
       elementText(Selectors.inset) shouldBe OTTNotificationMessages.inset
     }
 
