@@ -45,7 +45,7 @@ class UnauthorisedViewSpec extends ViewBaseSpec {
   "Rendering the unauthorised page" should {
 
     object Selectors {
-      val serviceName = ".govuk-header__service-name"
+      val serviceName = ".govuk-service-navigation__text"
       val pageHeading = "#content h1"
       val instructions = "#content .govuk-body"
       val instructionsLink = "#content .govuk-link"
