@@ -22,11 +22,10 @@ import config.{ConfigKeys => Keys}
 import models.VatThreshold
 import play.api.Configuration
 import play.api.i18n.Lang
-import play.api.mvc.Call
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import play.api.libs.json.Json
+import play.api.mvc.Call
 import uk.gov.hmrc.play.bootstrap.binders.RedirectUrl
-
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import java.net.URLEncoder
 import javax.inject.{Inject, Singleton}
 
@@ -78,6 +77,7 @@ trait AppConfig {
   val govUkOTTUrl: String
   val govUkLandBuildingFormUrl: String
   val urBannerUrl: String
+  val isServiceNavigationEnabled: Boolean
 }
 
 @Singleton
@@ -201,4 +201,6 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override lazy val govUkLandBuildingFormUrl: String = servicesConfig.getString(Keys.govUkLandBuildingFormUrl)
 
   override val urBannerUrl: String = servicesConfig.getString("urBanner.url")
+
+  override val isServiceNavigationEnabled: Boolean = servicesConfig.getBoolean(ConfigKeys.serviceNavigationFlag)
 }
