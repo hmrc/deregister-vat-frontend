@@ -21,7 +21,6 @@
 
 @this(govukLayout: GovukLayout,
       hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
-      hmrcLanguageSelect: HmrcLanguageSelect,
       hmrcTimeoutDialog: HmrcTimeoutDialog,
       hmrcStandardHeader: HmrcStandardHeader,
       hmrcStandardFooter: HmrcStandardFooter,
@@ -56,14 +55,6 @@
 }
 
 @beforeContentHtml = {
-    @if(!appConfig.isServiceNavigationEnabled){
-        @hmrcLanguageSelect(LanguageSelect(
-            language = if(messages.lang.language == "en") En else Cy,
-            languageLinks =
-                En -> appConfig.routeToSwitchLanguage("english").url,
-                Cy -> appConfig.routeToSwitchLanguage("cymraeg").url
-        ))
-    }
     @backLinkContent
 }
 
