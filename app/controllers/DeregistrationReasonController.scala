@@ -63,7 +63,10 @@ class DeregistrationReasonController @Inject()(deregistrationReason: Deregistrat
         _ <- EitherT(deregReasonAnswerService.storeAnswer(data))
         _ <- EitherT(wipeRedundantDataService.wipeRedundantData)
         route = redirect(data)
-      } yield route).value.flatMap {
+      } yield {
+        infoLog(s"User with VRN '${user.vrn}' selected reason '${data.value}', redirecting to: '$route'")
+        route
+      }).value.flatMap {
         case Right(result) => Future.successful(result)
         case Left(error) =>
           warnLog("[DeregistrationReasonController][submit] - storedAnswerService returned an error: " + error.message)
