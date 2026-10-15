@@ -77,7 +77,6 @@ trait AppConfig {
   val govUkOTTUrl: String
   val govUkLandBuildingFormUrl: String
   val urBannerUrl: String
-  val isServiceNavigationEnabled: Boolean
 }
 
 @Singleton
@@ -201,6 +200,4 @@ class FrontendAppConfig @Inject()(servicesConfig: ServicesConfig, implicit val r
   override lazy val govUkLandBuildingFormUrl: String = servicesConfig.getString(Keys.govUkLandBuildingFormUrl)
 
   override val urBannerUrl: String = servicesConfig.getString("urBanner.url")
-
-  override val isServiceNavigationEnabled: Boolean = servicesConfig.getBoolean(ConfigKeys.serviceNavigationFlag)
 }

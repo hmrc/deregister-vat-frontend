@@ -74,5 +74,4 @@ object ConfigKeys {
   val ottJourneyEnabled: String = "features.ottJourney.enabled"
   val govUkOTTUrl: String = "gov-uk.ott.url"
   val govUkLandBuildingFormUrl: String = "gov-uk.landbuilldingform.url"
-  val serviceNavigationFlag: String = "play-frontend-hmrc.forceServiceNavigation"
 }
