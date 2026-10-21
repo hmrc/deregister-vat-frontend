@@ -34,3 +34,5 @@ tmp
 .idea_modules
 bin
 .bsp
+/.vscode
+/.metals
