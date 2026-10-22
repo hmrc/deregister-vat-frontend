@@ -43,6 +43,6 @@
     )
   ),
   errorMessage = form("yes_no").error.map { err =>
-    ErrorMessage(content = Text(messages(err.message, vatThreshold)))
+    ErrorMessage(visuallyHiddenText = Some(messages("govukErrorMessage.visuallyHiddenText")), content = Text(messages(err.message, vatThreshold)))
   }
 ))

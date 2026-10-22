@@ -62,7 +62,7 @@
   ),
   errorMessage =
     if(form.hasErrors) {
-      Some(ErrorMessage(content = Text(messages(DateErrorHelper.errorContent(form, formVariant)))))
+      Some(ErrorMessage(visuallyHiddenText = Some(messages("govukErrorMessage.visuallyHiddenText")), content = Text(messages(DateErrorHelper.errorContent(form, formVariant)))))
     } else {
       None
     }

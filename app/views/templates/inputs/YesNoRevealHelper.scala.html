@@ -32,7 +32,7 @@
     )),
     errorMessage =
       if(form("amount").hasErrors) {
-        Some(ErrorMessage(content = Text(messages(form("amount").errors.head.message))))
+        Some(ErrorMessage(visuallyHiddenText = Some(messages("govukErrorMessage.visuallyHiddenText")), content = Text(messages(form("amount").errors.head.message))))
       } else {
         None
       }
@@ -66,6 +66,6 @@
     )
   ),
   errorMessage = form("yes_no").error.map { err =>
-    ErrorMessage(content = Text(messages(err.message)))
+    ErrorMessage(visuallyHiddenText = Some(messages("govukErrorMessage.visuallyHiddenText")), content = Text(messages(err.message)))
   }
 ))

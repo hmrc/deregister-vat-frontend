@@ -77,7 +77,7 @@
         )
       ),
       errorMessage = form("accountingMethod").error.map { err =>
-        ErrorMessage(content = Text(messages(err.message)))
+        ErrorMessage(visuallyHiddenText = Some(messages("govukErrorMessage.visuallyHiddenText")), content = Text(messages(err.message)))
       }
     ))
 
