@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import views.helpers.UrBannerUtil
+
 @this(mainTemplate: MainTemplate, govukBackLink: GovukBackLink)
 
 @(vatThreshold: String)(implicit user : User[_], messages: Messages, appConfig: config.AppConfig)
@@ -26,7 +28,8 @@
 
 }
 
-@mainTemplate(pageTitle = messages("cannotDeregister.title"), backLinkContent = Some(backLink)) {
+@mainTemplate(pageTitle = messages("cannotDeregister.title"), backLinkContent = Some(backLink),
+  urBanner = Some(UrBannerUtil.getUrBanner())) {
 
   <h1 class="govuk-heading-l">@messages("cannotDeregister.title")</h1>
   <p class="govuk-body">@messages("cannotDeregister.text", vatThreshold)</p>
