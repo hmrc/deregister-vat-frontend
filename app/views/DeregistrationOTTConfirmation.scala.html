@@ -15,6 +15,7 @@
  *@
 
 @import common.SessionKeys
+@import views.helpers.UrBannerUtil
 
 @this(mainTemplate: MainTemplate, govukPanel: GovukPanel, govukButton: GovukButton)
 
@@ -26,7 +27,7 @@
 
 @mainTemplate(
         pageTitle = messages("deregistrationOTTConfirmation.title"),
-        urBanner = Some(UserResearchBanner(url = appConfig.urBannerUrl, hideCloseButton = true, language = if(messages.lang.code == "en") En else Cy))
+        urBanner = Some(UrBannerUtil.getUrBanner())
 ) {
 
   @**govukPanel(Panel(
